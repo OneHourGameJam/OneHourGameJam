@@ -116,7 +116,7 @@
 				html += "	<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>";
 				html += "		<div class='panel-body' style='text-align: center; height: 226px;'>";
 				if(image != ""){
-					html += "			<img src='"+image+"' style='max-width:100%; max-height: 200px' alt='"+title+" by "+author+"'>";
+					html += "			<img src='"+image+"' style='max-width:100%; max-height: 200px' alt='"+title+" by "+author+"' onerror='this.src=\"logo.svg\"'>";
 				}
 				html += "		</div>";
 				html += "		<div class='panel-footer'>";
