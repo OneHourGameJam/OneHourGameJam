@@ -220,7 +220,7 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 	
 	//Validate Screenshot URL
 	if($screenshotURL == ""){
-		$screenshotURL = "logo.svg";
+		$screenshotURL = "logo.png";
 	}else if(filter_var($screenshotURL, FILTER_VALIDATE_URL) === false){
 		die("Invalid screenshot URL. Leave blank for default.");
 	}
