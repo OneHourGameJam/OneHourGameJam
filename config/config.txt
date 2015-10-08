@@ -1,0 +1,7 @@
+# Lines starting with # are comments
+# KEY | VALUE
+
+
+#Site-wide salt, used for passwords.
+#Auto generated if left blank, if changed this invalidates all user passwords on the site.
+PEPPER | 
