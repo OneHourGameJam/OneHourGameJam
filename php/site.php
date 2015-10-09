@@ -15,6 +15,7 @@ function startsWith($haystack, $needle) {
     // search backwards starting from haystack length characters from the end
     return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
 }
+
 function endsWith($haystack, $needle) {
     // search forward starting from end minus needle length characters
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
@@ -35,7 +36,7 @@ function IsAdmin(){
 }
 
 function IsLoggedIn(){
-	global $loginChecked, $loggedInUser;
+	global $loginChecked, $loggedInUser, $config;
 	
 	if($loginChecked){
 		return $loggedInUser;
@@ -58,7 +59,7 @@ function IsLoggedIn(){
 	$sessions = json_decode(file_get_contents("data/sessions.json"), true);
 	$sessionID = "".$_COOKIE["sessionID"];
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper);
+	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
 	
 	if(!isset($sessions[$sessionIDHash])){
 		//Session ID does not exist
@@ -75,6 +76,8 @@ function IsLoggedIn(){
 
 
 function LogInOrRegister($username, $password){
+	global $config;
+	
 	$users = json_decode(file_get_contents("data/users.json"), true);
 	$username = strtolower(trim($username));
 	$password = trim($password);
@@ -94,12 +97,13 @@ function LogInOrRegister($username, $password){
 		$user = $users[$username];
 		$correctPasswordHash = $user["password_hash"];
 		$userSalt = $user["salt"];
-		$passwordHash = HashPassword($password, $userSalt);
+		$userPasswordIterations = intval($user["password_iterations"]);
+		$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
 		if($correctPasswordHash == $passwordHash){
 			//User password correct!
 			$sessionID = "".GenerateSalt();
 			$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-			$sessionIDHash = HashPassword($sessionID, $pepper);
+			$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
 			
 			setcookie("sessionID", $sessionID, time()+60*60*24*30);
 			$_COOKIE["sessionID"] = $sessionID;
@@ -128,15 +132,16 @@ function LogInOrRegister($username, $password){
 function RegisterUser($username, $password){
 	$users = json_decode(file_get_contents("data/users.json"), true);
 	
-	
 	$userSalt = GenerateSalt();
-	$passwordHash = HashPassword($password, $userSalt);
+	$userPasswordIterations = intval(rand(10000, 20000));
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
 	
 	if(isset($users[$username])){
 		die("Username already registered");
 	}else{
 		$users[$username]["salt"] = $userSalt;
 		$users[$username]["password_hash"] = $passwordHash;
+		$users[$username]["password_iterations"] = $userPasswordIterations;
 	}
 	
 	file_put_contents("data/users.json", json_encode($users));
@@ -152,11 +157,22 @@ function GenerateSalt(){
 	return uniqid(mt_rand(), true);
 }
 
-function HashPassword($password, $salt){
+function HashPassword($password, $salt, $iterations){
 	global $config;
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "";
 	$pswrd = $pepper.$password.$salt;
-	return hash("sha256", $pswrd);
+	
+	//Check that we have sufficient iterations for password generation.
+	if($iterations < 100){
+		die("Insufficient iterations for password generation.");
+	}else if($iterations > 100000){
+		die("Too many iterations for password generation.");
+	}
+	
+	for($i = 0; $i < $iterations; $i++){
+		$pswrd = hash("sha256", $pswrd);
+	}
+	return $pswrd;
 }
 
 function CreateJam($theme, $date){
@@ -306,12 +322,21 @@ function Init(){
 						file_put_contents("config/config.txt", implode("\n", $lines));
 					}
 				break;
+				case "SESSION_PASSWORD_ITERATIONS":
+					if(strlen($value) < 1){
+						//Generate pepper if none exists (first time site launch).
+						$config[$key] = rand(10000, 20000);
+						$lines[$i] = "$key | ".$config[$key];
+						file_put_contents("config/config.txt", implode("\n", $lines));
+					}else{
+						$config[$key] = intval($value);
+					}
+				break;
 				default:
 					$linesUpdated[] = $line;
 				break;
 			}
 		}
-		
 	}
 }
 

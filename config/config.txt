@@ -5,3 +5,6 @@
 #Site-wide salt, used for passwords.
 #Auto generated if left blank, if changed this invalidates all user passwords on the site.
 PEPPER | 
+
+#Number of iterations used when hashing sessions
+SESSION_PASSWORD_ITERATIONS | 
