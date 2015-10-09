@@ -1,5 +1,7 @@
 <?php
 
+require "sanitize.php";
+
 //Setup
 $adminList = Array("admin");
 
@@ -230,14 +232,14 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 	}
 	
 	//Validate Game URL
-	if(filter_var($gameURL, FILTER_VALIDATE_URL) === false){
+	if(sanitize_Url($gameURL) === false){
 		die("Invalid game URL");
 	}
 	
 	//Validate Screenshot URL
 	if($screenshotURL == ""){
 		$screenshotURL = "logo.png";
-	}else if(filter_var($screenshotURL, FILTER_VALIDATE_URL) === false){
+	}else if(sanitize_Url($screenshotURL) === false){
 		die("Invalid screenshot URL. Leave blank for default.");
 	}
 	
