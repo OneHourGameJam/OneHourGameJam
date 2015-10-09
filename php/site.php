@@ -175,17 +175,18 @@ function HashPassword($password, $salt, $iterations){
 	return $pswrd;
 }
 
-function CreateJam($theme, $date){
+function CreateJam($theme, $date, $time){
 	$jamNumber = intval(GetNextJamNumber());
 	$theme = trim($theme);
 	$date = trim($date);
+	$time = trim($time);
 	
-	//Authorize user
+	//Authorize user (logged in)
 	if(IsLoggedIn() === false){
 		die("Not logged in.");
 	}
 	
-	//Authorize user
+	//Authorize user (is admin)
 	if(IsAdmin() === false){
 		die("Only admins can create jams.");
 	}
@@ -200,15 +201,21 @@ function CreateJam($theme, $date){
 		die("Invalid theme");
 	}
 	
-	//Validate date
+	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
 		die("Invalid date");
+	}else if(strlen($time) <= 0){
+		die("Invalid time");
+	}else{
+		$datetime = strtotime($date." ".$time);
 	}
 	
 	$newJam = Array();
 	$newJam["jam_number"] = $jamNumber;
 	$newJam["theme"] = $theme;
-	$newJam["date"] = $date;
+	$newJam["date"] = date("d M Y", $datetime);
+	$newJam["time"] = date("H:i", $datetime);
+	$newJam["start_time"] = date("c", $datetime);
 	$newJam["entries"] = Array();
 	file_put_contents("data/jams/jam_$jamNumber.json", json_encode($newJam));
 }

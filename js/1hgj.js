@@ -9,11 +9,29 @@ function scr(id){
 };
 
 function filterAuthor(text){
+	
 	$(".entryAuthor").each(function(){
 		if($(this).text() == text || text == "showall"){
-			$(this).parent().parent().parent().fadeIn(200);
+			$(this).parent().parent().parent().show();
 		}else{
-			$(this).parent().parent().parent().fadeOut(200);
+			$(this).parent().parent().parent().hide();
+		}
+	});
+	
+	$(".jamContent").each(function(){
+		var visibleEntries = 0;
+		$(this).children("a").each(function(){
+			if($(this).css("display") == "inline"){
+				visibleEntries++;
+			}
+		});
+		
+		if(visibleEntries > 0){
+			$(this).parent().fadeIn(200);
+			$(this).slideDown(200);
+		}else{
+			$(this).parent().fadeOut(200);
+			$(this).slideUp(200);
 		}
 	});
 	return false;
@@ -28,44 +46,74 @@ function filterText(text){
 	text = text.trim().toLowerCase();
 	$(".entry").each(function(){
 		if(text == ""){
-			$(this).parent().fadeIn(200);
+			$(this).parent().show();
+			$(this).parent().parent().parent().show();
 		}else{
 			var string = $(this).find(".entryAuthor").text().toLowerCase() +" "+ $(this).find(".entryTitle").text();
 			string = string.toLowerCase();
-			//alert(string);
+			
 			if(string.indexOf(text) > -1){
-				$(this).parent().fadeIn(200);
+				$(this).parent().show();
 			}else{
-				$(this).parent().fadeOut(200);
+				$(this).parent().hide();
 			}
 		}
 	});
+	
+	$(".jamContent").each(function(){
+		if(text != ""){
+			var visibleEntries = 0;
+			$(this).children("a").each(function(){
+				if($(this).css("display") == "inline"){
+					visibleEntries++;
+				}
+			});
+			
+			if(visibleEntries > 0){
+				$(this).parent().fadeIn(200);
+				$(this).slideDown(200);
+			}else{
+				$(this).parent().fadeOut(200);
+				$(this).slideUp(200);
+			}
+		}
+	});
+	
 	return false;
 }
 
 function makeJam(jam){
 	function getGetOrdinal(n) {
 	   var s=["th","st","nd","rd"],
-		   v = n%100;
-	   return n+(s[(v-20)%10]||s[v]||s[0]);
+		   v = n % 100;
+	   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 	}
 	
 	var html = "";
-	html += "<div class='panel panel-info' id='jam"+jam.jam_number+"'>";
-	html += "	<div class='panel-heading'>";
+	html += "<div class='panel panel-info jamContener' id='jam"+jam.jam_number+"'>";
+	html += "	<div class='panel-heading jamHeader' style='cursor: pointer;'>";
 	html += "		<a name='jam"+jam.jam_number+"'></a>";
 	html += "		<h3 class='panel-title' style='font-size: 24px;'>";
 	html += "			"+getGetOrdinal(jam.jam_number)+" hour game jam ("+jam.date+")";
 	html += "		</h3>";
-	html += "		Topic: "+jam.theme;
+	html += "		Theme: \""+jam.theme+"\"<br />";
+	if(jam.jam_started){
+		html += "		<span>Started: "+jam.date+" at "+jam.time+"</span>";
+	}else{
+		html += "		<span>Starts on: "+jam.date+" at "+jam.time+" <span style='color: red'>(in "+jam.time_left+")</span></span>";
+	}
 	html += "	</div>";
-	html += "	<div class='panel-body' style='background: none; background-color: #F7FBFD;' id='entries"+jam.jam_number+"'>";
+	if(jam.entries_visible){
+		html += "	<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries"+jam.jam_number+"'>";
+	}else{
+		html += "	<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD; display: none;' id='entries"+jam.jam_number+"'>";
+	}
 	html += "	</div>";
 	html += "</div>";
 	
 	$(html).appendTo("#jamlist");
 	
-	linkhtml = "<a href='#' onclick='scr(\"#jam"+jam.jam_number+"\");'>"+getGetOrdinal(jam.jam_number)+" Jam</a><br />";
+	linkhtml = "<a href='#' onclick='$(\"#jam"+jam.jam_number+"\").children(\".jamContent\").slideDown(); scr(\"#jam"+jam.jam_number+"\");'>"+getGetOrdinal(jam.jam_number)+" Jam</a><br />";
 	
 	$(linkhtml).appendTo("#jammenu");
 }
@@ -107,6 +155,8 @@ function makeEntry(jam, entry){
 }
 
 $(document).ready(function(){	
-	$("#nextevent").html(NEXT_EVENT);
 	$("#search").keyup(search);
+	$(".jamHeader").click(function(){
+		$(this).parent().children(".jamContent").slideToggle();
+	});
 });

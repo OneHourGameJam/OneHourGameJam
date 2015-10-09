@@ -38,8 +38,9 @@ if(isset($_POST["action"])){
 		case "newjam":
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
 			$date = (isset($_POST["date"])) ? $_POST["date"] : "";
+			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
 			
-			CreateJam($theme, $date);
+			CreateJam($theme, $date, $time);
 		break;
 	}
 }
@@ -65,35 +66,74 @@ switch($page){
 	<head>
 		<meta charset='utf-8'>
 		<script src="js/jquery.js"></script>
+			<?php
+				$filesToParse = GetSortedJamFileList();
+				$jams = Array();
+				$firstJam = true;
+				$jamFromStart = 1;
+				foreach ($filesToParse as $fileLoc) {
+					//Read data about the jam
+					$data = json_decode(file_get_contents($fileLoc), true);
+					$newData = Array();
+					$newData["jam_number"] = htmlspecialchars($data["jam_number"], ENT_QUOTES);
+					$newData["theme"] = htmlspecialchars($data["theme"], ENT_QUOTES);
+					$newData["date"] = htmlspecialchars($data["date"], ENT_QUOTES);
+					$newData["time"] = htmlspecialchars($data["time"], ENT_QUOTES);
+					$newData["entries"] = Array();
+					$newData["first_jam"] = $firstJam;
+					$newData["entries_visible"] = $jamFromStart <= 2;
+					if($firstJam){
+						$firstJam = false;
+					}
+					
+					foreach ($data["entries"] as $i => $entry){
+						$newData["entries"][$i]["title"] = htmlspecialchars($entry["title"], ENT_QUOTES);
+						$newData["entries"][$i]["author"] = htmlspecialchars($entry["author"], ENT_QUOTES);
+						$newData["entries"][$i]["url"] = str_replace("'", "\\'", $entry["url"]);
+						$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
+					}
+					
+					//Hide theme of not-yet-started jams
+					
+					$now = new DateTime();
+					$datetime = new DateTime($data["start_time"]);
+					$timeUntilJam = date_diff($datetime, $now);
+					
+					if($datetime > $now){
+						$newData["theme"] = "Not yet announced";
+						$newData["jam_started"] = false;
+						if($timeUntilJam->days > 0){
+							$newData["time_left"] = $timeUntilJam->format("%a days %H:%I:%S");
+						}else if($timeUntilJam->h > 0){
+							$newData["time_left"] = $timeUntilJam->format("%H:%I:%S");
+						}else  if($timeUntilJam->i > 0){
+							$newData["time_left"] = $timeUntilJam->format("%I:%S");
+						}else if($timeUntilJam->s > 0){
+							$newData["time_left"] = $timeUntilJam->format("%S seconds");
+						}else{
+							$newData["time_left"] = "Now!";
+						}
+					}else{
+						$newData["jam_started"] = true;
+					}
+					
+					//Insert into jams array
+					$jams[$newData["jam_number"]] = $newData;
+					$jamFromStart++;
+				}
+			?>
+
 		<script type='text/javascript'>
-			//SETUP!
-			var NEXT_EVENT = "10-10-2015 20:00 UTC";
 			var jams = [];
 			
 			<?php
-					$filesToParse = GetSortedJamFileList();
-					
-					foreach ($filesToParse as $fileLoc) {
-						$data = json_decode(file_get_contents($fileLoc), true);
-						$newData = Array();
-						$newData["jam_number"] = htmlspecialchars($data["jam_number"], ENT_QUOTES);
-						$newData["theme"] = htmlspecialchars($data["theme"], ENT_QUOTES);
-						$newData["date"] = htmlspecialchars($data["date"], ENT_QUOTES);
-						$newData["entries"] = Array();
-						
-						foreach ($data["entries"] as $i => $entry){
-							$newData["entries"][$i]["title"] = htmlspecialchars($entry["title"], ENT_QUOTES);
-							$newData["entries"][$i]["author"] = htmlspecialchars($entry["author"], ENT_QUOTES);
-							$newData["entries"][$i]["url"] = str_replace("'", "\\'", $entry["url"]);
-							$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
-						}
-						
-						$newData = json_encode($newData);
-						
-						print "jams.push(JSON.parse('$newData'));\n";
-					}
-				?>
-
+				//Transfer jam data to JavaScript
+				foreach($jams as $i => $jam){
+					$newDataJSON = json_encode($jam);
+					print "jams.push($newDataJSON);\n";
+				}
+			?>
+			
 			$(document).ready(function(){
 				jams.sort(function(j1, j2){
 					return j1.jam_number - j2.jam_number;
