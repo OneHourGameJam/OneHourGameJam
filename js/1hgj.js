@@ -43,9 +43,7 @@ function filterText(text){
 	return false;
 }
 
-function makeJam(jamNumber, date, topic){
-	var num = jamNumber;
-	
+function makeJam(jam){
 	function getGetOrdinal(n) {
 	   var s=["th","st","nd","rd"],
 		   v = n%100;
@@ -53,57 +51,57 @@ function makeJam(jamNumber, date, topic){
 	}
 	
 	var html = "";
-	html += "<div class='panel panel-info' id='jam"+num+"'>";
+	html += "<div class='panel panel-info' id='jam"+jam.jam_number+"'>";
 	html += "	<div class='panel-heading'>";
-	html += "		<a name='jam"+num+"'></a>";
+	html += "		<a name='jam"+jam.jam_number+"'></a>";
 	html += "		<h3 class='panel-title' style='font-size: 24px;'>";
-	html += "			"+getGetOrdinal(num)+" hour game jam ("+date+")";
+	html += "			"+getGetOrdinal(jam.jam_number)+" hour game jam ("+jam.date+")";
 	html += "		</h3>";
-	html += "		Topic: "+topic;
+	html += "		Topic: "+jam.theme;
 	html += "	</div>";
-	html += "	<div class='panel-body' style='background: none; background-color: #F7FBFD;' id='entries"+num+"'>";
+	html += "	<div class='panel-body' style='background: none; background-color: #F7FBFD;' id='entries"+jam.jam_number+"'>";
 	html += "	</div>";
 	html += "</div>";
 	
 	$(html).appendTo("#jamlist");
 	
-	linkhtml = "<a href='#' onclick='scr(\"#jam"+num+"\");'>"+getGetOrdinal(num)+" Jam</a><br />";
+	linkhtml = "<a href='#' onclick='scr(\"#jam"+jam.jam_number+"\");'>"+getGetOrdinal(jam.jam_number)+" Jam</a><br />";
 	
 	$(linkhtml).appendTo("#jammenu");
 }
 
-function makeEntry(jamNumber, author, title, image, link){
+function makeEntry(jam, entry){
 	var html = "";
-	html += "<a href='"+link+"' target='_BLANK'>";
+	html += "<a href='"+entry.url+"' target='_BLANK'>";
 	html += "	<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>";
 	html += "		<div class='panel-body' style='text-align: center; height: 226px;'>";
-	if(image != ""){
-		html += "			<img src='"+image+"' style='max-width:100%; max-height: 200px' alt='"+title+" by "+author+"' onerror='this.src=\"logo.png\"'>";
+	if(entry.screenshot_url != ""){
+		html += "			<img src='"+entry.screenshot_url+"' style='max-width:100%; max-height: 200px' alt='"+entry.title+" by "+entry.author+"' onerror='this.src=\"logo.png\"'>";
 	}else{
-		html += "			<img src='logo.png' style='max-width:100%; max-height: 200px' alt='"+title+" by "+author+"'>";
+		html += "			<img src='logo.png' style='max-width:100%; max-height: 200px' alt='"+entry.title+" by "+entry.author+"'>";
 	}
 	html += "		</div>";
 	html += "		<div class='panel-footer'>";
-	if(title != ""){
-		html += "			<b><span class='entryTitle'>"+title+"</span></b><br />";
+	if(entry.title != ""){
+		html += "			<b><span class='entryTitle'>"+entry.title+"</span></b><br />";
 	}else{
 		html += "			<b><span class='entryTitle'>Untitled</span></b><br />";
 	}
-	html += "			by <span class='entryAuthor'>"+author+"</span>";
+	html += "			by <span class='entryAuthor'>"+entry.author+"</span>";
 	html += "		</div>";
 	html += "	</div>";
 	html += "</a>";
-	$(html).appendTo("#entries"+jamNumber);
+	$(html).appendTo("#entries"+jam.jam_number);
 	
-	var authorSane = author.trim();
+	var authorSane = entry.author.trim();
 	
 	if(typeof(authors[authorSane]) === "undefined"){
 		authors[authorSane] = 1;
-		var authorHTML = "<li><a href='#' onclick='filterAuthor(\""+author+"\");' id='author-"+authorSane+"'>"+author+" (1)</a></li>";
+		var authorHTML = "<li><a href='#' onclick='filterAuthor(\""+entry.author+"\");' id='author-"+authorSane+"'>"+entry.author+" (1)</a></li>";
 		$(authorHTML).appendTo("#authorlist");
 	}else{
 		authors[authorSane]++;
-		var authorHTML = author+" ("+authors[authorSane]+")";
+		var authorHTML = entry.author+" ("+authors[authorSane]+")";
 		$("#author-"+authorSane).html(authorHTML);
 	}
 }

@@ -68,33 +68,31 @@ switch($page){
 		<script type='text/javascript'>
 			//SETUP!
 			var NEXT_EVENT = "10-10-2015 20:00 UTC";
-
-			$(document).ready(function(){
-				<?php
+			var jams = [];
+			
+			<?php
 					$filesToParse = GetSortedJamFileList();
 					
 					foreach ($filesToParse as $fileLoc) {
-						$data = json_decode(file_get_contents($fileLoc), true);
-						//print_r($data);
-						$jamNumber = htmlspecialchars($data["jam_number"], ENT_QUOTES);
-						$theme = htmlspecialchars($data["theme"], ENT_QUOTES);
-						$date = htmlspecialchars($data["date"], ENT_QUOTES);
-						$entries = $data["entries"];
+						$data = json_encode(json_decode(file_get_contents($fileLoc), true));
 						
-						//Create the jam listing
-						print "makeJam($jamNumber, '$date', '$theme');";
-						
-						foreach($entries as $i => $entry){
-							$title = htmlspecialchars($entry["title"], ENT_QUOTES);
-							$author = htmlspecialchars($entry["author"], ENT_QUOTES);
-							$url = $entry["url"];
-							$screenshot = $entry["screenshot_url"];
-							
-							//Create the entry listing
-							print "makeEntry($jamNumber, '$author', '$title', '$screenshot', '$url');";
-						}
+						print "jams.push(JSON.parse('$data'));\n";
 					}
 				?>
+
+			$(document).ready(function(){
+				jams.sort(function(j1, j2){
+					return j1.jam_number - j2.jam_number;
+				});
+				
+				//TODO: Do not load all jams at once - load when scrolling beyond end of page
+				for(var i = jams.length - 1; i >= 0; i--){
+					makeJam(jams[i]);
+					for(var j = 0; j < jams[i].entries.length; j++){
+						makeEntry(jams[i], jams[i].entries[j]);
+					}
+				}
+
 			});
 			
 		</script>
