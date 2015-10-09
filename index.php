@@ -74,9 +74,23 @@ switch($page){
 					$filesToParse = GetSortedJamFileList();
 					
 					foreach ($filesToParse as $fileLoc) {
-						$data = urlencode(json_encode(json_decode(file_get_contents($fileLoc), true)));
+						$data = json_decode(file_get_contents($fileLoc), true);
+						$newData = Array();
+						$newData["jam_number"] = htmlspecialchars($data["jam_number"], ENT_QUOTES);
+						$newData["theme"] = htmlspecialchars($data["theme"], ENT_QUOTES);
+						$newData["date"] = htmlspecialchars($data["date"], ENT_QUOTES);
+						$newData["entries"] = Array();
 						
-						print "jams.push(JSON.parse(unescape('$data')));\n";
+						foreach ($data["entries"] as $i => $entry){
+							$newData["entries"][$i]["title"] = htmlspecialchars($entry["title"], ENT_QUOTES);
+							$newData["entries"][$i]["author"] = htmlspecialchars($entry["author"], ENT_QUOTES);
+							$newData["entries"][$i]["url"] = str_replace("'", "\\'", $entry["url"]);
+							$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
+						}
+						
+						$newData = json_encode($newData);
+						
+						print "jams.push(JSON.parse('$newData'));\n";
 					}
 				?>
 
