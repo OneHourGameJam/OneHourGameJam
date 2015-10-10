@@ -3,7 +3,7 @@
 //ini_set('display_startup_errors',1);
 //error_reporting(-1);
 
-include("php/site.php");
+include_once("php/site.php");
 
 $page = "main";
 if(isset($_GET["page"])){

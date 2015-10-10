@@ -1,180 +1,24 @@
 <?php
+//This file is the site's entry point, called directly from the main index.php
+//All other files in the /php dirrectory are included from here.
 
-//Setup
-$adminList = Array("admin");
+//Fetch plugins
+include_once("plugins/plugins.php");
 
-
-//Init
+//Global variable definition
 session_start();
-$loggedInUser = "";
-$loginChecked = false;
-$config = Array();
-Init();
+include_once("global.php");
+include_once("helpers.php");
+include_once("authentication.php");
 
-function startsWith($haystack, $needle) {
-    // search backwards starting from haystack length characters from the end
-    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
-}
+//Initialization. This is where configuration is loaded
+include_once("init.php");
 
-function endsWith($haystack, $needle) {
-    // search forward starting from end minus needle length characters
-    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
-}
-
-function IsAdmin(){
-	global $adminList;
-	$username = IsLoggedIn();
-	if($username === false){
-		return false;
-	}
-	
-	if(array_search($username, $adminList) !== false){
-		return true;
-	}else{
-		return false;
-	}
-}
-
-function IsLoggedIn(){
-	global $loginChecked, $loggedInUser, $config;
-	
-	if($loginChecked){
-		return $loggedInUser;
-	}
-	
-	if(!isset($_COOKIE["sessionID"])){
-		//No session cookie, therefore not logged in
-		$loggedInUser = false;
-		$loginChecked = true;
-		return false;
-	}
-	
-	if(!file_exists("data/sessions.json")){
-		//No session was ever created on the site
-		$loggedInUser = false;
-		$loginChecked = true;
-		return false;
-	}
-	
-	$sessions = json_decode(file_get_contents("data/sessions.json"), true);
-	$sessionID = "".$_COOKIE["sessionID"];
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
-	
-	if(!isset($sessions[$sessionIDHash])){
-		//Session ID does not exist
-		$loggedInUser = false;
-		$loginChecked = true;
-		return false;
-	}else{
-		//Session ID does in fact exist
-		$loggedInUser = $sessions[$sessionIDHash]["username"];
-		$loginChecked = true;
-		return $sessions[$sessionIDHash]["username"];
-	}
-}
-
-
-function LogInOrRegister($username, $password){
-	global $config;
-	
-	$users = json_decode(file_get_contents("data/users.json"), true);
-	$username = strtolower(trim($username));
-	$password = trim($password);
-	
-	//Check username length
-	if(strlen($username) < 2 || strlen($username) > 20){
-		die("username must be between 2 and 20 characters");
-	}
-	
-	//Check password length
-	if(strlen($password) < 8 || strlen($password) > 20){
-		die("password must be between 8 and 20 characters");
-	}
-	
-	if(isset($users[$username])){
-		//User is registered already, check password
-		$user = $users[$username];
-		$correctPasswordHash = $user["password_hash"];
-		$userSalt = $user["salt"];
-		$userPasswordIterations = intval($user["password_iterations"]);
-		$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
-		if($correctPasswordHash == $passwordHash){
-			//User password correct!
-			$sessionID = "".GenerateSalt();
-			$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-			$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
-			
-			setcookie("sessionID", $sessionID, time()+60*60*24*30);
-			$_COOKIE["sessionID"] = $sessionID;
-			
-			$sessions = Array();
-			if(file_exists("data/sessions.json")){
-				$sessions = json_decode(file_get_contents("data/sessions.json"), true);
-			}
-			
-			$sessions[$sessionIDHash]["username"] = $username;
-			$sessions[$sessionIDHash]["datetime"] = time();
-			
-			file_put_contents("data/sessions.json", json_encode($sessions));
-			
-		}else{
-			//User password incorrect!
-			die("Incorrect username / password combination.");
-		}
-	}else{
-		//User not yet registered, register now.
-		RegisterUser($username, $password);
-		
-	}
-}
-
-function RegisterUser($username, $password){
-	$users = json_decode(file_get_contents("data/users.json"), true);
-	
-	$userSalt = GenerateSalt();
-	$userPasswordIterations = intval(rand(10000, 20000));
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
-	
-	if(isset($users[$username])){
-		die("Username already registered");
-	}else{
-		$users[$username]["salt"] = $userSalt;
-		$users[$username]["password_hash"] = $passwordHash;
-		$users[$username]["password_iterations"] = $userPasswordIterations;
-	}
-	
-	file_put_contents("data/users.json", json_encode($users));
-	LogInOrRegister($username, $password);
-}
-
-function LogOut(){
-	setcookie("sessionID", "", time());
-	$_COOKIE["sessionID"] = "";
-}
-
-function GenerateSalt(){
-	return uniqid(mt_rand(), true);
-}
-
-function HashPassword($password, $salt, $iterations){
-	global $config;
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "";
-	$pswrd = $pepper.$password.$salt;
-	
-	//Check that we have sufficient iterations for password generation.
-	if($iterations < 100){
-		die("Insufficient iterations for password generation.");
-	}else if($iterations > 100000){
-		die("Too many iterations for password generation.");
-	}
-	
-	for($i = 0; $i < $iterations; $i++){
-		$pswrd = hash("sha256", $pswrd);
-	}
-	return $pswrd;
-}
-
+//Creates a new jam with the provided theme, which starts at the given date
+//and time. All three are non-blank strings. $date and $time should be
+//parsable by PHP's date(...) function. Function also authorizes the user
+//(checks whether or not they are an admin).
+//TODO: Replace die() with in-page warning
 function CreateJam($theme, $date, $time){
 	$jamNumber = intval(GetNextJamNumber());
 	$theme = trim($theme);
@@ -220,7 +64,11 @@ function CreateJam($theme, $date, $time){
 	file_put_contents("data/jams/jam_$jamNumber.json", json_encode($newJam));
 }
 
-
+//Submits a new entry to the last jam. All parameters are strings, $gameName
+//and $gameURL must be non-blank, $gameURL must be a valid URL, $screenshotURL
+//can either be blank or a valid URL. If blank, a default image is used instead.
+//Function also authorizes the user (must be logged in)
+//TODO: Replace die() with in-page warning
 function SubmitEntry($gameName, $gameURL, $screenshotURL){
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -276,76 +124,6 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 	
 }
 
-function GetNextJamNumber(){
-	$NextJamNumber = 0;
-	
-	for($i = 0; $i < 1000; $i++){
-		if(file_exists("data/jams/jam_$i.json")){
-			$NextJamNumber = max($NextJamNumber, $i + 1);
-		}
-	}
-	
-	return $NextJamNumber;
-}
-
-function GetSortedJamFileList(){
-	$filesToParse = Array();
-	for($i = 0; $i < 1000; $i++){
-		if(file_exists("data/jams/jam_$i.json")){
-			$filesToParse[] = "data/jams/jam_$i.json";
-		}
-	}
-	krsort($filesToParse);
-	return $filesToParse;
-}
-
-//Initializes the site.
-function Init(){
-	global $config;
-	
-	$configTxt = file_get_contents("config/config.txt");
-	$lines = explode("\n", $configTxt);
-	$linesUpdated = Array();
-	foreach($lines as $i => $line){
-		$line = trim($line);
-		if(startsWith($line, "#")){
-			//Comment
-			continue;
-		}
-		$linePair = explode("|", $line);
-		if(count($linePair) == 2){
-			//key-value pair
-			$key = trim($linePair[0]);
-			$value = trim($linePair[1]);
-			$config[$key] = $value;
-			
-			//Validate line
-			switch($key){
-				case "PEPPER":
-					if(strlen($value) < 1){
-						//Generate pepper if none exists (first time site launch).
-						$config[$key] = GenerateSalt();
-						$lines[$i] = "$key | ".$config[$key];
-						file_put_contents("config/config.txt", implode("\n", $lines));
-					}
-				break;
-				case "SESSION_PASSWORD_ITERATIONS":
-					if(strlen($value) < 1){
-						//Generate pepper if none exists (first time site launch).
-						$config[$key] = rand(10000, 20000);
-						$lines[$i] = "$key | ".$config[$key];
-						file_put_contents("config/config.txt", implode("\n", $lines));
-					}else{
-						$config[$key] = intval($value);
-					}
-				break;
-				default:
-					$linesUpdated[] = $line;
-				break;
-			}
-		}
-	}
-}
 
 
 ?>
