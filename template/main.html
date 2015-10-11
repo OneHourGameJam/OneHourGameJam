@@ -24,7 +24,7 @@
 			{{/entries_visible}}
 			
 				{{#entries}}
-					<a href='"+entry.url+"' target='_BLANK'>
+					<a href='{{url}}' target='_BLANK'>
 						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>
 							<div class='panel-body' style='text-align: center; height: 226px;'>
 								<img src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
