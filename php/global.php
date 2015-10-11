@@ -8,5 +8,10 @@ $adminList = Array("admin");
 $loggedInUser = "";
 $loginChecked = false;
 $config = Array();
+$dictionary = Array();
+
+require "Mustache/Autoloader.php";
+Mustache_Autoloader::register();
+$mustache = new Mustache_Engine;
 
 ?>

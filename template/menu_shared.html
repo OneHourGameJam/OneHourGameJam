@@ -4,7 +4,9 @@
 	</div>
 	<div class="panel-body">
 		<ul id='jammenu' style='padding-left: 12px;'>
-		
+			{{#jams}}
+				<a href='#' onclick='$("#jam{{jam_number}}").children(".jamContent").slideDown(); scr("#jam{{jam_number}}");'>{{jam_number_ordinal}} Jam</a><br />
+			{{/jams}}
 		</ul>
 	</div>
 </div>
@@ -15,6 +17,9 @@
 	<div class="panel-body">
 		<ul id='authorlist' style='padding-left: 12px;'>
 			<li><a href='#' onclick='filterAuthor("showall");'>Show all</a></li>
+			{{#authors}}
+				<li><a href='#' onclick='filterAuthor("{{username}}"); return false;' id='author-{{username}}'>{{username}} ({{entry_count}})</a></li>
+			{{/authors}}
 		</ul>
 	</div>
 </div>

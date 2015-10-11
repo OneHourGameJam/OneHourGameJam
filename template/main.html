@@ -1,3 +1,42 @@
 <div class="col-md-10" id='jamlist'>
 	<input type="text" class="form-control" id='search' placeholder="Search for..." style='margin-bottom: 10px;'>
+	
+	{{#jams}}
+		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+			<div class='panel-heading jamHeader' style='cursor: pointer;'>
+				<a name='jam{{jam_number}}'></a>
+				<h3 class='panel-title' style='font-size: 24px;'>
+					{{jam_number_ordinal}} hour game jam ({{date}})
+				</h3>
+				Theme: {{theme}}<br />
+			{{#jam_started}}
+					<span>Started: {{date}} at {{time}}</span>
+			{{/jam_started}}
+			{{^jam_started}}
+					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in {{time_left}})</span></span>
+			{{/jam_started}}
+			</div>
+			{{#entries_visible}}
+				<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+			{{/entries_visible}}
+			{{^entries_visible}}
+				<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD; display: none;' id='entries{{jam_number}}'>
+			{{/entries_visible}}
+			
+				{{#entries}}
+					<a href='"+entry.url+"' target='_BLANK'>
+						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>
+							<div class='panel-body' style='text-align: center; height: 226px;'>
+								<img src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+							</div>
+							<div class='panel-footer'>
+								<b><span class='entryTitle'>{{title}}</span></b><br />
+								by <span class='entryAuthor'>{{author}}</span>
+							</div>
+						</div>
+					</a>
+				{{/entries}}
+			</div>
+		</div>
+	{{/jams}}
 </div>

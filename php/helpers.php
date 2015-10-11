@@ -39,4 +39,13 @@ function GetSortedJamFileList(){
 	return $filesToParse;
 }
 
+//Returns ordinal version of provided number, so 1 -> 1st; 3 -> 3rd, etc.
+function Ordinal($number) {
+    $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+    if ((($number % 100) >= 11) && (($number%100) <= 13))
+        return $number. 'th';
+    else
+        return $number. $ends[$number % 10];
+}
+
 ?>

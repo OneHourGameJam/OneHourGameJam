@@ -8,6 +8,8 @@ include_once("plugins/plugins.php");
 //Global variable definition
 session_start();
 include_once("global.php");
+
+//Global functions
 include_once("helpers.php");
 include_once("authentication.php");
 include_once("sanitize.php");
