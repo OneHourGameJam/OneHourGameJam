@@ -10,6 +10,7 @@ session_start();
 include_once("global.php");
 include_once("helpers.php");
 include_once("authentication.php");
+include_once("sanitize.php");
 
 //Initialization. This is where configuration is loaded
 include_once("init.php");
@@ -85,14 +86,14 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 	}
 	
 	//Validate Game URL
-	if(filter_var($gameURL, FILTER_VALIDATE_URL) === false){
+	if(SanitizeURL($gameURL) === false){
 		die("Invalid game URL");
 	}
 	
 	//Validate Screenshot URL
 	if($screenshotURL == ""){
 		$screenshotURL = "logo.png";
-	}else if(filter_var($screenshotURL, FILTER_VALIDATE_URL) === false){
+	}else if(SanitizeURL($screenshotURL) === false){
 		die("Invalid screenshot URL. Leave blank for default.");
 	}
 	
