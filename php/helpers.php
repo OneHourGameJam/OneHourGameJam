@@ -40,7 +40,7 @@ function GetSortedJamFileList(){
 }
 
 //Returns ordinal version of provided number, so 1 -> 1st; 3 -> 3rd, etc.
-function Ordinal($number) {
+function ordinal($number) {
     $ends = array('th','st','nd','rd','th','th','th','th','th','th');
     if ((($number % 100) >= 11) && (($number%100) <= 13))
         return $number. 'th';

@@ -11,7 +11,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules")))){
 	$page = "main";
 }
 
@@ -69,7 +69,7 @@ foreach ($filesToParse as $fileLoc) {
 	$data = json_decode(file_get_contents($fileLoc), true);
 	$newData = Array();
 	$newData["jam_number"] = htmlspecialchars($data["jam_number"], ENT_QUOTES);
-	$newData["jam_number_ordinal"] = htmlspecialchars(Ordinal($data["jam_number"]), ENT_QUOTES);
+	$newData["jam_number_ordinal"] = htmlspecialchars(ordinal($data["jam_number"]), ENT_QUOTES);
 	$newData["theme"] = htmlspecialchars($data["theme"], ENT_QUOTES);
 	$newData["date"] = htmlspecialchars($data["date"], ENT_QUOTES);
 	$newData["time"] = htmlspecialchars($data["time"], ENT_QUOTES);
@@ -178,6 +178,12 @@ foreach($authors as $k => $authorData){
 						break;
 						case "newjam":
 							print $mustache->render(file_get_contents("template/newjam.html"), $dictionary);
+						break;
+						case "assets":
+							print $mustache->render(file_get_contents("template/assets.html"), $dictionary);
+						break;
+						case "rules":
+							print $mustache->render(file_get_contents("template/rules.html"), $dictionary);
 						break;
 					}
 				?>
