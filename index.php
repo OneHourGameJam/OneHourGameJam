@@ -68,11 +68,11 @@ foreach ($filesToParse as $fileLoc) {
 	//Read data about the jam
 	$data = json_decode(file_get_contents($fileLoc), true);
 	$newData = Array();
-	$newData["jam_number"] = htmlspecialchars($data["jam_number"], ENT_QUOTES);
-	$newData["jam_number_ordinal"] = htmlspecialchars(ordinal($data["jam_number"]), ENT_QUOTES);
-	$newData["theme"] = htmlspecialchars($data["theme"], ENT_QUOTES);
-	$newData["date"] = htmlspecialchars($data["date"], ENT_QUOTES);
-	$newData["time"] = htmlspecialchars($data["time"], ENT_QUOTES);
+	$newData["jam_number"] = $data["jam_number"];
+	$newData["jam_number_ordinal"] = ordinal($data["jam_number"]);
+	$newData["theme"] = $data["theme"];
+	$newData["date"] = $data["date"];
+	$newData["time"] = $data["time"];
 	$newData["entries"] = Array();
 	$newData["first_jam"] = $firstJam;
 	$newData["entries_visible"] = $jamFromStart <= 2;
@@ -81,8 +81,8 @@ foreach ($filesToParse as $fileLoc) {
 	}
 	
 	foreach ($data["entries"] as $i => $entry){
-		$newData["entries"][$i]["title"] = htmlspecialchars($entry["title"], ENT_QUOTES);
-		$author = htmlspecialchars($entry["author"], ENT_QUOTES);
+		$newData["entries"][$i]["title"] = $entry["title"];
+		$author = $entry["author"];
 		
 		if(isset($authors[$author])){
 			$entryCount = $authors[$author]["entry_count"];
