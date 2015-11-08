@@ -33,11 +33,11 @@ Not everything is done in the best way, not everything has a pretty interface. I
 
 ## Registering
 
-Done on the website
+Done on the website. The first registered account will have admin rights.
 
 ## Adding more admins
 
-Done manually in php/global.php, add the admin to the list of admins there. 
+Done manually in data/users.json. Add "admins":1 to the user you want to be an admin.
 
 ## Adding jams
 

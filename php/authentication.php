@@ -30,14 +30,19 @@ function HashPassword($password, $salt, $iterations){
 	return $pswrd;
 }
 
+//(Re)Loads the users into the globally accessible $users variable.
+function LoadUsers(){
+	global $users;
+	$users = json_decode(file_get_contents("data/users.json"), true);
+}
+
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists. Dies if username exists and the
 //password is incorrect.
 //TODO: Replace die() with in-page warning
 function LogInOrRegister($username, $password){
-	global $config;
+	global $config, $users;
 	
-	$users = json_decode(file_get_contents("data/users.json"), true);
 	$username = strtolower(trim($username));
 	$password = trim($password);
 	
@@ -65,7 +70,8 @@ function LogInOrRegister($username, $password){
 //Calls LogInUser(...) after registering the user to also log them in.
 //TODO: Replace die() with in-page warning
 function RegisterUser($username, $password){
-	$users = json_decode(file_get_contents("data/users.json"), true);
+	global $users;
+	
 	$username = strtolower(trim($username));
 	$password = trim($password);
 	
@@ -86,12 +92,21 @@ function RegisterUser($username, $password){
 	if(isset($users[$username])){
 		die("Username already registered");
 	}else{
-		$users[$username]["salt"] = $userSalt;
-		$users[$username]["password_hash"] = $passwordHash;
-		$users[$username]["password_iterations"] = $userPasswordIterations;
+		$newUser = Array();
+		$newUser["salt"] = $userSalt;
+		$newUser["password_hash"] = $passwordHash;
+		$newUser["password_iterations"] = $userPasswordIterations;
+		$newUser["admin"] = 0;
+		if(count($users) == 0){
+			//If this is the very first user being registered, set them up as an admin.
+			$newUser["admin"] = 1;
+		}
+		
+		$users[$username] = $newUser;
 	}
 	
 	file_put_contents("data/users.json", json_encode($users));
+	LoadUsers();
 	LogInUser($username, $password);
 }
 
@@ -101,9 +116,8 @@ function RegisterUser($username, $password){
 //Dies if user does not exist or the password is incorrect
 //TODO: Replace die() with in-page warning
 function LogInUser($username, $password){
-	global $config;
+	global $config, $users;
 	
-	$users = json_decode(file_get_contents("data/users.json"), true);
 	$username = strtolower(trim($username));
 	$password = trim($password);
 	
@@ -165,7 +179,7 @@ function LogOut(){
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
 function IsLoggedIn(){
-	global $loginChecked, $loggedInUser, $config;
+	global $loginChecked, $loggedInUser, $config, $users;
 	
 	if($loginChecked){
 		return $loggedInUser;
@@ -197,24 +211,25 @@ function IsLoggedIn(){
 		return false;
 	}else{
 		//Session ID does in fact exist
-		$loggedInUser = $sessions[$sessionIDHash]["username"];
+		$username = $sessions[$sessionIDHash]["username"];
+		$loggedInUser = $users[$username];
 		$loginChecked = true;
-		return $sessions[$sessionIDHash]["username"];
+		return $loggedInUser;
 	}
 }
 
 //Returns TRUE or FALSE depending on whether the logged in user is an admin.
 //returns FALSE if there is no logged in user.
-//Admins are set in the global variable $adminList, defined in global.php
-//TODO: Move adminlist to config.
+//Admins are set by changing adding the "admin":1 parameter to the user's
+//object in users.json 
 function IsAdmin(){
 	global $adminList;
-	$username = IsLoggedIn();
-	if($username === false){
+	$loggedInUser = IsLoggedIn();
+	if($loggedInUser === false){
 		return false;
 	}
 	
-	if(array_search($username, $adminList) !== false){
+	if($loggedInUser["admin"] != 0){
 		return true;
 	}else{
 		return false;

@@ -8,7 +8,7 @@ AfterInit();	//Plugin hook
 //Initializes the site.
 function Init(){
 	function LoadConfig(){
-		global $config;
+		global $config, $dictionary;
 		
 		$configTxt = file_get_contents("config/config.txt");
 		$lines = explode("\n", $configTxt);
@@ -25,6 +25,12 @@ function Init(){
 				$key = trim($linePair[0]);
 				$value = trim($linePair[1]);
 				$config[$key] = $value;
+				
+				//Store marked config entries into the site dictionary for use in templates.
+				if(StartsWith($key, "LANG_")){
+					$dictKey = str_replace("LANG_", "CONFIG_", $key);
+					$dictionary[$dictKey] = $value;
+				}
 				
 				//Validate line
 				switch($key){
@@ -55,6 +61,7 @@ function Init(){
 	}
 	
 	LoadConfig();
+	LoadUsers();
 }
 
 ?>

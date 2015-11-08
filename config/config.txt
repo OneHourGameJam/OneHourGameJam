@@ -1,5 +1,17 @@
 # Lines starting with # are comments
+# Keys which start with LANG_ are automatically copied into the site dictionary. The value is however changed and LANG_ is replaced with CONFIG_
 # KEY | VALUE
+
+
+#Jam name - used in the page title
+LANG_JAMNAME | One hour game jam
+
+#Jam description lines (used in page title)
+LANG_JAMDESC1 | A weekly one hour game jam.
+LANG_JAMDESC2 | Every Saturday at 20:00 UTC.
+LANG_JAMDESC3 | Join us on IRC: <a href='irc:afternet.org/1hgj'>#1hgj channel</a> on <a href='http://afternet.org/'>afternet.org</a>
+
+
 
 
 #Site-wide salt, used for passwords.
@@ -8,3 +20,5 @@ PEPPER |
 
 #Number of iterations used when hashing sessions
 SESSION_PASSWORD_ITERATIONS | 
+
+
