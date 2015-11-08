@@ -1,18 +1,19 @@
 # Lines starting with # are comments
 # Keys which start with LANG_ are automatically copied into the site dictionary. The value is however changed and LANG_ is replaced with CONFIG_
+# Do not use the vertical line (|) character as part of the value.
 # KEY | VALUE
 
 
-#Jam name - used in the page title
+#Jam name (used in the page title)
 LANG_JAMNAME | One hour game jam
 
 #Jam description lines (used in page title)
 LANG_JAMDESC1 | A weekly one hour game jam.
 LANG_JAMDESC2 | Every Saturday at 20:00 UTC.
-LANG_JAMDESC3 | Join us on IRC: <a href='irc:afternet.org/1hgj'>#1hgj channel</a> on <a href='http://afternet.org/'>afternet.org</a>
+LANG_JAMDESC3 | Join us on IRC: <a href="irc:afternet.org/1hgj">#1hgj channel</a> on <a href='http://afternet.org/'>afternet.org</a>
 
-
-
+#Jam rules (displayed on the rules page)
+LANG_RULES | <p>One hour game jam takes place every <a href='https://www.google.com/search?q=20%3A00+UTC'>Saturday at 20:00 UTC</a>. At the start of the hour, a theme is announced in the IRC channel. You then have about an hour (we give you some flexibility) to submit a link to your game here on this website. You are free to use premade assets but it is recommended that you do make at least one game from scratch.</p><p>Then at about 21:30 UTC the bitslap brothers will stream themselves playing each of the games on <a href='http://www.twitch.tv/bitslap'>twitch.tv/bitslap</a>. The stream usually lasts about 2 hours.</p>
 
 #Site-wide salt, used for passwords.
 #Auto generated if left blank, if changed this invalidates all user passwords on the site.

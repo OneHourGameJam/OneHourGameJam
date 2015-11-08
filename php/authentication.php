@@ -179,7 +179,7 @@ function LogOut(){
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
 function IsLoggedIn(){
-	global $loginChecked, $loggedInUser, $config, $users;
+	global $loginChecked, $loggedInUser, $config, $users, $dictionary;
 	
 	if($loginChecked){
 		return $loggedInUser;
@@ -213,6 +213,8 @@ function IsLoggedIn(){
 		//Session ID does in fact exist
 		$username = $sessions[$sessionIDHash]["username"];
 		$loggedInUser = $users[$username];
+		$dictionary["user"] = $loggedInUser;
+		$dictionary["user"]["username"] = $username;
 		$loginChecked = true;
 		return $loggedInUser;
 	}

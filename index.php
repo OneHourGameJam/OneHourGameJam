@@ -11,7 +11,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry")))){
 	$page = "main";
 }
 
@@ -42,6 +42,76 @@ if(isset($_POST["action"])){
 			
 			CreateJam($theme, $date, $time);
 		break;
+		case "saveconfig":
+			if(IsAdmin()){
+				foreach($_POST as $key => $value){
+					SaveConfig($key, $value);
+				}
+				LoadConfig(); //reload config
+			}
+		break;
+		case "editjam":
+			if(IsAdmin()){
+				$jamNumber = intval($_POST["jamnumber"]);
+				$dictionary["editingjam"] = Array();
+				foreach($jams as $i => $jam){
+					if(intval($jam["jam_number"]) == $jamNumber){
+						$dictionary["editingjam"] = $jam;
+						break;
+					}
+				}
+				if(count($dictionary["editingjam"]) == 0){
+					die("no jam selected");
+				}
+				$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
+				$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
+			}
+		break;
+		case "savejamedits":
+			if(IsAdmin()){
+				$jamNumber = intval($_POST["jam_number"]);
+				$theme = $_POST["theme"];
+				$date = $_POST["date"];
+				$time = $_POST["time"];
+				
+				EditJam($jamNumber, $theme, $date, $time);
+			}
+			$page = "main";
+		break;
+		case "editentry":
+			if(IsAdmin()){
+				$jamNumber = intval($_POST["jamnumber"]);
+				$author = strtolower(trim($_POST["entryauthor"]));
+				$dictionary["editingentry"] = Array();
+				foreach($jams as $i => $jam){
+					if(intval($jam["jam_number"]) == $jamNumber){
+						foreach($jam["entries"] as $j => $entry){
+							if($entry["author"] == $author){
+								$dictionary["editingentry"] = $entry;
+								$dictionary["editingentry"]["jam_number"] = $jamNumber;
+								break;
+							}
+						}
+						break;
+					}
+				}
+				if(count($dictionary["editingentry"]) == 0){
+					die("no entry selected");
+				}
+			}
+		break;
+		case "saveentryedits":
+			if(IsAdmin()){
+				$jamNumber = intval($_POST["jam_number"]);
+				$author = $_POST["author"];
+				$title = $_POST["title"];
+				$url = $_POST["url"];
+				$screenshot_url = $_POST["screenshot_url"];
+				
+				EditEntry($jamNumber, $author, $title, $url, $screenshot_url);
+			}
+			$page = "main";
+		break;
 	}
 }
 
@@ -59,77 +129,6 @@ switch($page){
 }
 
 
-//Create lists of jams and jam entries
-$filesToParse = GetSortedJamFileList();
-$authors = Array();
-$firstJam = true;
-$jamFromStart = 1;
-foreach ($filesToParse as $fileLoc) {
-	//Read data about the jam
-	$data = json_decode(file_get_contents($fileLoc), true);
-	$newData = Array();
-	$newData["jam_number"] = $data["jam_number"];
-	$newData["jam_number_ordinal"] = ordinal($data["jam_number"]);
-	$newData["theme"] = $data["theme"];
-	$newData["date"] = $data["date"];
-	$newData["time"] = $data["time"];
-	$newData["entries"] = Array();
-	$newData["first_jam"] = $firstJam;
-	$newData["entries_visible"] = $jamFromStart <= 2;
-	if($firstJam){
-		$firstJam = false;
-	}
-	
-	foreach ($data["entries"] as $i => $entry){
-		$newData["entries"][$i]["title"] = $entry["title"];
-		$author = $entry["author"];
-		
-		if(isset($authors[$author])){
-			$entryCount = $authors[$author]["entry_count"];
-			$entryCount = $entryCount + 1;
-			$authors[$author]["entry_count"] = $entryCount;
-		}else{
-			$authors[$author] = Array("entry_count" => 1, "username" => $author);
-		}
-		
-		$newData["entries"][$i]["author"] = $author;
-		$newData["entries"][$i]["url"] = str_replace("'", "\\'", $entry["url"]);
-		$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
-	}
-	
-	//Hide theme of not-yet-started jams
-	
-	$now = new DateTime();
-	$datetime = new DateTime($data["start_time"]);
-	$timeUntilJam = date_diff($datetime, $now);
-	
-	if($datetime > $now){
-		$newData["theme"] = "Not yet announced";
-		$newData["jam_started"] = false;
-		if($timeUntilJam->days > 0){
-			$newData["time_left"] = $timeUntilJam->format("%a days %H:%I:%S");
-		}else if($timeUntilJam->h > 0){
-			$newData["time_left"] = $timeUntilJam->format("%H:%I:%S");
-		}else  if($timeUntilJam->i > 0){
-			$newData["time_left"] = $timeUntilJam->format("%I:%S");
-		}else if($timeUntilJam->s > 0){
-			$newData["time_left"] = $timeUntilJam->format("%S seconds");
-		}else{
-			$newData["time_left"] = "Now!";
-		}
-	}else{
-		$newData["jam_started"] = true;
-	}
-	
-	//Insert into dictionary array
-	$dictionary["jams"][] = $newData;
-	$jamFromStart++;
-}
-
-//Insert authors into dictionary
-foreach($authors as $k => $authorData){
-	$dictionary["authors"][] = $authorData;
-}
 
 ?>
 
@@ -177,13 +176,35 @@ foreach($authors as $k => $authorData){
 							print $mustache->render(file_get_contents("template/submit.html"), $dictionary);
 						break;
 						case "newjam":
-							print $mustache->render(file_get_contents("template/newjam.html"), $dictionary);
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/newjam.html"), $dictionary);
+							}
 						break;
 						case "assets":
 							print $mustache->render(file_get_contents("template/assets.html"), $dictionary);
 						break;
 						case "rules":
 							print $mustache->render(file_get_contents("template/rules.html"), $dictionary);
+						break;
+						case "config":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/config.html"), $dictionary);
+							}
+						break;
+						case "editcontent":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/editcontent.html"), $dictionary);
+							}
+						break;
+						case "editjam":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/editjam.html"), $dictionary);
+							}
+						break;
+						case "editentry":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/editentry.html"), $dictionary);
+							}
 						break;
 					}
 				?>

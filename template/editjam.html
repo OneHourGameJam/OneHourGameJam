@@ -1,0 +1,26 @@
+<div class="col-md-10" id='loginform'>
+	<p>
+		<h3>Edit jam</h3>
+	</p>
+	<form method='post'>
+		{{#editingjam}}
+			<div class="form-group">
+				<label for="jam_number">Jam number</label>
+				<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
+			</div>
+			<div class="form-group">
+				<label for="theme">Theme</label>
+				<input type="text" class="form-control" id="theme" name='theme' placeholder="Theme" value="{{{theme}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="date">Date</label>
+				<input type="date" class="form-control" id="date" name='date' placeholder="date" value="{{{html_startdate}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="time">Time</label>
+				<input type="time" class="form-control" id="time" name='time' placeholder="Time" value="{{{time}}}" required>
+			</div>
+		{{/editingjam}}
+		<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
+	</form>
+</div>

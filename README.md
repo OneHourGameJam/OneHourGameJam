@@ -23,7 +23,7 @@ It is possible that you will need to change the permissions on the /data and /co
 
 ## 3. First startup
 
-Open the page in your browser and register a user with the username "admin". That user will be the first site admin. It can schedule jams.
+Open the page in your browser and register a user. This first user will be a site administrator. 
 
 You will also likely want to delete the example jam. To do this, delete the file data/jams/jam_1.json
 
@@ -45,7 +45,7 @@ Done on the website - can be scheduled for the future in which case the theme is
 
 ## Removing or editing jams and entries
 
-Done manually by editing the files in data/jams. To delete the jam, simply delete the corresponding json file. To edit a jam or an entry, edit the file itself.
+Editing jams can be done via the website's "edit content" menu. Deleting is done manually by deleting the jam's file from the data/jams folder.
 
 ## Removing a user
 

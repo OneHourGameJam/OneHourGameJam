@@ -1,0 +1,30 @@
+<div class="col-md-10" id='loginform'>
+	<p>
+		<h3>Edit entry</h3>
+	</p>
+	<form method='post'>
+		{{#editingentry}}
+			<div class="form-group">
+				<label for="jam_number">Jam number</label>
+				<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
+			</div>
+			<div class="form-group">
+				<label for="author">Author</label>
+				<input type="text" class="form-control" id="author" name='author' placeholder="Author" value="{{{author}}}" readonly required>
+			</div>
+			<div class="form-group">
+				<label for="title">Title</label>
+				<input type="text" class="form-control" id="title" name='title' placeholder="Entry title" value="{{{title}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="url">Game URL</label>
+				<input type="text" class="form-control" id="url" name='url' placeholder="Game URL" value="{{{url}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="screenshot_url">Screenshot URL</label>
+				<input type="text" class="form-control" id="screenshot_url" name='screenshot_url' placeholder="Screenshot URL" value="{{{screenshot_url}}}" required>
+			</div>
+		{{/editingentry}}
+		<button type="submit" name='action' value='saveentryedits' class="btn btn-default">Save Entry</button>
+	</form>
+</div>

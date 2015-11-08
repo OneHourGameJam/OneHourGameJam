@@ -1,0 +1,14 @@
+<div class="col-md-10" id='loginform'>
+	<p>
+		<h3>Edit configuration</h3>
+	</p>
+	<form method='post'>
+		{{#CONFIG}}
+			<div class="form-group">
+				<label for="{{KEY}}">{{KEY}}</label>
+				<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{KEY}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} required>
+			</div>
+		{{/CONFIG}}
+		<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>
+	</form>
+</div>
