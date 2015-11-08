@@ -37,7 +37,7 @@ Done on the website. The first registered account will have admin rights.
 
 ## Adding more admins
 
-Done manually in data/users.json. Add "admins":1 to the user you want to be an admin.
+Done manually in data/users.json. Add "admin":1 to the user you want to be an admin.
 
 ## Adding jams
 
