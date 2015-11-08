@@ -22,6 +22,10 @@ function filterAuthor(text){
 		var visibleEntries = 0;
 		$(this).children("a").each(function(){
 			if($(this).css("display") == "inline"){
+				var imgElement = $(this).children("div").children("div").children("img");
+				if($(imgElement).attr("src") != $(imgElement).attr("hidden_src")){
+					$(imgElement).attr("src", $(imgElement).attr("hidden_src"));
+				}
 				visibleEntries++;
 			}
 		});
@@ -65,6 +69,10 @@ function filterText(text){
 			var visibleEntries = 0;
 			$(this).children("a").each(function(){
 				if($(this).css("display") == "inline"){
+					var imgElement = $(this).children("div").children("div").children("img");
+					if($(imgElement).attr("src") != $(imgElement).attr("hidden_src")){
+						$(imgElement).attr("src", $(imgElement).attr("hidden_src"));
+					}
 					visibleEntries++;
 				}
 			});
@@ -86,5 +94,13 @@ $(document).ready(function(){
 	$("#search").keyup(search);
 	$(".jamHeader").click(function(){
 		$(this).parent().children(".jamContent").slideToggle();
+		$(this).parent().children(".jamContent").children("a").children("div").children("div").children("img").each(function(){
+			if($(this).css("display") == "inline"){
+				var imgElement = $(this);
+				if($(imgElement).attr("src") != $(imgElement).attr("hidden_src")){
+					$(imgElement).attr("src", $(imgElement).attr("hidden_src"));
+				}
+			}
+		});
 	});
 });

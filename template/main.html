@@ -9,25 +9,27 @@
 					{{jam_number_ordinal}} hour game jam ({{date}})
 				</h3>
 				Theme: {{theme}}<br />
-			{{#jam_started}}
+				{{#jam_started}}
 					<span>Started: {{date}} at {{time}}</span>
-			{{/jam_started}}
-			{{^jam_started}}
+				{{/jam_started}}
+				{{^jam_started}}
 					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in {{time_left}})</span></span>
-			{{/jam_started}}
+				{{/jam_started}}
 			</div>
-			{{#entries_visible}}
-				<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
-			{{/entries_visible}}
-			{{^entries_visible}}
-				<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD; display: none;' id='entries{{jam_number}}'>
-			{{/entries_visible}}
+			
+			
+			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
 			
 				{{#entries}}
 					<a href='{{url}}' target='_BLANK'>
 						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>
 							<div class='panel-body' style='text-align: center; height: 226px;'>
-								<img src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+								{{#entries_visible}}
+									<img src='{{screenshot_url}}' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+								{{/entries_visible}}
+								{{^entries_visible}}
+									<img src='' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+								{{/entries_visible}}
 							</div>
 							<div class='panel-footer'>
 								<b><span class='entryTitle'>{{title}}</span></b><br />
