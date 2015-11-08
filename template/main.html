@@ -3,7 +3,7 @@
 	
 	{{#jams}}
 		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
-			<div class='panel-heading jamHeader' style='cursor: pointer;'>
+			<div class='panel-heading jamHeader'>
 				<a name='jam{{jam_number}}'></a>
 				<h3 class='panel-title' style='font-size: 24px;'>
 					{{jam_number_ordinal}} hour game jam ({{date}})
@@ -23,7 +23,7 @@
 				{{#entries}}
 					<a href='{{url}}' target='_BLANK'>
 						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>
-							<div class='panel-body' style='text-align: center; height: 226px;'>
+							<div class='panel-body entryScreenshot' style='text-align: center; height: 226px;'>
 								{{#entries_visible}}
 									<img src='{{screenshot_url}}' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
 								{{/entries_visible}}
@@ -31,7 +31,7 @@
 									<img src='' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
 								{{/entries_visible}}
 							</div>
-							<div class='panel-footer'>
+							<div class='panel-footer entryName'>
 								<b><span class='entryTitle'>{{title}}</span></b><br />
 								by <span class='entryAuthor'>{{author}}</span>
 							</div>

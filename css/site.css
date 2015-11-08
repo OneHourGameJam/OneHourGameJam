@@ -1,3 +1,41 @@
 body{
 	background-color: #EFEFEF;
 }
+
+
+.jamHeader{
+	cursor: pointer;
+}
+
+.jamHeader:hover{
+	background-color: #CCE7F4;
+}
+
+.panel{
+	border-radius: 0px;
+}
+
+.panel-footer{
+	border-radius: 0px;
+}
+
+.panel-heading{
+	border-radius: 0px;
+}
+
+.entryScreenshot{
+	border: solid 1px #DDDDDD;
+}
+
+.entryName{
+	border: solid 1px #DDDDDD;
+	border-top: 0px;
+}
+
+.form-control{
+	border-radius: 0px;
+}
+
+.btn{
+	border-radius: 0px;
+}
