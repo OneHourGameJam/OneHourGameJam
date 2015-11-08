@@ -32,8 +32,24 @@ function HashPassword($password, $salt, $iterations){
 
 //(Re)Loads the users into the globally accessible $users variable.
 function LoadUsers(){
-	global $users;
+	global $users, $dictionary;
 	$users = json_decode(file_get_contents("data/users.json"), true);
+	foreach($users as $username => $user){
+		$users[$username]["username"] = $username;
+	}
+	ksort($users);
+	$dictionary["users"] = $users;
+	$dictionary["admins"] = Array();
+	$dictionary["registered_users"] = Array();
+	foreach($users as $i => $user){
+	
+		if($user["admin"] != 0){
+			$dictionary["admins"][] = $user;
+		}else{
+			$dictionary["registered_users"][] = $user;
+		}
+	}
+	
 }
 
 //Function called when the login form is sent. Either logs in or registers the
@@ -237,4 +253,86 @@ function IsAdmin(){
 		return false;
 	}
 }
+
+
+
+//Edits an existing user, identified by the username.
+//Valid values for isAdmin are 0 (not admin) and 1 (admin)
+//Only changes whether the user is an admin, does NOT change the user's username.
+function EditUser($username, $isAdmin){
+	global $users;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can edit entries.");
+	}
+	
+	//Validate values
+	if($isAdmin == 0){
+		$isAdmin = 0;
+	}else if($isAdmin == 1){
+		$isAdmin = 1;
+	}else{
+		die("Bad isadmin value");
+		return;
+	}
+	
+	//Check that the user exists
+	if(!isset($users[$username])){
+		die("User does not exist");
+		return;
+	}
+	
+	if($isAdmin == 0){
+		$users[$username]["admin"] = "0";
+	}else{
+		$users[$username]["admin"] = "1";
+	}
+	
+	file_put_contents("data/users.json", json_encode($users));
+}
+
+
+//Edits an existing user's password, user is identified by the username.
+function EditUserPassword($username, $newPassword1, $newPassword2){
+	global $users;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can edit entries.");
+	}
+	
+	$newPassword1 = trim($newPassword1);
+	$newPassword2 = trim($newPassword2);
+	if($newPassword1 != $newPassword2){
+		die("passwords don't match");
+	}
+	$password = $newPassword1;
+	
+	//Check password length
+	if(strlen($password) < 8 || strlen($password) > 20){
+		die("password must be between 8 and 20 characters");
+	}
+	
+	//Check that the user exists
+	if(!isset($users[$username])){
+		die("User does not exist");
+		return;
+	}
+	
+	//Generate new salt, number of iterations and hashed password.
+	$userSalt = GenerateSalt();
+	$userPasswordIterations = intval(rand(10000, 20000));
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
+	
+	$users[$username]["salt"] = $userSalt;
+	$users[$username]["password_hash"] = $passwordHash;
+	$users[$username]["password_iterations"] = $userPasswordIterations;
+	
+	file_put_contents("data/users.json", json_encode($users));
+}
+
+
+
+
 ?>

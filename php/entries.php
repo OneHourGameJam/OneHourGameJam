@@ -144,6 +144,11 @@ function CreateJam($theme, $date, $time){
 function EditJam($jamNumber, $theme, $date, $time){
 	global $jams;
 	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can edit jams.");
+	}
+	
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
@@ -248,6 +253,11 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 //Only changes the title, game url and screenshot url, does NOT change the jam number or author.
 function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 	global $jams;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can edit entries.");
+	}
 	
 	$author = trim($author);
 	$title = trim($title);

@@ -1,0 +1,34 @@
+<div class="col-md-10" id='loginform'>
+	<p>
+		<h3>Edit user</h3>
+	</p>
+	<form method='post'>
+		{{#editinguser}}
+			<p>
+				<div class="form-group">
+					<label for="username">Username</label>
+					<input type="text" class="form-control" id="username" name='username' placeholder="Username" value="{{{username}}}" readonly required>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type='checkbox' name='isadmin' value='1' {{#isadmin}}checked{{/isadmin}}>
+						Site administrator
+					</label>
+				</div>
+				<button type="submit" name='action' value='saveuseredits' class="btn btn-default">Save User</button>
+			</p>
+			
+			<p style='margin-top: 50px;'>
+				<div class="form-group">
+					<label for="password1">New Password</label>
+					<input type="password" class="form-control" id="password1" name='password1' placeholder="Password" value="">
+				</div>
+				<div class="form-group">
+					<label for="password2">Repeat Password</label>
+					<input type="password" class="form-control" id="password2" name='password2' placeholder="Password (repeat)" value="">
+				</div>
+				<button type="submit" name='action' value='savenewuserpassword' class="btn btn-default">Change password</button>
+			</p>
+		{{/editinguser}}
+	</form>
+</div>

@@ -11,7 +11,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser")))){
 	$page = "main";
 }
 
@@ -50,6 +50,28 @@ if(isset($_POST["action"])){
 				LoadConfig(); //reload config
 			}
 		break;
+		case "editentry":
+			if(IsAdmin()){
+				$jamNumber = intval($_POST["jamnumber"]);
+				$author = strtolower(trim($_POST["entryauthor"]));
+				$dictionary["editingentry"] = Array();
+				foreach($jams as $i => $jam){
+					if(intval($jam["jam_number"]) == $jamNumber){
+						foreach($jam["entries"] as $j => $entry){
+							if($entry["author"] == $author){
+								$dictionary["editingentry"] = $entry;
+								$dictionary["editingentry"]["jam_number"] = $jamNumber;
+								break;
+							}
+						}
+						break;
+					}
+				}
+				if(count($dictionary["editingentry"]) == 0){
+					die("no entry selected");
+				}
+			}
+		break;
 		case "editjam":
 			if(IsAdmin()){
 				$jamNumber = intval($_POST["jamnumber"]);
@@ -78,28 +100,6 @@ if(isset($_POST["action"])){
 			}
 			$page = "main";
 		break;
-		case "editentry":
-			if(IsAdmin()){
-				$jamNumber = intval($_POST["jamnumber"]);
-				$author = strtolower(trim($_POST["entryauthor"]));
-				$dictionary["editingentry"] = Array();
-				foreach($jams as $i => $jam){
-					if(intval($jam["jam_number"]) == $jamNumber){
-						foreach($jam["entries"] as $j => $entry){
-							if($entry["author"] == $author){
-								$dictionary["editingentry"] = $entry;
-								$dictionary["editingentry"]["jam_number"] = $jamNumber;
-								break;
-							}
-						}
-						break;
-					}
-				}
-				if(count($dictionary["editingentry"]) == 0){
-					die("no entry selected");
-				}
-			}
-		break;
 		case "saveentryedits":
 			if(IsAdmin()){
 				$jamNumber = intval($_POST["jam_number"]);
@@ -111,6 +111,28 @@ if(isset($_POST["action"])){
 				EditEntry($jamNumber, $author, $title, $url, $screenshot_url);
 			}
 			$page = "main";
+		break;
+		case "saveuseredits":
+			if(IsAdmin()){
+				$username = $_POST["username"];
+				$isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
+				if($isAdmin != 0 && $isAdmin != 1){
+					die("invalid isadmin value");
+				}
+				
+				EditUser($username, $isAdmin);
+			}
+			$page = "editusers";
+		break;
+		case "savenewuserpassword":
+			if(IsAdmin()){
+				$username = $_POST["username"];
+				$password1 = $_POST["password1"];
+				$password2 = $_POST["password2"];
+				
+				EditUserPassword($username, $password1, $password2);
+			}
+			$page = "editusers";
 		break;
 	}
 }
@@ -125,6 +147,19 @@ switch($page){
 	case "logout":
 		LogOut();
 		$page = "main";
+	break;
+	case "edituser":
+		if(IsAdmin()){
+			$editingUsername = $_GET["username"];
+			$editingUsername = trim(strtolower($editingUsername));
+			if(!isset($users[$editingUsername])){
+				die("no user selected");
+			}
+			$dictionary["editinguser"] = $users[$editingUsername];
+			if($users[$editingUsername]["admin"] != 0){
+				$dictionary["editinguser"]["isadmin"] = 1;
+			}
+		}
 	break;
 }
 
@@ -204,6 +239,16 @@ switch($page){
 						case "editentry":
 							if(IsAdmin()){
 								print $mustache->render(file_get_contents("template/editentry.html"), $dictionary);
+							}
+						break;
+						case "editusers":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/editusers.html"), $dictionary);
+							}
+						break;
+						case "edituser":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents("template/edituser.html"), $dictionary);
 							}
 						break;
 					}

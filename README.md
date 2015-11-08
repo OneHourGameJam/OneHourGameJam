@@ -37,7 +37,7 @@ Done on the website. The first registered account will have admin rights.
 
 ## Adding more admins
 
-Done manually in data/users.json. Add "admin":1 to the user you want to be an admin.
+Adding or removing administrators can be done via the "Manage users" administrative menu.
 
 ## Adding jams
 
@@ -65,4 +65,6 @@ The simplest way to migrate is to simply copy the files from one server and past
 
 # Solving performance issues
 
-In order to ensure security of passwords and sessions, the site salts and peppers them, then hashes them with SHA256 between 10k and 20k times, by default. If the site takes too long to load for users, you might want to change these values to something lower. They can be found in php/authentication.php -> RegisterUser() and HashPassword()
+In order to ensure security of passwords and sessions, the site salts and peppers them, then hashes them with SHA256 between 10k and 20k times, by default. If the site takes too long to load for users, you might want to change these values to something lower. They can be found in php/authentication.php -> RegisterUser(), HashPassword() and EditUserPassword().
+
+It's also possible for the number of sessions to build up. If data/sessions.json becomes too large it may cause performance issues, consider deleting data/sessions.json if this happen. Note that this logs out all users.

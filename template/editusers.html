@@ -1,0 +1,17 @@
+<div class="col-md-10" id='jamlist'>
+	<h3>Edit users</h3>
+	
+	<h4>Administrators</h4>
+	<ul>
+		{{#admins}}
+			<li>{{username}} <a href='?page=edituser&username={{username}}'>edit</a></li>
+		{{/admins}}
+	</ul>
+	
+	<h4>Registered users</h4>
+	<ul>
+		{{#registered_users}}
+			<li>{{username}} <a href='?page=edituser&username={{username}}'>edit</a></li>
+		{{/registered_users}}
+	</ul>
+</div>
