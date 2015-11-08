@@ -21,4 +21,9 @@
 		
 	}
 	
+	//Called at the end of the <head> tag, intended to contain Analytics code.
+	function PrintAnalyticsCode(){
+		
+	}
+	
 ?>

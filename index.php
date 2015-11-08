@@ -178,6 +178,7 @@ switch($page){
 		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/site.css" rel="stylesheet">
 		<script src='js/1hgj.js' type='text/javascript'></script>
+		<?php PrintAnalyticsCode(); ?>
 	</head>
 	<body>
 		<div class="container">
