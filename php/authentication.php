@@ -314,8 +314,8 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$password = $newPassword1;
 	
 	//Check password length
-	if(strlen($password) < 8 || strlen($password) > 20){
-		die("password must be between 8 and 20 characters");
+	if(strlen($password) < 8){
+		die("password must be longer than 8 characters");
 	}
 	
 	//Check that the user exists

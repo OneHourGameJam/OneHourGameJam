@@ -3,6 +3,7 @@
 		<h3 class="panel-title">Previous jams</h3>
 	</div>
 	<div class="panel-body">
+		{{all_entries_count}} games made<br /><br />
 		<ul id='jammenu' style='padding-left: 12px;'>
 			{{#jams}}
 				<a href='#' onclick='$("#jam{{jam_number}}").children(".jamContent").slideDown(); scr("#jam{{jam_number}}");'>{{jam_number_ordinal}} Jam</a><br />

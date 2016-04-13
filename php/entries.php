@@ -15,6 +15,7 @@ function LoadEntries(){
 	$authorList = Array();
 	$firstJam = true;
 	$jamFromStart = 1;
+	$totalEntries = 0;
 	foreach ($filesToParse as $fileLoc) {
 		//Read data about the jam
 		$data = json_decode(file_get_contents($fileLoc), true);
@@ -50,6 +51,10 @@ function LoadEntries(){
 			$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
 		}
 		
+		$totalEntries += count($newData["entries"]);
+		$newData["entries_count"] = count($newData["entries"]);
+		
+		
 		//Hide theme of not-yet-started jams
 		
 		$now = new DateTime();
@@ -79,6 +84,8 @@ function LoadEntries(){
 		$jams[] = $newData;
 		$jamFromStart++;
 	}
+	
+	$dictionary["all_entries_count"] = $totalEntries;
 
 	//Insert authors into dictionary
 	foreach($authorList as $k => $authorData){
