@@ -126,15 +126,15 @@ function CreateJam($theme, $date, $time){
 	}else if(strlen($time) <= 0){
 		die("Invalid time");
 	}else{
-		$datetime = strtotime($date." ".$time);
+		$datetime = strtotime($date." ".$time." UTC");
 	}
 	
 	$newJam = Array();
 	$newJam["jam_number"] = $jamNumber;
 	$newJam["theme"] = $theme;
-	$newJam["date"] = date("d M Y", $datetime);
-	$newJam["time"] = date("H:i", $datetime);
-	$newJam["start_time"] = date("c", $datetime);
+	$newJam["date"] = gmdate("d M Y", $datetime);
+	$newJam["time"] = gmdate("H:i", $datetime);
+	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
 	file_put_contents("data/jams/jam_$jamNumber.json", json_encode($newJam));
 }
@@ -171,7 +171,7 @@ function EditJam($jamNumber, $theme, $date, $time){
 	}else if(strlen($time) <= 0){
 		die("Invalid time");
 	}else{
-		$datetime = strtotime($date." ".$time);
+		$datetime = strtotime($date." ".$time." UTC");
 	}
 	
 	if(count($jams) == 0){
@@ -181,9 +181,9 @@ function EditJam($jamNumber, $theme, $date, $time){
 	foreach($jams as $i => $jam){
 		if(intval($jam["jam_number"]) == $jamNumber){
 			$jam["theme"] = $theme;
-			$jam["date"] = date("d M Y", $datetime);
-			$jam["time"] = date("H:i", $datetime);
-			$jam["start_time"] = date("c", $datetime);
+			$jam["date"] = gmdate("d M Y", $datetime);
+			$jam["time"] = gmdate("H:i", $datetime);
+			$jam["start_time"] = gmdate("c", $datetime);
 			file_put_contents("data/jams/jam_$jamNumber.json", json_encode($jam));
 			break;
 		}

@@ -85,7 +85,7 @@ if(isset($_POST["action"])){
 				if(count($dictionary["editingjam"]) == 0){
 					die("no jam selected");
 				}
-				$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
+				$editingJamDate = gmdate("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
 				$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
 			}
 		break;
