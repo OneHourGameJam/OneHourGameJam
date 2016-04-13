@@ -229,8 +229,12 @@ function IsLoggedIn(){
 		//Session ID does in fact exist
 		$username = $sessions[$sessionIDHash]["username"];
 		$loggedInUser = $users[$username];
+		$loggedInUser["username"] = $username;
 		$dictionary["user"] = $loggedInUser;
 		$dictionary["user"]["username"] = $username;
+		if($loggedInUser["admin"] != 0){
+			$dictionary["user"]["isadmin"] = 1;
+		}
 		$loginChecked = true;
 		return $loggedInUser;
 	}

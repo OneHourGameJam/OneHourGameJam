@@ -5,8 +5,16 @@
 	<form method='post'>
 		{{#CONFIG}}
 			<div class="form-group">
-				<label for="{{KEY}}">{{KEY}}</label>
-				<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{KEY}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} required>
+				<label for="{{KEY}}">{{NAME}}</label>
+				{{#TYPE_TEXT}}
+					<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} required>
+				{{/TYPE_TEXT}}
+				{{#TYPE_NUMBER}}
+					<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} required>
+				{{/TYPE_NUMBER}}
+				{{#TYPE_TEXTAREA}}
+					<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} required>{{{VALUE}}}</textarea>
+				{{/TYPE_TEXTAREA}}
 			</div>
 		{{/CONFIG}}
 		<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>

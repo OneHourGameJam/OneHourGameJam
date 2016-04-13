@@ -11,10 +11,11 @@ include_once("global.php");
 
 //Global functions
 include_once("helpers.php");
+include_once("sanitize.php");
 include_once("config.php");
 include_once("authentication.php");
 include_once("entries.php");
-include_once("sanitize.php");
+include_once("themes.php");
 
 //Initialization. This is where configuration is loaded
 include_once("init.php");

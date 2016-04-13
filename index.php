@@ -11,7 +11,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes")))){
 	$page = "main";
 }
 
@@ -23,6 +23,7 @@ if(isset($_POST["action"])){
 		case "login":
 			$username = (isset($_POST["un"])) ? $_POST["un"] : "";
 			$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
+			$loginChecked = false;
 			
 			$username = strtolower(trim($username));
 			$password = trim($password);
@@ -85,7 +86,7 @@ if(isset($_POST["action"])){
 				if(count($dictionary["editingjam"]) == 0){
 					die("no jam selected");
 				}
-				$editingJamDate = gmdate("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
+				$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
 				$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
 			}
 		break;
@@ -134,6 +135,30 @@ if(isset($_POST["action"])){
 			}
 			$page = "editusers";
 		break;
+		case "savenewtheme":
+			if(IsLoggedIn()){
+				$newTheme = $_POST["theme"];
+				AddTheme($newTheme, false);
+			}
+		break;
+		case "deletetheme":
+			if(IsAdmin()){
+				$deletedTheme = $_POST["theme"];
+				RemoveTheme($deletedTheme);
+			}
+		break;
+		case "bantheme":
+			if(IsAdmin()){
+				$bannedTheme = $_POST["theme"];
+				BanTheme($bannedTheme);
+			}
+		break;
+		case "unbantheme":
+			if(IsAdmin()){
+				$unbannedTheme = $_POST["theme"];
+				UnbanTheme($unbannedTheme);
+			}
+		break;
 	}
 }
 
@@ -145,6 +170,7 @@ switch($page){
 		}
 	break;
 	case "logout":
+		$loginChecked = false;
 		LogOut();
 		$page = "main";
 	break;
@@ -163,7 +189,7 @@ switch($page){
 	break;
 }
 
-
+$dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
 ?>
 
@@ -251,6 +277,9 @@ switch($page){
 							if(IsAdmin()){
 								print $mustache->render(file_get_contents("template/edituser.html"), $dictionary);
 							}
+						break;
+						case "themes":
+							print $mustache->render(file_get_contents("template/themes.html"), $dictionary);
 						break;
 					}
 				?>

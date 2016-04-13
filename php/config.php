@@ -1,9 +1,54 @@
 <?php
 //Functions which have to do with reading/writing to the config file.
 
+$configSettings = Array(
+	"LANG_JAMNAME" => Array(
+		"TAG" => "LANG_JAMNAME",
+		"NAME" => "Jam name, displayed in the page header",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE
+	),
+	"LANG_JAMDESC1" => Array(
+		"TAG" => "LANG_JAMDESC1",
+		"NAME" => "Jam description, line 1, displayed in the page header",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE
+	),
+	"LANG_JAMDESC2" => Array(
+		"TAG" => "LANG_JAMDESC2",
+		"NAME" => "Jam description, line 2, displayed in the page header",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE
+	),
+	"LANG_JAMDESC3" => Array(
+		"TAG" => "LANG_JAMDESC3",
+		"NAME" => "Jam description, line 3, displayed in the page header",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE
+	),
+	"LANG_RULES" => Array(
+		"TAG" => "LANG_RULES",
+		"NAME" => "Jam rules, displayed on the rules page",
+		"TYPE" => "TEXTAREA",
+		"EDITABLE" => TRUE
+	),
+	"PEPPER" => Array(
+		"TAG" => "PEPPER",
+		"NAME" => "Sitewide Pepper (used in password hashing), for security reasons this can only be changed manually in the config file.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => FALSE
+	),
+	"SESSION_PASSWORD_ITERATIONS" => Array(
+		"TAG" => "SESSION_PASSWORD_ITERATIONS",
+		"NAME" => "Number of hashing iteraations for session IDs, for security reasons this can only be changed manually in the config file.",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => FALSE
+	)
+);
+
 //Initializes configuration, stores it in the global $config variable.
 function LoadConfig(){
-	global $config, $dictionary, $uneditableConfigEntries;
+	global $config, $dictionary, $configSettings;
 	
 	$config = Array();	//Clear any existing configuration.
 	$dictionary["CONFIG"] = Array();	//Clear any config entries in the dictionary
@@ -31,11 +76,23 @@ function LoadConfig(){
 			}
 			
 			//Store key-value pairs in the CONFIG part of the dictionary.
-			if(array_search($key, $uneditableConfigEntries) !== FALSE){
-				$dictionary["CONFIG"][] = Array("KEY" => $key, "VALUE" => htmlentities($value), "DISABLED" => 1);
-			}else{
-				$dictionary["CONFIG"][] = Array("KEY" => $key, "VALUE" => htmlentities($value));
+			$configEntry = Array("KEY" => $key, "VALUE" => htmlentities($value), "NAME" => $configSettings[$key]["NAME"]);
+			if($configSettings[$key]["EDITABLE"] == FALSE){
+				$configEntry["DISABLED"] = 1;
 			}
+			switch($configSettings[$key]["TYPE"]){
+				case "TEXT":
+					$configEntry["TYPE_TEXT"] = 1;
+				break;
+				case "NUMBER":
+					$configEntry["TYPE_NUMBER"] = 1;
+				break;
+				case "TEXTAREA":
+					$configEntry["TYPE_TEXTAREA"] = 1;
+				break;
+			}
+			
+			$dictionary["CONFIG"][] = $configEntry;
 			
 			//Validate line
 			switch($key){
@@ -68,13 +125,13 @@ function LoadConfig(){
 //Updates a given key's entry in the config file if it differs from the current one.
 //Disallowed characters in the new value: vertical line (|), \n and \r
 function SaveConfig($key, $newValue){
-	global $config, $uneditableConfigEntries;
+	global $config, $configSettings;
 	
 	if(!IsAdmin()){
 		return;	//Lacks permissions to make edits
 	}
 	
-	if(array_search($key, $uneditableConfigEntries) !== FALSE){
+	if($configSettings[$key]["EDITABLE"] == FALSE){
 		//Some configuration settings cannot be set via this interface for security reasons.
 		return;
 	}

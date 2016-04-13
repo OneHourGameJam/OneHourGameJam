@@ -22,6 +22,7 @@ function LoadEntries(){
 		$newData["jam_number"] = $data["jam_number"];
 		$newData["jam_number_ordinal"] = ordinal($data["jam_number"]);
 		$newData["theme"] = $data["theme"];
+		$newData["theme_visible"] = $data["theme"]; //Used for administration
 		$newData["date"] = $data["date"];
 		$newData["time"] = $data["time"];
 		$newData["entries"] = Array();
@@ -82,6 +83,25 @@ function LoadEntries(){
 	//Insert authors into dictionary
 	foreach($authorList as $k => $authorData){
 		$dictionary["authors"][] = $authorData;
+		
+		//Update users list with entry count for each
+		foreach($dictionary["users"] as $i => $dictUserInfo){
+			if($dictUserInfo["username"] == $k){
+				$dictionary["users"][$i]["entry_count"] = $authorData["entry_count"];
+			}
+		}
+		//Update admins list with entry count for each
+		foreach($dictionary["admins"] as $i => $dictUserInfo){
+			if($dictUserInfo["username"] == $k){
+				$dictionary["admins"][$i]["entry_count"] = $authorData["entry_count"];
+			}
+		}
+		//Update registered users list with entry count for each
+		foreach($dictionary["registered_users"] as $i => $dictUserInfo){
+			if($dictUserInfo["username"] == $k){
+				$dictionary["registered_users"][$i]["entry_count"] = $authorData["entry_count"];
+			}
+		}
 		$authors[] = $authorData;
 	}
 }
@@ -95,6 +115,7 @@ function LoadEntries(){
 //(checks whether or not they are an admin).
 //TODO: Replace die() with in-page warning
 function CreateJam($theme, $date, $time){
+	
 	$jamNumber = intval(GetNextJamNumber());
 	$theme = trim($theme);
 	$date = trim($date);
@@ -196,6 +217,8 @@ function EditJam($jamNumber, $theme, $date, $time){
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
 function SubmitEntry($gameName, $gameURL, $screenshotURL){
+	global $loggedInUser;
+	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
 	$screenshotURL = trim($screenshotURL);
@@ -229,21 +252,22 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 	
 	//First on the list is the current jam.
 	$currentJamFile = $filesToParse[count($filesToParse) - 1];
+		print $loggedInUser["username"];
 	
 	$currentJam = json_decode(file_get_contents($currentJamFile), true);
 	if(isset($currentJam["entries"])){
 		$entryUpdated = false;
 		foreach($currentJam["entries"] as $i => $entry){
-			if($entry["author"] == IsLoggedIn()){
+			if($entry["author"] == $loggedInUser["username"]){
 				//Updating existing entry
-				$currentJam["entries"][$i] = Array("title" => "$gameName", "author" => "".IsLoggedIn(), "url" => "$gameURL", "screenshot_url" => "$screenshotURL");
+				$currentJam["entries"][$i] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL");
 				file_put_contents($currentJamFile, json_encode($currentJam));
 				$entryUpdated = true;
 			}
 		}
 		if(!$entryUpdated){
 			//Submitting new entry
-			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".IsLoggedIn(), "url" => "$gameURL", "screenshot_url" => "$screenshotURL");
+			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL");
 			file_put_contents($currentJamFile, json_encode($currentJam));
 		}
 	}
@@ -307,6 +331,17 @@ function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 			break;
 		}
 	}
+}
+
+function GetNextJamDateAndTime(){
+	global $dictionary;
+	
+	$today = date('w'); 
+	$days = 6 - $today; 
+	$saturday = strtotime("+$days days"); 
+	
+	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $saturday);
+	$dictionary["next_jam_suggested_time"] = "20:00";
 }
 
 ?>

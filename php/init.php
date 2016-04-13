@@ -11,6 +11,8 @@ function Init(){
 	LoadConfig();
 	LoadUsers();
 	LoadEntries();
+	LoadThemes();
+	GetNextJamDateAndTime();
 }
 
 ?>
