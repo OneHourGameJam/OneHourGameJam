@@ -13,7 +13,7 @@
 					<span>Started: {{date}} at {{time}} ({{entries_count}} entries)</span>
 				{{/jam_started}}
 				{{^jam_started}}
-					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in {{time_left}})</span></span>
+					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in <span id='time_display_{{jam_number_ordinal}}'>{{time_left}}</span>)</span></span>
 				{{/jam_started}}
 			</div>
 			
@@ -21,22 +21,26 @@
 			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
 			
 				{{#entries}}
-					<a href='{{url}}' target='_BLANK'>
-						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px;'>
-							<div class='panel-body entryScreenshot' style='text-align: center; height: 226px;'>
-								{{#entries_visible}}
-									<img src='{{screenshot_url}}' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
-								{{/entries_visible}}
-								{{^entries_visible}}
-									<img src='' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
-								{{/entries_visible}}
-							</div>
-							<div class='panel-footer entryName'>
-								<b><span class='entryTitle'>{{title}}</span></b><br />
-								by <span class='entryAuthor'>{{author}}</span>
-							</div>
+					<div onclick='$(this).find(".screenshot").toggle(); $(this).find(".description").toggle(); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px; cursor: pointer;'>
+						<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;' >
+							{{#entries_visible}}
+								<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+							{{/entries_visible}}
+							{{^entries_visible}}
+								<img src='' hidden_src='{{screenshot_url}}' class='small_screenshot' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+							{{/entries_visible}}
 						</div>
-					</a>
+						<div class='panel-body entryScreenshot description' style='text-align: center; height: 226px; display: none; overflow: hidden;'>
+							<button type="button" class="btn btn-success" onclick='document.location.href="{{url}}"'>Download</button>
+							<p><br />
+								{{description}}
+							</p>
+						</div>
+						<div class='panel-footer entryName'>
+							<b><span class='entryTitle'>{{title}}</span></b><br />
+							by <span class='entryAuthor'>{{author}}</span>
+						</div>
+					</div>
 				{{/entries}}
 			</div>
 		</div>

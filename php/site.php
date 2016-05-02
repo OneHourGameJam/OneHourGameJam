@@ -7,18 +7,19 @@ include_once("plugins/plugins.php");
 
 //Global variable definition
 session_start();
-include_once("global.php");
+include_once("php/global.php");
 
 //Global functions
-include_once("helpers.php");
-include_once("sanitize.php");
-include_once("config.php");
-include_once("authentication.php");
-include_once("entries.php");
-include_once("themes.php");
+include_once("php/helpers.php");
+include_once("php/sanitize.php");
+include_once("php/config.php");
+include_once("php/db.php");
+include_once("php/authentication.php");
+include_once("php/entries.php");
+include_once("php/themes.php");
 
 //Initialization. This is where configuration is loaded
-include_once("init.php");
+include_once("php/init.php");
 
 
 

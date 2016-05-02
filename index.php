@@ -33,15 +33,16 @@ if(isset($_POST["action"])){
 			$gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
 			$gameURL = (isset($_POST["gameurl"])) ? $_POST["gameurl"] : "";
 			$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
+			$description = (isset($_POST["description"])) ? $_POST["description"] : "";
 			
-			SubmitEntry($gameName, $gameURL, $screenshotURL);
+			SubmitEntry($gameName, $gameURL, $screenshotURL, $description);
 		break;
 		case "newjam":
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
 			$date = (isset($_POST["date"])) ? $_POST["date"] : "";
 			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
 			
-			CreateJam($theme, $date, $time);
+			CreateJam($theme, $date, $time, $description);
 		break;
 		case "saveconfig":
 			if(IsAdmin()){
@@ -235,6 +236,18 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							print $mustache->render(file_get_contents("template/login.html"), $dictionary);
 						break;
 						case "submit":
+							$dictionary["logged_in_user_current_jam_entry_name"] = "";
+							foreach($dictionary["current_jam"]["entries"] as $current_jam_entry){
+								if($current_jam_entry["author"] == $loggedInUser["username"]){
+									$dictionary["user_entry_name"] = $current_jam_entry["title"];
+									if($current_jam_entry["screenshot_url"] != "logo.png"){
+										$dictionary["user_entry_screenshot"] = $current_jam_entry["screenshot_url"];
+									}
+									$dictionary["user_entry_url"] = $current_jam_entry["url"];
+									$dictionary["user_entry_desc"] = $current_jam_entry["description"];
+									break;
+								}
+							}
 							print $mustache->render(file_get_contents("template/submit.html"), $dictionary);
 						break;
 						case "newjam":

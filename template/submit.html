@@ -2,18 +2,22 @@
 	<p>
 		<h3>Submit your entry</h3>
 	</p>
-	<form method='post'>
+	<form method='post' enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="gamename">Game name</label>
-			<input type="text" class="form-control" id="gamename" name='gamename' placeholder="Game name" required>
+			<input type="text" class="form-control" id="gamename" name='gamename' placeholder="Game name" value="{{user_entry_name}}" required>
 		</div>
 		<div class="form-group">
 			<label for="gameurl">URL to game</label>
-			<input type="url" class="form-control" id="gameurl" name='gameurl' placeholder="http://game-url" required>
+			<input type="url" class="form-control" id="gameurl" name='gameurl' placeholder="http://game-url" value="{{user_entry_url}}" required>
 		</div>
 		<div class="form-group">
-			<label for="screenshoturl">Screenshot url</label>
-			<input type="url" class="form-control" id="screenshoturl" name='screenshoturl' placeholder="http://screenshot-url">
+			<label for="screenshotfile">Screenshot (Change)</label>
+			<input type="file" class="form-control" id="screenshotfile" name='screenshotfile' placeholder="Screenshot file" value="{{user_entry_screenshot}}">
+		</div>
+		<div class="form-group">
+			<label for="description">Brief game description</label>
+			<textarea class="form-control" id="description" name='description' placeholder="Game description">{{user_entry_desc}}</textarea>
 		</div>
 		<button type="submit" name='action' value='submit' class="btn btn-default">Submit</button>
 	</form>

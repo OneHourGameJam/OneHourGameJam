@@ -16,6 +16,7 @@ function LoadEntries(){
 	$firstJam = true;
 	$jamFromStart = 1;
 	$totalEntries = 0;
+	$largest_jam_number = -1;
 	foreach ($filesToParse as $fileLoc) {
 		//Read data about the jam
 		$data = json_decode(file_get_contents($fileLoc), true);
@@ -35,6 +36,7 @@ function LoadEntries(){
 		
 		foreach ($data["entries"] as $i => $entry){
 			$newData["entries"][$i]["title"] = $entry["title"];
+			$newData["entries"][$i]["description"] = $entry["description"];
 			$author = $entry["author"];
 			$entries[] = $entry;
 			
@@ -81,6 +83,10 @@ function LoadEntries(){
 		
 		//Insert into dictionary array
 		$dictionary["jams"][] = $newData;
+		if($largest_jam_number < intval($data["jam_number"])){
+			$largest_jam_number = intval($data["jam_number"]);
+			$dictionary["current_jam"] = $newData;
+		}
 		$jams[] = $newData;
 		$jamFromStart++;
 	}
@@ -111,6 +117,8 @@ function LoadEntries(){
 		}
 		$authors[] = $authorData;
 	}
+	
+	$dictionary["all_authors_count"] = count($authors);
 }
 
 
@@ -221,14 +229,16 @@ function EditJam($jamNumber, $theme, $date, $time){
 //Submits a new entry to the last jam. All parameters are strings, $gameName
 //and $gameURL must be non-blank, $gameURL must be a valid URL, $screenshotURL
 //can either be blank or a valid URL. If blank, a default image is used instead.
+//description must be non-blank
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
-function SubmitEntry($gameName, $gameURL, $screenshotURL){
-	global $loggedInUser;
+function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
+	global $loggedInUser, $_FILES;
 	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
 	$screenshotURL = trim($screenshotURL);
+	$description = trim($description);
 	
 	//Authorize user
 	if(IsLoggedIn() === false){
@@ -245,21 +255,58 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 		die("Invalid game URL");
 	}
 	
-	//Validate Screenshot URL
-	if($screenshotURL == ""){
-		$screenshotURL = "logo.png";
-	}else if(SanitizeURL($screenshotURL) === false){
-		die("Invalid screenshot URL. Leave blank for default.");
-	}
-	
 	$filesToParse = GetSortedJamFileList();
 	if(count($filesToParse) < 1){
 		die("No jam to submit your entry to");
 	}
 	
+	//Validate description
+	if(strlen($description) <= 0){
+		die("Invalid description");
+	}
+	
 	//First on the list is the current jam.
 	$currentJamFile = $filesToParse[count($filesToParse) - 1];
-		print $loggedInUser["username"];
+	$jam_folder = str_replace(".json", "", $currentJamFile);
+	//print $loggedInUser["username"];
+	
+	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
+		$uploadPass = 0;
+		$imageFileType = strtolower(pathinfo($_FILES["screenshotfile"]["name"], PATHINFO_EXTENSION));
+		$target_file = $jam_folder . "/".$loggedInUser["username"]."." . $imageFileType;
+		$check = getimagesize($_FILES["screenshotfile"]["tmp_name"]);
+		
+		if($check !== false) {
+			$uploadPass = 1;
+		} else {
+			die("Uploaded screenshot is not an image");
+			$uploadPass = 0;
+		}
+		
+		if ($_FILES["screenshotfile"]["size"] > 5000000) {
+			die("Uploaded screenshot is too big (max 5MB)");
+			$uploadPass = 0;
+		}
+		
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+		&& $imageFileType != "gif" ) {
+			die("Uploaded screenshot is not jpeg, png or gif");
+			$uploadPass = 0;
+		}
+		
+		if($uploadPass == 1){
+			if(!file_exists($jam_folder)){
+				mkdir($jam_folder);
+			}
+			move_uploaded_file($_FILES["screenshotfile"]["tmp_name"], $target_file);
+			$screenshotURL = $target_file;
+		}
+	}
+	
+	//Validate Screenshot URL
+	if($screenshotURL == ""){
+		$screenshotURL = "logo.png";
+	}
 	
 	$currentJam = json_decode(file_get_contents($currentJamFile), true);
 	if(isset($currentJam["entries"])){
@@ -267,17 +314,26 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL){
 		foreach($currentJam["entries"] as $i => $entry){
 			if($entry["author"] == $loggedInUser["username"]){
 				//Updating existing entry
-				$currentJam["entries"][$i] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL");
+				$existingScreenshot = $currentJam["entries"][$i]["screenshot_url"];
+				if($screenshotURL == "logo.png"){
+					if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
+						$screenshotURL = $existingScreenshot;
+					}
+				}
+				
+				$currentJam["entries"][$i] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
 				file_put_contents($currentJamFile, json_encode($currentJam));
 				$entryUpdated = true;
 			}
 		}
 		if(!$entryUpdated){
 			//Submitting new entry
-			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL");
+			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
 			file_put_contents($currentJamFile, json_encode($currentJam));
 		}
 	}
+	
+	LoadEntries();
 }
 
 //Edits an existing entry, identified by the jam number and author.

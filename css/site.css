@@ -39,3 +39,12 @@ body{
 .btn{
 	border-radius: 0px;
 }
+
+.themeTableCell{
+	padding: 3px 3px;
+	min-width: 30px;
+}
+
+.themeTableCellCentered{
+	text-align: center;
+}

@@ -1,3 +1,24 @@
+<script type='text/javascript'>
+	function VoteTheme(themeID, vote, btn_id){
+		$.get("api/themevote?themeID="+themeID+"&vote="+vote, function(data){
+			var d = jQuery.parseJSON(data)
+			
+			$("#"+btn_id+"-1").removeClass("btn-danger");
+			$("#"+btn_id+"-2").removeClass("btn-warning");
+			$("#"+btn_id+"-3").removeClass("btn-success");
+			if(vote == 1){
+				$("#"+btn_id+"-"+vote).addClass("btn-danger");
+			}
+			if(vote == 2){
+				$("#"+btn_id+"-"+vote).addClass("btn-warning");
+			}
+			if(vote == 3){
+				$("#"+btn_id+"-"+vote).addClass("btn-success");
+			}
+		});
+	}
+</script>
+
 <div class="col-md-10" id='themes'>
 	<h3>Jam theme suggestions</h3>
 	<h4>Suggest a theme</h4>
@@ -9,14 +30,91 @@
 		</div>
 	</form>
 	<h4>Suggested themes</h4>
+	
 	<ul>
-		{{#suggested_themes}}
-			{{#theme_visible}}
-				<li>{{{theme}}} {{#user.isadmin}}<form method='POST' style='display: inline-block;'><input type='hidden' name='theme' value='{{{theme}}}'><button type="submit" name='action' value='deletetheme' class="btn btn-default">Delete theme</button> 
-				{{#banned}}<span style='color:red;'>BANNED</font> <button type="submit" name='action' value='unbantheme' class="btn btn-default">Unban</button>{{/banned}}
-				{{^banned}}<button type="submit" name='action' value='bantheme' class="btn btn-default">Ban</button>{{/banned}}</form>{{/user.isadmin}}
-				</li> 
-			{{/theme_visible}}
-		{{/suggested_themes}}
+		<table>
+			<tr>
+				<th colspan='3' class='themeTableCell themeTableCellCentered'>
+					Vote
+				</th>
+				<th class='themeTableCell themeTableCellCentered'>
+					Theme
+				</th>
+				{{#user.isadmin}}
+					<th class='themeTableCell themeTableCellCentered'>
+						Author
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						Votes
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						Popularity
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						+1
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						0
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						-1
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						Admin actions
+					</th>
+				{{/user.isadmin}}
+			</tr>
+			{{#suggested_themes}}
+				{{#theme_visible}}
+					<tr>
+						<td class='themeTableCell'>
+							<button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}" onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
+						</td>
+						<td class='themeTableCell'>
+							<button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}" onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
+						</td>
+						<td class='themeTableCell'>
+							<button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}" onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
+						</td>
+						<td class='themeTableCell'>
+							{{{theme}}} 
+						</td>
+						{{#user.isadmin}}
+							<td class='themeTableCell themeTableCellCentered'>
+								{{author}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{votes_total}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{votes_popularity}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{votes_for}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{votes_neutral}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{votes_against}}
+							</td>
+							<td class='themeTableCell'>
+								<form method='POST' style='display: inline-block;'>
+									<input type='hidden' name='theme' value='{{{theme}}}'>
+									<button type="submit" name='action' value='deletetheme' class="btn btn-default">Delete</button> 
+									{{#banned}}
+										<span style='color:red;'>BANNED</font> 
+										<button type="submit" name='action' value='unbantheme' class="btn btn-default">Unban</button>
+									{{/banned}}
+									{{^banned}}
+										<button type="submit" name='action' value='bantheme' class="btn btn-default">Ban</button>
+									{{/banned}}	
+								</form>
+							</td>
+						{{/user.isadmin}}
+					</tr>
+				{{/theme_visible}}
+			{{/suggested_themes}}
+		</table>
 	</ul>
 </div>

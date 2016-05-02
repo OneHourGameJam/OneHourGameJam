@@ -18,10 +18,10 @@ function SanitizeURL($url) {
 	$url = trim($url);
 	
 	// Step 2. Confirm that it's a valid URL (i.e. has a scheme).
-	$protocols = [
+	$protocols = Array(
 		// Standard URLs (scheme://path/?query).
 		'http', 'https'
-	];
+	);
 	
 	// NOTE: parse_url isn't multibyte aware, so you should only rely on scheme and the existence of other members.
 	$parsed = parse_url($url);
