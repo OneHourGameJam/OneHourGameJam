@@ -29,15 +29,24 @@ function LoadThemes(){
 			//Theme already processed, simply log numbers for vote type
 			switch($theme["themevote_type"]){
 				case "1":
-					$themes[$themeID]["votes_against"] = $theme["themevote_count"];
+					$themes[$themeID]["votes_against"] = intval($theme["themevote_count"]);
 				break;
 				case "2":
-					$themes[$themeID]["votes_neutral"] = $theme["themevote_count"];
+					$themes[$themeID]["votes_neutral"] = intval($theme["themevote_count"]);
 				break;
 				case "3":
-					$themes[$themeID]["votes_for"] = $theme["themevote_count"];
+					$themes[$themeID]["votes_for"] = intval($theme["themevote_count"]);
 				break;
 			}
+		
+			$votesTotal = $themes[$themeID]["votes_for"] + $themes[$themeID]["votes_neutral"] + $themes[$themeID]["votes_against"] + $themes[$themeID]["votes_report"];
+			$oppinionatedVotesTotal = $themes[$themeID]["votes_for"] + $themes[$themeID]["votes_against"];
+			$themes[$themeID]["votes_popularity"] = "?";
+			if($oppinionatedVotesTotal > 0){
+				$themes[$themeID]["votes_popularity"] = round(($themes[$themeID]["votes_for"] * 100) / $oppinionatedVotesTotal) . "%";
+			}
+			$themes[$themeID]["votes_total"] = $votesTotal;
+			
 			continue;
 		}
 		
@@ -50,13 +59,13 @@ function LoadThemes(){
 					
 		switch($theme["themevote_type"]){
 			case "1":
-				$themeData["votes_against"] = $theme["themevote_count"];
+				$themeData["votes_against"] = intval($theme["themevote_count"]);
 			break;
 			case "2":
-				$themeData["votes_neutral"] = $theme["themevote_count"];
+				$themeData["votes_neutral"] = intval($theme["themevote_count"]);
 			break;
 			case "3":
-				$themeData["votes_for"] = $theme["themevote_count"];
+				$themeData["votes_for"] = intval($theme["themevote_count"]);
 			break;
 		}
 		

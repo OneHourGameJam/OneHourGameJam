@@ -17,6 +17,7 @@ include_once("php/db.php");
 include_once("php/authentication.php");
 include_once("php/entries.php");
 include_once("php/themes.php");
+include_once("php/assets.php");
 
 //Initialization. This is where configuration is loaded
 include_once("php/init.php");
