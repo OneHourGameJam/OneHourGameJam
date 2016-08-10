@@ -32,6 +32,30 @@ $configSettings = Array(
 		"TYPE" => "TEXTAREA",
 		"EDITABLE" => TRUE
 	),
+	"THEME_DAYS_MARK_AS_OLD" => Array(
+		"TAG" => "THEME_DAYS_MARK_AS_OLD",
+		"NAME" => "How many days a theme can be on the list before it is marked as old.",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE
+	),
+	"THEME_MIN_VOTES_TO_SCORE" => Array(
+		"TAG" => "THEME_MIN_VOTES_TO_SCORE",
+		"NAME" => "Minimum number of votes a theme must receive for it to be considered rated.",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE
+	),
+	"THEME_NUMBER_TO_MARK_TOP" => Array(
+		"TAG" => "THEME_NUMBER_TO_MARK_TOP",
+		"NAME" => "Number of best voted themes to mark as \"top\".",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE
+	),
+	"THEME_NUMBER_TO_MARK_KEEP" => Array(
+		"TAG" => "THEME_NUMBER_TO_MARK_KEEP",
+		"NAME" => "Number of best voted themes to keep for the next jam.",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE
+	),
 	"PEPPER" => Array(
 		"TAG" => "PEPPER",
 		"NAME" => "Sitewide Pepper (used in password hashing), for security reasons this can only be changed manually in the config file.",
@@ -63,6 +87,19 @@ function LoadConfig(){
 			continue;
 		}
 		$linePair = explode("|", $line);
+		
+		if(count($linePair) > 2){
+			//Value includes | delimiter, merge value together into a single string.
+			$key = $linePair[0];
+			$properValue = $linePair[1];
+			for($j = 2; $j < count($linePair); $j++){
+				$properValue .= "|" . $linePair[$j];
+			}
+			$linePair = Array();
+			$linePair[] = $key;
+			$linePair[] = $properValue;
+		}
+		
 		if(count($linePair) == 2){
 			//key-value pair
 			$key = trim($linePair[0]);
@@ -138,7 +175,6 @@ function SaveConfig($key, $newValue){
 	
 	$newValue = str_replace("\n", "", $newValue);
 	$newValue = str_replace("\r", "", $newValue);
-	$newValue = str_replace("|", "", $newValue);
 	$newValue = trim($newValue);
 	
 	$configTxt = file_get_contents("config/config.txt");
@@ -151,7 +187,7 @@ function SaveConfig($key, $newValue){
 			continue;
 		}
 		$linePair = explode("|", $line);
-		if(count($linePair) == 2){
+		if(count($linePair) >= 2){
 			//key-value pair
 			$currentKey = trim($linePair[0]);
 			$value = trim($linePair[1]);

@@ -1,13 +1,114 @@
 <div class="row">
 	<div class="col-md-12" style='text-align: center; margin-top: 10px;'>
 		<div class="panel panel-info">
-			<img src='logo.png' alt='Logo' style='float: left; max-height: 100px; margin-top: 17px; margin-left: 17px;' />
 			<div class="panel-body">
-				<h1 style='margin-top: 0px;'>{{CONFIG_JAMNAME}}</h1>
-				{{{CONFIG_JAMDESC1}}}<br />
-				{{{CONFIG_JAMDESC2}}}<br />
-				{{{CONFIG_JAMDESC3}}}
+				<div class="col-md-3 hidden-xs hidden-sm" style='text-align: center; margin-top: 10px;'>
+					<a href='.'><img src='logo.png' alt='Logo' style='float: left; max-height: 100px; border: 0;' /></a>
+				</div>
+				<div class="col-md-6" style='text-align: center; margin-top: 10px;'>
+					<a href='.'><img src='logo_1hgj.png' alt='Logo' style='max-width: 100%; width: 400px; border: 0;' /></a><br />
+					{{{CONFIG_JAMDESC2}}}<br />
+					{{{CONFIG_JAMDESC3}}}<br />
+					
+				</div>
+				<div class="col-md-3" style='text-align: center; margin-top: 10px; color: #FF0066'>
+					<p>
+						<b>Next jam:</b><br />
+						<script type='text/javascript'>
+							var date = new Date('{{{next_jam_suggested_date}}}T{{{next_jam_suggested_time}}}:00Z');
+							var now = new Date();
+							var countdownTimer = (date - now) / 1000;
+							function UpdateTimer(){
+								countdownTimer -= 1;
+								var totalS = countdownTimer;
+								var d = Math.floor(totalS / (24*60*60));
+								totalS -= d * (24*60*60);
+								var h = Math.floor(totalS / (60*60));
+								totalS -= h * (60*60);
+								var m = Math.floor(totalS / (60));
+								totalS -= m * (60);
+								var s = Math.floor(totalS);
+								
+								var timerString = "";
+								if (d > 0){
+									timerString = d+" day"+((d > 1) ? "s" : "")+((h > 0) ? (" "+h + " hour"+((h > 1) ? "s" : "")) : "");
+								}else if (d == 0 && h > 0){
+									timerString = h+" hour"+((h > 1) ? "s" : "")+((m > 0) ? (" "+m + " minute"+((m > 1) ? "s" : "")) : "");
+								}else if (d == 0 && h == 0 && m > 0){
+									timerString = m+" min"+((s > 0) ? (" "+s + " s") : "");
+								}else if (d == 0 && h == 0 && m == 0 && s > 0){
+									timerString = s+" s";
+								}else{
+									timerString = "Go! Go! Go!";
+								}
+								
+								$("#countdownTimer").text(timerString);
+								setTimeout(UpdateTimer, 1000);
+							}
+							var year = date.getFullYear();
+							var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+							var month = months[date.getMonth()];
+							var day = date.getDate();
+							var hour = date.getHours();
+							var min = date.getMinutes();
+							if(min < 10){
+								min = "0"+min
+							}
+							
+							var i1 = String(date).indexOf("(");
+							var i2 = String(date).lastIndexOf(")");
+							
+							var timezone = "";
+							
+							if(i1 > 0 && i2 > 0){
+								timezone = String(date).substring(i1 +1, i2);
+							}
+							else
+							{
+								var n = now.getTimezoneOffset() / -60;
+								timezone = "UTC";
+								if(n > 0){
+									if(n < 10){
+										n = "+0"+(n*100);
+									}else{
+										n = "+"+(n*100);
+									}
+									timezone += n;
+								}
+								if(n < 0){
+									if(n > -10){
+										n = "-0"+(n*-100);
+									}else{
+										n = "-"+(n*-100);
+									}
+									timezone += n;
+								}
+							}
+							document.write("<b>"+day+" "+month+" "+year+" at "+hour+":"+min+"</b><br />("+timezone+")");
+							
+							setTimeout(UpdateTimer, 0);
+						</script>
+					</p>
+					<p>
+						<span id='countdownTimer' style='font-size: 24px; font-weight: bold;'></span>
+					</p>
+				</div>
 			</div>
 		</div>
+	</div>
+</div>
+<div class="row" style="font-size: 24px; font-weight: bold;">
+	<div class="col-md-12" style='text-align: center;'>
+	</div>
+</div>
+<div class="row" style="font-size: 16px; font-weight: bold;">
+	<div class="col-md-offset-3 col-md-2" style='text-align: center; margin-bottom: 10px;'>
+		{{all_jams_count}} Jams
+	</div>
+	<div class="col-md-2" style='text-align: center; margin-bottom: 10px;'>
+		{{all_entries_count}} Games
+	</div>
+	<div class="col-md-2" style='text-align: center; margin-bottom: 10px;'>
+		{{all_authors_count}} Developers
 	</div>
 </div>

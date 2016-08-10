@@ -1,7 +1,7 @@
 <?php
 
 function LoadEntries(){
-	global $dictionary, $jams, $authors, $entries;
+	global $dictionary, $jams, $authors, $entries, $dbConn;
 	
 	//Clear public lists which get updated by this function
 	$dictionary["jams"] = Array();
@@ -12,6 +12,7 @@ function LoadEntries(){
 	
 	//Create lists of jams and jam entries
 	$filesToParse = GetSortedJamFileList();
+	//$filesToParse = array_reverse($filesToParse);
 	$authorList = Array();
 	$firstJam = true;
 	$jamFromStart = 1;
@@ -34,8 +35,22 @@ function LoadEntries(){
 			$firstJam = false;
 		}
 		
+		/*print "<br>INSERT INTO jam
+(jam_id, jam_datetime, jam_ip, jam_user_agent, jam_jam_number, jam_theme, jam_start_date, jam_start_time) 
+VALUES
+(".$newData["jam_number"].",
+Now(),
+'LEGACY',
+'LEGACY',
+".mysqli_real_escape_string($dbConn, $newData["jam_number"]).",
+'".mysqli_real_escape_string($dbConn, $newData["theme"])."',
+'".mysqli_real_escape_string($dbConn, $newData["date"])."',
+'".mysqli_real_escape_string($dbConn, $newData["time"])."');";
+		
+		*/
 		foreach ($data["entries"] as $i => $entry){
 			$newData["entries"][$i]["title"] = $entry["title"];
+			$newData["entries"][$i]["title_url_encoded"] = urlencode($entry["title"]);
 			$newData["entries"][$i]["description"] = $entry["description"];
 			$author = $entry["author"];
 			$entries[] = $entry;
@@ -49,8 +64,25 @@ function LoadEntries(){
 			}
 			
 			$newData["entries"][$i]["author"] = $author;
+			$newData["entries"][$i]["author_url_encoded"] = urlencode($author);
+			
 			$newData["entries"][$i]["url"] = str_replace("'", "\\'", $entry["url"]);
 			$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
+			
+			/*print "<br>INSERT INTO entry
+(entry_id, entry_datetime, entry_ip, entry_user_agent, entry_jam_number, entry_title, entry_description, entry_author, entry_url, entry_screenshot_url)
+VALUES
+(null,
+Now(),
+'LEGACY',
+'LEGACY',
+".mysqli_real_escape_string($dbConn, $newData["jam_number"]).",
+'".mysqli_real_escape_string($dbConn, $entry["title"])."',
+'".mysqli_real_escape_string($dbConn, $entry["description"])."',
+'".mysqli_real_escape_string($dbConn, $entry["author"])."',
+'".mysqli_real_escape_string($dbConn, $entry["url"])."',
+'".mysqli_real_escape_string($dbConn, $entry["screenshot_url"])."');
+";*/
 		}
 		
 		$totalEntries += count($newData["entries"]);
@@ -87,6 +119,7 @@ function LoadEntries(){
 			$largest_jam_number = intval($data["jam_number"]);
 			$dictionary["current_jam"] = $newData;
 		}
+		
 		$jams[] = $newData;
 		$jamFromStart++;
 	}
@@ -119,6 +152,8 @@ function LoadEntries(){
 	}
 	
 	$dictionary["all_authors_count"] = count($authors);
+	$dictionary["all_jams_count"] = count($jams);
+	GetNextJamDateAndTime();
 }
 
 
@@ -130,6 +165,7 @@ function LoadEntries(){
 //(checks whether or not they are an admin).
 //TODO: Replace die() with in-page warning
 function CreateJam($theme, $date, $time){
+	global $dbConn, $ip, $userAgent;
 	
 	$jamNumber = intval(GetNextJamNumber());
 	$theme = trim($theme);
@@ -173,12 +209,39 @@ function CreateJam($theme, $date, $time){
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
 	file_put_contents("data/jams/jam_$jamNumber.json", json_encode($newJam));
+	
+	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
+	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
+	$escapedJamNumber = mysqli_real_escape_string($dbConn, $newJam["jam_number"]);
+	$escapedTheme = mysqli_real_escape_string($dbConn, $newJam["theme"]);
+	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
+	
+	$sql = "
+		INSERT INTO jam
+		(jam_id,
+		jam_datetime,
+		jam_ip,
+		jam_user_agent,
+		jam_jam_number,
+		jam_theme,
+		jam_start_datetime)
+		VALUES
+		(null,
+		Now(),
+		'$escapedIP',
+		'$escapedUserAgent',
+		'$escapedJamNumber',
+		'$escapedTheme',
+		'$escapedStartTime');";
+	
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
 }
 
 //Edits an existing jam, identified by the jam number.
 //Only changes the theme, date and time, does NOT change the jam number.
 function EditJam($jamNumber, $theme, $date, $time){
-	global $jams;
+	global $jams, $dbConn;
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
@@ -224,6 +287,18 @@ function EditJam($jamNumber, $theme, $date, $time){
 			break;
 		}
 	}
+	
+	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
+	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
+	$escapedJamNumber = mysqli_real_escape_string($dbConn, "$jamNumber");
+	
+	$sql = "
+		UPDATE jam
+		SET jam_theme = '$escapedTheme', 
+		    jam_start_datetime = '$escapedStartTime'
+		WHERE jam_jam_number = $escapedJamNumber;";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
 }
 
 //Submits a new entry to the last jam. All parameters are strings, $gameName
@@ -233,7 +308,7 @@ function EditJam($jamNumber, $theme, $date, $time){
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
 function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
-	global $loggedInUser, $_FILES;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent;
 	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -297,6 +372,7 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 		if($uploadPass == 1){
 			if(!file_exists($jam_folder)){
 				mkdir($jam_folder);
+				file_put_contents($jam_folder."/.htaccess", "Order allow,deny\nAllow from all");
 			}
 			move_uploaded_file($_FILES["screenshotfile"]["tmp_name"], $target_file);
 			$screenshotURL = $target_file;
@@ -321,15 +397,74 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 					}
 				}
 				
-				$currentJam["entries"][$i] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
+				$currentJam["entries"][$i] = Array("title" => "$gameName", "title_url_encoded" => urlencode("$gameName"), "author_url_encoded" => urlencode("".$loggedInUser["username"]), "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
 				file_put_contents($currentJamFile, json_encode($currentJam));
+				
+				$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
+				$escapedGameURL = mysqli_real_escape_string($dbConn, $gameURL);
+				$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
+				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
+				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
+				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $currentJam["jam_number"]);
+				
+				$sql = "
+				UPDATE entry
+				SET
+					entry_title = '$escapedGameName',
+					entry_url = '$escapedGameURL',
+					entry_screenshot_url = '$escapedScreenshotURL',
+					entry_description = '$escapedDescription'
+				WHERE 
+					entry_author = '$escapedAuthorName'
+				AND entry_jam_number = $escaped_jamNumber;
+
+				";
+				$data = mysqli_query($dbConn, $sql);
+				$sql = "";
+				
 				$entryUpdated = true;
 			}
 		}
 		if(!$entryUpdated){
 			//Submitting new entry
-			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
+			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "title_url_encoded" => urlencode("$gameName"), "author_url_encoded" => urlencode("".$loggedInUser["username"]), "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
 			file_put_contents($currentJamFile, json_encode($currentJam));
+			
+			$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
+			$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
+			$escaped_jamNumber = mysqli_real_escape_string($dbConn, $currentJam["jam_number"]);
+			$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
+			$escaped_description = mysqli_real_escape_string($dbConn, $description);
+			$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+			$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
+			$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
+			
+			$sql = "
+				INSERT INTO entry
+				(entry_id,
+				entry_datetime,
+				entry_ip,
+				entry_user_agent,
+				entry_jam_number,
+				entry_title,
+				entry_description,
+				entry_author,
+				entry_url,
+				entry_screenshot_url)
+				VALUES
+				(null,
+				Now(),
+				'$escaped_ip',
+				'$escaped_userAgent',
+				$escaped_jamNumber,
+				'$escaped_gameName',
+				'$escaped_description',
+				'$escaped_aurhor',
+				'$escaped_gameURL',
+				'$escaped_ssURL');
+			";
+			$data = mysqli_query($dbConn, $sql);
+			$sql = "";
 		}
 	}
 	
@@ -399,12 +534,14 @@ function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 function GetNextJamDateAndTime(){
 	global $dictionary;
 	
-	$today = date('w'); 
-	$days = 6 - $today; 
-	$saturday = strtotime("+$days days"); 
-	
+	$saturday = strtotime("saturday +20 hours");
 	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $saturday);
-	$dictionary["next_jam_suggested_time"] = "20:00";
+	$dictionary["next_jam_suggested_time"] = date("H:i", $saturday);
+	$now = time();
+	$interval = $saturday - $now;
+	$dictionary["seconds_until_jam_suggested_time"] = $interval;
+	return $saturday;
+	return $saturday;
 }
 
 ?>

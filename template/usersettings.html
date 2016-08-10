@@ -1,0 +1,38 @@
+<div class="col-md-10" id='usersettingsform'>
+	<p>
+		<h3>User Settings</h3>
+	</p>
+	<p>
+		<b>Login username:</b> {{user.username}} (cannot be changed)
+	</p>
+	<form method='post'>
+		<p style='margin-top: 50px;'>
+			<div class="form-group">
+				<label for="displayname">Display Name</label>
+				<input type="text" class="form-control" id="displayname" name='displayname' placeholder="Display name" value="" pattern=".{2,50}" required>
+			</div>
+			<div class="form-group">
+				<label for="twitterhandle">Twitter Handle</label>
+				<input type="text" class="form-control" id="twitterhandle" name='twitterhandle' placeholder="Twitter Handle" value="" pattern="^@[a-zA-Z0-9_]+$">
+			</div>
+			<button type="submit" name='action' value='saveuserchanges' class="btn btn-default">Save Changes</button>
+		</p>
+	</form>
+	<form method='post'>
+		<p style='margin-top: 50px;'>
+			<div class="form-group">
+				<label for="passwordold">Current Password</label>
+				<input type="password" class="form-control" id="passwordold" name='passwordold' placeholder="Old Password" value="">
+			</div>
+			<div class="form-group">
+				<label for="password1">New Password</label>
+				<input type="password" class="form-control" id="password1" name='password1' placeholder="New Password" value="">
+			</div>
+			<div class="form-group">
+				<label for="password2">Repeat Password</label>
+				<input type="password" class="form-control" id="password2" name='password2' placeholder="New Password (repeat)" value="">
+			</div>
+			<button type="submit" name='action' value='changepassword' class="btn btn-default">Change password</button>
+		</p>
+	</form>
+</div>

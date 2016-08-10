@@ -21,4 +21,35 @@
 		</div>
 		<button type="submit" name='action' value='submit' class="btn btn-default">Submit</button>
 	</form>
+	{{{#user_entry_name}}}
+		<p>
+			<h3>Share</h3>
+		</p>
+		<div id="share-buttons">
+			<!-- Facebook -->
+			<a href="http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/" target="_blank">
+				<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" />
+			</a>
+			 
+			<!-- Twitter -->
+			<a href="https://twitter.com/share?url=http://onehourgamejam.com/&amp;text=Just made a game in one hour titled {{user_entry_name}}. Try it!;hashtags=gamedev, 1hgj, gamejam" target="_blank">
+				<img src="http://liamlime.com/site/images/social/twitter.png" alt="Twitter" />
+			</a>
+			
+			<!-- Google+ -->
+			<a href="https://plus.google.com/share?url=http://onehourgamejam.com/" target="_blank">
+				<img src="http://liamlime.com/site/images/social/google.png" alt="Google" />
+			</a>
+			
+			<!-- LinkedIn -->
+			<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://onehourgamejam.com" target="_blank">
+				<img src="http://liamlime.com/site/images/social/linkedin.png" alt="LinkedIn" />
+			</a>
+			
+			<!-- Tumblr-->
+			<a href="http://www.tumblr.com/share/link?url=http://onehourgamejam.com/&amp;title=Made a game in an hour titled {{user_entry_name}}! Try it!" target="_blank">
+				<img src="http://liamlime.com/site/images/social/tumblr.png" alt="Tumblr" />
+			</a>
+		</div>
+	{{{/user_entry_name}}}
 </div>

@@ -1,8 +1,9 @@
 <?php
 
+
 //Fills the list of suggested themes
 function LoadThemes(){
-	global $themes, $dictionary, $loggedInUser, $dbConn;
+	global $themes, $dictionary, $loggedInUser, $dbConn, $config;
 	IsLoggedIn();
 	
 	$clean_userName = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
@@ -13,7 +14,7 @@ function LoadThemes(){
 	
 	//Fill list of themes - will return same row multiple times (once for each valid themevote_type)
 	$sql = "
-		SELECT theme_id, theme_text, theme_author, theme_banned, themevote_type, count(themevote_id) AS themevote_count
+		SELECT theme_id, theme_text, theme_author, theme_banned, themevote_type, count(themevote_id) AS themevote_count, DATEDIFF(Now(), theme_datetime) as theme_daysago
 		FROM (theme LEFT JOIN themevote ON (themevote.themevote_theme_id = theme.theme_id))
 		WHERE theme_deleted != 1
 		GROUP BY theme_id, themevote_type
@@ -38,14 +39,6 @@ function LoadThemes(){
 					$themes[$themeID]["votes_for"] = intval($theme["themevote_count"]);
 				break;
 			}
-		
-			$votesTotal = $themes[$themeID]["votes_for"] + $themes[$themeID]["votes_neutral"] + $themes[$themeID]["votes_against"] + $themes[$themeID]["votes_report"];
-			$oppinionatedVotesTotal = $themes[$themeID]["votes_for"] + $themes[$themeID]["votes_against"];
-			$themes[$themeID]["votes_popularity"] = "?";
-			if($oppinionatedVotesTotal > 0){
-				$themes[$themeID]["votes_popularity"] = round(($themes[$themeID]["votes_for"] * 100) / $oppinionatedVotesTotal) . "%";
-			}
-			$themes[$themeID]["votes_total"] = $votesTotal;
 			
 			continue;
 		}
@@ -56,6 +49,11 @@ function LoadThemes(){
 		$themeData["votes_against"] = 0;
 		$themeData["votes_neutral"] = 0;
 		$themeData["votes_for"] = 0;
+		$themeData["days_ago"] = intval($theme["theme_daysago"]);
+		
+		if(intval($theme["theme_daysago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"])){
+			$themeData["is_old"] = 1;
+		}
 					
 		switch($theme["themevote_type"]){
 			case "1":
@@ -78,13 +76,6 @@ function LoadThemes(){
 			$themeData["theme_visible"] = 1;
 		}
 		
-		$votesTotal = $themeData["votes_for"] + $themeData["votes_neutral"] + $themeData["votes_against"] + $themeData["votes_report"];
-		$oppinionatedVotesTotal = $themeData["votes_for"] + $themeData["votes_against"];
-		$themeData["votes_popularity"] = "?";
-		if($oppinionatedVotesTotal > 0){
-			$themeData["votes_popularity"] = round(($themeData["votes_for"] * 100) / $oppinionatedVotesTotal) . "%";
-		}
-		$themeData["votes_total"] = $votesTotal;
 		$themes[$themeID] = $themeData;
 	}
 	
@@ -112,9 +103,68 @@ function LoadThemes(){
 		}
 	}
 	
+	//Calculate popularity and apathy
+	$counter = 0;
+	foreach($themes as $themeID => $theme){
+		$votesTotal = $themes[$themeID]["votes_for"] + $themes[$themeID]["votes_neutral"] + $themes[$themeID]["votes_against"] + $themes[$themeID]["votes_report"];
+		$oppinionatedVotesTotal = $themes[$themeID]["votes_for"] + $themes[$themeID]["votes_against"];
+		$unopinionatedVotesTotal = $themes[$themeID]["votes_neutral"];
+		$themes[$themeID]["votes_popularity"] = "?";
+		$themes[$themeID]["votes_apathy"] = "?";
+		if($oppinionatedVotesTotal > 0){
+			$themes[$themeID]["popularity_num"] = ($themes[$themeID]["votes_for"]) / $oppinionatedVotesTotal;
+			$themes[$themeID]["apathy_num"] = 1;
+			if($votesTotal > 0){
+				$themes[$themeID]["apathy_num"] = $unopinionatedVotesTotal / $votesTotal;
+			}
+			$themes[$themeID]["votes_popularity"] = round($themes[$themeID]["popularity_num"] * 100) . "%";
+			$themes[$themeID]["votes_apathy"] = round($themes[$themeID]["apathy_num"] * 100) . "%";
+		}
+		$themes[$themeID]["votes_total"] = $votesTotal;
+		
+		
+		if($votesTotal >= intval($config["THEME_MIN_VOTES_TO_SCORE"])){
+			$themes[$themeID]["has_enough_votes"] = true;
+			if($themes[$themeID]["popularity_num"] >= 0.5){
+				$themes[$themeID]["is_popular"] = 1;
+				unset($themes[$themeID]["is_unpopular"]);
+				$themes[$themeID]["popularity_color"] = "#".(str_pad(dechex(0xFF - (0xFF * 2 * (( $themes[$themeID]["popularity_num"]) - 0.5 ))), 2, "0", STR_PAD_LEFT))."FF00";
+			}else{
+				unset($themes[$themeID]["is_popular"]);
+				$themes[$themeID]["is_unpopular"] = 1;
+				$themes[$themeID]["popularity_color"] = "#ff".str_pad(dechex((0xFF * 2 * $themes[$themeID]["popularity_num"])), 2, "0", STR_PAD_LEFT)."00";
+			}
+			$themes[$themeID]["apathy_color"] = "#".str_pad(dechex(0xBB + round(0x44 * ($themes[$themeID]["apathy_num"]))), 2, "0", STR_PAD_LEFT)."DD".str_pad(dechex(0xBB + round(0x44 * (1 - $themes[$themeID]["apathy_num"]))), 2, "0", STR_PAD_LEFT);
+		}else{
+			$themes[$themeID]["has_enough_votes"] = false;
+			$themes[$themeID]["popularity_num"] = 0;
+			$themes[$themeID]["apathy_num"] = 0;
+			$themes[$themeID]["votes_popularity"] = "?";
+			$themes[$themeID]["votes_apathy"] = "?";
+		}
+		$counter++;
+	}
+	
+	$user = IsAdmin();
+	if($user !== false){
+		usort($themes, "CmpArrayByPropertyPopularityNum");
+		$count = 0;
+		foreach($themes as $i => $theme){
+			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"])){
+				$themes[$i]["top_theme"] = 1;
+			}
+			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]) || !$theme["has_enough_votes"]){
+				$themes[$i]["keep_theme"] = 1;
+			}
+			$count++;
+		}
+	}
 	
 	foreach($themes as $i => $theme){
 		$dictionary["suggested_themes"][] = $theme;
+		if($theme["top_theme"]){
+			$dictionary["top_themes"][] = $theme;
+		}
 	}
 }
 
@@ -150,26 +200,13 @@ function AddTheme($newTheme, $isBot){
 	$clean_newTheme = mysqli_real_escape_string($dbConn, $newTheme);
 	$clean_userName = mysqli_real_escape_string($dbConn, $user["username"]);
 	
-	
-	//Check if the theme exists already and is deleted
-	$sql = "SELECT theme_id FROM theme WHERE theme_deleted = 1 AND theme_text = '$clean_newTheme'";
+	//Insert new theme
+	$sql = "
+		INSERT INTO theme
+		(theme_datetime, theme_ip, theme_user_agent, theme_text, theme_author)
+		VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', '$clean_userName');";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
-	if(mysqli_num_rows($data) == 0){
-		//Insert new theme
-		$sql = "
-			INSERT INTO theme
-			(theme_datetime, theme_ip, theme_user_agent, theme_text, theme_author)
-			VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', '$clean_userName');";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-	}else{
-		//Undelete theme
-		$sql = "UPDATE theme SET theme_deleted = 0 WHERE theme_deleted = 1 AND theme_text = '$clean_newTheme'";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-	}
 	
 	LoadThemes();
 }

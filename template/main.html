@@ -6,7 +6,7 @@
 			<div class='panel-heading jamHeader'>
 				<a name='jam{{jam_number}}'></a>
 				<h3 class='panel-title' style='font-size: 24px;'>
-					{{jam_number_ordinal}} hour game jam ({{date}})
+					{{jam_number_ordinal}} one hour game jam ({{date}})
 				</h3>
 				Theme: {{theme}}<br />
 				{{#jam_started}}
@@ -31,8 +31,19 @@
 							{{/entries_visible}}
 						</div>
 						<div class='panel-body entryScreenshot description' style='text-align: center; height: 226px; display: none; overflow: hidden;'>
-							<button type="button" class="btn btn-success" onclick='document.location.href="{{url}}"'>Download</button>
-							<p><br />
+							<button type="button" class="btn btn-success" style='margin-bottom: 5px;' onclick='window.open("{{url}}", "_blank")'>Play</button><br />
+							<!-- Facebook -->
+							<a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/', '_blank');" target="_blank">
+								<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" style='max-width: 30px;' /></a>
+							 
+							<!-- Twitter -->
+							<a href="#" onclick="window.open('https://twitter.com/share?url=http://onehourgamejam.com/&amp;text=Played a game by {{{author_url_encoded}}} made in one hour titled {{{title_url_encoded}}}. Try it!;hashtags=gamedev, 1hgj, gamejam', '_blank');" target="_blank">
+								<img src="http://liamlime.com/site/images/social/twitter.png" alt="Twitter" style='max-width: 30px;' /></a>
+							
+							<!-- Google+ -->
+							<a href="#" onclick="window.open('https://plus.google.com/share?url=http://onehourgamejam.com/', '_blank');" target="_blank">
+								<img src="http://liamlime.com/site/images/social/google.png" alt="Google" style='max-width: 30px;' /></a>
+							<p>
 								{{description}}
 							</p>
 						</div>

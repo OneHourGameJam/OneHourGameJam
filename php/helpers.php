@@ -10,6 +10,21 @@ function EndsWith($haystack, $needle) {
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
 }
 
+//Numeric comparator for arrays based on property
+function CmpArrayByPropertyPopularityNum($a, $b)
+{
+	if($a["banned"] == 1){
+		return 1;
+	}
+	return CmpArrayByProperty($a, $b, "popularity_num");
+}
+
+//Numeric comparator for arrays based on property
+function CmpArrayByProperty($a, $b, $property)
+{
+	return $a[$property] < $b[$property];
+}
+
 //Returns the number for the next jam. 
 //If a jam json file is deleted, it does not return the jam number of the deleted jam,
 //unless the deleted jam was the last one. Essentially it returns Max(jam_number) +1,

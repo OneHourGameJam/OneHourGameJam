@@ -5,15 +5,27 @@
 
 
 #Jam name (used in the page title)
-LANG_JAMNAME | One hour game jam
+LANG_JAMNAME | One Hour Game Jam!
 
 #Jam description lines (used in page title)
-LANG_JAMDESC1 | A weekly one hour game jam.
-LANG_JAMDESC2 | Every Saturday at 20:00 UTC.
-LANG_JAMDESC3 | Join us on IRC: <a href="irc:afternet.org/1hgj">#1hgj channel</a> on <a href='http://afternet.org/'>afternet.org</a>
+LANG_JAMDESC1 | 
+LANG_JAMDESC2 | Every Saturday at 20:00 UTC
+LANG_JAMDESC3 | Join us on IRC: <a href="irc:afternet.org/1hgj">#1hgj</a> on <a href='http://afternet.org/'>afternet.org</a> or <a href='https://qwebirc.afternet.org/?channels=1hgj'>chat from your browser</a>
 
 #Jam rules (displayed on the rules page)
-LANG_RULES | <p>One hour game jam takes place every <a href='https://www.google.com/search?q=20%3A00+UTC'>Saturday at 20:00 UTC</a>. At the start of the hour, a theme is announced in the IRC channel. You then have about an hour (we give you some flexibility) to submit a link to your game here on this website. You are free to use premade assets but it is recommended that you do make at least one game from scratch.</p><p>Then at about 21:30 UTC the bitslap brothers will stream themselves playing each of the games on <a href='http://www.twitch.tv/bitslap'>twitch.tv/bitslap</a>. The stream usually lasts about 2 hours.</p>
+LANG_RULES | <h4>When?</h4><p>Every <a href='https://www.google.com/search?q=20%3A00+UTC'>Saturday at 20:00 UTC</a>.</p><h4>Where?</h4><p>Right here! Joining our IRC channel (<a href='irc:afternet.org/1hgj'>#1hgj</a> on <a href='http://afternet.org' target='_BLANK'>afternet.org</a>) is however a good idea, as the theme is first announced there!</p><h4>Is there a theme?</h4><p>Yes! At the start of the hour, the theme is announced in the IRC channel (<a href='irc:afternet.org/1hgj'>#1hgj</a> on <a href='http://afternet.org' target='_BLANK'>afternet.org</a>).</p><h4>How long do I have to finish?</h4><p>:D</p><h4>Can I use premade assets?</h4><p>You are free to use premade assets but it is recommended that you make at least one game from scratch.</p><h4>What happens after the jam?</h4><p>At about 21:30 UTC the Bitslap brothers stream themselves playing each of the games on <a href='http://www.twitch.tv/bitslap'>twitch.tv/bitslap</a>. The stream usually lasts about 2 hours.</p><h4>What if I don't finish in time?</h4><p>If you finish and submit your game before the stream ends, we'll play it on stream, even if it takes you more than an hour to finish.</p><h4>Can I participate after the jam has ended?</h4><p>If you come late you can still participate. If the stream is over, then your game won't be played on-stream, obviously, but we'll still keep it on the site!</p>
+
+#The number of days at which a theme is marked as old
+THEME_DAYS_MARK_AS_OLD | 90
+
+#The minimum number of votes needed to mark a theme's score.
+THEME_MIN_VOTES_TO_SCORE | 10
+
+#Number of best voted themes to mark as "top"
+THEME_NUMBER_TO_MARK_TOP | 5
+
+#Number of vest voted themes to keep for the next jam
+THEME_NUMBER_TO_MARK_KEEP | 20
 
 #Site-wide salt, used for passwords.
 #Auto generated if left blank, if changed this invalidates all user passwords on the site.
@@ -21,5 +33,3 @@ PEPPER |
 
 #Number of iterations used when hashing sessions
 SESSION_PASSWORD_ITERATIONS | 
-
-

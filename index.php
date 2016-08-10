@@ -5,13 +5,16 @@
 
 include_once("php/site.php");
 
+$templateBasePath = "template/";
+$dictionary["template_path"] = $templateBasePath;
+
 $page = "main";
 if(isset($_GET["page"])){
 	$page = strtolower(trim($_GET["page"]));
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings")))){
 	$page = "main";
 }
 
@@ -136,6 +139,25 @@ if(isset($_POST["action"])){
 			}
 			$page = "editusers";
 		break;
+		case "changepassword":
+			if(IsAdmin()){
+				$passwordold = $_POST["passwordold"];
+				$password1 = $_POST["password1"];
+				$password2 = $_POST["password2"];
+				
+				ChangePassword($passwordold, $password1, $password2);
+			}
+			$page = "usersettings";
+		break;
+		case "saveuserchanges":
+			if(IsAdmin()){
+				$displayName = $_POST["displayname"];
+				$twitterHandle = $_POST["twitterhandle"];
+				
+				ChangeUserData($displayName, $twitterHandle);
+			}
+			$page = "usersettings";
+		break;
 		case "savenewtheme":
 			if(IsLoggedIn()){
 				$newTheme = $_POST["theme"];
@@ -204,6 +226,8 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
 		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/site.css" rel="stylesheet">
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/favicon.ico" type="image/x-icon">
 		<script src='js/1hgj.js' type='text/javascript'></script>
 		<?php PrintAnalyticsCode(); ?>
 	</head>
@@ -236,7 +260,6 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							print $mustache->render(file_get_contents("template/login.html"), $dictionary);
 						break;
 						case "submit":
-							$dictionary["logged_in_user_current_jam_entry_name"] = "";
 							foreach($dictionary["current_jam"]["entries"] as $current_jam_entry){
 								if($current_jam_entry["author"] == $loggedInUser["username"]){
 									$dictionary["user_entry_name"] = $current_jam_entry["title"];
@@ -294,9 +317,15 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						case "themes":
 							print $mustache->render(file_get_contents("template/themes.html"), $dictionary);
 						break;
+						case "usersettings":
+							print $mustache->render(file_get_contents("template/usersettings.html"), $dictionary);
+						break;
 					}
 				?>
 			</div>
+			<?php
+				print $mustache->render(file_get_contents("template/footer.html"), $dictionary);
+			?>
 		</div>
 	
 		<script src="bs/js/bootstrap.min.js"></script>

@@ -31,9 +31,21 @@
 	</form>
 	<h4>Suggested themes</h4>
 	
+	<p>
+		Here you can vote on the themes you would like to appear in 1HGJ jams.
+	</p>
+	
+	<p>
+		Themes suggested above will appear in this list. Once a theme receives enough votes, it becomes considered for a jam, depending on its popuparity. Themes which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested themes. Old themes are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any theme that gets removed due to unpopularity or age can be sugested again at any point. 
+	</p>
+	
 	<ul>
 		<table>
 			<tr>
+				{{#user.isadmin}}
+					<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Top</th>
+					<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Keep</th>
+				{{/user.isadmin}}
 				<th colspan='3' class='themeTableCell themeTableCellCentered'>
 					Vote
 				</th>
@@ -51,6 +63,9 @@
 						Popularity
 					</th>
 					<th class='themeTableCell themeTableCellCentered'>
+						Apathy
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
 						+1
 					</th>
 					<th class='themeTableCell themeTableCellCentered'>
@@ -60,13 +75,36 @@
 						-1
 					</th>
 					<th class='themeTableCell themeTableCellCentered'>
+						Days old
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
 						Admin actions
 					</th>
 				{{/user.isadmin}}
 			</tr>
 			{{#suggested_themes}}
 				{{#theme_visible}}
-					<tr>
+					{{#user.isadmin}}
+						{{#is_old}}
+							<tr style='background-color: #cccccc;'>
+						{{/is_old}}
+						{{^is_old}}
+							<tr>
+						{{/is_old}}
+						<td class='themeTableCell themeTableCellCentered'>
+							{{#top_theme}}
+								<img src='{{{template_path}}}images/star.png' title='Top theme'>
+							{{/top_theme}}
+						</td>
+						<td class='themeTableCell themeTableCellCentered' title='Theme wil be kept in voting for the next jam'>
+							{{#keep_theme}}
+								<img src='{{{template_path}}}images/tick.png'>
+							{{/keep_theme}}
+						</td>
+					{{/user.isadmin}}
+					{{^user.isadmin}}
+						<tr>
+					{{/user.isadmin}}
 						<td class='themeTableCell'>
 							<button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}" onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
 						</td>
@@ -86,8 +124,11 @@
 							<td class='themeTableCell themeTableCellCentered'>
 								{{votes_total}}
 							</td>
-							<td class='themeTableCell themeTableCellCentered'>
+							<td class='themeTableCell themeTableCellCentered' style='background-color: {{popularity_color}}'>
 								{{votes_popularity}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered' style='background-color: {{apathy_color}}'>
+								{{votes_apathy}}
 							</td>
 							<td class='themeTableCell themeTableCellCentered'>
 								{{votes_for}}
@@ -97,6 +138,9 @@
 							</td>
 							<td class='themeTableCell themeTableCellCentered'>
 								{{votes_against}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{days_ago}}
 							</td>
 							<td class='themeTableCell'>
 								<form method='POST' style='display: inline-block;'>

@@ -5,14 +5,44 @@
 	<p>
 		Here you can find some jam-specific assets which can help you make your 1 hour game jam games.
 	</p>
-	<p>
-		<h4>1 Hour game jam theme song</h4>
-	</p>
-	<p>
-		<audio controls="controls">
-			Your browser does not support the <code>audio</code> element.
-			<source src="assets/1 hour game jam game jam.wav" type="audio/wav">
-		</audio>
-		<br /><a href='assets/1 hour game jam game jam.wav'>Download</a>
-	</p>
+	
+	{{#assets}}
+		<p>
+			<h4>{{title}}</h4>
+		</p>
+		<p>
+			By {{author}}<br />
+			{{description}}
+		</p>
+		{{#is_audio}}
+			<p>
+				<audio controls="controls">
+					Your browser does not support the <code>audio</code> element.
+					<source src="{{content}}" type="audio/wav">
+				</audio>
+				<br /><a href='{{content}}'>Download</a>
+			</p>
+		{{/is_audio}}
+		{{#is_image}}
+			<p>
+				<a href='{{content}}'><img src='{{content}}' style='max-width: 600px; max-height: 200px; border: 0;'></a>
+				<br /><a href='{{content}}'>Download</a>
+			</p>
+		{{/is_image}}
+		{{#is_text}}
+			<p>
+				{{content}}
+			</p>
+		{{/is_text}}
+		{{#is_link}}
+			<p>
+				<a href='{{content}}'>{{content}}</a>
+			</p>
+		{{/is_link}}
+		{{#is_other}}
+			<p>
+				{{content}}
+			</p>
+		{{/is_other}}
+	{{/assets}}
 </div>

@@ -68,8 +68,13 @@ function LogInOrRegister($username, $password){
 	}
 	
 	//Check password length
-	if(strlen($password) < 8 || strlen($password) > 20){
-		die("password must be between 8 and 20 characters");
+	if(strlen($password) < 8){
+		die("password must be at least 8 characters long");
+	}
+	
+	//Check password length
+	if(strlen($password) > 128){
+		die("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;");
 	}
 	
 	if(isset($users[$username])){
@@ -296,6 +301,86 @@ function EditUser($username, $isAdmin){
 	file_put_contents("data/users.json", json_encode($users));
 }
 
+//Changes data about the logged in user
+function ChangeUserData($displayName, $twitterHandle){
+	global $users, $loggedInUser;
+	
+	$loggedInUser = IsLoggedIn();
+	
+	//Authorize user (is admin)
+	if($loggedInUser === false){
+		die("Not logged in.");
+	}
+	
+	//Validate values
+	if(!$displayName || strlen($displayName) <= 0 || strlen($displayName) > 50){
+		
+	}
+	
+	//Check that the user exists
+	if(!isset($users[$username])){
+		die("User does not exist");
+		return;
+	}
+	
+	if($isAdmin == 0){
+		$users[$username]["admin"] = "0";
+	}else{
+		$users[$username]["admin"] = "1";
+	}
+	
+	file_put_contents("data/users.json", json_encode($users));
+}
+
+//Changes the logged in user's password if the old one matches.
+function ChangePassword($oldPassword, $newPassword1, $newPassword2){
+	global $users, $loggedInUser;
+	
+	$loggedInUser = IsLoggedIn();
+	
+	//Authorize user (is admin)
+	if($loggedInUser === false){
+		die("Not logged in.");
+	}
+	
+	$newPassword1 = trim($newPassword1);
+	$newPassword2 = trim($newPassword2);
+	if($newPassword1 != $newPassword2){
+		die("passwords don't match");
+	}
+	$password = $newPassword1;
+	
+	//Check password length
+	if(strlen($password) < 8){
+		die("password must be longer than 8 characters");
+	}
+	
+	//Check that the user exists
+	if(!isset($users[$loggedInUser["username"]])){
+		die("User does not exist");
+		return;
+	}
+	
+	$user = $users[$loggedInUser["username"]];
+	$correctPasswordHash = $user["password_hash"];
+	$userSalt = $user["salt"];
+	$userPasswordIterations = intval($user["password_iterations"]);
+	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations);
+	if($correctPasswordHash != $passwordHash){
+		die("The entered password is incorrect.");
+	}
+	
+	//Generate new salt, number of iterations and hashed password.
+	$newUserSalt = GenerateSalt();
+	$newUserPasswordIterations = intval(rand(10000, 20000));
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations);
+	
+	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
+	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;
+	$users[$loggedInUser["username"]]["password_iterations"] = $newUserPasswordIterations;
+	
+	file_put_contents("data/users.json", json_encode($users));
+}
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
