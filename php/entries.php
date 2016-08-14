@@ -59,8 +59,14 @@ Now(),
 				$entryCount = $authorList[$author]["entry_count"];
 				$entryCount = $entryCount + 1;
 				$authorList[$author]["entry_count"] = $entryCount;
+				if(intval($newData["jam_number"]) < intval($authorList[$author]["first_jam_number"])){
+					$authorList[$author]["first_jam_number"] = $newData["jam_number"];
+				}
+				if(intval($newData["jam_number"]) > intval($authorList[$author]["last_jam_number"])){
+					$authorList[$author]["last_jam_number"] = $newData["jam_number"];
+				}
 			}else{
-				$authorList[$author] = Array("entry_count" => 1, "username" => $author);
+				$authorList[$author] = Array("entry_count" => 1, "username" => $author, "first_jam_number" => $newData["jam_number"], "last_jam_number" => $newData["jam_number"]);
 			}
 			
 			$newData["entries"][$i]["author"] = $author;
@@ -134,18 +140,24 @@ Now(),
 		foreach($dictionary["users"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $k){
 				$dictionary["users"][$i]["entry_count"] = $authorData["entry_count"];
+				$dictionary["users"][$i]["first_jam_number"] = $authorData["first_jam_number"];
+				$dictionary["users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}
 		}
 		//Update admins list with entry count for each
 		foreach($dictionary["admins"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $k){
 				$dictionary["admins"][$i]["entry_count"] = $authorData["entry_count"];
+				$dictionary["admins"][$i]["first_jam_number"] = $authorData["first_jam_number"];
+				$dictionary["admins"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}
 		}
 		//Update registered users list with entry count for each
 		foreach($dictionary["registered_users"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $k){
 				$dictionary["registered_users"][$i]["entry_count"] = $authorData["entry_count"];
+				$dictionary["registered_users"][$i]["first_jam_number"] = $authorData["first_jam_number"];
+				$dictionary["registered_users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}
 		}
 		$authors[] = $authorData;
