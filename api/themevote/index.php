@@ -11,6 +11,8 @@ if($usr == false){
 	die();
 }
 
+$clean_ip = mysqli_real_escape_string($dbConn, $ip);
+$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
 $clean_username = mysqli_real_escape_string($dbConn, $usr["username"]);
 
 if(!isset($_GET["themeID"])){

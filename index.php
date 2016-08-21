@@ -182,6 +182,12 @@ if(isset($_POST["action"])){
 				UnbanTheme($unbannedTheme);
 			}
 		break;
+		case "downloaddb":
+			if(IsAdmin()){
+				print GetJSONDataForAllTables();
+				die();
+			}
+		break;
 	}
 }
 

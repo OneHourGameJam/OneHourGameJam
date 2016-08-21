@@ -7,16 +7,19 @@
 			<div class="form-group">
 				<label for="{{KEY}}">{{NAME}}</label>
 				{{#TYPE_TEXT}}
-					<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} required>
+					<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
 				{{/TYPE_TEXT}}
 				{{#TYPE_NUMBER}}
-					<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} required>
+					<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
 				{{/TYPE_NUMBER}}
 				{{#TYPE_TEXTAREA}}
-					<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} required>{{{VALUE}}}</textarea>
+					<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE}}}</textarea>
 				{{/TYPE_TEXTAREA}}
 			</div>
 		{{/CONFIG}}
 		<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>
+	</form>
+	<form method='post'>
+		<button type="submit" name='action' value='downloaddb' class="btn btn-default">Download Database</button>
 	</form>
 </div>

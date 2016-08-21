@@ -6,67 +6,78 @@ $configSettings = Array(
 		"TAG" => "LANG_JAMNAME",
 		"NAME" => "Jam name, displayed in the page header",
 		"TYPE" => "TEXT",
-		"EDITABLE" => TRUE
-	),
-	"LANG_JAMDESC1" => Array(
-		"TAG" => "LANG_JAMDESC1",
-		"NAME" => "Jam description, line 1, displayed in the page header",
-		"TYPE" => "TEXT",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"LANG_JAMDESC2" => Array(
 		"TAG" => "LANG_JAMDESC2",
 		"NAME" => "Jam description, line 2, displayed in the page header",
 		"TYPE" => "TEXT",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"LANG_JAMDESC3" => Array(
 		"TAG" => "LANG_JAMDESC3",
 		"NAME" => "Jam description, line 3, displayed in the page header",
 		"TYPE" => "TEXT",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
+	),
+	"LANG_NOTIFICATION" => Array(
+		"TAG" => "LANG_NOTIFICATION",
+		"NAME" => "An optional notification area, displayed at the top of the page if set.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => FALSE
 	),
 	"LANG_RULES" => Array(
 		"TAG" => "LANG_RULES",
 		"NAME" => "Jam rules, displayed on the rules page",
 		"TYPE" => "TEXTAREA",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"THEME_DAYS_MARK_AS_OLD" => Array(
 		"TAG" => "THEME_DAYS_MARK_AS_OLD",
 		"NAME" => "How many days a theme can be on the list before it is marked as old.",
 		"TYPE" => "NUMBER",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"THEME_MIN_VOTES_TO_SCORE" => Array(
 		"TAG" => "THEME_MIN_VOTES_TO_SCORE",
 		"NAME" => "Minimum number of votes a theme must receive for it to be considered rated.",
 		"TYPE" => "NUMBER",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"THEME_NUMBER_TO_MARK_TOP" => Array(
 		"TAG" => "THEME_NUMBER_TO_MARK_TOP",
 		"NAME" => "Number of best voted themes to mark as \"top\".",
 		"TYPE" => "NUMBER",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"THEME_NUMBER_TO_MARK_KEEP" => Array(
 		"TAG" => "THEME_NUMBER_TO_MARK_KEEP",
 		"NAME" => "Number of best voted themes to keep for the next jam.",
 		"TYPE" => "NUMBER",
-		"EDITABLE" => TRUE
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
 	),
 	"PEPPER" => Array(
 		"TAG" => "PEPPER",
 		"NAME" => "Sitewide Pepper (used in password hashing), for security reasons this can only be changed manually in the config file.",
 		"TYPE" => "TEXT",
-		"EDITABLE" => FALSE
+		"EDITABLE" => FALSE,
+		"REQUIRED" => TRUE
 	),
 	"SESSION_PASSWORD_ITERATIONS" => Array(
 		"TAG" => "SESSION_PASSWORD_ITERATIONS",
 		"NAME" => "Number of hashing iteraations for session IDs, for security reasons this can only be changed manually in the config file.",
 		"TYPE" => "NUMBER",
-		"EDITABLE" => FALSE
+		"EDITABLE" => FALSE,
+		"REQUIRED" => TRUE
 	)
 );
 
@@ -116,6 +127,9 @@ function LoadConfig(){
 			$configEntry = Array("KEY" => $key, "VALUE" => htmlentities($value), "NAME" => $configSettings[$key]["NAME"]);
 			if($configSettings[$key]["EDITABLE"] == FALSE){
 				$configEntry["DISABLED"] = 1;
+			}
+			if($configSettings[$key]["REQUIRED"] == TRUE){
+				$configEntry["REQUIRED"] = 1;
 			}
 			switch($configSettings[$key]["TYPE"]){
 				case "TEXT":
