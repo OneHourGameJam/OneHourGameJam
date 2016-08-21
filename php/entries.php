@@ -18,16 +18,23 @@ function LoadEntries(){
 	$jamFromStart = 1;
 	$totalEntries = 0;
 	$largest_jam_number = -1;
-	foreach ($filesToParse as $fileLoc) {
+	
+	$sql = "SELECT * FROM jam WHERE jam_deleted = 0 ORDER BY jam_jam_number DESC";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	while($info = mysqli_fetch_array($data)){
+		
 		//Read data about the jam
-		$data = json_decode(file_get_contents($fileLoc), true);
 		$newData = Array();
-		$newData["jam_number"] = $data["jam_number"];
-		$newData["jam_number_ordinal"] = ordinal($data["jam_number"]);
-		$newData["theme"] = $data["theme"];
-		$newData["theme_visible"] = $data["theme"]; //Used for administration
-		$newData["date"] = $data["date"];
-		$newData["time"] = $data["time"];
+		$newData["jam_number"] = intval($info["jam_jam_number"]);
+		$newData["start_time"] = $info["jam_start_datetime"];
+		$newData["jam_id"] = intval($info["jam_id"]);
+		$newData["jam_number_ordinal"] = ordinal(intval($info["jam_jam_number"]));
+		$newData["theme"] = $info["jam_theme"];
+		$newData["theme_visible"] = $info["jam_theme"]; //Used for administration
+		$newData["date"] = date("d M Y", strtotime($info["jam_start_datetime"]));
+		$newData["time"] = date("G:i", strtotime($info["jam_start_datetime"]));
 		$newData["entries"] = Array();
 		$newData["first_jam"] = $firstJam;
 		$newData["entries_visible"] = $jamFromStart <= 2;
@@ -35,25 +42,17 @@ function LoadEntries(){
 			$firstJam = false;
 		}
 		
-		/*print "<br>INSERT INTO jam
-(jam_id, jam_datetime, jam_ip, jam_user_agent, jam_jam_number, jam_theme, jam_start_date, jam_start_time) 
-VALUES
-(".$newData["jam_number"].",
-Now(),
-'LEGACY',
-'LEGACY',
-".mysqli_real_escape_string($dbConn, $newData["jam_number"]).",
-'".mysqli_real_escape_string($dbConn, $newData["theme"])."',
-'".mysqli_real_escape_string($dbConn, $newData["date"])."',
-'".mysqli_real_escape_string($dbConn, $newData["time"])."');";
+		$sql = "SELECT * FROM entry WHERE entry_deleted = 0 AND entry_jam_id = ".$newData["jam_id"]." ORDER BY entry_id ASC";
+		$data2 = mysqli_query($dbConn, $sql);
+		$sql = "";
 		
-		*/
-		foreach ($data["entries"] as $i => $entry){
-			$newData["entries"][$i]["title"] = $entry["title"];
-			$newData["entries"][$i]["title_url_encoded"] = urlencode($entry["title"]);
-			$newData["entries"][$i]["description"] = $entry["description"];
-			$author = $entry["author"];
-			$entries[] = $entry;
+		$i = 0;
+		while($info2 = mysqli_fetch_array($data2)){
+			$newData["entries"][$i]["title"] = $info2["entry_title"];
+			$newData["entries"][$i]["title_url_encoded"] = urlencode($info2["entry_title"]);
+			$newData["entries"][$i]["description"] = $info2["entry_description"];
+			$author = $info2["entry_author"];
+			$entries[] = Array("title" => $info2["entry_title"], "author" => $info2["entry_author"], "url" => $info2["entry_url"],"screenshot_url" => $info2["entry_screenshot_url"],"description" => $info2["entry_description"]);
 			
 			if(isset($authorList[$author])){
 				$entryCount = $authorList[$author]["entry_count"];
@@ -72,33 +71,19 @@ Now(),
 			$newData["entries"][$i]["author"] = $author;
 			$newData["entries"][$i]["author_url_encoded"] = urlencode($author);
 			
-			$newData["entries"][$i]["url"] = str_replace("'", "\\'", $entry["url"]);
-			$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $entry["screenshot_url"]);
+			$newData["entries"][$i]["url"] = str_replace("'", "\\'", $info2["entry_url"]);
+			$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $info2["entry_screenshot_url"]);
 			
-			/*print "<br>INSERT INTO entry
-(entry_id, entry_datetime, entry_ip, entry_user_agent, entry_jam_number, entry_title, entry_description, entry_author, entry_url, entry_screenshot_url)
-VALUES
-(null,
-Now(),
-'LEGACY',
-'LEGACY',
-".mysqli_real_escape_string($dbConn, $newData["jam_number"]).",
-'".mysqli_real_escape_string($dbConn, $entry["title"])."',
-'".mysqli_real_escape_string($dbConn, $entry["description"])."',
-'".mysqli_real_escape_string($dbConn, $entry["author"])."',
-'".mysqli_real_escape_string($dbConn, $entry["url"])."',
-'".mysqli_real_escape_string($dbConn, $entry["screenshot_url"])."');
-";*/
+			$i++;
 		}
 		
 		$totalEntries += count($newData["entries"]);
 		$newData["entries_count"] = count($newData["entries"]);
 		
-		
 		//Hide theme of not-yet-started jams
 		
 		$now = new DateTime();
-		$datetime = new DateTime($data["start_time"]);
+		$datetime = new DateTime($newData["start_time"]);
 		$timeUntilJam = date_diff($datetime, $now);
 		
 		if($datetime > $now){
@@ -121,8 +106,8 @@ Now(),
 		
 		//Insert into dictionary array
 		$dictionary["jams"][] = $newData;
-		if($largest_jam_number < intval($data["jam_number"])){
-			$largest_jam_number = intval($data["jam_number"]);
+		if($largest_jam_number < intval($newData["jam_number"])){
+			$largest_jam_number = intval($newData["jam_number"]);
 			$dictionary["current_jam"] = $newData;
 		}
 		
@@ -179,7 +164,8 @@ Now(),
 function CreateJam($theme, $date, $time){
 	global $dbConn, $ip, $userAgent;
 	
-	$jamNumber = intval(GetNextJamNumber());
+	$currentJamData = GetCurrentJamNumberAndID();
+	$jamNumber = intval($currentJamData["NUMBER"] + 1);
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
@@ -220,7 +206,6 @@ function CreateJam($theme, $date, $time){
 	$newJam["time"] = gmdate("H:i", $datetime);
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
-	file_put_contents("data/jams/jam_$jamNumber.json", json_encode($newJam));
 	
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
@@ -236,7 +221,8 @@ function CreateJam($theme, $date, $time){
 		jam_user_agent,
 		jam_jam_number,
 		jam_theme,
-		jam_start_datetime)
+		jam_start_datetime,
+		jam_deleted)
 		VALUES
 		(null,
 		Now(),
@@ -244,7 +230,8 @@ function CreateJam($theme, $date, $time){
 		'$escapedUserAgent',
 		'$escapedJamNumber',
 		'$escapedTheme',
-		'$escapedStartTime');";
+		'$escapedStartTime',
+		0);";
 	
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
@@ -289,17 +276,6 @@ function EditJam($jamNumber, $theme, $date, $time){
 		return; //No jams exist
 	}
 	
-	foreach($jams as $i => $jam){
-		if(intval($jam["jam_number"]) == $jamNumber){
-			$jam["theme"] = $theme;
-			$jam["date"] = gmdate("d M Y", $datetime);
-			$jam["time"] = gmdate("H:i", $datetime);
-			$jam["start_time"] = gmdate("c", $datetime);
-			file_put_contents("data/jams/jam_$jamNumber.json", json_encode($jam));
-			break;
-		}
-	}
-	
 	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
 	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
 	$escapedJamNumber = mysqli_real_escape_string($dbConn, "$jamNumber");
@@ -308,7 +284,70 @@ function EditJam($jamNumber, $theme, $date, $time){
 		UPDATE jam
 		SET jam_theme = '$escapedTheme', 
 		    jam_start_datetime = '$escapedStartTime'
-		WHERE jam_jam_number = $escapedJamNumber;";
+		WHERE jam_jam_number = $escapedJamNumber
+		  AND jam_deleted = 0";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+}
+
+
+
+//Deletes an existing jam, identified by the jam number.
+function DeleteJam($jamID){
+	global $jams, $dbConn;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can delete jams.");
+	}
+	
+	//Validate values
+	$jamID = intval($jamID);
+	if($jamID <= 0){
+		die("invalid jam ID");
+		return;
+	}
+	
+	if(count($jams) == 0){
+		return; //No jams exist
+	}
+	
+	$escapedJamID = mysqli_real_escape_string($dbConn, "$jamID");
+	
+	$sql = "
+		UPDATE jam
+		SET jam_deleted = 1
+		WHERE jam_id = $escapedJamID
+		  AND jam_deleted = 0";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+}
+
+//Returns true / false based on whether or not the specified jam can be deleted
+function CanDeleteJam($jamID){
+	global $jams, $dbConn;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can delete jams.");
+		return FALSE;
+	}
+	
+	//Validate values
+	$jamNumber = intval($jamNumber);
+	if($jamNumber <= 0){
+		die("invalid jam number");
+		return FALSE;
+	}
+	
+	$escapedJamNumber = mysqli_real_escape_string($dbConn, "$jamNumber");
+	
+	$sql = "
+		SELECT entry_id
+		FROM entry
+		WHERE entry_jam_number = $escapedJamNumber
+		AND 
+		";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 }
@@ -442,9 +481,14 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "title_url_encoded" => urlencode("$gameName"), "author_url_encoded" => urlencode("".$loggedInUser["username"]), "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
 			file_put_contents($currentJamFile, json_encode($currentJam));
 			
+			
+
+			$jamData = GetCurrentJamNumberAndID();
+			
 			$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
 			$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-			$escaped_jamNumber = mysqli_real_escape_string($dbConn, $currentJam["jam_number"]);
+			$escaped_jamId = mysqli_real_escape_string($dbConn, $jamData["ID"]);
+			$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jamData["NUMBER"]);
 			$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
 			$escaped_description = mysqli_real_escape_string($dbConn, $description);
 			$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
@@ -457,6 +501,7 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 				entry_datetime,
 				entry_ip,
 				entry_user_agent,
+				entry_jam_id,
 				entry_jam_number,
 				entry_title,
 				entry_description,
@@ -468,6 +513,7 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 				Now(),
 				'$escaped_ip',
 				'$escaped_userAgent',
+				$escaped_jamId,
 				$escaped_jamNumber,
 				'$escaped_gameName',
 				'$escaped_description',
@@ -554,6 +600,22 @@ function GetNextJamDateAndTime(){
 	$dictionary["seconds_until_jam_suggested_time"] = $interval;
 	return $saturday;
 	return $saturday;
+}
+
+function GetCurrentJamNumberAndID(){
+	global $dbConn;
+	
+	$sql = "
+		SELECT jam_id, jam_jam_number FROM jam WHERE jam_jam_number = (SELECT MAX(jam_jam_number) FROM jam WHERE jam_deleted = 0) AND jam_deleted = 0
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	if($info = mysqli_fetch_array($data)){
+		return Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
+	}else{
+		return Array("NUMBER" => 0, "ID" => 0);
+	}
 }
 
 ?>

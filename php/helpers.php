@@ -25,22 +25,6 @@ function CmpArrayByProperty($a, $b, $property)
 	return $a[$property] < $b[$property];
 }
 
-//Returns the number for the next jam. 
-//If a jam json file is deleted, it does not return the jam number of the deleted jam,
-//unless the deleted jam was the last one. Essentially it returns Max(jam_number) +1,
-//determined by file names. Capped at 1000 jam entries.
-function GetNextJamNumber(){
-	$NextJamNumber = 1;
-	
-	for($i = 1; $i < 1000; $i++){
-		if(file_exists("data/jams/jam_$i.json")){
-			$NextJamNumber = max($NextJamNumber, $i + 1);
-		}
-	}
-	
-	return $NextJamNumber;
-}
-
 //Gets the list of json file locations, sorted in ascending order
 //Capped at 1000 entries.
 function GetSortedJamFileList(){
@@ -56,6 +40,7 @@ function GetSortedJamFileList(){
 
 //Returns ordinal version of provided number, so 1 -> 1st; 3 -> 3rd, etc.
 function ordinal($number) {
+	$number = intval($number);
     $ends = array('th','st','nd','rd','th','th','th','th','th','th');
     if ((($number % 100) >= 11) && (($number%100) <= 13))
         return $number. 'th';
