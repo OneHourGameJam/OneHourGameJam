@@ -48,12 +48,14 @@ CREATE TABLE `entry` (
   `entry_datetime` datetime DEFAULT NULL,
   `entry_ip` varchar(45) DEFAULT NULL,
   `entry_user_agent` text,
+  `entry_jam_id` int(11) DEFAULT NULL,
   `entry_jam_number` int(11) DEFAULT NULL,
   `entry_title` text,
   `entry_description` text,
   `entry_author` varchar(45) DEFAULT NULL,
   `entry_url` varchar(255) DEFAULT NULL,
   `entry_screenshot_url` varchar(255) DEFAULT NULL,
+  `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -73,6 +75,7 @@ CREATE TABLE `jam` (
   `jam_jam_number` int(11) DEFAULT NULL,
   `jam_theme` text,
   `jam_start_datetime` datetime DEFAULT NULL,
+  `jam_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`jam_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -125,4 +128,4 @@ CREATE TABLE `themevote` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-14 21:02:56
+-- Dump completed on 2016-08-21  6:32:54
