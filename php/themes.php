@@ -49,6 +49,7 @@ function LoadThemes(){
 		$themeData["votes_against"] = 0;
 		$themeData["votes_neutral"] = 0;
 		$themeData["votes_for"] = 0;
+		$themeData["votes_report"] = 0;
 		$themeData["days_ago"] = intval($theme["theme_daysago"]);
 		
 		if(intval($theme["theme_daysago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"])){
@@ -90,6 +91,9 @@ function LoadThemes(){
 	
 	while($theme = mysqli_fetch_array($data)){
 		$themeID = $theme["themevote_theme_id"];
+		if(!isset($themes[$themeID])){
+			continue; //voted-on theme no longer relevant (was deleted, banned, marked as old,...)
+		}
 		switch($theme["themevote_type"]){
 			case "1":
 				$themes[$themeID]["user_vote_against"] = 1;
@@ -162,7 +166,7 @@ function LoadThemes(){
 	
 	foreach($themes as $i => $theme){
 		$dictionary["suggested_themes"][] = $theme;
-		if($theme["top_theme"]){
+		if(isset($theme["top_theme"]) && $theme["top_theme"]){
 			$dictionary["top_themes"][] = $theme;
 		}
 	}

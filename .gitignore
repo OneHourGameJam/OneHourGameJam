@@ -1,3 +1,4 @@
 data/
 assets/
+plugins/migratedata/*.json
 .vscode/

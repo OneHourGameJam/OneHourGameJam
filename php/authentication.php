@@ -43,7 +43,7 @@ function LoadUsers(){
 	$dictionary["registered_users"] = Array();
 	foreach($users as $i => $user){
 	
-		if($user["admin"] != 0){
+		if(isset($user["admin"]) && $user["admin"] != 0){
 			$dictionary["admins"][] = $user;
 		}else{
 			$dictionary["registered_users"][] = $user;

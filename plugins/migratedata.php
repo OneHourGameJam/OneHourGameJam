@@ -117,6 +117,75 @@ for($i = 1; $i <= 100; $i++){
 	$jamID++;
 }
 
+$userID = 1;
+
+if(file_exists("migratedata/users.json")){
+	$data = json_decode(file_get_contents("migratedata/users.json"), true);
+}
+
+$users = Array();
+
+foreach($data as $i => $user){
+
+	if(!isset($user["admin"])){
+		$user["admin"] = 0;
+	}
+
+	print "<br>INSERT INTO user
+		(user_id,
+		user_username,
+		user_datetime,
+		user_register_ip,
+		user_register_user_agent,
+		user_display_name,
+		user_password_salt,
+		user_password_hash,
+		user_password_iterations,
+		user_last_login_datetime,
+		user_last_ip,
+		user_last_user_agent,
+		user_email,
+		user_role)
+		VALUES
+		($userID,
+		'".$user["username"]."',
+		Now(),
+		'LEGACY',
+		'LEGACY',
+		'".$user["username"]."',
+		'".$user["salt"]."',
+		'".$user["password_hash"]."',
+		".$user["password_iterations"].",
+		'0000-00-00 00:00:00',
+		'LEGACY',
+		'LEGACY',
+		'',
+		".$user["admin"].");
+
+	";
+	$users[$user["username"]] = $userID;
+	
+	$userID++;
+}
+
+if(file_exists("migratedata/sessions.json")){
+	$data = json_decode(file_get_contents("migratedata/sessions.json"), true);
+}
+
+foreach($data as $i => $session){
+
+	print "<br>INSERT INTO session
+		(session_id,
+		session_user_id,
+		session_datetime_started,
+		session_datetime_last_used)
+		VALUES
+		('$i',
+		".$users[$session["username"]].",
+		Now(),
+		Now());	#".$session["username"].";
+	";
+}
 
 ?>
 

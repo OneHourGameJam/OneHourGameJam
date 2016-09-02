@@ -11,8 +11,6 @@ function LoadEntries(){
 	$entries = Array();
 	
 	//Create lists of jams and jam entries
-	$filesToParse = GetSortedJamFileList();
-	//$filesToParse = array_reverse($filesToParse);
 	$authorList = Array();
 	$firstJam = true;
 	$jamFromStart = 1;
@@ -83,7 +81,7 @@ function LoadEntries(){
 		//Hide theme of not-yet-started jams
 		
 		$now = new DateTime();
-		$datetime = new DateTime($newData["start_time"]);
+		$datetime = new DateTime($newData["start_time"] . " UTC");
 		$timeUntilJam = date_diff($datetime, $now);
 		
 		if($datetime > $now){
@@ -395,7 +393,7 @@ function JamExists($jamID){
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
 function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
 	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -417,19 +415,23 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 		die("Invalid game URL");
 	}
 	
-	$filesToParse = GetSortedJamFileList();
-	if(count($filesToParse) < 1){
-		die("No jam to submit your entry to");
-	}
-	
 	//Validate description
 	if(strlen($description) <= 0){
 		die("Invalid description");
 	}
 	
-	//First on the list is the current jam.
-	$currentJamFile = $filesToParse[count($filesToParse) - 1];
-	$jam_folder = str_replace(".json", "", $currentJamFile);
+	//Check that a jam exists
+	$currentJam = GetCurrentJamNumberAndID();
+	if($currentJam == null || $currentJam["NUMBER"] == 0){
+		die("No jam to submit to");
+	}
+	
+	if(count($jams) == 0){
+		die("No jam to submit to");
+	}
+	
+	$currentJamNumber = intval($currentJam["NUMBER"]);
+	$jam_folder = "data/jams/jam_$currentJamNumber";
 	//print $loggedInUser["username"];
 	
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
@@ -471,7 +473,7 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 		$screenshotURL = "logo.png";
 	}
 	
-	$currentJam = json_decode(file_get_contents($currentJamFile), true);
+	$currentJam = $jams[0];
 	if(isset($currentJam["entries"])){
 		$entryUpdated = false;
 		foreach($currentJam["entries"] as $i => $entry){
@@ -484,15 +486,12 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 					}
 				}
 				
-				$currentJam["entries"][$i] = Array("title" => "$gameName", "title_url_encoded" => urlencode("$gameName"), "author_url_encoded" => urlencode("".$loggedInUser["username"]), "author" => "".$loggedInUser["username"], "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
-				file_put_contents($currentJamFile, json_encode($currentJam));
-				
 				$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
 				$escapedGameURL = mysqli_real_escape_string($dbConn, $gameURL);
 				$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
-				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $currentJam["jam_number"]);
+				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $currentJamNumber);
 				
 				$sql = "
 				UPDATE entry
@@ -513,12 +512,6 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 			}
 		}
 		if(!$entryUpdated){
-			//Submitting new entry
-			$currentJam["entries"][] = Array("title" => "$gameName", "author" => "".$loggedInUser["username"], "title_url_encoded" => urlencode("$gameName"), "author_url_encoded" => urlencode("".$loggedInUser["username"]), "url" => "$gameURL", "screenshot_url" => "$screenshotURL", "description" => "$description");
-			file_put_contents($currentJamFile, json_encode($currentJam));
-			
-			
-
 			$jamData = GetCurrentJamNumberAndID();
 			
 			$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
@@ -622,35 +615,6 @@ function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 			}
 			break;
 		}
-	}
-}
-
-function GetNextJamDateAndTime(){
-	global $dictionary;
-	
-	$saturday = strtotime("saturday +20 hours");
-	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $saturday);
-	$dictionary["next_jam_suggested_time"] = date("H:i", $saturday);
-	$now = time();
-	$interval = $saturday - $now;
-	$dictionary["seconds_until_jam_suggested_time"] = $interval;
-	return $saturday;
-	return $saturday;
-}
-
-function GetCurrentJamNumberAndID(){
-	global $dbConn;
-	
-	$sql = "
-		SELECT jam_id, jam_jam_number FROM jam WHERE jam_jam_number = (SELECT MAX(jam_jam_number) FROM jam WHERE jam_deleted = 0) AND jam_deleted = 0
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-	
-	if($info = mysqli_fetch_array($data)){
-		return Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
-	}else{
-		return Array("NUMBER" => 0, "ID" => 0);
 	}
 }
 

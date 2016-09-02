@@ -13,7 +13,7 @@ function EndsWith($haystack, $needle) {
 //Numeric comparator for arrays based on property
 function CmpArrayByPropertyPopularityNum($a, $b)
 {
-	if($a["banned"] == 1){
+	if(isset($a["banned"]) && $a["banned"] == 1){
 		return 1;
 	}
 	return CmpArrayByProperty($a, $b, "popularity_num");
@@ -46,6 +46,35 @@ function ordinal($number) {
         return $number. 'th';
     else
         return $number. $ends[$number % 10];
+}
+
+function GetNextJamDateAndTime(){
+	global $dictionary;
+	
+	$saturday = strtotime("saturday +20 hours");
+	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $saturday);
+	$dictionary["next_jam_suggested_time"] = date("H:i", $saturday);
+	$now = time();
+	$interval = $saturday - $now;
+	$dictionary["seconds_until_jam_suggested_time"] = $interval;
+	return $saturday;
+	return $saturday;
+}
+
+function GetCurrentJamNumberAndID(){
+	global $dbConn;
+	
+	$sql = "
+		SELECT jam_id, jam_jam_number FROM jam WHERE jam_jam_number = (SELECT MAX(jam_jam_number) FROM jam WHERE jam_deleted = 0) AND jam_deleted = 0
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	if($info = mysqli_fetch_array($data)){
+		return Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
+	}else{
+		return Array("NUMBER" => 0, "ID" => 0);
+	}
 }
 
 ?>

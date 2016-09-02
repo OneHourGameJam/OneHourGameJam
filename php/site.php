@@ -23,5 +23,4 @@ include_once("php/assets.php");
 include_once("php/init.php");
 
 
-
 ?>
