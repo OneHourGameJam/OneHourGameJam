@@ -20,7 +20,7 @@
 		<ul id='authorlist' style='padding-left: 12px;'>
 			<li><a href='#' onclick='filterAuthor("showall");'>Show all</a></li>
 			{{#authors}}
-				<li><a href='#' onclick='filterAuthor("{{username}}"); return false;' id='author-{{username}}'>{{username}} ({{entry_count}})</a></li>
+				<li><a href='#' onclick='filterAuthor("{{username}}"); return false;' id='author-{{username}}'>{{author_display}} ({{entry_count}})</a></li>
 			{{/authors}}
 		</ul>
 	</div>

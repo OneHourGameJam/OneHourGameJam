@@ -8,12 +8,16 @@
 	<form method='post'>
 		<p style='margin-top: 50px;'>
 			<div class="form-group">
-				<label for="displayname">Display Name</label>
-				<input type="text" class="form-control" id="displayname" name='displayname' placeholder="Display name" value="" pattern=".{2,50}" required>
+				<label for="displayname">Display Name <span style='font-weight: normal'>(Required)</span></label>
+				<input type="text" class="form-control" id="displayname" name='displayname' placeholder="Display name" value="{{user.display_name}}" pattern=".{2,50}" required>
 			</div>
 			<div class="form-group">
-				<label for="twitterhandle">Twitter Handle</label>
-				<input type="text" class="form-control" id="twitterhandle" name='twitterhandle' placeholder="Twitter Handle" value="" pattern="^@[a-zA-Z0-9_]+$">
+				<label for="twitterhandle">Twitter Handle <span style='font-weight: normal'>(NOT Required)</span></label>
+				<input type="text" class="form-control" id="twitterhandle" name='twitterhandle' placeholder="@Twitter Handle" value="{{user.twitter}}" pattern="^@[a-zA-Z0-9_]+$">
+			</div>
+			<div class="form-group">
+				<label for="emailaddress">Email <span style='font-weight: normal'>(NOT Required)</span></label>
+				<input type="email" class="form-control" id="emailaddress" name='emailaddress' placeholder="Email Address" value="{{user.email}}">
 			</div>
 			<button type="submit" name='action' value='saveuserchanges' class="btn btn-default">Save Changes</button>
 		</p>
@@ -22,15 +26,15 @@
 		<p style='margin-top: 50px;'>
 			<div class="form-group">
 				<label for="passwordold">Current Password</label>
-				<input type="password" class="form-control" id="passwordold" name='passwordold' placeholder="Old Password" value="">
+				<input type="password" class="form-control" id="passwordold" name='passwordold' placeholder="Old Password" value="" required>
 			</div>
 			<div class="form-group">
 				<label for="password1">New Password</label>
-				<input type="password" class="form-control" id="password1" name='password1' placeholder="New Password" value="">
+				<input type="password" class="form-control" id="password1" name='password1' placeholder="New Password" value="" required>
 			</div>
 			<div class="form-group">
 				<label for="password2">Repeat Password</label>
-				<input type="password" class="form-control" id="password2" name='password2' placeholder="New Password (repeat)" value="">
+				<input type="password" class="form-control" id="password2" name='password2' placeholder="New Password (repeat)" value="" required>
 			</div>
 			<button type="submit" name='action' value='changepassword' class="btn btn-default">Change password</button>
 		</p>

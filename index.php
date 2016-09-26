@@ -7,6 +7,7 @@
 
 include_once("php/site.php");
 
+
 $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
 
@@ -142,7 +143,7 @@ if(isset($_POST["action"])){
 			$page = "editusers";
 		break;
 		case "changepassword":
-			if(IsAdmin()){
+			if(IsLoggedIn()){
 				$passwordold = $_POST["passwordold"];
 				$password1 = $_POST["password1"];
 				$password2 = $_POST["password2"];
@@ -152,11 +153,12 @@ if(isset($_POST["action"])){
 			$page = "usersettings";
 		break;
 		case "saveuserchanges":
-			if(IsAdmin()){
+			if(IsLoggedIn()){
 				$displayName = $_POST["displayname"];
 				$twitterHandle = $_POST["twitterhandle"];
+				$emailAddress = $_POST["emailaddress"];
 				
-				ChangeUserData($displayName, $twitterHandle);
+				ChangeUserData($displayName, $twitterHandle, $emailAddress);
 			}
 			$page = "usersettings";
 		break;

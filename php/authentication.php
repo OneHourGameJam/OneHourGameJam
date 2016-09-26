@@ -32,24 +32,42 @@ function HashPassword($password, $salt, $iterations){
 
 //(Re)Loads the users into the globally accessible $users variable.
 function LoadUsers(){
-	global $users, $dictionary;
-	$users = json_decode(file_get_contents("data/users.json"), true);
-	foreach($users as $username => $user){
-		$users[$username]["username"] = $username;
+	global $users, $loggedInUser, $dictionary, $dbConn;
+	//$users = json_decode(file_get_contents("data/users.json"), true);
+	
+	$users = Array();
+	
+	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email, user_password_salt, user_password_hash, user_password_iterations, user_role FROM user";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	while($info = mysqli_fetch_array($data)){
+		//Read data about the user
+		$currentUser = Array();
+		$currentUser["id"] = $info["user_id"];
+		$currentUser["username"] = $info["user_username"];
+		$currentUser["display_name"] = $info["user_display_name"];
+		$currentUser["twitter"] = $info["user_twitter"];
+		$currentUser["email"] = $info["user_email"];
+		$currentUser["salt"] = $info["user_password_salt"];
+		$currentUser["password_hash"] = $info["user_password_hash"];
+		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
+		$currentUser["admin"] = intval($info["user_role"]);
+		
+		$users[$currentUser["username"]] = $currentUser;
 	}
+	
 	ksort($users);
 	$dictionary["users"] = $users;
 	$dictionary["admins"] = Array();
 	$dictionary["registered_users"] = Array();
 	foreach($users as $i => $user){
-	
-		if(isset($user["admin"]) && $user["admin"] != 0){
+		if($user["admin"] == 1){
 			$dictionary["admins"][] = $user;
 		}else{
 			$dictionary["registered_users"][] = $user;
 		}
 	}
-	
 }
 
 //Function called when the login form is sent. Either logs in or registers the
@@ -91,7 +109,7 @@ function LogInOrRegister($username, $password){
 //Calls LogInUser(...) after registering the user to also log them in.
 //TODO: Replace die() with in-page warning
 function RegisterUser($username, $password){
-	global $users;
+	global $users, $dbConn, $ip, $userAgent;
 	
 	$username = strtolower(trim($username));
 	$password = trim($password);
@@ -102,8 +120,13 @@ function RegisterUser($username, $password){
 	}
 	
 	//Check password length
-	if(strlen($password) < 8 || strlen($password) > 20){
-		die("password must be between 8 and 20 characters");
+	if(strlen($password) < 8){
+		die("password must be at least 8 characters long");
+	}
+	
+	//Check password length
+	if(strlen($password) > 128){
+		die("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;");
 	}
 	
 	$userSalt = GenerateSalt();
@@ -124,9 +147,46 @@ function RegisterUser($username, $password){
 		}
 		
 		$users[$username] = $newUser;
+		
+		$usernameClean = mysqli_real_escape_string($dbConn, $username);
+		
+		$sql = "
+			INSERT INTO user
+			(user_id,
+			user_username,
+			user_datetime,
+			user_register_ip,
+			user_register_user_agent,
+			user_display_name,
+			user_password_salt,
+			user_password_hash,
+			user_password_iterations,
+			user_last_login_datetime,
+			user_last_ip,
+			user_last_user_agent,
+			user_email,
+			user_role)
+			VALUES
+			(null,
+			'$usernameClean',
+			Now(),
+			'$ip',
+			'$userAgent',
+			'$usernameClean',
+			'$userSalt',
+			'$passwordHash',
+			$userPasswordIterations,
+			Now(),
+			'$ip',
+			'$userAgent',
+			'',
+			0);
+		";
+		mysqli_query($dbConn, $sql) ;
+		$sql = "";
+
 	}
 	
-	file_put_contents("data/users.json", json_encode($users));
 	LoadUsers();
 	LogInUser($username, $password);
 }
@@ -170,6 +230,21 @@ function LogInUser($username, $password){
 		setcookie("sessionID", $sessionID, time()+60*60*24*30);
 		$_COOKIE["sessionID"] = $sessionID;
 		
+		
+		//$sql = "
+		//	INSERT INTO session
+		//	(session_id,
+		//	session_user_id,
+		//	session_datetime_started,
+		//	session_datetime_last_used)
+		//	VALUES
+		//	'$sessionIDHash',
+		//	'$userID',
+		//	<{session_datetime_started: }>,
+		//	<{session_datetime_last_used: }>);
+        //
+		//";
+		
 		$sessions = Array();
 		if(file_exists("data/sessions.json")){
 			$sessions = json_decode(file_get_contents("data/sessions.json"), true);
@@ -199,12 +274,15 @@ function LogOut(){
 //returns that. This is to prevent re-hashing the provided sessionID multiple times.
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
-function IsLoggedIn(){
+//Set $force to TRUE to force reloading (for example if a user setting was changed for the logged in user)
+function IsLoggedIn($force = FALSE){
 	global $loginChecked, $loggedInUser, $config, $users, $dictionary;
 	
-	if($loginChecked){
+	if($loginChecked && !$force){
 		return $loggedInUser;
 	}
+	
+	$loggedInUser = Array();
 	
 	if(!isset($_COOKIE["sessionID"])){
 		//No session cookie, therefore not logged in
@@ -269,7 +347,7 @@ function IsAdmin(){
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
 function EditUser($username, $isAdmin){
-	global $users;
+	global $users, $dbConn;
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
@@ -291,19 +369,25 @@ function EditUser($username, $isAdmin){
 		die("User does not exist");
 		return;
 	}
+		
+	$usernameClean = mysqli_real_escape_string($dbConn, $username);
 	
-	if($isAdmin == 0){
-		$users[$username]["admin"] = "0";
-	}else{
-		$users[$username]["admin"] = "1";
-	}
+	$sql = "	
+		UPDATE user
+		SET
+		user_role = $isAdmin
+		WHERE user_username = '$usernameClean';
+	";
+	mysqli_query($dbConn, $sql) ;
+	$sql = "";
 	
-	file_put_contents("data/users.json", json_encode($users));
+	LoadUsers();
+	$loggedInUser = IsLoggedIn(TRUE);
 }
 
 //Changes data about the logged in user
-function ChangeUserData($displayName, $twitterHandle){
-	global $users, $loggedInUser;
+function ChangeUserData($displayName, $twitterHandle, $emailAddress){
+	global $users, $loggedInUser, $dbConn;
 	
 	$loggedInUser = IsLoggedIn();
 	
@@ -314,27 +398,37 @@ function ChangeUserData($displayName, $twitterHandle){
 	
 	//Validate values
 	if(!$displayName || strlen($displayName) <= 0 || strlen($displayName) > 50){
+		die("Display name must be between 0 and 50 characters long");
+	}
+	
+	//Validate email address
+	if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+		die("Provided email address is not valid");
+	}
 		
-	}
+	$displayNameClean = mysqli_real_escape_string($dbConn, $displayName);
+	$twitterHandleClean = mysqli_real_escape_string($dbConn, $twitterHandle);
+	$emailAddressClean = mysqli_real_escape_string($dbConn, $emailAddress);
+	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 	
-	//Check that the user exists
-	if(!isset($users[$username])){
-		die("User does not exist");
-		return;
-	}
+	$sql = "	
+		UPDATE user
+		SET
+		user_display_name = '$displayNameClean',
+		user_twitter = '$twitterHandleClean',
+		user_email = '$emailAddressClean'
+		WHERE user_username = '$usernameClean';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
 	
-	if($isAdmin == 0){
-		$users[$username]["admin"] = "0";
-	}else{
-		$users[$username]["admin"] = "1";
-	}
-	
-	file_put_contents("data/users.json", json_encode($users));
-}
+	LoadUsers();
+	$loggedInUser = IsLoggedIn(TRUE);
+}   
 
 //Changes the logged in user's password if the old one matches.
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
-	global $users, $loggedInUser;
+	global $users, $loggedInUser, $dbConn;
 	
 	$loggedInUser = IsLoggedIn();
 	
@@ -378,13 +472,30 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
 	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;
 	$users[$loggedInUser["username"]]["password_iterations"] = $newUserPasswordIterations;
+		
+	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
+	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);
+	$newUserPasswordIterationsClean = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
+	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 	
-	file_put_contents("data/users.json", json_encode($users));
+	$sql = "	
+		UPDATE user
+		SET
+		user_password_salt = '$newUserSaltClean',
+		user_password_iterations = '$newUserPasswordIterationsClean',
+		user_password_hash = '$newPasswordHashClean'
+		WHERE user_username = '$usernameClean';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	LoadUsers();
+	$loggedInUser = IsLoggedIn(TRUE);
 }
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $users;
+	global $users, $dbConn;
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
@@ -410,15 +521,32 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	}
 	
 	//Generate new salt, number of iterations and hashed password.
-	$userSalt = GenerateSalt();
-	$userPasswordIterations = intval(rand(10000, 20000));
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
+	$newUserSalt = GenerateSalt();
+	$newUserPasswordIterations = intval(rand(10000, 20000));
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations);
 	
-	$users[$username]["salt"] = $userSalt;
-	$users[$username]["password_hash"] = $passwordHash;
-	$users[$username]["password_iterations"] = $userPasswordIterations;
+	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
+	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;
+	$users[$loggedInUser["username"]]["password_iterations"] = $newUserPasswordIterations;
+		
+	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
+	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);
+	$newUserPasswordIterationsClean = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
+	$usernameClean = mysqli_real_escape_string($dbConn, $username);
 	
-	file_put_contents("data/users.json", json_encode($users));
+	$sql = "	
+		UPDATE user
+		SET
+		user_password_salt = '$newUserSaltClean',
+		user_password_iterations = '$newUserPasswordIterationsClean',
+		user_password_hash = '$newPasswordHashClean'
+		WHERE user_username = '$usernameClean';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	LoadUsers();
+	$loggedInUser = IsLoggedIn(TRUE);
 }
 
 

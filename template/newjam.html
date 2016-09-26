@@ -4,7 +4,7 @@
 	</p>
 	<form method='post'>
 		<div class="form-group">
-			<label for="theme">Jam theme</label> (Top themes:{{#top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{theme}}</a>;{{/top_themes}})
+			<label for="theme">Jam theme</label> (Top themes:{{#top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/top_themes}})
 			<input type="text" class="form-control" id="theme" name='theme' placeholder="Jam theme" required>
 		</div>
 		<div class="form-group">

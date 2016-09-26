@@ -1,9 +1,49 @@
 <?php
 
 chdir("../../");
-include_once("php/helpers.php");
-$filesToParse = GetSortedJamFileList();
+include_once("php/db.php");
 
+//Number of minutes after jam to be considered active.
+$jamDurationMinutes = 60;
+
+$sql = "	
+	SELECT jam_jam_number, jam_theme, jam_start_datetime, jam_start_datetime - UTC_TIMESTAMP() AS jam_timediff
+	FROM jam
+	WHERE jam_deleted = 0
+";
+$data = mysqli_query($dbConn, $sql) ;
+$sql = "";
+
+$return = Array();
+$return["upcoming_jams"] = Array();
+$return["current_jams"] = Array();
+$return["previous_jams"] = Array();
+
+while($info = mysqli_fetch_array($data)){
+	$row = Array();
+	foreach(array_keys($info) as $key){
+		if(is_numeric($key)){
+			continue;
+		}
+		$row[str_replace("jam_", "", $key)] = $info[$key];
+	}
+	
+	if(intval($info["jam_timediff"]) > 0){
+		//Future jam
+		$row["theme"] = "Not announced yet";
+		$return["upcoming_jams"][] = $row;
+	}else if(intval($info["jam_timediff"]) >= -60 * $jamDurationMinutes){
+		$return["current_jams"][] = $row;
+	}else{
+		$return["previous_jams"][] = $row;
+	}
+}
+
+print json_encode($return);
+
+die();
+
+$filesToParse = GetSortedJamFileList();
 $minPositiveInterval = -1;
 $maxNegativeInterval = 1;
 $nextJam = Array();

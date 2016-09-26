@@ -1,7 +1,7 @@
 <?php
 
 function LoadEntries(){
-	global $dictionary, $jams, $authors, $entries, $dbConn;
+	global $dictionary, $jams, $authors, $entries, $users, $dbConn;
 	
 	//Clear public lists which get updated by this function
 	$dictionary["jams"] = Array();
@@ -33,6 +33,7 @@ function LoadEntries(){
 		$newData["theme_visible"] = $info["jam_theme"]; //Used for administration
 		$newData["date"] = date("d M Y", strtotime($info["jam_start_datetime"]));
 		$newData["time"] = date("G:i", strtotime($info["jam_start_datetime"]));
+		$newData["minutes_to_jam"] = floor((strtotime($info["jam_start_datetime"] ." UTC") - time()) / 60);
 		$newData["entries"] = Array();
 		$newData["first_jam"] = $firstJam;
 		$newData["entries_visible"] = $jamFromStart <= 2;
@@ -49,7 +50,12 @@ function LoadEntries(){
 			$newData["entries"][$i]["title"] = $info2["entry_title"];
 			$newData["entries"][$i]["title_url_encoded"] = urlencode($info2["entry_title"]);
 			$newData["entries"][$i]["description"] = $info2["entry_description"];
-			$author = $info2["entry_author"];
+			$author_username = $info2["entry_author"];
+			$author = $author_username;
+			$author_display = $author_username;
+			if(isset($users[$author_username]["display_name"])){
+				$author_display = $users[$author_username]["display_name"];
+			}
 			$entries[] = Array("title" => $info2["entry_title"], "author" => $info2["entry_author"], "url" => $info2["entry_url"],"screenshot_url" => $info2["entry_screenshot_url"],"description" => $info2["entry_description"]);
 			
 			if(isset($authorList[$author])){
@@ -63,9 +69,10 @@ function LoadEntries(){
 					$authorList[$author]["last_jam_number"] = $newData["jam_number"];
 				}
 			}else{
-				$authorList[$author] = Array("entry_count" => 1, "username" => $author, "first_jam_number" => $newData["jam_number"], "last_jam_number" => $newData["jam_number"]);
+				$authorList[$author] = Array("entry_count" => 1, "username" => $author, "author_display" => $author_display, "first_jam_number" => $newData["jam_number"], "last_jam_number" => $newData["jam_number"]);
 			}
 			
+			$newData["entries"][$i]["author_display"] = $author_display;
 			$newData["entries"][$i]["author"] = $author;
 			$newData["entries"][$i]["author_url_encoded"] = urlencode($author);
 			
