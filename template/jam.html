@@ -1,0 +1,60 @@
+<div class="col-md-10" id='jamlist'>
+	{{#viewing_jam}}
+		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+			<div class='panel-heading'>
+				<a name='jam{{jam_number}}'></a>
+				<h3 class='panel-title' style='font-size: 24px;'>
+					{{jam_number_ordinal}} one hour game jam ({{date}})
+				</h3>
+				Theme: {{theme}}<br />
+				{{#jam_started}}
+					<span>Started: {{date}} at {{time}} ({{entries_count}} entries)</span>
+				{{/jam_started}}
+				{{^jam_started}}
+					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in <span id='time_display_{{jam_number_ordinal}}'>{{time_left}}</span>)</span></span>
+					{{#user.isadmin}}
+						<br/>	
+						<span>~startjam {{minutes_to_jam}} minutes</span>
+					{{/user.isadmin}}
+				{{/jam_started}}
+			</div>
+		</div>
+		<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+			{{#entries}}
+				<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px;'>
+					<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;' >
+						<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+					</div>
+				</div>
+				<div class='panel panel-default col-md-9 entry' style='padding-left: 0px; padding-right: 0px; height: 226px;'>
+					<div class='col-md-12' style='background-color: #F5F5F5;'>
+						<div class='col-md-8'>
+							<b><span class='entryTitle'>{{title}}</span></b><br />
+							by <span class='entryAuthor'>{{author_display}}</span>
+						</div>
+						<div class='col-md-4' style='text-align: right;'>
+							<!-- Facebook -->
+							<a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/', '_blank');" target="_blank">
+								<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" style='max-width: 30px;' /></a>
+							
+							<!-- Twitter -->
+							<a href="#" onclick="window.open('https://twitter.com/share?url=http://onehourgamejam.com/&amp;text=Played a game by {{{author_url_encoded}}} made in one hour titled {{{title_url_encoded}}}. Try it!;hashtags=gamedev, 1hgj, gamejam', '_blank');" target="_blank">
+								<img src="http://liamlime.com/site/images/social/twitter.png" alt="Twitter" style='max-width: 30px;' /></a>
+							
+							<!-- Google+ -->
+							<a href="#" onclick="window.open('https://plus.google.com/share?url=http://onehourgamejam.com/', '_blank');" target="_blank">
+							<img src="http://liamlime.com/site/images/social/google.png" alt="Google" style='max-width: 30px;' /></a>
+							
+							<button type="button" class="btn btn-success" style='margin-bottom: 5px;' onclick='window.open("{{url}}", "_blank")'>Play</button>
+						</div>
+					</div>
+					<div class='panel-body entryScreenshot description  col-md-12' style='text-align: center; height: 226px; overflow-y: auto; overflow-x: hidden;'>
+						<p>
+							{{description}}
+						</p>
+					</div>
+				</div>
+			{{/entries}}
+		</div>
+	{{/viewing_jam}}
+</div>

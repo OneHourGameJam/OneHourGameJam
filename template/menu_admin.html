@@ -1,6 +1,6 @@
 <div class="panel panel-info">
 	<div class="panel-heading">
-		<h3 class="panel-title">Hello {{user.username}}</h3>
+		<h3 class="panel-title">Hello {{user.display_name}}</h3>
 	</div>
 	<div class="panel-body">
 		<ul id='mainmenu' style='padding-left: 12px;'>
@@ -11,6 +11,7 @@
 			<li><a href='?page=rules'>How it works</a></li>
 			<li><a href='?page=assets'>Assets</a></li>
 			<br/>
+			<li><b><a href='?page=author&author={{user.username}}'>Profile</a> (<span style='color:red'>New!</span>)</b></li>
 			<li><a href='?page=usersettings'>User Settings</a></li>
 			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues'>Submit Issue</a></li>
 			<br>

@@ -17,7 +17,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "jam", "author")))){
 	$page = "main";
 }
 
@@ -220,6 +220,58 @@ switch($page){
 			}
 		}
 	break;
+	case "jam":
+		$viewingJamNumber = ((isset($_GET["jam"])) ? intval($_GET["jam"]) : 0);
+		if($viewingJamNumber == 0){
+			die("invalid jam number");
+		}
+		
+		$pass = FALSE;
+		foreach($dictionary["jams"] as $i => $jam){
+			if($jam["jam_number"] == $viewingJamNumber){
+				$dictionary["viewing_jam"] = $jam;
+				$pass = TRUE;
+				break;
+			}
+		}
+		
+		if($pass == FALSE){
+			die("jam does not exist");
+		}
+	break;
+	case "author":
+		$viewingAuthor = ((isset($_GET["author"])) ? ("".$_GET["author"]) : "");
+		if($viewingAuthor == ""){
+			die("invalid author name");
+		}
+		
+		$dictionary["viewing_author"]["author"] = $viewingAuthor;
+		$dictionary["viewing_author"]["author_display"] = $viewingAuthor;
+		$dictionary["viewing_author"]["entries"] = Array();
+		
+		foreach($authors as $i => $author){
+			if($author["username"] == $viewingAuthor){
+				$dictionary["viewing_author"]["author_display"] = $author["author_display"];
+				break;
+			}
+		}
+		
+		
+		$pass = FALSE;
+		foreach($dictionary["jams"] as $i => $jam){
+			foreach($jam["entries"] as $j => $entry){
+				if($entry["author"] == $viewingAuthor){
+					$dictionary["viewing_author"]["entries"][] = $entry;
+					$pass = TRUE;
+					break;
+				}
+			}
+		}
+		
+		if($pass == FALSE){
+			die("author does not exist");
+		}
+	break;
 }
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
@@ -329,6 +381,12 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						break;
 						case "usersettings":
 							print $mustache->render(file_get_contents("template/usersettings.html"), $dictionary);
+						break;
+						case "jam":
+							print $mustache->render(file_get_contents("template/jam.html"), $dictionary);
+						break;
+						case "author":
+							print $mustache->render(file_get_contents("template/author.html"), $dictionary);
 						break;
 					}
 				?>
