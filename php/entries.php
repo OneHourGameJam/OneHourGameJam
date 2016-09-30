@@ -47,38 +47,71 @@ function LoadEntries(){
 		
 		$i = 0;
 		while($info2 = mysqli_fetch_array($data2)){
-			$newData["entries"][$i]["title"] = $info2["entry_title"];
-			$newData["entries"][$i]["title_url_encoded"] = urlencode($info2["entry_title"]);
-			$newData["entries"][$i]["description"] = $info2["entry_description"];
+			$entry = Array();
+			$entry["title"] = $info2["entry_title"];
+			$entry["title_url_encoded"] = urlencode($info2["entry_title"]);
+			$entry["description"] = $info2["entry_description"];
 			$author_username = $info2["entry_author"];
 			$author = $author_username;
 			$author_display = $author_username;
 			if(isset($users[$author_username]["display_name"])){
 				$author_display = $users[$author_username]["display_name"];
 			}
-			$entries[] = Array("title" => $info2["entry_title"], "author" => $info2["entry_author"], "url" => $info2["entry_url"],"screenshot_url" => $info2["entry_screenshot_url"],"description" => $info2["entry_description"]);
+			
+			$entry["author_display"] = $author_display;
+			$entry["author"] = $author;
+			$entry["author_url_encoded"] = urlencode($author);
+			
+			$entry["url"] = str_replace("'", "\\'", $info2["entry_url"]);
+			$entry["screenshot_url"] = str_replace("'", "\\'", $info2["entry_screenshot_url"]);
+			
+			$entry["jam_number"] = $newData["jam_number"];
+			$entry["jam_theme"] = $newData["theme"];
+			
+			$hasTitle = false;
+			$hasDesc = false;
+			$hasSS = false;
+			
+			if($entry["screenshot_url"] != "logo.png" &&
+			   $entry["screenshot_url"] != ""){
+				$entry["has_screenshot"] = 1;
+				$hasSS = true;
+			}
+			
+			if(trim($entry["title"]) != ""){
+				$entry["has_title"] = 1;
+				$hasTitle = true;
+			}
+			
+			if(trim($entry["description"]) != ""){
+				$entry["has_description"] = 1;
+				$hasDesc = true;
+			}
 			
 			if(isset($authorList[$author])){
-				$entryCount = $authorList[$author]["entry_count"];
-				$entryCount = $entryCount + 1;
-				$authorList[$author]["entry_count"] = $entryCount;
+				$authorList[$author]["entry_count"] += 1;
 				if(intval($newData["jam_number"]) < intval($authorList[$author]["first_jam_number"])){
 					$authorList[$author]["first_jam_number"] = $newData["jam_number"];
 				}
 				if(intval($newData["jam_number"]) > intval($authorList[$author]["last_jam_number"])){
 					$authorList[$author]["last_jam_number"] = $newData["jam_number"];
 				}
+				$authorList[$author]["entries"][] = $entry;
 			}else{
-				$authorList[$author] = Array("entry_count" => 1, "username" => $author, "author_display" => $author_display, "first_jam_number" => $newData["jam_number"], "last_jam_number" => $newData["jam_number"]);
+				if(isset($users[$author])){
+					$authorList[$author] = $users[$author];
+				}else{
+					//Author does not have matching account (very old entry)
+					$authorList[$author] = Array("username" => $author, "display_name" => $author_display);
+				}
+				$authorList[$author]["entry_count"] = 1;
+				$authorList[$author]["first_jam_number"] = $newData["jam_number"];
+				$authorList[$author]["last_jam_number"] = $newData["jam_number"];
+				$authorList[$author]["entries"][] = $entry;
 			}
 			
-			$newData["entries"][$i]["author_display"] = $author_display;
-			$newData["entries"][$i]["author"] = $author;
-			$newData["entries"][$i]["author_url_encoded"] = urlencode($author);
-			
-			$newData["entries"][$i]["url"] = str_replace("'", "\\'", $info2["entry_url"]);
-			$newData["entries"][$i]["screenshot_url"] = str_replace("'", "\\'", $info2["entry_screenshot_url"]);
-			
+			$newData["entries"][$i] = $entry;
+			$entries[] = $entry;
 			$i++;
 		}
 		
@@ -150,7 +183,7 @@ function LoadEntries(){
 				$dictionary["registered_users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}
 		}
-		$authors[] = $authorData;
+		$authors[$authorData["username"]] = $authorData;
 	}
 	
 	$dictionary["all_authors_count"] = count($authors);

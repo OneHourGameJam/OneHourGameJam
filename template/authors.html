@@ -1,0 +1,55 @@
+<div class="col-md-10" id='jamlist'>
+	<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+		<div class='panel-heading'>
+			Authors ({{all_authors_count}} total!)
+		</div>
+	</div>
+	
+	<input type="text" class="form-control" id='authorsearch' placeholder="Search for..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
+	<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+		Click on a column header to sort.
+		<table class="table sortable" id="authortable">
+			<tr style='cursor: pointer;'>
+				<th>Username</th>
+				<th>Twitter</th>
+				<th>Entries</th>
+				<th>First Jam</th>
+				<th>Last Jam</th>
+			</tr>
+			{{#authors}}
+				<tr>
+					<td><b><a href='?page=author&author={{username}}'>{{display_name}}</a></b></td>
+					<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
+					<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
+					<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
+					<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+				</tr>
+			{{/authors}}
+		</table>
+	</div>
+</div>
+
+<script>
+	function FilterAuthorTable() {
+		// Declare variables 
+		var input, filter, table, tr, td_username, td_twitter, i;
+		input = document.getElementById("authorsearch");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("authortable");
+		tr = table.getElementsByTagName("tr");
+		
+		// Loop through all table rows, and hide those who don't match the search query
+		for (i = 0; i < tr.length; i++) {
+			td_username = tr[i].getElementsByTagName("td")[0];
+			td_twitter = tr[i].getElementsByTagName("td")[1];
+			if (td_username && td_twitter) {
+				if (td_username.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+				     td_twitter.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			} 
+		}
+	}
+</script>

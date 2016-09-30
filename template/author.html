@@ -2,23 +2,23 @@
 	{{#viewing_author}}
 		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
 			<div class='panel-heading'>
-				{{author_display}}
+				{{display_name}}
 			</div>
 		</div>
 		<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
-			{{#entries}}
-				<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px;'>
-					<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;' >
-						<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
-					</div>
-				</div>
-				<div class='panel panel-default col-md-9 entry' style='padding-left: 0px; padding-right: 0px; height: 226px;'>
-					<div class='col-md-12' style='background-color: #F5F5F5;'>
-						<div class='col-md-8'>
-							<b><span class='entryTitle'>{{title}}</span></b><br />
-							by <span class='entryAuthor'>{{author_display}}</span>
+			<table style='width: 100%' class='table'>
+				{{#entries}}
+					<tr style='height: 40px;'>
+						{{#has_screenshot}}
+							<td rowspan='2' style='width: 220px; text-align: center;'>
+								<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+							</td>
+						{{/has_screenshot}}
+						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' style='background-color: #F5F5F5;'>
+							<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
+							for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
 						</div>
-						<div class='col-md-4' style='text-align: right;'>
+						<td style='background-color: #F5F5F5; text-align: right;'>
 							<!-- Facebook -->
 							<a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/', '_blank');" target="_blank">
 								<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" style='max-width: 30px;' /></a>
@@ -32,15 +32,19 @@
 							<img src="http://liamlime.com/site/images/social/google.png" alt="Google" style='max-width: 30px;' /></a>
 							
 							<button type="button" class="btn btn-success" style='margin-bottom: 5px;' onclick='window.open("{{url}}", "_blank")'>Play</button>
-						</div>
-					</div>
-					<div class='panel-body entryScreenshot description  col-md-12' style='text-align: center; height: 226px; overflow-y: auto; overflow-x: hidden;'>
-						<p>
-							{{description}}
-						</p>
-					</div>
-				</div>
-			{{/entries}}
+						</td>
+					</tr>
+					<tr>
+						{{#has_description}}
+							<td colspan='{{#has_screenshot}}2{{/has_screenshot}}{{^has_screenshot}}3{{/has_screenshot}}'>
+								<p>
+									{{description}}
+								</p>
+							</td>
+						{{/has_description}}
+					</tr>
+				{{/entries}}
+			</table>
 		</div>
 	{{/viewing_author}}
 </div>

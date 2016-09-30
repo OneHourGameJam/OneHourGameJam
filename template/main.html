@@ -25,23 +25,28 @@
 			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
 			
 				{{#entries}}
-					<div onclick='$(this).find(".screenshot").toggle(); $(this).find(".description").toggle(); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 289px; cursor: pointer;'>
-						<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;' >
-							{{#entries_visible}}
-								<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
-							{{/entries_visible}}
-							{{^entries_visible}}
-								<img src='' hidden_src='{{screenshot_url}}' class='small_screenshot' style='max-width:100%; max-height: 200px' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
-							{{/entries_visible}}
+					<div onclick='$(this).find(".screenshot").toggle(); $(this).find(".description").toggle(); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer;'>
+						<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
+							<div style="display:table; height: 100%; width: 100%;">
+								<div style="display:table-cell;vertical-align:bottom;">
+									<div style="margin-left:auto;margin-right:auto;">
+										<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba(255, 255, 255, 0.9); border-radius: 5px;'>
+											<!-- Why is centering things such a collossal pain in CSS :s -->
+											<b><span class='entryTitle'>{{title}}</span></b><br />
+											by <span class='entryAuthor'>{{author_display}}</span>
+										</div>	
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class='panel-body entryScreenshot description' style='text-align: center; height: 226px; display: none; overflow-y: auto; overflow-x: hidden;'>
-							<button type="button" class="btn btn-success" style='margin-bottom: 5px;' onclick='window.open("{{url}}", "_blank")'>Play</button><br />
+							<button type="button" class="btn btn-success" style='margin-bottom: 5px;' onclick='window.open("{{url}}", "_blank")'>Play</button>
 							<!-- Facebook -->
 							<a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/', '_blank');" target="_blank">
 								<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" style='max-width: 30px;' /></a>
 							 
 							<!-- Twitter -->
-							<a href="#" onclick="window.open('https://twitter.com/share?url=http://onehourgamejam.com/&amp;text=Played a game by {{{author_url_encoded}}} made in one hour titled {{{title_url_encoded}}}. Try it!;hashtags=gamedev, 1hgj, gamejam', '_blank');" target="_blank">
+							<a href="#" onclick="window.open('https://twitter.com/share?url={{url}}&amp;text=Played a game by {{{author_url_encoded}}} made in one hour titled {{{title_url_encoded}}}. Try it!;hashtags=gamedev, 1hgj, gamejam', '_blank');" target="_blank">
 								<img src="http://liamlime.com/site/images/social/twitter.png" alt="Twitter" style='max-width: 30px;' /></a>
 							
 							<!-- Google+ -->
@@ -50,10 +55,6 @@
 							<p>
 								{{description}}
 							</p>
-						</div>
-						<div class='panel-footer entryName'>
-							<b><span class='entryTitle'>{{title}}</span></b><br />
-							by <span class='entryAuthor'>{{author_display}}</span>
 						</div>
 					</div>
 				{{/entries}}

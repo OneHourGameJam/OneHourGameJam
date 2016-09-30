@@ -17,7 +17,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "jam", "author")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "jam", "author", "authors")))){
 	$page = "main";
 }
 
@@ -245,36 +245,17 @@ switch($page){
 			die("invalid author name");
 		}
 		
-		$dictionary["viewing_author"]["author"] = $viewingAuthor;
-		$dictionary["viewing_author"]["author_display"] = $viewingAuthor;
-		$dictionary["viewing_author"]["entries"] = Array();
-		
-		foreach($authors as $i => $author){
-			if($author["username"] == $viewingAuthor){
-				$dictionary["viewing_author"]["author_display"] = $author["author_display"];
-				break;
-			}
+		if(!isset($authors[$viewingAuthor])){
+			die("Author does not exist");
 		}
 		
-		
-		$pass = FALSE;
-		foreach($dictionary["jams"] as $i => $jam){
-			foreach($jam["entries"] as $j => $entry){
-				if($entry["author"] == $viewingAuthor){
-					$dictionary["viewing_author"]["entries"][] = $entry;
-					$pass = TRUE;
-					break;
-				}
-			}
-		}
-		
-		if($pass == FALSE){
-			die("author does not exist");
-		}
+		$dictionary["viewing_author"] = $authors[$viewingAuthor];
 	break;
 }
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
+
+//print_r($authors[0]);
 
 ?>
 
@@ -291,6 +272,7 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
 		<script src='js/1hgj.js' type='text/javascript'></script>
+		<script src='js/sorttable.js' type='text/javascript'></script>
 		<?php PrintAnalyticsCode(); ?>
 	</head>
 	<body>
@@ -387,6 +369,9 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						break;
 						case "author":
 							print $mustache->render(file_get_contents("template/author.html"), $dictionary);
+						break;
+						case "authors":
+							print $mustache->render(file_get_contents("template/authors.html"), $dictionary);
 						break;
 					}
 				?>

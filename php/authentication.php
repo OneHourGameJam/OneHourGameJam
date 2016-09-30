@@ -48,6 +48,7 @@ function LoadUsers(){
 		$currentUser["username"] = $info["user_username"];
 		$currentUser["display_name"] = $info["user_display_name"];
 		$currentUser["twitter"] = $info["user_twitter"];
+		$currentUser["twitter_text_only"] = str_replace("@", "", $info["user_twitter"]);
 		$currentUser["email"] = $info["user_email"];
 		$currentUser["salt"] = $info["user_password_salt"];
 		$currentUser["password_hash"] = $info["user_password_hash"];
