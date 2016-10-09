@@ -2,7 +2,7 @@
 Source code required to run your very own One hour game jam event.
 
 # Requirements
-Requires a web server with PHP 5.4 or later.
+Requires a web server with PHP 5.4 or later and MySQL.
 
 # Installing
 What you need is a web server capable of running PHP, for example Apache. 
@@ -13,23 +13,25 @@ For windows: https://www.apachefriends.org/download.html
 For linux: https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu
 For mac: http://jason.pureconcepts.net/2012/10/install-apache-php-mysql-mac-os-x/
 
-If these guides are out of date at the time you are reading this, simply google "Install apache on <OS>" where OS is the operating system you wish to use.
+If these guides are out of date at the time you are reading this, simply google "Install apache on %OS%" where %OS% is the operating system you wish to use.
+
+Also install MySQL (available in XAMPP), connect to it (via PHPMYADMIN or MySQL Workbench) and execute the contents of the provided sql file in SQL/1hgj.sql. This will create the database structure
+
+Open php/db.php and edit the database connection details at the top.
 
 ## 2: Deploying
 
 Once you have your web server set up, copy the contents of this repository to it.
 
-It is possible that you will need to change the permissions on the /data and /config dirrectories, so that your scripts will be able to write to them. This depends to how your web server is set up. If needed, change them to 777 and it should work. Tutorial: http://www.linux.org/threads/file-permissions-chmod.4094/. It is however likely that you will not need to do this. 
+It is possible that you will need to change the permissions on the /data and /config dirrectories, so that your scripts will be able to write to them. This depends to how your web server is set up. If needed, change them to 777 and it should work. Tutorial: http://www.linux.org/threads/file-permissions-chmod.4094/. It is however likely that you will not need to do this.
 
 ## 3. First startup
 
 Open the page in your browser and register a user. This first user will be a site administrator. 
 
-You will also likely want to delete the example jam. To do this, delete the file data/jams/jam_1.json
-
 # Common tasks
 
-Not everything is done in the best way, not everything has a pretty interface. It was much more important to add the functionality quickly and then add interfaces as needed. Interfaces for these tasks will be made soon<TM>, for now, follow the guide below.
+This project is in-development, so some administrative tasks do not yet have a pretty interface. It was much more important to add the functionality quickly and then add interfaces as needed. Interfaces for these tasks will be made soon<TM>, for now, follow the guide below.
 
 ## Registering
 
@@ -45,11 +47,11 @@ Done on the website - can be scheduled for the future in which case the theme is
 
 ## Removing or editing jams and entries
 
-Editing jams can be done via the website's "edit content" menu. Deleting is done manually by deleting the jam's file from the data/jams folder.
+Editing jams can be done via the website's "edit content" menu. Deleting is done by directly editing the database. Set the jam_deleted volumn to 1.
 
 ## Removing a user
 
-Manually remove them from data/users.json
+Manually remove them from the database table 'user'
 
 ## Remotely log out a user or all users
 
@@ -57,7 +59,7 @@ Manually remove their entry from data/sessions.json; or delete the file to log o
 
 # Migrating to a new server
 
-The site uses a site-wide pepper (for password and session id salting*). This pepper is generated the first time you launch the website, so it's unique for each distribution. It's saved in config/config.txt. Changing this will invalidate all session IDs and passwords. When migrating, it is important to preserve this pepper value. 
+The site uses a site-wide pepper (for password and session id salting*). This pepper is generated the first time you launch the website, so it's unique for each deployment. It's saved in config/config.txt. Changing this will invalidate all session IDs and passwords. When migrating, it is important to preserve this pepper value. 
 
 The simplest way to migrate is to simply copy the files from one server and paste them onto the new server. You might need to ensure file permissions are set correctly on the new server though (See "Deploying")
 
