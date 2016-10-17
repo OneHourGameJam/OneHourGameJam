@@ -33,7 +33,7 @@ CREATE TABLE `asset` (
   `asset_content` text NOT NULL,
   `asset_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`asset_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `entry` (
   `entry_screenshot_url` varchar(255) DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1246 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,7 @@ CREATE TABLE `jam` (
   `jam_start_datetime` datetime DEFAULT NULL,
   `jam_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`jam_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE `theme` (
   `theme_banned` tinyint(1) DEFAULT '0',
   `theme_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`theme_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=440 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `themevote` (
   `themevote_username` varchar(255) NOT NULL,
   `themevote_type` int(11) NOT NULL,
   PRIMARY KEY (`themevote_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6362 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `user` (
   `user_role` int(11) DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_username_UNIQUE` (`user_username`)
-) ENGINE=MyISAM AUTO_INCREMENT=524 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
