@@ -1,7 +1,7 @@
 -- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
 --
 -- ------------------------------------------------------
--- Server version	5.1.59-log
+-- Server version	5.6.29-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `asset` (
   `asset_content` text NOT NULL,
   `asset_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`asset_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `entry` (
   `entry_screenshot_url` varchar(255) DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1246 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,23 @@ CREATE TABLE `jam` (
   `jam_start_datetime` datetime DEFAULT NULL,
   `jam_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`jam_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `session`
+--
+
+DROP TABLE IF EXISTS `session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `session` (
+  `session_id` varchar(255) NOT NULL,
+  `session_user_id` int(11) DEFAULT NULL,
+  `session_datetime_started` datetime DEFAULT NULL,
+  `session_datetime_last_used` datetime DEFAULT NULL,
+  PRIMARY KEY (`session_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +113,7 @@ CREATE TABLE `theme` (
   `theme_banned` tinyint(1) DEFAULT '0',
   `theme_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`theme_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=440 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +132,35 @@ CREATE TABLE `themevote` (
   `themevote_username` varchar(255) NOT NULL,
   `themevote_type` int(11) NOT NULL,
   PRIMARY KEY (`themevote_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6362 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_username` varchar(45) NOT NULL,
+  `user_datetime` datetime DEFAULT NULL,
+  `user_register_ip` varchar(45) DEFAULT NULL,
+  `user_register_user_agent` varchar(255) DEFAULT NULL,
+  `user_display_name` varchar(45) DEFAULT NULL,
+  `user_password_salt` varchar(255) DEFAULT NULL,
+  `user_password_hash` varchar(255) DEFAULT NULL,
+  `user_password_iterations` int(11) DEFAULT NULL,
+  `user_last_login_datetime` datetime DEFAULT NULL,
+  `user_last_ip` varchar(45) DEFAULT NULL,
+  `user_last_user_agent` varchar(255) DEFAULT NULL,
+  `user_email` varchar(255) DEFAULT NULL,
+  `user_twitter` varchar(255) DEFAULT NULL,
+  `user_role` int(11) DEFAULT '0',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_username_UNIQUE` (`user_username`)
+) ENGINE=MyISAM AUTO_INCREMENT=524 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -128,4 +172,4 @@ CREATE TABLE `themevote` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-21  6:32:54
+-- Dump completed on 2016-10-17 13:28:39
