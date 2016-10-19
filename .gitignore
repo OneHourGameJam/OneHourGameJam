@@ -1,4 +1,5 @@
-data/
-assets/
+data/*
+assets/*
+cache/*
 plugins/migratedata/*.json
 .vscode/

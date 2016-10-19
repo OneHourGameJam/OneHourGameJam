@@ -23,6 +23,27 @@ $configSettings = Array(
 		"EDITABLE" => TRUE,
 		"REQUIRED" => TRUE
 	),
+	"STREAMER_TWITCH_NAME" => Array(
+		"TAG" => "STREAMER_TWITCH_NAME",
+		"NAME" => "Twitch name for the streamer for this jam",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
+	),
+	"TWITCH_CLIENT_ID" => Array(
+		"TAG" => "TWITCH_CLIENT_ID",
+		"NAME" => "Twitch client id for the API",
+		"TYPE" => "TEXT",
+		"EDITABLE" => FALSE,
+		"REQUIRED" => TRUE
+	),
+	"TWITCH_API_STREAM_UPDATE_FREQUENCY" => Array(
+		"TAG" => "TWITCH_API_STREAM_UPDATE_FREQUENCY",
+		"NAME" => "The minimum number of seconds that has to pass between subsequent checks as to whether the stream is online on Twitch or not.",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
+	),
 	"LANG_NOTIFICATION" => Array(
 		"TAG" => "LANG_NOTIFICATION",
 		"NAME" => "An optional notification area, displayed at the top of the page if set.",
@@ -74,7 +95,7 @@ $configSettings = Array(
 	),
 	"SESSION_PASSWORD_ITERATIONS" => Array(
 		"TAG" => "SESSION_PASSWORD_ITERATIONS",
-		"NAME" => "Number of hashing iteraations for session IDs, for security reasons this can only be changed manually in the config file.",
+		"NAME" => "Number of hashing iterations for session IDs, for security reasons this can only be changed manually in the config file.",
 		"TYPE" => "NUMBER",
 		"EDITABLE" => FALSE,
 		"REQUIRED" => TRUE

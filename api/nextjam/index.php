@@ -7,7 +7,7 @@ include_once("php/db.php");
 $jamDurationMinutes = 60;
 
 $sql = "	
-	SELECT jam_jam_number, jam_theme, jam_start_datetime, jam_start_datetime - UTC_TIMESTAMP() AS jam_timediff
+	SELECT jam_jam_number, jam_theme, jam_start_datetime, UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(jam_start_datetime) - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff
 	FROM jam
 	WHERE jam_deleted = 0
 ";

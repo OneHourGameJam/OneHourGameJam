@@ -35,3 +35,12 @@ PEPPER |
 
 #Number of iterations used when hashing sessions
 SESSION_PASSWORD_ITERATIONS | 
+
+#Twitch name for the streamer for this jam (For example if the stream url is https://www.twitch.tv/bitslap, set this to bitslap)
+STREAMER_TWITCH_NAME | 
+
+#Twitch client id for the API (Register a new application on Twitch: https://www.twitch.tv/settings/connections and copy the Client ID here.)
+TWITCH_CLIENT_ID | 
+
+#The minimum number of seconds that has to pass between subsequent checks as to whether the stream is online on Twitch or not.
+TWITCH_API_STREAM_UPDATE_FREQUENCY | 30
