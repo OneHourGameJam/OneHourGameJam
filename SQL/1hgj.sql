@@ -1,5 +1,4 @@
--- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
---
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 -- ------------------------------------------------------
 -- Server version	5.6.29-log
 
@@ -54,6 +53,12 @@ CREATE TABLE `entry` (
   `entry_description` text,
   `entry_author` varchar(45) DEFAULT NULL,
   `entry_url` varchar(255) DEFAULT NULL,
+  `entry_url_web` varchar(255) DEFAULT NULL,
+  `entry_url_windows` varchar(255) DEFAULT NULL,
+  `entry_url_linux` varchar(255) DEFAULT NULL,
+  `entry_url_mac` varchar(255) DEFAULT NULL,
+  `entry_url_android` varchar(255) DEFAULT NULL,
+  `entry_url_ios` varchar(255) DEFAULT NULL,
   `entry_screenshot_url` varchar(255) DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
@@ -172,4 +177,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-17 13:28:39
+-- Dump completed on 2016-12-07 20:11:54
