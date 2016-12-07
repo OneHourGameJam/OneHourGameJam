@@ -39,7 +39,7 @@ $configSettings = Array(
 	),
 	"TWITCH_API_STREAM_UPDATE_FREQUENCY" => Array(
 		"TAG" => "TWITCH_API_STREAM_UPDATE_FREQUENCY",
-		"NAME" => "The minimum number of seconds that has to pass between subsequent checks as to whether the stream is online on Twitch or not.",
+		"NAME" => "The minimum number of seconds that have to pass between subsequent checks as to whether the stream is online on Twitch or not.",
 		"TYPE" => "NUMBER",
 		"EDITABLE" => TRUE,
 		"REQUIRED" => TRUE
@@ -47,6 +47,20 @@ $configSettings = Array(
 	"LANG_NOTIFICATION" => Array(
 		"TAG" => "LANG_NOTIFICATION",
 		"NAME" => "An optional notification area, displayed at the top of the page if set.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => FALSE
+	),
+	"LANG_NOTIFICATION_IMAGE" => Array(
+		"TAG" => "LANG_NOTIFICATION_IMAGE",
+		"NAME" => "The notification can have an image, which displays on the side. Put the image URL here.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => FALSE
+	),
+	"LANG_NOTIFICATION_URL" => Array(
+		"TAG" => "LANG_NOTIFICATION_URL",
+		"NAME" => "The notification image can lead to a URL. If you want it to link to somewhere, put the URL here.",
 		"TYPE" => "TEXT",
 		"EDITABLE" => TRUE,
 		"REQUIRED" => FALSE

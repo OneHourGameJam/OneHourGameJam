@@ -14,6 +14,10 @@ LANG_JAMDESC3 | Join us on IRC: <a href="irc:afternet.org/1hgj">#1hgj</a> on <a 
 #Optional notification, displayed at the top of the screen if set.
 LANG_NOTIFICATION | 
 
+#Optional notification image and link. If blank, they will not be shown
+LANG_NOTIFICATION_IMAGE | 
+LANG_NOTIFICATION_URL | 
+
 #Jam rules (displayed on the rules page)
 LANG_RULES | <h4>When?</h4><p>Every <a href='https://www.google.com/search?q=20%3A00+UTC'>Saturday at 20:00 UTC</a>.</p><h4>Where?</h4><p>Right here! Joining our IRC channel (<a href='irc:afternet.org/1hgj'>#1hgj</a> on <a href='http://afternet.org' target='_BLANK'>afternet.org</a>) is however a good idea, as the theme is first announced there!</p><h4>Is there a theme?</h4><p>Yes! At the start of the hour, the theme is announced in the IRC channel (<a href='irc:afternet.org/1hgj'>#1hgj</a> on <a href='http://afternet.org' target='_BLANK'>afternet.org</a>).</p><h4>How long do I have to finish?</h4><p>:D</p><h4>Can I use premade assets?</h4><p>You are free to use premade assets but it is recommended that you make at least one game from scratch.</p><h4>What happens after the jam?</h4><p>At about 21:30 UTC the Bitslap brothers stream themselves playing each of the games on <a href='http://www.twitch.tv/bitslap'>twitch.tv/bitslap</a>. The stream usually lasts about 2 hours.</p><h4>What if I don't finish in time?</h4><p>If you finish and submit your game before the stream ends, we'll play it on stream, even if it takes you more than an hour to finish.</p><h4>Can I participate after the jam has ended?</h4><p>If you come late you can still participate. If the stream is over, then your game won't be played on-stream, obviously, but we'll still keep it on the site!</p>
 

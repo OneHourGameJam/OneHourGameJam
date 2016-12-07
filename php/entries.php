@@ -63,7 +63,21 @@ function LoadEntries(){
 			$entry["author_url_encoded"] = urlencode($author);
 			
 			$entry["url"] = str_replace("'", "\\'", $info2["entry_url"]);
+			$entry["url_web"] = str_replace("'", "\\'", $info2["entry_url_web"]);
+			$entry["url_windows"] = str_replace("'", "\\'", $info2["entry_url_windows"]);
+			$entry["url_mac"] = str_replace("'", "\\'", $info2["entry_url_mac"]);
+			$entry["url_linux"] = str_replace("'", "\\'", $info2["entry_url_linux"]);
+			$entry["url_ios"] = str_replace("'", "\\'", $info2["entry_url_ios"]);
+			$entry["url_android"] = str_replace("'", "\\'", $info2["entry_url_android"]);
 			$entry["screenshot_url"] = str_replace("'", "\\'", $info2["entry_screenshot_url"]);
+			
+			if($entry["url"] != ""){$entry["has_url"] = 1;}
+			if($entry["url_web"] != ""){$entry["has_url_web"] = 1;}
+			if($entry["url_windows"] != ""){$entry["has_url_windows"] = 1;}
+			if($entry["url_mac"] != ""){$entry["has_url_mac"] = 1;}
+			if($entry["url_linux"] != ""){$entry["has_url_linux"] = 1;}
+			if($entry["url_ios"] != ""){$entry["has_url_ios"] = 1;}
+			if($entry["url_android"] != ""){$entry["has_url_android"] = 1;}
 			
 			$entry["jam_number"] = $newData["jam_number"];
 			$entry["jam_theme"] = $newData["theme"];
@@ -432,11 +446,17 @@ function JamExists($jamID){
 //description must be non-blank
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
-function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
+function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
 	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
+	$gameURLWeb = trim($gameURLWeb);
+	$gameURLWin = trim($gameURLWin);
+	$gameURLMac = trim($gameURLMac);
+	$gameURLLinux = trim($gameURLLinux);
+	$gameURLiOS = trim($gameURLiOS);
+	$gameURLAndroid = trim($gameURLAndroid);
 	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
 	
@@ -450,9 +470,33 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 		die("Game name not provided");
 	}
 	
-	//Validate Game URL
-	if(SanitizeURL($gameURL) === false){
-		die("Invalid game URL");
+	$urlValid = FALSE;
+	//Validate that at least one of the provided game URLs is valid
+	if(SanitizeURL($gameURL) !== false){
+		$urlValid = TRUE;
+	}
+	if(SanitizeURL($gameURLWeb) !== false){
+		$urlValid = TRUE;
+	}
+	if(SanitizeURL($gameURLWin) !== false){
+		$urlValid = TRUE;
+	}
+	if(SanitizeURL($gameURLMac) !== false){
+		$urlValid = TRUE;
+	}
+	if(SanitizeURL($gameURLLinux) !== false){
+		$urlValid = TRUE;
+	}
+	if(SanitizeURL($gameURLiOS) !== false){
+		$urlValid = TRUE;
+	}
+	if(SanitizeURL($gameURLAndroid) !== false){
+		$urlValid = TRUE;
+	}
+	
+	//Did at least one url pass validation?
+	if($urlValid == FALSE){
+		die("Invalid game url");
 	}
 	
 	//Validate description
@@ -528,6 +572,12 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 				
 				$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
 				$escapedGameURL = mysqli_real_escape_string($dbConn, $gameURL);
+				$escapedGameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
+				$escapedGameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
+				$escapedGameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
+				$escapedGameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
+				$escapedGameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
+				$escapedGameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
 				$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
@@ -538,6 +588,12 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 				SET
 					entry_title = '$escapedGameName',
 					entry_url = '$escapedGameURL',
+					entry_url_web = '$escapedGameURLWeb',
+					entry_url_windows = '$escapedGameURLWin',
+					entry_url_mac = '$escapedGameURLMac',
+					entry_url_linux = '$escapedGameURLLinux',
+					entry_url_ios = '$escapedGameURLiOS',
+					entry_url_android = '$escapedGameURLAndroid',
 					entry_screenshot_url = '$escapedScreenshotURL',
 					entry_description = '$escapedDescription'
 				WHERE 
@@ -562,6 +618,12 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 			$escaped_description = mysqli_real_escape_string($dbConn, $description);
 			$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 			$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
+			$escaped_gameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
+			$escaped_gameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
+			$escaped_gameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
+			$escaped_gameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
+			$escaped_gameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
+			$escaped_gameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
 			$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 			
 			$sql = "
@@ -576,6 +638,12 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 				entry_description,
 				entry_author,
 				entry_url,
+				entry_url_web,
+				entry_url_windows,
+				entry_url_mac,
+				entry_url_linux,
+				entry_url_ios,
+				entry_url_android,
 				entry_screenshot_url)
 				VALUES
 				(null,
@@ -588,6 +656,12 @@ function SubmitEntry($gameName, $gameURL, $screenshotURL, $description){
 				'$escaped_description',
 				'$escaped_aurhor',
 				'$escaped_gameURL',
+				'$escaped_gameURLWeb',
+				'$escaped_gameURLWin',
+				'$escaped_gameURLMac',
+				'$escaped_gameURLLinux',
+				'$escaped_gameURLiOS',
+				'$escaped_gameURLAndroid',
 				'$escaped_ssURL');
 			";
 			$data = mysqli_query($dbConn, $sql);

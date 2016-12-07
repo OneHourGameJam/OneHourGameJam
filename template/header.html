@@ -114,8 +114,19 @@
 </div>
 {{#CONFIG_NOTIFICATION}}
 <div class="row" style="font-size: 16px;">
-	<div class="alert alert-warning">
-	<strong>News!</strong> {{{CONFIG_NOTIFICATION}}}.
+	<div class="col-md-12" style='text-align: center;'>
+		<div class="alert alert-warning" style='{{#CONFIG_NOTIFICATION_IMAGE}}height: 100px;{{/CONFIG_NOTIFICATION_IMAGE}}'>
+			{{#CONFIG_NOTIFICATION_IMAGE}}
+				{{#CONFIG_NOTIFICATION_URL}}
+					<a href='{{CONFIG_NOTIFICATION_URL}}' target='_BLANK'>
+				{{/CONFIG_NOTIFICATION_URL}}
+				<img src='{{CONFIG_NOTIFICATION_IMAGE}}' style='max-height: 80px; float: left;'>
+				{{#CONFIG_NOTIFICATION_URL}}
+					</a>
+				{{/CONFIG_NOTIFICATION_URL}}
+			{{/CONFIG_NOTIFICATION_IMAGE}}
+			<strong>News!</strong> {{{CONFIG_NOTIFICATION}}}.
+		</div>
 	</div>
 </div>
 {{/CONFIG_NOTIFICATION}}

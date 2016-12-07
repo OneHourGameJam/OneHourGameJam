@@ -208,11 +208,6 @@ function LogInUser($username, $password){
 		die("username must be between 2 and 20 characters");
 	}
 	
-	//Check password length
-	if(strlen($password) < 8 || strlen($password) > 20){
-		die("password must be between 8 and 20 characters");
-	}
-	
 	if(!isset($users[$username])){
 		die("User does not exist");
 	}

@@ -7,9 +7,71 @@
 			<label for="gamename">Game name</label>
 			<input type="text" class="form-control" id="gamename" name='gamename' placeholder="Game name" value="{{user_entry_name}}" required>
 		</div>
+		
+		<b>Link to game</b>
+		<br />Add at least one. Leave blank to remove. If your game supports multiple platforms, insert the URL in fields for all supported platforms.
 		<div class="form-group">
-			<label for="gameurl">URL to game</label>
-			<input type="url" class="form-control" id="gameurl" name='gameurl' placeholder="http://game-url" value="{{user_entry_url}}" required>
+			<span style="{{#user_has_url_web}}display: none; {{/user_has_url_web}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add web build</a>
+			</span>
+			<span style="{{^user_has_url_web}}display: none; {{/user_has_url_web}}">
+				<label for="gameurlweb">URL to web build</label>
+				<input type="url" class="form-control" id="gameurlweb" name='gameurlweb' placeholder="http://game-url" value="{{user_entry_url_web}}">
+			</span>
+		</div>
+		<div class="form-group">
+			<span style="{{#user_has_url_windows}}display: none; {{/user_has_url_windows}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add Windows build</a>
+			</span>
+			<span style="{{^user_has_url_windows}}display: none; {{/user_has_url_windows}}">
+				<label for="gameurlwin">URL to Windows build</label>
+				<input type="url" class="form-control" id="gameurlwin" name='gameurlwin' placeholder="http://game-url" value="{{user_entry_url_windows}}">
+			</span>
+		</div>
+		<div class="form-group">
+			<span style="{{#user_has_url_mac}}display: none; {{/user_has_url_mac}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add Mac build</a>
+			</span>
+			<span style="{{^user_has_url_mac}}display: none; {{/user_has_url_mac}}">
+				<label for="gameurlmac">URL to Mac build</label>
+				<input type="url" class="form-control" id="gameurlmac" name='gameurlmac' placeholder="http://game-url" value="{{user_entry_url_mac}}">
+			</span>
+		</div>
+		<div class="form-group">
+			<span style="{{#user_has_url_linux}}display: none; {{/user_has_url_linux}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add Linux build</a>
+			</span>
+			<span style="{{^user_has_url_linux}}display: none; {{/user_has_url_linux}}">
+				<label for="gameurllinux">URL to Linux build</label>
+				<input type="url" class="form-control" id="gameurllinux" name='gameurllinux' placeholder="http://game-url" value="{{user_entry_url_linux}}">
+			</span>
+		</div>
+		<div class="form-group">
+			<span style="{{#user_has_url_ios}}display: none; {{/user_has_url_ios}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add iOS build</a>
+			</span>
+			<span style="{{^user_has_url_ios}}display: none; {{/user_has_url_ios}}">
+				<label for="gameurlios">URL to iOS build</label>
+				<input type="url" class="form-control" id="gameurlios" name='gameurlios' placeholder="http://game-url" value="{{user_entry_url_ios}}">
+			</span>
+		</div>
+		<div class="form-group">
+			<span style="{{#user_has_url_android}}display: none; {{/user_has_url_android}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add Android build</a>
+			</span>
+			<span style="{{^user_has_url_android}}display: none; {{/user_has_url_android}}">
+				<label for="gameurlandroid">URL to Android build</label>
+				<input type="url" class="form-control" id="gameurlandroid" name='gameurlandroid' placeholder="http://game-url" value="{{user_entry_url_android}}">
+			</span>
+		</div>
+		<div class="form-group">
+			<span style="{{#user_has_url}}display: none; {{/user_has_url}}">
+				<a href='#' onclick='ToggleURLEntry($(this));'>Add build for another platform</a>
+			</span>
+			<span style="{{^user_has_url}}display: none; {{/user_has_url}}">
+				<label for="gameurl">URL to build for another platform</label>
+				<input type="url" class="form-control" id="gameurl" name='gameurl' placeholder="http://game-url" value="{{user_entry_url}}">
+			</span>
 		</div>
 		<div class="form-group">
 			<label for="screenshotfile">Screenshot (Change)</label>
@@ -53,3 +115,10 @@
 		</div>
 	{{{/user_entry_name}}}
 </div>
+
+<script type='text/javascript'>
+	function ToggleURLEntry(sender){
+		$(sender).parent().parent().find("span").toggle();
+		return false;
+	}
+</script>
