@@ -252,11 +252,14 @@ switch($page){
 			die("invalid author name");
 		}
 		
-		if(!isset($authors[$viewingAuthor])){
+		if (isset($authors[$viewingAuthor])) {
+			$dictionary["viewing_author"] = $authors[$viewingAuthor];
+		} else if (isset($users[$viewingAuthor])) {
+			// User without entries
+			$dictionary["viewing_author"] = $users[$viewingAuthor];
+		} else {
 			die("Author does not exist");
 		}
-		
-		$dictionary["viewing_author"] = $authors[$viewingAuthor];
 	break;
 	case "submit":
 		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["current_jam"]["jam_number"];
