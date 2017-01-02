@@ -6,6 +6,9 @@
 			</div>
 		</div>
 		<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+			{{^entries}}
+				This user did not submit any games.
+			{{/entries}}
 			<table style='width: 100%' class='table'>
 				{{#entries}}
 					<tr style='height: 40px;'>
