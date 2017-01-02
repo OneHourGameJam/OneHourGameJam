@@ -133,6 +133,7 @@ function RegisterUser($username, $password){
 	$userSalt = GenerateSalt();
 	$userPasswordIterations = intval(rand(10000, 20000));
 	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
+	$admin = (count($users) == 0) ? 1 : 0;
 	
 	if(isset($users[$username])){
 		die("Username already registered");
@@ -141,11 +142,7 @@ function RegisterUser($username, $password){
 		$newUser["salt"] = $userSalt;
 		$newUser["password_hash"] = $passwordHash;
 		$newUser["password_iterations"] = $userPasswordIterations;
-		$newUser["admin"] = 0;
-		if(count($users) == 0){
-			//If this is the very first user being registered, set them up as an admin.
-			$newUser["admin"] = 1;
-		}
+		$newUser["admin"] = $admin;
 		
 		$users[$username] = $newUser;
 		
@@ -181,7 +178,7 @@ function RegisterUser($username, $password){
 			'$ip',
 			'$userAgent',
 			'',
-			0);
+			$admin);
 		";
 		mysqli_query($dbConn, $sql) ;
 		$sql = "";
