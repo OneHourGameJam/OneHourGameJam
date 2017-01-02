@@ -46,15 +46,16 @@ if(isset($_POST["action"])){
 			$gameURLAndroid = (isset($_POST["gameurlandroid"])) ? $_POST["gameurlandroid"] : "";
 			$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
 			$description = (isset($_POST["description"])) ? $_POST["description"] : "";
+			$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
 			
-			SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description);
+			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description);
 		break;
 		case "newjam":
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
 			$date = (isset($_POST["date"])) ? $_POST["date"] : "";
 			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
 			
-			CreateJam($theme, $date, $time, $description);
+			CreateJam($theme, $date, $time);
 		break;
 		case "saveconfig":
 			if(IsAdmin()){
@@ -257,6 +258,9 @@ switch($page){
 		
 		$dictionary["viewing_author"] = $authors[$viewingAuthor];
 	break;
+	case "submit":
+		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["current_jam"]["jam_number"];
+	break;
 }
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
@@ -310,31 +314,43 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							print $mustache->render(file_get_contents("template/login.html"), $dictionary);
 						break;
 						case "submit":
-							foreach($dictionary["current_jam"]["entries"] as $current_jam_entry){
-								if($current_jam_entry["author"] == $loggedInUser["username"]){
-									$dictionary["user_entry_name"] = $current_jam_entry["title"];
-									if($current_jam_entry["screenshot_url"] != "logo.png"){
-										$dictionary["user_entry_screenshot"] = $current_jam_entry["screenshot_url"];
+							$jam = GetJamByNumber($jamNumber);
+							if (!$jam) {
+								die('jam not found');
+							}
+
+							$dictionary["submit_jam"] = $jam;
+
+							foreach($jam["entries"] as $jam_entry){
+								if($jam_entry["author"] == $loggedInUser["username"]){
+									$dictionary["user_entry_name"] = $jam_entry["title"];
+									if($jam_entry["screenshot_url"] != "logo.png"){
+										$dictionary["user_entry_screenshot"] = $jam_entry["screenshot_url"];
 									}
-									$dictionary["user_entry_url"] = $current_jam_entry["url"];
-									$dictionary["user_entry_url_web"] = $current_jam_entry["url_web"];
-									$dictionary["user_entry_url_windows"] = $current_jam_entry["url_windows"];
-									$dictionary["user_entry_url_mac"] = $current_jam_entry["url_mac"];
-									$dictionary["user_entry_url_linux"] = $current_jam_entry["url_linux"];
-									$dictionary["user_entry_url_ios"] = $current_jam_entry["url_ios"];
-									$dictionary["user_entry_url_android"] = $current_jam_entry["url_android"];
-									$dictionary["user_entry_desc"] = $current_jam_entry["description"];
+									$dictionary["user_entry_url"] = $jam_entry["url"];
+									$dictionary["user_entry_url_web"] = $jam_entry["url_web"];
+									$dictionary["user_entry_url_windows"] = $jam_entry["url_windows"];
+									$dictionary["user_entry_url_mac"] = $jam_entry["url_mac"];
+									$dictionary["user_entry_url_linux"] = $jam_entry["url_linux"];
+									$dictionary["user_entry_url_ios"] = $jam_entry["url_ios"];
+									$dictionary["user_entry_url_android"] = $jam_entry["url_android"];
+									$dictionary["user_entry_desc"] = $jam_entry["description"];
 									
-									if(isset($current_jam_entry["has_url"])){$dictionary["user_has_url"] = 1;}
-									if(isset($current_jam_entry["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
-									if(isset($current_jam_entry["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
-									if(isset($current_jam_entry["has_url_mac"])){$dictionary["user_has_url_mac"] = 1;}
-									if(isset($current_jam_entry["has_url_linux"])){$dictionary["user_has_url_linux"] = 1;}
-									if(isset($current_jam_entry["has_url_ios"])){$dictionary["user_has_url_ios"] = 1;}
-									if(isset($current_jam_entry["has_url_android"])){$dictionary["user_has_url_android"] = 1;}
+									if(isset($jam_entry["has_url"])){$dictionary["user_has_url"] = 1;}
+									if(isset($jam_entry["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
+									if(isset($jam_entry["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
+									if(isset($jam_entry["has_url_mac"])){$dictionary["user_has_url_mac"] = 1;}
+									if(isset($jam_entry["has_url_linux"])){$dictionary["user_has_url_linux"] = 1;}
+									if(isset($jam_entry["has_url_ios"])){$dictionary["user_has_url_ios"] = 1;}
+									if(isset($jam_entry["has_url_android"])){$dictionary["user_has_url_android"] = 1;}
 									break;
 								}
 							}
+
+							if (!isset($dictionary["user_entry_name"]) && $jamNumber != $dictionary["current_jam"]["jam_number"]) {
+								die('Cannot make a new submission to a past jam');
+							}
+
 							print $mustache->render(file_get_contents("template/submit.html"), $dictionary);
 						break;
 						case "newjam":
@@ -388,6 +404,7 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							print $mustache->render(file_get_contents("template/jam.html"), $dictionary);
 						break;
 						case "author":
+							$dictionary['show_edit_link'] = $dictionary["viewing_author"]["id"] == $loggedInUser["id"];
 							print $mustache->render(file_get_contents("template/author.html"), $dictionary);
 						break;
 						case "authors":

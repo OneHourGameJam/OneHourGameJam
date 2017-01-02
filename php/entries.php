@@ -440,15 +440,29 @@ function JamExists($jamID){
 	}
 }
 
-//Submits a new entry to the last jam. All parameters are strings, $gameName
-//and $gameURL must be non-blank, $gameURL must be a valid URL, $screenshotURL
-//can either be blank or a valid URL. If blank, a default image is used instead.
-//description must be non-blank
+// Returns a jam given its number.
+// The dictionary of jams must have been previously loaded.
+function GetJamByNumber($jamNumber) {
+	global $jams;
+
+	foreach ($jams as $jam) {
+		if ($jam["jam_number"] == $jamNumber) {
+			return $jam;
+		}
+	}
+
+	return null;
+}
+
+//Creates or updates a jam entry. $jam_number is a mandatory jam number to submit to.
+//All other parameters are strings: $gameName and $gameURL must be non-blank
+//$gameURL must be a valid URL, $screenshotURL can either be blank or a valid URL.
+//If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
-function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description){
+function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
-	
+
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
 	$gameURLWeb = trim($gameURLWeb);
@@ -505,8 +519,11 @@ function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac,
 	}
 	
 	//Check that a jam exists
-	$currentJam = GetCurrentJamNumberAndID();
-	if($currentJam == null || $currentJam["NUMBER"] == 0){
+	if (!is_int($jam_number)) {
+		die('Invalid jam number');
+	}
+	$jam = GetJamByNumber($jam_number);
+	if($jam == null || $jam["jam_number"] == 0){
 		die("No jam to submit to");
 	}
 	
@@ -514,10 +531,8 @@ function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac,
 		die("No jam to submit to");
 	}
 	
-	$currentJamNumber = intval($currentJam["NUMBER"]);
-	$jam_folder = "data/jams/jam_$currentJamNumber";
-	//print $loggedInUser["username"];
-	
+	//Upload screenshot
+	$jam_folder = "data/jams/jam_$jam_number";
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
 		$uploadPass = 0;
 		$imageFileType = strtolower(pathinfo($_FILES["screenshotfile"]["name"], PATHINFO_EXTENSION));
@@ -552,18 +567,18 @@ function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac,
 		}
 	}
 	
-	//Validate Screenshot URL
+	//Default screenshot URL
 	if($screenshotURL == ""){
 		$screenshotURL = "logo.png";
 	}
 	
-	$currentJam = $jams[0];
-	if(isset($currentJam["entries"])){
+	//Create or update entry
+	if(isset($jam["entries"])){
 		$entryUpdated = false;
-		foreach($currentJam["entries"] as $i => $entry){
+		foreach($jam["entries"] as $i => $entry){
 			if($entry["author"] == $loggedInUser["username"]){
 				//Updating existing entry
-				$existingScreenshot = $currentJam["entries"][$i]["screenshot_url"];
+				$existingScreenshot = $jam["entries"][$i]["screenshot_url"];
 				if($screenshotURL == "logo.png"){
 					if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
 						$screenshotURL = $existingScreenshot;
@@ -581,7 +596,7 @@ function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac,
 				$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
-				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $currentJamNumber);
+				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
 				
 				$sql = "
 				UPDATE entry
@@ -608,12 +623,15 @@ function SubmitEntry($gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac,
 			}
 		}
 		if(!$entryUpdated){
-			$jamData = GetCurrentJamNumberAndID();
-			
+			$currentJam = $jams[0];
+			if ($jam_number != $currentJam["jam_number"]) {
+				die('Cannot make a new submission to a past jam');
+			}
+
 			$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
 			$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-			$escaped_jamId = mysqli_real_escape_string($dbConn, $jamData["ID"]);
-			$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jamData["NUMBER"]);
+			$escaped_jamId = mysqli_real_escape_string($dbConn, $jam["jam_id"]);
+			$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam["jam_number"]);
 			$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
 			$escaped_description = mysqli_real_escape_string($dbConn, $description);
 			$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
