@@ -11,10 +11,16 @@ LANG_JAMNAME | One Hour Game Jam!
 LANG_JAMDESC2 | Every Saturday at 20:00 UTC
 LANG_JAMDESC3 | Join us on IRC: <a href="irc:afternet.org/1hgj">#1hgj</a> on <a href='http://afternet.org/'>afternet.org</a> or <a href='https://qwebirc.afternet.org/?channels=1hgj'>chat from your browser</a>
 
+#Identifier for the day of the week, when the jam happens. 0 = Sunday, 1 = Monday, .. 6 = Saturday.
+LANG_JAM_DAY | 6
+
+#Hour when the jam happens on the day specified above. (00 - 23)
+LANG_JAM_TIME | 20
+
 #Optional notification, displayed at the top of the screen if set.
 LANG_NOTIFICATION | 
 
-#Optional notification image and link. If blank, they will not be shown
+#Optional notification Image and link. If blank, they will not be shown
 LANG_NOTIFICATION_IMAGE | 
 LANG_NOTIFICATION_URL | 
 

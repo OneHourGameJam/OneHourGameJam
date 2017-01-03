@@ -49,9 +49,34 @@ function ordinal($number) {
 }
 
 function GetNextJamDateAndTime(){
-	global $dictionary;
+	global $dictionary, $config;
 	
-	$saturday = strtotime("saturday +20 hours");
+    $jamDay = "monday";
+    switch($config["LANG_JAM_DAY"]){
+        case 0:
+            $jamDay = "sunday";  
+        break;
+        case 1:
+            $jamDay = "monday";  
+        break;
+        case 2:
+            $jamDay = "tuesday";  
+        break;
+        case 3:
+            $jamDay = "wednesday";  
+        break;
+        case 4:
+            $jamDay = "thursday";  
+        break;
+        case 5:
+            $jamDay = "friday";  
+        break;
+        case 6:
+            $jamDay = "saturday";  
+        break;
+    }
+
+	$saturday = strtotime("$jamDay +" . intval($config["LANG_JAM_TIME"]) . " hours");
 	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $saturday);
 	$dictionary["next_jam_suggested_time"] = date("H:i", $saturday);
 	$now = time();

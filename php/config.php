@@ -17,9 +17,23 @@ $configSettings = Array(
 		"REQUIRED" => TRUE
 	),
 	"LANG_JAMDESC3" => Array(
-		"TAG" => "LANG_JAMDESC3",
+		"TAG" => "LANG_JAMDESC3", 
 		"NAME" => "Jam description, line 3, displayed in the page header",
 		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
+	),
+	"LANG_JAM_DAY" => Array(
+		"TAG" => "LANG_JAM_DAY",
+		"NAME" => "Identifier for the day the jam happens on. 0 = Sunday, 1 = Monday, ..., 6 = Saturday",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
+	),
+	"LANG_JAM_TIME" => Array(
+		"TAG" => "LANG_JAM_DAY",
+		"NAME" => "The hour the jam starts on 01..24",
+		"TYPE" => "NUMBER",
 		"EDITABLE" => TRUE,
 		"REQUIRED" => TRUE
 	),

@@ -2,6 +2,9 @@
 
 chdir("../../");
 include_once("php/db.php");
+include_once("php/helpers.php");
+include_once("php/config.php");
+LoadConfig();
 
 //Number of minutes after jam to be considered active.
 $jamDurationMinutes = 60;
@@ -13,6 +16,8 @@ $sql = "
 ";
 $data = mysqli_query($dbConn, $sql) ;
 $sql = "";
+
+$maxJamNumber = 0;
 
 $return = Array();
 $return["upcoming_jams"] = Array();
@@ -27,6 +32,8 @@ while($info = mysqli_fetch_array($data)){
 		}
 		$row[str_replace("jam_", "", $key)] = $info[$key];
 	}
+
+    $maxJamNumber = max($maxJamNumber, intval($row["number"]));
 	
 	if(intval($info["jam_timediff"]) > 0){
 		//Future jam
@@ -37,6 +44,21 @@ while($info = mysqli_fetch_array($data)){
 	}else{
 		$return["previous_jams"][] = $row;
 	}
+}
+
+if(count($return["upcoming_jams"]) == 0){
+    //No jam scheduled yet, insert stub.
+
+    $now =  time();
+    $saturday = GetNextJamDateAndTime();
+
+    $timediff = intval(date("U", $saturday)) - intval(date("U", $now));
+	if($timediff < 0){
+		$saturday = strtotime("+7 day", $saturday);
+    	$timediff = intval(date("U", $saturday)) - intval(date("U", $now));
+	}
+
+    $return["upcoming_jams"][] = Array("number" => $maxJamNumber, "theme" => "Not announced yet", "start_datetime" => date("Y-m-d H:i:s", $saturday), "timediff" => $timediff);
 }
 
 print json_encode($return);
