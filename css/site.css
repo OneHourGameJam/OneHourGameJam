@@ -72,3 +72,9 @@ body{
   /* let's see it! */
   color: white;
 }
+
+.trumbowyg {
+  background-color: white;
+  border: 1px solid #CCCCCC;
+  margin-top: 0;
+}

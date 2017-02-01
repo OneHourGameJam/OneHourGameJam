@@ -102,4 +102,37 @@ function GetCurrentJamNumberAndID(){
 	}
 }
 
+// Uses a whitelist of tags and attributes, plus parses the HTML to ensure
+// the markup is well-formed and limited to non-harming code.
+function CleanHtml($html) {
+	// Remove tags
+	$halfCleanedHtml = strip_tags($html, '<p><strong><em><strike><sup><sub><a><ul><li>');
+
+	// Parse non-empty HTML only
+	if (!empty(trim($html))) {
+		$dom = new DOMDocument();
+		$dom->loadHTML($halfCleanedHtml);
+
+		// Only keep whitelisted HTML attributes
+		$allowed_attributes = array('href');
+		foreach ($dom->getElementsByTagName('*') as $node) {
+		    for ($i = $node->attributes->length - 1; $i >= 0; $i--) {
+		        $attribute = $node->attributes->item($i);
+		        if (!in_array($attribute->name, $allowed_attributes)) {
+		        	$node->removeAttributeNode($attribute);
+		        }
+		    }
+		}
+
+		// Stringify the DOMDocument <body> contents
+		$cleanedHtml = '';
+		foreach ($dom->getElementsByTagName('body')->item(0)->childNodes as $node) {
+		    $cleanedHtml .= $dom->saveXML($node);
+		}
+		return $cleanedHtml;
+	} else {
+		return NULL;
+	}
+}
+
 ?>
