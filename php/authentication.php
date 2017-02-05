@@ -379,7 +379,7 @@ function EditUser($username, $isAdmin){
 }
 
 //Changes data about the logged in user
-function ChangeUserData($displayName, $twitterHandle, $emailAddress){
+function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
 	global $users, $loggedInUser, $dbConn;
 	
 	$loggedInUser = IsLoggedIn();
@@ -402,6 +402,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress){
 	$displayNameClean = mysqli_real_escape_string($dbConn, $displayName);
 	$twitterHandleClean = mysqli_real_escape_string($dbConn, $twitterHandle);
 	$emailAddressClean = mysqli_real_escape_string($dbConn, $emailAddress);
+	$bioClean = mysqli_real_escape_string($dbConn, CleanHtml($bio));
 	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 	
 	$sql = "	
@@ -409,7 +410,8 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress){
 		SET
 		user_display_name = '$displayNameClean',
 		user_twitter = '$twitterHandleClean',
-		user_email = '$emailAddressClean'
+		user_email = '$emailAddressClean',
+		user_bio = '$bioClean'
 		WHERE user_username = '$usernameClean';
 	";
 	$data = mysqli_query($dbConn, $sql);
@@ -417,7 +419,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress){
 	
 	LoadUsers();
 	$loggedInUser = IsLoggedIn(TRUE);
-}   
+}
 
 //Changes the logged in user's password if the old one matches.
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
@@ -542,7 +544,18 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$loggedInUser = IsLoggedIn(TRUE);
 }
 
-
+// Fetchs the user bio in the database, and sets it under the "bio" key.
+function LoadBio($user) {
+	global $dbConn;
+	if (isset($user)) {
+		$clean_username = mysqli_real_escape_string($dbConn, $user["username"]);
+		$sql = "SELECT user_bio FROM user WHERE user_username = '$clean_username'";
+		$data = mysqli_query($dbConn, $sql);
+		$info = mysqli_fetch_array($data);
+		$user["bio"] = $info["user_bio"];
+	}
+	return $user;
+}
 
 
 ?>

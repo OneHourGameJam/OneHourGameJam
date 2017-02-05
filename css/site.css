@@ -72,3 +72,14 @@ body{
   /* let's see it! */
   color: white;
 }
+
+.trumbowyg {
+  background-color: white;
+  border: 1px solid #CCCCCC;
+  margin-top: 0;
+  min-height: 150px;
+}
+
+.trumbowyg-editor {
+  min-height: 150px;
+}

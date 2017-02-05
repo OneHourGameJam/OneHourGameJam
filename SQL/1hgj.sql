@@ -403,6 +403,7 @@ CREATE TABLE `user` (
   `user_last_user_agent` varchar(255) DEFAULT NULL,
   `user_email` varchar(255) DEFAULT NULL,
   `user_twitter` varchar(255) DEFAULT NULL,
+  `user_bio` text DEFAULT NULL,
   `user_role` int(11) DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_username_UNIQUE` (`user_username`)
