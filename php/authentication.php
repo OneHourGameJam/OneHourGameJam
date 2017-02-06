@@ -33,7 +33,6 @@ function HashPassword($password, $salt, $iterations){
 //(Re)Loads the users into the globally accessible $users variable.
 function LoadUsers(){
 	global $users, $loggedInUser, $dictionary, $dbConn;
-	//$users = json_decode(file_get_contents("data/users.json"), true);
 	
 	$users = Array();
 	
@@ -318,8 +317,6 @@ function IsLoggedIn($force = FALSE){
 
 //Returns TRUE or FALSE depending on whether the logged in user is an admin.
 //returns FALSE if there is no logged in user.
-//Admins are set by changing adding the "admin":1 parameter to the user's
-//object in users.json 
 function IsAdmin(){
 	global $adminList;
 	$loggedInUser = IsLoggedIn();
