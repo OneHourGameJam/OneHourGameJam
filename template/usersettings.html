@@ -19,6 +19,12 @@
 				<label for="emailaddress">Email <span style='font-weight: normal'>(NOT Required)</span></label>
 				<input type="email" class="form-control" id="emailaddress" name='emailaddress' placeholder="Email Address" value="{{user.email}}">
 			</div>
+
+			<div class="form-group">
+				<label for="emailaddress">Bio <span style='font-weight: normal'>(NOT Required)</span></label>
+				<div id="bio" name="bio" class="trumbowyg-editor">{{{ user.bio }}}</div>
+			</div>
+
 			<button type="submit" name='action' value='saveuserchanges' class="btn btn-default">Save Changes</button>
 		</p>
 	</form>
@@ -40,3 +46,19 @@
 		</p>
 	</form>
 </div>
+
+<script src="js/trumbowyg.js"></script>
+<script>
+	$.trumbowyg.svgPath = '/assets/icons.svg';
+	$('.trumbowyg-editor').trumbowyg({
+	    btns: [
+	        'btnGrp-semantic',
+	        ['superscript', 'subscript'],
+	        ['link'],
+	        'btnGrp-lists',
+	        ['removeformat']
+	    ],
+	    removeformatPasted: true,
+	    autogrow: true
+	});
+</script>

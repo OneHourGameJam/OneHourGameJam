@@ -164,8 +164,9 @@ if(isset($_POST["action"])){
 				$displayName = $_POST["displayname"];
 				$twitterHandle = $_POST["twitterhandle"];
 				$emailAddress = $_POST["emailaddress"];
+				$bio = $_POST["bio"];
 				
-				ChangeUserData($displayName, $twitterHandle, $emailAddress);
+				ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio);
 			}
 			$page = "usersettings";
 		break;
@@ -281,6 +282,7 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/css/trumbowyg.css">
 		<link href="css/site.css" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -401,6 +403,7 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							print $mustache->render(file_get_contents("template/themes.html"), $dictionary);
 						break;
 						case "usersettings":
+							$dictionary["user"] = LoadBio($dictionary["user"]);
 							print $mustache->render(file_get_contents("template/usersettings.html"), $dictionary);
 						break;
 						case "jam":
@@ -408,6 +411,7 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						break;
 						case "author":
 							$dictionary['show_edit_link'] = $dictionary["viewing_author"]["id"] == $loggedInUser["id"];
+							$dictionary["viewing_author"] = LoadBio($dictionary["viewing_author"]);
 							print $mustache->render(file_get_contents("template/author.html"), $dictionary);
 						break;
 						case "authors":
