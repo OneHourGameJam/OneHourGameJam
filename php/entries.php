@@ -1,7 +1,7 @@
 <?php
 
 function LoadEntries(){
-	global $dictionary, $jams, $authors, $entries, $users, $dbConn;
+	global $dictionary, $jams, $authors, $entries, $users, $config, $dbConn;
 	
 	//Clear public lists which get updated by this function
 	$dictionary["jams"] = Array();
@@ -20,6 +20,8 @@ function LoadEntries(){
 	$sql = "SELECT * FROM jam WHERE jam_deleted = 0 ORDER BY jam_jam_number DESC";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	$currentJamData = GetCurrentJamNumberAndID();
 	
 	while($info = mysqli_fetch_array($data)){
 		
@@ -40,6 +42,9 @@ function LoadEntries(){
 		if($firstJam){
 			$firstJam = false;
 		}
+		
+		
+		$newData["is_recent"] = (intval($newData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]));
 		
 		$sql = "SELECT * FROM entry WHERE entry_deleted = 0 AND entry_jam_id = ".$newData["jam_id"]." ORDER BY entry_id ASC";
 		$data2 = mysqli_query($dbConn, $sql);
@@ -104,6 +109,7 @@ function LoadEntries(){
 			
 			if(isset($authorList[$author])){
 				$authorList[$author]["entry_count"] += 1;
+				$authorList[$author]["recent_participation"] += (($newData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]) : 0);
 				if(intval($newData["jam_number"]) < intval($authorList[$author]["first_jam_number"])){
 					$authorList[$author]["first_jam_number"] = $newData["jam_number"];
 				}
@@ -119,6 +125,7 @@ function LoadEntries(){
 					$authorList[$author] = Array("username" => $author, "display_name" => $author_display);
 				}
 				$authorList[$author]["entry_count"] = 1;
+				$authorList[$author]["recent_participation"] = (($newData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]) : 0);
 				$authorList[$author]["first_jam_number"] = $newData["jam_number"];
 				$authorList[$author]["last_jam_number"] = $newData["jam_number"];
 				$authorList[$author]["entries"][] = $entry;
@@ -177,6 +184,7 @@ function LoadEntries(){
 		foreach($dictionary["users"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $k){
 				$dictionary["users"][$i]["entry_count"] = $authorData["entry_count"];
+				$dictionary["users"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["users"][$i]["first_jam_number"] = $authorData["first_jam_number"];
 				$dictionary["users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}
@@ -185,6 +193,7 @@ function LoadEntries(){
 		foreach($dictionary["admins"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $k){
 				$dictionary["admins"][$i]["entry_count"] = $authorData["entry_count"];
+				$dictionary["admins"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["admins"][$i]["first_jam_number"] = $authorData["first_jam_number"];
 				$dictionary["admins"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}
@@ -193,6 +202,7 @@ function LoadEntries(){
 		foreach($dictionary["registered_users"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $k){
 				$dictionary["registered_users"][$i]["entry_count"] = $authorData["entry_count"];
+				$dictionary["registered_users"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["registered_users"][$i]["first_jam_number"] = $authorData["first_jam_number"];
 				$dictionary["registered_users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
 			}

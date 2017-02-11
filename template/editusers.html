@@ -2,12 +2,13 @@
 	<h3>Edit users</h3>
 	
 	<h4>Administrators</h4>
-	<table class="table">
+	<table class="table sortable">
 		<tr>
 			<th>Username</th>
 			<th>Entries</th>
 			<th>First Jam</th>
 			<th>Last Jam</th>
+			<th>Recent Participation</th>
 			<th></th>
 		</tr>
 		{{#admins}}
@@ -16,18 +17,20 @@
 				<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
 				<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 				<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+				<td>{{recent_participation}}%</td>
 				<td><a href='?page=edituser&username={{username}}'>edit</a></td>
 			</tr>
 		{{/admins}}
 	</table>
 	
 	<h4>Registered users</h4>
-	<table class="table">
+	<table class="table sortable">
 		<tr>
 			<th>Username</th>
 			<th>Entries</th>
 			<th>First Jam</th>
 			<th>Last Jam</th>
+			<th>Recent Participation</th>
 			<th></th>
 		</tr>
 		{{#registered_users}}
@@ -36,6 +39,7 @@
 				<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
 				<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 				<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+				<td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
 				<td><a href='?page=edituser&username={{username}}'>edit</a></td>
 			</tr>
 		{{/registered_users}}

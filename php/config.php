@@ -114,6 +114,13 @@ $configSettings = Array(
 		"EDITABLE" => TRUE,
 		"REQUIRED" => TRUE
 	),
+	"JAMS_CONSIDERED_RECENT" => Array(
+		"TAG" => "JAMS_CONSIDERED_RECENT",
+		"NAME" => "Number of jams which are considered 'recent' when calculating recent jam participation.",
+		"TYPE" => "NUMBER",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => TRUE
+	),
 	"PEPPER" => Array(
 		"TAG" => "PEPPER",
 		"NAME" => "Sitewide Pepper (used in password hashing), for security reasons this can only be changed manually in the config file.",

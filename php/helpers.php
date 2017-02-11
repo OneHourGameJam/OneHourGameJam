@@ -86,8 +86,13 @@ function GetNextJamDateAndTime(){
 	return $saturday;
 }
 
+$currentJamNumberArchive = FALSE;
 function GetCurrentJamNumberAndID(){
-	global $dbConn;
+	global $currentJamNumberArchive, $dbConn;
+	
+	if($currentJamNumberArchive !== FALSE){
+		return $currentJamNumberArchive;
+	}
 	
 	$sql = "
 		SELECT jam_id, jam_jam_number FROM jam WHERE jam_jam_number = (SELECT MAX(jam_jam_number) FROM jam WHERE jam_deleted = 0) AND jam_deleted = 0
@@ -96,10 +101,11 @@ function GetCurrentJamNumberAndID(){
 	$sql = "";
 	
 	if($info = mysqli_fetch_array($data)){
-		return Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
+		$currentJamNumberArchive = Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
 	}else{
-		return Array("NUMBER" => 0, "ID" => 0);
+		$currentJamNumberArchive = Array("NUMBER" => 0, "ID" => 0);
 	}
+	return $currentJamNumberArchive;
 }
 
 // Uses a whitelist of tags and attributes, plus parses the HTML to ensure
