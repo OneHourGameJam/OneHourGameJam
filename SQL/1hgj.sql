@@ -24,16 +24,16 @@ DROP TABLE IF EXISTS `asset`;
 CREATE TABLE `asset` (
   `asset_id` int(11) NOT NULL AUTO_INCREMENT,
   `asset_datetime` datetime NOT NULL,
-  `asset_ip` varchar(45) NOT NULL,
-  `asset_user_agent` varchar(255) NOT NULL,
-  `asset_author` varchar(255) NOT NULL,
-  `asset_title` text NOT NULL,
-  `asset_description` text NOT NULL,
-  `asset_type` varchar(45) NOT NULL,
-  `asset_content` text NOT NULL,
+  `asset_ip` varchar(45) COLLATE utf8mb4_bin NOT NULL,
+  `asset_user_agent` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `asset_author` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `asset_title` mediumtext COLLATE utf8mb4_bin NOT NULL,
+  `asset_description` mediumtext COLLATE utf8mb4_bin NOT NULL,
+  `asset_type` varchar(45) COLLATE utf8mb4_bin NOT NULL,
+  `asset_content` mediumtext COLLATE utf8mb4_bin NOT NULL,
   `asset_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`asset_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,24 +46,24 @@ DROP TABLE IF EXISTS `entry`;
 CREATE TABLE `entry` (
   `entry_id` int(11) NOT NULL AUTO_INCREMENT,
   `entry_datetime` datetime DEFAULT NULL,
-  `entry_ip` varchar(45) DEFAULT NULL,
-  `entry_user_agent` text,
+  `entry_ip` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_user_agent` mediumtext COLLATE utf8mb4_bin,
   `entry_jam_id` int(11) DEFAULT NULL,
   `entry_jam_number` int(11) DEFAULT NULL,
-  `entry_title` text,
-  `entry_description` text,
-  `entry_author` varchar(45) DEFAULT NULL,
-  `entry_url` varchar(255) DEFAULT NULL,
-  `entry_url_web` varchar(255) DEFAULT NULL,
-  `entry_url_windows` varchar(255) DEFAULT NULL,
-  `entry_url_linux` varchar(255) DEFAULT NULL,
-  `entry_url_mac` varchar(255) DEFAULT NULL,
-  `entry_url_android` varchar(255) DEFAULT NULL,
-  `entry_url_ios` varchar(255) DEFAULT NULL,
-  `entry_screenshot_url` varchar(255) DEFAULT NULL,
+  `entry_title` mediumtext COLLATE utf8mb4_bin,
+  `entry_description` mediumtext COLLATE utf8mb4_bin,
+  `entry_author` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_web` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_windows` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_linux` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_mac` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_android` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_ios` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_screenshot_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -74,8 +74,7 @@ CREATE TABLE `entry` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_insert AFTER INSERT ON entry
-FOR EACH ROW 
+/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_insert AFTER INSERT ON `entry` FOR EACH ROW 
 BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
@@ -136,8 +135,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_update BEFORE UPDATE ON entry
-FOR EACH ROW 
+/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_update BEFORE UPDATE ON `entry` FOR EACH ROW 
 BEGIN
   IF OLD.entry_id = NEW.entry_id OR
 	 OLD.entry_datetime = NEW.entry_datetime OR
@@ -219,8 +217,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_delete BEFORE DELETE ON entry
-FOR EACH ROW 
+/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_delete BEFORE DELETE ON `entry` FOR EACH ROW 
 BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
@@ -282,28 +279,28 @@ DROP TABLE IF EXISTS `entry_changelog`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry_changelog` (
   `change_id` int(11) NOT NULL AUTO_INCREMENT,
-  `change_type` varchar(45) NOT NULL,
+  `change_type` varchar(45) COLLATE utf8mb4_bin NOT NULL,
   `change_datetime` datetime NOT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_datetime` datetime DEFAULT NULL,
-  `entry_ip` varchar(45) DEFAULT NULL,
-  `entry_user_agent` text,
+  `entry_ip` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_user_agent` mediumtext COLLATE utf8mb4_bin,
   `entry_jam_id` int(11) DEFAULT NULL,
   `entry_jam_number` int(11) DEFAULT NULL,
-  `entry_title` text,
-  `entry_description` text,
-  `entry_author` varchar(45) DEFAULT NULL,
-  `entry_url` varchar(255) DEFAULT NULL,
-  `entry_url_web` varchar(255) DEFAULT NULL,
-  `entry_url_windows` varchar(255) DEFAULT NULL,
-  `entry_url_linux` varchar(255) DEFAULT NULL,
-  `entry_url_mac` varchar(255) DEFAULT NULL,
-  `entry_url_android` varchar(255) DEFAULT NULL,
-  `entry_url_ios` varchar(255) DEFAULT NULL,
-  `entry_screenshot_url` varchar(255) DEFAULT NULL,
+  `entry_title` mediumtext COLLATE utf8mb4_bin,
+  `entry_description` mediumtext COLLATE utf8mb4_bin,
+  `entry_author` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_web` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_windows` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_linux` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_mac` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_android` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_ios` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_screenshot_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`change_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,14 +313,14 @@ DROP TABLE IF EXISTS `jam`;
 CREATE TABLE `jam` (
   `jam_id` int(11) NOT NULL AUTO_INCREMENT,
   `jam_datetime` datetime DEFAULT NULL,
-  `jam_ip` varchar(45) DEFAULT NULL,
-  `jam_user_agent` text,
+  `jam_ip` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `jam_user_agent` mediumtext COLLATE utf8mb4_bin,
   `jam_jam_number` int(11) DEFAULT NULL,
-  `jam_theme` text,
+  `jam_theme` mediumtext COLLATE utf8mb4_bin,
   `jam_start_datetime` datetime DEFAULT NULL,
   `jam_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`jam_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,14 +349,14 @@ DROP TABLE IF EXISTS `theme`;
 CREATE TABLE `theme` (
   `theme_id` int(11) NOT NULL AUTO_INCREMENT,
   `theme_datetime` datetime NOT NULL,
-  `theme_ip` varchar(45) NOT NULL,
-  `theme_user_agent` varchar(255) NOT NULL,
-  `theme_text` varchar(255) NOT NULL,
-  `theme_author` varchar(255) NOT NULL,
+  `theme_ip` varchar(45) COLLATE utf8mb4_bin NOT NULL,
+  `theme_user_agent` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `theme_text` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `theme_author` varchar(255) COLLATE utf8mb4_bin NOT NULL,
   `theme_banned` tinyint(1) DEFAULT '0',
   `theme_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`theme_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -372,13 +369,13 @@ DROP TABLE IF EXISTS `themevote`;
 CREATE TABLE `themevote` (
   `themevote_id` int(11) NOT NULL AUTO_INCREMENT,
   `themevote_datetime` datetime NOT NULL,
-  `themevote_ip` varchar(45) NOT NULL,
-  `themevote_user_agent` varchar(255) NOT NULL,
+  `themevote_ip` varchar(45) COLLATE utf8mb4_bin NOT NULL,
+  `themevote_user_agent` varchar(255) COLLATE utf8mb4_bin NOT NULL,
   `themevote_theme_id` int(11) NOT NULL,
-  `themevote_username` varchar(255) NOT NULL,
+  `themevote_username` varchar(255) COLLATE utf8mb4_bin NOT NULL,
   `themevote_type` int(11) NOT NULL,
   PRIMARY KEY (`themevote_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8659 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -390,32 +387,32 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_username` varchar(45) NOT NULL,
+  `user_username` varchar(45) COLLATE utf8mb4_bin NOT NULL,
   `user_datetime` datetime DEFAULT NULL,
-  `user_register_ip` varchar(45) DEFAULT NULL,
-  `user_register_user_agent` varchar(255) DEFAULT NULL,
-  `user_display_name` varchar(45) DEFAULT NULL,
-  `user_password_salt` varchar(255) DEFAULT NULL,
-  `user_password_hash` varchar(255) DEFAULT NULL,
+  `user_register_ip` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_register_user_agent` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_display_name` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_password_salt` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_password_hash` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `user_password_iterations` int(11) DEFAULT NULL,
   `user_last_login_datetime` datetime DEFAULT NULL,
-  `user_last_ip` varchar(45) DEFAULT NULL,
-  `user_last_user_agent` varchar(255) DEFAULT NULL,
-  `user_email` varchar(255) DEFAULT NULL,
-  `user_twitter` varchar(255) DEFAULT NULL,
-  `user_bio` text DEFAULT NULL,
+  `user_last_ip` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_last_user_agent` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_email` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_twitter` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `user_bio` mediumtext COLLATE utf8mb4_bin,
   `user_role` int(11) DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_username_UNIQUE` (`user_username`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping events for database 
+-- Dumping events for database 'errorage_onehourgamejam'
 --
 
 --
--- Dumping routines for database 
+-- Dumping routines for database 'errorage_onehourgamejam'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -427,4 +424,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-03  2:15:54
+-- Dump completed on 2017-02-14  9:33:55
