@@ -363,6 +363,10 @@ function DeleteJam($jamID){
 		die("Only admins can delete jams.");
 	}
 	
+	if(!CanDeleteJam($jamID)){
+		die("This jam cannot be deleted.");
+	}
+	
 	//Validate values
 	$jamID = intval($jamID);
 	if($jamID <= 0){
@@ -376,11 +380,7 @@ function DeleteJam($jamID){
 	
 	$escapedJamID = mysqli_real_escape_string($dbConn, "$jamID");
 	
-	$sql = "
-		UPDATE jam
-		SET jam_deleted = 1
-		WHERE jam_id = $escapedJamID
-		  AND jam_deleted = 0";
+	$sql = "UPDATE jam SET jam_deleted = 1 WHERE jam_id = $escapedJamID";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 }

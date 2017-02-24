@@ -21,6 +21,13 @@ if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "asset
 	$page = "main";
 }
 
+//Special parameters
+$shutup = false;
+if(isset($_GET["shutup"])){
+	$shutup = true;
+	$dictionary["SHUTUP"] = 1;
+}
+
 //Actions!
 $action = "";
 if(isset($_POST["action"])){
@@ -56,6 +63,13 @@ if(isset($_POST["action"])){
 			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
 			
 			CreateJam($theme, $date, $time);
+		break;
+		case "deletejam":
+			$jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
+			if($jamID != ""){
+				DeleteJam(intval($jamID));
+				$page = "editcontent";
+			}
 		break;
 		case "saveconfig":
 			if(IsAdmin()){
