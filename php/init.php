@@ -11,6 +11,7 @@ function Init(){
 	LoadEntries();
 	LoadThemes();
 	LoadAssets();
+	LoadPolls();
 	InitStream();
 	GetNextJamDateAndTime();
 }

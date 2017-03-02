@@ -130,3 +130,41 @@
 	</div>
 </div>
 {{/CONFIG_NOTIFICATION}}
+
+{{#user}}
+	{{#active_polls}}
+	<div class="row" style="font-size: 16px;">
+		<div class="col-md-12" style='text-align: center;'>
+			<div class="alert alert-info">
+				<b>Poll:</b> {{{QUESTION}}}
+				(<a href='#' onclick='$("#PollOptionsContainer_{{POLL_ID}}").slideToggle(); return false;'>Show / hide</a>)
+				<div id='PollOptionsContainer_{{POLL_ID}}' style='{{#USER_VOTED_IN_POLL}}display: none; {{/USER_VOTED_IN_POLL}}'>
+				<span style='font-size: 12px;'>Click any number of options. Options marked in green are your answer.</span><br />
+				{{#OPTIONS}}
+					<button id="{{{POLL_ID}}}-{{{OPTION_ID}}}" type="button" name='action' value='bantheme' class="btn btn-default {{#USER_VOTED}}btn-success{{/USER_VOTED}}" onclick='VotePoll({{POLL_ID}}, {{OPTION_ID}});'>{{TEXT}}</button>
+				{{/OPTIONS}}
+				</div>
+			</div>
+		</div>
+	</div>
+	{{/active_polls}}
+{{/user}}
+
+<script type='text/javascript'>
+	function VotePoll(pollID, optionID){
+		$.get("api/pollvote?pollID="+pollID+"&optionID="+optionID, function(data){
+			var d = jQuery.parseJSON(data)
+			
+			$("#"+pollID+"-"+optionID).toggleClass("btn-success");
+		});
+	}
+</script>
+
+
+
+
+
+
+
+
+

@@ -12,6 +12,7 @@ $authors = Array();
 $entries = Array();
 $themes = Array();
 $assets = Array();
+$polls = Array();
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];

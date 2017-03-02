@@ -74,7 +74,7 @@ CREATE TABLE `entry` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_insert AFTER INSERT ON `entry` FOR EACH ROW 
+/*!50003 CREATE*/ /*!50017 DEFINER=`*`@`%`*/ /*!50003 TRIGGER entry_insert AFTER INSERT ON `entry` FOR EACH ROW 
 BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
@@ -135,7 +135,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_update BEFORE UPDATE ON `entry` FOR EACH ROW 
+/*!50003 CREATE*/ /*!50017 DEFINER=`*`@`%`*/ /*!50003 TRIGGER entry_update BEFORE UPDATE ON `entry` FOR EACH ROW 
 BEGIN
   IF OLD.entry_id = NEW.entry_id OR
 	 OLD.entry_datetime = NEW.entry_datetime OR
@@ -217,7 +217,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errorage_onehour`@`%`*/ /*!50003 TRIGGER entry_delete BEFORE DELETE ON `entry` FOR EACH ROW 
+/*!50003 CREATE*/ /*!50017 DEFINER=`*`@`%`*/ /*!50003 TRIGGER entry_delete BEFORE DELETE ON `entry` FOR EACH ROW 
 BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
@@ -324,6 +324,55 @@ CREATE TABLE `jam` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `poll`
+--
+
+DROP TABLE IF EXISTS `poll`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poll` (
+  `poll_id` int(11) NOT NULL AUTO_INCREMENT,
+  `poll_question` mediumtext COLLATE utf8mb4_bin,
+  `poll_type` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `poll_start_datetime` datetime DEFAULT NULL,
+  `poll_end_datetime` datetime DEFAULT NULL,
+  `poll_deleted` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`poll_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `poll_option`
+--
+
+DROP TABLE IF EXISTS `poll_option`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poll_option` (
+  `option_id` int(11) NOT NULL AUTO_INCREMENT,
+  `option_poll_id` int(11) DEFAULT NULL,
+  `option_poll_text` mediumtext COLLATE utf8mb4_bin,
+  PRIMARY KEY (`option_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `poll_vote`
+--
+
+DROP TABLE IF EXISTS `poll_vote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poll_vote` (
+  `vote_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vote_option_id` int(11) DEFAULT NULL,
+  `vote_username` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
+  `vote_deleted` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`vote_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `session`
 --
 
@@ -375,7 +424,7 @@ CREATE TABLE `themevote` (
   `themevote_username` varchar(255) COLLATE utf8mb4_bin NOT NULL,
   `themevote_type` int(11) NOT NULL,
   PRIMARY KEY (`themevote_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8659 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -407,13 +456,7 @@ CREATE TABLE `user` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping events for database 'errorage_onehourgamejam'
---
 
---
--- Dumping routines for database 'errorage_onehourgamejam'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -424,4 +467,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-14  9:33:55
+-- Dump completed on 2017-03-02 21:25:21

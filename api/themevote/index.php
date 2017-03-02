@@ -45,12 +45,12 @@ $data = mysqli_query($dbConn, $sql);
 $sql = "";
 
 if($themeVote = mysqli_fetch_array($data)){
-	//Undelete themevote
+	//Update themevote to user's new preference
 	$themeVoteID = $themeVote["themevote_id"];
 	$sql = "UPDATE themevote SET themevote_type = $vote WHERE themevote_id = $themeVoteID";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	print json_encode(Array("SUCCESS" => "Vote cast."));
+	print json_encode(Array("SUCCESS" => "Vote updated."));
 }else{
 	//Insert new themevote
 	$sql = "
@@ -60,7 +60,7 @@ if($themeVote = mysqli_fetch_array($data)){
 		(Now(), '$clean_ip', '$clean_userAgent', $voteThemeID, '$clean_username', $vote);";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	print json_encode(Array("SUCCESS" => "Vote updated."));
+	print json_encode(Array("SUCCESS" => "Vote cast."));
 }
 
 ?>
