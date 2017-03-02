@@ -17,7 +17,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "jam", "author", "authors")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "jam", "jams", "author", "authors")))){
 	$page = "main";
 }
 
@@ -422,6 +422,9 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						break;
 						case "jam":
 							print $mustache->render(file_get_contents("template/jam.html"), $dictionary);
+						break;
+						case "jams":
+							print $mustache->render(file_get_contents("template/jams.html"), $dictionary);
 						break;
 						case "author":
 							$dictionary['show_edit_link'] = $dictionary["viewing_author"]["id"] == $loggedInUser["id"];

@@ -1,0 +1,50 @@
+<div class="col-md-10">
+	<input type="text" class="form-control" id='jamsearch' placeholder="Search for..." style='margin-bottom: 10px;' onkeyup="FilterJamsTable()">
+	<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+		Click on a column header to sort.
+		<table class="table sortable" id="jamtable">
+			<tr style='cursor: pointer;'>
+				<th>Number</th>
+				<th>Theme</th>
+				<th>Date</th>
+				<th>Entries</th>
+			</tr>
+			{{#jams}}
+				<tr>
+					<td>{{#jam_number}}<a href='http://onehourgamejam.com/?page=jam&jam={{jam_number}}'>{{jam_number}}</a>{{/jam_number}}</td>
+					<td>{{#theme}}{{theme}}{{/theme}}</td>
+					<td>{{#date}}{{date}} at {{time}}{{/date}}</td>
+					<td>{{entries_count}}
+					</td>
+				</tr>
+			{{/jams}}
+		</table>
+	</div>
+</div>
+
+<script>
+	function FilterJamsTable() {
+		// Declare variables 
+		var input, filter, table, tr, td_number, td_theme, td_date, i;
+		input = document.getElementById("jamsearch");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("jamtable");
+		tr = table.getElementsByTagName("tr");
+		
+		// Loop through all table rows, and hide those who don't match the search query
+		for (i = 0; i < tr.length; i++) {
+			td_number = tr[i].getElementsByTagName("td")[0];
+			td_theme = tr[i].getElementsByTagName("td")[1];
+			td_date = tr[i].getElementsByTagName("td")[1];
+			if (td_number && td_theme && td_date) {
+				if (  td_number.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+				      td_theme.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+				      td_date.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			} 
+		}
+	}
+</script>

@@ -4,6 +4,7 @@
 	</p>
 	<form method='post'>
 		{{#editingjam}}
+			<input type="hidden" name="jamID" value="{{{jam_id}}}">
 			<div class="form-group">
 				<label for="jam_number">Jam number</label>
 				<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
@@ -20,7 +21,9 @@
 				<label for="time">Time</label>
 				<input type="time" class="form-control" id="time" name='time' placeholder="Time" value="{{{time}}}" required>
 			</div>
+			
+			<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
+			<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete Jam</button>
 		{{/editingjam}}
-		<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
 	</form>
 </div>
