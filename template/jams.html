@@ -1,5 +1,11 @@
 <div class="col-md-10">
-	<input type="text" class="form-control" id='jamsearch' placeholder="Search for..." style='margin-bottom: 10px;' onkeyup="FilterJamsTable()">
+	<div class='panel panel-info'>
+		<div class='panel-heading'>
+			Jams ({{all_jams_count}} total!)
+		</div>
+	</div>
+	
+	<input type="text" class="form-control" id='jamsearch' placeholder="Search by number, theme or date..." style='margin-bottom: 10px;' onkeyup="FilterJamsTable()">
 	<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
 		Click on a column header to sort.
 		<table class="table sortable" id="jamtable">

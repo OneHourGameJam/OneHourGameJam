@@ -175,6 +175,7 @@ function LoadEntries(){
 	}
 	
 	$dictionary["all_entries_count"] = $totalEntries;
+	$dictionary["entries"] = $entries;
 
 	//Insert authors into dictionary
 	foreach($authorList as $k => $authorData){

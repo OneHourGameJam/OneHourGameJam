@@ -17,7 +17,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "jam", "jams", "author", "authors")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors")))){
 	$page = "main";
 }
 
@@ -419,6 +419,9 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						case "usersettings":
 							$dictionary["user"] = LoadBio($dictionary["user"]);
 							print $mustache->render(file_get_contents("template/usersettings.html"), $dictionary);
+						break;
+						case "entries":
+							print $mustache->render(file_get_contents("template/entries.html"), $dictionary);
 						break;
 						case "jam":
 							print $mustache->render(file_get_contents("template/jam.html"), $dictionary);

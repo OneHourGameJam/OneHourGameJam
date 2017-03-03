@@ -28,8 +28,8 @@ if(!isset($_GET["optionID"])){
 $pollID = intval(trim($_GET["pollID"]));
 $optionID = intval(trim($_GET["optionID"]));
 
-//Check if the poll/option combination exists
-$sql = "SELECT 1 FROM poll p, poll_option o WHERE p.poll_deleted != 1 AND p.poll_id = o.option_poll_id AND poll_id = $pollID AND o.option_id = $optionID";
+//Check if the poll/option combination exists, that the poll wasn't deleted, that it's already started and that it hasn't expired
+$sql = "SELECT 1 FROM poll p, poll_option o WHERE p.poll_deleted != 1 AND NOW() BETWEEN p.poll_start_datetime AND p.poll_end_datetime AND p.poll_id = o.option_poll_id AND poll_id = $pollID AND o.option_id = $optionID";
 $data = mysqli_query($dbConn, $sql);
 $sql = "";
 
