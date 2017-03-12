@@ -352,9 +352,6 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							$dictionary["submit_jam"] = $jam;
 							$dictionary["user_entry_color_number"] = rand(0, count($jam["colors"]) - 1);
 							$dictionary["user_entry_color"] = $jam["colors"][$dictionary["user_entry_color_number"]]["color"];
-							
-							print($dictionary["user_entry_color_number"]);
-							print($dictionary["user_entry_color"]);
 
 							foreach($jam["entries"] as $jam_entry){
 								if($jam_entry["author"] == $loggedInUser["username"]){
