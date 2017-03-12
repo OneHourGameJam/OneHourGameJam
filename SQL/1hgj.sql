@@ -1,26 +1,7 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
---
--- ------------------------------------------------------
--- Server version	5.6.29-log
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
 --
 -- Table structure for table `asset`
 --
 
-DROP TABLE IF EXISTS `asset`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `asset` (
   `asset_id` int(11) NOT NULL AUTO_INCREMENT,
   `asset_datetime` datetime NOT NULL,
@@ -34,15 +15,11 @@ CREATE TABLE `asset` (
   `asset_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`asset_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `entry`
 --
 
-DROP TABLE IF EXISTS `entry`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry` (
   `entry_id` int(11) NOT NULL AUTO_INCREMENT,
   `entry_datetime` datetime DEFAULT NULL,
@@ -60,21 +37,14 @@ CREATE TABLE `entry` (
   `entry_url_mac` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_url_android` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_url_ios` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_source` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_screenshot_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`*`@`%`*/ /*!50003 TRIGGER entry_insert AFTER INSERT ON `entry` FOR EACH ROW 
+CREATE TRIGGER entry_insert AFTER INSERT ON `entry` FOR EACH ROW 
 BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
@@ -96,6 +66,7 @@ BEGIN
 		`entry_url_mac`,
 		`entry_url_android`,
 		`entry_url_ios`,
+		`entry_url_source`,
 		`entry_screenshot_url`,
 		`entry_deleted`)
 	VALUES
@@ -118,24 +89,14 @@ BEGIN
 		NEW.entry_url_mac,
 		NEW.entry_url_android,
 		NEW.entry_url_ios,
+		NEW.entry_url_source,
 		NEW.entry_screenshot_url,
 		NEW.entry_deleted);
-END */;;
+END;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`*`@`%`*/ /*!50003 TRIGGER entry_update BEFORE UPDATE ON `entry` FOR EACH ROW 
+CREATE TRIGGER entry_update BEFORE UPDATE ON `entry` FOR EACH ROW 
 BEGIN
   IF OLD.entry_id = NEW.entry_id OR
 	 OLD.entry_datetime = NEW.entry_datetime OR
@@ -153,6 +114,7 @@ BEGIN
 	 OLD.entry_url_mac = NEW.entry_url_mac OR
 	 OLD.entry_url_android = NEW.entry_url_android OR
 	 OLD.entry_url_ios = NEW.entry_url_ios OR
+	 OLD.entry_url_source = NEW.entry_url_source OR
 	 OLD.entry_screenshot_url = NEW.entry_screenshot_url OR
 	 OLD.entry_deleted = NEW.entry_deleted
   THEN BEGIN
@@ -176,6 +138,7 @@ BEGIN
 		`entry_url_mac`,
 		`entry_url_android`,
 		`entry_url_ios`,
+		`entry_url_source`,
 		`entry_screenshot_url`,
 		`entry_deleted`)
 	VALUES
@@ -198,26 +161,16 @@ BEGIN
 		NEW.entry_url_mac,
 		NEW.entry_url_android,
 		NEW.entry_url_ios,
+		NEW.entry_url_source,
 		NEW.entry_screenshot_url,
 		NEW.entry_deleted);
 
   END; END IF;
-END */;;
+END;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`*`@`%`*/ /*!50003 TRIGGER entry_delete BEFORE DELETE ON `entry` FOR EACH ROW 
+CREATE TRIGGER entry_delete BEFORE DELETE ON `entry` FOR EACH ROW 
 BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
@@ -239,6 +192,7 @@ BEGIN
 		`entry_url_mac`,
 		`entry_url_android`,
 		`entry_url_ios`,
+		`entry_url_source`,
 		`entry_screenshot_url`,
 		`entry_deleted`)
 	VALUES
@@ -261,22 +215,16 @@ BEGIN
 		old.entry_url_mac,
 		old.entry_url_android,
 		old.entry_url_ios,
+		old.entry_url_source,
 		old.entry_screenshot_url,
 		old.entry_deleted);
-END */;;
+END;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `entry_changelog`
 --
 
-DROP TABLE IF EXISTS `entry_changelog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry_changelog` (
   `change_id` int(11) NOT NULL AUTO_INCREMENT,
   `change_type` varchar(45) COLLATE utf8mb4_bin NOT NULL,
@@ -297,19 +245,15 @@ CREATE TABLE `entry_changelog` (
   `entry_url_mac` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_url_android` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_url_ios` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_url_source` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_screenshot_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`change_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `jam`
 --
-
-DROP TABLE IF EXISTS `jam`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jam` (
   `jam_id` int(11) NOT NULL AUTO_INCREMENT,
   `jam_datetime` datetime DEFAULT NULL,
@@ -321,15 +265,11 @@ CREATE TABLE `jam` (
   `jam_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`jam_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `poll`
 --
 
-DROP TABLE IF EXISTS `poll`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `poll` (
   `poll_id` int(11) NOT NULL AUTO_INCREMENT,
   `poll_question` mediumtext COLLATE utf8mb4_bin,
@@ -339,30 +279,22 @@ CREATE TABLE `poll` (
   `poll_deleted` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`poll_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `poll_option`
 --
 
-DROP TABLE IF EXISTS `poll_option`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `poll_option` (
   `option_id` int(11) NOT NULL AUTO_INCREMENT,
   `option_poll_id` int(11) DEFAULT NULL,
   `option_poll_text` mediumtext COLLATE utf8mb4_bin,
   PRIMARY KEY (`option_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `poll_vote`
 --
 
-DROP TABLE IF EXISTS `poll_vote`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `poll_vote` (
   `vote_id` int(11) NOT NULL AUTO_INCREMENT,
   `vote_option_id` int(11) DEFAULT NULL,
@@ -370,15 +302,11 @@ CREATE TABLE `poll_vote` (
   `vote_deleted` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`vote_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `session`
 --
 
-DROP TABLE IF EXISTS `session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `session` (
   `session_id` varchar(255) NOT NULL,
   `session_user_id` int(11) DEFAULT NULL,
@@ -386,15 +314,11 @@ CREATE TABLE `session` (
   `session_datetime_last_used` datetime DEFAULT NULL,
   PRIMARY KEY (`session_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `theme`
 --
 
-DROP TABLE IF EXISTS `theme`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `theme` (
   `theme_id` int(11) NOT NULL AUTO_INCREMENT,
   `theme_datetime` datetime NOT NULL,
@@ -406,15 +330,11 @@ CREATE TABLE `theme` (
   `theme_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`theme_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `themevote`
 --
 
-DROP TABLE IF EXISTS `themevote`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `themevote` (
   `themevote_id` int(11) NOT NULL AUTO_INCREMENT,
   `themevote_datetime` datetime NOT NULL,
@@ -425,15 +345,11 @@ CREATE TABLE `themevote` (
   `themevote_type` int(11) NOT NULL,
   PRIMARY KEY (`themevote_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_username` varchar(45) COLLATE utf8mb4_bin NOT NULL,
@@ -454,17 +370,3 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_username_UNIQUE` (`user_username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-03-02 21:25:21
