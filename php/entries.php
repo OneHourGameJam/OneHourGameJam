@@ -35,6 +35,14 @@ function LoadEntries(){
 		$newData["theme_visible"] = $info["jam_theme"]; //Used for administration
 		$newData["date"] = date("d M Y", strtotime($info["jam_start_datetime"]));
 		$newData["time"] = date("G:i", strtotime($info["jam_start_datetime"]));
+		$newData["colors"] = Array();
+		$jamColors = explode("|", $info["jam_colors"]);
+		if(count($jamColors) == 0){
+			$jamColors = Array("FFFFFF");
+		}
+		foreach($jamColors as $num => $color){
+			$newData["colors"][] = Array("number" => $num, "color" => "#".$color, "color_hex" => $color);
+		}
 		$newData["minutes_to_jam"] = floor((strtotime($info["jam_start_datetime"] ." UTC") - time()) / 60);
 		$newData["entries"] = Array();
 		$newData["first_jam"] = $firstJam;
@@ -53,9 +61,27 @@ function LoadEntries(){
 		$i = 0;
 		while($info2 = mysqli_fetch_array($data2)){
 			$entry = Array();
+			
+			//Entry basic information
 			$entry["title"] = $info2["entry_title"];
 			$entry["title_url_encoded"] = urlencode($info2["entry_title"]);
 			$entry["description"] = $info2["entry_description"];
+			
+			//Entry color
+			$entry["color"] = "#".$info2["entry_color"];
+			$entry["color256_red"] = hexdec(substr($info2["entry_color"], 0, 2));
+			$entry["color256_green"] = hexdec(substr($info2["entry_color"], 2, 2));
+			$entry["color256_blue"] = hexdec(substr($info2["entry_color"], 4, 2));
+			$entry["color_lighter"] = "#".str_pad(dechex( ($entry["color256_red"] + 255) / 2 ), 2, "0", STR_PAD_LEFT).str_pad(dechex( ($entry["color256_green"] + 255) / 2 ), 2, "0", STR_PAD_LEFT).str_pad(dechex( ($entry["color256_blue"] + 255) / 2 ), 2, "0", STR_PAD_LEFT);
+			$entry["color_non_white"] = "#".str_pad(dechex(min($entry["color256_red"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($entry["color256_green"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($entry["color256_blue"], 0xDD)), 2, "0", STR_PAD_LEFT);
+			$entry["color_number"] = rand(0, count($newData["colors"]) - 1);
+			foreach($newData["colors"] as $j => $clr){
+				if($clr["color_hex"] == $entry["color"]){
+					$entry["color_number"] = $clr["number"];
+				}
+			}
+			
+			//Entry author
 			$author_username = $info2["entry_author"];
 			$author = $author_username;
 			$author_display = $author_username;
@@ -226,7 +252,7 @@ function LoadEntries(){
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
 //TODO: Replace die() with in-page warning
-function CreateJam($theme, $date, $time){
+function CreateJam($theme, $date, $time, $colorsList){
 	global $dbConn, $ip, $userAgent;
 	
 	$currentJamData = GetCurrentJamNumberAndID();
@@ -234,6 +260,13 @@ function CreateJam($theme, $date, $time){
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
+	foreach($colorsList as $i => $color){
+		$clr = trim($color);
+		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
+			die("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF|067BC2|D56062|F37748|ECC30B|84BCDA");
+		}
+		$colorsList[$i] = $clr;
+	}
 	
 	//Authorize user (logged in)
 	if(IsLoggedIn() === false){
@@ -264,6 +297,8 @@ function CreateJam($theme, $date, $time){
 		$datetime = strtotime($date." ".$time." UTC");
 	}
 	
+	$colors = implode("|", $colorsList);
+	
 	$newJam = Array();
 	$newJam["jam_number"] = $jamNumber;
 	$newJam["theme"] = $theme;
@@ -277,6 +312,7 @@ function CreateJam($theme, $date, $time){
 	$escapedJamNumber = mysqli_real_escape_string($dbConn, $newJam["jam_number"]);
 	$escapedTheme = mysqli_real_escape_string($dbConn, $newJam["theme"]);
 	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
+	$escapedColors = mysqli_real_escape_string($dbConn, $colors);
 	
 	$sql = "
 		INSERT INTO jam
@@ -287,6 +323,7 @@ function CreateJam($theme, $date, $time){
 		jam_jam_number,
 		jam_theme,
 		jam_start_datetime,
+		jam_colors,
 		jam_deleted)
 		VALUES
 		(null,
@@ -296,6 +333,7 @@ function CreateJam($theme, $date, $time){
 		'$escapedJamNumber',
 		'$escapedTheme',
 		'$escapedStartTime',
+		'$escapedColors',
 		0);";
 	
 	$data = mysqli_query($dbConn, $sql);
@@ -473,9 +511,9 @@ function GetJamByNumber($jamNumber) {
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
-function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description){
+function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
-
+	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
 	$gameURLWeb = trim($gameURLWeb);
@@ -487,6 +525,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$gameURLSource = trim($gameURLSource);
 	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
+	$jamColorNumber = intval(trim($jamColorNumber));
 	
 	//Authorize user
 	if(IsLoggedIn() === false){
@@ -535,6 +574,12 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	if(count($jams) == 0){
 		die("No jam to submit to");
 	}
+	
+	//Validate color
+	if($jamColorNumber < 0 || count($jam["colors"]) <= $jamColorNumber){
+		die("Selected invalid color");
+	}
+	$color = $jam["colors"][$jamColorNumber]["color_hex"];
 	
 	//Upload screenshot
 	$jam_folder = "data/jams/jam_$jam_number";
@@ -603,6 +648,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
 				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
+				$escaped_color = mysqli_real_escape_string($dbConn, $color);
 				
 				$sql = "
 				UPDATE entry
@@ -617,10 +663,12 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 					entry_url_android = '$escapedGameURLAndroid',
 					entry_url_source = '$escapedGameURLSource',
 					entry_screenshot_url = '$escapedScreenshotURL',
-					entry_description = '$escapedDescription'
+					entry_description = '$escapedDescription',
+					entry_color = '$escaped_color'
 				WHERE 
 					entry_author = '$escapedAuthorName'
-				AND entry_jam_number = $escaped_jamNumber;
+				AND entry_jam_number = $escaped_jamNumber
+				AND entry_deleted = 0;
 
 				";
 				$data = mysqli_query($dbConn, $sql);
@@ -651,6 +699,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			$escaped_gameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
 			$escaped_gameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 			$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
+			$escaped_color = mysqli_real_escape_string($dbConn, $color);
 			
 			$sql = "
 				INSERT INTO entry
@@ -671,7 +720,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				entry_url_ios,
 				entry_url_android,
 				entry_url_source,
-				entry_screenshot_url)
+				entry_screenshot_url,
+				entry_color)
 				VALUES
 				(null,
 				Now(),
@@ -690,7 +740,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				'$escaped_gameURLiOS',
 				'$escaped_gameURLAndroid',
 				'$escaped_gameURLSource',
-				'$escaped_ssURL');
+				'$escaped_ssURL',
+				'$escaped_color');
 			";
 			$data = mysqli_query($dbConn, $sql);
 			$sql = "";

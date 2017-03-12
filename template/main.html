@@ -31,12 +31,12 @@
 			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
 			
 				{{#entries}}
-					<div onclick='$(this).find(".screenshot").toggle(); $(this).find(".description").toggle(); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer;'>
+					<div onclick='$(this).find(".screenshot").toggle(); $(this).find(".description").toggle(); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
 						<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
 							<div style="display:table; height: 100%; width: 100%;">
 								<div style="display:table-cell;vertical-align:bottom;">
 									<div style="margin-left:auto;margin-right:auto;">
-										<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba(255, 255, 255, 0.9); border-radius: 5px;'>
+										<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
 											<!-- Why is centering things such a collossal pain in CSS :s -->
 											<b><span class='entryTitle'>{{title}}</span></b><br />
 											by <span class='entryAuthor'>{{author_display}}</span>
@@ -45,7 +45,7 @@
 								</div>
 							</div>
 						</div>
-						<div class='panel-body entryScreenshot description' style='text-align: center; height: 226px; display: none; overflow-y: auto; overflow-x: hidden;'>
+						<div class='panel-body entryScreenshot description' style='text-align: center; height: 226px; display: none; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
 							<div style='margin-bottom: 5px;'>
 								Play:<br>
 								{{#has_url_web}}<a href='#' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}
@@ -60,7 +60,7 @@
 							<p>
 								{{description}}
 							</p>
-							<button type="button" class="btn" style='margin-bottom: 5px;' onclick='document.location.href = "?page=author&author={{author}}";'>Author's profile</button>
+							<button type="button" class="btn" style='margin-bottom: 5px; background-color: {{color}}; border: solid 1px #000000;' onclick='document.location.href = "?page=author&author={{author}}";'>Author's profile</button>
 						</div>
 					</div>
 				{{/entries}}

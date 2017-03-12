@@ -62,15 +62,18 @@ if(isset($_POST["action"])){
 			$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
 			$description = (isset($_POST["description"])) ? $_POST["description"] : "";
 			$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
+			$jamColorNumber = (isset($_POST["colorNumber"])) ? intval($_POST["colorNumber"]) : 0;
 			
-			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description);
+			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber);
 		break;
 		case "newjam":
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
 			$date = (isset($_POST["date"])) ? $_POST["date"] : "";
 			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
+			$colors = (isset($_POST["jamcolors"])) ? $_POST["jamcolors"] : "FFFFFF";
+			$jamColors = explode("-", $colors);
 			
-			CreateJam($theme, $date, $time);
+			CreateJam($theme, $date, $time, $jamColors);
 		break;
 		case "deletejam":
 			$jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
@@ -347,6 +350,11 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 							}
 
 							$dictionary["submit_jam"] = $jam;
+							$dictionary["user_entry_color_number"] = rand(0, count($jam["colors"]) - 1);
+							$dictionary["user_entry_color"] = $jam["colors"][$dictionary["user_entry_color_number"]]["color"];
+							
+							print($dictionary["user_entry_color_number"]);
+							print($dictionary["user_entry_color"]);
 
 							foreach($jam["entries"] as $jam_entry){
 								if($jam_entry["author"] == $loggedInUser["username"]){
@@ -363,6 +371,8 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 									$dictionary["user_entry_url_android"] = $jam_entry["url_android"];
 									$dictionary["user_entry_url_source"] = $jam_entry["url_source"];
 									$dictionary["user_entry_desc"] = $jam_entry["description"];
+									$dictionary["user_entry_color"] = $jam_entry["color"];
+									$dictionary["user_entry_color_number"] = $jam_entry["color_number"];
 									
 									if($jam_entry["url_web"] != ""){
 										$dictionary["user_entry_share_url"] = $jam_entry["url_web"];

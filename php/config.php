@@ -155,6 +155,13 @@ $configSettings = Array(
 		"TYPE" => "TEXT",
 		"EDITABLE" => FALSE,
 		"REQUIRED" => FALSE
+	),
+	"LANG_DEFAULT_JAM_COLORS" => Array(
+		"TAG" => "LANG_DEFAULT_JAM_COLORS",
+		"NAME" => "Default jam colors, use color hex codes (without pound sign #), separate with dashes and no whitespaces, example: 067BC2-D56062-F37748-ECC30B-84BCDA",
+		"TYPE" => "TEXT",
+		"EDITABLE" => true,
+		"REQUIRED" => true
 	)
 );
 

@@ -170,6 +170,28 @@
 					</div>
 				</div>
 			</div>
+		
+			<div class="panel panel-info">
+				<div class='panel-heading'>
+					<h3 class='panel-title' style='font-size: 16px;'>
+						Customize
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label for="gamename">Game color</label>
+						<input type='hidden' id="colorNumber" name="colorNumber" value='{{user_entry_color_number}}'>
+						<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: {{user_entry_color}}; vertical-align: middle;'></div>
+						<div class="btn-group" data-toggle="buttons">
+							{{#submit_jam.colors}}
+								<label class="btn btn-default" style='background-color: {{color}}' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorNumber').val('{{number}}')">
+									<input type="radio" name="options" id="option2" autocomplete="off"> {{color}}
+								</label>
+							{{/submit_jam.colors}}
+						</div>
+					</div>
+				</div>
+			</div>
 			
 
 			<input type="hidden" name="jam_number" value="{{submit_jam.jam_number}}" />

@@ -66,3 +66,6 @@ LANG_TWITCH_ACCOUNT |
 
 #Google Analytics code. Something like UA-00000000-1
 GOOGLE_ANALYTICS_CODE | 
+
+#Default jam colors, use color hex codes (without pound sign #), separate with dashes and no whitespaces, example: 067BC2-D56062-F37748-ECC30B-84BCDA
+LANG_DEFAULT_JAM_COLORS | FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA
