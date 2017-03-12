@@ -39,6 +39,7 @@ CREATE TABLE `entry` (
   `entry_url_ios` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_url_source` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_screenshot_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_color` varchar(45) COLLATE utf8mb4_bin DEFAULT 'FFFFFF',
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`entry_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -68,6 +69,7 @@ BEGIN
 		`entry_url_ios`,
 		`entry_url_source`,
 		`entry_screenshot_url`,
+		`entry_color`,
 		`entry_deleted`)
 	VALUES
 		(null,
@@ -91,6 +93,7 @@ BEGIN
 		NEW.entry_url_ios,
 		NEW.entry_url_source,
 		NEW.entry_screenshot_url,
+		NEW.entry_color,
 		NEW.entry_deleted);
 END;;
 DELIMITER ;
@@ -140,6 +143,7 @@ BEGIN
 		`entry_url_ios`,
 		`entry_url_source`,
 		`entry_screenshot_url`,
+		`entry_color`,
 		`entry_deleted`)
 	VALUES
 		(null,
@@ -163,6 +167,7 @@ BEGIN
 		NEW.entry_url_ios,
 		NEW.entry_url_source,
 		NEW.entry_screenshot_url,
+		NEW.entry_color,
 		NEW.entry_deleted);
 
   END; END IF;
@@ -194,6 +199,7 @@ BEGIN
 		`entry_url_ios`,
 		`entry_url_source`,
 		`entry_screenshot_url`,
+		`entry_color`,
 		`entry_deleted`)
 	VALUES
 		(null,
@@ -217,6 +223,7 @@ BEGIN
 		old.entry_url_ios,
 		old.entry_url_source,
 		old.entry_screenshot_url,
+		old.entry_color,
 		old.entry_deleted);
 END;;
 DELIMITER ;
@@ -247,6 +254,7 @@ CREATE TABLE `entry_changelog` (
   `entry_url_ios` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_url_source` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `entry_screenshot_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `entry_color` varchar(45) COLLATE utf8mb4_bin DEFAULT 'FFFFFF',
   `entry_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`change_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -262,6 +270,7 @@ CREATE TABLE `jam` (
   `jam_jam_number` int(11) DEFAULT NULL,
   `jam_theme` mediumtext COLLATE utf8mb4_bin,
   `jam_start_datetime` datetime DEFAULT NULL,
+  `jam_colors` text COLLATE utf8mb4_bin,
   `jam_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`jam_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
