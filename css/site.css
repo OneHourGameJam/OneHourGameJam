@@ -83,3 +83,28 @@ body{
 .trumbowyg-editor {
   min-height: 150px;
 }
+
+.mediaButton{
+	width: 100px; 
+	border-radius: 5px; 
+	color: white; 
+	text-align: center; 
+	padding: 4px 0px;
+	margin-bottom: 5px;
+}
+
+.twitterButton{
+	background-color: #1B95E0; 
+}
+
+.twitterButton:hover{
+	background-color: #0C7ABF; 
+}
+
+.twitchButton{
+	background-color: #6441A5; 
+}
+
+.twitchButton:hover{
+	background-color: #472B7C; 
+}

@@ -134,6 +134,20 @@ $configSettings = Array(
 		"TYPE" => "NUMBER",
 		"EDITABLE" => FALSE,
 		"REQUIRED" => TRUE
+	),
+	"LANG_TWITTER_ACCOUNT" => Array(
+		"TAG" => "LANG_TWITTER_ACCOUNT",
+		"NAME" => "Game Jam's twitter account, appears in the left menu.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => FALSE
+	),
+	"LANG_TWITCH_ACCOUNT" => Array(
+		"TAG" => "LANG_TWITCH_ACCOUNT",
+		"NAME" => "Game Jam's twitch account, appears in the left menu.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => TRUE,
+		"REQUIRED" => FALSE
 	)
 );
 

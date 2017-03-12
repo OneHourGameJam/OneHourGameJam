@@ -25,7 +25,16 @@
 			<li><a href='?page=editusers'>Manage users</a></li>
 		</ul>
 		
-		<a href="https://twitter.com/OneHourGameJam" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow</a>
-		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+		{{#CONFIG_TWITTER_ACCOUNT}}
+			<a href="https://twitter.com/{{CONFIG_TWITTER_ACCOUNT}}" style='text-decoration: none;' target='_blank'>
+				<div class='mediaButton twitterButton'><img src='{{{template_path}}}images/twitter.png' style='width: 20px;' /> Follow</div>
+			</a>
+		{{/CONFIG_TWITTER_ACCOUNT}}
+		
+		{{#CONFIG_TWITCH_ACCOUNT}}
+			<a href="https://twitch.tv/{{CONFIG_TWITCH_ACCOUNT}}" style='text-decoration: none;' target='_blank'>
+				<div class='mediaButton twitchButton'><img src='{{{template_path}}}images/twitch.png' style='width: 20px;' /> Watch</div>
+			</a>
+		{{/CONFIG_TWITCH_ACCOUNT}}
 	</div>
 </div>
