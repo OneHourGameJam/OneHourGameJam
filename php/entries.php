@@ -74,6 +74,7 @@ function LoadEntries(){
 			$entry["url_linux"] = str_replace("'", "\\'", $info2["entry_url_linux"]);
 			$entry["url_ios"] = str_replace("'", "\\'", $info2["entry_url_ios"]);
 			$entry["url_android"] = str_replace("'", "\\'", $info2["entry_url_android"]);
+			$entry["url_source"] = str_replace("'", "\\'", $info2["entry_url_source"]);
 			$entry["screenshot_url"] = str_replace("'", "\\'", $info2["entry_screenshot_url"]);
 			
 			if($entry["url"] != ""){$entry["has_url"] = 1;}
@@ -83,6 +84,7 @@ function LoadEntries(){
 			if($entry["url_linux"] != ""){$entry["has_url_linux"] = 1;}
 			if($entry["url_ios"] != ""){$entry["has_url_ios"] = 1;}
 			if($entry["url_android"] != ""){$entry["has_url_android"] = 1;}
+			if($entry["url_source"] != ""){$entry["has_url_source"] = 1;}
 			
 			$entry["jam_number"] = $newData["jam_number"];
 			$entry["jam_theme"] = $newData["theme"];
@@ -471,7 +473,7 @@ function GetJamByNumber($jamNumber) {
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 //TODO: Replace die() with in-page warning
-function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description){
+function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
 
 	$gameName = trim($gameName);
@@ -482,6 +484,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$gameURLLinux = trim($gameURLLinux);
 	$gameURLiOS = trim($gameURLiOS);
 	$gameURLAndroid = trim($gameURLAndroid);
+	$gameURLSource = trim($gameURLSource);
 	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
 	
@@ -497,25 +500,16 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	
 	$urlValid = FALSE;
 	//Validate that at least one of the provided game URLs is valid
-	if(SanitizeURL($gameURL) !== false){
-		$urlValid = TRUE;
-	}
-	if(SanitizeURL($gameURLWeb) !== false){
-		$urlValid = TRUE;
-	}
-	if(SanitizeURL($gameURLWin) !== false){
-		$urlValid = TRUE;
-	}
-	if(SanitizeURL($gameURLMac) !== false){
-		$urlValid = TRUE;
-	}
-	if(SanitizeURL($gameURLLinux) !== false){
-		$urlValid = TRUE;
-	}
-	if(SanitizeURL($gameURLiOS) !== false){
-		$urlValid = TRUE;
-	}
-	if(SanitizeURL($gameURLAndroid) !== false){
+	$gameURL = SanitizeURL($gameURL);
+	$gameURLWeb = SanitizeURL($gameURLWeb);
+	$gameURLWin = SanitizeURL($gameURLWin);
+	$gameURLMac = SanitizeURL($gameURLMac);
+	$gameURLLinux = SanitizeURL($gameURLLinux);
+	$gameURLiOS = SanitizeURL($gameURLiOS);
+	$gameURLAndroid = SanitizeURL($gameURLAndroid);
+	$gameURLSource = SanitizeURL($gameURLSource);
+	
+	if($gameURL || $gameURLWeb || $gameURLWin || $gameURLMac || $gameURLLinux || $gameURLiOS || $gameURLAndroid){
 		$urlValid = TRUE;
 	}
 	
@@ -604,6 +598,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				$escapedGameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
 				$escapedGameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
 				$escapedGameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
+				$escapedGameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 				$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
@@ -620,6 +615,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 					entry_url_linux = '$escapedGameURLLinux',
 					entry_url_ios = '$escapedGameURLiOS',
 					entry_url_android = '$escapedGameURLAndroid',
+					entry_url_source = '$escapedGameURLSource',
 					entry_screenshot_url = '$escapedScreenshotURL',
 					entry_description = '$escapedDescription'
 				WHERE 
@@ -653,6 +649,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			$escaped_gameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
 			$escaped_gameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
 			$escaped_gameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
+			$escaped_gameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 			$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 			
 			$sql = "
@@ -673,6 +670,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				entry_url_linux,
 				entry_url_ios,
 				entry_url_android,
+				entry_url_source,
 				entry_screenshot_url)
 				VALUES
 				(null,
@@ -691,6 +689,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				'$escaped_gameURLLinux',
 				'$escaped_gameURLiOS',
 				'$escaped_gameURLAndroid',
+				'$escaped_gameURLSource',
 				'$escaped_ssURL');
 			";
 			$data = mysqli_query($dbConn, $sql);

@@ -55,18 +55,8 @@
 								{{#has_url_android}}<a href='#' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}
 								{{#has_url_ios}}<a href='#' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' style='width: 16px;' title='iOS'></a>{{/has_url_ios}}
 								{{#has_url}}<a href='#' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}
+								{{#has_url_source}}<a href='#' onclick='window.open("{{url_source}}", "_blank");'><img src='{{{template_path}}}images/platforms/source.png' style='width: 16px;' title='Source code'></a>{{/has_url_source}}
 							</div>
-							<!-- Facebook -->
-							<a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/', '_blank');" target="_blank">
-								<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" style='max-width: 30px;' /></a>
-							 
-							<!-- Twitter -->
-							<a href="#" onclick="window.open('https://twitter.com/share?url={{url}}&amp;text=Played a game by {{{author_url_encoded}}} made in one hour titled {{{title_url_encoded}}}. Try it!;hashtags=gamedev, 1hgj, gamejam', '_blank');" target="_blank">
-								<img src="http://liamlime.com/site/images/social/twitter.png" alt="Twitter" style='max-width: 30px;' /></a>
-							
-							<!-- Google+ -->
-							<a href="#" onclick="window.open('https://plus.google.com/share?url=http://onehourgamejam.com/', '_blank');" target="_blank">
-								<img src="http://liamlime.com/site/images/social/google.png" alt="Google" style='max-width: 30px;' /></a>
 							<p>
 								{{description}}
 							</p>

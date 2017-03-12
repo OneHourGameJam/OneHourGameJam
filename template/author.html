@@ -25,19 +25,6 @@
 							for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
 						</div>
 						<td style='background-color: #F5F5F5; text-align: right;'>
-							<!-- Facebook -->
-							<a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=http://onehourgamejam.com/', '_blank');" target="_blank">
-								<img src="http://liamlime.com/site/images/social/facebook.png" alt="Facebook" style='max-width: 30px;' /></a>
-							
-							<!-- Twitter -->
-							<a href="#" onclick="window.open('https://twitter.com/share?url=http://onehourgamejam.com/&amp;text=Played a game by {{{author_url_encoded}}} made in one hour titled {{{title_url_encoded}}}. Try it!;hashtags=gamedev, 1hgj, gamejam', '_blank');" target="_blank">
-								<img src="http://liamlime.com/site/images/social/twitter.png" alt="Twitter" style='max-width: 30px;' /></a>
-							
-							<!-- Google+ -->
-							<a href="#" onclick="window.open('https://plus.google.com/share?url=http://onehourgamejam.com/', '_blank');" target="_blank">
-							<img src="http://liamlime.com/site/images/social/google.png" alt="Google" style='max-width: 30px;' /></a>
-							
-							
 							{{#has_url_web}}<a href='#' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}
 							{{#has_url_windows}}<a href='#' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' style='width: 16px;' title='Windows'></a>{{/has_url_windows}}
 							{{#has_url_mac}}<a href='#' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' style='width: 16px;' title='Mac'></a>{{/has_url_mac}}
@@ -45,7 +32,8 @@
 							{{#has_url_android}}<a href='#' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}
 							{{#has_url_ios}}<a href='#' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' style='width: 16px;' title='iOS'></a>{{/has_url_ios}}
 							{{#has_url}}<a href='#' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}
-
+							{{#has_url_source}}<a href='{{url_source}}' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' style='width: 16px;' title='Source'></a>{{/has_url_source}}
+							
 							{{#show_edit_link}}
 							<a href="?page=submit&amp;jam_number={{jam_number}}" class="btn btn-default">Edit entry</a>
 							{{/show_edit_link}}

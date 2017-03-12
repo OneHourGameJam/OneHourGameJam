@@ -51,11 +51,12 @@ if(isset($_POST["action"])){
 			$gameURLLinux = (isset($_POST["gameurllinux"])) ? $_POST["gameurllinux"] : "";
 			$gameURLiOS = (isset($_POST["gameurlios"])) ? $_POST["gameurlios"] : "";
 			$gameURLAndroid = (isset($_POST["gameurlandroid"])) ? $_POST["gameurlandroid"] : "";
+			$gameURLSource = (isset($_POST["gameurlsource"])) ? $_POST["gameurlsource"] : "";
 			$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
 			$description = (isset($_POST["description"])) ? $_POST["description"] : "";
 			$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
 			
-			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $screenshotURL, $description);
+			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description);
 		break;
 		case "newjam":
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
@@ -353,7 +354,26 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 									$dictionary["user_entry_url_linux"] = $jam_entry["url_linux"];
 									$dictionary["user_entry_url_ios"] = $jam_entry["url_ios"];
 									$dictionary["user_entry_url_android"] = $jam_entry["url_android"];
+									$dictionary["user_entry_url_source"] = $jam_entry["url_source"];
 									$dictionary["user_entry_desc"] = $jam_entry["description"];
+									
+									if($jam_entry["url_web"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_web"];
+									}else if($jam_entry["url_windows"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_windows"];
+									}else if($jam_entry["url_mac"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_mac"];
+									}else if($jam_entry["url_linux"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_linux"];
+									}else if($jam_entry["url_ios"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_ios"];
+									}else if($jam_entry["url_android"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_android"];
+									}else if($jam_entry["url"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url"];
+									}else if($jam_entry["url_source"] != ""){
+										$dictionary["user_entry_share_url"] = $jam_entry["url_source"];
+									}
 									
 									if(isset($jam_entry["has_url"])){$dictionary["user_has_url"] = 1;}
 									if(isset($jam_entry["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
@@ -362,6 +382,7 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 									if(isset($jam_entry["has_url_linux"])){$dictionary["user_has_url_linux"] = 1;}
 									if(isset($jam_entry["has_url_ios"])){$dictionary["user_has_url_ios"] = 1;}
 									if(isset($jam_entry["has_url_android"])){$dictionary["user_has_url_android"] = 1;}
+									if(isset($jam_entry["has_url_source"])){$dictionary["user_has_url_source"] = 1;}
 									break;
 								}
 							}

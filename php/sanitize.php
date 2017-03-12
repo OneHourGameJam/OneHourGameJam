@@ -17,6 +17,10 @@ function SanitizeURL($url) {
 	// Step 1. Trim whitespace.
 	$url = trim($url);
 	
+	if(!$url){
+		return false;
+	}
+	
 	// Step 2. Confirm that it's a valid URL (i.e. has a scheme).
 	$protocols = Array(
 		// Standard URLs (scheme://path/?query).

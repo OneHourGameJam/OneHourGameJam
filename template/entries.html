@@ -1,0 +1,71 @@
+<div class="col-md-10">
+	<div class='panel panel-info'>
+		<div class='panel-heading'>
+			Entries ({{all_entries_count}} total!)
+		</div>
+	</div>
+	
+	<input type="text" class="form-control" id='entrysearch' placeholder="Search by title, author, jam number or theme..." style='margin-bottom: 10px;' onkeyup="FilterEntryTable()">
+	<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+		Click on a column header to sort.
+		<table class="table sortable" id="entrytable">
+			<tr style='cursor: pointer;'>
+				<th style='max-width: 150px;'>Title</th>
+				<th style='max-width: 100px;'>Author</th>
+				<th style='max-width: 50px;'>Jam</th>
+				<th style='max-width: 100px;'>Theme</th>
+				<th>Web</th>
+				<th>Win</th>
+				<th>Mac</th>
+				<th>Linux</th>
+				<th>Android</th>
+				<th>Other</th>
+				<th>Source</th>
+			</tr>
+			{{#entries}}
+				<tr>
+					<td><b>{{title}}</b></td>
+					<td><a href='?page=author&author={{author}}'>{{author_display}}</a></td>
+					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_number}}</a></td>
+					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_theme}}</a></td>
+					<td>{{#has_url_web}}<a href='{{url_web}}' target='_blank'><img src='{{{template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}</td>
+					<td>{{#has_url_windows}}<a href='{{url_windows}}' target='_blank'><img src='{{{template_path}}}images/platforms/windows.png' style='width: 16px;' title='Windows'></a>{{/has_url_windows}}</td>
+					<td>{{#has_url_mac}}<a href='{{url_mac}}' target='_blank'><img src='{{{template_path}}}images/platforms/mac.png' style='width: 16px;' title='Mac'></a>{{/has_url_mac}}</td>
+					<td>{{#has_url_linux}}<a href='{{url_linux}}' target='_blank'><img src='{{{template_path}}}images/platforms/linux.png' style='width: 16px;' title='Linux'></a>{{/has_url_linux}}</td>
+					<td>{{#has_url_android}}<a href='{{url_android}}' target='_blank'><img src='{{{template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}</td>
+					<td>{{#has_url}}<a href='{{url}}' target='_blank'><img src='{{{template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}</td>
+					<td>{{#has_url_source}}<a href='{{url_source}}' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' style='width: 16px;' title='Source'></a>{{/has_url_source}}</td>
+				</tr>
+			{{/entries}}
+		</table>
+	</div>
+</div>
+
+<script>
+	function FilterEntryTable() {
+		// Declare variables 
+		var input, filter, table, tr, td_title, td_author, td_jam, td_theme, i;
+		input = document.getElementById("entrysearch");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("entrytable");
+		tr = table.getElementsByTagName("tr");
+		
+		// Loop through all table rows, and hide those who don't match the search query
+		for (i = 0; i < tr.length; i++) {
+			td_title = tr[i].getElementsByTagName("td")[0];
+			td_author = tr[i].getElementsByTagName("td")[1];
+			td_jam = tr[i].getElementsByTagName("td")[2];
+			td_theme = tr[i].getElementsByTagName("td")[3];
+			if (td_title && td_author && td_jam && td_theme) {
+				if (	td_title.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+						td_author.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+						td_jam.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+						td_theme.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			} 
+		}
+	}
+</script>
