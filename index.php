@@ -10,7 +10,7 @@ include_once("php/site.php");
 //Determine whether the person is in streaming mode
 if(isset($_GET["streaming"])){
 	if($_GET["streaming"] == 1){
-		setcookie("streaming", 1, time() + (60 * 3));	//Streamer mode lasts for 3 hours
+		setcookie("streaming", 1, time() + (60 * 60 * 3));	//Streamer mode lasts for 3 hours
 		$dictionary["is_streamer"] = 1;
 	}else{
 		setcookie("streaming", 1, 0);
