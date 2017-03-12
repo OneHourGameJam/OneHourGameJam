@@ -1,5 +1,5 @@
 <div class="col-md-10" id='jamlist'>
-	{{^SHUTUP}}
+	{{^is_streamer}}
 		{{#IS_STREAM_ACTIVE}}
 			<div class="wrapper">
 				<div class="main">
@@ -7,7 +7,7 @@
 				</div>
 			</div>
 		{{/IS_STREAM_ACTIVE}}
-	{{/SHUTUP}}
+	{{/is_streamer}}
 	
 	<input type="text" class="form-control" id='search' placeholder="Search for..." style='margin-bottom: 10px;'>
 	

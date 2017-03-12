@@ -7,6 +7,20 @@
 
 include_once("php/site.php");
 
+//Determine whether the person is in streaming mode
+if(isset($_GET["streaming"])){
+	if($_GET["streaming"] == 1){
+		setcookie("streaming", 1, time() + (60 * 3));	//Streamer mode lasts for 3 hours
+		$dictionary["is_streamer"] = 1;
+	}else{
+		setcookie("streaming", 1, 0);
+	}
+}else{
+	if(isset($_COOKIE["streaming"]) && $_COOKIE["streaming"] == 1){
+		$dictionary["is_streamer"] = 1;
+	}
+}
+
 
 $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
@@ -19,13 +33,6 @@ if(isset($_GET["page"])){
 //List allowed page identifiers here.
 if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors")))){
 	$page = "main";
-}
-
-//Special parameters
-$shutup = false;
-if(isset($_GET["shutup"])){
-	$shutup = true;
-	$dictionary["SHUTUP"] = 1;
 }
 
 //Actions!

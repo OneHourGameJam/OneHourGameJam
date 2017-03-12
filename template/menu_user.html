@@ -17,7 +17,14 @@
 			<br/>
 			<li><a href='?page=author&author={{user.username}}'>Profile</a></li>
 			<li><a href='?page=usersettings'>User Settings</a></li>
-			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues'>Submit Issue</a></li>
+			<br>
+			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Submit Issue</a></li>
+			{{#is_streamer}}
+				<li><a href='?page=main&streaming=0'>Disable streamer Mode</a></li>
+			{{/is_streamer}}
+			{{^is_streamer}}
+				<li><a href='?page=main&streaming=1'>Streamer Mode</a></li>
+			{{/is_streamer}}
 		</ul>
 		
 		{{#CONFIG_TWITTER_ACCOUNT}}
