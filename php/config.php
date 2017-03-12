@@ -148,6 +148,13 @@ $configSettings = Array(
 		"TYPE" => "TEXT",
 		"EDITABLE" => TRUE,
 		"REQUIRED" => FALSE
+	),
+	"GOOGLE_ANALYTICS_CODE" => Array(
+		"TAG" => "GOOGLE_ANALYTICS_CODE",
+		"NAME" => "Google Analytics code for site. Will look something like this: UA-00000000-1. If blank, Google analytics code will not even be inserted.",
+		"TYPE" => "TEXT",
+		"EDITABLE" => FALSE,
+		"REQUIRED" => FALSE
 	)
 );
 

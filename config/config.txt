@@ -63,3 +63,6 @@ LANG_TWITTER_ACCOUNT |
 
 #Twitch account for the jam
 LANG_TWITCH_ACCOUNT | 
+
+#Google Analytics code. Something like UA-00000000-1
+GOOGLE_ANALYTICS_CODE | 
