@@ -13,7 +13,7 @@ if(isset($_GET["streaming"])){
 		setcookie("streaming", 1, time() + (60 * 60 * 3));	//Streamer mode lasts for 3 hours
 		$dictionary["is_streamer"] = 1;
 	}else{
-		setcookie("streaming", 1, 0);
+		setcookie("streaming", null, -1);
 	}
 }else{
 	if(isset($_COOKIE["streaming"]) && $_COOKIE["streaming"] == 1){
