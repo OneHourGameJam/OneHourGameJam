@@ -43,6 +43,7 @@ function LoadEntries(){
 		foreach($jamColors as $num => $color){
 			$newData["colors"][] = Array("number" => $num, "color" => "#".$color, "color_hex" => $color);
 		}
+		$newData["colors_input_string"] = implode("-", $jamColors);
 		$newData["minutes_to_jam"] = floor((strtotime($info["jam_start_datetime"] ." UTC") - time()) / 60);
 		$newData["entries"] = Array();
 		$newData["first_jam"] = $firstJam;
@@ -263,7 +264,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
-			die("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF|067BC2|D56062|F37748|ECC30B|84BCDA");
+			die("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA");
 		}
 		$colorsList[$i] = $clr;
 	}
@@ -342,7 +343,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 
 //Edits an existing jam, identified by the jam number.
 //Only changes the theme, date and time, does NOT change the jam number.
-function EditJam($jamNumber, $theme, $date, $time){
+function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	global $jams, $dbConn;
 	
 	//Authorize user (is admin)
@@ -353,6 +354,17 @@ function EditJam($jamNumber, $theme, $date, $time){
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
+	
+	$colorsList = explode("-", $colorsString);
+	$colorSHexCodes = Array();
+	foreach($colorsList as $i => $color){
+		$clr = trim($color);
+		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
+			die("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA");
+		}
+		$colorSHexCodes[] = $clr;
+	}
+	$colors = implode("|", $colorSHexCodes);
 	
 	//Validate values
 	$jamNumber = intval($jamNumber);
@@ -382,11 +394,13 @@ function EditJam($jamNumber, $theme, $date, $time){
 	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
 	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
 	$escapedJamNumber = mysqli_real_escape_string($dbConn, "$jamNumber");
+	$escapedColors = mysqli_real_escape_string($dbConn, "$colors");
 	
 	$sql = "
 		UPDATE jam
 		SET jam_theme = '$escapedTheme', 
-		    jam_start_datetime = '$escapedStartTime'
+		    jam_start_datetime = '$escapedStartTime', 
+		    jam_colors = '$escapedColors'
 		WHERE jam_jam_number = $escapedJamNumber
 		  AND jam_deleted = 0";
 	$data = mysqli_query($dbConn, $sql);

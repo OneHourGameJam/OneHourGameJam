@@ -77,7 +77,7 @@ function LoadUsers(){
 function LogInOrRegister($username, $password){
 	global $config, $users;
 	
-	$username = strtolower(trim($username));
+	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 	
 	//Check username length
@@ -111,7 +111,7 @@ function LogInOrRegister($username, $password){
 function RegisterUser($username, $password){
 	global $users, $dbConn, $ip, $userAgent;
 	
-	$username = strtolower(trim($username));
+	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 	
 	//Check username length
@@ -196,7 +196,7 @@ function RegisterUser($username, $password){
 function LogInUser($username, $password){
 	global $config, $users;
 	
-	$username = strtolower(trim($username));
+	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 	
 	//Check username length

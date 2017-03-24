@@ -21,7 +21,6 @@ if(isset($_GET["streaming"])){
 	}
 }
 
-
 $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
 
@@ -135,8 +134,9 @@ if(isset($_POST["action"])){
 				$theme = $_POST["theme"];
 				$date = $_POST["date"];
 				$time = $_POST["time"];
+				$jamcolors = $_POST["jamcolors"];
 				
-				EditJam($jamNumber, $theme, $date, $time);
+				EditJam($jamNumber, $theme, $date, $time, $jamcolors);
 			}
 			$page = "main";
 		break;
@@ -298,50 +298,31 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
 ?>
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset='utf-8'>
-		<script src="js/jquery.js"></script>
-		<title>One hour game jam</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="/css/trumbowyg.css">
-		<link href="css/site.css" rel="stylesheet">
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="/favicon.ico" type="image/x-icon">
-		<script src='js/1hgj.js' type='text/javascript'></script>
-		<script src='js/sorttable.js' type='text/javascript'></script>
-		<?php PrintAnalyticsCode(); ?>
-	</head>
-	<body>
-		<div class="container">
 			<?php
-				print $mustache->render(file_get_contents("template/header.html"), $dictionary);
+				print $mustache->render(file_get_contents($templateBasePath."header.html"), $dictionary);
 			?>
 			<div class="row">
 				<div class="col-md-2">
 					<?php
 						if(IsLoggedIn() === false){
-							print $mustache->render(file_get_contents("template/menu_guest.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."menu_guest.html"), $dictionary);
 						}else if(IsAdmin()){
-							print $mustache->render(file_get_contents("template/menu_admin.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."menu_admin.html"), $dictionary);
 						}else{
-							print $mustache->render(file_get_contents("template/menu_user.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."menu_user.html"), $dictionary);
 						}
 						
-						print $mustache->render(file_get_contents("template/menu_shared.html"), $dictionary);
+						print $mustache->render(file_get_contents($templateBasePath."menu_shared.html"), $dictionary);
 					?>
 				</div>
 						
 				<?php
 					switch($page){
 						case "main":
-							print $mustache->render(file_get_contents("template/main.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."main.html"), $dictionary);
 						break;
 						case "login":
-							print $mustache->render(file_get_contents("template/login.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."login.html"), $dictionary);
 						break;
 						case "submit":
 							$jam = GetJamByNumber($jamNumber);
@@ -405,78 +386,78 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 								die('Cannot make a new submission to a past jam');
 							}
 
-							print $mustache->render(file_get_contents("template/submit.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."submit.html"), $dictionary);
 						break;
 						case "newjam":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/newjam.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."newjam.html"), $dictionary);
 							}
 						break;
 						case "assets":
-							print $mustache->render(file_get_contents("template/assets.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."assets.html"), $dictionary);
 						break;
 						case "rules":
-							print $mustache->render(file_get_contents("template/rules.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."rules.html"), $dictionary);
 						break;
 						case "config":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/config.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."config.html"), $dictionary);
 							}
 						break;
 						case "editcontent":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/editcontent.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."editcontent.html"), $dictionary);
 							}
 						break;
 						case "editjam":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/editjam.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."editjam.html"), $dictionary);
 							}
 						break;
 						case "editentry":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/editentry.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."editentry.html"), $dictionary);
 							}
 						break;
 						case "editusers":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/editusers.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."editusers.html"), $dictionary);
 							}
 						break;
 						case "edituser":
 							if(IsAdmin()){
-								print $mustache->render(file_get_contents("template/edituser.html"), $dictionary);
+								print $mustache->render(file_get_contents($templateBasePath."edituser.html"), $dictionary);
 							}
 						break;
 						case "themes":
-							print $mustache->render(file_get_contents("template/themes.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."themes.html"), $dictionary);
 						break;
 						case "usersettings":
 							$dictionary["user"] = LoadBio($dictionary["user"]);
-							print $mustache->render(file_get_contents("template/usersettings.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."usersettings.html"), $dictionary);
 						break;
 						case "entries":
-							print $mustache->render(file_get_contents("template/entries.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."entries.html"), $dictionary);
 						break;
 						case "jam":
-							print $mustache->render(file_get_contents("template/jam.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."jam.html"), $dictionary);
 						break;
 						case "jams":
-							print $mustache->render(file_get_contents("template/jams.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."jams.html"), $dictionary);
 						break;
 						case "author":
 							$dictionary['show_edit_link'] = $dictionary["viewing_author"]["id"] == $loggedInUser["id"];
 							$dictionary["viewing_author"] = LoadBio($dictionary["viewing_author"]);
-							print $mustache->render(file_get_contents("template/author.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."author.html"), $dictionary);
 						break;
 						case "authors":
-							print $mustache->render(file_get_contents("template/authors.html"), $dictionary);
+							print $mustache->render(file_get_contents($templateBasePath."authors.html"), $dictionary);
 						break;
 					}
 				?>
 			</div>
 			<?php
-				print $mustache->render(file_get_contents("template/footer.html"), $dictionary);
+				print $mustache->render(file_get_contents($templateBasePath."footer.html"), $dictionary);
 			?>
 		</div>
 	
