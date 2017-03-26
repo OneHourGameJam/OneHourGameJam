@@ -76,14 +76,13 @@ function GetNextJamDateAndTime(){
         break;
     }
 
-	$saturday = strtotime("$jamDay +" . intval($config["LANG_JAM_TIME"]) . " hours");
-	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $saturday);
-	$dictionary["next_jam_suggested_time"] = date("H:i", $saturday);
+	$suggestedDay = strtotime("$jamDay +" . intval($config["LANG_JAM_TIME"]) . " hours");
+	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $suggestedDay);
+	$dictionary["next_jam_suggested_time"] = date("H:i", $suggestedDay);
 	$now = time();
-	$interval = $saturday - $now;
+	$interval = $suggestedDay - $now;
 	$dictionary["seconds_until_jam_suggested_time"] = $interval;
-	return $saturday;
-	return $saturday;
+	return $suggestedDay;
 }
 
 $currentJamNumberArchive = FALSE;
