@@ -37,9 +37,9 @@
 						<script type='text/javascript'>
 							var date = new Date('{{{next_jam_suggested_date}}}T{{{next_jam_suggested_time}}}:00Z');
 							var now = new Date();
-							var countdownTimer = (date - now) / 1000;
 							function UpdateTimer(){
-								countdownTimer -= 1;
+								now = new Date();
+								var countdownTimer = (date - now) / 1000;
 								var totalS = countdownTimer;
 								var d = Math.floor(totalS / (24*60*60));
 								totalS -= d * (24*60*60);
@@ -63,7 +63,7 @@
 								}
 								
 								$("#countdownTimer").text(timerString);
-								setTimeout(UpdateTimer, 1000);
+								setTimeout(UpdateTimer, 500);
 							}
 							var year = date.getFullYear();
 							var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
