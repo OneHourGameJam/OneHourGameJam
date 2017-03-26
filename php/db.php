@@ -1,13 +1,20 @@
 <?php
 
+include_once("config/dbconfig.php");
+
 //Database connection
-$dbConn = mysqli_connect("<Address>", "<username>","<password>", "<db_name>");
+$dbConn = mysqli_connect($dbAddress, $dbUsername, $dbPassword, $dbDatabaseName);
 if(!$dbConn ){
 	die("Database connection error");
 }	
-mysqli_select_db($dbConn, "<db_name>") or die("Database selection failure");	
+mysqli_select_db($dbConn, $dbDatabaseName) or die("Database selection failure");	
 mysqli_query($dbConn, 'SET character_set_results="utf8mb4"') or die("Database result type setting failure");
 mysqli_set_charset ($dbConn, "utf8mb4");
+
+$dbAddress = "";
+$dbUsername = "";
+$dbPassword = "";
+$dbDatabaseName = "";
 
 
 function GetTables(){
