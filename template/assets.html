@@ -5,10 +5,23 @@
 	<p>
 		Here you can find some jam-specific assets which can help you make your 1 hour game jam games.
 	</p>
+	{{#user.isadmin}}
+		<form action='?page=editasset' method='POST'>
+			<input type='hidden' name='action' value='editasset'>
+			<input type='submit' name='action' value='New'>
+		</form>
+	{{/user.isadmin}}
 	
 	{{#assets}}
 		<p>
 			<h4>{{title}}</h4>
+			{{#user.isadmin}}
+				<form action='?page=editasset' method='POST'>
+					<input type='hidden' name='asset_id' value='{{id}}'>
+					<input type='hidden' name='action' value='editasset'>
+					<input type='submit' value='Edit'>
+				</form>
+			{{/user.isadmin}}
 		</p>
 		<p>
 			By {{author}}<br />
@@ -29,6 +42,11 @@
 				<br /><a href='{{content}}'>Download</a>
 			</p>
 		{{/is_image}}
+		{{#is_file}}
+			<p>
+				<a href='{{content}}'>Download</a>
+			</p>
+		{{/is_file}}
 		{{#is_text}}
 			<p>
 				{{content}}

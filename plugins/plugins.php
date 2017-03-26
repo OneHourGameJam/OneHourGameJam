@@ -46,10 +46,10 @@
 	}
 	
 	//Called at the end of the <head> tag, intended to contain Analytics code.
-	function PrintAnalyticsCode(){
+	function GetAnalyticsCode(){
 		global $config;
 		if(isset($config["GOOGLE_ANALYTICS_CODE"]) && $config["GOOGLE_ANALYTICS_CODE"] != ""){
-			print "
+			return "
 				<script>
 					(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 					(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

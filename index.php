@@ -30,7 +30,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors")))){
 	$page = "main";
 }
 
@@ -127,6 +127,32 @@ if(isset($_POST["action"])){
 				$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
 				$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
 			}
+		break;
+		case "editasset":
+			if(IsAdmin()){
+				$assetID = intval($_POST["asset_id"]);
+				$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
+				print_r($dictionary["editingasset"]);
+			}
+		break;
+		case "saveassetedits":
+			if(IsAdmin()){
+				$assetID = $_POST["asset_id"];
+				$author = $_POST["author"];
+				$title = $_POST["title"];
+				$description = $_POST["description"];
+				$type = $_POST["type"];
+				
+				AddAsset($assetID, $author, $title, $description, $type);
+			}
+			$page = "assets";
+		break;
+		case "deleteasset":
+			if(IsAdmin()){
+				$assetID = $_POST["asset_id"];
+				DeleteAsset($assetID);
+			}
+			$page = "assets";
 		break;
 		case "savejamedits":
 			if(IsAdmin()){
@@ -294,6 +320,9 @@ switch($page){
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
+$dictionary["ANALYTICS"] = GetAnalyticsCode();
+
+
 //print_r($authors[0]);
 
 ?>
@@ -402,6 +431,11 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 						case "config":
 							if(IsAdmin()){
 								print $mustache->render(file_get_contents($templateBasePath."config.html"), $dictionary);
+							}
+						break;
+						case "editasset":
+							if(IsAdmin()){
+								print $mustache->render(file_get_contents($templateBasePath."editasset.html"), $dictionary);
 							}
 						break;
 						case "editcontent":

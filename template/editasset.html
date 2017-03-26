@@ -1,0 +1,41 @@
+<div class="col-md-10" id='loginform'>
+	<p>
+		<h3>Add / edit asset</h3>
+	</p>
+	<form method='post' enctype="multipart/form-data">
+			<input type="hidden" name="jamID" value="{{{jam_id}}}">
+			<div class="form-group">
+				<label for="jam_number">Asset ID (leave blank to add new asset)</label>
+				<input type="text" class="form-control" id="asset_id" name='asset_id' placeholder="Asset ID" value="{{{editingasset.id}}}" readonly required>
+			</div>
+			<div class="form-group">
+				<label for="author">Author</label>
+				<input type="text" class="form-control" id="author" name='author' placeholder="Author" value="{{{editingasset.author}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="title">Asset Title</label>
+				<input type="text" class="form-control" id="title" name='title' placeholder="Asset Title" value="{{{editingasset.title}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="description">Asset Description</label>
+				<input type="text" class="form-control" id="description" name='description' placeholder="Asset Description" value="{{{editingasset.description}}}" required>
+			</div>
+			<div class="form-group">
+				<label for="type">Asset Type:</label>
+				<select class="form-control" id="type" name="type">
+					<option value="">Select...</option>
+					<option value="FILE" {{#editingasset.is_file}}selected{{/editingasset.is_file}}>File</option>
+					<option value="AUDIO" {{#editingasset.is_audio}}selected{{/editingasset.is_audio}}>Audio file</option>
+					<option value="IMAGE" {{#editingasset.is_image}}selected{{/editingasset.is_image}}>Image</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="assetfile">Asset File (Change)</label>
+				<br />(up to 15MB)
+				<input type="file" class="form-control" id="assetfile" name='assetfile' placeholder="Asset file" value="{{editingasset.content}}">
+			</div>
+			
+			<button type="submit" name='action' value='saveassetedits' class="btn btn-default">Save Asset</button>
+			<button type="submit" name='action' value='deleteasset' class="btn btn-default">Delete Asset</button>
+	</form>
+</div>
