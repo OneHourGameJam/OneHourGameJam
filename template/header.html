@@ -4,7 +4,7 @@
 	<head>
 		<meta charset='utf-8'>
 		<script src="js/jquery.js"></script>
-		<title>One hour game jam</title>
+		<title>{{{PAGE_TITLE}}}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 					<a href='.'><img src='logo_1hgj.png' alt='Logo' style='max-width: 100%; width: 400px; border: 0;' /></a><br />
 					{{{CONFIG_JAMDESC2}}}<br />
 					{{{CONFIG_JAMDESC3}}}<br />
-					
+
 				</div>
 				<div class="col-md-3" style='text-align: center; margin-top: 10px; color: #FF0066'>
 					<p>
@@ -48,7 +48,7 @@
 								var m = Math.floor(totalS / (60));
 								totalS -= m * (60);
 								var s = Math.floor(totalS);
-								
+
 								var timerString = "";
 								if (d > 0){
 									timerString = d+" day"+((d > 1) ? "s" : "")+((h > 0) ? (" "+h + " hour"+((h > 1) ? "s" : "")) : "");
@@ -61,7 +61,7 @@
 								}else{
 									timerString = "Go! Go! Go!";
 								}
-								
+
 								$("#countdownTimer").text(timerString);
 								setTimeout(UpdateTimer, 500);
 							}
@@ -74,12 +74,12 @@
 							if(min < 10){
 								min = "0"+min
 							}
-							
+
 							var i1 = String(date).indexOf("(");
 							var i2 = String(date).lastIndexOf(")");
-							
+
 							var timezone = "";
-							
+
 							if(i1 > 0 && i2 > 0){
 								timezone = String(date).substring(i1 +1, i2);
 							}
@@ -105,7 +105,7 @@
 								}
 							}
 							document.write("<b>"+day+" "+month+" "+year+" at "+hour+":"+min+"</b><br />("+timezone+")");
-							
+
 							setTimeout(UpdateTimer, 0);
 						</script>
 					</p>
@@ -152,7 +152,7 @@
 		</div>
 	</div>
 	{{/CONFIG_NOTIFICATION}}
-	
+
 	{{#user}}
 		{{#active_polls}}
 		<div class="row" style="font-size: 16px;">
@@ -177,17 +177,8 @@
 	function VotePoll(pollID, optionID){
 		$.get("api/pollvote?pollID="+pollID+"&optionID="+optionID, function(data){
 			var d = jQuery.parseJSON(data)
-			
+
 			$("#"+pollID+"-"+optionID).toggleClass("btn-success");
 		});
 	}
 </script>
-
-
-
-
-
-
-
-
-
