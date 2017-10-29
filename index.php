@@ -43,7 +43,7 @@ if(isset($_POST["action"])){
 			$username = (isset($_POST["un"])) ? $_POST["un"] : "";
 			$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
 			$loginChecked = false;
-			
+
 			$username = strtolower(trim($username));
 			$password = trim($password);
 			LogInOrRegister($username, $password);
@@ -62,7 +62,7 @@ if(isset($_POST["action"])){
 			$description = (isset($_POST["description"])) ? $_POST["description"] : "";
 			$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
 			$jamColorNumber = (isset($_POST["colorNumber"])) ? intval($_POST["colorNumber"]) : 0;
-			
+
 			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber);
 		break;
 		case "newjam":
@@ -71,7 +71,7 @@ if(isset($_POST["action"])){
 			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
 			$colors = (isset($_POST["jamcolors"])) ? $_POST["jamcolors"] : "FFFFFF";
 			$jamColors = explode("-", $colors);
-			
+
 			CreateJam($theme, $date, $time, $jamColors);
 		break;
 		case "deletejam":
@@ -142,7 +142,7 @@ if(isset($_POST["action"])){
 				$title = $_POST["title"];
 				$description = $_POST["description"];
 				$type = $_POST["type"];
-				
+
 				AddAsset($assetID, $author, $title, $description, $type);
 			}
 			$page = "assets";
@@ -161,7 +161,7 @@ if(isset($_POST["action"])){
 				$date = $_POST["date"];
 				$time = $_POST["time"];
 				$jamcolors = $_POST["jamcolors"];
-				
+
 				EditJam($jamNumber, $theme, $date, $time, $jamcolors);
 			}
 			$page = "main";
@@ -173,7 +173,7 @@ if(isset($_POST["action"])){
 				$title = $_POST["title"];
 				$url = $_POST["url"];
 				$screenshot_url = $_POST["screenshot_url"];
-				
+
 				EditEntry($jamNumber, $author, $title, $url, $screenshot_url);
 			}
 			$page = "main";
@@ -185,7 +185,7 @@ if(isset($_POST["action"])){
 				if($isAdmin != 0 && $isAdmin != 1){
 					die("invalid isadmin value");
 				}
-				
+
 				EditUser($username, $isAdmin);
 			}
 			$page = "editusers";
@@ -195,7 +195,7 @@ if(isset($_POST["action"])){
 				$username = $_POST["username"];
 				$password1 = $_POST["password1"];
 				$password2 = $_POST["password2"];
-				
+
 				EditUserPassword($username, $password1, $password2);
 			}
 			$page = "editusers";
@@ -205,7 +205,7 @@ if(isset($_POST["action"])){
 				$passwordold = $_POST["passwordold"];
 				$password1 = $_POST["password1"];
 				$password2 = $_POST["password2"];
-				
+
 				ChangePassword($passwordold, $password1, $password2);
 			}
 			$page = "usersettings";
@@ -216,7 +216,7 @@ if(isset($_POST["action"])){
 				$twitterHandle = $_POST["twitterhandle"];
 				$emailAddress = $_POST["emailaddress"];
 				$bio = $_POST["bio"];
-				
+
 				ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio);
 			}
 			$page = "usersettings";
@@ -254,19 +254,26 @@ if(isset($_POST["action"])){
 	}
 }
 
+$pageTitle = "Home";
+
 //Page actions!
 switch($page){
 	case "login":
+	$pageTitle = "Login";
 		if(IsLoggedIn()){
 			$page = "main";
+			$pageTitle = "Home";
 		}
 	break;
 	case "logout":
+	  $pageTitle = "Logout";
 		$loginChecked = false;
 		LogOut();
 		$page = "main";
+		$pageTitle = "Home";
 	break;
 	case "edituser":
+	  $pageTitle = "Edit User";
 		if(IsAdmin()){
 			$editingUsername = $_GET["username"];
 			$editingUsername = trim(strtolower($editingUsername));
@@ -280,11 +287,12 @@ switch($page){
 		}
 	break;
 	case "jam":
+	  $pageTitle = "Edit Jam";
 		$viewingJamNumber = ((isset($_GET["jam"])) ? intval($_GET["jam"]) : 0);
 		if($viewingJamNumber == 0){
 			die("invalid jam number");
 		}
-		
+
 		$pass = FALSE;
 		foreach($dictionary["jams"] as $i => $jam){
 			if($jam["jam_number"] == $viewingJamNumber){
@@ -293,7 +301,7 @@ switch($page){
 				break;
 			}
 		}
-		
+
 		if($pass == FALSE){
 			die("jam does not exist");
 		}
@@ -303,7 +311,7 @@ switch($page){
 		if($viewingAuthor == ""){
 			die("invalid author name");
 		}
-		
+
 		if (isset($authors[$viewingAuthor])) {
 			$dictionary["viewing_author"] = $authors[$viewingAuthor];
 		} else if (isset($users[$viewingAuthor])) {
@@ -312,15 +320,53 @@ switch($page){
 		} else {
 			die("Author does not exist");
 		}
+		$pageTitle = "Viewing " . $viewingAuthor;
 	break;
 	case "submit":
 		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["current_jam"]["jam_number"];
+		$pageTitle = "Submit Game";
 	break;
+	case "rules":
+		$pageTitle = "Rules";
+	break;
+	case "assets":
+		$pageTitle = "Assets";
+	break;
+	case "entries":
+	  $pageTitle = "Games";
+	break;
+	case "authors":
+		$pageTitle = "Authors";
+	break;
+	case "jams":
+		$pageTitle = "Jams";
+	break;
+	case "usersettings":
+		$pageTitle = "User Settings";
+	break;
+	case "newjam":
+		$pageTitle = "Schedule New Jam";
+	break;
+	case "config":
+		$pageTitle = "Edit Configuration";
+	break;
+	case "editcontent":
+		$pageTitle = "Manage Content";
+	break;
+	case "editusers":
+		$pageTitle = "Manage Users";
+	break;
+	case "themes":
+		$pageTitle = "Theme Voting";
+	break;
+
 }
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
 $dictionary["ANALYTICS"] = GetAnalyticsCode();
+
+$dictionary["PAGE_TITLE"] = $pageTitle;
 
 
 //print_r($authors[0]);
@@ -340,11 +386,11 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 						}else{
 							print $mustache->render(file_get_contents($templateBasePath."menu_user.html"), $dictionary);
 						}
-						
+
 						print $mustache->render(file_get_contents($templateBasePath."menu_shared.html"), $dictionary);
 					?>
 				</div>
-						
+
 				<?php
 					switch($page){
 						case "main":
@@ -380,7 +426,7 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 									$dictionary["user_entry_desc"] = $jam_entry["description"];
 									$dictionary["user_entry_color"] = $jam_entry["color"];
 									$dictionary["user_entry_color_number"] = $jam_entry["color_number"];
-									
+
 									if($jam_entry["url_web"] != ""){
 										$dictionary["user_entry_share_url"] = $jam_entry["url_web"];
 									}else if($jam_entry["url_windows"] != ""){
@@ -398,7 +444,7 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 									}else if($jam_entry["url_source"] != ""){
 										$dictionary["user_entry_share_url"] = $jam_entry["url_source"];
 									}
-									
+
 									if(isset($jam_entry["has_url"])){$dictionary["user_has_url"] = 1;}
 									if(isset($jam_entry["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
 									if(isset($jam_entry["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
@@ -494,7 +540,7 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 				print $mustache->render(file_get_contents($templateBasePath."footer.html"), $dictionary);
 			?>
 		</div>
-	
+
 		<script src="bs/js/bootstrap.min.js"></script>
 	</body>
 </html>
