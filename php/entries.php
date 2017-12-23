@@ -21,6 +21,9 @@ function LoadEntries(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	$suggestedNextJamTime = GetNextJamDateAndTime();
+	$dictionary["next_jam_timer_code"] = gmdate("Y-m-d", $suggestedNextJamTime)."T".gmdate("H:i", $suggestedNextJamTime).":00Z";
+	
 	$currentJamData = GetCurrentJamNumberAndID();
 	
 	while($info = mysqli_fetch_array($data)){
@@ -34,7 +37,7 @@ function LoadEntries(){
 		$newData["theme"] = $info["jam_theme"];
 		$newData["theme_visible"] = $info["jam_theme"]; //Used for administration
 		$newData["date"] = date("d M Y", strtotime($info["jam_start_datetime"]));
-		$newData["time"] = date("G:i", strtotime($info["jam_start_datetime"]));
+		$newData["time"] = date("H:i", strtotime($info["jam_start_datetime"]));
 		$newData["colors"] = Array();
 		$jamColors = explode("|", $info["jam_colors"]);
 		if(count($jamColors) == 0){
@@ -188,6 +191,8 @@ function LoadEntries(){
 			}else{
 				$newData["time_left"] = "Now!";
 			}
+			$nextJamTime = strtotime($newData["start_time"]);
+			$dictionary["next_jam_timer_code"] = date("Y-m-d", $nextJamTime)."T".date("H:i", $nextJamTime).":00Z";
 		}else{
 			$newData["jam_started"] = true;
 		}
@@ -206,6 +211,26 @@ function LoadEntries(){
 	$dictionary["all_entries_count"] = $totalEntries;
 	$dictionary["entries"] = $entries;
 
+	//Process authors list
+	foreach($authorList as $k => $authorData){
+		//Find admin candidates
+		if($authorList[$k]["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]){
+			$authorList[$k]["admin_candidate_recent_participation_check_pass"] = 1;
+		}
+		if($authorList[$k]["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]){
+			$authorList[$k]["admin_candidate_total_participation_check_pass"] = 1;
+		}
+		if(	$authorList[$k]["admin_candidate_recent_participation_check_pass"] &&
+			$authorList[$k]["admin_candidate_total_participation_check_pass"]){
+				$authorList[$k]["is_admin_candidate"] = 1;
+		}
+		
+		//Find inactive admins
+		if($authorList[$k]["last_jam_number"] <= (count($jams) - $config["ADMIN_WARNING_WEEKS_SINCE_LAST_JAM"])){
+			$authorList[$k]["is_inactive"] = 1;
+		}
+	}
+	
 	//Insert authors into dictionary
 	foreach($authorList as $k => $authorData){
 		$dictionary["authors"][] = $authorData;
@@ -226,6 +251,9 @@ function LoadEntries(){
 				$dictionary["admins"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["admins"][$i]["first_jam_number"] = $authorData["first_jam_number"];
 				$dictionary["admins"][$i]["last_jam_number"] = $authorData["last_jam_number"];
+				if(isset($authorData["is_inactive"])){
+					$dictionary["admins"][$i]["is_inactive"] = 1;
+				}
 			}
 		}
 		//Update registered users list with entry count for each
@@ -235,6 +263,9 @@ function LoadEntries(){
 				$dictionary["registered_users"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["registered_users"][$i]["first_jam_number"] = $authorData["first_jam_number"];
 				$dictionary["registered_users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
+				if(isset($authorData["is_admin_candidate"])){
+					$dictionary["registered_users"][$i]["is_admin_candidate"] = 1;
+				}
 			}
 		}
 		$authors[$authorData["username"]] = $authorData;
@@ -242,7 +273,7 @@ function LoadEntries(){
 	
 	$dictionary["all_authors_count"] = count($authors);
 	$dictionary["all_jams_count"] = count($jams);
-	GetNextJamDateAndTime();
+	
 }
 
 

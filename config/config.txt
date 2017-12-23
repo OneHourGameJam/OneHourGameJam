@@ -4,12 +4,11 @@
 # KEY | VALUE
 
 
-#Jam name (used in the page title)
+#Jam name (used in the page header)
 LANG_JAMNAME | One Hour Game Jam!
 
-#Jam description lines (used in page title)
-LANG_JAMDESC2 | Every Saturday at 20:00 UTC
-LANG_JAMDESC3 | Join us on IRC: <a href="irc:afternet.org/1hgj">#1hgj</a> on <a href='http://afternet.org/'>afternet.org</a> or <a href='https://qwebirc.afternet.org/?channels=1hgj'>chat from your browser</a>
+#Jam description (used in page header)
+LANG_JAMDESC | Every Saturday at 20:00 UTC
 
 #Identifier for the day of the week, when the jam happens. 0 = Sunday, 1 = Monday, .. 6 = Saturday.
 LANG_JAM_DAY | 6
@@ -25,7 +24,7 @@ LANG_NOTIFICATION_IMAGE |
 LANG_NOTIFICATION_URL | 
 
 #Jam rules (displayed on the rules page)
-LANG_RULES | Rules
+LANG_RULES | <h3>When?</h3><p>Every <a href='https://www.google.com/search?q=20%3A00+UTC'>Saturday at 20:00 UTC</a>. The time in your local time and a countdown-timer should be in the top of the site though.</p><h3>Where?</h3><p>Right here! Joining our IRC channel (<a href='irc:afternet.org/1hgj'>#1hgj</a> on <a href='http://afternet.org' target='_BLANK'>afternet.org</a>) is however a good idea.</p><h3>Is there a theme?</h3><p>Yes! At the start of the hour, the theme is announced on the site and in the IRC channel (<a href='irc:afternet.org/1hgj'>#1hgj</a> on <a href='http://afternet.org' target='_BLANK'>afternet.org</a>). Themes are suggested and voted by the community.</p><h3>How long do I have to finish?</h3><p>:D</p><h3>Do I have to submit within the hour?</h3><p>No. Keep working on your game until it's done, then submit.</p><h3>Can I use premade assets?</h3><p>You are free to use premade assets but it is recommended that you make at least one game from scratch. Some assets are provided on the assets page.</p><h3>Do I have to host the games myself?</h3><p>Yes, you'll need to host the game and submit the links here. We do host the thumbnail though. If you don't have a website yourself, use something like dropbox / google drive, or itch.io / newgrounds. Ask in IRC for more suggestions.</p><h3>What happens after the jam?</h3><p>About 30 minutes after the jam ends, we host a stream on Twitch where all submitted games are played. The stream usually lasts about 2 hours. It's not always the same people streaming though, so keep an eye on the IRC channel to see who's streaming.</p><h3>What if I don't finish in time?</h3><p>If you finish and submit your game before the stream ends, we'll play it on stream, even if it took you more than an hour to finish.</p><h3>Can I participate after the jam has ended?</h3><p>If you come late you can still participate. If the stream is over, then your game won't be played on-stream, obviously, but we'll still keep it on the site!</p><h3>Copyright / licenses / future development / intellectual property / ...?</h3><p>You retain full ownership / copyright / yadda yadda. If you get a BAFTA make sure to mention us in your acceptance speech though :D</p>
 
 #The number of days at which a theme is marked as old
 THEME_DAYS_MARK_AS_OLD | 90
@@ -64,8 +63,29 @@ LANG_TWITTER_ACCOUNT |
 #Twitch account for the jam
 LANG_TWITCH_ACCOUNT | 
 
+#IRC domain
+LANG_IRC_ADDRESS | 
+
+#IRC channel
+LANG_IRC_CHANNEL | 
+
+#IRC chat in browser URL
+LANG_IRC_CHAT_IN_BROWSER | 
+
+#Discord invite URL
+LANG_DISCORD_INVITE_URL | 
+
 #Google Analytics code. Something like UA-00000000-1
 GOOGLE_ANALYTICS_CODE | 
 
 #Default jam colors, use color hex codes (without pound sign #), separate with dashes and no whitespaces, example: 067BC2-D56062-F37748-ECC30B-84BCDA
 LANG_DEFAULT_JAM_COLORS | FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA
+
+#Administrator - inactivity warning (weeks since last participation)
+ADMIN_WARNING_WEEKS_SINCE_LAST_JAM | 20
+
+#Administrator - minimum total participation to suggest as admin
+ADMIN_SUGGESTION_TOTAL_PARTICIPATION | 15
+
+#Administrator - minimum recent participation to suggest as admin
+ADMIN_SUGGESTION_RECENT_PARTICIPATION | 50

@@ -20,18 +20,18 @@ $sql = "";
 $maxJamNumber = 0;
 
 $return = Array();
+$return["now"] = gmdate("Y-m-d H:i:s", time());
 $return["upcoming_jams"] = Array();
 $return["current_jams"] = Array();
 $return["previous_jams"] = Array();
 
 while($info = mysqli_fetch_array($data)){
 	$row = Array();
-	foreach(array_keys($info) as $key){
-		if(is_numeric($key)){
-			continue;
-		}
-		$row[str_replace("jam_", "", $key)] = $info[$key];
-	}
+	
+	$row["number"] = intval($info["jam_jam_number"]);
+	$row["theme"] = $info["jam_theme"];
+	$row["start_datetime"] = $info["jam_start_datetime"];;
+	$row["timediff"] = intval($info["jam_timediff"]);
 
     $maxJamNumber = max($maxJamNumber, intval($row["number"]));
 	
@@ -52,13 +52,15 @@ if(count($return["upcoming_jams"]) == 0){
     $now =  time();
     $saturday = GetNextJamDateAndTime();
 
-    $timediff = intval(date("U", $saturday)) - intval(date("U", $now));
+    //$timediff = intval(date("U", $saturday)) - intval(date("U", $now));
+	$timediff = intval($dictionary["seconds_until_jam_suggested_time"]);
 	if($timediff < 0){
 		$saturday = strtotime("+7 day", $saturday);
-    	$timediff = intval(date("U", $saturday)) - intval(date("U", $now));
+    	//$timediff = intval(date("U", $saturday)) - intval(date("U", $now));
+		$timediff = $timediff + (7*24*60*60);
 	}
 
-    $return["upcoming_jams"][] = Array("number" => $maxJamNumber, "theme" => "Not announced yet", "start_datetime" => date("Y-m-d H:i:s", $saturday), "timediff" => $timediff);
+    $return["upcoming_jams"][] = Array("number" => $maxJamNumber + 1, "theme" => "Not announced yet", "start_datetime" => date("Y-m-d H:i:s", $saturday), "timediff" => $timediff);
 }
 
 print json_encode($return);

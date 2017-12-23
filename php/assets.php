@@ -9,9 +9,10 @@ function LoadAssets(){
 	
 	//Fill list of themes - will return same row multiple times (once for each valid themevote_type)
 	$sql = "
-		SELECT asset_id, asset_author, asset_title, asset_description, asset_type, asset_content
-		FROM asset
-		WHERE asset_deleted != 1;
+		SELECT a.asset_id, a.asset_author, a.asset_title, a.asset_description, a.asset_type, a.asset_content, u.user_display_name
+		FROM asset a, user u
+		WHERE asset_deleted != 1
+          AND a.asset_author = u.user_username
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
@@ -20,12 +21,13 @@ function LoadAssets(){
 	while($asset = mysqli_fetch_array($data)){
 		$id = $asset["asset_id"];
 		$author = $asset["asset_author"];
+		$author_display_name = $asset["user_display_name"];
 		$title = $asset["asset_title"];
 		$description = $asset["asset_description"];
 		$type = $asset["asset_type"];
 		$content = $asset["asset_content"];
 		
-		$a = Array("id" => $id, "author" => $author, "title" => $title, "description" => $description, "type" => $type, "content" => $content );
+		$a = Array("id" => $id, "author" => $author, "author_display_name" => $author_display_name, "title" => $title, "description" => $description, "type" => $type, "content" => $content );
 		
 		switch($type){
 			case "AUDIO":

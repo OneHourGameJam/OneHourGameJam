@@ -38,5 +38,21 @@
 				<div class='mediaButton twitchButton'><img src='{{{template_path}}}images/twitch.png' style='width: 20px;' /> Watch</div>
 			</a>
 		{{/CONFIG_TWITCH_ACCOUNT}}
+		
+		{{#CONFIG_IRC_CHAT_IN_BROWSER}}
+		{{#CONFIG_IRC_ADDRESS}}
+		{{#CONFIG_IRC_CHANNEL}}
+			<a href="{{{CONFIG_IRC_CHAT_IN_BROWSER}}}" style='text-decoration: none;' target='_blank'>
+				<div class='mediaButton ircButton'><img src='{{{template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
+			</a>
+		{{/CONFIG_IRC_CHANNEL}}
+		{{/CONFIG_IRC_ADDRESS}}
+		{{/CONFIG_IRC_CHAT_IN_BROWSER}}
+		
+		{{#CONFIG_DISCORD_INVITE_URL}}
+			<a href="{{{CONFIG_DISCORD_INVITE_URL}}}" style='text-decoration: none;' target='_blank'>
+				<div class='mediaButton discordButton'><img src='{{{template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>
+			</a>
+		{{/CONFIG_DISCORD_INVITE_URL}}
 	</div>
 </div>

@@ -9,6 +9,7 @@
 			<th>First Jam</th>
 			<th>Last Jam</th>
 			<th>Recent Participation</th>
+			<th>Flags</th>
 			<th></th>
 		</tr>
 		{{#admins}}
@@ -18,6 +19,7 @@
 				<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 				<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
 				<td>{{recent_participation}}%</td>
+				<td>{{#is_inactive}}Inactive{{/is_inactive}}</td>
 				<td><a href='?page=edituser&username={{username}}'>edit</a></td>
 			</tr>
 		{{/admins}}
@@ -31,6 +33,7 @@
 			<th>First Jam</th>
 			<th>Last Jam</th>
 			<th>Recent Participation</th>
+			<th>Admin candidate</th>
 			<th></th>
 		</tr>
 		{{#registered_users}}
@@ -40,6 +43,7 @@
 				<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 				<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
 				<td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
+				<td>{{#is_admin_candidate}}Yes{{/is_admin_candidate}}</td>
 				<td><a href='?page=edituser&username={{username}}'>edit</a></td>
 			</tr>
 		{{/registered_users}}

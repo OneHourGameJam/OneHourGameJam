@@ -27,9 +27,20 @@
 				</div>
 				<div class="col-md-6" style='text-align: center; margin-top: 10px;'>
 					<a href='.'><img src='logo_1hgj.png' alt='Logo' style='max-width: 100%; width: 400px; border: 0;' /></a><br />
-					{{{CONFIG_JAMDESC2}}}<br />
-					{{{CONFIG_JAMDESC3}}}<br />
+					{{{CONFIG_JAMDESC}}}<br />
+					{{#CONFIG_IRC_ADDRESS}}
+					{{#CONFIG_IRC_CHANNEL}}
+						<a href="#" onclick='$("#ircInfo").slideToggle(); return false;' style='text-decoration: none;' target='_blank'>
+							<div class='mediaButton ircButton' style='display: inline-block;'><img src='{{{template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
+						</a>
+					{{/CONFIG_IRC_CHANNEL}}
+					{{/CONFIG_IRC_ADDRESS}}
 					
+					{{#CONFIG_DISCORD_INVITE_URL}}
+						<a href="{{{CONFIG_DISCORD_INVITE_URL}}}" style='text-decoration: none;' target='_blank'>
+							<div class='mediaButton discordButton' style='display: inline-block;'><img src='{{{template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>
+						</a>
+					{{/CONFIG_DISCORD_INVITE_URL}}
 				</div>
 				<div class="col-md-3" style='text-align: center; margin-top: 10px; color: #FF0066'>
 					<p>
@@ -114,6 +125,16 @@
 					</p>
 				</div>
 			</div>
+			{{#CONFIG_IRC_ADDRESS}}
+			{{#CONFIG_IRC_CHANNEL}}
+			<div class="panel-body" id="ircInfo" style='display: none;'>
+				Join us on IRC: Channel <a href="irc:{{{CONFIG_IRC_ADDRESS}}}/{{{CONFIG_IRC_CHANNEL}}}">#{{{CONFIG_IRC_CHANNEL}}} on {{{CONFIG_IRC_ADDRESS}}}</a>
+				{{#CONFIG_IRC_CHAT_IN_BROWSER}}
+					or <a href='{{{CONFIG_IRC_CHAT_IN_BROWSER}}}'>chat from your browser</a>
+				{{/CONFIG_IRC_CHAT_IN_BROWSER}}
+			</div>
+			{{/CONFIG_IRC_CHANNEL}}
+			{{/CONFIG_IRC_ADDRESS}}
 		</div>
 	</div>
 </div>

@@ -4,17 +4,26 @@
 	</p>
 	<form method='post'>
 		{{#CONFIG}}
-			<div class="form-group">
-				<label for="{{KEY}}">{{NAME}}</label>
-				{{#TYPE_TEXT}}
-					<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
-				{{/TYPE_TEXT}}
-				{{#TYPE_NUMBER}}
-					<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
-				{{/TYPE_NUMBER}}
-				{{#TYPE_TEXTAREA}}
-					<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE}}}</textarea>
-				{{/TYPE_TEXTAREA}}
+			<div class='panel panel-info'>
+				<div class='panel-heading'>
+					<b>{{CATEGORY_HEADER}}</b>
+				</div>
+				<div class='panel-body'>
+					{{#ENTRIES}}
+						<div class="form-group">
+							<label for="{{KEY}}">{{NAME}}</label>
+							{{#TYPE_TEXT}}
+								<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
+							{{/TYPE_TEXT}}
+							{{#TYPE_NUMBER}}
+								<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{NAME}}" value="{{{VALUE}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
+							{{/TYPE_NUMBER}}
+							{{#TYPE_TEXTAREA}}
+								<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE}}}</textarea>
+							{{/TYPE_TEXTAREA}}
+						</div>
+					{{/ENTRIES}}
+				</div>
 			</div>
 		{{/CONFIG}}
 		<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>

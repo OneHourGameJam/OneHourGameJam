@@ -108,3 +108,19 @@ body{
 .twitchButton:hover{
 	background-color: #472B7C; 
 }
+
+.ircButton{
+	background-color: #777777; 
+}
+
+.ircButton:hover{
+	background-color: #4B4B4B; 
+}
+
+.discordButton{
+	background-color: #7289DA; 
+}
+
+.discordButton:hover{
+	background-color: #6676AE; 
+}

@@ -76,9 +76,9 @@ function GetNextJamDateAndTime(){
         break;
     }
 
-	$suggestedDay = strtotime("$jamDay +" . intval($config["LANG_JAM_TIME"]) . " hours");
-	$dictionary["next_jam_suggested_date"] = date("Y-m-d", $suggestedDay);
-	$dictionary["next_jam_suggested_time"] = date("H:i", $suggestedDay);
+	$suggestedDay = strtotime("$jamDay +" . intval($config["LANG_JAM_TIME"]) . " hours UTC");
+	$dictionary["next_jam_suggested_date"] = gmdate("Y-m-d", $suggestedDay);
+	$dictionary["next_jam_suggested_time"] = gmdate("H:i", $suggestedDay);
 	$now = time();
 	$interval = $suggestedDay - $now;
 	$dictionary["seconds_until_jam_suggested_time"] = $interval;
