@@ -5,6 +5,10 @@
 	<form method='post'>
 		{{#editingentry}}
 			<div class="form-group">
+				<label for="entryID">Entry ID</label>
+				<input type="text" class="form-control" id="entryID" name='entryID' placeholder="Entry ID" value="{{{entry_id}}}" readonly required>
+			</div>
+			<div class="form-group">
 				<label for="jam_number">Jam number</label>
 				<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
 			</div>
@@ -18,7 +22,7 @@
 			</div>
 			<div class="form-group">
 				<label for="url">Game URL</label>
-				<input type="text" class="form-control" id="url" name='url' placeholder="Game URL" value="{{{url}}}" required>
+				<input type="text" class="form-control" id="url" name='url' placeholder="Game URL" value="{{{url}}}">
 			</div>
 			<div class="form-group">
 				<label for="screenshot_url">Screenshot URL</label>
@@ -26,5 +30,6 @@
 			</div>
 		{{/editingentry}}
 		<button type="submit" name='action' value='saveentryedits' class="btn btn-default">Save Entry</button>
+		<button type="submit" name='action' value='deleteentry' class="btn btn-default">Delete Entry</button>
 	</form>
 </div>

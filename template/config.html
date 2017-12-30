@@ -21,6 +21,13 @@
 							{{#TYPE_TEXTAREA}}
 								<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE}}}</textarea>
 							{{/TYPE_TEXTAREA}}
+							{{#TYPE_ENUM}}
+								<select class="form-control" id="{{KEY}}" name='{{KEY}}' {{#DISABLED}}disabled title="Cannot be edited here, edit in config.txt"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
+								{{#ENUM_OPTIONS}}
+									<option value="{{{VALUE}}}" {{#ENUM_SELECTED}}selected{{/ENUM_SELECTED}}>{{TEXT}}</value>
+								{{/ENUM_OPTIONS}}
+								</select>
+							{{/TYPE_ENUM}}
 						</div>
 					{{/ENTRIES}}
 				</div>

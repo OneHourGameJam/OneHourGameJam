@@ -69,8 +69,15 @@ if(isset($_POST["action"])){
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
 			$date = (isset($_POST["date"])) ? $_POST["date"] : "";
 			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
-			$colors = (isset($_POST["jamcolors"])) ? $_POST["jamcolors"] : "FFFFFF";
-			$jamColors = explode("-", $colors);
+			$jamColors = Array();
+			for($colorIndex = 0; $colorIndex < 16; $colorIndex++){
+				if(isset($_POST["jamcolor".$colorIndex])){
+					$jamColors[] = $_POST["jamcolor".$colorIndex];
+				}
+			}
+			if(count($jamColors) == 0){
+				$jamColors = Array("FFFFFF");
+			}
 			
 			CreateJam($theme, $date, $time, $jamColors);
 		break;
@@ -78,6 +85,13 @@ if(isset($_POST["action"])){
 			$jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
 			if($jamID != ""){
 				DeleteJam(intval($jamID));
+				$page = "editcontent";
+			}
+		break;
+		case "deleteentry":
+			$entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
+			if($entryID != ""){
+				DeleteEntry(intval($entryID));
 				$page = "editcontent";
 			}
 		break;

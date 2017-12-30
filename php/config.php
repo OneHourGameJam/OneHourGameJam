@@ -3,7 +3,7 @@
 
 $configSettings = Array(
 	"JAM_SETTINGS" => Array(
-		"HEADER" => "General Jam Session",
+		"HEADER" => "General Jam Settings",
 		"SETTINGS" => Array(
 			"LANG_JAMNAME" => Array(
 				"TAG" => "LANG_JAMNAME",
@@ -21,15 +21,50 @@ $configSettings = Array(
 			),
 			"LANG_JAM_DAY" => Array(
 				"TAG" => "LANG_JAM_DAY",
-				"NAME" => "Identifier for the day the jam happens on. 0 = Sunday, 1 = Monday, ..., 6 = Saturday",
-				"TYPE" => "NUMBER",
+				"NAME" => "Jam start day of the week",
+				"TYPE" => "ENUM",
+				"ENUM_OPTIONS" => Array(
+					Array("VALUE" => 0, "TEXT" => "Sunday"),
+					Array("VALUE" => 1, "TEXT" => "Monday"),
+					Array("VALUE" => 2, "TEXT" => "Tuesday"),
+					Array("VALUE" => 3, "TEXT" => "Wednesday"),
+					Array("VALUE" => 4, "TEXT" => "Thursday"),
+					Array("VALUE" => 5, "TEXT" => "Friday"),
+					Array("VALUE" => 6, "TEXT" => "Saturday")
+				),
 				"EDITABLE" => TRUE,
 				"REQUIRED" => TRUE
 			),
 			"LANG_JAM_TIME" => Array(
 				"TAG" => "LANG_JAM_DAY",
-				"NAME" => "The hour the jam starts on 01..24",
-				"TYPE" => "NUMBER",
+				"NAME" => "The hour the jam starts on",
+				"TYPE" => "ENUM",
+				"ENUM_OPTIONS" => Array(
+					Array("VALUE" => 24, "TEXT" => "Midnight"),
+					Array("VALUE" => 23, "TEXT" => "23:00"),
+					Array("VALUE" => 22, "TEXT" => "22:00"),
+					Array("VALUE" => 21, "TEXT" => "21:00"),
+					Array("VALUE" => 20, "TEXT" => "20:00"),
+					Array("VALUE" => 19, "TEXT" => "19:00"),
+					Array("VALUE" => 18, "TEXT" => "18:00"),
+					Array("VALUE" => 17, "TEXT" => "17:00"),
+					Array("VALUE" => 16, "TEXT" => "16:00"),
+					Array("VALUE" => 15, "TEXT" => "15:00"),
+					Array("VALUE" => 14, "TEXT" => "14:00"),
+					Array("VALUE" => 13, "TEXT" => "13:00"),
+					Array("VALUE" => 12, "TEXT" => "12:00"),
+					Array("VALUE" => 11, "TEXT" => "11:00"),
+					Array("VALUE" => 10, "TEXT" => "10:00"),
+					Array("VALUE" => 9, "TEXT" => "9:00"),
+					Array("VALUE" => 8, "TEXT" => "8:00"),
+					Array("VALUE" => 7, "TEXT" => "7:00"),
+					Array("VALUE" => 6, "TEXT" => "6:00"),
+					Array("VALUE" => 5, "TEXT" => "5:00"),
+					Array("VALUE" => 4, "TEXT" => "4:00"),
+					Array("VALUE" => 3, "TEXT" => "3:00"),
+					Array("VALUE" => 2, "TEXT" => "2:00"),
+					Array("VALUE" => 1, "TEXT" => "1:00"),
+				),
 				"EDITABLE" => TRUE,
 				"REQUIRED" => TRUE
 			)
@@ -62,25 +97,25 @@ $configSettings = Array(
 		)
 	),
 	"NOTIFICATION" => Array(
-		"HEADER" => "Notification",
+		"HEADER" => "Notification (optional)",
 		"SETTINGS" => Array(
 			"LANG_NOTIFICATION" => Array(
 				"TAG" => "LANG_NOTIFICATION",
-				"NAME" => "An optional notification area, displayed at the top of the page if set.",
+				"NAME" => "Notification text",
 				"TYPE" => "TEXT",
 				"EDITABLE" => TRUE,
 				"REQUIRED" => FALSE
 			),
 			"LANG_NOTIFICATION_IMAGE" => Array(
 				"TAG" => "LANG_NOTIFICATION_IMAGE",
-				"NAME" => "The notification can have an image, which displays on the side. Put the image URL here.",
+				"NAME" => "Notification Image URL",
 				"TYPE" => "TEXT",
 				"EDITABLE" => TRUE,
 				"REQUIRED" => FALSE
 			),
 			"LANG_NOTIFICATION_URL" => Array(
 				"TAG" => "LANG_NOTIFICATION_URL",
-				"NAME" => "The notification image can lead to a URL. If you want it to link to somewhere, put the URL here.",
+				"NAME" => "Notification Link URL",
 				"TYPE" => "TEXT",
 				"EDITABLE" => TRUE,
 				"REQUIRED" => FALSE
@@ -220,13 +255,41 @@ $configSettings = Array(
 	"NEW_JAM_DEFAULTS" => Array(
 		"HEADER" => "New Jam Defaults",
 		"SETTINGS" => Array(
-			"LANG_DEFAULT_JAM_COLORS" => Array(
-				"TAG" => "LANG_DEFAULT_JAM_COLORS",
-				"NAME" => "Default jam colors, use color hex codes (without pound sign #), separate with dashes and no whitespaces, example: 067BC2-D56062-F37748-ECC30B-84BCDA",
-				"TYPE" => "TEXT",
+			"LANG_DEFAULT_NUMBER_OF_COLORS" => Array(
+				"TAG" => "LANG_DEFAULT_NUMBER_OF_COLORS",
+				"NAME" => "Default number of colors (0..16)",
+				"TYPE" => "NUMBER",
 				"EDITABLE" => true,
 				"REQUIRED" => true
 			),
+			"LANG_DEFAULT_SATURATION" => Array(
+				"TAG" => "LANG_DEFAULT_SATURATION",
+				"NAME" => "Default saturation (0..255)",
+				"TYPE" => "NUMBER",
+				"EDITABLE" => true,
+				"REQUIRED" => true
+			),
+			"LANG_DEFAULT_BRIGHTNESS" => Array(
+				"TAG" => "LANG_DEFAULT_BRIGHTNESS",
+				"NAME" => "Default brightness (0..255)",
+				"TYPE" => "NUMBER",
+				"EDITABLE" => true,
+				"REQUIRED" => true
+			),
+			"LANG_DEFAULT_HUE_MIN" => Array(
+				"TAG" => "LANG_DEFAULT_HUE_MIN",
+				"NAME" => "Default minimum hue (0..255)",
+				"TYPE" => "NUMBER",
+				"EDITABLE" => true,
+				"REQUIRED" => true
+			),
+			"LANG_DEFAULT_HUE_MAX" => Array(
+				"TAG" => "LANG_DEFAULT_HUE_MAX",
+				"NAME" => "Default maximum hue (0..255)",
+				"TYPE" => "NUMBER",
+				"EDITABLE" => true,
+				"REQUIRED" => true
+			)
 		)
 	),
 	"ADMIN_SUGGESTIONS" => Array(
@@ -327,6 +390,22 @@ function LoadConfig(){
 				case "NUMBER":
 					$configEntry["TYPE_NUMBER"] = 1;
 				break;
+				case "ENUM":
+					$configEntry["TYPE_ENUM"] = 1;
+					$configEntry["ENUM_OPTIONS"] = Array();
+					foreach($configSettings[$configCategoryID]["SETTINGS"][$key]["ENUM_OPTIONS"] as $index => $enumOption){
+						$configEnumOption = Array(
+							"TEXT" => $enumOption["TEXT"],
+							"VALUE" => $enumOption["VALUE"]
+						);
+						if($value == $enumOption["VALUE"]){
+							$configEnumOption["ENUM_SELECTED"] = 1;
+						}
+						
+						$configEntry["ENUM_OPTIONS"][] = $configEnumOption;
+					}
+					
+				break;
 				case "TEXTAREA":
 					$configEntry["TYPE_TEXTAREA"] = 1;
 				break;
@@ -379,8 +458,15 @@ function SaveConfig($key, $newValue){
 	if(!IsAdmin()){
 		return;	//Lacks permissions to make edits
 	}
+			
+	$configCategoryID = "";
+	foreach($configSettings as $category => $entries){
+		if(array_key_exists($key, $entries["SETTINGS"])){
+			$configCategoryID = $category;
+		}
+	}
 	
-	if($configSettings[$key]["EDITABLE"] == FALSE){
+	if($configSettings[$configCategoryID]["SETTINGS"][$key]["EDITABLE"] == FALSE){
 		//Some configuration settings cannot be set via this interface for security reasons.
 		return;
 	}

@@ -5,6 +5,7 @@ function LoadEntries(){
 	
 	//Clear public lists which get updated by this function
 	$dictionary["jams"] = Array();
+	$dictionary["jams_with_deleted"] = Array();
 	$dictionary["authors"] = Array();
 	$jams = Array();
 	$authors = Array();
@@ -17,7 +18,7 @@ function LoadEntries(){
 	$totalEntries = 0;
 	$largest_jam_number = -1;
 	
-	$sql = "SELECT * FROM jam WHERE jam_deleted = 0 ORDER BY jam_jam_number DESC";
+	$sql = "SELECT * FROM jam ORDER BY jam_jam_number DESC";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
@@ -39,6 +40,9 @@ function LoadEntries(){
 		$newData["date"] = date("d M Y", strtotime($info["jam_start_datetime"]));
 		$newData["time"] = date("H:i", strtotime($info["jam_start_datetime"]));
 		$newData["colors"] = Array();
+		if(intval($info["jam_deleted"]) == 1){
+			$newData["jam_deleted"] = 1;
+		}
 		$jamColors = explode("|", $info["jam_colors"]);
 		if(count($jamColors) == 0){
 			$jamColors = Array("FFFFFF");
@@ -55,21 +59,23 @@ function LoadEntries(){
 			$firstJam = false;
 		}
 		
-		
 		$newData["is_recent"] = (intval($newData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]));
 		
-		$sql = "SELECT * FROM entry WHERE entry_deleted = 0 AND entry_jam_id = ".$newData["jam_id"]." ORDER BY entry_id ASC";
+		$sql = "SELECT * FROM entry WHERE entry_jam_id = ".$newData["jam_id"]." ORDER BY entry_id ASC";
 		$data2 = mysqli_query($dbConn, $sql);
 		$sql = "";
 		
-		$i = 0;
 		while($info2 = mysqli_fetch_array($data2)){
 			$entry = Array();
 			
 			//Entry basic information
+			$entry["entry_id"] = $info2["entry_id"];
 			$entry["title"] = $info2["entry_title"];
 			$entry["title_url_encoded"] = urlencode($info2["entry_title"]);
 			$entry["description"] = $info2["entry_description"];
+			if(intval($info2["entry_deleted"]) == 1){
+				$entry["entry_deleted"] = 1;
+			}
 			
 			//Entry color
 			$entry["color"] = "#".$info2["entry_color"];
@@ -139,33 +145,35 @@ function LoadEntries(){
 				$hasDesc = true;
 			}
 			
-			if(isset($authorList[$author])){
-				$authorList[$author]["entry_count"] += 1;
-				$authorList[$author]["recent_participation"] += (($newData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]) : 0);
-				if(intval($newData["jam_number"]) < intval($authorList[$author]["first_jam_number"])){
-					$authorList[$author]["first_jam_number"] = $newData["jam_number"];
-				}
-				if(intval($newData["jam_number"]) > intval($authorList[$author]["last_jam_number"])){
-					$authorList[$author]["last_jam_number"] = $newData["jam_number"];
-				}
-				$authorList[$author]["entries"][] = $entry;
-			}else{
-				if(isset($users[$author])){
-					$authorList[$author] = $users[$author];
+			if(!isset($entry["entry_deleted"])){
+				if(isset($authorList[$author])){
+					$authorList[$author]["entry_count"] += 1;
+					$authorList[$author]["recent_participation"] += (($newData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]) : 0);
+					if(intval($newData["jam_number"]) < intval($authorList[$author]["first_jam_number"])){
+						$authorList[$author]["first_jam_number"] = $newData["jam_number"];
+					}
+					if(intval($newData["jam_number"]) > intval($authorList[$author]["last_jam_number"])){
+						$authorList[$author]["last_jam_number"] = $newData["jam_number"];
+					}
+					$authorList[$author]["entries"][] = $entry;
 				}else{
-					//Author does not have matching account (very old entry)
-					$authorList[$author] = Array("username" => $author, "display_name" => $author_display);
+					if(isset($users[$author])){
+						$authorList[$author] = $users[$author];
+					}else{
+						//Author does not have matching account (very old entry)
+						$authorList[$author] = Array("username" => $author, "display_name" => $author_display);
+					}
+					$authorList[$author]["entry_count"] = 1;
+					$authorList[$author]["recent_participation"] = (($newData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]) : 0);
+					$authorList[$author]["first_jam_number"] = $newData["jam_number"];
+					$authorList[$author]["last_jam_number"] = $newData["jam_number"];
+					$authorList[$author]["entries"][] = $entry;
 				}
-				$authorList[$author]["entry_count"] = 1;
-				$authorList[$author]["recent_participation"] = (($newData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]) : 0);
-				$authorList[$author]["first_jam_number"] = $newData["jam_number"];
-				$authorList[$author]["last_jam_number"] = $newData["jam_number"];
-				$authorList[$author]["entries"][] = $entry;
-			}
 			
-			$newData["entries"][$i] = $entry;
-			$entries[] = $entry;
-			$i++;
+				$newData["entries"][] = $entry;
+				$entries[] = $entry;
+			}
+			$newData["entries_with_deleted"][] = $entry;
 		}
 		
 		$totalEntries += count($newData["entries"]);
@@ -198,14 +206,19 @@ function LoadEntries(){
 		}
 		
 		//Insert into dictionary array
-		$dictionary["jams"][] = $newData;
-		if($largest_jam_number < intval($newData["jam_number"])){
-			$largest_jam_number = intval($newData["jam_number"]);
-			$dictionary["current_jam"] = $newData;
+		if(!isset($newData["jam_deleted"])){
+			$dictionary["jams"][] = $newData;
+			$jams[] = $newData;
+			$jamFromStart++;
+			if($newData["jam_started"]){
+				if($largest_jam_number < intval($newData["jam_number"])){
+					$largest_jam_number = intval($newData["jam_number"]);
+					$dictionary["current_jam"] = $newData;
+				}
+			}
 		}
+		$dictionary["jams_with_deleted"][] = $newData;
 		
-		$jams[] = $newData;
-		$jamFromStart++;
 	}
 	
 	$dictionary["all_entries_count"] = $totalEntries;
@@ -724,6 +737,14 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		}
 		if(!$entryUpdated){
 			$currentJam = $jams[0];
+			
+			foreach($jams as $index => $eachJam){
+				if($eachJam["jam_started"]){
+					$currentJam = $jams[$index];
+					break;
+				}
+			}
+			
 			if ($jam_number != $currentJam["jam_number"]) {
 				die('Cannot make a new submission to a past jam');
 			}
@@ -853,6 +874,87 @@ function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 			}
 			break;
 		}
+	}
+}
+
+//Deletes an existing entry, identified by the entryID.
+function DeleteEntry($entryID){
+	global $jams, $dbConn;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		die("Only admins can delete entries.");
+	}
+	
+	if(!CanDeleteEntry($entryID)){
+		die("This entry cannot be deleted.");
+	}
+	
+	//Validate values
+	$entryID = intval($entryID);
+	if($entryID <= 0){
+		die("invalid jam ID");
+		return;
+	}
+	
+	if(count($jams) == 0){
+		return; //No jams exist
+	}
+	
+	$escapedEntryID = mysqli_real_escape_string($dbConn, "$entryID");
+	
+	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryID";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+}
+
+//Returns true / false based on whether or not the specified entry can be deleted
+function CanDeleteEntry($entryID){
+	global $jams, $dbConn;
+	
+	//Authorize user (is admin)
+	if(IsAdmin() === false){
+		return FALSE;
+	}
+	
+	//Validate values
+	$entryID = intval($entryID);
+	if($entryID <= 0){
+		return FALSE;
+	}
+	
+	if(!EntryExists($entryID)){
+		return FALSE;
+	}
+	
+	return true;
+}
+
+//Returns true / false based on whether or not the specified entry exists (and has not been deleted)
+function EntryExists($entryID){
+	global $dbConn;
+	
+	//Validate values
+	$entryID = intval($entryID);
+	if($entryID <= 0){
+		return FALSE;
+	}
+	
+	$escapedEntryID = mysqli_real_escape_string($dbConn, "$entryID");
+	
+	$sql = "
+		SELECT 1
+		FROM entry
+		WHERE entry_id = $escapedEntryID
+		AND entry_deleted = 0;
+		";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	if(mysqli_fetch_array($data)){
+		return true;
+	}else{
+		return false;
 	}
 }
 

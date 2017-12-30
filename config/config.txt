@@ -78,8 +78,12 @@ LANG_DISCORD_INVITE_URL |
 #Google Analytics code. Something like UA-00000000-1
 GOOGLE_ANALYTICS_CODE | 
 
-#Default jam colors, use color hex codes (without pound sign #), separate with dashes and no whitespaces, example: 067BC2-D56062-F37748-ECC30B-84BCDA
-LANG_DEFAULT_JAM_COLORS | FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA
+#Default HSL settings for new jam colors
+LANG_DEFAULT_NUMBER_OF_COLORS | 10
+LANG_DEFAULT_SATURATION | 160
+LANG_DEFAULT_BRIGHTNESS | 180
+LANG_DEFAULT_HUE_MIN | 0
+LANG_DEFAULT_HUE_MAX | 200
 
 #Administrator - inactivity warning (weeks since last participation)
 ADMIN_WARNING_WEEKS_SINCE_LAST_JAM | 20
