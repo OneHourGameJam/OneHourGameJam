@@ -314,6 +314,21 @@ CREATE TABLE `poll_vote` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
+-- Table structure for table `satisfaction`
+--
+
+CREATE TABLE `satisfaction` (
+  `satisfaction_id` int(11) NOT NULL AUTO_INCREMENT,
+  `satisfaction_datetime` datetime NOT NULL,
+  `satisfaction_ip` varchar(45) NOT NULL,
+  `satisfaction_user_agent` varchar(255) NOT NULL,
+  `satisfaction_question_id` varchar(255) NOT NULL,
+  `satisfaction_username` varchar(45) NOT NULL,
+  `satisfaction_score` int(11) NOT NULL,
+  PRIMARY KEY (`satisfaction_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin AUTO_INCREMENT=1 ;
+
+--
 -- Table structure for table `session`
 --
 
@@ -323,7 +338,7 @@ CREATE TABLE `session` (
   `session_datetime_started` datetime DEFAULT NULL,
   `session_datetime_last_used` datetime DEFAULT NULL,
   PRIMARY KEY (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
 -- Table structure for table `theme`

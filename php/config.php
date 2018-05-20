@@ -174,6 +174,18 @@ $configSettings = Array(
 			)
 		)
 	),
+	"SATISFACTION" => Array(
+		"HEADER" => "Satisfaction",
+		"SETTINGS" => Array(
+			"SATISFACTION_RATINGS_TO_SHOW_SCORE" => Array(
+				"TAG" => "SATISFACTION_RATINGS_TO_SHOW_SCORE",
+				"NAME" => "Total number of satisfaction ratings needed for them to become publicly visible.",
+				"TYPE" => "NUMBER",
+				"EDITABLE" => TRUE,
+				"REQUIRED" => TRUE
+			),
+		)
+	),
 	"SECURITY" => Array(
 		"HEADER" => "Security",
 		"SETTINGS" => Array(

@@ -7,7 +7,7 @@
 			<div class='panel-heading' style='background-color: {{#jam_deleted}}#F7D9D9{{/jam_deleted}}{{^jam_deleted}}#D9EDF7{{/jam_deleted}};'>
 				<span style='font-size: 16px;'>
 					<form method='POST' action='?page=editjam'>
-						<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}})
+						<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores))
 						<input type='hidden' name='jamnumber' value='{{jam_number}}'>
 						<button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button>
 					</form>
@@ -15,6 +15,19 @@
 			</div>
 			
 			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+				<div style='width: 100%; text-align: center;'>
+					<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
+					<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>
+					<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-3}}</div>
+					<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-2}}</div>
+					<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-1}}</div>
+					<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score0}}</div>
+					<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score1}}</div>
+					<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score2}}</div>
+					<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score3}}</div>
+					<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score4}}</div>
+					<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score5}}</div>
+				</div>
 				{{#entries_with_deleted}}
 					<div class='panel panel-default col-md-12' style='padding-left: 0px; padding-right: 0px; {{#entry_deleted}}background-color: #FDF7F7{{/entry_deleted}}'>
 						<div class='panel-body' style='text-align: center;'>

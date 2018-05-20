@@ -41,6 +41,9 @@ THEME_NUMBER_TO_MARK_KEEP | 20
 #Number of jams which are considered 'recent' when calculating recent jam participation.
 JAMS_CONSIDERED_RECENT | 10
 
+#Number of satisfaction ratings needed to publicly show score
+SATISFACTION_RATINGS_TO_SHOW_SCORE | 5
+
 #Site-wide salt, used for passwords.
 #Auto generated if left blank, if changed this invalidates all user passwords on the site.
 PEPPER | 

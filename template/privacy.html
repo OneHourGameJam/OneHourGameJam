@@ -63,6 +63,15 @@
 				<li>The username of the user who voted</li>
 			</ul>
 			
+			<li>For each satisfaction vote, the following user data is stored:</li>
+			<ul>
+				<li>Date and time when the vote was cast</li>
+				<li>IP Address and User Agent of user who cast the vote</li>
+				<li>The question identifier which was voted on (for example JAM_160 when casting a satisfaction vote for jam 160)</li>
+				<li>The option which was voted for</li>
+				<li>The username of the user who voted</li>
+			</ul>
+			
 			<li>For each user session, the following user data is stored:</li>
 			<ul>
 				<li>The ID of the logged in user</li>
@@ -92,13 +101,13 @@
 				Event dates and times, IP Addresses and User Agent information is stored to identify users in cases of abuse.
 			</li>
 			<li>
-				Usernames, password validation information, session IDs and the user's role are stored to authenticate and authorize users
+				Usernames, password validation information, session IDs and the user's role are stored to authenticate and authorize users.
 			</li>
 			<li>
-				Email addresses, Twitter handles, Bio, Theme text, Cast vote, Entry title, Entry description, Entry URLs, Entry image, Entry color, Voted for option and any other user-entered fields are considered voluntarily entered. Removing these fields (e.g. submitting them as blank) will (unless otherwise stated upon submission) remove them from public visibility, the old versions may however remain in logs or administrator-only tools. See "How can you control your data" for more details
+				Email addresses, Twitter handles, Bio, Theme text, Cast vote, Entry title, Entry description, Entry URLs, Entry image, Entry color, Voted for option and any other user-entered fields are considered voluntarily entered. Removing these fields (e.g. submitting them as blank) will (unless otherwise stated upon submission) remove them from public visibility, the old versions may however remain in logs or administrator-only tools. See "How can you control your data" for more details.
 			</li>
 			<li>
-				For theme votes and poll votes, the cast votes are directly tied to the user who cast them. This is done to ensure each user can only cast one vote and to indicate to the user what they voted for. In the case of theme votes, it is so we can color the currently-voted-for option. This is also done to mittigate cases of vote abuse or to check what different groups of users voted for - for example select only what recent participants voted for. This does mean that there is enough data available to check what each user individually has voted for (themes and polls).
+				For theme votes, poll votes and satisfaction votes, the cast votes are directly tied to the user who cast them. This is done to ensure each user can only cast one vote and to indicate to the user what they voted for. In the case of theme votes, it is so we can color the currently-voted-for option. This is also done to mittigate cases of vote abuse or to check what different groups of users voted for - for example select only what recent participants voted for. This does mean that there is enough data available to check what each user individually has voted for (themes, polls and satisfaction).
 			</li>
 		</ul>
 	</p>

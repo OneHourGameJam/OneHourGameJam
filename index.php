@@ -64,6 +64,11 @@ if(isset($_POST["action"])){
 			$jamColorNumber = (isset($_POST["colorNumber"])) ? intval($_POST["colorNumber"]) : 0;
 			
 			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber);
+			
+			$satisfaction = (isset($_POST["satisfaction"])) ? intval($_POST["satisfaction"]) : 0;
+			if($satisfaction != 0){
+				SubmitSatisfaction("JAM_$jamNumber", $satisfaction);
+			}
 		break;
 		case "newjam":
 			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
@@ -338,6 +343,7 @@ switch($page){
 		$dictionary["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser["username"]);
 	break;
 }
 
@@ -388,6 +394,7 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 
 							foreach($jam["entries"] as $jam_entry){
 								if($jam_entry["author"] == $loggedInUser["username"]){
+									$dictionary["user_submitted_to_this_jam"] = true;
 									$dictionary["user_entry_name"] = $jam_entry["title"];
 									if($jam_entry["screenshot_url"] != "logo.png"){
 										$dictionary["user_entry_screenshot"] = $jam_entry["screenshot_url"];

@@ -12,6 +12,7 @@ function Init(){
 	LoadThemes();
 	LoadAssets();
 	LoadPolls();
+	LoadSatisfaction();
 	InitStream();
 	GetNextJamDateAndTime();
 }
