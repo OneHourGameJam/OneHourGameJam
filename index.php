@@ -29,6 +29,20 @@ if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "asset
 	$page = "main";
 }
 
+//List of pages which require user to be logged in
+if(in_array($page, Array("submit", "newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "userdata"))){
+	if(!IsLoggedIn()){
+		$page = "main";
+	}
+}
+
+//List of pages which require administrator access
+if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser"))){
+	if(!IsAdmin()){
+		$page = "main";
+	}
+}
+
 //Actions!
 $action = "";
 if(isset($_POST["action"])){
