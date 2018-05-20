@@ -336,5 +336,36 @@ function UnbanTheme($unbannedTheme){
 }
 
 
+function GetThemesOfUserFormatted($username){
+	global $dbConn;
+	
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
+	$sql = "
+		SELECT *
+		FROM theme
+		WHERE theme_author = '$escapedUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
+function GetThemeVotesOfUserFormatted($username){
+	global $dbConn;
+	
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
+	$sql = "
+		SELECT theme.theme_text, themevote.*, IF(themevote.themevote_type = 1, '-1', IF(themevote.themevote_type = 2, '0', '+1'))
+		FROM themevote, theme
+		WHERE theme.theme_id = themevote.themevote_theme_id
+		  AND themevote_username = '$escapedUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
 
 ?>

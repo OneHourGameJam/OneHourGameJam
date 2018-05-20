@@ -554,5 +554,20 @@ function LoadBio($user) {
 	return $user;
 }
 
+function GetUsersOfUserFormatted($username){
+	global $dbConn;
+	
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
+	$sql = "
+		SELECT *
+		FROM user
+		WHERE user_username = '$escapedUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
 
 ?>

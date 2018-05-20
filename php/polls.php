@@ -103,5 +103,22 @@ function LoadPolls(){
 }
 
 
+function GetPollVotesOfUserFormatted($username){
+	global $dbConn;
+	
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
+	$sql = "
+		SELECT poll.poll_question, poll_option.option_poll_text, poll_vote.*
+		FROM poll_vote, poll_option, poll
+		WHERE poll_vote.vote_option_id = poll_option.option_id
+		  AND poll_option.option_poll_id = poll.poll_id
+		  AND poll_vote.vote_username = '$escapedUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
 
 ?>

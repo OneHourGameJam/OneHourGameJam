@@ -30,7 +30,7 @@ if(isset($_GET["page"])){
 }
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata")))){
 	$page = "main";
 }
 
@@ -330,6 +330,15 @@ switch($page){
 	case "submit":
 		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["current_jam"]["jam_number"];
 	break;
+	case "userdata":
+		$dictionary["userdata_assets"] = GetAssetsOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_entries"] = GetEntriesOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_poll_votes"] = GetPollVotesOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_themes"] = GetThemesOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
+		
+	break;
 }
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
@@ -500,6 +509,12 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 						break;
 						case "authors":
 							print $mustache->render(file_get_contents($templateBasePath."authors.html"), $dictionary);
+						break;
+						case "privacy":
+							print $mustache->render(file_get_contents($templateBasePath."privacy.html"), $dictionary);
+						break;
+						case "userdata":
+							print $mustache->render(file_get_contents($templateBasePath."userdata.html"), $dictionary);
 						break;
 					}
 				?>

@@ -958,4 +958,19 @@ function EntryExists($entryID){
 	}
 }
 
+function GetEntriesOfUserFormatted($author){
+	global $dbConn;
+	
+	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+	$sql = "
+		SELECT *
+		FROM entry
+		WHERE entry_author = '$escapedAuthor';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
 ?>

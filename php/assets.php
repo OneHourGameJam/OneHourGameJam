@@ -260,4 +260,19 @@ function DeleteAsset($assetID){
 	LoadAssets();
 }
 
+function GetAssetsOfUserFormatted($author){
+	global $dbConn;
+	
+	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+	$sql = "
+		SELECT *
+		FROM asset
+		WHERE asset_author = '$escapedAuthor';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data));
+}
+
 ?>

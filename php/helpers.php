@@ -140,4 +140,51 @@ function CleanHtml($html) {
 	}
 }
 
+// Converts a MySQL data object into an Array (Skips numeric keys aka $data[0], $data[1], etc.)
+function MySQLDataToArray($data){
+	$result = Array();
+	while($asset = mysqli_fetch_array($data)){
+		$row = Array();
+		foreach($asset as $key => $value){
+			if(!is_numeric($key)){
+				$row[$key] = $value;
+			}
+		}
+		$result[] = $row;
+	}
+	
+	return $result;
+}
+
+// Converts a two dimensional array into a html-formatted table (string output)
+function ArrayToHTML($array){
+	
+	$str = "<table style='border: solid 1px'>";
+	
+	foreach($array as $id => $row){
+		$str .= "<tr style='border: solid 2px'><td>#</td>";
+		foreach($row as $key => $value){
+			$str .= "<th style='border: solid 2px'>";
+			$str .= "$key";
+			$str .= "</th>";
+		}
+		$str .= "</tr>";
+		break;
+	}
+	
+	foreach($array as $id => $row){
+		$str .= "<tr style='border: solid 1px'><td>$id</td>";
+		foreach($row as $key => $value){
+			$str .= "<td style='border: solid 1px'>";
+			$str .= "$value";
+			$str .= "</td>";
+		}
+		$str .= "</tr>";
+	}
+	
+	$str .= "</table>";
+	
+	return $str;
+}
+
 ?>
