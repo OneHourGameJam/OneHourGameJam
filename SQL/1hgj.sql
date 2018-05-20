@@ -267,6 +267,7 @@ CREATE TABLE `jam` (
   `jam_datetime` datetime DEFAULT NULL,
   `jam_ip` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
   `jam_user_agent` mediumtext COLLATE utf8mb4_bin,
+  `jam_username` varchar(45) COLLATE utf8mb4_bin DEFAULT NULL,
   `jam_jam_number` int(11) DEFAULT NULL,
   `jam_theme` mediumtext COLLATE utf8mb4_bin,
   `jam_start_datetime` datetime DEFAULT NULL,

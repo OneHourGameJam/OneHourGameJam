@@ -35,6 +35,7 @@ function LoadEntries(){
 		$newData["start_time"] = $info["jam_start_datetime"];
 		$newData["jam_id"] = intval($info["jam_id"]);
 		$newData["jam_number_ordinal"] = ordinal(intval($info["jam_jam_number"]));
+		$newData["username"] = $info["jam_username"];
 		$newData["theme"] = $info["jam_theme"];
 		$newData["theme_visible"] = $info["jam_theme"]; //Used for administration
 		$newData["date"] = date("d M Y", strtotime($info["jam_start_datetime"]));
@@ -298,13 +299,14 @@ function LoadEntries(){
 //(checks whether or not they are an admin).
 //TODO: Replace die() with in-page warning
 function CreateJam($theme, $date, $time, $colorsList){
-	global $dbConn, $ip, $userAgent;
+	global $dbConn, $ip, $userAgent, $loggedInUser;
 	
 	$currentJamData = GetCurrentJamNumberAndID();
 	$jamNumber = intval($currentJamData["NUMBER"] + 1);
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
+	$username = trim($loggedInUser["username"]);
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
@@ -354,6 +356,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$escapedJamNumber = mysqli_real_escape_string($dbConn, $newJam["jam_number"]);
 	$escapedTheme = mysqli_real_escape_string($dbConn, $newJam["theme"]);
 	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
@@ -365,6 +368,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 		jam_datetime,
 		jam_ip,
 		jam_user_agent,
+		jam_username,
 		jam_jam_number,
 		jam_theme,
 		jam_start_datetime,
@@ -375,6 +379,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 		Now(),
 		'$escapedIP',
 		'$escapedUserAgent',
+		'$escapedUsername',
 		'$escapedJamNumber',
 		'$escapedTheme',
 		'$escapedStartTime',
@@ -966,6 +971,20 @@ function GetEntriesOfUserFormatted($author){
 		SELECT *
 		FROM entry
 		WHERE entry_author = '$escapedAuthor';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+function GetJamsOfUserFormatted($author){
+	global $dbConn;
+	
+	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+	$sql = "
+		SELECT *
+		FROM jam
+		WHERE jam_author = '$escapedAuthor';
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

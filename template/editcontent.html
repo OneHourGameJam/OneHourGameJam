@@ -7,7 +7,7 @@
 			<div class='panel-heading' style='background-color: {{#jam_deleted}}#F7D9D9{{/jam_deleted}}{{^jam_deleted}}#D9EDF7{{/jam_deleted}};'>
 				<span style='font-size: 16px;'>
 					<form method='POST' action='?page=editjam'>
-						<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries)
+						<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}})
 						<input type='hidden' name='jamnumber' value='{{jam_number}}'>
 						<button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button>
 					</form>

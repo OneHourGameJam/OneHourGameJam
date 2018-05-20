@@ -337,7 +337,7 @@ switch($page){
 		$dictionary["userdata_themes"] = GetThemesOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
-		
+		$dictionary["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser["username"]);
 	break;
 }
 
