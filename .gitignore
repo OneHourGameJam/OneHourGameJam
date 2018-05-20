@@ -4,3 +4,4 @@ cache/*
 custom/*
 plugins/migratedata/*.json
 .vscode/
+vendor/*

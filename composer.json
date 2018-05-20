@@ -1,0 +1,6 @@
+{
+    "require": {
+        "mustache/mustache": "2.11.*",
+        "components/jquery": "1.11.*"
+    }
+}
