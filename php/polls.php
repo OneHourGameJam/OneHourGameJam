@@ -203,10 +203,12 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 	global $dbConn, $ip, $userAgent, $loggedInUser;
 	
 	if($score < -5){
-		die("Invalid satisfaction score");
+		AddDataWarning("Invalid satisfaction score", false);
+		return;
 	}
 	if($score > 5){
-		die("Invalid satisfaction score");
+		AddDataWarning("Invalid satisfaction score", false);
+		return;
 	}
 	
 	$username = trim($loggedInUser["username"]);
@@ -236,6 +238,8 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 		'$escapedScore');";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	AddDataSuccess("Satisfaction score submitted", false);
 }
 
 

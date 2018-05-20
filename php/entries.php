@@ -297,7 +297,6 @@ function LoadEntries(){
 //and time. All three are non-blank strings. $date and $time should be
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
-//TODO: Replace die() with in-page warning
 function CreateJam($theme, $date, $time, $colorsList){
 	global $dbConn, $ip, $userAgent, $loggedInUser;
 	
@@ -310,36 +309,43 @@ function CreateJam($theme, $date, $time, $colorsList){
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
-			die("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA");
+			AddDataWarning("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA", false);
+			return;
 		}
 		$colorsList[$i] = $clr;
 	}
 	
 	//Authorize user (logged in)
 	if(IsLoggedIn() === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can create jams.");
+		AddAuthorizationWarning("Only admins can create jams.", false);
+		return;
 	}
 	
 	//Validate jam number
 	if($jamNumber <= 0){
-		die("Invalid jam number");
+		AddDataWarning("Invalid jam number", false);
+		return;
 	}
 	
 	//Validate theme
 	if(strlen($theme) <= 0){
-		die("Invalid theme");
+		AddDataWarning("Invalid theme", false);
+		return;
 	}
 	
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
-		die("Invalid date");
+		AddDataWarning("Invalid date", false);
+		return;
 	}else if(strlen($time) <= 0){
-		die("Invalid time");
+		AddDataWarning("Invalid time", false);
+		return;
 	}else{
 		$datetime = strtotime($date." ".$time." UTC");
 	}
@@ -388,6 +394,8 @@ function CreateJam($theme, $date, $time, $colorsList){
 	
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	AddDataSuccess("Jam Scheduled");
 }
 
 //Edits an existing jam, identified by the jam number.
@@ -397,7 +405,8 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can edit jams.");
+		AddAuthorizationWarning("Only admins can edit jams.", false);
+		return;
 	}
 	
 	$theme = trim($theme);
@@ -409,7 +418,8 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
-			die("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA");
+			AddDataWarning("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA", false);
+			return;
 		}
 		$colorSHexCodes[] = $clr;
 	}
@@ -418,20 +428,22 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	//Validate values
 	$jamNumber = intval($jamNumber);
 	if($jamNumber <= 0){
-		die("invalid jam number");
+		AddDataWarning("invalid jam number", false);
 		return;
 	}
 	
 	if(strlen($theme) <= 0){
-		die("invalid theme");
+		AddDataWarning("invalid theme", false);
 		return;
 	}
 	
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
-		die("Invalid date");
+		AddDataWarning("Invalid date", false);
+		return;
 	}else if(strlen($time) <= 0){
-		die("Invalid time");
+		AddDataWarning("Invalid time", false);
+		return;
 	}else{
 		$datetime = strtotime($date." ".$time." UTC");
 	}
@@ -454,6 +466,8 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 		  AND jam_deleted = 0";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	AddDataSuccess("Jam Updated");
 }
 
 
@@ -464,17 +478,19 @@ function DeleteJam($jamID){
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can delete jams.");
+		AddAuthorizationWarning("Only admins can delete jams.", false);
+		return;
 	}
 	
 	if(!CanDeleteJam($jamID)){
-		die("This jam cannot be deleted.");
+		AddInternalDataError("This jam cannot be deleted.", false);
+		return;
 	}
 	
 	//Validate values
 	$jamID = intval($jamID);
 	if($jamID <= 0){
-		die("invalid jam ID");
+		AddDataWarning("invalid jam ID", false);
 		return;
 	}
 	
@@ -487,6 +503,8 @@ function DeleteJam($jamID){
 	$sql = "UPDATE jam SET jam_deleted = 1 WHERE jam_id = $escapedJamID";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	AddDataSuccess("Jam Deleted");
 }
 
 //Returns true / false based on whether or not the specified jam can be deleted
@@ -573,7 +591,6 @@ function GetJamByNumber($jamNumber) {
 //$gameURL must be a valid URL, $screenshotURL can either be blank or a valid URL.
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
-//TODO: Replace die() with in-page warning
 function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
 	
@@ -592,12 +609,14 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	
 	//Authorize user
 	if(IsLoggedIn() === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	//Validate game name
 	if(strlen($gameName) < 1){
-		die("Game name not provided");
+		AddDataWarning("Game name not provided", false);
+		return;
 	}
 	
 	$urlValid = FALSE;
@@ -617,30 +636,36 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	
 	//Did at least one url pass validation?
 	if($urlValid == FALSE){
-		die("Invalid game url");
+		AddDataWarning("Invalid game url", false);
+		return;
 	}
 	
 	//Validate description
 	if(strlen($description) <= 0){
-		die("Invalid description");
+		AddDataWarning("Invalid description", false);
+		return;
 	}
 	
 	//Check that a jam exists
 	if (!is_int($jam_number)) {
-		die('Invalid jam number');
+		AddDataWarning('Invalid jam number', false);
+		return;
 	}
 	$jam = GetJamByNumber($jam_number);
 	if($jam == null || $jam["jam_number"] == 0){
-		die("No jam to submit to");
+		AddInternalDataError("No jam to submit to", false);
+		return;
 	}
 	
 	if(count($jams) == 0){
-		die("No jam to submit to");
+		AddInternalDataError("No jam to submit to", false);
+		return;
 	}
 	
 	//Validate color
 	if($jamColorNumber < 0 || count($jam["colors"]) <= $jamColorNumber){
-		die("Selected invalid color");
+		AddDataWarning("Selected invalid color", false);
+		return;
 	}
 	$color = $jam["colors"][$jamColorNumber]["color_hex"];
 	
@@ -655,18 +680,21 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		if($check !== false) {
 			$uploadPass = 1;
 		} else {
-			die("Uploaded screenshot is not an image");
+			AddDataWarning("Uploaded screenshot is not an image", false);
+			return;
 			$uploadPass = 0;
 		}
 		
 		if ($_FILES["screenshotfile"]["size"] > 5000000) {
-			die("Uploaded screenshot is too big (max 5MB)");
+			AddDataWarning("Uploaded screenshot is too big (max 5MB)", false);
+			return;
 			$uploadPass = 0;
 		}
 		
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 		&& $imageFileType != "gif" ) {
-			die("Uploaded screenshot is not jpeg, png or gif");
+			AddDataWarning("Uploaded screenshot is not jpeg, png or gif", false);
+			return;
 			$uploadPass = 0;
 		}
 		
@@ -736,6 +764,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 				";
 				$data = mysqli_query($dbConn, $sql);
 				$sql = "";
+	
+				AddDataSuccess("Game Updated");
 				
 				$entryUpdated = true;
 			}
@@ -751,7 +781,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			}
 			
 			if ($jam_number != $currentJam["jam_number"]) {
-				die('Cannot make a new submission to a past jam');
+				AddDataWarning('Cannot make a new submission to a past jam', false);
+				return;
 			}
 
 			$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
@@ -816,6 +847,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			";
 			$data = mysqli_query($dbConn, $sql);
 			$sql = "";
+	
+			AddDataSuccess("Game Submitted");
 		}
 	}
 	
@@ -829,7 +862,8 @@ function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can edit entries.");
+		AddAuthorizationWarning("Only admins can edit entries.", false);
+		return;
 	}
 	
 	$author = trim($author);
@@ -840,26 +874,28 @@ function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
 	//Validate values
 	$jamNumber = intval($jamNumber);
 	if($jamNumber <= 0){
-		die("invalid jam number");
+		AddDataWarning("invalid jam number", false);
 		return;
 	}
 	
 	//Validate title
 	if(strlen($title) <= 0){
-		die("invalid title");
+		AddDataWarning("invalid title", false);
 		return;
 	}
 	
 	//Validate Game URL
 	if(SanitizeURL($gameURL) === false){
-		die("Invalid game URL");
+		AddDataWarning("Invalid game URL", false);
+		return;
 	}
 	
 	//Validate Screenshot URL
 	if($screenshotURL == ""){
 		$screenshotURL = "logo.png";
 	}else if(SanitizeURL($screenshotURL) === false){
-		die("Invalid screenshot URL. Leave blank for default.");
+		AddDataWarning("Invalid screenshot URL. Leave blank for default.", false);
+		return;
 	}
 	
 	if(count($jams) == 0){
@@ -888,17 +924,19 @@ function DeleteEntry($entryID){
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can delete entries.");
+		AddAuthorizationWarning("Only admins can delete entries.", false);
+		return;
 	}
 	
 	if(!CanDeleteEntry($entryID)){
-		die("This entry cannot be deleted.");
+		AddDataWarning("This entry cannot be deleted.", false);
+		return;
 	}
 	
 	//Validate values
 	$entryID = intval($entryID);
 	if($entryID <= 0){
-		die("invalid jam ID");
+		AddDataWarning("invalid jam ID", false);
 		return;
 	}
 	
@@ -911,6 +949,8 @@ function DeleteEntry($entryID){
 	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryID";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	AddDataSuccess("Game Deleted");
 }
 
 //Returns true / false based on whether or not the specified entry can be deleted
@@ -977,14 +1017,15 @@ function GetEntriesOfUserFormatted($author){
 	
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
-function GetJamsOfUserFormatted($author){
+
+function GetJamsOfUserFormatted($username){
 	global $dbConn;
 	
-	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
 		SELECT *
 		FROM jam
-		WHERE jam_author = '$escapedAuthor';
+		WHERE jam_username = '$escapedUsername';
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

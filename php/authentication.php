@@ -11,7 +11,6 @@ function GenerateSalt(){
 //reasons, set to 100 < iterations < 100k. We suggest that passwords and session IDs
 //are hashed at least 10k times
 //TODO: Move min and max iterations to config
-//TODO: Replace die() with in-page warning
 function HashPassword($password, $salt, $iterations){
 	global $config;
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "";
@@ -19,9 +18,11 @@ function HashPassword($password, $salt, $iterations){
 	
 	//Check that we have sufficient iterations for password generation.
 	if($iterations < 100){
-		die("Insufficient iterations for password generation.");
+		AddInternalDataError("Insufficient iterations for password generation.", false);
+		return;
 	}else if($iterations > 100000){
-		die("Too many iterations for password generation.");
+		AddInternalDataError("Too many iterations for password generation.", false);
+		return;
 	}
 	
 	for($i = 0; $i < $iterations; $i++){
@@ -71,9 +72,7 @@ function LoadUsers(){
 }
 
 //Function called when the login form is sent. Either logs in or registers the
-//user, depending on whether the username exists. Dies if username exists and the
-//password is incorrect.
-//TODO: Replace die() with in-page warning
+//user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
 	global $config, $users;
 	
@@ -82,17 +81,20 @@ function LogInOrRegister($username, $password){
 	
 	//Check username length
 	if(strlen($username) < 2 || strlen($username) > 20){
-		die("username must be between 2 and 20 characters");
+		AddDataWarning("username must be between 2 and 20 characters", false);
+		return;
 	}
 	
 	//Check password length
 	if(strlen($password) < 8){
-		die("password must be at least 8 characters long");
+		AddDataWarning("password must be at least 8 characters long", false);
+		return;
 	}
 	
 	//Check password length
 	if(strlen($password) > 128){
-		die("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;");
+		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
+		return;
 	}
 	
 	if(isset($users[$username])){
@@ -105,9 +107,7 @@ function LogInOrRegister($username, $password){
 }
 
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
-//Dies if user already exists.
 //Calls LogInUser(...) after registering the user to also log them in.
-//TODO: Replace die() with in-page warning
 function RegisterUser($username, $password){
 	global $users, $dbConn, $ip, $userAgent;
 	
@@ -116,17 +116,20 @@ function RegisterUser($username, $password){
 	
 	//Check username length
 	if(strlen($username) < 2 || strlen($username) > 20){
-		die("username must be between 2 and 20 characters");
+		AddDataWarning("username must be between 2 and 20 characters", false);
+		return;
 	}
 	
 	//Check password length
 	if(strlen($password) < 8){
-		die("password must be at least 8 characters long");
+		AddDataWarning("password must be at least 8 characters long", false);
+		return;
 	}
 	
 	//Check password length
 	if(strlen($password) > 128){
-		die("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;");
+		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
+		return;
 	}
 	
 	$userSalt = GenerateSalt();
@@ -135,7 +138,8 @@ function RegisterUser($username, $password){
 	$admin = (count($users) == 0) ? 1 : 0;
 	
 	if(isset($users[$username])){
-		die("Username already registered");
+		AddDataWarning("Username already registered", false);
+		return;
 	}else{
 		$newUser = Array();
 		$newUser["salt"] = $userSalt;
@@ -191,8 +195,6 @@ function RegisterUser($username, $password){
 //Logs in the user with the provided credentials.
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
-//Dies if user does not exist or the password is incorrect
-//TODO: Replace die() with in-page warning
 function LogInUser($username, $password){
 	global $config, $users;
 	
@@ -201,11 +203,13 @@ function LogInUser($username, $password){
 	
 	//Check username length
 	if(strlen($username) < 2 || strlen($username) > 20){
-		die("username must be between 2 and 20 characters");
+		AddDataWarning("username must be between 2 and 20 characters", false);
+		return;
 	}
 	
 	if(!isset($users[$username])){
-		die("User does not exist");
+		AddDataWarning("User does not exist", false);
+		return;
 	}
 	
 	$user = $users[$username];
@@ -249,7 +253,8 @@ function LogInUser($username, $password){
 		
 	}else{
 		//User password incorrect!
-		die("Incorrect username / password combination.");
+		AddDataWarning("Incorrect username / password combination.", false);
+		return;
 	}
 }
 
@@ -341,7 +346,8 @@ function EditUser($username, $isAdmin){
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can edit entries.");
+		AddAuthorizationWarning("Only admins can edit entries.", false);
+		return;
 	}
 	
 	//Validate values
@@ -350,13 +356,13 @@ function EditUser($username, $isAdmin){
 	}else if($isAdmin == 1){
 		$isAdmin = 1;
 	}else{
-		die("Bad isadmin value");
+		AddDataWarning("Bad isadmin value", false);
 		return;
 	}
 	
 	//Check that the user exists
 	if(!isset($users[$username])){
-		die("User does not exist");
+		AddDataWarning("User does not exist", false);
 		return;
 	}
 		
@@ -383,17 +389,20 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
 	
 	//Authorize user (is admin)
 	if($loggedInUser === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	//Validate values
 	if(!$displayName || strlen($displayName) <= 0 || strlen($displayName) > 50){
-		die("Display name must be between 0 and 50 characters long");
+		AddDataWarning("Display name must be between 0 and 50 characters long", false);
+		return;
 	}
 	
 	//Validate email address
 	if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-		die("Provided email address is not valid");
+		AddDataWarning("Provided email address is not valid", false);
+		return;
 	}
 		
 	$displayNameClean = mysqli_real_escape_string($dbConn, $displayName);
@@ -426,24 +435,27 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	
 	//Authorize user (is admin)
 	if($loggedInUser === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	$newPassword1 = trim($newPassword1);
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
-		die("passwords don't match");
+		AddDataWarning("passwords don't match", false);
+		return;
 	}
 	$password = $newPassword1;
 	
 	//Check password length
 	if(strlen($password) < 8){
-		die("password must be longer than 8 characters");
+		AddDataWarning("password must be longer than 8 characters", false);
+		return;
 	}
 	
 	//Check that the user exists
 	if(!isset($users[$loggedInUser["username"]])){
-		die("User does not exist");
+		AddDataWarning("User does not exist", false);
 		return;
 	}
 	
@@ -453,7 +465,8 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$userPasswordIterations = intval($user["password_iterations"]);
 	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations);
 	if($correctPasswordHash != $passwordHash){
-		die("The entered password is incorrect.");
+		AddDataWarning("The entered password is incorrect.", false);
+		return;
 	}
 	
 	//Generate new salt, number of iterations and hashed password.
@@ -491,24 +504,27 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can edit entries.");
+		AddAuthorizationWarning("Only admins can edit entries.", false);
+		return;
 	}
 	
 	$newPassword1 = trim($newPassword1);
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
-		die("passwords don't match");
+		AddDataWarning("passwords don't match", false);
+		return;
 	}
 	$password = $newPassword1;
 	
 	//Check password length
 	if(strlen($password) < 8){
-		die("password must be longer than 8 characters");
+		AddDataWarning("password must be longer than 8 characters", false);
+		return;
 	}
 	
 	//Check that the user exists
 	if(!isset($users[$username])){
-		die("User does not exist");
+		AddDataWarning("User does not exist", false);
 		return;
 	}
 	

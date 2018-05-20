@@ -12,6 +12,7 @@ include_once("php/global.php");
 //Global functions
 include_once("php/helpers.php");
 include_once("php/sanitize.php");
+include_once("php/warnings.php");
 include_once("php/config.php");
 include_once("php/db.php");
 include_once("php/authentication.php");

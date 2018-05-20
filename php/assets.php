@@ -71,30 +71,36 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	
 	//Authorize user
 	if(!IsAdmin()){
-		die("Must be a site admin to upload assets.");
+		AddAdminAuthorizationWarning(false);
+		return;
 	}
 	
 	//Validate author
 	if(strlen($author) < 1){
-		die("Asset author is empty");
+		AddDataWarning("Asset author is empty", false);
+		return;
 	}
 	if(!isset($users[$author])){
-		die("Author is not a valid user (must use their username)");
+		AddDataWarning("Author is not a valid user (must use their username)", false);
+		return;
 	}
 	
 	//Validate title
 	if(strlen($title) < 1){
-		die("Asset title is empty");
+		AddDataWarning("Asset title is empty", false);
+		return;
 	}
 	
 	//Validate description
 	if(strlen($description) < 1){
-		die("Asset description is empty");
+		AddDataWarning("Asset description is empty", false);
+		return;
 	}
 	
 	//Validate type
 	if(strlen($type) < 1){
-		die("Asset type is blank");
+		AddDataWarning("Asset type is blank", false);
+		return;
 	}
 	switch($type){
 		case "AUDIO":
@@ -105,7 +111,8 @@ function AddAsset($assetID, $author, $title, $description, $type){
 			//ok
 		break;
 		default:
-			die("Invalid asset type");
+			AddDataWarning("Invalid asset type", false);
+			return;
 		break;
 	}
 	
@@ -124,7 +131,8 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		}
 	}
 	if($fileNumber == -1){
-		die("Could not find valid file name for asset.");
+		AddInternalDataError("Could not find valid file name for asset.", false);
+		return;
 	}
 	
 	//Upload asset
@@ -132,12 +140,12 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	$asset_folder = "assets/$author";
 	$asset_name = "$fileNumber.$ext";
 	if(isset($_FILES["assetfile"]) && $_FILES["assetfile"] != null && $_FILES["assetfile"]["size"] != 0){
-		print_r($_FILES["assetfile"]);
 		$uploadPass = 1;
 		$target_file = $asset_folder ."/". $asset_name;
 		
 		if ($_FILES["assetfile"]["size"] > 15000000) {
-			die("Uploaded screenshot is too big (max 15MB)");
+			AddDataWarning("Uploaded screenshot is too big (max 15MB)", false);
+			return;
 			$uploadPass = 0;
 		}
 		
@@ -152,7 +160,8 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	}
 	
 	if($assetURL == "" && !$assetExists){
-		die("Upload failure - Could not determine URL");
+		AddInternalDataError("Upload failure - Could not determine URL", false);
+		return;
 	}
 	
 	//Create or update entry
@@ -234,7 +243,8 @@ function DeleteAsset($assetID){
 	
 	//Authorize user
 	if(!IsAdmin()){
-		die("Must be a site admin to delete assets.");
+		AddAdminAuthorizationWarning(false);
+		return;
 	}
 	
 	$assetExists = false;
@@ -243,7 +253,8 @@ function DeleteAsset($assetID){
 	}
 	
 	if(!$assetExists){
-		die("The specified asset does not exist.");
+		AddDataWarning("The specified asset does not exist.", false);
+		return;
 	}
 	
 	$escapedID = mysqli_real_escape_string($dbConn, $assetID);

@@ -182,19 +182,21 @@ function AddTheme($newTheme, $isBot){
 		//Authorize user (logged in)
 		$user = IsLoggedIn();
 		if($user === false){
-			die("Not logged in.");
+			AddAuthorizationWarning("Not logged in.", false);
+			return;
 		}
 	}
 	
 	$newTheme = trim($newTheme);
 	if($newTheme == ""){
-		die("Theme is blank");
+		AddDataWarning("Theme is blank", false);
+		return;
 	}
 	
 	foreach($themes as $i => $theme){
 		if(strtolower($theme["theme"]) == strtolower($newTheme)){
 			//Theme is already suggested
-			die("This theme has already been suggested.");
+			AddDataWarning("This theme has already been suggested.", false);
 			return;
 		}
 	}
@@ -213,6 +215,8 @@ function AddTheme($newTheme, $isBot){
 	$sql = "";
 	
 	LoadThemes();
+	
+	AddDataSuccess("Theme added", false);
 }
 
 //Removes a suggested theme
@@ -222,17 +226,20 @@ function RemoveTheme($removedTheme){
 	//Authorize user (logged in)
 	$user = IsAdmin();
 	if($user === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can delete themes.");
+		AddAuthorizationWarning("Only admins can delete themes.", false);
+		return;
 	}
 	
 	$removedTheme = trim($removedTheme);
 	if($removedTheme == ""){
-		die("Theme is blank");
+		AddDataWarning("Theme is blank", false);
+		return;
 	}
 	
 	$clean_removedTheme = mysqli_real_escape_string($dbConn, $removedTheme);
@@ -245,7 +252,8 @@ function RemoveTheme($removedTheme){
 	$sql = "";
 	
 	if(mysqli_num_rows($data) == 0){
-		die("Theme does not exist");
+		AddDataWarning("Theme does not exist", false);
+		return;
 	}
 	
 	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
@@ -253,6 +261,8 @@ function RemoveTheme($removedTheme){
 	$sql = "";
 	
 	LoadThemes();
+	
+	AddDataSuccess("Theme Removed", false);
 }
 
 //Marks a suggested theme as banned
@@ -262,17 +272,20 @@ function BanTheme($bannedTheme){
 	//Authorize user (logged in)
 	$user = IsAdmin();
 	if($user === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can delete themes.");
+		AddAuthorizationWarning("Only admins can delete themes.", false);
+		return;
 	}
 	
 	$bannedTheme = trim($bannedTheme);
 	if($bannedTheme == ""){
-		die("Theme is blank");
+		AddDataWarning("Theme is blank", false);
+		return;
 	}
 	
 	$clean_bannedTheme = mysqli_real_escape_string($dbConn, $bannedTheme);
@@ -285,7 +298,8 @@ function BanTheme($bannedTheme){
 	$sql = "";
 	
 	if(mysqli_num_rows($data) == 0){
-		die("Theme does not exist");
+		AddDataWarning("Theme does not exist", false);
+		return;
 	}
 	
 	$sql = "UPDATE theme SET theme_banned = 1 WHERE theme_banned != 1 AND theme_text = '$clean_bannedTheme'";
@@ -293,6 +307,8 @@ function BanTheme($bannedTheme){
 	$sql = "";
 	
 	LoadThemes();
+	
+	AddDataSuccess("Theme Banned", false);
 }
 
 //Unmarks a suggested theme as banned (unbans it)
@@ -302,17 +318,20 @@ function UnbanTheme($unbannedTheme){
 	//Authorize user (logged in)
 	$user = IsAdmin();
 	if($user === false){
-		die("Not logged in.");
+		AddAuthorizationWarning("Not logged in.", false);
+		return;
 	}
 	
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		die("Only admins can delete themes.");
+		AddAuthorizationWarning("Only admins can delete themes.", false);
+		return;
 	}
 	
 	$unbannedTheme = trim($unbannedTheme);
 	if($unbannedTheme == ""){
-		die("Theme is blank");
+		AddDataWarning("Theme is blank", false);
+		return;
 	}
 	
 	$clean_unbannedTheme = mysqli_real_escape_string($dbConn, $unbannedTheme);
@@ -325,7 +344,8 @@ function UnbanTheme($unbannedTheme){
 	$sql = "";
 	
 	if(mysqli_num_rows($data) == 0){
-		die("Theme is not banned");
+		AddDataWarning("Theme is not banned", false);
+		return;
 	}
 	
 	$sql = "UPDATE theme SET theme_banned = 0 WHERE theme_banned = 1 AND theme_text = '$clean_unbannedTheme'";
@@ -333,6 +353,8 @@ function UnbanTheme($unbannedTheme){
 	$sql = "";
 	
 	LoadThemes();
+	
+	AddDataSuccess("Theme Unbanned", false);
 }
 
 

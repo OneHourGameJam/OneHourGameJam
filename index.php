@@ -24,11 +24,6 @@ if(isset($_GET["streaming"])){
 $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
 
-$page = "main";
-if(isset($_GET["page"])){
-	$page = strtolower(trim($_GET["page"]));
-}
-
 //List allowed page identifiers here.
 if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata")))){
 	$page = "main";
@@ -151,7 +146,6 @@ if(isset($_POST["action"])){
 			if(IsAdmin()){
 				$assetID = intval($_POST["asset_id"]);
 				$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
-				print_r($dictionary["editingasset"]);
 			}
 		break;
 		case "saveassetedits":
@@ -375,6 +369,8 @@ $dictionary["ANALYTICS"] = GetAnalyticsCode();
 				</div>
 						
 				<?php
+					print $mustache->render(file_get_contents($templateBasePath."message.html"), $dictionary);
+				
 					switch($page){
 						case "main":
 							print $mustache->render(file_get_contents($templateBasePath."main.html"), $dictionary);
