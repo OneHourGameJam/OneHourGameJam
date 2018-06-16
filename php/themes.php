@@ -164,12 +164,56 @@ function LoadThemes(){
 		}
 	}
 	
+	CalculateThemeSelectionProbabilityByVoteDifference();
+	CalculateThemeSelectionProbabilityByPopularity();
+	
+	$jsFormattedThemesPopularityThemeList = Array();
+	$jsFormattedThemesPopularityPopularityList = Array();
+	$jsFormattedThemesPopularityFillColorList = Array();
+	$jsFormattedThemesPopularityBorderColorList = Array();
+	
 	foreach($themes as $i => $theme){
 		$dictionary["suggested_themes"][] = $theme;
 		if(isset($theme["top_theme"]) && $theme["top_theme"]){
 			$dictionary["top_themes"][] = $theme;
 		}
-	}
+		
+		if($theme["ThemeSelectionProbabilityByVoteDifference"] > 0){
+			$popularity = floor($theme["ThemeSelectionProbabilityByVoteDifference"] * 10000) / 100;
+			$popularityUnmodified = $popularity;
+			
+			if(isset($jsFormattedThemesPopularityThemeList["".$popularity])){
+				$safety = 100;
+				while($safety > 0){
+					$safety--;
+					$popularity += 0.001;
+					$isTaken = isset($jsFormattedThemesPopularityThemeList["".$popularity]);
+					if(!isset($jsFormattedThemesPopularityThemeList[$popularity])){
+						break;
+					}
+				}
+			}
+			
+			$jsFormattedThemesPopularityThemeList["".$popularity] = "\"".str_replace("\"", "\\\"", $theme["theme"])."\"";
+			$jsFormattedThemesPopularityPopularityList["".$popularity] = $popularityUnmodified;
+			
+			$randomR = 0x10 + (rand(0,14) * 0x10);
+			$randomG = 0x10 + (rand(0,14) * 0x10);
+			$randomB = 0x10 + (rand(0,14) * 0x10);
+			$jsFormattedThemesPopularityFillColorList["".$popularity] = "'rgba(".$randomR.", ".$randomG.", ".$randomB.", 0.2)'";
+			$jsFormattedThemesPopularityBorderColorList["".$popularity] = "'rgba(".$randomR.", ".$randomG.", ".$randomB.", 1)'";
+		}
+	} 
+	
+	krsort($jsFormattedThemesPopularityThemeList);
+	krsort($jsFormattedThemesPopularityPopularityList);
+	krsort($jsFormattedThemesPopularityFillColorList);
+	krsort($jsFormattedThemesPopularityBorderColorList);
+	
+	$dictionary["js_formatted_themes_popularity_themes_list"] = implode(",", $jsFormattedThemesPopularityThemeList);
+	$dictionary["js_formatted_themes_popularity_popularity_list"] = implode(",", $jsFormattedThemesPopularityPopularityList);
+	$dictionary["js_formatted_themes_popularity_fill_color_list"] = implode(",", $jsFormattedThemesPopularityFillColorList);
+	$dictionary["js_formatted_themes_popularity_border_color_list"] = implode(",", $jsFormattedThemesPopularityBorderColorList);
 }
 
 //Add a suggested theme
@@ -387,6 +431,125 @@ function GetThemeVotesOfUserFormatted($username){
 	$sql = "";
 	
 	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
+function CalculateThemeSelectionProbabilityByVoteDifference(){
+	global $themes;
+	$minimumVotes = 10;
+	
+	$selectedTheme = "";
+	
+	$totalVotesDifference = 0;
+	foreach($themes as $id => $theme){
+		$themeOption = Array();
+		
+		if($theme["banned"]){
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
+			continue;
+		}
+		
+		$votesFor = $theme["votes_for"];
+		$votesNeutral = $theme["votes_neutral"];
+		$votesAgainst = $theme["votes_against"];
+		$votesDifference = $votesFor - $votesAgainst;
+		
+		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
+		$votesOpinionatedTotal = $votesFor + $votesAgainst;
+		
+		if($votesOpinionatedTotal <= 0){
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
+			continue;
+		}
+		
+		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
+		
+		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
+			continue;
+		}
+		
+		$themeOption["theme"] = $theme["theme"];
+		$themeOption["votes_for"] = $votesFor;
+		$themeOption["votes_difference"] = $votesDifference;
+		$themeOption["popularity"] = $votesPopularity;
+		$totalVotesDifference += max(0, $votesDifference);
+		
+		$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
+		$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
+		$availableThemes[$id] = $themeOption;
+	}
+	
+	if($totalVotesDifference > 0 && count($availableThemes) > 0){
+		foreach($availableThemes as $id => $availableTheme){
+			$voteDifference = $availableTheme["votes_difference"];
+			$selectionProbability = max(0, $voteDifference / $totalVotesDifference);
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = $selectionProbability;
+			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = round($selectionProbability * 100)."%";
+		}
+	}
+}
+
+function CalculateThemeSelectionProbabilityByPopularity(){
+	global $themes;
+	$minimumVotes = 10;
+	
+	$selectedTheme = "";
+	
+	$totalVotesDifference = 0;
+	foreach($themes as $id => $theme){
+		$themeOption = Array();
+		
+		if($theme["banned"]){
+			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
+			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
+			continue;
+		}
+		
+		$votesFor = $theme["votes_for"];
+		$votesNeutral = $theme["votes_neutral"];
+		$votesAgainst = $theme["votes_against"];
+		$votesDifference = $votesFor - $votesAgainst;
+		
+		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
+		$votesOpinionatedTotal = $votesFor + $votesAgainst;
+		
+		if($votesOpinionatedTotal <= 0){
+			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
+			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
+			continue;
+		}
+		
+		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
+		
+		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
+			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
+			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
+			continue;
+		}
+		
+		$themeOption["theme"] = $theme["theme"];
+		$themeOption["votes_for"] = $votesFor;
+		$themeOption["votes_difference"] = $votesDifference;
+		$themeOption["popularity"] = $votesPopularity;
+		$totalPopularity += max(0, $votesPopularity);
+		
+		$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
+		$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
+		
+		$availableThemes[] = $themeOption;
+	}
+	
+	if($totalPopularity > 0 && count($availableThemes) > 0){
+		foreach($availableThemes as $id => $availableTheme){
+			$popularity = $availableTheme["popularity"];
+			$selectionProbability = max(0, $popularity / $totalPopularity);
+			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = $selectionProbability;
+			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = round($selectionProbability * 100)."%";
+		}
+	}
 }
 
 

@@ -87,6 +87,46 @@
 			</ul>
 		</p>
 	</p>
+	
+	<div class='panel panel-info'>
+		<div class="chart-container" style="position: relative; max-height:500px; max-width:500px">
+			<canvas id="entriesChart" width="200" height="200"></canvas>
+		</div>
+		<script type='text/javascript'>
+			var entriesChartCtx = $("#entriesChart");
+			var entriesChart = new Chart(entriesChartCtx, {
+				type: 'pie',
+				data: {
+					labels: [{{{js_formatted_themes_popularity_themes_list}}}],
+					datasets: [{
+						label: '# of Entries',
+						data: [{{{js_formatted_themes_popularity_popularity_list}}}],
+						backgroundColor: [
+							{{{js_formatted_themes_popularity_fill_color_list}}}
+						],
+						borderColor: [
+							{{{js_formatted_themes_popularity_border_color_list}}}
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					animation: {
+						duration: 0
+					},
+					tooltips: {
+						mode: 'index'
+					},
+					title: {
+						display: true,
+						text: "Theme Selection Probability"
+					}
+				},
+			});
+			
+		</script>
+	</div>
+	
 	{{/user.isadmin}}
 	
 	<ul>
@@ -125,6 +165,12 @@
 					</th>
 					<th class='themeTableCell themeTableCellCentered'>
 						Days old
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						Selection Probability by Vote Difference
+					</th>
+					<th class='themeTableCell themeTableCellCentered'>
+						Selection Probability by Popularity
 					</th>
 					<th class='themeTableCell themeTableCellCentered'>
 						Admin actions
@@ -219,6 +265,12 @@
 							</td>
 							<td class='themeTableCell themeTableCellCentered'>
 								{{days_ago}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{ThemeSelectionProbabilityByVoteDifferenceText}}
+							</td>
+							<td class='themeTableCell themeTableCellCentered'>
+								{{ThemeSelectionProbabilityByPopularityText}}
 							</td>
 							<td class='themeTableCell'>
 								<form method='POST' style='display: inline-block;'>

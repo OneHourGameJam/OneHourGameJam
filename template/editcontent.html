@@ -2,6 +2,104 @@
 	<p>
 		<h3>Edit content</h3>
 	</p>
+	
+	<div class='panel panel-info'>
+		<canvas id="entriesChart" width="400" height="400"></canvas>
+		<script type='text/javascript'>
+			var entriesChartCtx = $("#entriesChart");
+			var entriesChart = new Chart(entriesChartCtx, {
+				type: 'line',
+				data: {
+					labels: [{{{js_formatted_themes_list}}}],
+					datasets: [{
+						label: '# of Entries',
+						data: [{{{js_formatted_entries_count_list}}}],
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.2)',
+						],
+						borderColor: [
+							'rgba(255,99,132,1)',
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					animation: {
+						duration: 0
+					},
+					tooltips: {
+						mode: 'index'
+					}
+				}
+			});
+			
+		</script>
+	</div>
+	
+	<div class='panel panel-info'>
+		<canvas id="usersChart" width="400" height="400"></canvas>
+		<script type='text/javascript'>
+			var usersChartCtx = $("#usersChart");
+			var usersChart = new Chart(usersChartCtx, {
+				type: 'line',
+				data: {
+					labels: [{{{js_formatted_themes_list}}}],
+					datasets: [
+						{
+							label: '# First Time Participants',
+							data: [{{{js_formatted_first_time_number_list}}}],
+							backgroundColor: [
+								'rgba(99, 255, 132, 0.2)',
+							],
+							borderColor: [
+								'rgba(99,255,132,1)',
+							],
+							borderWidth: 1
+						},
+						{
+							label: '# Last Time Participants',
+							data: [{{{js_formatted_last_time_number_list}}}],
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+							],
+							borderColor: [
+								'rgba(255,99,132,1)',
+							],
+							borderWidth: 1
+						},
+						{
+							label: 'First vs Last Time Participant Difference',
+							data: [{{{js_formatted_first_vs_last_time_difference_number_list}}}],
+							backgroundColor: [
+								'rgba(255, 255, 132, 0)',
+							],
+							borderColor: [
+								'rgba(225,225,132,1)',
+							],
+							borderWidth: 2
+						}
+					]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					},
+					animation: {
+						duration: 0
+					},
+					tooltips: {
+						mode: 'index'
+					}
+				}
+			});
+			
+		</script>
+	</div>
+	
 	{{#jams_with_deleted}}
 		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
 			<div class='panel-heading' style='background-color: {{#jam_deleted}}#F7D9D9{{/jam_deleted}}{{^jam_deleted}}#D9EDF7{{/jam_deleted}};'>

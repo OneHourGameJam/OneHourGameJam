@@ -87,7 +87,7 @@
 			All data is transmitted in plaintext. This includes passwords and session IDs. Session IDs are stored in cookies. None of this is good, but it's what we have.
 		</p>
 		<p>
-			All data is stored in plaintext, except passwords and session IDs. These are salted, peppered and hashed with SHA256 between 10000 and 20000 times (random number for each user). The result is stored. This same process is done again whenever a password or session ID is provided and the result is checked against the stored hashed values. As far as we're aware, this method means a breech of our database would not result in username/password combinations being obtainable with current technology.
+			All data is stored in plaintext, except passwords and session IDs. These are salted, peppered and hashed with SHA256 between 10000 and 20000 times (random number for each user). The result is stored. This same process is done again whenever a password or session ID is provided and the result is checked against the stored hashed values. As far as we're aware, this method means a breech of our database would not result in username/password combinations being obtainable through brute-forcing with current technology. Weak passwords are however easily obtainable no matter what encryption we use.
 		</p>
 	</p>
 	<p>

@@ -21,6 +21,7 @@ $assets = Array();
 $polls = Array();
 $satisfaction = Array();
 
+$nextJamTime = "";
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
 

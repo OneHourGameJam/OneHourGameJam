@@ -1,7 +1,7 @@
 <?php
 
 function LoadEntries(){
-	global $dictionary, $jams, $authors, $entries, $users, $config, $dbConn;
+	global $dictionary, $jams, $authors, $entries, $users, $config, $dbConn, $nextJamTime;
 	
 	//Clear public lists which get updated by this function
 	$dictionary["jams"] = Array();
@@ -200,8 +200,10 @@ function LoadEntries(){
 			}else{
 				$newData["time_left"] = "Now!";
 			}
-			$nextJamTime = strtotime($newData["start_time"]);
-			$dictionary["next_jam_timer_code"] = date("Y-m-d", $nextJamTime)."T".date("H:i", $nextJamTime).":00Z";
+			if(!isset($newData["jam_deleted"])){
+				$nextJamTime = strtotime($newData["start_time"]);
+				$dictionary["next_jam_timer_code"] = date("Y-m-d", $nextJamTime)."T".date("H:i", $nextJamTime).":00Z";
+			}
 		}else{
 			$newData["jam_started"] = true;
 		}
@@ -219,11 +221,7 @@ function LoadEntries(){
 			}
 		}
 		$dictionary["jams_with_deleted"][] = $newData;
-		
 	}
-	
-	$dictionary["all_entries_count"] = $totalEntries;
-	$dictionary["entries"] = $entries;
 
 	//Process authors list
 	foreach($authorList as $k => $authorData){
@@ -288,17 +286,234 @@ function LoadEntries(){
 	$dictionary["all_authors_count"] = count($authors);
 	$dictionary["all_jams_count"] = count($jams);
 	
+	$dictionary["all_entries_count"] = $totalEntries;
+	$dictionary["entries"] = $entries;
+	
+	//Prepare data for "Manage content" charts
+	$jsFormattedThemesList = Array();
+	$jsFormattedEntriesCountList = Array();
+	foreach($jams as $id => $jam){
+		$jsFormattedThemesList[] = "\"".str_replace("\"", "\\\"", $jam["theme"])."\"";
+		$jsFormattedEntriesCountList[] = count($jam["entries"]);
+	}
+	$dictionary["js_formatted_themes_list"] = implode(",", array_reverse($jsFormattedThemesList));
+	$dictionary["js_formatted_entries_count_list"] = implode(",", array_reverse($jsFormattedEntriesCountList));
+	
+	//Prepare data for "Manage users" charts
+	$jsFormattedFirstTimeNumberList = Array();
+	$jsFormattedLastTimeNumberList = Array();
+	$jsFormattedFirstVsLastTimeDifferenceNumberList = Array();
+	
+	foreach($jams as $id => $jam){
+		$jsFormattedFirstTimeNumberList[$jam["jam_number"]] = 0;
+		$jsFormattedLastTimeNumberList[$jam["jam_number"]] = 0;
+		$jsFormattedFirstVsLastTimeDifferenceNumberList[$jam["jam_number"]] = 0;
+	}
+	
+	foreach($authorList as $id => $author){
+		$firstJamNumber = $author["first_jam_number"];
+		$lastJamNumber = $author["last_jam_number"];
+		$jsFormattedFirstTimeNumberList[$firstJamNumber]++;
+		$jsFormattedLastTimeNumberList[$lastJamNumber]--;
+		
+		$jsFormattedFirstVsLastTimeDifferenceNumberList[$firstJamNumber]++;
+		$jsFormattedFirstVsLastTimeDifferenceNumberList[$lastJamNumber]--;
+	}
+	$dictionary["js_formatted_first_time_number_list"] = implode(",", array_reverse($jsFormattedFirstTimeNumberList));
+	$dictionary["js_formatted_last_time_number_list"] = implode(",", array_reverse($jsFormattedLastTimeNumberList));
+	$dictionary["js_formatted_first_vs_last_time_difference_number_list"] = implode(",", array_reverse($jsFormattedFirstVsLastTimeDifferenceNumberList));
 }
 
+//Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
+function CheckNextJamSchedule(){
+	global $themes, $nextJamTime;
+	
+	$autoScheduleThreshold = 2 * 60 * 60;
+	
+	$suggestedNextJamTime = GetNextJamDateAndTime();
+	$now = time();
+	$interval = $suggestedNextJamTime - $now;
+	$colors = "e38484|e3b684|dee384|ade384|84e38d|84e3be|84d6e3|84a4e3|9684e3|c784e3";
+	
+	if($interval > 0 && $interval <= $autoScheduleThreshold){
+		if($nextJamTime != ""){
+			//A future jam is already scheduled
+			return;
+		}
+		
+		$selectedTheme = "";
+		
+		$selectedTheme = SelectRandomThemeByVoteDifference();
+		if($selectedTheme == ""){
+			$selectedTheme = SelectRandomThemeByPopularity();
+		}
+		if($selectedTheme == ""){
+			$selectedTheme = SelectRandomTheme();
+		}
+		if($selectedTheme == ""){
+			$selectedTheme = "Any theme";
+		}
+		
+		$currentJamData = GetCurrentJamNumberAndID();
+		$jamNumber = intval($currentJamData["NUMBER"] + 1);
+		
+		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $suggestedNextJamTime), $colors);
+	}
+}
 
+//Selects a random theme (or "" if none can be selected) by calculating the difference between positive and negative votes and
+//selecting a proportional random theme by this difference
+function SelectRandomThemeByVoteDifference(){
+	global $themes;
+	$minimumVotes = 10;
+	
+	$selectedTheme = "";
+	
+	$availableThemes = Array();
+	$totalVotesDifference = 0;
+	foreach($themes as $id => $theme){
+		$themeOption = Array();
+		
+		if($theme["banned"]){
+			continue;
+		}
+		
+		$votesFor = $theme["votes_for"];
+		$votesNeutral = $theme["votes_neutral"];
+		$votesAgainst = $theme["votes_against"];
+		$votesDifference = $votesFor - $votesAgainst;
+		
+		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
+		$votesOpinionatedTotal = $votesFor + $votesAgainst;
+		
+		if($votesOpinionatedTotal <= 0){
+			continue;
+		}
+		
+		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
+		
+		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
+			continue;
+		}
+		
+		$themeOption["theme"] = $theme["theme"];
+		$themeOption["votes_for"] = $votesFor;
+		$themeOption["votes_difference"] = $votesDifference;
+		$themeOption["popularity"] = $votesPopularity;
+		$totalVotesDifference += max(0, $votesDifference);
+		
+		$availableThemes[] = $themeOption;
+	}
+	
+	if($totalVotesDifference > 0 && count($availableThemes) > 0){
+		$selectedVote = rand(0, $totalVotesDifference);
+		
+		$runningVoteNumber = $selectedVote;
+		foreach($availableThemes as $i => $availableTheme){
+			$runningVoteNumber -= $availableTheme["votes_difference"];
+			if($runningVoteNumber <= 0){
+				$selectedTheme = $availableTheme["theme"];
+				break;
+			}
+		}
+	}
+	
+	return $selectedTheme;
+}
 
+//Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
+function SelectRandomThemeByPopularity(){
+	global $themes;
+	$minimumVotes = 10;
+	
+	$selectedTheme = "";
+	
+	$availableThemes = Array();
+	$totalPopularity = 0;
+	foreach($themes as $id => $theme){
+		$themeOption = Array();
+		
+		if($theme["banned"]){
+			continue;
+		}
+		
+		$votesFor = $theme["votes_for"];
+		$votesNeutral = $theme["votes_neutral"];
+		$votesAgainst = $theme["votes_against"];
+		$votesDifference = $votesFor - $votesAgainst;
+		
+		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
+		$votesOpinionatedTotal = $votesFor + $votesAgainst;
+		
+		if($votesOpinionatedTotal <= 0){
+			continue;
+		}
+		
+		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
+		
+		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
+			continue;
+		}
+		
+		$themeOption["theme"] = $theme["theme"];
+		$themeOption["votes_for"] = $votesFor;
+		$themeOption["votes_difference"] = $votesDifference;
+		$themeOption["popularity"] = $votesPopularity;
+		$totalPopularity += max(0, $votesPopularity);
+		
+		$availableThemes[] = $themeOption;
+	}
+	
+	if($totalPopularity > 0 && count($availableThemes) > 0){
+		$selectedPopularity = (rand(0, 100000) / 100000) * $totalPopularity;
+		
+		$runningPopularity = $selectedPopularity;
+		foreach($availableThemes as $i => $availableTheme){
+			$runningPopularity -= $availableTheme["popularity"];
+			if($runningPopularity <= 0){
+				$selectedTheme = $availableTheme["theme"];
+				break;
+			}
+		}
+	}
+	
+	return $selectedTheme;
+}
+
+//Selects a random theme with equal probability for all themes, not caring for number of votes
+function SelectRandomTheme(){
+	global $themes;
+	$minimumVotes = 10;
+	
+	$selectedTheme = "";
+	
+	$availableThemes = Array();
+	foreach($themes as $id => $theme){
+		$themeOption = Array();
+		
+		if($theme["banned"]){
+			continue;
+		}
+		
+		$themeOption["theme"] = $theme["theme"];
+		
+		$availableThemes[] = $themeOption;
+	}
+	
+	if(count($availableThemes) > 0){
+		$selectedIndex = rand(0, count($availableThemes));
+		$selectedTheme = $availableThemes[$selectedIndex]["theme"];
+	}
+	
+	return $selectedTheme;
+}
 
 //Creates a new jam with the provided theme, which starts at the given date
 //and time. All three are non-blank strings. $date and $time should be
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
 function CreateJam($theme, $date, $time, $colorsList){
-	global $dbConn, $ip, $userAgent, $loggedInUser;
+	global $ip, $userAgent, $loggedInUser;
 	
 	$currentJamData = GetCurrentJamNumberAndID();
 	$jamNumber = intval($currentJamData["NUMBER"] + 1);
@@ -360,12 +575,21 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
 	
+	AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors);
+	
+	AddDataSuccess("Jam Scheduled");
+}
+
+//Adds the jam with the provided data into the database
+function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors){
+	global $dbConn;
+	
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
-	$escapedJamNumber = mysqli_real_escape_string($dbConn, $newJam["jam_number"]);
-	$escapedTheme = mysqli_real_escape_string($dbConn, $newJam["theme"]);
-	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
+	$escapedJamNumber = mysqli_real_escape_string($dbConn, $jamNumber);
+	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
+	$escapedStartTime = mysqli_real_escape_string($dbConn, $startTime);
 	$escapedColors = mysqli_real_escape_string($dbConn, $colors);
 	
 	$sql = "
@@ -394,8 +618,6 @@ function CreateJam($theme, $date, $time, $colorsList){
 	
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
-	AddDataSuccess("Jam Scheduled");
 }
 
 //Edits an existing jam, identified by the jam number.

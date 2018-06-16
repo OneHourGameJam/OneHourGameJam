@@ -10,6 +10,7 @@ function Init(){
 	LoadUsers();
 	LoadEntries();
 	LoadThemes();
+	CheckNextJamSchedule();
 	LoadAssets();
 	LoadPolls();
 	LoadSatisfaction();
