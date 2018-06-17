@@ -29,6 +29,32 @@ if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "asset
 	$page = "main";
 }
 
+$pageTitles = Array(
+	"main" => "Main Page",
+	"login" => "Login",
+	"logout" => "Logout",
+	"submit" => "Submit Game",
+	"newjam" => "Schedule New Jam",
+	"assets" => "Assets",
+	"editasset" => "Edit Asset",
+	"rules" => "Rules",
+	"config" => "Configuration",
+	"editcontent" => "Manage Content",
+	"editjam" => "Edit Jam",
+	"editentry" => "Edit Entry",
+	"editusers" => "Manage Users",
+	"edituser" => "Edit User",
+	"themes" => "Theme Voting",
+	"usersettings" => "User Settings",
+	"entries" => "Entries",
+	"jam" => "Jam",
+	"jams" => "Jams",
+	"author" => "Author",
+	"authors" => "Authors",
+	"privacy" => "Privacy",
+	"userdata" => "User Data"
+);
+
 //List of pages which require user to be logged in
 if(in_array($page, Array("submit", "newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "userdata"))){
 	if(!IsLoggedIn()){
@@ -359,6 +385,16 @@ $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
 $dictionary["ANALYTICS"] = GetAnalyticsCode();
 
+$dictionary["page_title"] = $pageTitles[$page];
+
+if($page == "author")
+{
+	$dictionary["page_title"] = $viewingAuthor;
+}
+if($page == "jam")
+{
+	$dictionary["page_title"] = "Jam #" . $viewingJamNumber . ": ".$dictionary["viewing_jam"]["theme"];
+}
 
 //print_r($authors[0]);
 
