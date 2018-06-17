@@ -188,13 +188,13 @@ function LoadThemes(){
 					$safety--;
 					$popularity += 0.001;
 					$isTaken = isset($jsFormattedThemesPopularityThemeList["".$popularity]);
-					if(!isset($jsFormattedThemesPopularityThemeList[$popularity])){
+					if(!isset($jsFormattedThemesPopularityThemeList["".$popularity])){
 						break;
 					}
 				}
 			}
 			
-			$jsFormattedThemesPopularityThemeList["".$popularity] = "\"".str_replace("\"", "\\\"", $theme["theme"])."\"";
+			$jsFormattedThemesPopularityThemeList["".$popularity] = "\"".str_replace("\"", "\\\"", htmlspecialchars_decode($theme["theme"], ENT_COMPAT | ENT_HTML401 | ENT_QUOTES))."\"";
 			$jsFormattedThemesPopularityPopularityList["".$popularity] = $popularityUnmodified;
 			
 			$randomR = 0x10 + (rand(0,14) * 0x10);
