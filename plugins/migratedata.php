@@ -12,7 +12,7 @@ This file is meant to help transition your installation from the JSON file based
 <html lang="en">
 	<head>
 		<meta charset='utf-8'>
-		<script src="js/jquery.js"></script>
+		<script src="vendor/components/jquery/jquery.js"></script>
 		<title>One hour game jam</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -21,32 +21,32 @@ This file is meant to help transition your installation from the JSON file based
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
 		<script src='js/1hgj.js' type='text/javascript'></script>
-		
+
 	</head>
 	<body>
-	
+
 	<?php
 
 
 $jamID = 1;
 $entryID = 1;
 
-for($i = 1; $i <= 100; $i++){		
+for($i = 1; $i <= 100; $i++){
 
 	if(!file_exists("migratedata/jam_$i.json")){
 		continue;
 	}
 
 	$data = json_decode(file_get_contents("migratedata/jam_$i.json"), true);
-	
+
 	//print_r($data);
-	
+
 	$datetime = date("Y-m-d H:i", strtotime($data["date"]." ".$data["time"]));
-	
+
 	$theme = $data["theme"];
 	$theme = str_replace("'", "\\'", $theme);
 	$theme = str_replace("\"", "\\\"", $theme);
-	
+
 	print "<br>INSERT INTO jam
 		(jam_id,
 		jam_datetime,
@@ -66,7 +66,7 @@ for($i = 1; $i <= 100; $i++){
 		'$datetime',
 		0);
 	";
-	
+
 	foreach($data["entries"] as $j => $entry){
 		$title = $entry["title"];
 		$title = str_replace("'", "\\'", $title);
@@ -83,7 +83,7 @@ for($i = 1; $i <= 100; $i++){
 		$ss = $entry["screenshot_url"];
 		$ss = str_replace("'", "\\'", $ss);
 		$ss = str_replace("\"", "\\\"", $ss);
-		
+
 		print "<br>INSERT INTO entry
 			(entry_id,
 			entry_datetime,
@@ -113,7 +113,7 @@ for($i = 1; $i <= 100; $i++){
 ";
 		$entryID++;
 	}
-	
+
 	$jamID++;
 }
 
@@ -164,7 +164,7 @@ foreach($data as $i => $user){
 
 	";
 	$users[$user["username"]] = $userID;
-	
+
 	$userID++;
 }
 
