@@ -25,19 +25,6 @@ function CmpArrayByProperty($a, $b, $property)
 	return $a[$property] < $b[$property];
 }
 
-//Gets the list of json file locations, sorted in ascending order
-//Capped at 1000 entries.
-function GetSortedJamFileList(){
-	$filesToParse = Array();
-	for($i = 0; $i < 1000; $i++){
-		if(file_exists("data/jams/jam_$i.json")){
-			$filesToParse[] = "data/jams/jam_$i.json";
-		}
-	}
-	krsort($filesToParse);
-	return $filesToParse;
-}
-
 //Returns ordinal version of provided number, so 1 -> 1st; 3 -> 3rd, etc.
 function ordinal($number) {
 	$number = intval($number);
