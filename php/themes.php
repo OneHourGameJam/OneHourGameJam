@@ -465,7 +465,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 		
 		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
 		
-		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
+		if($votesTotal <= 0 || $votesTotal < $minimumVotes){
 			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
 			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 			continue;
@@ -524,7 +524,7 @@ function CalculateThemeSelectionProbabilityByPopularity(){
 		
 		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
 		
-		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
+		if($votesTotal <= 0 || $votesTotal < $minimumVotes){
 			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
 			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
 			continue;
