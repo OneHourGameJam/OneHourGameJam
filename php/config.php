@@ -423,17 +423,6 @@ function LoadConfig(){
 				break;
 			}
 			
-			$i = count($dictionary["CONFIG"]);
-			foreach($dictionary["CONFIG"] as $index => $configDictionaryEntry){
-				if($configDictionaryEntry["CATEGORY_ID"] == $configCategoryID){
-					$i = $index;
-				}
-			}
-			
-			$dictionary["CONFIG"][$i]["CATEGORY_ID"] = $configCategoryID;
-			$dictionary["CONFIG"][$i]["CATEGORY_HEADER"] = $configCategoryHeader;
-			$dictionary["CONFIG"][$i]["ENTRIES"][] = $configEntry;
-			
 			//Validate line
 			switch($key){
 				case "PEPPER":
@@ -458,6 +447,17 @@ function LoadConfig(){
 					$linesUpdated[] = $line;
 				break;
 			}
+			
+			$i = count($dictionary["CONFIG"]);
+			foreach($dictionary["CONFIG"] as $index => $configDictionaryEntry){
+				if($configDictionaryEntry["CATEGORY_ID"] == $configCategoryID){
+					$i = $index;
+				}
+			}
+			
+			$dictionary["CONFIG"][$i]["CATEGORY_ID"] = $configCategoryID;
+			$dictionary["CONFIG"][$i]["CATEGORY_HEADER"] = $configCategoryHeader;
+			$dictionary["CONFIG"][$i]["ENTRIES"][] = $configEntry;
 		}
 	}
 }
