@@ -32,6 +32,26 @@ body{
 	border-top: 0px;
 }
 
+.entryPlayIcon{
+	width: 24px;
+}
+
+.entryDescription{
+	margin: 10px 0;
+	padding: 5px;
+	border-top: 1px solid rgba(0,0,0,0.5);
+	border-bottom: 1px solid rgba(0,0,0,0.5);
+	line-height: 14px;
+}
+
+.entryButton{
+	border: 1px solid rgba(0,0,0,0.4);
+	padding: 4px;
+}
+.entryButton:hover{
+	border: 1px solid rgba(0,0,0,1);
+}
+
 .form-control{
 	border-radius: 0px;
 }
