@@ -24,7 +24,15 @@ body{
 }
 
 .entryScreenshot{
+	position: absolute;
 	border: solid 1px #DDDDDD;
+	transform: scale(1, 1);
+	transition: 0.3s;
+	width: 100%;
+}
+.entryScreenshot.hiddenFace{
+	transform: scale(0, 1);
+	transition: 0.1s;
 }
 
 .entryName{

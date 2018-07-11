@@ -46,7 +46,7 @@
 				{{/enough_scores_to_show_satisfaction}}
 			
 				{{#entries}}
-					<div onclick='$(this).find(".screenshot").toggle(); $(this).find(".description").toggle(); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
+					<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
 						<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
 							<div style="display:table; height: 100%; width: 100%;">
 								<div style="display:table-cell;vertical-align:bottom;">
@@ -60,7 +60,7 @@
 								</div>
 							</div>
 						</div>
-						<div class='panel-body entryScreenshot description' style='text-align: center; height: 226px; display: none; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
+						<div class='panel-body entryScreenshot description hiddenFace' style='text-align: center; height: 226px; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
 							<div>
 								<b>Play</b><br />
 								{{#has_url_web}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
