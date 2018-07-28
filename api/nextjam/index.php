@@ -60,7 +60,7 @@ if(count($return["upcoming_jams"]) == 0){
 		$timediff = $timediff + (7*24*60*60);
 	}
 
-    $return["upcoming_jams"][] = Array("number" => $maxJamNumber + 1, "theme" => "Not announced yet", "start_datetime" => date("Y-m-d H:i:s", $saturday), "timediff" => $timediff);
+    $return["upcoming_jams"][] = Array("number" => $maxJamNumber + 1, "theme" => "Not announced yet", "start_datetime" => gmdate("Y-m-d H:i:s", $saturday), "timediff" => $timediff);
 }
 
 print json_encode($return);
