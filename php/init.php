@@ -14,7 +14,7 @@ function Init(){
 	LoadAssets();
 	LoadPolls();
 	LoadSatisfaction();
-	InitStream();
+	//InitStream();
 	GetNextJamDateAndTime();
 }
 
