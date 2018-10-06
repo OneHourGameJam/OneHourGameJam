@@ -4,3 +4,6 @@ cache/*
 custom/*
 plugins/migratedata/*.json
 .vscode/
+
+config/dbconfig.php
+.vagrant/
