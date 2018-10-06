@@ -7,7 +7,7 @@ Requires a web server with PHP 5.4 or later and MySQL.
 # Installing
 You can either install with vagrant or you can manually install (if you want to install on a production server)
 
-## With Vagrant
+## With Vagrant:
 
 ```
 vagrant up
@@ -15,7 +15,7 @@ vagrant up
 
 You can now find your local version of 1hgj at: http://192.168.48.49
 
-This will setup a scotchbox vagrant box with 1hgj fully installed. You only need to set up the admin user. You will be able to develop as you would normally.
+This will setup a scotchbox vagrant box with 1hgj fully installed. You only need to set up the admin user (see below in "First Startup"). You will be able to develop as you would normally.
 
 ## Manually:
 What you need is a web server capable of running PHP, for example Apache.

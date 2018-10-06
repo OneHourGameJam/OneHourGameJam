@@ -7,7 +7,6 @@ DB_PASS=root
 DB_NAME=scotchbox
 DB_HOST=localhost
 
-# TODO: Check to see if this is need, if so fix apache2 config
 # clean /var/www
 sudo rm -Rf $WWW_ROOT
 
