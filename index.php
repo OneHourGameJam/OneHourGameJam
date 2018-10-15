@@ -378,6 +378,7 @@ switch($page){
 		$dictionary["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser["username"]);
+		$dictionary["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser["id"]);
 	break;
 }
 

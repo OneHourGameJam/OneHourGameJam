@@ -33,14 +33,14 @@ function HashPassword($password, $salt, $iterations){
 
 //(Re)Loads the users into the globally accessible $users variable.
 function LoadUsers(){
-	global $users, $loggedInUser, $dictionary, $dbConn;
-	
+	global $users, $loggedInUser, $dictionary, $dbConn, $userIDLookup;
+
 	$users = Array();
-	
+
 	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email, user_password_salt, user_password_hash, user_password_iterations, user_role FROM user";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	while($info = mysqli_fetch_array($data)){
 		//Read data about the user
 		$currentUser = Array();
@@ -54,10 +54,11 @@ function LoadUsers(){
 		$currentUser["password_hash"] = $info["user_password_hash"];
 		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
 		$currentUser["admin"] = intval($info["user_role"]);
-		
+
 		$users[$currentUser["username"]] = $currentUser;
+		$userIDLookup[$currentUser["id"]] = $currentUser["username"];
 	}
-	
+
 	ksort($users);
 	$dictionary["users"] = $users;
 	$dictionary["admins"] = Array();
@@ -196,23 +197,24 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
 function LogInUser($username, $password){
-	global $config, $users;
-	
+	global $config, $users, $dbConn;
+
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
-	
+
 	//Check username length
 	if(strlen($username) < 2 || strlen($username) > 20){
 		AddDataWarning("username must be between 2 and 20 characters", false);
 		return;
 	}
-	
+
 	if(!isset($users[$username])){
 		AddDataWarning("User does not exist", false);
 		return;
 	}
-	
+
 	$user = $users[$username];
+	$userID = $user["id"];
 	$correctPasswordHash = $user["password_hash"];
 	$userSalt = $user["salt"];
 	$userPasswordIterations = intval($user["password_iterations"]);
@@ -222,35 +224,25 @@ function LogInUser($username, $password){
 		$sessionID = "".GenerateSalt();
 		$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
 		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
-		
+
 		setcookie("sessionID", $sessionID, time()+60*60*24*30);
 		$_COOKIE["sessionID"] = $sessionID;
-		
-		
-		//$sql = "
-		//	INSERT INTO session
-		//	(session_id,
-		//	session_user_id,
-		//	session_datetime_started,
-		//	session_datetime_last_used)
-		//	VALUES
-		//	'$sessionIDHash',
-		//	'$userID',
-		//	<{session_datetime_started: }>,
-		//	<{session_datetime_last_used: }>);
-        //
-		//";
-		
-		$sessions = Array();
-		if(file_exists("data/sessions.json")){
-			$sessions = json_decode(file_get_contents("data/sessions.json"), true);
-		}
-		
-		$sessions[$sessionIDHash]["username"] = $username;
-		$sessions[$sessionIDHash]["datetime"] = time();
-		
-		file_put_contents("data/sessions.json", json_encode($sessions));
-		
+
+		$sql = "
+			INSERT INTO session
+			(session_id,
+			session_user_id,
+			session_datetime_started,
+			session_datetime_last_used)
+			VALUES
+			('$sessionIDHash',
+			'$userID',
+			Now(),
+			Now());
+		";
+
+		mysqli_query($dbConn, $sql) ;
+		$sql = "";
 	}else{
 		//User password incorrect!
 		AddDataWarning("Incorrect username / password combination.", false);
@@ -261,6 +253,22 @@ function LogInUser($username, $password){
 //Logs out the current user by setting their sessionID cookie to blank and expiring it.
 //TODO: Clear session from on-server session data
 function LogOut(){
+	global $dbConn, $config;
+
+	// Delete the session out of our DB
+	$sessionID = "".$_COOKIE["sessionID"];
+	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
+	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
+
+	$sql = "
+		DELETE FROM session
+		WHERE `session_id` = '$sessionIDHash';
+	";
+
+	mysqli_query($dbConn, $sql) ;
+	$sql = "";
+
+	// Clear the cookie
 	setcookie("sessionID", "", time());
 	$_COOKIE["sessionID"] = "";
 }
@@ -273,41 +281,38 @@ function LogOut(){
 //Returns either the logged in user's username or FALSE if not logged in.
 //Set $force to TRUE to force reloading (for example if a user setting was changed for the logged in user)
 function IsLoggedIn($force = FALSE){
-	global $loginChecked, $loggedInUser, $config, $users, $dictionary;
-	
+	global $loginChecked, $loggedInUser, $config, $users, $dictionary, $dbConn, $userIDLookup;
+
 	if($loginChecked && !$force){
 		return $loggedInUser;
 	}
-	
+
 	$loggedInUser = Array();
-	
+
 	if(!isset($_COOKIE["sessionID"])){
 		//No session cookie, therefore not logged in
 		$loggedInUser = false;
 		$loginChecked = true;
 		return false;
 	}
-	
-	if(!file_exists("data/sessions.json")){
-		//No session was ever created on the site
-		$loggedInUser = false;
-		$loginChecked = true;
-		return false;
-	}
-	
-	$sessions = json_decode(file_get_contents("data/sessions.json"), true);
+
 	$sessionID = "".$_COOKIE["sessionID"];
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
 	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
-	
-	if(!isset($sessions[$sessionIDHash])){
-		//Session ID does not exist
-		$loggedInUser = false;
-		$loginChecked = true;
-		return false;
-	}else{
+
+	$sql = "
+		SELECT `session_id`, `session_user_id`
+		FROM session
+		WHERE `session_id` = '$sessionIDHash';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+
+	$session = mysqli_fetch_array($data);
+	if($session){
 		//Session ID does in fact exist
-		$username = $sessions[$sessionIDHash]["username"];
+		$userID = $session["session_user_id"];
+		$username = $userIDLookup[$userID];
 		$loggedInUser = $users[$username];
 		$loggedInUser["username"] = $username;
 		$dictionary["user"] = $loggedInUser;
@@ -316,7 +321,21 @@ function IsLoggedIn($force = FALSE){
 			$dictionary["user"]["isadmin"] = 1;
 		}
 		$loginChecked = true;
+
+		$sql = "
+			UPDATE session
+			SET `session_datetime_last_used` = Now()
+			WHERE `session_id` = '$sessionIDHash'
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+
 		return $loggedInUser;
+	} else {
+		//Session ID does not exist
+		$loggedInUser = false;
+		$loginChecked = true;
+		return false;
 	}
 }
 
@@ -581,8 +600,23 @@ function GetUsersOfUserFormatted($username){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
-	return ArrayToHTML(MySQLDataToArray($data)); 
+
+	return ArrayToHTML(MySQLDataToArray($data));
+}
+
+function GetSessionsOfUserFormatted($userId){
+	global $dbConn;
+
+	$escapedID = mysqli_real_escape_string($dbConn, $userId);
+	$sql = "
+		SELECT *
+		FROM session
+		WHERE session_user_id = '$escapedID';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 
