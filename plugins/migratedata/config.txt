@@ -17,11 +17,11 @@ LANG_JAM_DAY | 6
 LANG_JAM_TIME | 20
 
 #Optional notification, displayed at the top of the screen if set.
-LANG_NOTIFICATION | 
+LANG_NOTIFICATION |
 
 #Optional notification Image and link. If blank, they will not be shown
-LANG_NOTIFICATION_IMAGE | 
-LANG_NOTIFICATION_URL | 
+LANG_NOTIFICATION_IMAGE |
+LANG_NOTIFICATION_URL |
 
 #Jam rules (displayed on the rules page)
 LANG_RULES | <h3>When?</h3><p>Every <a href='https://www.google.com/search?q=20%3A00+UTC' target='_BLANK'>Saturday at 20:00 UTC</a>. The time in your local time and a countdown-timer should be in the top of the site though.</p><h3>Where?</h3><p>Right here! <a href='https://discord.gg/J86uTu9' target='_BLANK'>Joining our Discord server</a> is however a good idea.</p><h3>Is there a theme?</h3><p>Yes! At the start of the hour, the theme is announced on the site and <a href='https://discord.gg/J86uTu9' target='_BLANK'>on Discord</a>. Themes are suggested and voted by the community on the <a href='?page=themes'>Theme Voting page</a>.</p><h3>How long do I have to finish?</h3><p>:D</p><h3>Do I have to submit within the hour?</h3><p>No. Keep working on your game until it's done, then submit.</p><h3>Can I use premade assets?</h3><p>You are free to use premade assets but it is recommended that you make at least one game from scratch. Some assets are provided on the <a href='?page=assets'>Assets page</a> but you do not have to use them.</p><h3>Do I have to host the games myself?</h3><p>Yes, you'll need to host the game and submit the links here. We host the thumbnail though. If you don't have a website yourself, use something like dropbox / google drive, or itch.io / newgrounds. Ask on Discord for more suggestions.</p><h3>What happens after the jam?</h3><p>About 30 minutes after the jam ends, we host a stream on Twitch where all submitted games are played. The stream usually lasts about 2 hours. It's not always the same people streaming though, so keep an eye on Discord to see who's streaming.</p><h3>What if I don't finish in time?</h3><p>If you finish and submit your game before the stream ends, we'll play it on stream, even if it took you more than an hour to finish.</p><h3>Can I participate after the jam has ended?</h3><p>If you come late you can still participate. If the stream is over, then your game won't be played on-stream, obviously, but we'll still keep it on the site!</p><h3>Copyright / licenses / future development / intellectual property / ...?</h3><p>You retain full ownership / copyright / yadda yadda. If you get a BAFTA make sure to mention us in your acceptance speech though :D</p>
@@ -46,40 +46,40 @@ SATISFACTION_RATINGS_TO_SHOW_SCORE | 5
 
 #Site-wide salt, used for passwords.
 #Auto generated if left blank, if changed this invalidates all user passwords on the site.
-PEPPER | 
+PEPPER |
 
 #Number of iterations used when hashing sessions
-SESSION_PASSWORD_ITERATIONS | 
+SESSION_PASSWORD_ITERATIONS |
 
 #Twitch name for the streamer for this jam (For example if the stream url is https://www.twitch.tv/bitslap, set this to bitslap)
-STREAMER_TWITCH_NAME | 
+STREAMER_TWITCH_NAME |
 
 #Twitch client id for the API (Register a new application on Twitch: https://www.twitch.tv/settings/connections and copy the Client ID here.)
-TWITCH_CLIENT_ID | 
+TWITCH_CLIENT_ID |
 
 #The minimum number of seconds that has to pass between subsequent checks as to whether the stream is online on Twitch or not.
 TWITCH_API_STREAM_UPDATE_FREQUENCY | 30
 
 #Twitter account of the jam
-LANG_TWITTER_ACCOUNT | 
+LANG_TWITTER_ACCOUNT |
 
 #Twitch account for the jam
-LANG_TWITCH_ACCOUNT | 
+LANG_TWITCH_ACCOUNT |
 
 #IRC domain
-LANG_IRC_ADDRESS | 
+LANG_IRC_ADDRESS |
 
 #IRC channel
-LANG_IRC_CHANNEL | 
+LANG_IRC_CHANNEL |
 
 #IRC chat in browser URL
-LANG_IRC_CHAT_IN_BROWSER | 
+LANG_IRC_CHAT_IN_BROWSER |
 
 #Discord invite URL
-LANG_DISCORD_INVITE_URL | 
+LANG_DISCORD_INVITE_URL |
 
 #Google Analytics code. Something like UA-00000000-1
-GOOGLE_ANALYTICS_CODE | 
+GOOGLE_ANALYTICS_CODE |
 
 #Default HSL settings for new jam colors
 LANG_DEFAULT_NUMBER_OF_COLORS | 10

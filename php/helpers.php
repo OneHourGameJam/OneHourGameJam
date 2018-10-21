@@ -37,33 +37,33 @@ function ordinal($number) {
 
 function GetNextJamDateAndTime(){
 	global $dictionary, $config;
-	
+
     $jamDay = "monday";
-    switch($config["LANG_JAM_DAY"]){
+    switch($config["JAM_DAY"]){
         case 0:
-            $jamDay = "sunday";  
+            $jamDay = "sunday";
         break;
         case 1:
-            $jamDay = "monday";  
+            $jamDay = "monday";
         break;
         case 2:
-            $jamDay = "tuesday";  
+            $jamDay = "tuesday";
         break;
         case 3:
-            $jamDay = "wednesday";  
+            $jamDay = "wednesday";
         break;
         case 4:
-            $jamDay = "thursday";  
+            $jamDay = "thursday";
         break;
         case 5:
-            $jamDay = "friday";  
+            $jamDay = "friday";
         break;
         case 6:
-            $jamDay = "saturday";  
+            $jamDay = "saturday";
         break;
     }
 
-	$suggestedDay = strtotime("$jamDay +" . intval($config["LANG_JAM_TIME"]) . " hours UTC");
+	$suggestedDay = strtotime("$jamDay +" . intval($config["JAM_TIME"]) . " hours UTC");
 	$dictionary["next_jam_suggested_date"] = gmdate("Y-m-d", $suggestedDay);
 	$dictionary["next_jam_suggested_time"] = gmdate("H:i", $suggestedDay);
 	$now = time();
@@ -75,17 +75,17 @@ function GetNextJamDateAndTime(){
 $currentJamNumberArchive = FALSE;
 function GetCurrentJamNumberAndID(){
 	global $currentJamNumberArchive, $dbConn;
-	
+
 	if($currentJamNumberArchive !== FALSE){
 		return $currentJamNumberArchive;
 	}
-	
+
 	$sql = "
 		SELECT jam_id, jam_jam_number FROM jam WHERE jam_jam_number = (SELECT MAX(jam_jam_number) FROM jam WHERE jam_deleted = 0) AND jam_deleted = 0
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	if($info = mysqli_fetch_array($data)){
 		$currentJamNumberArchive = Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
 	}else{
@@ -139,15 +139,15 @@ function MySQLDataToArray($data){
 		}
 		$result[] = $row;
 	}
-	
+
 	return $result;
 }
 
 // Converts a two dimensional array into a html-formatted table (string output)
 function ArrayToHTML($array){
-	
+
 	$str = "<table style='border: solid 1px'>";
-	
+
 	foreach($array as $id => $row){
 		$str .= "<tr style='border: solid 2px'><td>#</td>";
 		foreach($row as $key => $value){
@@ -158,7 +158,7 @@ function ArrayToHTML($array){
 		$str .= "</tr>";
 		break;
 	}
-	
+
 	foreach($array as $id => $row){
 		$str .= "<tr style='border: solid 1px'><td>$id</td>";
 		foreach($row as $key => $value){
@@ -168,9 +168,9 @@ function ArrayToHTML($array){
 		}
 		$str .= "</tr>";
 	}
-	
+
 	$str .= "</table>";
-	
+
 	return $str;
 }
 
