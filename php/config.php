@@ -54,6 +54,7 @@ function LoadConfig(){
 			"VALUE" => htmlentities($value),
 			"NAME" => $description,
 			"DISABLED" => !$editable,
+			"EDITABLE" => $editable,
 			"REQUIRED" => $required,
 			"TYPE" => $type,
 		);
@@ -134,27 +135,36 @@ function UpdateConfig($key, $value) {
 	$sql = "";
 }
 
-//Updates a given key's entry in the config file if it differs from the current one.
-//Disallowed characters in the new value: vertical line (|), \n and \r
+
 function SaveConfig($key, $newValue){
-	global $config, $configSettings;
+	global $config, $dictionary;
 
 	if(!IsAdmin()){
 		return;	//Lacks permissions to make edits
 	}
 
 	$configCategoryID = "";
-	foreach($configSettings as $category => $entries){
-		if(array_key_exists($key, $entries["SETTINGS"])){
-			$configCategoryID = $category;
+	$configEntryID = "";
+	foreach($dictionary["CONFIG"] as $category => $entries){
+		foreach($entries["ENTRIES"] as $entryIndex => $entry){
+			if ($entry["KEY"] == $key) {
+				$configCategoryID = $category;
+				$configEntryID = $entryIndex;
+			}
 		}
 	}
 
-	if($configSettings[$configCategoryID]["SETTINGS"][$key]["EDITABLE"] == FALSE){
+	// If entry not found
+	if(strlen($configEntryID) == 0) {
+		return;
+	}
+
+	if($dictionary["CONFIG"][$configCategoryID]["ENTRIES"][$configEntryID]["EDITABLE"] == FALSE){
 		//Some configuration settings cannot be set via this interface for security reasons.
 		return;
 	}
 
+	$key = str_replace("CONFIG_", "", $key);
 	UpdateConfig($key, $newValue);
 }
 
