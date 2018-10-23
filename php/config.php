@@ -109,17 +109,17 @@ function VerifyConfig() {
 	global $config;
 
 	if (!isset($config["PEPPER"]) || strlen($config["PEPPER"]) < 1) {
-		UpdateConfig("PEPPER", GenerateSalt());
+		UpdateConfig("PEPPER", GenerateSalt(), -1);
 	}
 
 	if (!isset($config["SESSION_PASSWORD_ITERATIONS"]) || strlen($config["SESSION_PASSWORD_ITERATIONS"]) < 1) {
-		UpdateConfig("SESSION_PASSWORD_ITERATIONS", rand(10000, 20000));
+		UpdateConfig("SESSION_PASSWORD_ITERATIONS", rand(10000, 20000), -1);
 	}
 }
 
 
 // Actually updates the config. Doesn't check auth.
-function UpdateConfig($key, $value) {
+function UpdateConfig($key, $value, $userID) {
 	global $config, $dbConn;
 
 	$keyClean = mysqli_real_escape_string($dbConn, $key);
@@ -128,7 +128,9 @@ function UpdateConfig($key, $value) {
 	$config[$key] = $value;
 	$sql = "
 		UPDATE config
-		SET config_value = '$valueClean'
+		SET config_value = '$valueClean',
+		config_lastedited = Now(),
+		config_lasteditedby = '$userID'
 		WHERE config_key = '$keyClean';
 	";
 	mysqli_query($dbConn, $sql);
@@ -137,10 +139,10 @@ function UpdateConfig($key, $value) {
 
 
 function SaveConfig($key, $newValue){
-	global $config, $dictionary;
+	global $config, $dictionary, $loggedInUser;
 
 	if(!IsAdmin()){
-		return;	//Lacks permissions to make edits
+		return; //Lacks permissions to make edits
 	}
 
 	$configCategoryID = "";
@@ -165,7 +167,12 @@ function SaveConfig($key, $newValue){
 	}
 
 	$key = str_replace("CONFIG_", "", $key);
-	UpdateConfig($key, $newValue);
+
+	if ($newValue == $config[$key]) {
+		return;
+	}
+
+	UpdateConfig($key, $newValue, $loggedInUser['id']);
 }
 
 
