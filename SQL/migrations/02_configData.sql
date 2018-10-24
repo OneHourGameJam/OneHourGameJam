@@ -23,7 +23,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -51,7 +51,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -79,7 +79,7 @@ INSERT INTO config (
 	'[{\"VALUE\":0,\"TEXT\":\"Sunday\"},{\"VALUE\":1,\"TEXT\":\"Monday\"},{\"VALUE\":2,\"TEXT\":\"Tuesday\"},{\"VALUE\":3,\"TEXT\":\"Wednesday\"},{\"VALUE\":4,\"TEXT\":\"Thursday\"},{\"VALUE\":5,\"TEXT\":\"Friday\"},{\"VALUE\":6,\"TEXT\":\"Saturday\"}]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -107,7 +107,7 @@ INSERT INTO config (
 	'[{\"VALUE\":24,\"TEXT\":\"Midnight\"},{\"VALUE\":23,\"TEXT\":\"23:00\"},{\"VALUE\":22,\"TEXT\":\"22:00\"},{\"VALUE\":21,\"TEXT\":\"21:00\"},{\"VALUE\":20,\"TEXT\":\"20:00\"},{\"VALUE\":19,\"TEXT\":\"19:00\"},{\"VALUE\":18,\"TEXT\":\"18:00\"},{\"VALUE\":17,\"TEXT\":\"17:00\"},{\"VALUE\":16,\"TEXT\":\"16:00\"},{\"VALUE\":15,\"TEXT\":\"15:00\"},{\"VALUE\":14,\"TEXT\":\"14:00\"},{\"VALUE\":13,\"TEXT\":\"13:00\"},{\"VALUE\":12,\"TEXT\":\"12:00\"},{\"VALUE\":11,\"TEXT\":\"11:00\"},{\"VALUE\":10,\"TEXT\":\"10:00\"},{\"VALUE\":9,\"TEXT\":\"9:00\"},{\"VALUE\":8,\"TEXT\":\"8:00\"},{\"VALUE\":7,\"TEXT\":\"7:00\"},{\"VALUE\":6,\"TEXT\":\"6:00\"},{\"VALUE\":5,\"TEXT\":\"5:00\"},{\"VALUE\":4,\"TEXT\":\"4:00\"},{\"VALUE\":3,\"TEXT\":\"3:00\"},{\"VALUE\":2,\"TEXT\":\"2:00\"},{\"VALUE\":1,\"TEXT\":\"1:00\"}]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -135,7 +135,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -163,7 +163,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -191,7 +191,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -219,7 +219,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -555,7 +555,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -583,7 +583,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -611,7 +611,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -639,7 +639,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -667,7 +667,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -695,7 +695,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'0',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -751,7 +751,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -779,7 +779,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -807,7 +807,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -835,7 +835,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -863,7 +863,7 @@ INSERT INTO config (
 	'[]',
 	'1',
 	'1',
-	'0'
+	'1'
 );
 
 INSERT INTO config (
@@ -949,4 +949,4 @@ INSERT INTO config (
 	'1',
 	'0'
 );
-			
+				
