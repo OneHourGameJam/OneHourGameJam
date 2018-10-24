@@ -24,12 +24,40 @@ body{
 }
 
 .entryScreenshot{
+	position: absolute;
 	border: solid 1px #DDDDDD;
+	transform: scale(1, 1);
+	transition: 0.3s;
+	width: 100%;
+}
+.entryScreenshot.hiddenFace{
+	transform: scale(0, 1);
+	transition: 0.1s;
 }
 
 .entryName{
 	border: solid 1px #DDDDDD;
 	border-top: 0px;
+}
+
+.entryPlayIcon{
+	width: 24px;
+}
+
+.entryDescription{
+	margin: 10px 0;
+	padding: 5px;
+	border-top: 1px solid rgba(0,0,0,0.5);
+	border-bottom: 1px solid rgba(0,0,0,0.5);
+	line-height: 14px;
+}
+
+.entryButton{
+	border: 1px solid rgba(0,0,0,0.4);
+	padding: 4px;
+}
+.entryButton:hover{
+	border: 1px solid rgba(0,0,0,1);
 }
 
 .form-control{
