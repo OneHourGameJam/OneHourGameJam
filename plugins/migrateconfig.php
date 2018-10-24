@@ -2,7 +2,9 @@
 
 /*
 
-This file is meant to help transition your installation from the JSON file based storage to databases. Put the files you want to transition into the /migratedata folder (files named jam_xy.json, where xy is a number). Then open the page in your browser. It will generate the SQL statements needed to move the content from the json files into the database. Copy-paste these statements into your database (using mysql workbench of phpmyadmin).
+This file is meant to help transition your installation from the TXT file based storage to databases. Put the config.txt you want to transition into the /migratedata folder. Then open the page in your browser. It will generate the SQL statements needed to move the content from the json files into the database. Copy-paste these statements into your database (using mysql workbench of phpmyadmin).
+
+If you want INSERT statements instead of UPDATE, then add ?insert=true to the URL
 
 */
 
@@ -424,7 +426,14 @@ function LoadConfig(){
 			$options = mysql_escape_string(json_encode($configEntry["ENUM_OPTIONS"] ?: Array()));
 
 			$sql = "";
-			if ($_GET['update'] != 'true') {
+			if ($_GET['insert'] != 'true') {
+			$sql = "
+UPDATE config
+SET config_lastedited = Now(),
+	config_value = '$value'
+WHERE config_key = '$key';
+			";
+			} else {
 				$sql = "
 INSERT INTO config (
 	config_id,
@@ -453,13 +462,6 @@ INSERT INTO config (
 	'$required',
 	'$populateTemplate'
 );
-				";
-			} else {
-				$sql = "
-UPDATE config
-SET config_lastedited = Now(),
-	config_value = '$value'
-WHERE config_key = '$key';
 				";
 			}
 
