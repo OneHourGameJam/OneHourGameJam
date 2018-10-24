@@ -5,9 +5,22 @@ Source code required to run your very own One hour game jam event.
 Requires a web server with PHP 5.4 or later and MySQL.
 
 # Installing
-What you need is a web server capable of running PHP, for example Apache. 
+You can either install with vagrant or you can manually install (if you want to install on a production server)
 
-## 1: Apache
+## With Vagrant:
+
+```
+vagrant up
+```
+
+You can now find your local version of 1hgj at: http://192.168.48.49
+
+This will setup a scotchbox vagrant box with 1hgj fully installed. You only need to set up the admin user (see below in "First Startup"). You will be able to develop as you would normally.
+
+## Manually:
+What you need is a web server capable of running PHP, for example Apache.
+
+### 1: Apache
 
 For windows: https://www.apachefriends.org/download.html
 For linux: https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu
@@ -17,17 +30,17 @@ If these guides are out of date at the time you are reading this, simply google 
 
 Also install MySQL (available in XAMPP), connect to it (via PHPMYADMIN or MySQL Workbench) and execute the contents of the provided sql file in SQL/1hgj.sql. This will create the database structure
 
-Open php/db.php and edit the database connection details at the top.
+Open config/dbconfig.php and edit the database connection details (you can copy and edit the example found at config/dbconfig_example.php).
 
-## 2: Deploying
+### 2: Deploying
 
 Once you have your web server set up, copy the contents of this repository to it.
 
 It is possible that you will need to change the permissions on the /data and /config dirrectories, so that your scripts will be able to write to them. This depends to how your web server is set up. If needed, change them to 777 and it should work. Tutorial: http://www.linux.org/threads/file-permissions-chmod.4094/. It is however likely that you will not need to do this.
 
-## 3. First startup
+## First startup
 
-Open the page in your browser and register a user. This first user will be a site administrator. 
+Open the page in your browser and register a user. This first user will be a site administrator.
 
 # Common tasks
 
@@ -59,11 +72,11 @@ Manually remove their entry from data/sessions.json; or delete the file to log o
 
 # Migrating to a new server
 
-The site uses a site-wide pepper (for password and session id salting*). This pepper is generated the first time you launch the website, so it's unique for each deployment. It's saved in config/config.txt. Changing this will invalidate all session IDs and passwords. When migrating, it is important to preserve this pepper value. 
+The site uses a site-wide pepper (for password and session id salting*). This pepper is generated the first time you launch the website, so it's unique for each deployment. It's saved in config/config.txt. Changing this will invalidate all session IDs and passwords. When migrating, it is important to preserve this pepper value.
 
 The simplest way to migrate is to simply copy the files from one server and paste them onto the new server. You might need to ensure file permissions are set correctly on the new server though (See "Deploying")
 
-*The site also uses per-user salts, not just the site-wide pepper. 
+*The site also uses per-user salts, not just the site-wide pepper.
 
 # Solving performance issues
 
