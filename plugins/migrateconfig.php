@@ -401,7 +401,8 @@ function LoadConfig(){
 			$populateTemplate = 0;
 
 			//Store marked config entries into the site dictionary for use in templates.
-			if(StartsWith($key, "LANG_")){
+
+			if(StartsWith($configKey, "LANG_")){
 				$populateTemplate = 1;
 			}
 
