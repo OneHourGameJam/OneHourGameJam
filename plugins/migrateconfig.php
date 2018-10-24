@@ -422,7 +422,9 @@ function LoadConfig(){
 			$required = $configEntry["REQUIRED"] ?: 0;
 			$options = mysql_escape_string(json_encode($configEntry["ENUM_OPTIONS"] ?: Array()));
 
-			$sql = "
+			$sql = "";
+			if ($_GET['update'] != 'true') {
+				$sql = "
 INSERT INTO config (
 	config_id,
 	config_lastedited,
@@ -450,7 +452,16 @@ INSERT INTO config (
 	'$required',
 	'$populateTemplate'
 );
-			";
+				";
+			} else {
+				$sql = "
+UPDATE config
+SET config_lastedited = Now(),
+	config_value = '$value'
+WHERE config_key = '$key';
+				";
+			}
+
 			print("<pre>" . htmlentities($sql) . "</pre>");
 		}
 	}
