@@ -79,7 +79,32 @@
 							<button type="button" class="btn entryButton" style='background-color: {{color}}' onclick='document.location.href = "?page=author&amp;author={{author}}";'>Author's profile</button>
 						</div>
 					</div>
-				{{/entries}}
+                {{/entries}}
+                
+                {{#user}}
+				    {{#is_latest_started_jam}}
+				        {{^user_participated_in_jam}}
+                            <div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
+                                <div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;'>
+                                    <div style="display:table; height: 100%; width: 100%;">
+                                        <div style="display:table-cell;vertical-align:middle;">
+                                            <div style="margin-left:auto;margin-right:auto;">
+                                                <div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
+                                                    <p style='padding-bottom: 3px;'>Once ready, submit your game to the jam here:</p>
+                                                    <a href='?page=submit'>
+                                                        <div class="btn btn-success">
+                                                            Submit game
+                                                        </div>
+                                                    </a>
+                                                </div>	
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+				        {{/user_participated_in_jam}}
+                    {{/is_latest_started_jam}}
+                {{/user}}
 			</div>
 		</div>
 	{{/jams}}

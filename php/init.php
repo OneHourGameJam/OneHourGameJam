@@ -9,6 +9,7 @@ function Init(){
 	LoadConfig();
     LoadAdminLog();
 	LoadUsers();
+	IsLoggedIn();	//Sets $loggedInUser
 	LoadEntries();
 	LoadThemes();
 	CheckNextJamSchedule();

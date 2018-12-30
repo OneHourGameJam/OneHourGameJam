@@ -27,7 +27,8 @@ function LoadEntries(){
 	$dictionary["next_jam_timer_code"] = gmdate("Y-m-d", $suggestedNextJamTime)."T".gmdate("H:i", $suggestedNextJamTime).":00Z";
 	
 	$currentJamData = GetCurrentJamNumberAndID();
-	
+	$latestStartedJamFound = false;
+
 	while($info = mysqli_fetch_array($data)){
 		
 		//Read data about the jam
@@ -146,6 +147,13 @@ function LoadEntries(){
 				$entry["has_description"] = 1;
 				$hasDesc = true;
 			}
+
+			//Has logged in user participated in this jam?
+			if(!$entry["entry_deleted"]){
+				if($loggedInUser["username"] == $author){
+					$newData["user_participated_in_jam"] = 1;
+				}
+			}
 			
 			if(!isset($entry["entry_deleted"])){
 				if(isset($authorList[$author])){
@@ -207,6 +215,13 @@ function LoadEntries(){
 			}
 		}else{
 			$newData["jam_started"] = true;
+
+			if(!isset($newData["jam_deleted"])){
+				if($latestStartedJamFound == false){
+					$newData["is_latest_started_jam"] = 1;
+					$latestStartedJamFound = true; 
+				}
+			}
 		}
 		
 		//Insert into dictionary array
