@@ -17,20 +17,20 @@ if(isset($_GET["streaming"])){
 	}
 }else{
 	if(isset($_COOKIE["streaming"]) && $_COOKIE["streaming"] == 1){
-		$dictionary["is_streamer"] = 1;
+		$dictionary["is_streamer"] = 1; 
 	}
 }
 
 $templateBasePath = "template/";
-$dictionary["template_path"] = $templateBasePath;
+$dictionary["template_path"] = $templateBasePath; 
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
 	$page = "main";
 }
 
 $pageTitles = Array(
-	"main" => "Main Page",
+	"main" => "Main Page", 
 	"login" => "Login",
 	"logout" => "Logout",
 	"submit" => "Submit Game",
@@ -52,7 +52,8 @@ $pageTitles = Array(
 	"author" => "Author",
 	"authors" => "Authors",
 	"privacy" => "Privacy",
-	"userdata" => "User Data"
+    "userdata" => "User Data",
+    "adminlog" => "Admin Log"
 );
 
 //List of pages which require user to be logged in
@@ -63,7 +64,7 @@ if(in_array($page, Array("submit", "newjam", "editasset", "config", "editcontent
 }
 
 //List of pages which require administrator access
-if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser"))){
+if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "adminlog"))){
 	if(!IsAdmin()){
 		$page = "main";
 	}
@@ -304,6 +305,11 @@ if(isset($_POST["action"])){
 				die();
 			}
 		break;
+		case "adminvote":
+			$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
+			$voteType = $_POST["adminVoteType"];
+			CastVoteForAdmin($voteSubjectUsername, $voteType);
+		break;
 	}
 }
 
@@ -377,8 +383,12 @@ switch($page){
 		$dictionary["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
 		$dictionary["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser["id"]);
+        $dictionary["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser["username"]);
+        $dictionary["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser["id"]);
+        $dictionary["userdata_adminlog_admin"] = GetAdminLogForAdminFormatted($loggedInUser["username"]);
+        $dictionary["userdata_adminlog_subject"] = GetAdminLogForSubjectFormatted($loggedInUser["username"]);
+        $dictionary["userdata_admin_vote_voter"] = GetAdminVotesCastByUserFormatted($loggedInUser["username"]);
+        $dictionary["userdata_admin_vote_subject"] = GetAdminVotesForSubjectUserFormatted($loggedInUser["username"]);
 	break;
 }
 
@@ -569,6 +579,9 @@ if($page == "jam")
 						break;
 						case "userdata":
 							print $mustache->render(file_get_contents($templateBasePath."userdata.html"), $dictionary);
+						break;
+						case "adminlog":
+							print $mustache->render(file_get_contents($templateBasePath."adminlog.html"), $dictionary);
 						break;
 					}
 				?>

@@ -16,6 +16,7 @@ include_once("php/warnings.php");
 include_once("php/config.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
+include_once("php/adminlog.php");
 include_once("php/entries.php");
 include_once("php/themes.php");
 include_once("php/assets.php");

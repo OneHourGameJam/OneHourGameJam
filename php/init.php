@@ -7,13 +7,16 @@ AfterInit();	//Plugin hook
 //Initializes the site.
 function Init(){
 	LoadConfig();
+    LoadAdminLog();
 	LoadUsers();
 	LoadEntries();
 	LoadThemes();
 	CheckNextJamSchedule();
 	LoadAssets();
 	LoadPolls();
-	LoadSatisfaction();
+    LoadSatisfaction();
+    LoadAdminVotes();
+	LoadLoggedInUsersAdminVotes();
 	//InitStream();
 	GetNextJamDateAndTime();
 }

@@ -176,8 +176,8 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		if($assetURL != ""){
 			//Uploaded new file
 			$assets[$assetID]["content"] = $assetURL;
-		}
-		
+        }
+
 		$escapedID = mysqli_real_escape_string($dbConn, $assets[$assetID]["id"]);
 		$escapedAuthor = mysqli_real_escape_string($dbConn, $assets[$assetID]["author"]);
 		$escapedTitle = mysqli_real_escape_string($dbConn, $assets[$assetID]["title"]);
@@ -196,7 +196,9 @@ function AddAsset($assetID, $author, $title, $description, $type){
 			WHERE asset_id = $escapedID;
 		";
 		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
+        $sql = "";
+        
+        AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author);
 	}else{
 		$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
 		$escapedTitle = mysqli_real_escape_string($dbConn, $title);
@@ -230,7 +232,9 @@ function AddAsset($assetID, $author, $title, $description, $type){
 
 		";
 		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
+        $sql = "";
+        
+        AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author);
 	}
 	
 	LoadAssets();
@@ -258,7 +262,23 @@ function DeleteAsset($assetID){
 	}
 	
 	$escapedID = mysqli_real_escape_string($dbConn, $assetID);
-	
+    
+	$sql = "
+        SELECT asset_id, asset_author, asset_title
+        FROM asset a
+        WHERE asset_deleted != 1
+          AND asset_id = $escapedID;
+    ";
+    $data = mysqli_query($dbConn, $sql);
+    $sql = "";
+    
+    $assetAuthor = "";
+    $assetTitle = "";
+	if($info = mysqli_fetch_array($data)){
+        $assetAuthor = $info["asset_author"];
+        $assetTitle = $info["asset_title"];
+    }
+
 	$sql = "
 		UPDATE asset
 		SET
@@ -269,6 +289,8 @@ function DeleteAsset($assetID){
 	$sql = "";
 	
 	LoadAssets();
+        
+    AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor);
 }
 
 function GetAssetsOfUserFormatted($author){

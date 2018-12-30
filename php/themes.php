@@ -303,6 +303,8 @@ function RemoveTheme($removedTheme){
 	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+    
+    AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "");
 
 	LoadThemes();
 
@@ -349,6 +351,8 @@ function BanTheme($bannedTheme){
 	$sql = "UPDATE theme SET theme_banned = 1 WHERE theme_banned != 1 AND theme_text = '$clean_bannedTheme'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+    
+    AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "");
 
 	LoadThemes();
 
@@ -395,6 +399,8 @@ function UnbanTheme($unbannedTheme){
 	$sql = "UPDATE theme SET theme_banned = 0 WHERE theme_banned = 1 AND theme_text = '$clean_unbannedTheme'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+    
+    AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", ""); 
 
 	LoadThemes();
 

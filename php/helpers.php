@@ -146,6 +146,10 @@ function MySQLDataToArray($data){
 // Converts a two dimensional array into a html-formatted table (string output)
 function ArrayToHTML($array){
 
+	if(count($array) == 0){
+		return "No data in table";
+	}
+
 	$str = "<table style='border: solid 1px'>";
 
 	foreach($array as $id => $row){

@@ -1,12 +1,13 @@
 <?php
 
 function LoadEntries(){
-	global $dictionary, $jams, $authors, $entries, $users, $config, $dbConn, $nextJamTime;
+	global $dictionary, $jams, $authors, $entries, $users, $config, $dbConn, $nextJamTime, $loggedInUser;
 	
 	//Clear public lists which get updated by this function
 	$dictionary["jams"] = Array();
 	$dictionary["jams_with_deleted"] = Array();
 	$dictionary["authors"] = Array();
+	$dictionary["admin_candidates"] = Array();
 	$jams = Array();
 	$authors = Array();
 	$entries = Array();
@@ -221,7 +222,28 @@ function LoadEntries(){
 			}
 		}
 		$dictionary["jams_with_deleted"][] = $newData;
-	}
+    }
+    
+    //Get list of sponsored users to be administration candidates, ensuring the voter is still an admin and the candidate hasn't become an admin since the vote was cast
+	$sql = "
+        SELECT v.vote_voter_username, v.vote_subject_username
+        FROM admin_vote v, user u1, user u2
+        WHERE v.vote_voter_username = u1.user_username
+          AND u1.user_role = 1
+          AND v.vote_subject_username = u2.user_username
+          AND u2.user_role = 0
+          AND v.vote_type = 'SPONSOR'
+    ";
+    $data = mysqli_query($dbConn, $sql);
+    $sql = "";
+
+    while($info = mysqli_fetch_array($data)){
+        $voteVoterUsername = $info["vote_voter_username"];
+        $voteSubjectUsername = $info["vote_subject_username"];
+
+        $authorList[$voteSubjectUsername]["is_sponsored"] = 1;
+        $authorList[$voteSubjectUsername]["sponsored_by"] = $voteVoterUsername;
+    }
 
 	//Process authors list
 	foreach($authorList as $k => $authorData){
@@ -237,10 +259,43 @@ function LoadEntries(){
 				$authorList[$k]["is_admin_candidate"] = 1;
 		}
 		
-		//Find inactive admins
-		if($authorList[$k]["last_jam_number"] <= (count($jams) - $config["ADMIN_WARNING_WEEKS_SINCE_LAST_JAM"])){
-			$authorList[$k]["is_inactive"] = 1;
-		}
+        //Find inactive admins (participation in jams)
+        $jamsSinceLastParticipation = (count($jams) - $authorList[$k]["last_jam_number"]);
+        $authorList[$k]["jams_since_last_participation"] = $jamsSinceLastParticipation;
+		if($authorList[$k]["last_jam_number"] < (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"])){
+			$authorList[$k]["activity_jam_participation"] = "inactive";
+			$authorList[$k]["activity_jam_participation_color"] = "#FFECEC";
+		}else if($authorList[$k]["last_jam_number"] >= (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"])){
+			$authorList[$k]["activity_jam_participation"] = "highly active";
+			$authorList[$k]["activity_jam_participation_color"] = "#ECFFEC";
+		}else{
+			$authorList[$k]["activity_jam_participation"] = "active";
+			$authorList[$k]["activity_jam_participation_color"] = "#F6FFEC";
+        }
+		
+        //Find inactive admins (days since last login)
+		if($authorList[$k]["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]){
+			$authorList[$k]["activity_login"] = "inactive";
+			$authorList[$k]["activity_login_color"] = "#FFECEC";
+		}else if($authorList[$k]["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]){
+			$authorList[$k]["activity_login"] = "highly active";
+			$authorList[$k]["activity_login_color"] = "#ECFFEC";
+		}else{
+            $authorList[$k]["activity_login"] = "active";
+			$authorList[$k]["activity_login_color"] = "#F6FFEC";
+        }
+		
+        //Find inactive admins (days since last login)
+		if($authorList[$k]["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]){
+			$authorList[$k]["activity_administration"] = "inactive";
+			$authorList[$k]["activity_administration_color"] = "#FFECEC";
+		}else if($authorList[$k]["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]){
+			$authorList[$k]["activity_administration"] = "highly active";
+			$authorList[$k]["activity_administration_color"] = "#ECFFEC";
+		}else{
+            $authorList[$k]["activity_administration"] = "active";
+			$authorList[$k]["activity_administration_color"] = "#F6FFEC";
+        }
 	}
 	
 	//Insert authors into dictionary
@@ -262,10 +317,46 @@ function LoadEntries(){
 				$dictionary["admins"][$i]["entry_count"] = $authorData["entry_count"];
 				$dictionary["admins"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["admins"][$i]["first_jam_number"] = $authorData["first_jam_number"];
-				$dictionary["admins"][$i]["last_jam_number"] = $authorData["last_jam_number"];
-				if(isset($authorData["is_inactive"])){
-					$dictionary["admins"][$i]["is_inactive"] = 1;
-				}
+                $dictionary["admins"][$i]["last_jam_number"] = $authorData["last_jam_number"];
+                $dictionary["admins"][$i]["activity_jam_participation"] = $authorData["activity_jam_participation"];
+                switch($authorData["activity_jam_participation"]){
+                    case "inactive":
+                        $dictionary["admins"][$i]["activity_jam_participation_inactive"] = 1;
+                        break;
+                    case "active":
+                        $dictionary["admins"][$i]["activity_jam_participation_active"] = 1;
+                        break;
+                    case "highly active":
+                        $dictionary["admins"][$i]["activity_jam_participation_highly_active"] = 1;
+                        break;
+                }
+				$dictionary["admins"][$i]["activity_jam_participation_color"] = $authorData["activity_jam_participation_color"];
+				$dictionary["admins"][$i]["activity_login"] = $authorData["activity_login"];
+                switch($authorData["activity_login"]){
+                    case "inactive":
+                        $dictionary["admins"][$i]["activity_login_inactive"] = 1;
+                        break;
+                    case "active":
+                        $dictionary["admins"][$i]["activity_login_active"] = 1;
+                        break;
+                    case "highly active":
+                        $dictionary["admins"][$i]["activity_login_highly_active"] = 1;
+                        break;
+                }
+				$dictionary["admins"][$i]["activity_login_color"] = $authorData["activity_login_color"];
+				$dictionary["admins"][$i]["activity_administration"] = $authorData["activity_administration"];
+                switch($authorData["activity_administration"]){
+                    case "inactive":
+                        $dictionary["admins"][$i]["activity_administration_inactive"] = 1;
+                        break;
+                    case "active":
+                        $dictionary["admins"][$i]["activity_administration_active"] = 1;
+                        break;
+                    case "highly active":
+                        $dictionary["admins"][$i]["activity_administration_highly_active"] = 1;
+                        break;
+                }
+                $dictionary["admins"][$i]["activity_administration_color"] = $authorData["activity_administration_color"];
 			}
 		}
 		//Update registered users list with entry count for each
@@ -275,8 +366,13 @@ function LoadEntries(){
 				$dictionary["registered_users"][$i]["recent_participation"] = $authorData["recent_participation"];
 				$dictionary["registered_users"][$i]["first_jam_number"] = $authorData["first_jam_number"];
 				$dictionary["registered_users"][$i]["last_jam_number"] = $authorData["last_jam_number"];
-				if(isset($authorData["is_admin_candidate"])){
-					$dictionary["registered_users"][$i]["is_admin_candidate"] = 1;
+				if(isset($authorData["is_admin_candidate"]) || isset($authorData["is_sponsored"])){
+                    $dictionary["registered_users"][$i]["is_admin_candidate"] = 1;
+                    if(isset($authorData["is_sponsored"])){
+                        $dictionary["registered_users"][$i]["is_sponsored"] = 1;
+                    }
+					$dictionary["registered_users"][$i]["sponsored_by"] = $authorData["sponsored_by"];
+					$dictionary["admin_candidates"][] = $dictionary["registered_users"][$i];
 				}
 			}
 		}
@@ -617,7 +713,9 @@ function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $start
 		0);";
 	
 	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+    $sql = "";
+    
+    AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "");
 }
 
 //Edits an existing jam, identified by the jam number.
@@ -690,6 +788,8 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	$sql = "";
 	
 	AddDataSuccess("Jam Updated");
+    
+    AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamNumber: $jamNumber, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "");
 }
 
 
@@ -727,6 +827,8 @@ function DeleteJam($jamID){
 	$sql = "";
 	
 	AddDataSuccess("Jam Deleted");
+    
+    AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "");
 }
 
 //Returns true / false based on whether or not the specified jam can be deleted
@@ -1170,9 +1272,11 @@ function DeleteEntry($entryID){
 	
 	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryID";
 	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+    $sql = "";
+    
+    AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "");
 	
-	AddDataSuccess("Game Deleted");
+    AddDataSuccess("Game Deleted");
 }
 
 //Returns true / false based on whether or not the specified entry can be deleted

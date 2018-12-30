@@ -242,6 +242,214 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 	AddDataSuccess("Satisfaction score submitted", false);
 }
 
+function LoadLoggedInUsersAdminVotes(){
+	global $dbConn, $loggedInUser, $dictionary;
+
+	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	
+	$sql = "
+		SELECT vote_subject_username, vote_type
+		FROM admin_vote 
+		WHERE vote_voter_username = '$escapedVoterUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+    
+	unset($dictionary["missing_admin_candidate_votes"]);
+	unset($dictionary["missing_admin_candidate_votes_number"]);
+    
+	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
+		unset($dictionary["admin_candidates"][$i]["vote_type"]);
+		unset($dictionary["admin_candidates"][$i]["vote_type_for"]);
+		unset($dictionary["admin_candidates"][$i]["vote_type_neutral"]);
+		unset($dictionary["admin_candidates"][$i]["vote_type_against"]);
+		unset($dictionary["admin_candidates"][$i]["vote_type_sponsor"]);
+		unset($dictionary["admin_candidates"][$i]["vote_type_veto"]);
+	}
+
+	while($info = mysqli_fetch_array($data)){
+		$voteSubjectUsername = $info["vote_subject_username"];
+		$voteType = $info["vote_type"];
+
+		foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
+			if($dictUserInfo["username"] == $voteSubjectUsername){
+				$dictionary["admin_candidates"][$i]["vote_type"] = $info["vote_type"];
+
+				switch($info["vote_type"]){
+					case "FOR":
+						$dictionary["admin_candidates"][$i]["vote_type_for"] = 1;
+						break;
+					case "NEUTRAL":
+						$dictionary["admin_candidates"][$i]["vote_type_neutral"] = 1;
+						break;
+					case "AGAINST":
+						$dictionary["admin_candidates"][$i]["vote_type_against"] = 1;
+						break;
+					case "SPONSOR":
+						$dictionary["admin_candidates"][$i]["vote_type_sponsor"] = 1;
+						break;
+					case "VETO":
+						$dictionary["admin_candidates"][$i]["vote_type_veto"] = 1;
+						break;
+				}
+			}
+		}
+    }
+    
+    $missingAdminCandidateVotes = 0;
+	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
+		if(!isset($dictionary["admin_candidates"][$i]["vote_type"])){
+            $missingAdminCandidateVotes += 1;
+		}
+    }
+    
+    if($missingAdminCandidateVotes > 0){
+        $dictionary["missing_admin_candidate_votes"] = 1;
+        $dictionary["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
+    }
+}
+
+function LoadAdminVotes(){
+	global $dbConn, $loggedInUser, $dictionary;
+
+	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	
+	$sql = "
+		SELECT v.vote_subject_username, v.vote_type
+		FROM admin_vote v, user u
+        WHERE v.vote_voter_username = u.user_username
+          AND u.user_role = 1
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
+		unset($dictionary["admin_candidates"][$i]["is_sponsored"]);
+		unset($dictionary["admin_candidates"][$i]["is_vetoed"]);
+		unset($dictionary["admin_candidates"][$i]["votes_for"]);
+		unset($dictionary["admin_candidates"][$i]["votes_neutral"]);
+		unset($dictionary["admin_candidates"][$i]["votes_against"]);
+		unset($dictionary["admin_candidates"][$i]["votes_vetos"]);
+	}
+
+	while($info = mysqli_fetch_array($data)){
+		$voteSubjectUsername = $info["vote_subject_username"];
+		$voteType = $info["vote_type"];
+
+		foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
+			if($dictUserInfo["username"] == $voteSubjectUsername){
+				$dictionary["admin_candidates"][$i]["vote_type"] = $info["vote_type"];
+
+				switch($info["vote_type"]){
+					case "FOR":
+						$dictionary["admin_candidates"][$i]["votes_for"] += 1;
+						break;
+					case "NEUTRAL":
+						$dictionary["admin_candidates"][$i]["votes_neutral"] += 1;
+						break;
+					case "AGAINST":
+						$dictionary["admin_candidates"][$i]["votes_against"] += 1;
+						break;
+					case "SPONSOR":
+						$dictionary["admin_candidates"][$i]["votes_for"] += 1;
+						$dictionary["admin_candidates"][$i]["is_sponsored"] = 1;
+						break;
+					case "VETO":
+						$dictionary["admin_candidates"][$i]["votes_vetos"] += 1;
+						$dictionary["admin_candidates"][$i]["is_vetoed"] = 1;
+						break;
+				}
+			}
+		}
+	}
+}
+
+function CastVoteForAdmin($subjectUsername, $voteType){
+	global $dbConn, $ip, $userAgent, $loggedInUser;
+
+	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
+	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
+	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$escapedSubjectUsername = mysqli_real_escape_string($dbConn, $subjectUsername);
+	$escapedVoteType = mysqli_real_escape_string($dbConn, $voteType);
+
+	switch($voteType){
+		case "FOR":
+		case "NEUTRAL":
+		case "AGAINST":
+			break;
+		case "SPONSOR":
+		case "VETO":
+			//Each admin can sponsor and veto only one candidate
+			$sql = "
+				SELECT vote_id
+				FROM admin_vote 
+				WHERE vote_voter_username = '$escapedVoterUsername'
+				  AND vote_type = '$escapedVoteType'
+			";
+			$data = mysqli_query($dbConn, $sql);
+			$sql = "";
+
+			if($info = mysqli_fetch_array($data)){
+				$voteID = $info["vote_id"];
+				$escapedVoteID = mysqli_real_escape_string($dbConn, $voteID);
+
+				$sql = "
+					DELETE FROM admin_vote
+					WHERE vote_id = $escapedVoteID
+				";
+				$data = mysqli_query($dbConn, $sql);
+				$sql = "";
+			}
+			break;
+		default:
+			AddDataWarning("Failed to cast vote for admin: Invalid vote type", false);
+			return;
+	}
+
+	$sql = "
+		SELECT vote_id
+		FROM admin_vote 
+		WHERE vote_voter_username = '$escapedVoterUsername'
+		  AND vote_subject_username = '$escapedSubjectUsername'
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	if($info = mysqli_fetch_array($data)){
+		//A vote already exists, update it
+		$sql = "
+			UPDATE admin_vote
+			SET vote_type = '$escapedVoteType'
+			WHERE vote_voter_username = '$escapedVoterUsername'
+			  AND vote_subject_username = '$escapedSubjectUsername'
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+		AddDataSuccess("Admin vote updated", false);
+	}else{
+		//New vote for admin
+		$sql = "
+			INSERT INTO admin_vote
+			(vote_id, vote_datetime, vote_ip, vote_user_agent, vote_voter_username, vote_subject_username, vote_type)
+			VALUES
+			(null,
+			Now(),
+			'$escapedIP',
+			'$escapedUserAgent',
+			'$escapedVoterUsername',
+			'$escapedSubjectUsername',
+			'$escapedVoteType');
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+		AddDataSuccess("Admin vote cast", false);
+	}
+
+    LoadEntries();
+    LoadAdminVotes();
+    LoadLoggedInUsersAdminVotes();
+}
 
 function GetPollVotesOfUserFormatted($username){
 	global $dbConn;
@@ -268,6 +476,36 @@ function GetSatisfactionVotesOfUserFormatted($username){
 		SELECT *
 		FROM satisfaction
 		WHERE satisfaction_username = '$escapedUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
+function GetAdminVotesCastByUserFormatted($username){
+	global $dbConn;
+	
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
+	$sql = "
+		SELECT *
+		FROM admin_vote
+		WHERE vote_voter_username = '$escapedUsername';
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return ArrayToHTML(MySQLDataToArray($data)); 
+}
+
+function GetAdminVotesForSubjectUserFormatted($username){
+	global $dbConn;
+	
+	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
+	$sql = "
+        SELECT vote_id, vote_datetime, 'redacted' AS vote_voter_username, vote_subject_username, 'redacted' AS vote_type
+        FROM admin_vote
+        WHERE vote_subject_username = '$escapedUsername';
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

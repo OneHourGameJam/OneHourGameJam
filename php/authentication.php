@@ -37,9 +37,19 @@ function LoadUsers(){
 
 	$users = Array();
 
-	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email, user_password_salt, user_password_hash, user_password_iterations, user_role FROM user";
+	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email, 
+                   user_password_salt, user_password_hash, user_password_iterations, user_role, 
+                   DATEDIFF(Now(), user_last_login_datetime) AS days_since_last_login, 
+                   DATEDIFF(Now(), log_max_datetime) AS days_since_last_admin_action
+            FROM 
+                user u LEFT JOIN 
+                (
+                    SELECT log_admin_username, max(log_datetime) AS log_max_datetime 
+                    FROM admin_log 
+                    GROUP BY log_admin_username
+                ) al ON u.user_username = al.log_admin_username";
 	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+    $sql = "";
 
 	while($info = mysqli_fetch_array($data)){
 		//Read data about the user
@@ -53,7 +63,20 @@ function LoadUsers(){
 		$currentUser["salt"] = $info["user_password_salt"];
 		$currentUser["password_hash"] = $info["user_password_hash"];
 		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
-		$currentUser["admin"] = intval($info["user_role"]);
+        $currentUser["admin"] = intval($info["user_role"]);
+        
+        //This fixes an issue where user_last_login_datetime was not set properly in the database, which results in days_since_last_login being null for users who have not logged in since the fix was applied
+        if($info["days_since_last_login"] == null){
+            $info["days_since_last_login"] = 1000000;
+        }
+        
+        //For cases where users have never performed an admin action
+        if($info["days_since_last_admin_action"] == null){
+            $info["days_since_last_admin_action"] = 1000000;
+        }
+
+		$currentUser["days_since_last_login"] = intval($info["days_since_last_login"]);
+		$currentUser["days_since_last_admin_action"] = intval($info["days_since_last_admin_action"]);
 
 		$users[$currentUser["username"]] = $currentUser;
 		$userIDLookup[$currentUser["id"]] = $currentUser["username"];
@@ -262,7 +285,7 @@ function LogOut(){
 
 	$sql = "
 		DELETE FROM session
-		WHERE `session_id` = '$sessionIDHash';
+		WHERE session_id = '$sessionIDHash';
 	";
 
 	mysqli_query($dbConn, $sql) ;
@@ -281,7 +304,7 @@ function LogOut(){
 //Returns either the logged in user's username or FALSE if not logged in.
 //Set $force to TRUE to force reloading (for example if a user setting was changed for the logged in user)
 function IsLoggedIn($force = FALSE){
-	global $loginChecked, $loggedInUser, $config, $users, $dictionary, $dbConn, $userIDLookup;
+	global $loginChecked, $loggedInUser, $config, $users, $dictionary, $dbConn, $userIDLookup, $ip, $userAgent;
 
 	if($loginChecked && !$force){
 		return $loggedInUser;
@@ -299,17 +322,18 @@ function IsLoggedIn($force = FALSE){
 	$sessionID = "".$_COOKIE["sessionID"];
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
 	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
+        
+    $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
 
 	$sql = "
-		SELECT `session_id`, `session_user_id`
+		SELECT session_id, session_user_id
 		FROM session
-		WHERE `session_id` = '$sessionIDHash';
+		WHERE session_id = '$cleanSessionIdHash';
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$session = mysqli_fetch_array($data);
-	if($session){
+	if($session = mysqli_fetch_array($data)){
 		//Session ID does in fact exist
 		$userID = $session["session_user_id"];
 		$username = $userIDLookup[$userID];
@@ -320,13 +344,27 @@ function IsLoggedIn($force = FALSE){
 		if($loggedInUser["admin"] != 0){
 			$dictionary["user"]["isadmin"] = 1;
 		}
-		$loginChecked = true;
+        $loginChecked = true;
 
 		$sql = "
 			UPDATE session
-			SET `session_datetime_last_used` = Now()
-			WHERE `session_id` = '$sessionIDHash'
+			SET session_datetime_last_used = Now()
+			WHERE session_id = '$cleanSessionIdHash'
 		";
+		$data = mysqli_query($dbConn, $sql);
+        $sql = "";
+        
+        $cleanUserId = mysqli_real_escape_string($dbConn, $userID);
+        $cleanIp = mysqli_real_escape_string($dbConn, $ip);
+        $cleanUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
+
+		$sql = "
+			UPDATE user
+            SET user_last_login_datetime = Now(),
+                user_last_ip = '$cleanIp',
+                user_last_user_agent = '$cleanUserAgent'
+			WHERE user_id = $cleanUserId
+        ";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 
@@ -394,7 +432,9 @@ function EditUser($username, $isAdmin){
 		WHERE user_username = '$usernameClean';
 	";
 	mysqli_query($dbConn, $sql) ;
-	$sql = "";
+    $sql = "";
+    
+    AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username);
 	
 	LoadUsers();
 	$loggedInUser = IsLoggedIn(TRUE);
@@ -571,7 +611,9 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+    
+    AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username);
+    
 	LoadUsers();
 	$loggedInUser = IsLoggedIn(TRUE);
 }

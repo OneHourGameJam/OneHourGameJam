@@ -78,13 +78,31 @@
 				<li>Date and time when the session started</li>
 				<li>Hashed session ID</li>
 			</ul>
+			
+			<li>For each administrative action (scheduling jams, changing user roles, deleting themes, etc.), the following user data is stored:</li>
+			<ul>
+				<li>Date and time when the log was created</li>
+				<li>IP Address and User Agent of administrator who triggered the event</li>
+				<li>The username of the administrator who triggered the event</li>
+				<li>The username of the subject the event relates to</li>
+				<li>A human readable descriptor of the event, which may include user data relevant to the event. The specific user data may be any of the following: User ID, Date and time of any kind, Username, IP Address, User Agent, User-entered content, Password hashes, Email address, Twitter handle, Role or anything else from this privacy document.</li>
+			</ul>
+			
+			<li>For each administion candidate vote the following user data is stored:</li>
+			<ul>
+				<li>Date and time the vote was cast</li>
+				<li>IP Address and User Agent of administrator who cast the vote</li>
+				<li>The username of the administrator who cast the vote</li>
+				<li>The username of the person being voted on</li>
+				<li>The type of vote cast: Sponsor (administrator suggests the user as an admin candidate), for, neutral, against, veto</li>
+			</ul>
 		</ul>
 	</p>
 	<p>
 		<h4>How data is transmitted and stored</h4>
 		
 		<p>
-			All data is transmitted in plaintext. This includes passwords and session IDs. Session IDs are stored in cookies. None of this is good, but it's what we have.
+			All data is transmitted encrypted via HTTPS. This includes passwords and session IDs. Session IDs are stored in cookies.
 		</p>
 		<p>
 			All data is stored in plaintext, except passwords and session IDs. These are salted, peppered and hashed with SHA256 between 10000 and 20000 times (random number for each user). The result is stored. This same process is done again whenever a password or session ID is provided and the result is checked against the stored hashed values. As far as we're aware, this method means a breech of our database would not result in username/password combinations being obtainable through brute-forcing with current technology. Weak passwords are however easily obtainable no matter what encryption we use.
@@ -98,7 +116,7 @@
 				User IDs and usernames are stored to determine which user is related to each bit of content.
 			</li>
 			<li>
-				Event dates and times, IP Addresses and User Agent information is stored to identify users in cases of abuse.
+				Event dates and times, IP Addresses and User Agent information is stored to identify users in cases of abuse and user's level of activity.
 			</li>
 			<li>
 				Usernames, password validation information, session IDs and the user's role are stored to authenticate and authorize users.
@@ -109,13 +127,19 @@
 			<li>
 				For theme votes, poll votes and satisfaction votes, the cast votes are directly tied to the user who cast them. This is done to ensure each user can only cast one vote and to indicate to the user what they voted for. In the case of theme votes, it is so we can color the currently-voted-for option. This is also done to mittigate cases of vote abuse or to check what different groups of users voted for - for example select only what recent participants voted for. This does mean that there is enough data available to check what each user individually has voted for (themes, polls and satisfaction).
 			</li>
+			<li>
+				The data in the administration log is stored to identify abuse, determine administrator activity and to reverse accidental or malicious changes.
+			</li>
+			<li>
+				The data in the administration candidate vote is stored to help determine which candidates should be given the administration role.
+			</li>
 		</ul>
 	</p>
 	<p>
 		<h4>How you can control your data</h4>
 		
 		<p>
-			If you wish to get a copy of all the data we have on you, please visit us on Discord by clicking the button in the page's header and ask for an administrator. We'll need to authenticate you first though.
+			If you wish to get a copy of all the data we have on you, please click the link labeled "<a href='?page=userdata'>User Data</a>" in the menu, or visit us on Discord by clicking the button in the page's header and ask for an administrator. We'll need to authenticate you first though.
 		</p>
 		<p>
 			If you wish us to delete the data we have, please visit us on Discord by clicking the button in the page's header and ask for an administrator. We'll need to authenticate you first though.

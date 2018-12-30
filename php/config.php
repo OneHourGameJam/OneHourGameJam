@@ -16,6 +16,7 @@ $configCategorySettings = Array(
 );
 
 //Initializes configuration, stores it in the global $config variable.
+
 function LoadConfig(){
 	global $config, $dictionary, $configCategorySettings, $dbConn;
 
@@ -23,7 +24,7 @@ function LoadConfig(){
 	$dictionary["CONFIG"] = Array();	//Clear any config entries in the dictionary
 
 	//Fill list of themes - will return same row multiple times (once for each valid themevote_type)
-	$sql = " SELECT * FROM config; ";
+	$sql = " SELECT * FROM config ORDER BY config_id; ";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
@@ -37,13 +38,13 @@ function LoadConfig(){
 		$options = json_decode($configEntry["config_options"], true);
 		$editable = $configEntry["config_editable"];
 		$required = $configEntry["config_required"];
-		$populateTemplate = $configEntry["config_template"];
+		$addedToDictionary = $configEntry["config_added_to_dictionary"];
 
 		$key = "CONFIG_" . $baseKey;
 
 		$config[$baseKey] = $value;
 
-		if ($populateTemplate) {
+		if ($addedToDictionary) {
 			$dictionary[$key] = $value;
 		}
 
@@ -102,7 +103,8 @@ function LoadConfig(){
 	// print_r($config);
 	// print_r($dictionary);
 
-	VerifyConfig();
+    VerifyConfig();
+    RedirectToHttpsIfRequired();
 }
 
 function VerifyConfig() {
@@ -122,6 +124,10 @@ function VerifyConfig() {
 function UpdateConfig($key, $value, $userID) {
 	global $config, $dbConn;
 
+	if(!IsAdmin()){
+		return; //Lacks permissions to make edits
+	}
+
 	$keyClean = mysqli_real_escape_string($dbConn, $key);
 	$valueClean = mysqli_real_escape_string($dbConn, $value);
 
@@ -134,7 +140,9 @@ function UpdateConfig($key, $value, $userID) {
 		WHERE config_key = '$keyClean';
 	";
 	mysqli_query($dbConn, $sql);
-	$sql = "";
+    $sql = "";
+    
+    AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
 }
 
 
@@ -175,7 +183,19 @@ function SaveConfig($key, $newValue){
 	UpdateConfig($key, $newValue, $loggedInUser['id']);
 }
 
+function RedirectToHttpsIfRequired(){
+    global $config;
 
+    if($config["REDIRECT_TO_HTTPS"]){
+        if(!isset($_SERVER['HTTPS'])){
+        	//Redirect to https
+            $url = "https://". $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+            header("HTTP/1.1 301 Moved Permanently"); 
+            header("Location: $url"); 
+            die();
+        }
+    }
+}
 
 
 

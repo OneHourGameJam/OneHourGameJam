@@ -1,7 +1,12 @@
 <div class="panel panel-info">
-	<div class="panel-heading">
-		<h3 class="panel-title">Hello {{user.display_name}}</h3>
-	</div>
+    <div class="panel-heading">
+        <h3 class="panel-title">Hello {{user.display_name}}</h3>
+    </div>
+    {{#missing_admin_candidate_votes}}
+    <div class="panel-body">
+            <a href='?page=editusers'><span style='background-color: red; color: white; font-weight: bold;'>{{{missing_admin_candidate_votes_number}}}</span> admin candidate(s) need(s) your vote</a>   
+    </div>
+    {{/missing_admin_candidate_votes}}
 	<div class="panel-body">
 		<ul id='mainmenu' style='padding-left: 12px;'>
 			<li><a href='?page=main'>Home</a></li>
