@@ -1,0 +1,69 @@
+body{
+    background-color: #202020;
+    color: white;
+}
+.panel-body{
+    background-color: #383838;
+    border-color: #7B8991;
+}
+
+.jamContent{
+    background-color: #383838;
+    border-color: #7B8991;
+}
+
+.panel-info>.panel-heading{
+    background-color: #576065;
+    color: #D8F2FF;
+    border-color: #7B8991;
+}
+
+.panel{
+    border-color: #7B8991;
+}
+
+a{
+    color: #76B2E5;
+}
+.a:visited{
+    color: #76B2E5;
+}
+
+.a:link{
+    color: #76B2E5;
+}
+
+a:hover{
+    color: #99CAF4;
+}
+.a:active{
+    color: #99CAF4;
+}
+
+.form-control{
+    background-color: #606060;
+    color: white;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+    background-color: #606060;
+    color: white;
+}
+
+.btn-default{
+    background-color: #606060;
+    color: white;
+}
+
+.authorPageEntry{
+    background-color: #484848;
+}
+
+.trumbowyg{
+    background-color: #606060;
+    color: white;
+}
+
+.trumbowyg-button-pane{
+    background-color: #7B8991;
+}

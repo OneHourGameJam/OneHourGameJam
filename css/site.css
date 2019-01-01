@@ -7,6 +7,10 @@ body{
 	cursor: pointer;
 }
 
+.jamContent{
+    background-color: #F7FBFD;
+}
+
 .jamHeader:hover{
 	background-color: #CCE7F4;
 }
@@ -151,4 +155,8 @@ body{
 
 .discordButton:hover{
 	background-color: #6676AE; 
+}
+
+.authorPageEntry{
+    background-color: #F5F5F5;
 }

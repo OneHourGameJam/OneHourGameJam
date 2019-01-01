@@ -28,7 +28,7 @@
 			</div>
 			
 			
-			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
+			<div class='panel-body jamContent' style='{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
 				{{#enough_scores_to_show_satisfaction}}
 					<div style='width: 100%; text-align: center;'>
 						<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>

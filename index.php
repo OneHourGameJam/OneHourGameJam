@@ -70,6 +70,21 @@ if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editja
 	}
 }
 
+$nightmode = $_COOKIE["nightmode"];
+if(isset($_GET["nightmode"])){
+	$nightmode = $_GET["nightmode"];
+	if($nightmode == 1){
+		setcookie("nightmode", 1, time() + (60 * 60 * 24 * 365));
+		$nightmode = 1;
+	}else{
+		setcookie("nightmode", null, -1);
+		$nightmode = 0;
+	}
+}
+if($nightmode == 1){
+	$dictionary["NIGHT_MODE"] = 1;
+}
+
 //Actions!
 $action = "";
 if(isset($_POST["action"])){

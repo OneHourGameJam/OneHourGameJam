@@ -1,6 +1,6 @@
 <div class="col-md-10" id='jamlist'>
 	{{#viewing_author}}
-		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+		<div class='panel panel-info jamContener'>
 			<div class='panel-heading'>
 				{{display_name}}
 			</div>
@@ -8,7 +8,7 @@
 		<div class='panel-body'>
 			{{{ viewing_author.bio }}}
 		</div>
-		<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+		<div class='panel-body jamContent'>
 			{{^entries}}
 				This user did not submit any games.
 			{{/entries}}
@@ -20,11 +20,11 @@
 								<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
 							</td>
 						{{/has_screenshot}}
-						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' style='background-color: #F5F5F5;'>
+						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
 							<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
 							for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
 						</div>
-						<td style='background-color: #F5F5F5; text-align: right;'>
+						<td class='authorPageEntry' style='text-align: right;'>
 							{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
 							{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
 							{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
