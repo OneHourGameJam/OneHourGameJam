@@ -1,13 +1,10 @@
 <?php
 
 function LoadAssets(){
-	global $dictionary, $assets, $dbConn;
-	
-	//Clear public lists which get updated by this function
-	$dictionary["assets"] = Array();
+	global $dictionary, $dbConn;
+
 	$assets = Array();
 	
-	//Fill list of themes - will return same row multiple times (once for each valid themevote_type)
 	$sql = "
 		SELECT a.asset_id, a.asset_author, a.asset_title, a.asset_description, a.asset_type, a.asset_content, u.user_display_name
 		FROM asset a, user u
@@ -17,7 +14,6 @@ function LoadAssets(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
-	//Fill dictionary with non-banned themes
 	while($asset = mysqli_fetch_array($data)){
 		$id = $asset["asset_id"];
 		$author = $asset["asset_author"];
@@ -52,11 +48,16 @@ function LoadAssets(){
 		
 		$assets[$id] = $a;
 	}
-	
-	$dictionary["assets"] = Array();
+
+	return $assets;
+}
+
+function RenderAssets($assets){
+	$render = Array();
 	foreach($assets as $id => $asset){
-		$dictionary["assets"][] = $asset;
+		$render[] = $asset;
 	}
+	return $render;
 }
 
 function GetAssetsOfUserFormatted($author){

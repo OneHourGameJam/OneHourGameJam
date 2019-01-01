@@ -13,7 +13,6 @@ $loginChecked = false;
 $config = Array();
 $dictionary = Array();
 $users = Array();
-$userIDLookup = Array();
 $jams = Array();
 $authors = Array();
 $entries = Array();

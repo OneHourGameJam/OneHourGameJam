@@ -39,7 +39,7 @@ function GetNextJamDateAndTime(){
 	global $dictionary, $config;
 
     $jamDay = "monday";
-    switch($config["JAM_DAY"]){
+    switch($config["JAM_DAY"]["VALUE"]){
         case 0:
             $jamDay = "sunday";
         break;
@@ -63,7 +63,7 @@ function GetNextJamDateAndTime(){
         break;
     }
 
-	$suggestedDay = strtotime("$jamDay +" . intval($config["JAM_TIME"]) . " hours UTC");
+	$suggestedDay = strtotime("$jamDay +" . intval($config["JAM_TIME"]["VALUE"]) . " hours UTC");
 	$dictionary["next_jam_suggested_date"] = gmdate("Y-m-d", $suggestedDay);
 	$dictionary["next_jam_suggested_time"] = gmdate("H:i", $suggestedDay);
 	$now = time();

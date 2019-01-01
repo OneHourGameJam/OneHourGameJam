@@ -6,20 +6,39 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	LoadConfig();
-    LoadAdminLog();
-	LoadUsers();
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser;
+
+	$config = LoadConfig();
+
+    RedirectToHttpsIfRequired($config);
+
+	$adminLog = LoadAdminLog();
+	$users = LoadUsers();
+
 	IsLoggedIn();	//Sets $loggedInUser
-	LoadEntries();
+
+	$jams =  LoadJams();
+	$games = LoadGames();
+
 	LoadThemes();
 	CheckNextJamSchedule();
-	LoadAssets();
+	$assets = LoadAssets();
 	LoadPolls();
     LoadSatisfaction();
     LoadAdminVotes();
 	LoadLoggedInUsersAdminVotes();
 	//InitStream();
-	GetNextJamDateAndTime();
+	GetNextJamDateAndTime(); 
+
+	$dictionary["CONFIG"] = RenderConfig($config);
+	$dictionary["adminlog"] = RenderAdminLog($adminLog);
+	$dictionary["users"] = RenderUsers($users, $games, $jams, $config);
+	$dictionary["jams"] = RenderJams($jams, $config, $games, $users, $loggedInUser);
+	$dictionary["entries"] = RenderGames($games, $jams, $users);
+
+
+	$dictionary["assets"] = RenderAssets($assets);
+	
 }
 
 ?>

@@ -7,8 +7,8 @@ function LogOut(){
 
 	// Delete the session out of our DB
 	$sessionID = "".$_COOKIE["sessionID"];
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
+	$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
+	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
 
 	$sql = "
 		DELETE FROM session

@@ -20,27 +20,27 @@
 			
 			<label for="jamcolors">Number of Colours</label>
 			<div class="slidecontainer">
-				<input type="number" min="1" max="16" value="{{CONFIG_DEFAULT_NUMBER_OF_COLORS}}" class="form-control" id="NumberOfColors" onchange="UpdateNumberOfColors();">
+				<input type="number" min="1" max="16" value="{{CONFIG.VALUES.DEFAULT_NUMBER_OF_COLORS}}" class="form-control" id="NumberOfColors" onchange="UpdateNumberOfColors();">
 			</div>
 			
 			<label for="jamcolors">Saturation</label>
 			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG_DEFAULT_SATURATION}}" class="slider" id="Saturation" oninput="UpdateAutoJamcolors();">
+				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_SATURATION}}" class="slider" id="Saturation" oninput="UpdateAutoJamcolors();">
 			</div>
 			
 			<label for="jamcolors">Brightness</label>
 			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG_DEFAULT_BRIGHTNESS}}" class="slider" id="Brightness" oninput="UpdateAutoJamcolors();">
+				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_BRIGHTNESS}}" class="slider" id="Brightness" oninput="UpdateAutoJamcolors();">
 			</div>
 			
 			<label for="jamcolors">Min Hue</label>
 			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG_DEFAULT_HUE_MIN}}" class="slider" id="MinHue" oninput="UpdateAutoJamcolors();">
+				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_HUE_MIN}}" class="slider" id="MinHue" oninput="UpdateAutoJamcolors();">
 			</div>
 			
 			<label for="jamcolors">Max Hue</label>
 			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG_DEFAULT_HUE_MAX}}" class="slider" id="MaxHue" oninput="UpdateAutoJamcolors();">
+				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_HUE_MAX}}" class="slider" id="MaxHue" oninput="UpdateAutoJamcolors();">
 			</div>
 			
 			<span id="ColorPreviews">

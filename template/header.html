@@ -4,7 +4,7 @@
 	<head>
 		<meta charset='utf-8'>
 		<script src="js/jquery.js"></script>
-		<title>{{CONFIG_JAMNAME}} - {{page_title}}</title>
+		<title>{{CONFIG.VALUES.JAMNAME}} - {{page_title}}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
@@ -31,26 +31,26 @@
 				</div>
 				<div class="col-md-6" style='text-align: center; margin-top: 10px;'>
 					<a href='.'><img src='logo_1hgj.png' alt='Logo' style='max-width: 100%; width: 400px; border: 0;' /></a><br />
-					{{{CONFIG_JAMDESC}}}<br />
-					{{#CONFIG_IRC_ADDRESS}}
-					{{#CONFIG_IRC_CHANNEL}}
+					{{{CONFIG.VALUES.JAMDESC}}}<br />
+					{{#CONFIG.VALUES.IRC_ADDRESS}}
+					{{#CONFIG.VALUES.IRC_CHANNEL}}
 						<a href="#" onclick='$("#ircInfo").slideToggle(); return false;' style='text-decoration: none;' target='_blank'>
 							<div class='mediaButton ircButton' style='display: inline-block;'><img src='{{{template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
 						</a>
-					{{/CONFIG_IRC_CHANNEL}}
-					{{/CONFIG_IRC_ADDRESS}}
+					{{/CONFIG.VALUES.IRC_CHANNEL}}
+					{{/CONFIG.VALUES.IRC_ADDRESS}}
 					
-					{{#CONFIG_DISCORD_INVITE_URL}}
-						<a href="{{{CONFIG_DISCORD_INVITE_URL}}}" style='text-decoration: none;' target='_blank'>
+					{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
+						<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" style='text-decoration: none;' target='_blank'>
 							<div class='mediaButton discordButton' style='display: inline-block;'><img src='{{{template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>
 						</a>
-					{{/CONFIG_DISCORD_INVITE_URL}}
+					{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
 				</div>
 				<div class="col-md-3" style='text-align: center; margin-top: 10px; color: #FF0066'>
 					<p>
 						<b>Next jam:</b><br />
 						<script type='text/javascript'>
-							var date = new Date('{{{next_jam_timer_code}}}');
+							var date = new Date('{{{jams.next_jam_timer_code}}}');
 							var now = new Date();
 							function UpdateTimer(){
 								now = new Date();
@@ -129,16 +129,16 @@
 					</p>
 				</div>
 			</div>
-			{{#CONFIG_IRC_ADDRESS}}
-			{{#CONFIG_IRC_CHANNEL}}
+			{{#CONFIG.VALUES.IRC_ADDRESS}}
+			{{#CONFIG.VALUES.IRC_CHANNEL}}
 			<div class="panel-body" id="ircInfo" style='display: none;'>
-				Join us on IRC: Channel <a href="irc:{{{CONFIG_IRC_ADDRESS}}}/{{{CONFIG_IRC_CHANNEL}}}">#{{{CONFIG_IRC_CHANNEL}}} on {{{CONFIG_IRC_ADDRESS}}}</a>
-				{{#CONFIG_IRC_CHAT_IN_BROWSER}}
-					or <a href='{{{CONFIG_IRC_CHAT_IN_BROWSER}}}'>chat from your browser</a>
-				{{/CONFIG_IRC_CHAT_IN_BROWSER}}
+				Join us on IRC: Channel <a href="irc:{{{CONFIG.VALUES.IRC_ADDRESS}}}/{{{CONFIG.VALUES.IRC_CHANNEL}}}">#{{{CONFIG.VALUES.IRC_CHANNEL}}} on {{{CONFIG.VALUES.IRC_ADDRESS}}}</a>
+				{{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
+					or <a href='{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}'>chat from your browser</a>
+				{{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
 			</div>
-			{{/CONFIG_IRC_CHANNEL}}
-			{{/CONFIG_IRC_ADDRESS}}
+			{{/CONFIG.VALUES.IRC_CHANNEL}}
+			{{/CONFIG.VALUES.IRC_ADDRESS}}
 		</div>
 	</div>
 </div>
@@ -148,35 +148,35 @@
 </div>
 <div class="row" style="font-size: 16px; font-weight: bold;">
 	<div class="col-md-offset-3 col-md-2" style='text-align: center; margin-bottom: 10px;'>
-		<a href='?page=jams'>{{all_jams_count}} Jams</a>
+		<a href='?page=jams'>{{jams.all_jams_count}} Jams</a>
 	</div>
 	<div class="col-md-2" style='text-align: center; margin-bottom: 10px;'>
-		<a href='?page=entries'>{{all_entries_count}} Games</a>
+		<a href='?page=entries'>{{entries.all_entries_count}} Games</a>
 	</div>
 	<div class="col-md-2" style='text-align: center; margin-bottom: 10px;'>
-		<a href='?page=authors'>{{all_authors_count}} Developers</a>
+		<a href='?page=authors'>{{users.all_authors_count}} Developers</a>
 	</div>
 </div>
 
 {{^is_streamer}}
-	{{#CONFIG_NOTIFICATION}}
+	{{#CONFIG.VALUES.NOTIFICATION}}
 	<div class="row" style="font-size: 16px;">
 		<div class="col-md-12" style='text-align: center;'>
-			<div class="alert alert-warning" style='{{#CONFIG_NOTIFICATION_IMAGE}}height: 100px;{{/CONFIG_NOTIFICATION_IMAGE}}'>
-				{{#CONFIG_NOTIFICATION_IMAGE}}
-					{{#CONFIG_NOTIFICATION_URL}}
-						<a href='{{CONFIG_NOTIFICATION_URL}}' target='_BLANK'>
-					{{/CONFIG_NOTIFICATION_URL}}
-					<img src='{{CONFIG_NOTIFICATION_IMAGE}}' style='max-height: 80px; float: left;'>
-					{{#CONFIG_NOTIFICATION_URL}}
+			<div class="alert alert-warning" style='{{#CONFIG.VALUES.NOTIFICATION_IMAGE}}height: 100px;{{/CONFIG.VALUES.NOTIFICATION_IMAGE}}'>
+				{{#CONFIG.VALUES.NOTIFICATION_IMAGE}}
+					{{#CONFIG.VALUES.NOTIFICATION_URL}}
+						<a href='{{CONFIG.VALUES.NOTIFICATION_URL}}' target='_BLANK'>
+					{{/CONFIG.VALUES.NOTIFICATION_URL}}
+					<img src='{{CONFIG.VALUES.NOTIFICATION_IMAGE}}' style='max-height: 80px; float: left;'>
+					{{#CONFIG.VALUES.NOTIFICATION_URL}}
 						</a>
-					{{/CONFIG_NOTIFICATION_URL}}
-				{{/CONFIG_NOTIFICATION_IMAGE}}
-				{{{CONFIG_NOTIFICATION}}}
+					{{/CONFIG.VALUES.NOTIFICATION_URL}}
+				{{/CONFIG.VALUES.NOTIFICATION_IMAGE}}
+				{{{CONFIG.VALUES.NOTIFICATION}}}
 			</div>
 		</div>
 	</div>
-	{{/CONFIG_NOTIFICATION}}
+	{{/CONFIG.VALUES.NOTIFICATION}}
 	
 	{{#user}}
 		{{#active_polls}}

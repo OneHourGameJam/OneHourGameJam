@@ -1,16 +1,13 @@
 <?php
 
 function LoadAdminLog(){
-    global $dbConn, $adminLog, $dictionary;
+    global $dbConn;
+
+    $adminLog = Array();
 
 	$sql = "select log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content from admin_log order by log_id desc";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
-	$suggestedNextJamTime = GetNextJamDateAndTime();
-	$dictionary["next_jam_timer_code"] = gmdate("Y-m-d", $suggestedNextJamTime)."T".gmdate("H:i", $suggestedNextJamTime).":00Z";
-	
-	$currentJamData = GetCurrentJamNumberAndID();
 	
 	while($info = mysqli_fetch_array($data)){
 		
@@ -23,12 +20,12 @@ function LoadAdminLog(){
 		$log["admin_username"] = $info["log_admin_username"];
 		$log["subject_username"] = $info["log_subject_username"];
 		$log["log_type"] = $info["log_type"];
-        $log["log_content"] = $info["log_content"];
+        $log["log_content"] = $info["log_content"]; 
 
         $adminLog[] = $log;
     }
 
-    $dictionary["adminlog"] = $adminLog;
+    return $adminLog;
 }
 
 function AddToAdminLog($logType, $logContent, $logSubjectUsername){
@@ -58,6 +55,10 @@ function AddToAdminLog($logType, $logContent, $logSubjectUsername){
 
 	$data = mysqli_query($dbConn, $sql);
 	$sql = ""; 
+}
+
+function RenderAdminLog($adminLog){
+    return $adminLog;
 }
 
 function GetAdminLogForAdminFormatted($username){

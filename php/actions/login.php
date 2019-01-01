@@ -4,7 +4,7 @@
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
-	global $config, $users;
+	global $users;
 	
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -151,8 +151,8 @@ function LogInUser($username, $password){
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
-		$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
+		$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
+		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
 
 		setcookie("sessionID", $sessionID, time()+60*60*24*30);
 		$_COOKIE["sessionID"] = $sessionID;

@@ -10,7 +10,7 @@ function InitStream(){
 		$timeDiff = time() - intval($data["time_last_updated"]);
 	}
 	
-	if($timeDiff > intval($config["TWITCH_API_STREAM_UPDATE_FREQUENCY"])){
+	if($timeDiff > intval($config["TWITCH_API_STREAM_UPDATE_FREQUENCY"]["VALUE"])){
 		//Enough time has passed for an update from the API, fetch it.
 		
 		//First overwrite the currently saved time_last_updated, so that if there is a lot of load on the twitch API and reponses are slow, only one site user has to wait.
@@ -19,8 +19,8 @@ function InitStream(){
 		
 		//Fetch API response using CURL, because that was the easiest to copy-paste in :)
 		$channelsApi = 'https://api.twitch.tv/kraken/streams/';
-		$channelName = $config["STREAMER_TWITCH_NAME"];
-		$clientId = $config["TWITCH_CLIENT_ID"];
+		$channelName = $config["STREAMER_TWITCH_NAME"]["VALUE"];
+		$clientId = $config["TWITCH_CLIENT_ID"]["VALUE"];
 		$ch = curl_init();
 	
 		curl_setopt_array($ch, array(
@@ -42,7 +42,7 @@ function InitStream(){
 	
 	if(isset($data) && $data["stream"] != null && count($data["stream"]) > 0){
 		$dictionary["IS_STREAM_ACTIVE"] = 1;
-		$dictionary["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"];
+		$dictionary["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]["VALUE"];
 	}
 	
 }

@@ -1,7 +1,7 @@
 <div class="col-md-10">
 	<div class='panel panel-info'>
 		<div class='panel-heading'>
-			Entries ({{all_entries_count}} total!)
+			Entries ({{entries.all_entries_count}} total!)
 		</div>
 	</div>
 	
@@ -22,21 +22,23 @@
 				<th>Other</th>
 				<th>Source</th>
 			</tr>
-			{{#entries}}
+			{{#entries.LIST}}
+				{{^entry_deleted}}
 				<tr>
-					<td><b>{{title}}</b></td>
-					<td><a href='?page=author&author={{author}}'>{{author_display}}</a></td>
-					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_number}}</a></td>
-					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_theme}}</a></td>
-					<td>{{#has_url_web}}<a href='{{url_web}}' target='_blank'><img src='{{{template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}</td>
-					<td>{{#has_url_windows}}<a href='{{url_windows}}' target='_blank'><img src='{{{template_path}}}images/platforms/windows.png' style='width: 16px;' title='Windows'></a>{{/has_url_windows}}</td>
-					<td>{{#has_url_mac}}<a href='{{url_mac}}' target='_blank'><img src='{{{template_path}}}images/platforms/mac.png' style='width: 16px;' title='Mac'></a>{{/has_url_mac}}</td>
-					<td>{{#has_url_linux}}<a href='{{url_linux}}' target='_blank'><img src='{{{template_path}}}images/platforms/linux.png' style='width: 16px;' title='Linux'></a>{{/has_url_linux}}</td>
-					<td>{{#has_url_android}}<a href='{{url_android}}' target='_blank'><img src='{{{template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}</td>
-					<td>{{#has_url}}<a href='{{url}}' target='_blank'><img src='{{{template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}</td>
-					<td>{{#has_url_source}}<a href='{{url_source}}' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' style='width: 16px;' title='Source'></a>{{/has_url_source}}</td>
-				</tr>
-			{{/entries}}
+						<td><b>{{title}}</b></td>
+						<td><a href='?page=author&author={{author}}'>{{author_display}}</a></td>
+						<td><a href='?page=jam&jam={{jam_number}}'>{{jam_number}}</a></td>
+						<td><a href='?page=jam&jam={{jam_number}}'>{{jam_theme}}</a></td>
+						<td>{{#has_url_web}}<a href='{{url_web}}' target='_blank'><img src='{{{template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}</td>
+						<td>{{#has_url_windows}}<a href='{{url_windows}}' target='_blank'><img src='{{{template_path}}}images/platforms/windows.png' style='width: 16px;' title='Windows'></a>{{/has_url_windows}}</td>
+						<td>{{#has_url_mac}}<a href='{{url_mac}}' target='_blank'><img src='{{{template_path}}}images/platforms/mac.png' style='width: 16px;' title='Mac'></a>{{/has_url_mac}}</td>
+						<td>{{#has_url_linux}}<a href='{{url_linux}}' target='_blank'><img src='{{{template_path}}}images/platforms/linux.png' style='width: 16px;' title='Linux'></a>{{/has_url_linux}}</td>
+						<td>{{#has_url_android}}<a href='{{url_android}}' target='_blank'><img src='{{{template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}</td>
+						<td>{{#has_url}}<a href='{{url}}' target='_blank'><img src='{{{template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}</td>
+						<td>{{#has_url_source}}<a href='{{url_source}}' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' style='width: 16px;' title='Source'></a>{{/has_url_source}}</td>
+					</tr>
+				{{/entry_deleted}}
+			{{/entries.LIST}}
 		</table>
 	</div>
 </div>

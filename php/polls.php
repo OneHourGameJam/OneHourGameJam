@@ -129,7 +129,7 @@ function LoadSatisfaction(){
 		$row["question_id"] = $questionId;
 		$row["average_score"] = $averageScore;
 		$row["submitted_scores"] = $submittedScores;
-		$row["enough_scores_to_show_satisfaction"] = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"];
+		$row["enough_scores_to_show_satisfaction"] = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
 		
 		$satisfaction[$questionId] = $row;
 	}

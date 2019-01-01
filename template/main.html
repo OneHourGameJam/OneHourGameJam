@@ -11,101 +11,105 @@
 	
 	<input type="text" class="form-control" id='search' placeholder="Search for..." style='margin-bottom: 10px;'>
 	
-	{{#jams}}
-		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
-			<div class='panel-heading jamHeader'>
-				<a name='jam{{jam_number}}'></a>
-				<h3 class='panel-title' style='font-size: 24px;'>
-					{{jam_number_ordinal}} one hour game jam ({{date}})
-				</h3>
-				Theme: {{theme}}<br />
-				{{#jam_started}}
-					<span>Started: {{date}} at {{time}} ({{entries_count}} entries)</span>
-				{{/jam_started}}
-				{{^jam_started}}
-					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in <span id='time_display_{{jam_number_ordinal}}'>{{time_left}}</span>)</span></span>
-				{{/jam_started}}
-			</div>
-			
-			
-			<div class='panel-body jamContent' style='{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
-				{{#enough_scores_to_show_satisfaction}}
-					<div style='width: 100%; text-align: center;'>
-						<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
-						<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>
-						<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-3}}</div>
-						<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-2}}</div>
-						<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-1}}</div>
-						<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score0}}</div>
-						<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score1}}</div>
-						<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score2}}</div>
-						<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score3}}</div>
-						<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score4}}</div>
-						<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score5}}</div>
-					</div>
-				{{/enough_scores_to_show_satisfaction}}
-			
-				{{#entries}}
-					<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
-						<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
-							<div style="display:table; height: 100%; width: 100%;">
-								<div style="display:table-cell;vertical-align:bottom;">
-									<div style="margin-left:auto;margin-right:auto;">
-										<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
-											<!-- Why is centering things such a collossal pain in CSS :s -->
-											<b><span class='entryTitle'>{{title}}</span></b><br />
-											by <span class='entryAuthor'>{{author_display}}</span>
-										</div>	
+	{{#jams.LIST}}
+		{{^jam_deleted}}
+			<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+				<div class='panel-heading jamHeader'>
+					<a name='jam{{jam_number}}'></a>
+					<h3 class='panel-title' style='font-size: 24px;'>
+						{{jam_number_ordinal}} one hour game jam ({{date}})
+					</h3>
+					Theme: {{theme}}<br />
+					{{#jam_started}}
+						<span>Started: {{date}} at {{time}} ({{entries_count}} entries)</span>
+					{{/jam_started}}
+					{{^jam_started}}
+						<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in <span id='time_display_{{jam_number_ordinal}}'>{{time_left}}</span>)</span></span>
+					{{/jam_started}}
+				</div>
+
+
+				<div class='panel-body jamContent' style='{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
+					{{#enough_scores_to_show_satisfaction}}
+						<div style='width: 100%; text-align: center;'>
+							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
+							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>
+							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-3}}</div>
+							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-2}}</div>
+							<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-1}}</div>
+							<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score0}}</div>
+							<div style='background: url({{{template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score1}}</div>
+							<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score2}}</div>
+							<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score3}}</div>
+							<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score4}}</div>
+							<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score5}}</div>
+						</div>
+					{{/enough_scores_to_show_satisfaction}}
+					
+					{{#entries}}
+						{{^entry_deleted}}
+							<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
+								<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
+									<div style="display:table; height: 100%; width: 100%;">
+										<div style="display:table-cell;vertical-align:bottom;">
+											<div style="margin-left:auto;margin-right:auto;">
+												<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
+													<!-- Why is centering things such a collossal pain in CSS :s -->
+													<b><span class='entryTitle'>{{title}}</span></b><br />
+													by <span class='entryAuthor'>{{author_display}}</span>
+												</div>	
+											</div>
+										</div>
 									</div>
 								</div>
+								<div class='panel-body entryScreenshot description hiddenFace' style='text-align: center; height: 226px; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
+									<div>
+										<b>Play</b><br />
+										{{#has_url_web}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
+										{{#has_url_windows}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
+										{{#has_url_mac}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
+										{{#has_url_linux}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
+										{{#has_url_android}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
+										{{#has_url_ios}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
+										{{#has_url}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
+										{{#has_url_source}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_source}}", "_blank");'><img src='{{{template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source code'></a>{{/has_url_source}}
+									</div>
+									<div class='entryDescription' style='border-color: {{color_non_white}}'>
+										<b>Description</b><br />
+										{{description}}
+									</div>
+									<button type="button" class="btn entryButton" style='background-color: {{color}}' onclick='document.location.href = "?page=author&amp;author={{author}}";'>Author's profile</button>
+								</div>
 							</div>
-						</div>
-						<div class='panel-body entryScreenshot description hiddenFace' style='text-align: center; height: 226px; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
-							<div>
-								<b>Play</b><br />
-								{{#has_url_web}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
-								{{#has_url_windows}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
-								{{#has_url_mac}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
-								{{#has_url_linux}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
-								{{#has_url_android}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
-								{{#has_url_ios}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
-								{{#has_url}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
-								{{#has_url_source}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_source}}", "_blank");'><img src='{{{template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source code'></a>{{/has_url_source}}
-							</div>
-							<div class='entryDescription' style='border-color: {{color_non_white}}'>
-								<b>Description</b><br />
-								{{description}}
-							</div>
-							<button type="button" class="btn entryButton" style='background-color: {{color}}' onclick='document.location.href = "?page=author&amp;author={{author}}";'>Author's profile</button>
-						</div>
-					</div>
-                {{/entries}}
-                
-                {{#user}}
-				    {{#is_latest_started_jam}}
-				        {{^user_participated_in_jam}}
-                            <div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
-                                <div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;'>
-                                    <div style="display:table; height: 100%; width: 100%;">
-                                        <div style="display:table-cell;vertical-align:middle;">
-                                            <div style="margin-left:auto;margin-right:auto;">
-                                                <div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
-                                                    <p style='padding-bottom: 3px;'>Once ready, submit your game to the jam here:</p>
-                                                    <a href='?page=submit'>
-                                                        <div class="btn btn-success">
-                                                            Submit game
-                                                        </div>
-                                                    </a>
-                                                </div>	
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-				        {{/user_participated_in_jam}}
-                    {{/is_latest_started_jam}}
-                {{/user}}
+						{{/entry_deleted}}
+        	        {{/entries}}
+						
+        	        {{#user}}
+					    {{#is_latest_started_jam}}
+					        {{^user_participated_in_jam}}
+        	                    <div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
+        	                        <div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;'>
+        	                            <div style="display:table; height: 100%; width: 100%;">
+        	                                <div style="display:table-cell;vertical-align:middle;">
+        	                                    <div style="margin-left:auto;margin-right:auto;">
+        	                                        <div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
+        	                                            <p style='padding-bottom: 3px;'>Once ready, submit your game to the jam here:</p>
+        	                                            <a href='?page=submit'>
+        	                                                <div class="btn btn-success">
+        	                                                    Submit game
+        	                                                </div>
+        	                                            </a>
+        	                                        </div>	
+        	                                    </div>
+        	                                </div>
+        	                            </div>
+        	                        </div>
+        	                    </div> 
+					        {{/user_participated_in_jam}}
+        	            {{/is_latest_started_jam}}
+        	        {{/user}}
+				</div>
 			</div>
-		</div>
-	{{/jams}}
+		{{/jam_deleted}}
+	{{/jams.LIST}}
 </div>

@@ -13,7 +13,7 @@ function GenerateSalt(){
 //TODO: Move min and max iterations to config
 function HashPassword($password, $salt, $iterations){
 	global $config;
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "";
+	$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "";
 	$pswrd = $pepper.$password.$salt;
 	
 	//Check that we have sufficient iterations for password generation.
@@ -31,66 +31,13 @@ function HashPassword($password, $salt, $iterations){
 	return $pswrd;
 }
 
-//(Re)Loads the users into the globally accessible $users variable.
-function LoadUsers(){
-	global $users, $loggedInUser, $dictionary, $dbConn, $userIDLookup;
+//Returns the username of the user associated with the provided user id
+function GetUsernameForUserId($userID){
+	global $users;
 
-	$users = Array();
-
-	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email, 
-                   user_password_salt, user_password_hash, user_password_iterations, user_role, 
-                   DATEDIFF(Now(), user_last_login_datetime) AS days_since_last_login, 
-                   DATEDIFF(Now(), log_max_datetime) AS days_since_last_admin_action
-            FROM 
-                user u LEFT JOIN 
-                (
-                    SELECT log_admin_username, max(log_datetime) AS log_max_datetime 
-                    FROM admin_log 
-                    GROUP BY log_admin_username
-                ) al ON u.user_username = al.log_admin_username";
-	$data = mysqli_query($dbConn, $sql);
-    $sql = "";
-
-	while($info = mysqli_fetch_array($data)){
-		//Read data about the user
-		$currentUser = Array();
-		$currentUser["id"] = $info["user_id"];
-		$currentUser["username"] = $info["user_username"];
-		$currentUser["display_name"] = $info["user_display_name"];
-		$currentUser["twitter"] = $info["user_twitter"];
-		$currentUser["twitter_text_only"] = str_replace("@", "", $info["user_twitter"]);
-		$currentUser["email"] = $info["user_email"];
-		$currentUser["salt"] = $info["user_password_salt"];
-		$currentUser["password_hash"] = $info["user_password_hash"];
-		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
-        $currentUser["admin"] = intval($info["user_role"]);
-        
-        //This fixes an issue where user_last_login_datetime was not set properly in the database, which results in days_since_last_login being null for users who have not logged in since the fix was applied
-        if($info["days_since_last_login"] == null){
-            $info["days_since_last_login"] = 1000000;
-        }
-        
-        //For cases where users have never performed an admin action
-        if($info["days_since_last_admin_action"] == null){
-            $info["days_since_last_admin_action"] = 1000000;
-        }
-
-		$currentUser["days_since_last_login"] = intval($info["days_since_last_login"]);
-		$currentUser["days_since_last_admin_action"] = intval($info["days_since_last_admin_action"]);
-
-		$users[$currentUser["username"]] = $currentUser;
-		$userIDLookup[$currentUser["id"]] = $currentUser["username"];
-	}
-
-	ksort($users);
-	$dictionary["users"] = $users;
-	$dictionary["admins"] = Array();
-	$dictionary["registered_users"] = Array();
 	foreach($users as $i => $user){
-		if($user["admin"] == 1){
-			$dictionary["admins"][] = $user;
-		}else{
-			$dictionary["registered_users"][] = $user;
+		if($user["id"] == $userID){
+			return $user["username"];
 		}
 	}
 }
@@ -103,7 +50,7 @@ function LoadUsers(){
 //Returns either the logged in user's username or FALSE if not logged in.
 //Set $force to TRUE to force reloading (for example if a user setting was changed for the logged in user)
 function IsLoggedIn($force = FALSE){
-	global $loginChecked, $loggedInUser, $config, $users, $dictionary, $dbConn, $userIDLookup, $ip, $userAgent;
+	global $loginChecked, $loggedInUser, $config, $users, $dictionary, $dbConn, $ip, $userAgent;
 
 	if($loginChecked && !$force){
 		return $loggedInUser;
@@ -119,8 +66,8 @@ function IsLoggedIn($force = FALSE){
 	}
 
 	$sessionID = "".$_COOKIE["sessionID"];
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"] : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]);
+	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
+	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
         
     $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
 
@@ -135,7 +82,7 @@ function IsLoggedIn($force = FALSE){
 	if($session = mysqli_fetch_array($data)){
 		//Session ID does in fact exist
 		$userID = $session["session_user_id"];
-		$username = $userIDLookup[$userID];
+		$username = GetUsernameForUserId($userID);
 		$loggedInUser = $users[$username];
 		$loggedInUser["username"] = $username;
 		$dictionary["user"] = $loggedInUser;

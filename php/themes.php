@@ -52,7 +52,7 @@ function LoadThemes(){
 		$themeData["votes_report"] = 0;
 		$themeData["days_ago"] = intval($theme["theme_daysago"]);
 
-		if(intval($theme["theme_daysago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"])){
+		if(intval($theme["theme_daysago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"]["VALUE"])){
 			$themeData["is_old"] = 1;
 		}
 
@@ -127,7 +127,7 @@ function LoadThemes(){
 		$themes[$themeID]["votes_total"] = $votesTotal;
 
 
-		if($votesTotal >= intval($config["THEME_MIN_VOTES_TO_SCORE"])){
+		if($votesTotal >= intval($config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"])){
 			$themes[$themeID]["has_enough_votes"] = true;
 			if($themes[$themeID]["popularity_num"] >= 0.5){
 				$themes[$themeID]["is_popular"] = 1;
@@ -154,10 +154,10 @@ function LoadThemes(){
 		usort($themes, "CmpArrayByPropertyPopularityNum");
 		$count = 0;
 		foreach($themes as $i => $theme){
-			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"])){
+			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"]["VALUE"])){
 				$themes[$i]["top_theme"] = 1;
 			}
-			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]) || !$theme["has_enough_votes"]){
+			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]["VALUE"]) || !$theme["has_enough_votes"]){
 				$themes[$i]["keep_theme"] = 1;
 			}
 			$count++;

@@ -18,19 +18,16 @@ $configCategorySettings = Array(
 //Initializes configuration, stores it in the global $config variable.
 
 function LoadConfig(){
-	global $config, $dictionary, $configCategorySettings, $dbConn;
+	global $dbConn;
 
-	$config = Array();	//Clear any existing configuration.
-	$dictionary["CONFIG"] = Array();	//Clear any config entries in the dictionary
+	$config = Array();
 
-	//Fill list of themes - will return same row multiple times (once for each valid themevote_type)
 	$sql = " SELECT * FROM config ORDER BY config_id; ";
-	$data = mysqli_query($dbConn, $sql);
+	$data = mysqli_query($dbConn, $sql); 
 	$sql = "";
 
-	//Fill dictionary with non-banned themes
 	while($configEntry = mysqli_fetch_array($data)) {
-		$baseKey = $configEntry["config_key"];
+		$key = $configEntry["config_key"];
 		$value = $configEntry["config_value"];
 		$category = $configEntry["config_category"];
 		$description = $configEntry["config_description"];
@@ -40,24 +37,17 @@ function LoadConfig(){
 		$required = $configEntry["config_required"];
 		$addedToDictionary = $configEntry["config_added_to_dictionary"];
 
-		$key = "CONFIG_" . $baseKey;
-
-		$config[$baseKey] = $value;
-
-		if ($addedToDictionary) {
-			$dictionary[$key] = $value;
-		}
-
-		$configCategoryHeader = $configCategorySettings[$category];
-
 		$configEntry = Array(
 			"KEY" => $key,
-			"VALUE" => htmlentities($value),
-			"NAME" => $description,
+			"VALUE" => $value,
+			"VALUE_HTML_ENCODED" => htmlentities($value),
+			"CATEGORY" => $category,
+			"DESCRIPTION" => $description,
 			"DISABLED" => !$editable,
 			"EDITABLE" => $editable,
 			"REQUIRED" => $required,
 			"TYPE" => $type,
+			"ADDED_TO_DICTIONARY" => $addedToDictionary,
 		);
 
 		switch($type) {
@@ -87,42 +77,60 @@ function LoadConfig(){
 				$configEntry["TYPE_TEXTAREA"] = 1;
 			break;
 		}
+		
+		$config[$key] = $configEntry;
+	}
 
-		$i = count($dictionary["CONFIG"]);
-		foreach($dictionary["CONFIG"] as $index => $configDictionaryEntry){
+	$config = VerifyConfig($config);
+	
+	return $config;
+}
+
+function RenderConfig($config){
+	global $configCategorySettings;
+
+	$render = Array("LIST" => Array(), "VALUES" => Array());
+
+	foreach($config as $i => $configEntry){
+		$configKey = $configEntry["KEY"];
+		$configValue = $configEntry["VALUE"];
+		$category = $configEntry["CATEGORY"];
+		$configCategoryHeader = $configCategorySettings[$category];
+
+		$render["VALUES"][$configKey] = $configValue;
+
+		$categoryIndex = count($render["LIST"]);
+		foreach($render["LIST"] as $index => $configDictionaryEntry){
 			if($configDictionaryEntry["CATEGORY_ID"] == $category){
-				$i = $index;
+				$categoryIndex = $index;
 			}
 		}
 
-		$dictionary["CONFIG"][$i]["CATEGORY_ID"] = $category;
-		$dictionary["CONFIG"][$i]["CATEGORY_HEADER"] = $configCategoryHeader;
-		$dictionary["CONFIG"][$i]["ENTRIES"][] = $configEntry;
+		$render["LIST"][$categoryIndex]["CATEGORY_ID"] = $category;
+		$render["LIST"][$categoryIndex]["CATEGORY_HEADER"] = $configCategoryHeader;
+		$render["LIST"][$categoryIndex]["ENTRIES"][] = $configEntry;
 	}
 
-	// print_r($config);
-	// print_r($dictionary);
-
-    VerifyConfig();
-    RedirectToHttpsIfRequired();
+	return $render;
 }
 
-function VerifyConfig() {
-	global $config;
 
-	if (!isset($config["PEPPER"]) || strlen($config["PEPPER"]) < 1) {
-		UpdateConfig("PEPPER", GenerateSalt(), -1);
+function VerifyConfig($config) {
+	if (!isset($config["PEPPER"]["VALUE"]) || strlen($config["PEPPER"]["VALUE"]) < 1) {
+		$config = UpdateConfig($config, "PEPPER", GenerateSalt(), -1);
 	}
 
-	if (!isset($config["SESSION_PASSWORD_ITERATIONS"]) || strlen($config["SESSION_PASSWORD_ITERATIONS"]) < 1) {
-		UpdateConfig("SESSION_PASSWORD_ITERATIONS", rand(10000, 20000), -1);
+	if (!isset($config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]) || strlen($config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]) < 1) {
+		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", rand(10000, 20000), -1);
 	}
+
+	return $config;
 }
 
 
 // Actually updates the config. Doesn't check auth.
-function UpdateConfig($key, $value, $userID) {
-	global $config, $dbConn;
+function UpdateConfig($config, $key, $value, $userID) {
+	global $dbConn;
 
 	if(!IsAdmin()){
 		return; //Lacks permissions to make edits
@@ -131,7 +139,7 @@ function UpdateConfig($key, $value, $userID) {
 	$keyClean = mysqli_real_escape_string($dbConn, $key);
 	$valueClean = mysqli_real_escape_string($dbConn, $value);
 
-	$config[$key] = $value;
+	$config[$key]["VALUE"] = $value;
 	$sql = "
 		UPDATE config
 		SET config_value = '$valueClean',
@@ -142,14 +150,14 @@ function UpdateConfig($key, $value, $userID) {
 	mysqli_query($dbConn, $sql);
     $sql = "";
     
-    AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
+	AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
+	
+	return $config;
 }
 
 
-function RedirectToHttpsIfRequired(){
-    global $config;
-
-    if($config["REDIRECT_TO_HTTPS"]){
+function RedirectToHttpsIfRequired($config){
+    if($config["REDIRECT_TO_HTTPS"]["VALUE"]){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https
             $url = "https://". $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
