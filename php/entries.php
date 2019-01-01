@@ -1194,69 +1194,6 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	LoadEntries();
 }
 
-//Edits an existing entry, identified by the jam number and author.
-//Only changes the title, game url and screenshot url, does NOT change the jam number or author.
-function EditEntry($jamNumber, $author, $title, $gameURL, $screenshotURL){
-	global $jams;
-	
-	//Authorize user (is admin)
-	if(IsAdmin() === false){
-		AddAuthorizationWarning("Only admins can edit entries.", false);
-		return;
-	}
-	
-	$author = trim($author);
-	$title = trim($title);
-	$gameURL = trim($gameURL);
-	$screenshotURL = trim($screenshotURL);
-	
-	//Validate values
-	$jamNumber = intval($jamNumber);
-	if($jamNumber <= 0){
-		AddDataWarning("invalid jam number", false);
-		return;
-	}
-	
-	//Validate title
-	if(strlen($title) <= 0){
-		AddDataWarning("invalid title", false);
-		return;
-	}
-	
-	//Validate Game URL
-	if(SanitizeURL($gameURL) === false){
-		AddDataWarning("Invalid game URL", false);
-		return;
-	}
-	
-	//Validate Screenshot URL
-	if($screenshotURL == ""){
-		$screenshotURL = "logo.png";
-	}else if(SanitizeURL($screenshotURL) === false){
-		AddDataWarning("Invalid screenshot URL. Leave blank for default.", false);
-		return;
-	}
-	
-	if(count($jams) == 0){
-		return; //No jams exist
-	}
-	
-	foreach($jams as $i => $jam){
-		if(intval($jam["jam_number"]) == $jamNumber){
-			foreach($jam["entries"] as $j => $entry){
-				if($entry["author"] == $author){
-					$jam["entries"][$j]["title"] = $title;
-					$jam["entries"][$j]["url"] = $gameURL;
-					$jam["entries"][$j]["screenshot_url"] = $screenshotURL;
-					file_put_contents("data/jams/jam_$jamNumber.json", json_encode($jam));
-					break;
-				}
-			}
-			break;
-		}
-	}
-}
-
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryID){
 	global $jams, $dbConn;

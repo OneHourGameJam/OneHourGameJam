@@ -85,260 +85,133 @@ if($nightmode == 1){
 	$dictionary["NIGHT_MODE"] = 1;
 }
 
+$actions = Array(
+	Array(
+		"POST_REQUEST" => "login",
+		"PHP_FILE" => "php/actions/login.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "logout",
+		"PHP_FILE" => "php/actions/logout.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "submit",
+		"PHP_FILE" => "php/actions/submit.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "newjam",
+		"PHP_FILE" => "php/actions/newjam.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "deletejam",
+		"PHP_FILE" => "php/actions/deletejam.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "deleteentry",
+		"PHP_FILE" => "php/actions/deleteentry.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "saveconfig",
+		"PHP_FILE" => "php/actions/saveconfig.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "editjam",
+		"PHP_FILE" => "php/actions/editjam.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "saveassetedits",
+		"PHP_FILE" => "php/actions/saveassetedits.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "deleteasset",
+		"PHP_FILE" => "php/actions/deleteasset.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "savejamedits",
+		"PHP_FILE" => "php/actions/savejamedits.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "saveuseredits",
+		"PHP_FILE" => "php/actions/saveuseredits.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "savenewuserpassword",
+		"PHP_FILE" => "php/actions/savenewuserpassword.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "changepassword",
+		"PHP_FILE" => "php/actions/changepassword.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "saveuserchanges",
+		"PHP_FILE" => "php/actions/saveuserchanges.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "savenewtheme",
+		"PHP_FILE" => "php/actions/savenewtheme.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "deletetheme",
+		"PHP_FILE" => "php/actions/deletetheme.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "bantheme",
+		"PHP_FILE" => "php/actions/bantheme.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "unbantheme",
+		"PHP_FILE" => "php/actions/unbantheme.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "downloaddb",
+		"PHP_FILE" => "php/actions/downloaddb.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	),
+	Array(
+		"POST_REQUEST" => "adminvote",
+		"PHP_FILE" => "php/actions/adminvote.php",
+		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+	)
+);
+
 //Actions!
-$action = "";
 if(isset($_POST["action"])){
-	$action = $_POST["action"];
-	switch($action){
-		case "login":
-			$username = (isset($_POST["un"])) ? $_POST["un"] : "";
-			$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
-			$loginChecked = false;
-			
-			$username = strtolower(trim($username));
-			$password = trim($password);
-			LogInOrRegister($username, $password);
-		break;
-		case "submit":
-			$gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
-			$gameURL = (isset($_POST["gameurl"])) ? $_POST["gameurl"] : "";
-			$gameURLWeb = (isset($_POST["gameurlweb"])) ? $_POST["gameurlweb"] : "";
-			$gameURLWin = (isset($_POST["gameurlwin"])) ? $_POST["gameurlwin"] : "";
-			$gameURLMac = (isset($_POST["gameurlmac"])) ? $_POST["gameurlmac"] : "";
-			$gameURLLinux = (isset($_POST["gameurllinux"])) ? $_POST["gameurllinux"] : "";
-			$gameURLiOS = (isset($_POST["gameurlios"])) ? $_POST["gameurlios"] : "";
-			$gameURLAndroid = (isset($_POST["gameurlandroid"])) ? $_POST["gameurlandroid"] : "";
-			$gameURLSource = (isset($_POST["gameurlsource"])) ? $_POST["gameurlsource"] : "";
-			$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
-			$description = (isset($_POST["description"])) ? $_POST["description"] : "";
-			$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
-			$jamColorNumber = (isset($_POST["colorNumber"])) ? intval($_POST["colorNumber"]) : 0;
-			
-			SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber);
-			
-			$satisfaction = (isset($_POST["satisfaction"])) ? intval($_POST["satisfaction"]) : 0;
-			if($satisfaction != 0){
-				SubmitSatisfaction("JAM_$jamNumber", $satisfaction);
-			}
-		break;
-		case "newjam":
-			$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
-			$date = (isset($_POST["date"])) ? $_POST["date"] : "";
-			$time = (isset($_POST["time"])) ? $_POST["time"] : "";
-			$jamColors = Array();
-			for($colorIndex = 0; $colorIndex < 16; $colorIndex++){
-				if(isset($_POST["jamcolor".$colorIndex])){
-					$jamColors[] = $_POST["jamcolor".$colorIndex];
-				}
-			}
-			if(count($jamColors) == 0){
-				$jamColors = Array("FFFFFF");
-			}
-			
-			CreateJam($theme, $date, $time, $jamColors);
-		break;
-		case "deletejam":
-			$jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
-			if($jamID != ""){
-				DeleteJam(intval($jamID));
-				$page = "editcontent";
-			}
-		break;
-		case "deleteentry":
-			$entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
-			if($entryID != ""){
-				DeleteEntry(intval($entryID));
-				$page = "editcontent";
-			}
-		break;
-		case "saveconfig":
-			if(IsAdmin()){
-				foreach($_POST as $key => $value){
-					SaveConfig($key, $value);
-				}
-				LoadConfig(); //reload config
-			}
-		break;
-		case "editentry":
-			if(IsAdmin()){
-				$jamNumber = intval($_POST["jamnumber"]);
-				$author = strtolower(trim($_POST["entryauthor"]));
-				$dictionary["editingentry"] = Array();
-				foreach($jams as $i => $jam){
-					if(intval($jam["jam_number"]) == $jamNumber){
-						foreach($jam["entries"] as $j => $entry){
-							if($entry["author"] == $author){
-								$dictionary["editingentry"] = $entry;
-								$dictionary["editingentry"]["jam_number"] = $jamNumber;
-								break;
-							}
-						}
-						break;
-					}
-				}
-				if(count($dictionary["editingentry"]) == 0){
-					die("no entry selected");
-				}
-			}
-		break;
-		case "editjam":
-			if(IsAdmin()){
-				$jamNumber = intval($_POST["jamnumber"]);
-				$dictionary["editingjam"] = Array();
-				foreach($jams as $i => $jam){
-					if(intval($jam["jam_number"]) == $jamNumber){
-						$dictionary["editingjam"] = $jam;
-						break;
-					}
-				}
-				if(count($dictionary["editingjam"]) == 0){
-					die("no jam selected");
-				}
-				$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
-				$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
-			}
-		break;
-		case "editasset":
-			if(IsAdmin()){
-				$assetID = intval($_POST["asset_id"]);
-				$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
-			}
-		break;
-		case "saveassetedits":
-			if(IsAdmin()){
-				$assetID = $_POST["asset_id"];
-				$author = $_POST["author"];
-				$title = $_POST["title"];
-				$description = $_POST["description"];
-				$type = $_POST["type"];
-				
-				AddAsset($assetID, $author, $title, $description, $type);
-			}
-			$page = "assets";
-		break;
-		case "deleteasset":
-			if(IsAdmin()){
-				$assetID = $_POST["asset_id"];
-				DeleteAsset($assetID);
-			}
-			$page = "assets";
-		break;
-		case "savejamedits":
-			if(IsAdmin()){
-				$jamNumber = intval($_POST["jam_number"]);
-				$theme = $_POST["theme"];
-				$date = $_POST["date"];
-				$time = $_POST["time"];
-				$jamcolors = $_POST["jamcolors"];
-				
-				EditJam($jamNumber, $theme, $date, $time, $jamcolors);
-			}
-			$page = "main";
-		break;
-		case "saveentryedits":
-			if(IsAdmin()){
-				$jamNumber = intval($_POST["jam_number"]);
-				$author = $_POST["author"];
-				$title = $_POST["title"];
-				$url = $_POST["url"];
-				$screenshot_url = $_POST["screenshot_url"];
-				
-				EditEntry($jamNumber, $author, $title, $url, $screenshot_url);
-			}
-			$page = "main";
-		break;
-		case "saveuseredits":
-			if(IsAdmin()){
-				$username = $_POST["username"];
-				$isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
-				if($isAdmin != 0 && $isAdmin != 1){
-					die("invalid isadmin value");
-				}
-				
-				EditUser($username, $isAdmin);
-			}
-			$page = "editusers";
-		break;
-		case "savenewuserpassword":
-			if(IsAdmin()){
-				$username = $_POST["username"];
-				$password1 = $_POST["password1"];
-				$password2 = $_POST["password2"];
-				
-				EditUserPassword($username, $password1, $password2);
-			}
-			$page = "editusers";
-		break;
-		case "changepassword":
-			if(IsLoggedIn()){
-				$passwordold = $_POST["passwordold"];
-				$password1 = $_POST["password1"];
-				$password2 = $_POST["password2"];
-				
-				ChangePassword($passwordold, $password1, $password2);
-			}
-			$page = "usersettings";
-		break;
-		case "saveuserchanges":
-			if(IsLoggedIn()){
-				$displayName = $_POST["displayname"];
-				$twitterHandle = $_POST["twitterhandle"];
-				$emailAddress = $_POST["emailaddress"];
-				$bio = $_POST["bio"];
-				
-				ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio);
-			}
-			$page = "usersettings";
-		break;
-		case "savenewtheme":
-			if(IsLoggedIn()){
-				$newTheme = $_POST["theme"];
-				AddTheme($newTheme, false);
-			}
-		break;
-		case "deletetheme":
-			if(IsAdmin()){
-				$deletedTheme = $_POST["theme"];
-				RemoveTheme($deletedTheme);
-			}
-		break;
-		case "bantheme":
-			if(IsAdmin()){
-				$bannedTheme = $_POST["theme"];
-				BanTheme($bannedTheme);
-			}
-		break;
-		case "unbantheme":
-			if(IsAdmin()){
-				$unbannedTheme = $_POST["theme"];
-				UnbanTheme($unbannedTheme);
-			}
-		break;
-		case "downloaddb":
-			if(IsAdmin()){
-				print GetJSONDataForAllTables();
-				die();
-			}
-		break;
-		case "adminvote":
-			$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
-			$voteType = $_POST["adminVoteType"];
-			CastVoteForAdmin($voteSubjectUsername, $voteType);
-		break;
+	foreach($actions as $i => $action){
+		$actionPostRequest = $action["POST_REQUEST"];
+		$actionPhpFile = $action["PHP_FILE"];
+		$actionRedirectAfterExecution = $action["REDIRECT_AFTER_EXECUTION"];
+
+		if($_POST["action"] == $actionPostRequest){
+			include_once($actionPhpFile);
+
+			header("Location: $actionRedirectAfterExecution");
+			die("Redirecting to <a href='$actionRedirectAfterExecution'>$actionRedirectAfterExecution</a>...");
+		}
 	}
 }
 
 //Page actions!
 switch($page){
-	case "login":
-		if(IsLoggedIn()){
-			$page = "main";
-		}
-	break;
 	case "logout":
-		$loginChecked = false;
-		LogOut();
-		$page = "main";
 	break;
 	case "edituser":
 		if(IsAdmin()){
@@ -350,6 +223,47 @@ switch($page){
 			$dictionary["editinguser"] = $users[$editingUsername];
 			if($users[$editingUsername]["admin"] != 0){
 				$dictionary["editinguser"]["isadmin"] = 1;
+			}
+		}
+	break;
+	case "editjam":
+		if(IsAdmin()){
+			$jamNumber = intval($_GET["jamnumber"]);
+			$dictionary["editingjam"] = Array();
+			foreach($jams as $i => $jam){
+				if(intval($jam["jam_number"]) == $jamNumber){
+					$dictionary["editingjam"] = $jam;
+					break;
+				}
+			}
+			if(count($dictionary["editingjam"]) == 0){
+				die("no jam selected");
+			}
+			$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
+			$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
+		}
+	break;
+	case "editasset":
+		if(IsAdmin()){
+			$assetID = intval($_GET["asset_id"]);
+			$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
+		}
+	break;
+	case "editentry":
+		if(IsAdmin()){
+			$entryID = intval($_GET["entry_id"]);
+			$dictionary["editingentry"] = Array();
+			foreach($jams as $i => $jam){
+				foreach($jam["entries_with_deleted"] as $j => $entry){
+					if($entry["entry_id"] == $entryID){
+						$dictionary["editingentry"] = $entry;
+						$dictionary["editingentry"]["jam_number"] = $jamNumber;
+						break;
+					}
+				}
+			}
+			if(count($dictionary["editingentry"]) == 0){
+				die("no entry selected");
 			}
 		}
 	break;

@@ -13,6 +13,12 @@
 			<li><a href='?page=entries'>Games</a></li>
 			<li><a href='?page=authors'>Developers</a></li>
 			<li><a href='?page=jams'>Jams</a></li>
+			{{#NIGHT_MODE}}
+				<li><a href='?page=main&nightmode=0'>Enable Light Mode</a></li>
+			{{/NIGHT_MODE}}
+			{{^NIGHT_MODE}}
+				<li><a href='?page=main&nightmode=1'>Enable Dark Mode</a> (<b>New!</b>)</li>
+			{{/NIGHT_MODE}}
 		</ul>
 		
 		{{#CONFIG_TWITTER_ACCOUNT}}

@@ -16,11 +16,7 @@
 		<p>
 			<h4>{{title}}</h4>
 			{{#user.isadmin}}
-				<form action='?page=editasset' method='POST'>
-					<input type='hidden' name='asset_id' value='{{id}}'>
-					<input type='hidden' name='action' value='editasset'>
-					<input type='submit' value='Edit'>
-				</form>
+				<a href='?page=editasset&asset_id={{id}}'><button type="submit" name='action' value='editasset' class="btn btn-default">Edit asset</button></a>
 			{{/user.isadmin}}
 		</p>
 		<p>

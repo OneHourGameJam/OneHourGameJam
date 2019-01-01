@@ -1,11 +1,15 @@
 <div class="panel panel-info">
 	<div class="panel-heading">
 		<h3 class="panel-title">Hello {{user.display_name}}</h3>
+		{{#user}}
+			<form method='post'>
+				<button type="submit" name='action' value='logout' class="btn btn-default">Log out</button>
+			</form>
+		{{/user}}
 	</div>
 	<div class="panel-body">
 		<ul id='mainmenu' style='padding-left: 12px;'>
 			<li><a href='?page=main'>Home</a></li>
-			<li><a href='?page=logout'>Log out</a></li>
 			<li><b><a href='?page=submit'>Submit game</a></b></li>
 			<li><b><a href='?page=themes'>Theme voting</a></b></li>
 			<li><a href='?page=rules'>How it works</a></li>
@@ -27,6 +31,12 @@
 			{{^is_streamer}}
 				<li><a href='?page=main&streaming=1'>Streamer Mode</a></li>
 			{{/is_streamer}}
+			{{#NIGHT_MODE}}
+				<li><a href='?page=main&nightmode=0'>Enable Light Mode</a></li>
+			{{/NIGHT_MODE}}
+			{{^NIGHT_MODE}}
+				<li><a href='?page=main&nightmode=1'>Enable Dark Mode</a> (<b>New!</b>)</li>
+			{{/NIGHT_MODE}}
 		</ul>
 		
 		{{#CONFIG_TWITTER_ACCOUNT}}
