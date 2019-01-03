@@ -1,7 +1,7 @@
 <?php
 
 //Loads users
-function LoadUsers($games){
+function LoadUsers(){
 	global $dictionary, $dbConn;
 
 	$users = Array();
@@ -76,6 +76,145 @@ function LoadUsers($games){
 	return $users;
 }
 
+function RenderUser($user, $users, $games, $jams, $config){
+    $userData = $user;
+
+    $username = $userData["username"];
+    $userData["recent_participation"] = 0;
+
+    //Determine if this user is an author and their participation
+    foreach($games as $j => $gameData){
+        $gameAuthor = $gameData["author"];
+        if($username == $gameAuthor){
+            foreach($jams as $k => $jam){
+                if($jam["jam_id"] == $gameData["jam_id"]){
+                    $jamData = $jam;
+                    break;
+                }
+            }
+
+            $userData["is_author"] = 1;
+            if(!isset($userData["entry_count"])){
+                $userData["entry_count"] = 0;
+                $userData["first_jam_number"] = $gameData["jam_number"];
+                $userData["last_jam_number"] = $gameData["jam_number"];
+            }
+
+            $userData["entry_count"] += 1;
+            
+            if($gameData["jam_number"] < $userData["first_jam_number"] ){
+                $userData["first_jam_number"] = $gameData["jam_number"];
+            }
+            if($gameData["jam_number"] > $userData["last_jam_number"] ){
+                $userData["last_jam_number"] = $gameData["jam_number"];
+            }
+            
+            $isJamRecent = (intval($jamData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
+            if($isJamRecent){
+                $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
+            }
+            $userData["entries"][] = RenderGame($gameData, $jams, $users);
+        }
+    }
+    
+    //Find admin candidates
+    if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]["VALUE"]){
+        $userData["admin_candidate_recent_participation_check_pass"] = 1;
+    }
+    if($userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]["VALUE"]){
+        $userData["admin_candidate_total_participation_check_pass"] = 1;
+    }
+    if(	$userData["admin_candidate_recent_participation_check_pass"] &&
+        $userData["admin_candidate_total_participation_check_pass"]){
+            $userData["system_suggestsed_admin_candidate"] = 1;
+    }
+    
+    //Find inactive admins (participation in jams)
+    $jamsSinceLastParticipation = (count($jams) - $userData["last_jam_number"]);
+    $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
+    if($userData["last_jam_number"] < (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
+        $userData["activity_jam_participation"] = "inactive";
+        $userData["activity_jam_participation_color"] = "#FFECEC";
+    }else if($userData["last_jam_number"] >= (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
+        $userData["activity_jam_participation"] = "highly active";
+        $userData["activity_jam_participation_color"] = "#ECFFEC";
+    }else{
+        $userData["activity_jam_participation"] = "active";
+        $userData["activity_jam_participation_color"] = "#F6FFEC";
+    }
+    
+    //Find inactive admins (days since last login)
+    if($userData["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]["VALUE"]){
+        $userData["activity_login"] = "inactive";
+        $userData["activity_login_color"] = "#FFECEC";
+    }else if($userData["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]["VALUE"]){
+        $userData["activity_login"] = "highly active";
+        $userData["activity_login_color"] = "#ECFFEC";
+    }else{
+        $userData["activity_login"] = "active";
+        $userData["activity_login_color"] = "#F6FFEC";
+    }
+    
+    //Find inactive admins (days since last login)
+    if($userData["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]["VALUE"]){
+        $userData["activity_administration"] = "inactive";
+        $userData["activity_administration_color"] = "#FFECEC";
+    }else if($userData["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]["VALUE"]){
+        $userData["activity_administration"] = "highly active";
+        $userData["activity_administration_color"] = "#ECFFEC";
+    }else{
+        $userData["activity_administration"] = "active";
+        $userData["activity_administration_color"] = "#F6FFEC";
+    }
+
+    //Render activity related statuses (inactive, active, highly active)
+    switch($userData["activity_jam_participation"]){
+        case "inactive":
+            $userData["activity_jam_participation_inactive"] = 1;
+            break;
+        case "active":
+            $userData["activity_jam_participation_active"] = 1;
+            break;
+        case "highly active":
+            $userData["activity_jam_participation_highly_active"] = 1;
+            break;
+    }
+    switch($userData["activity_login"]){
+        case "inactive":
+            $userData["activity_login_inactive"] = 1;
+            break;
+        case "active":
+            $userData["activity_login_active"] = 1;
+            break;
+        case "highly active":
+            $userData["activity_login_highly_active"] = 1;
+            break;
+    }
+    switch($userData["activity_administration"]){
+        case "inactive":
+            $userData["activity_administration_inactive"] = 1;
+            break;
+        case "active":
+            $userData["activity_administration_active"] = 1;
+            break;
+        case "highly active":
+            $userData["activity_administration_highly_active"] = 1;
+            break;
+    }
+
+    //Mark system suggested and admin-sponsored users as admin candidates
+    if(isset($userData["system_suggestsed_admin_candidate"]) || isset($userData["is_sponsored"])){
+        $userData["is_admin_candidate"] = 1;
+    }
+
+    //Is administrator
+    if($userData["admin"] == 1){
+        $userData["is_admin"] = 1;
+    }
+
+    return $userData;
+}
+
 function RenderUsers($users, $games, $jams, $config){
     $render = Array("LIST" => Array());
     
@@ -83,143 +222,13 @@ function RenderUsers($users, $games, $jams, $config){
     $authorCount = 0;
 	
 	foreach($users as $i => $user){
-		$userData = $user;
+        $userData = RenderUser($user, $users, $games, $jams, $config);
 
-        $username = $userData["username"];
-        $userData["recent_participation"] = 0;
-
-		//Determine if this user is an author and their participation
-		foreach($games as $j => $gameData){
-			$gameAuthor = $gameData["author"];
-			if($username == $gameAuthor){
-                foreach($jams as $k => $jam){
-                    if($jam["jam_id"] == $gameData["jam_id"]){
-                        $jamData = $jam;
-                        break;
-                    }
-                }
-
-				$userData["is_author"] = 1;
-				if(!isset($userData["entry_count"])){
-					$userData["entry_count"] = 0;
-					$userData["first_jam_number"] = $gameData["jam_number"];
-                    $userData["last_jam_number"] = $gameData["jam_number"];
-                    $authorCount += 1;
-				}
-
-				$userData["entry_count"] += 1;
-				
-				if($gameData["jam_number"] < $userData["first_jam_number"] ){
-					$userData["first_jam_number"] = $gameData["jam_number"];
-				}
-				if($gameData["jam_number"] > $userData["last_jam_number"] ){
-					$userData["last_jam_number"] = $gameData["jam_number"];
-                }
-                
-                $isJamRecent = (intval($jamData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
-                if($isJamRecent){
-                    $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
-                }
-                $userData["entries"][] = RenderGame($game);
-			}
+        if(!isset($userData["entry_count"])){
+            $authorCount += 1;
         }
         
-        //Find admin candidates
-        if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]["VALUE"]){
-            $userData["admin_candidate_recent_participation_check_pass"] = 1;
-        }
-        if($userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]["VALUE"]){
-            $userData["admin_candidate_total_participation_check_pass"] = 1;
-        }
-        if(	$userData["admin_candidate_recent_participation_check_pass"] &&
-            $userData["admin_candidate_total_participation_check_pass"]){
-                $userData["system_suggestsed_admin_candidate"] = 1;
-        }
-        
-        //Find inactive admins (participation in jams)
-        $jamsSinceLastParticipation = (count($jams) - $userData["last_jam_number"]);
-        $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
-        if($userData["last_jam_number"] < (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
-            $userData["activity_jam_participation"] = "inactive";
-            $userData["activity_jam_participation_color"] = "#FFECEC";
-        }else if($userData["last_jam_number"] >= (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
-            $userData["activity_jam_participation"] = "highly active";
-            $userData["activity_jam_participation_color"] = "#ECFFEC";
-        }else{
-            $userData["activity_jam_participation"] = "active";
-            $userData["activity_jam_participation_color"] = "#F6FFEC";
-        }
-        
-        //Find inactive admins (days since last login)
-        if($userData["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]["VALUE"]){
-            $userData["activity_login"] = "inactive";
-            $userData["activity_login_color"] = "#FFECEC";
-        }else if($userData["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]["VALUE"]){
-            $userData["activity_login"] = "highly active";
-            $userData["activity_login_color"] = "#ECFFEC";
-        }else{
-            $userData["activity_login"] = "active";
-            $userData["activity_login_color"] = "#F6FFEC";
-        }
-        
-        //Find inactive admins (days since last login)
-        if($userData["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]["VALUE"]){
-            $userData["activity_administration"] = "inactive";
-            $userData["activity_administration_color"] = "#FFECEC";
-        }else if($userData["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]["VALUE"]){
-            $userData["activity_administration"] = "highly active";
-            $userData["activity_administration_color"] = "#ECFFEC";
-        }else{
-            $userData["activity_administration"] = "active";
-            $userData["activity_administration_color"] = "#F6FFEC";
-        }
-
-        //Render activity related statuses (inactive, active, highly active)
-        switch($userData["activity_jam_participation"]){
-            case "inactive":
-                $userData["activity_jam_participation_inactive"] = 1;
-                break;
-            case "active":
-                $userData["activity_jam_participation_active"] = 1;
-                break;
-            case "highly active":
-                $userData["activity_jam_participation_highly_active"] = 1;
-                break;
-        }
-        switch($userData["activity_login"]){
-            case "inactive":
-                $userData["activity_login_inactive"] = 1;
-                break;
-            case "active":
-                $userData["activity_login_active"] = 1;
-                break;
-            case "highly active":
-                $userData["activity_login_highly_active"] = 1;
-                break;
-        }
-        switch($userData["activity_administration"]){
-            case "inactive":
-                $userData["activity_administration_inactive"] = 1;
-                break;
-            case "active":
-                $userData["activity_administration_active"] = 1;
-                break;
-            case "highly active":
-                $userData["activity_administration_highly_active"] = 1;
-                break;
-        }
-
-        //Mark system suggested and admin-sponsored users as admin candidates
-        if(isset($userData["system_suggestsed_admin_candidate"]) || isset($userData["is_sponsored"])){
-            $userData["is_admin_candidate"] = 1;
-        }
-
-		//Is administrator
-		if($userData["admin"] == 1){
-			$userData["is_admin"] = 1;
-		}
-
-		$render["LIST"][] = $userData;
+        $render["LIST"][] = $userData;
     }
     
 	$render["all_authors_count"] = $authorCount;

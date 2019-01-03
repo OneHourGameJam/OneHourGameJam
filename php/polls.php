@@ -154,6 +154,7 @@ function LoadSatisfaction(){
 		$satisfaction[$questionId]["scores"][$satisfactionScore] = $votesForScore;
 	}
 	
+	/*
 	foreach($dictionary["jams_with_deleted"] as $id => $jam){
 		$jamNumber = $jam["jam_number"];
 		$dictionary["jams_with_deleted"][$id]["satisfaction"] = "No Data";
@@ -175,7 +176,9 @@ function LoadSatisfaction(){
 			$dictionary["jams_with_deleted"][$id]["score5"] = $satisfaction[$arrayId]["scores"][5];
 		}
 	}
+	*/
 	
+	/*
 	foreach($dictionary["jams"] as $id => $jam){
 		$jamNumber = $jam["jam_number"];
 		$dictionary["jams"][$id]["satisfaction"] = "No Data";
@@ -197,6 +200,7 @@ function LoadSatisfaction(){
 			$dictionary["jams"][$id]["score5"] = $satisfaction[$arrayId]["scores"][5];
 		}
 	}
+	*/
 }
 
 function SubmitSatisfaction($satisfactionQuestionId, $score){
@@ -257,7 +261,8 @@ function LoadLoggedInUsersAdminVotes(){
     
 	unset($dictionary["missing_admin_candidate_votes"]);
 	unset($dictionary["missing_admin_candidate_votes_number"]);
-    
+	
+	/*
 	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 		unset($dictionary["admin_candidates"][$i]["vote_type"]);
 		unset($dictionary["admin_candidates"][$i]["vote_type_for"]);
@@ -266,11 +271,13 @@ function LoadLoggedInUsersAdminVotes(){
 		unset($dictionary["admin_candidates"][$i]["vote_type_sponsor"]);
 		unset($dictionary["admin_candidates"][$i]["vote_type_veto"]);
 	}
+	*/
 
 	while($info = mysqli_fetch_array($data)){
 		$voteSubjectUsername = $info["vote_subject_username"];
 		$voteType = $info["vote_type"];
 
+		/*
 		foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $voteSubjectUsername){
 				$dictionary["admin_candidates"][$i]["vote_type"] = $info["vote_type"];
@@ -294,8 +301,10 @@ function LoadLoggedInUsersAdminVotes(){
 				}
 			}
 		}
+		*/
     }
-    
+	
+	/*
     $missingAdminCandidateVotes = 0;
 	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 		if(!isset($dictionary["admin_candidates"][$i]["vote_type"])){
@@ -306,7 +315,8 @@ function LoadLoggedInUsersAdminVotes(){
     if($missingAdminCandidateVotes > 0){
         $dictionary["missing_admin_candidate_votes"] = 1;
         $dictionary["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
-    }
+	}
+	*/
 }
 
 function LoadAdminVotes(){
@@ -323,6 +333,7 @@ function LoadAdminVotes(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	/*
 	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 		unset($dictionary["admin_candidates"][$i]["is_sponsored"]);
 		unset($dictionary["admin_candidates"][$i]["is_vetoed"]);
@@ -331,11 +342,13 @@ function LoadAdminVotes(){
 		unset($dictionary["admin_candidates"][$i]["votes_against"]);
 		unset($dictionary["admin_candidates"][$i]["votes_vetos"]);
 	}
+	*/
 
 	while($info = mysqli_fetch_array($data)){
 		$voteSubjectUsername = $info["vote_subject_username"];
 		$voteType = $info["vote_type"];
 
+		/*
 		foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 			if($dictUserInfo["username"] == $voteSubjectUsername){
 				$dictionary["admin_candidates"][$i]["vote_type"] = $info["vote_type"];
@@ -361,6 +374,7 @@ function LoadAdminVotes(){
 				}
 			}
 		}
+		*/
 	}
 }
 

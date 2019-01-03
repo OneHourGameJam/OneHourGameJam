@@ -1,8 +1,8 @@
 <?php
 
-//Edits an existing jam, identified by the jam number.
-//Only changes the theme, date and time, does NOT change the jam number.
-function EditJam($jamNumber, $theme, $date, $time, $colorsString){
+//Edits an existing jam, identified by the jam id.
+//Only changes the theme, date and time and colors does NOT change the jam number.
+function EditJam($jamID, $theme, $date, $time, $colorsString){
 	global $jams, $dbConn;
 	
 	//Authorize user (is admin)
@@ -14,7 +14,7 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
-	
+
 	$colorsList = explode("-", $colorsString);
 	$colorSHexCodes = Array();
 	foreach($colorsList as $i => $color){
@@ -28,9 +28,9 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	$colors = implode("|", $colorSHexCodes);
 	
 	//Validate values
-	$jamNumber = intval($jamNumber);
-	if($jamNumber <= 0){
-		AddDataWarning("invalid jam number", false);
+	$jamID = intval($jamID);
+	if($jamID <= 0){
+		AddDataWarning("invalid jam id", false);
 		return;
 	}
 	
@@ -56,7 +56,7 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 	
 	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
 	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
-	$escapedJamNumber = mysqli_real_escape_string($dbConn, "$jamNumber");
+	$escapedJamID = mysqli_real_escape_string($dbConn, $jamID);
 	$escapedColors = mysqli_real_escape_string($dbConn, "$colors");
 	
 	$sql = "
@@ -64,24 +64,23 @@ function EditJam($jamNumber, $theme, $date, $time, $colorsString){
 		SET jam_theme = '$escapedTheme', 
 		    jam_start_datetime = '$escapedStartTime', 
 		    jam_colors = '$escapedColors'
-		WHERE jam_jam_number = $escapedJamNumber
-		  AND jam_deleted = 0";
+		WHERE jam_id = $escapedJamID";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
 	AddDataSuccess("Jam Updated");
     
-    AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamNumber: $jamNumber, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "");
+    AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "");
 }
 
 if(IsAdmin()){
-    $jamNumber = intval($_POST["jam_number"]);
+    $jamID = intval($_POST["jamID"]);
     $theme = $_POST["theme"];
     $date = $_POST["date"];
     $time = $_POST["time"];
     $jamcolors = $_POST["jamcolors"];
     
-    EditJam($jamNumber, $theme, $date, $time, $jamcolors);
+    EditJam($jamID, $theme, $date, $time, $jamcolors);
 }
 $page = "main"; 
 

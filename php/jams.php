@@ -59,7 +59,7 @@ function RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $logged
 	foreach($jam["colors"] as $num => $color){
 		$jamData["colors"][] = Array("number" => $num, "color" => "#".$color, "color_hex" => $color);
 	}
-	$jamData["colors_input_string"] = implode("-", $jamColors);
+	$jamData["colors_input_string"] = implode("-", $jam["colors"]);
 
 	$jamData["minutes_to_jam"] = floor((strtotime($jam["start_time"] ." UTC") - time()) / 60);
 
@@ -78,9 +78,32 @@ function RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $logged
 		}
 	}
 
+	//Hide theme of not-yet-started jams
+	$now = new DateTime();
+	$datetime = new DateTime($jamData["start_time"] . " UTC");
+	$timeUntilJam = date_diff($datetime, $now);
+
 	$jamData["first_jam"] = $nonDeletedJamCounter == 1;
 	$jamData["entries_visible"] = $nonDeletedJamCounter <= 2;
 	$jamData["entries_count"] = count($jamData["entries"]);
+
+	if($datetime > $now){
+		$jamData["theme"] = "Not yet announced";
+		$jamData["jam_started"] = false;
+		if($timeUntilJam->days > 0){
+			$jamData["time_left"] = $timeUntilJam->format("%a days %H:%I:%S");
+		}else if($timeUntilJam->h > 0){
+			$jamData["time_left"] = $timeUntilJam->format("%H:%I:%S");
+		}else  if($timeUntilJam->i > 0){
+			$jamData["time_left"] = $timeUntilJam->format("%I:%S");
+		}else if($timeUntilJam->s > 0){
+			$jamData["time_left"] = $timeUntilJam->format("%S seconds");
+		}else{
+			$jamData["time_left"] = "Now!";
+		}
+	}else{
+		$jamData["jam_started"] = true;
+	}
 
 	return $jamData;
 }
@@ -102,32 +125,13 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 		}
 		
 		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser);
-
-		//Hide theme of not-yet-started jams
+		
 		$now = new DateTime();
 		$datetime = new DateTime($jamData["start_time"] . " UTC");
-		$timeUntilJam = date_diff($datetime, $now);
-		
 		if($datetime > $now){
-			$jamData["theme"] = "Not yet announced";
-			$jamData["jam_started"] = false;
-			if($timeUntilJam->days > 0){
-				$jamData["time_left"] = $timeUntilJam->format("%a days %H:%I:%S");
-			}else if($timeUntilJam->h > 0){
-				$jamData["time_left"] = $timeUntilJam->format("%H:%I:%S");
-			}else  if($timeUntilJam->i > 0){
-				$jamData["time_left"] = $timeUntilJam->format("%I:%S");
-			}else if($timeUntilJam->s > 0){
-				$jamData["time_left"] = $timeUntilJam->format("%S seconds");
-			}else{
-				$jamData["time_left"] = "Now!";
-			}
-			
 			$nextJamTime = strtotime($jamData["start_time"]);
 			$render["next_jam_timer_code"] = date("Y-m-d", $nextJamTime)."T".date("H:i", $nextJamTime).":00Z";
 		}else{
-			$jamData["jam_started"] = true;
-
 			if(!isset($jamData["jam_deleted"])){
 				if($latestStartedJamFound == false){
 					$jamData["is_latest_started_jam"] = 1;

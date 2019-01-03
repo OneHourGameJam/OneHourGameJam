@@ -4,11 +4,11 @@
 	</p>
 	
 	{{#jams.LIST}}
-		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+		<div class='panel panel-info jamContener'>
 			<div class='panel-heading' style='background-color: {{#jam_deleted}}#F7D9D9{{/jam_deleted}}{{^jam_deleted}}#D9EDF7{{/jam_deleted}};'>
 				<span style='font-size: 16px;'>
-					<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores))
-					<a href='?page=editjam&jamnumber={{jam_number}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
+					<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
+					<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
 				</span>
 			</div>
 			
@@ -30,7 +30,7 @@
 					<div class='panel panel-default col-md-12' style='padding-left: 0px; padding-right: 0px; {{#entry_deleted}}background-color: #FDF7F7{{/entry_deleted}}'>
 						<div class='panel-body' style='text-align: center;'>
 							{{#entry_deleted}}Deleted - {{/entry_deleted}}{{title}} by {{author}}
-							<a href='?page=editentry&entry_id={{entry_id}}'><button type="submit" name='action' value='editentry' class="btn btn-default">Edit entry</button></a>
+							<a href='?page=editentry&entry_id={{id}}'><button type="submit" name='action' value='editentry' class="btn btn-default">Edit entry</button></a>
 						</div>
 					</div>
 				{{/entries}}

@@ -14,40 +14,42 @@
 			{{/entries}}
 			<table style='width: 100%' class='table'>
 				{{#entries}}
-					<tr style='height: 40px;'>
-						{{#has_screenshot}}
-							<td rowspan='2' style='width: 220px; text-align: center;'>
-								<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+					{{^entry_deleted}}
+						<tr style='height: 40px;'>
+							{{#has_screenshot}}
+								<td rowspan='2' style='width: 220px; text-align: center;'>
+									<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+								</td>
+							{{/has_screenshot}}
+							<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
+								<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
+								for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
+							</div>
+							<td class='authorPageEntry' style='text-align: right;'>
+								{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
+								{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
+								{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
+								{{#has_url_linux}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
+								{{#has_url_android}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
+								{{#has_url_ios}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
+								{{#has_url}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
+								{{#has_url_source}}<a href='{{url_source}}' class='btn entryButton' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source'></a>{{/has_url_source}}
+
+								{{#show_edit_link}}
+								<a href="?page=submit&amp;jam_number={{jam_number}}" class="btn btn-default">Edit entry</a>
+								{{/show_edit_link}}
 							</td>
-						{{/has_screenshot}}
-						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
-							<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
-							for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
-						</div>
-						<td class='authorPageEntry' style='text-align: right;'>
-							{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
-							{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
-							{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
-							{{#has_url_linux}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
-							{{#has_url_android}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
-							{{#has_url_ios}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
-							{{#has_url}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
-							{{#has_url_source}}<a href='{{url_source}}' class='btn entryButton' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source'></a>{{/has_url_source}}
-							
-							{{#show_edit_link}}
-							<a href="?page=submit&amp;jam_number={{jam_number}}" class="btn btn-default">Edit entry</a>
-							{{/show_edit_link}}
-						</td>
-					</tr>
-					<tr>
-						{{#has_description}}
-							<td colspan='{{#has_screenshot}}2{{/has_screenshot}}{{^has_screenshot}}3{{/has_screenshot}}'>
-								<p>
-									{{description}}
-								</p>
-							</td>
-						{{/has_description}}
-					</tr>
+						</tr>
+						<tr>
+							{{#has_description}}
+								<td colspan='{{#has_screenshot}}2{{/has_screenshot}}{{^has_screenshot}}3{{/has_screenshot}}'>
+									<p>
+										{{description}}
+									</p>
+								</td>
+							{{/has_description}}
+						</tr>
+					{{/entry_deleted}}
 				{{/entries}}
 			</table>
 		</div>

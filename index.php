@@ -228,15 +228,16 @@ switch($page){
 	break;
 	case "editjam":
 		if(IsAdmin()){
-			$jamNumber = intval($_GET["jamnumber"]);
-			$dictionary["editingjam"] = Array();
+			$jamID = intval($_GET["jam_id"]);
+			$jamFound = false;
 			foreach($jams as $i => $jam){
-				if(intval($jam["jam_number"]) == $jamNumber){
-					$dictionary["editingjam"] = $jam;
+				if(intval($jam["jam_id"]) == $jamID){
+					$dictionary["editingjam"] = RenderJam($jam, 0, $config, $games, $users, $loggedInUser);
+					$jamFound = true;
 					break;
 				}
 			}
-			if(count($dictionary["editingjam"]) == 0){
+			if(!$jamFound){
 				die("no jam selected");
 			}
 			$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
@@ -253,13 +254,10 @@ switch($page){
 		if(IsAdmin()){
 			$entryID = intval($_GET["entry_id"]);
 			$dictionary["editingentry"] = Array();
-			foreach($jams as $i => $jam){
-				foreach($jam["entries_with_deleted"] as $j => $entry){
-					if($entry["entry_id"] == $entryID){
-						$dictionary["editingentry"] = $entry;
-						$dictionary["editingentry"]["jam_number"] = $jamNumber;
-						break;
-					}
+			foreach($games as $i => $game){
+				if($game["id"] == $entryID){
+					$dictionary["editingentry"] = RenderGame($game, $jams, $users);
+					break;
 				}
 			}
 			if(count($dictionary["editingentry"]) == 0){

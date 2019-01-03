@@ -144,7 +144,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		}
 		
 		//Updating existing entry
-		$existingScreenshot = $jam["entries"][$i]["screenshot_url"];
+		$existingScreenshot = $game["screenshot_url"];
 		if($screenshotURL == "logo.png"){
 			if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
 				$screenshotURL = $existingScreenshot;

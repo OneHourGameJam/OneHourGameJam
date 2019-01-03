@@ -81,7 +81,14 @@ function GetCurrentJamNumberAndID(){
 	}
 
 	$sql = "
-		SELECT jam_id, jam_jam_number FROM jam WHERE jam_jam_number = (SELECT MAX(jam_jam_number) FROM jam WHERE jam_deleted = 0) AND jam_deleted = 0
+		SELECT j.jam_id, j.jam_jam_number
+		FROM (
+			SELECT MAX(jam_id) as max_jam_id
+			FROM jam 
+			WHERE jam_start_datetime <= Now()
+			  AND jam_deleted = 0
+		) past_jams, jam j
+		WHERE past_jams.max_jam_id = j.jam_id
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
