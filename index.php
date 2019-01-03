@@ -274,12 +274,18 @@ switch($page){
 		}
 		
 		$pass = FALSE;
-		foreach($dictionary["jams"] as $i => $jam){
-			if($jam["jam_number"] == $viewingJamNumber){
-				$dictionary["viewing_jam"] = $jam;
-				$pass = TRUE;
-				break;
+		foreach($jams as $i => $jam){
+			if($jam["jam_number"] != $viewingJamNumber){
+				continue;
 			}
+
+			if($jam["jam_deleted"] == 1){
+				continue;
+			}
+
+			$dictionary["viewing_jam"] = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser);
+			$pass = TRUE;
+			break;
 		}
 		
 		if($pass == FALSE){
@@ -291,18 +297,11 @@ switch($page){
 		if($viewingAuthor == ""){
 			die("invalid author name");
 		}
-		
-		if (isset($authors[$viewingAuthor])) {
-			$dictionary["viewing_author"] = $authors[$viewingAuthor];
-		} else if (isset($users[$viewingAuthor])) {
-			// User without entries
-			$dictionary["viewing_author"] = $users[$viewingAuthor];
-		} else {
-			die("Author does not exist");
-		}
+
+		$dictionary["viewing_author"] = RenderUser($users[$viewingAuthor], $users, $games, $jams, $config);
 	break;
 	case "submit":
-		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["current_jam"]["jam_number"];
+		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["jams"]["current_jam"]["jam_number"];
 	break;
 	case "userdata":
 		$dictionary["userdata_assets"] = GetAssetsOfUserFormatted($loggedInUser["username"]);
@@ -369,65 +368,86 @@ if($page == "jam")
 							print $mustache->render(file_get_contents($templateBasePath."login.html"), $dictionary);
 						break;
 						case "submit":
-							$jam = GetJamByNumber($jamNumber);
+							$jam = GetJamByNumber($jams, $jamNumber);
 							if (!$jam) {
 								die('jam not found');
 							}
 
-							$dictionary["submit_jam"] = $jam;
-							$dictionary["user_entry_color_number"] = rand(0, count($jam["colors"]) - 1);
-							$dictionary["user_entry_color"] = $jam["colors"][$dictionary["user_entry_color_number"]]["color"];
+							$dictionary["submit_jam"] = RenderSubmitJam($jam, $config, $games, $users, $loggedInUser);
+							$colorNumber = rand(0, count($jam["colors"]) - 1);
+							$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
 
-							foreach($jam["entries"] as $jam_entry){
-								if($jam_entry["author"] == $loggedInUser["username"]){
-									$dictionary["user_submitted_to_this_jam"] = true;
-									$dictionary["user_entry_name"] = $jam_entry["title"];
-									if($jam_entry["screenshot_url"] != "logo.png"){
-										$dictionary["user_entry_screenshot"] = $jam_entry["screenshot_url"];
-									}
-									$dictionary["user_entry_url"] = $jam_entry["url"];
-									$dictionary["user_entry_url_web"] = $jam_entry["url_web"];
-									$dictionary["user_entry_url_windows"] = $jam_entry["url_windows"];
-									$dictionary["user_entry_url_mac"] = $jam_entry["url_mac"];
-									$dictionary["user_entry_url_linux"] = $jam_entry["url_linux"];
-									$dictionary["user_entry_url_ios"] = $jam_entry["url_ios"];
-									$dictionary["user_entry_url_android"] = $jam_entry["url_android"];
-									$dictionary["user_entry_url_source"] = $jam_entry["url_source"];
-									$dictionary["user_entry_desc"] = $jam_entry["description"];
-									$dictionary["user_entry_color"] = $jam_entry["color"];
-									$dictionary["user_entry_color_number"] = $jam_entry["color_number"];
-									
-									if($jam_entry["url_web"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_web"];
-									}else if($jam_entry["url_windows"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_windows"];
-									}else if($jam_entry["url_mac"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_mac"];
-									}else if($jam_entry["url_linux"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_linux"];
-									}else if($jam_entry["url_ios"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_ios"];
-									}else if($jam_entry["url_android"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_android"];
-									}else if($jam_entry["url"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url"];
-									}else if($jam_entry["url_source"] != ""){
-										$dictionary["user_entry_share_url"] = $jam_entry["url_source"];
-									}
-									
-									if(isset($jam_entry["has_url"])){$dictionary["user_has_url"] = 1;}
-									if(isset($jam_entry["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
-									if(isset($jam_entry["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
-									if(isset($jam_entry["has_url_mac"])){$dictionary["user_has_url_mac"] = 1;}
-									if(isset($jam_entry["has_url_linux"])){$dictionary["user_has_url_linux"] = 1;}
-									if(isset($jam_entry["has_url_ios"])){$dictionary["user_has_url_ios"] = 1;}
-									if(isset($jam_entry["has_url_android"])){$dictionary["user_has_url_android"] = 1;}
-									if(isset($jam_entry["has_url_source"])){$dictionary["user_has_url_source"] = 1;}
-									break;
+							foreach($games as $i => $game){
+								if($game["author"] != $loggedInUser["username"]){
+									continue;
 								}
+								
+								if($game["jam_number"] != $jamNumber){
+									continue;
+								}
+								
+								if($game["entry_deleted"] == 1){
+									continue;
+								}
+
+								//Determine entry color number
+								foreach($jam["colors"] as $colorIndex => $color){
+									if($color == $game["color"]){
+										$colorNumber = $colorIndex;
+										break;
+									}
+								}
+
+								$dictionary["user_entry_color_number"] = $colorNumber;
+								$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
+								
+								$dictionary["user_submitted_to_this_jam"] = true;
+								$dictionary["user_entry_name"] = $game["title"];
+								if($game["screenshot_url"] != "logo.png"){
+									$dictionary["user_entry_screenshot"] = $game["screenshot_url"];
+								}
+								$dictionary["user_entry_url"] = $game["url"];
+								$dictionary["user_entry_url_web"] = $game["url_web"];
+								$dictionary["user_entry_url_windows"] = $game["url_windows"];
+								$dictionary["user_entry_url_mac"] = $game["url_mac"];
+								$dictionary["user_entry_url_linux"] = $game["url_linux"];
+								$dictionary["user_entry_url_ios"] = $game["url_ios"];
+								$dictionary["user_entry_url_android"] = $game["url_android"];
+								$dictionary["user_entry_url_source"] = $game["url_source"];
+								$dictionary["user_entry_desc"] = $game["description"];
+								//$dictionary["user_entry_color"] = $game["color"];
+								//$dictionary["user_entry_color_number"] = $game["color_number"];
+								
+								if($game["url_web"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_web"];
+								}else if($game["url_windows"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_windows"];
+								}else if($game["url_mac"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_mac"];
+								}else if($game["url_linux"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_linux"];
+								}else if($game["url_ios"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_ios"];
+								}else if($game["url_android"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_android"];
+								}else if($game["url"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url"];
+								}else if($game["url_source"] != ""){
+									$dictionary["user_entry_share_url"] = $game["url_source"];
+								}
+								
+								if(isset($game["has_url"])){$dictionary["user_has_url"] = 1;}
+								if(isset($game["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
+								if(isset($game["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
+								if(isset($game["has_url_mac"])){$dictionary["user_has_url_mac"] = 1;}
+								if(isset($game["has_url_linux"])){$dictionary["user_has_url_linux"] = 1;}
+								if(isset($game["has_url_ios"])){$dictionary["user_has_url_ios"] = 1;}
+								if(isset($game["has_url_android"])){$dictionary["user_has_url_android"] = 1;}
+								if(isset($game["has_url_source"])){$dictionary["user_has_url_source"] = 1;}
+								break;
 							}
 
-							if (!isset($dictionary["user_entry_name"]) && $jamNumber != $dictionary["current_jam"]["jam_number"]) {
+							if (!isset($dictionary["user_entry_name"]) && $jamNumber != $dictionary["jams"]["current_jam"]["jam_number"]) {
 								die('Cannot make a new submission to a past jam');
 							}
 

@@ -29,12 +29,64 @@ function LoadJams(){
 }
 
 function ParseJamColors($colorString){
-	$jamColors = explode("|", $info["jam_colors"]);
+	$jamColors = explode("|", $colorString);
 	if(count($jamColors) == 0){
 		return Array("FFFFFF");
 	}
 
 	return $jamColors;
+}
+
+function RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser){
+	$jamData = Array();
+
+	$jamData["jam_id"] = $jam["jam_id"];
+	$jamData["username"] = $jam["username"];
+	$jamData["jam_number"] = $jam["jam_number"];
+	$jamData["theme"] = $jam["theme"];
+	$jamData["start_time"] = $jam["start_time"];
+	if($jam["jam_deleted"] == 1){
+		$jamData["jam_deleted"] = 1;
+	}
+
+	$jamData["theme_visible"] = $jam["theme"]; //Theme is visible to admins
+	$jamData["jam_number_ordinal"] = ordinal(intval($jam["jam_number"]));
+	$jamData["date"] = date("d M Y", strtotime($jam["start_time"]));
+	$jamData["time"] = date("H:i", strtotime($jam["start_time"]));
+
+	//Jam Colors
+	$jamData["colors"] = Array();
+	foreach($jam["colors"] as $num => $color){
+		$jamData["colors"][] = Array("number" => $num, "color" => "#".$color, "color_hex" => $color);
+	}
+	$jamData["colors_input_string"] = implode("-", $jamColors);
+
+	$jamData["minutes_to_jam"] = floor((strtotime($jam["start_time"] ." UTC") - time()) / 60);
+
+	//Games in jam
+	$jamData["entries"] = Array();
+	foreach($games as $j => $game){
+		if($game["jam_id"] == $jamData["jam_id"]){
+			$jamData["entries"][] = RenderGame($game, $jams, $users);
+			
+			//Has logged in user participated in this jam?
+			if(!$game["entry_deleted"]){
+				if($loggedInUser["username"] == $game["author"]){
+					$jamData["user_participated_in_jam"] = 1;
+				}
+			}
+		}
+	}
+
+	$jamData["first_jam"] = $nonDeletedJamCounter == 1;
+	$jamData["entries_visible"] = $nonDeletedJamCounter <= 2;
+	$jamData["entries_count"] = count($jamData["entries"]);
+
+	return $jamData;
+}
+
+function RenderSubmitJam($jam, $config, $games, $users, $loggedInUser){
+	return RenderJam($jam, 0, $config, $games, $users, $loggedInUser);
 }
 
 function RenderJams($jams, $config, $games, $users, $loggedInUser){
@@ -45,50 +97,11 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 	$currentJamData = GetCurrentJamNumberAndID();
 
 	foreach($jams as $i => $jam){
-		$jamData = Array();
-
-		$jamData["jam_id"] = $jam["jam_id"];
-		$jamData["username"] = $jam["username"];
-		$jamData["jam_number"] = $jam["jam_number"];
-		$jamData["theme"] = $jam["theme"];
-		$jamData["start_time"] = $jam["start_time"];
-		if($jam["jam_deleted"] == 1){
-			$jamData["jam_deleted"] = 1;
-		}else{
-            $nonDeletedJamCounter += 1;
+		if($jam["jam_deleted"] != 1){
+			$nonDeletedJamCounter += 1;
 		}
-
-		$jamData["theme_visible"] = $jam["theme"]; //Theme is visible to admins
-		$jamData["jam_number_ordinal"] = ordinal(intval($jam["jam_number"]));
-		$jamData["date"] = date("d M Y", strtotime($jam["start_time"]));
-		$jamData["time"] = date("H:i", strtotime($jam["start_time"]));
-
-		//Jam Colors
-		foreach($jam["colors"] as $num => $color){
-			$jamData["colors"][] = Array("number" => $num, "color" => "#".$color, "color_hex" => $color);
-		}
-		$jamData["colors_input_string"] = implode("-", $jamColors);
-
-		$jamData["minutes_to_jam"] = floor((strtotime($jam["start_time"] ." UTC") - time()) / 60);
-
-		//Games in jam
-		$jamData["entries"] = Array();
-		foreach($games as $j => $game){
-			if($game["jam_id"] == $jamData["jam_id"]){
-				$jamData["entries"][] = RenderGame($game, $jams, $users);
-				
-				//Has logged in user participated in this jam?
-				if(!$game["entry_deleted"]){
-					if($loggedInUser["username"] == $game["author"]){
-						$jamData["user_participated_in_jam"] = 1;
-					}
-				}
-			}
-		}
-
-		$jamData["first_jam"] = $nonDeletedJamCounter == 1;
-		$jamData["entries_visible"] = $nonDeletedJamCounter <= 2;
-		$jamData["entries_count"] = count($jamData["entries"]);
+		
+		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser);
 
 		//Hide theme of not-yet-started jams
 		$now = new DateTime();
@@ -108,8 +121,8 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 				$jamData["time_left"] = $timeUntilJam->format("%S seconds");
 			}else{
 				$jamData["time_left"] = "Now!";
-            }
-            
+			}
+			
 			$nextJamTime = strtotime($jamData["start_time"]);
 			$render["next_jam_timer_code"] = date("Y-m-d", $nextJamTime)."T".date("H:i", $nextJamTime).":00Z";
 		}else{
@@ -124,6 +137,10 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 		}
 
 		$render["LIST"][] = $jamData;
+
+		if($currentJamData["ID"] == $jamData["jam_id"]){
+			$render["current_jam"] = $jamData;
+		}
     }
     
     $render["all_jams_count"] = $nonDeletedJamCounter;
@@ -359,20 +376,6 @@ function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $start
     AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "");
 }
 
-// Returns a jam given its number.
-// The dictionary of jams must have been previously loaded.
-function GetJamByNumber($jamNumber) {
-	global $jams;
-
-	foreach ($jams as $jam) {
-		if ($jam["jam_number"] == $jamNumber) {
-			return $jam;
-		}
-	}
-
-	return null;
-}
-
 function GetJamsOfUserFormatted($username){
 	global $dbConn;
 	
@@ -387,5 +390,19 @@ function GetJamsOfUserFormatted($username){
 	
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
+
+// Returns a jam given its number.
+// The dictionary of jams must have been previously loaded.
+function GetJamByNumber($jams, $jamNumber) {
+	foreach ($jams as $jam) {
+		if ($jam["jam_number"] == $jamNumber && $jam["jam_deleted"] != 1) {
+			return $jam;
+		}
+	}
+
+	return null;
+}
+
+
 
 ?>

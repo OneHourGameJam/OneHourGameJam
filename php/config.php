@@ -136,6 +136,7 @@ function UpdateConfig($config, $key, $value, $userID) {
 		return; //Lacks permissions to make edits
 	}
 
+	$userIDClean = mysqli_real_escape_string($dbConn, $userID);
 	$keyClean = mysqli_real_escape_string($dbConn, $key);
 	$valueClean = mysqli_real_escape_string($dbConn, $value);
 
@@ -144,7 +145,7 @@ function UpdateConfig($config, $key, $value, $userID) {
 		UPDATE config
 		SET config_value = '$valueClean',
 		config_lastedited = Now(),
-		config_lasteditedby = '$userID'
+		config_lasteditedby = '$userIDClean'
 		WHERE config_key = '$keyClean';
 	";
 	mysqli_query($dbConn, $sql);

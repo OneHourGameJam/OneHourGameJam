@@ -52,38 +52,6 @@ function LoadUsers($games){
 
     ksort($users);
 
-    foreach($games as $i => $game){
-        if($game["entry_deleted"] != 1){
-            if(isset($authorList[$author])){
-                $authorList[$author]["entry_count"] += 1;
-                $authorList[$author]["recent_participation"] += (($jamData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"]) : 0);
-                if(intval($jamData["jam_number"]) < intval($authorList[$author]["first_jam_number"])){
-                    $authorList[$author]["first_jam_number"] = $jamData["jam_number"];
-                }
-                if(intval($jamData["jam_number"]) > intval($authorList[$author]["last_jam_number"])){
-                    $authorList[$author]["last_jam_number"] = $jamData["jam_number"];
-                }
-                $authorList[$author]["entries"][] = $game;
-            }else{
-                if(isset($users[$author])){
-                    $authorList[$author] = $users[$author];
-                }else{
-                    //Author does not have matching account (very old entry)
-                    $authorList[$author] = Array("username" => $author, "display_name" => $author_display);
-                }
-                $authorList[$author]["entry_count"] = 1;
-                $authorList[$author]["recent_participation"] = (($jamData["is_recent"]) ? (100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"]) : 0);
-                $authorList[$author]["first_jam_number"] = $jamData["jam_number"];
-                $authorList[$author]["last_jam_number"] = $jamData["jam_number"];
-                $authorList[$author]["entries"][] = $game;
-            }
-        
-            $jamData["entries"][] = $game;
-            $entries[] = $game;
-        }
-        $jamData["entries_with_deleted"][] = $game;
-    }
-
     //Get list of sponsored users to be administration candidates, ensuring the voter is still an admin and the candidate hasn't become an admin since the vote was cast
 	$sql = "
         SELECT v.vote_voter_username, v.vote_subject_username

@@ -28,7 +28,7 @@ function LoadGames(){
 		$gameData["url_android"] = $info["entry_url_android"];
 		$gameData["url_source"] = $info["entry_url_source"];
 		$gameData["screenshot_url"] = $info["entry_screenshot_url"];
-		$gameData["color"] = "#".$info["entry_color"];
+		$gameData["color"] = $info["entry_color"];
 		$gameData["entry_deleted"] = $info["entry_deleted"];
 
 		$games[] = $gameData;

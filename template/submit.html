@@ -12,38 +12,6 @@
 		</div>
 
 		<form method='post' enctype="multipart/form-data" class="panel-body jamContent">
-		
-			{{#user_entry_share_url}}
-				<div class="panel panel-info">
-					<div class='panel-heading'>
-						<h3 class='panel-title' style='font-size: 16px;'>
-							Share your game
-						</h3>
-					</div>
-					<div class="panel-body">
-						<!-- Facebook -->
-						<a href="http://www.facebook.com/sharer.php?u={{{user_entry_share_url}}}" target="_blank">
-							<img src="{{{template_path}}}images/circle_facebook.png" alt="Facebook" />
-						</a>
-						
-						<!-- Twitter -->
-						<a href="https://twitter.com/share?url={{{user_entry_share_url}}}&amp;text=Just made a game in one hour titled {{user_entry_name}}. Try it!;hashtags=gamedev, 1hgj, gamejam" target="_blank">
-							<img src="{{{template_path}}}images/circle_twitter.png" alt="Twitter" />
-						</a>
-						
-						<!-- LinkedIn -->
-						<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{{user_entry_share_url}}}" target="_blank">
-							<img src="{{{template_path}}}images/circle_linkedin.png" alt="LinkedIn" />
-						</a>
-						
-						<!-- Tumblr-->
-						<a href="http://www.tumblr.com/share/link?url={{{user_entry_share_url}}}&amp;title=Made a game in an hour titled {{user_entry_name}}! Try it!" target="_blank">
-							<img src="{{{template_path}}}images/circle_tumblr.png" alt="Tumblr" />
-						</a>
-					</div>
-				</div>
-			{{/user_entry_share_url}}
-		
 			<div class="panel panel-info">
 				<div class='panel-heading'>
 					<h3 class='panel-title' style='font-size: 16px;'>
@@ -176,7 +144,7 @@
 					<div class="form-group">
 						<label for="gamename">Game color</label>
 						<input type='hidden' id="colorNumber" name="colorNumber" value='{{user_entry_color_number}}'>
-						<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: {{user_entry_color}}; vertical-align: middle;'></div>
+						<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: #{{user_entry_color}}; vertical-align: middle;'></div>
 						<div class="btn-group" data-toggle="buttons">
 							{{#submit_jam.colors}}
 								<label class="btn btn-default" style='background-color: {{color}}' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorNumber').val('{{number}}')">

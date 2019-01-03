@@ -6,7 +6,7 @@
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $games;
 	
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -20,7 +20,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
 	$jamColorNumber = intval(trim($jamColorNumber));
-	
+
 	//Authorize user
 	if(IsLoggedIn() === false){
 		AddAuthorizationWarning("Not logged in.", false);
@@ -65,7 +65,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		AddDataWarning('Invalid jam number', false);
 		return;
 	}
-	$jam = GetJamByNumber($jam_number);
+	
+	$jam = GetJamByNumber($jams, $jam_number);
 	if($jam == null || $jam["jam_number"] == 0){
 		AddInternalDataError("No jam to submit to", false);
 		return;
@@ -75,13 +76,13 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		AddInternalDataError("No jam to submit to", false);
 		return;
 	}
-	
+
 	//Validate color
 	if($jamColorNumber < 0 || count($jam["colors"]) <= $jamColorNumber){
 		AddDataWarning("Selected invalid color", false);
 		return;
 	}
-	$color = $jam["colors"][$jamColorNumber]["color_hex"];
+	$color = $jam["colors"][$jamColorNumber];
 	
 	//Upload screenshot
 	$jam_folder = "data/jams/jam_$jam_number";
@@ -128,148 +129,148 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	}
 	
 	//Create or update entry
-	if(isset($jam["entries"])){
-		$entryUpdated = false;
-		foreach($jam["entries"] as $i => $entry){
-			if($entry["author"] == $loggedInUser["username"]){
-				//Updating existing entry
-				$existingScreenshot = $jam["entries"][$i]["screenshot_url"];
-				if($screenshotURL == "logo.png"){
-					if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
-						$screenshotURL = $existingScreenshot;
-					}
-				}
-				
-				$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
-				$escapedGameURL = mysqli_real_escape_string($dbConn, $gameURL);
-				$escapedGameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
-				$escapedGameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
-				$escapedGameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
-				$escapedGameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
-				$escapedGameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
-				$escapedGameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
-				$escapedGameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
-				$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
-				$escapedDescription = mysqli_real_escape_string($dbConn, $description);
-				$escapedAuthorName = mysqli_real_escape_string($dbConn, $entry["author"]);
-				$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
-				$escaped_color = mysqli_real_escape_string($dbConn, $color);
-				
-				$sql = "
-				UPDATE entry
-				SET
-					entry_title = '$escapedGameName',
-					entry_url = '$escapedGameURL',
-					entry_url_web = '$escapedGameURLWeb',
-					entry_url_windows = '$escapedGameURLWin',
-					entry_url_mac = '$escapedGameURLMac',
-					entry_url_linux = '$escapedGameURLLinux',
-					entry_url_ios = '$escapedGameURLiOS',
-					entry_url_android = '$escapedGameURLAndroid',
-					entry_url_source = '$escapedGameURLSource',
-					entry_screenshot_url = '$escapedScreenshotURL',
-					entry_description = '$escapedDescription',
-					entry_color = '$escaped_color'
-				WHERE 
-					entry_author = '$escapedAuthorName'
-				AND entry_jam_number = $escaped_jamNumber
-				AND entry_deleted = 0;
+	$entryUpdated = false;
+	foreach($games as $i => $game){
+		if($game["entry_deleted"]){
+			continue;
+		}
 
-				";
-				$data = mysqli_query($dbConn, $sql);
-				$sql = "";
-	
-				AddDataSuccess("Game Updated");
-				
-				$entryUpdated = true;
+		if($game["jam_number"] != $jam_number){
+			continue;
+		}
+
+		if($game["author"] != $loggedInUser["username"]){
+			continue;
+		}
+		
+		//Updating existing entry
+		$existingScreenshot = $jam["entries"][$i]["screenshot_url"];
+		if($screenshotURL == "logo.png"){
+			if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
+				$screenshotURL = $existingScreenshot;
 			}
 		}
-		if(!$entryUpdated){
-			$currentJam = $jams[0];
-			
-			foreach($jams as $index => $eachJam){
-				if($eachJam["jam_started"]){
-					$currentJam = $jams[$index];
-					break;
-				}
-			}
-			
-			if ($jam_number != $currentJam["jam_number"]) {
-				AddDataWarning('Cannot make a new submission to a past jam', false);
-				return;
-			}
 
-			$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
-			$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-			$escaped_jamId = mysqli_real_escape_string($dbConn, $jam["jam_id"]);
-			$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam["jam_number"]);
-			$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
-			$escaped_description = mysqli_real_escape_string($dbConn, $description);
-			$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
-			$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
-			$escaped_gameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
-			$escaped_gameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
-			$escaped_gameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
-			$escaped_gameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
-			$escaped_gameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
-			$escaped_gameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
-			$escaped_gameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
-			$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
-			$escaped_color = mysqli_real_escape_string($dbConn, $color);
-			
-			$sql = "
-				INSERT INTO entry
-				(entry_id,
-				entry_datetime,
-				entry_ip,
-				entry_user_agent,
-				entry_jam_id,
-				entry_jam_number,
-				entry_title,
-				entry_description,
-				entry_author,
-				entry_url,
-				entry_url_web,
-				entry_url_windows,
-				entry_url_mac,
-				entry_url_linux,
-				entry_url_ios,
-				entry_url_android,
-				entry_url_source,
-				entry_screenshot_url,
-				entry_color)
-				VALUES
-				(null,
-				Now(),
-				'$escaped_ip',
-				'$escaped_userAgent',
-				$escaped_jamId,
-				$escaped_jamNumber,
-				'$escaped_gameName',
-				'$escaped_description',
-				'$escaped_aurhor',
-				'$escaped_gameURL',
-				'$escaped_gameURLWeb',
-				'$escaped_gameURLWin',
-				'$escaped_gameURLMac',
-				'$escaped_gameURLLinux',
-				'$escaped_gameURLiOS',
-				'$escaped_gameURLAndroid',
-				'$escaped_gameURLSource',
-				'$escaped_ssURL',
-				'$escaped_color');
-			";
-			$data = mysqli_query($dbConn, $sql);
-			$sql = "";
-	
-			AddDataSuccess("Game Submitted");
-		}
+		$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
+		$escapedGameURL = mysqli_real_escape_string($dbConn, $gameURL);
+		$escapedGameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
+		$escapedGameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
+		$escapedGameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
+		$escapedGameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
+		$escapedGameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
+		$escapedGameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
+		$escapedGameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
+		$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
+		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
+		$escapedAuthorName = mysqli_real_escape_string($dbConn, $game["author"]);
+		$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
+		$escaped_color = mysqli_real_escape_string($dbConn, $color);
+
+		$sql = "
+		UPDATE entry
+		SET
+			entry_title = '$escapedGameName',
+			entry_url = '$escapedGameURL',
+			entry_url_web = '$escapedGameURLWeb',
+			entry_url_windows = '$escapedGameURLWin',
+			entry_url_mac = '$escapedGameURLMac',
+			entry_url_linux = '$escapedGameURLLinux',
+			entry_url_ios = '$escapedGameURLiOS',
+			entry_url_android = '$escapedGameURLAndroid',
+			entry_url_source = '$escapedGameURLSource',
+			entry_screenshot_url = '$escapedScreenshotURL',
+			entry_description = '$escapedDescription',
+			entry_color = '$escaped_color'
+		WHERE 
+			entry_author = '$escapedAuthorName'
+		AND entry_jam_number = $escaped_jamNumber
+		AND entry_deleted = 0;
+
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+
+		AddDataSuccess("Game Updated");
+
+		$entryUpdated = true;
 	}
-	
-	LoadEntries();
+
+	if(!$entryUpdated){
+		$currentJamData = GetCurrentJamNumberAndID();
+		
+		if ($jam_number != $currentJamData["NUMBER"]) {
+			AddDataWarning('Cannot make a new submission to a past jam', false);
+			return;
+		}
+
+		$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
+		$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
+		$escaped_jamId = mysqli_real_escape_string($dbConn, $jam["jam_id"]);
+		$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam["jam_number"]);
+		$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
+		$escaped_description = mysqli_real_escape_string($dbConn, $description);
+		$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+		$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
+		$escaped_gameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
+		$escaped_gameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
+		$escaped_gameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
+		$escaped_gameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
+		$escaped_gameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
+		$escaped_gameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
+		$escaped_gameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
+		$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
+		$escaped_color = mysqli_real_escape_string($dbConn, $color);
+		
+		$sql = "
+			INSERT INTO entry
+			(entry_id,
+			entry_datetime,
+			entry_ip,
+			entry_user_agent,
+			entry_jam_id,
+			entry_jam_number,
+			entry_title,
+			entry_description,
+			entry_author,
+			entry_url,
+			entry_url_web,
+			entry_url_windows,
+			entry_url_mac,
+			entry_url_linux,
+			entry_url_ios,
+			entry_url_android,
+			entry_url_source,
+			entry_screenshot_url,
+			entry_color)
+			VALUES
+			(null,
+			Now(),
+			'$escaped_ip',
+			'$escaped_userAgent',
+			$escaped_jamId,
+			$escaped_jamNumber,
+			'$escaped_gameName',
+			'$escaped_description',
+			'$escaped_aurhor',
+			'$escaped_gameURL',
+			'$escaped_gameURLWeb',
+			'$escaped_gameURLWin',
+			'$escaped_gameURLMac',
+			'$escaped_gameURLLinux',
+			'$escaped_gameURLiOS',
+			'$escaped_gameURLAndroid',
+			'$escaped_gameURLSource',
+			'$escaped_ssURL',
+			'$escaped_color');
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+
+		AddDataSuccess("Game Submitted");
+	}
 }
 
-if(IsAdmin()){
+if(IsLoggedIn()){
     $gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
     $gameURL = (isset($_POST["gameurl"])) ? $_POST["gameurl"] : "";
     $gameURLWeb = (isset($_POST["gameurlweb"])) ? $_POST["gameurlweb"] : "";
