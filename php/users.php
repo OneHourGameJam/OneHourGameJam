@@ -85,36 +85,43 @@ function RenderUser($user, $users, $games, $jams, $config){
     //Determine if this user is an author and their participation
     foreach($games as $j => $gameData){
         $gameAuthor = $gameData["author"];
-        if($username == $gameAuthor){
-            foreach($jams as $k => $jam){
-                if($jam["jam_id"] == $gameData["jam_id"]){
-                    $jamData = $jam;
-                    break;
-                }
-            }
 
-            $userData["is_author"] = 1;
-            if(!isset($userData["entry_count"])){
-                $userData["entry_count"] = 0;
-                $userData["first_jam_number"] = $gameData["jam_number"];
-                $userData["last_jam_number"] = $gameData["jam_number"];
-            }
-
-            $userData["entry_count"] += 1;
-            
-            if($gameData["jam_number"] < $userData["first_jam_number"] ){
-                $userData["first_jam_number"] = $gameData["jam_number"];
-            }
-            if($gameData["jam_number"] > $userData["last_jam_number"] ){
-                $userData["last_jam_number"] = $gameData["jam_number"];
-            }
-            
-            $isJamRecent = (intval($jamData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
-            if($isJamRecent){
-                $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
-            }
-            $userData["entries"][] = RenderGame($gameData, $jams, $users);
+        if($gameData["author"] != $username){
+            continue;
         }
+
+        if($gameData["entry_deleted"] == 1){
+            continue;
+        }
+
+        foreach($jams as $k => $jam){
+            if($jam["jam_id"] == $gameData["jam_id"]){
+                $jamData = $jam;
+                break;
+            }
+        }
+
+        $userData["is_author"] = 1;
+        if(!isset($userData["entry_count"])){
+            $userData["entry_count"] = 0;
+            $userData["first_jam_number"] = $gameData["jam_number"];
+            $userData["last_jam_number"] = $gameData["jam_number"];
+        }
+
+        $userData["entry_count"] += 1;
+        
+        if($gameData["jam_number"] < $userData["first_jam_number"] ){
+            $userData["first_jam_number"] = $gameData["jam_number"];
+        }
+        if($gameData["jam_number"] > $userData["last_jam_number"] ){
+            $userData["last_jam_number"] = $gameData["jam_number"];
+        }
+        
+        $isJamRecent = (intval($jamData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
+        if($isJamRecent){
+            $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
+        }
+        $userData["entries"][] = RenderGame($gameData, $jams, $users);
     }
     
     //Find admin candidates
