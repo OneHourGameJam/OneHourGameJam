@@ -78,6 +78,8 @@ function LoadUsers(){
 
 function RenderUser($user, $users, $games, $jams, $config){
     $userData = $user;
+    
+    $currentJamData = GetCurrentJamNumberAndID();
 
     $username = $userData["username"];
     $userData["recent_participation"] = 0;
@@ -117,7 +119,7 @@ function RenderUser($user, $users, $games, $jams, $config){
             $userData["last_jam_number"] = $gameData["jam_number"];
         }
         
-        $isJamRecent = (intval($jamData["jam_number"]) > intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
+        $isJamRecent = intval($jamData["jam_number"]) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
         if($isJamRecent){
             $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
         }
@@ -137,12 +139,12 @@ function RenderUser($user, $users, $games, $jams, $config){
     }
     
     //Find inactive admins (participation in jams)
-    $jamsSinceLastParticipation = (count($jams) - $userData["last_jam_number"]);
+    $jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);
     $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
-    if($userData["last_jam_number"] < (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
+    if($userData["last_jam_number"] < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
         $userData["activity_jam_participation"] = "inactive";
         $userData["activity_jam_participation_color"] = "#FFECEC";
-    }else if($userData["last_jam_number"] >= (count($jams) - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
+    }else if($userData["last_jam_number"] >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
         $userData["activity_jam_participation"] = "highly active";
         $userData["activity_jam_participation_color"] = "#ECFFEC";
     }else{
@@ -224,8 +226,7 @@ function RenderUser($user, $users, $games, $jams, $config){
 
 function RenderUsers($users, $games, $jams, $config){
     $render = Array("LIST" => Array());
-    
-    $currentJamData = GetCurrentJamNumberAndID();
+
     $authorCount = 0;
 	
 	foreach($users as $i => $user){
