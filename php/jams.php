@@ -65,15 +65,19 @@ function RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $logged
 
 	//Games in jam
 	$jamData["entries"] = Array();
+	$jamData["entries_count"] = 0;
 	foreach($games as $j => $game){
 		if($game["jam_id"] == $jamData["jam_id"]){
 			$jamData["entries"][] = RenderGame($game, $jams, $users);
-			
-			//Has logged in user participated in this jam?
+
 			if(!$game["entry_deleted"]){
+				//Has logged in user participated in this jam?
 				if($loggedInUser["username"] == $game["author"]){
 					$jamData["user_participated_in_jam"] = 1;
 				}
+
+				//Count non-deleted entries in jam
+				$jamData["entries_count"] += 1;
 			}
 		}
 	}
@@ -85,7 +89,6 @@ function RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $logged
 
 	$jamData["first_jam"] = $nonDeletedJamCounter == 1;
 	$jamData["entries_visible"] = $nonDeletedJamCounter <= 2;
-	$jamData["entries_count"] = count($jamData["entries"]);
 
 	if($datetime > $now){
 		$jamData["theme"] = "Not yet announced";
