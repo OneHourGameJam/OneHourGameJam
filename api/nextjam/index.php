@@ -4,7 +4,7 @@ chdir("../../");
 include_once("php/db.php");
 include_once("php/helpers.php");
 include_once("php/config.php");
-LoadConfig();
+$config = LoadConfig();
 
 //Number of minutes after jam to be considered active.
 $jamDurationMinutes = 60;
