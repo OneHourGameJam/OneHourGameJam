@@ -33,6 +33,7 @@ body{
 	transform: scale(1, 1);
 	transition: 0.3s;
 	width: 100%;
+	color: black;
 }
 .entryScreenshot.hiddenFace{
 	transform: scale(0, 1);
