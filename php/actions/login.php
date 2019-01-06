@@ -118,7 +118,7 @@ function RegisterUser($username, $password){
 
 	}
 	
-	LoadUsers();
+	$users = LoadUsers();
 	LogInUser($username, $password);
 }
 
