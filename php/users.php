@@ -227,11 +227,14 @@ function RenderUser($user, $users, $games, $jams, $config){
 function RenderUsers($users, $games, $jams, $config){
     $render = Array("LIST" => Array());
 
-    $authorCount = 0;
-	
-	foreach($users as $i => $user){
-        $userData = RenderUser($user, $users, $games, $jams, $config);
-
+    $authorCount = 0;
+	$gamesByUsername = GroupGamesByUsername($games);
+	
+	foreach($users as $i => $user){
+		$userGames = $gamesByUsername[$user["username"]];
+
+        $userData = RenderUser($user, $users, $userGames, $jams, $config);
+		
         if(!isset($userData["entry_count"])){
             $authorCount += 1;
         }
@@ -243,5 +246,17 @@ function RenderUsers($users, $games, $jams, $config){
 
 	return $render;
 }
-
+function GroupGamesByUsername($games) {
+	$gamesByUsername = [];
+		foreach($games as $i => $game){
+		$username = $game["author"];
+		if (!isset($gamesByUsername[$username])) {
+			$gamesByUsername[$username] = [];
+		}
+		$gamesByUsername[$username][] = $game;
+	}
+	
+	return $gamesByUsername;
+}
+
 ?>
