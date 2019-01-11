@@ -1,7 +1,7 @@
 <?php
 
 function LoadJams(){
-	global $dbConn;	
+	global $dbConn;
 
 	$jams = Array();
 
@@ -117,8 +117,10 @@ function RenderSubmitJam($jam, $config, $games, $users, $loggedInUser){
 
 function RenderJams($jams, $config, $games, $users, $loggedInUser){
 	$render = Array("LIST" => Array());
+
+	$render["next_jam_timer_code"] = "".gmdate("Y-m-d H:i", GetNextJamDateAndTime());
 
-    $nonDeletedJamCounter = 0;
+  $nonDeletedJamCounter = 0;
 	$latestStartedJamFound = false;
 	$currentJamData = GetCurrentJamNumberAndID();
 
@@ -126,9 +128,9 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 		if($jam["jam_deleted"] != 1){
 			$nonDeletedJamCounter += 1;
 		}
-		
+
 		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser);
-		
+
 		$now = new DateTime();
 		$datetime = new DateTime($jamData["start_time"] . " UTC");
 		if($datetime > $now){
@@ -138,7 +140,7 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 			if(!isset($jamData["jam_deleted"])){
 				if($latestStartedJamFound == false){
 					$jamData["is_latest_started_jam"] = 1;
-					$latestStartedJamFound = true; 
+					$latestStartedJamFound = true;
 				}
 			}
 		}
@@ -149,7 +151,7 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 			$render["current_jam"] = $jamData;
 		}
     }
-    
+
     $render["all_jams_count"] = $nonDeletedJamCounter;
 
 	return $render;
@@ -160,22 +162,22 @@ function RenderJams($jams, $config, $games, $users, $loggedInUser){
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
 function CheckNextJamSchedule(){
 	global $themes, $nextJamTime;
-	
+
 	$autoScheduleThreshold = 2 * 60 * 60;
-	
+
 	$suggestedNextJamTime = GetNextJamDateAndTime();
 	$now = time();
 	$interval = $suggestedNextJamTime - $now;
 	$colors = "e38484|e3b684|dee384|ade384|84e38d|84e3be|84d6e3|84a4e3|9684e3|c784e3";
-	
+
 	if($interval > 0 && $interval <= $autoScheduleThreshold){
 		if($nextJamTime != ""){
 			//A future jam is already scheduled
 			return;
 		}
-		
+
 		$selectedTheme = "";
-		
+
 		$selectedTheme = SelectRandomThemeByVoteDifference();
 		if($selectedTheme == ""){
 			$selectedTheme = SelectRandomThemeByPopularity();
@@ -186,10 +188,10 @@ function CheckNextJamSchedule(){
 		if($selectedTheme == ""){
 			$selectedTheme = "Any theme";
 		}
-		
+
 		$currentJamData = GetCurrentJamNumberAndID();
 		$jamNumber = intval($currentJamData["NUMBER"] + 1);
-		
+
 		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $suggestedNextJamTime), $colors);
 	}
 }
@@ -199,48 +201,48 @@ function CheckNextJamSchedule(){
 function SelectRandomThemeByVoteDifference(){
 	global $themes;
 	$minimumVotes = 10;
-	
+
 	$selectedTheme = "";
-	
+
 	$availableThemes = Array();
 	$totalVotesDifference = 0;
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
-		
+
 		if($theme["banned"]){
 			continue;
 		}
-		
+
 		$votesFor = $theme["votes_for"];
 		$votesNeutral = $theme["votes_neutral"];
 		$votesAgainst = $theme["votes_against"];
 		$votesDifference = $votesFor - $votesAgainst;
-		
+
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
 		$votesOpinionatedTotal = $votesFor + $votesAgainst;
-		
+
 		if($votesOpinionatedTotal <= 0){
 			continue;
 		}
-		
+
 		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
-		
+
 		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
 			continue;
 		}
-		
+
 		$themeOption["theme"] = $theme["theme"];
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
 		$totalVotesDifference += max(0, $votesDifference);
-		
+
 		$availableThemes[] = $themeOption;
 	}
-	
+
 	if($totalVotesDifference > 0 && count($availableThemes) > 0){
 		$selectedVote = rand(0, $totalVotesDifference);
-		
+
 		$runningVoteNumber = $selectedVote;
 		foreach($availableThemes as $i => $availableTheme){
 			$runningVoteNumber -= $availableTheme["votes_difference"];
@@ -250,7 +252,7 @@ function SelectRandomThemeByVoteDifference(){
 			}
 		}
 	}
-	
+
 	return $selectedTheme;
 }
 
@@ -258,48 +260,48 @@ function SelectRandomThemeByVoteDifference(){
 function SelectRandomThemeByPopularity(){
 	global $themes;
 	$minimumVotes = 10;
-	
+
 	$selectedTheme = "";
-	
+
 	$availableThemes = Array();
 	$totalPopularity = 0;
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
-		
+
 		if($theme["banned"]){
 			continue;
 		}
-		
+
 		$votesFor = $theme["votes_for"];
 		$votesNeutral = $theme["votes_neutral"];
 		$votesAgainst = $theme["votes_against"];
 		$votesDifference = $votesFor - $votesAgainst;
-		
+
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
 		$votesOpinionatedTotal = $votesFor + $votesAgainst;
-		
+
 		if($votesOpinionatedTotal <= 0){
 			continue;
 		}
-		
+
 		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
-		
+
 		if($votesTotal <= 0 || $votesTotal <= $minimumVotes){
 			continue;
 		}
-		
+
 		$themeOption["theme"] = $theme["theme"];
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
 		$totalPopularity += max(0, $votesPopularity);
-		
+
 		$availableThemes[] = $themeOption;
 	}
-	
+
 	if($totalPopularity > 0 && count($availableThemes) > 0){
 		$selectedPopularity = (rand(0, 100000) / 100000) * $totalPopularity;
-		
+
 		$runningPopularity = $selectedPopularity;
 		foreach($availableThemes as $i => $availableTheme){
 			$runningPopularity -= $availableTheme["popularity"];
@@ -309,7 +311,7 @@ function SelectRandomThemeByPopularity(){
 			}
 		}
 	}
-	
+
 	return $selectedTheme;
 }
 
@@ -317,34 +319,34 @@ function SelectRandomThemeByPopularity(){
 function SelectRandomTheme(){
 	global $themes;
 	$minimumVotes = 10;
-	
+
 	$selectedTheme = "";
-	
+
 	$availableThemes = Array();
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
-		
+
 		if($theme["banned"]){
 			continue;
 		}
-		
+
 		$themeOption["theme"] = $theme["theme"];
-		
+
 		$availableThemes[] = $themeOption;
 	}
-	
+
 	if(count($availableThemes) > 0){
 		$selectedIndex = rand(0, count($availableThemes));
 		$selectedTheme = $availableThemes[$selectedIndex]["theme"];
 	}
-	
+
 	return $selectedTheme;
 }
 
 //Adds the jam with the provided data into the database
 function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors){
 	global $dbConn;
-	
+
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
@@ -352,7 +354,7 @@ function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $start
 	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
 	$escapedStartTime = mysqli_real_escape_string($dbConn, $startTime);
 	$escapedColors = mysqli_real_escape_string($dbConn, $colors);
-	
+
 	$sql = "
 		INSERT INTO jam
 		(jam_id,
@@ -376,16 +378,16 @@ function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $start
 		'$escapedStartTime',
 		'$escapedColors',
 		0);";
-	
+
 	$data = mysqli_query($dbConn, $sql);
     $sql = "";
-    
+
     AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "");
 }
 
 function GetJamsOfUserFormatted($username){
 	global $dbConn;
-	
+
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
 		SELECT *
@@ -394,8 +396,8 @@ function GetJamsOfUserFormatted($username){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
-	return ArrayToHTML(MySQLDataToArray($data)); 
+
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 // Returns a jam given its number.
