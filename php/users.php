@@ -6,15 +6,15 @@ function LoadUsers(){
 
 	$users = Array();
 
-	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email, 
-                   user_password_salt, user_password_hash, user_password_iterations, user_role, 
-                   DATEDIFF(Now(), user_last_login_datetime) AS days_since_last_login, 
+	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email,
+                   user_password_salt, user_password_hash, user_password_iterations, user_role,
+                   DATEDIFF(Now(), user_last_login_datetime) AS days_since_last_login,
                    DATEDIFF(Now(), log_max_datetime) AS days_since_last_admin_action
-            FROM 
-                user u LEFT JOIN 
+            FROM
+                user u LEFT JOIN
                 (
-                    SELECT log_admin_username, max(log_datetime) AS log_max_datetime 
-                    FROM admin_log 
+                    SELECT log_admin_username, max(log_datetime) AS log_max_datetime
+                    FROM admin_log
                     GROUP BY log_admin_username
                 ) al ON u.user_username = al.log_admin_username";
 	$data = mysqli_query($dbConn, $sql);
@@ -33,12 +33,12 @@ function LoadUsers(){
 		$currentUser["password_hash"] = $info["user_password_hash"];
 		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
         $currentUser["admin"] = intval($info["user_role"]);
-        
+
         //This fixes an issue where user_last_login_datetime was not set properly in the database, which results in days_since_last_login being null for users who have not logged in since the fix was applied
         if($info["days_since_last_login"] == null){
             $info["days_since_last_login"] = 1000000;
         }
-        
+
         //For cases where users have never performed an admin action
         if($info["days_since_last_admin_action"] == null){
             $info["days_since_last_admin_action"] = 1000000;
@@ -77,8 +77,10 @@ function LoadUsers(){
 }
 
 function RenderUser($user, $users, $games, $jams, $config){
+		global $nightmode;
+
     $userData = $user;
-    
+
     $currentJamData = GetCurrentJamNumberAndID();
 
     $username = $userData["username"];
@@ -111,21 +113,21 @@ function RenderUser($user, $users, $games, $jams, $config){
         }
 
         $userData["entry_count"] += 1;
-        
+
         if($gameData["jam_number"] < $userData["first_jam_number"] ){
             $userData["first_jam_number"] = $gameData["jam_number"];
         }
         if($gameData["jam_number"] > $userData["last_jam_number"] ){
             $userData["last_jam_number"] = $gameData["jam_number"];
         }
-        
+
         $isJamRecent = intval($jamData["jam_number"]) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
         if($isJamRecent){
             $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
         }
         $userData["entries"][] = RenderGame($gameData, $jams, $users);
     }
-    
+
     //Find admin candidates
     if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]["VALUE"]){
         $userData["admin_candidate_recent_participation_check_pass"] = 1;
@@ -137,43 +139,55 @@ function RenderUser($user, $users, $games, $jams, $config){
         $userData["admin_candidate_total_participation_check_pass"]){
             $userData["system_suggestsed_admin_candidate"] = 1;
     }
-    
+
+
+		$inactiveColour = "#FFECEC";
+		$activeColour = "#F6FFEC";
+		$highlyAciveColour = "#ECFFEC";
+
+		if($nightmode == 1)
+		{
+			$inactiveColour = "#4A3636";
+			$activeColour = "#3E4A36";
+			$highlyAciveColour = "#364A36";
+		}
+
     //Find inactive admins (participation in jams)
     $jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);
     $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
     if($userData["last_jam_number"] < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
         $userData["activity_jam_participation"] = "inactive";
-        $userData["activity_jam_participation_color"] = "#FFECEC";
+        $userData["activity_jam_participation_color"] = $inactiveColour;
     }else if($userData["last_jam_number"] >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
         $userData["activity_jam_participation"] = "highly active";
-        $userData["activity_jam_participation_color"] = "#ECFFEC";
+        $userData["activity_jam_participation_color"] = $highlyAciveColour;
     }else{
         $userData["activity_jam_participation"] = "active";
-        $userData["activity_jam_participation_color"] = "#F6FFEC";
+        $userData["activity_jam_participation_color"] = $activeColour;
     }
-    
+
     //Find inactive admins (days since last login)
     if($userData["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]["VALUE"]){
         $userData["activity_login"] = "inactive";
-        $userData["activity_login_color"] = "#FFECEC";
+        $userData["activity_login_color"] = $inactiveColour;
     }else if($userData["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]["VALUE"]){
         $userData["activity_login"] = "highly active";
-        $userData["activity_login_color"] = "#ECFFEC";
+        $userData["activity_login_color"] = $highlyAciveColour;
     }else{
         $userData["activity_login"] = "active";
-        $userData["activity_login_color"] = "#F6FFEC";
+        $userData["activity_login_color"] = $activeColour;
     }
-    
+
     //Find inactive admins (days since last login)
     if($userData["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]["VALUE"]){
         $userData["activity_administration"] = "inactive";
-        $userData["activity_administration_color"] = "#FFECEC";
+        $userData["activity_administration_color"] = $inactiveColour;
     }else if($userData["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]["VALUE"]){
         $userData["activity_administration"] = "highly active";
-        $userData["activity_administration_color"] = "#ECFFEC";
+        $userData["activity_administration_color"] = $highlyAciveColour;
     }else{
         $userData["activity_administration"] = "active";
-        $userData["activity_administration_color"] = "#F6FFEC";
+        $userData["activity_administration_color"] = $activeColour;
     }
 
     //Render activity related statuses (inactive, active, highly active)
@@ -229,33 +243,33 @@ function RenderUsers($users, $games, $jams, $config){
 
     $authorCount = 0;
 	$gamesByUsername = GroupGamesByUsername($games);
-	
+
 	foreach($users as $i => $user){
 		$userGames = $gamesByUsername[$user["username"]];
 
         $userData = RenderUser($user, $users, $userGames, $jams, $config);
-		
+
         if(!isset($userData["entry_count"])){
             $authorCount += 1;
         }
-        
+
         $render["LIST"][] = $userData;
     }
-    
+
 	$render["all_authors_count"] = $authorCount;
 
 	return $render;
 }
 function GroupGamesByUsername($games) {
 	$gamesByUsername = [];
-		foreach($games as $i => $game){
+	foreach($games as $i => $game){
 		$username = $game["author"];
 		if (!isset($gamesByUsername[$username])) {
 			$gamesByUsername[$username] = [];
 		}
 		$gamesByUsername[$username][] = $game;
 	}
-	
+
 	return $gamesByUsername;
 }
 

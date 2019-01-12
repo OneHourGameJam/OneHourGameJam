@@ -5,6 +5,18 @@
 //
 //print phpversion ();
 
+$nightmode = $_COOKIE["nightmode"];
+if(isset($_GET["nightmode"])){
+	$nightmode = $_GET["nightmode"];
+	if($nightmode == 1){
+		setcookie("nightmode", 1, time() + (60 * 60 * 24 * 365));
+		$nightmode = 1;
+	}else{
+		setcookie("nightmode", null, -1);
+		$nightmode = 0;
+	}
+}
+
 include_once("php/site.php");
 
 //Determine whether the person is in streaming mode
@@ -17,12 +29,12 @@ if(isset($_GET["streaming"])){
 	}
 }else{
 	if(isset($_COOKIE["streaming"]) && $_COOKIE["streaming"] == 1){
-		$dictionary["is_streamer"] = 1; 
+		$dictionary["is_streamer"] = 1;
 	}
 }
 
 $templateBasePath = "template/";
-$dictionary["template_path"] = $templateBasePath; 
+$dictionary["template_path"] = $templateBasePath;
 
 //List allowed page identifiers here.
 if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
@@ -30,7 +42,7 @@ if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "asset
 }
 
 $pageTitles = Array(
-	"main" => "Main Page", 
+	"main" => "Main Page",
 	"login" => "Login",
 	"logout" => "Logout",
 	"submit" => "Submit Game",
@@ -70,17 +82,6 @@ if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editja
 	}
 }
 
-$nightmode = $_COOKIE["nightmode"];
-if(isset($_GET["nightmode"])){
-	$nightmode = $_GET["nightmode"];
-	if($nightmode == 1){
-		setcookie("nightmode", 1, time() + (60 * 60 * 24 * 365));
-		$nightmode = 1;
-	}else{
-		setcookie("nightmode", null, -1);
-		$nightmode = 0;
-	}
-}
 if($nightmode == 1){
 	$dictionary["NIGHT_MODE"] = 1;
 }
@@ -270,7 +271,7 @@ switch($page){
 		if($viewingJamNumber == 0){
 			die("invalid jam number");
 		}
-		
+
 		$pass = FALSE;
 		foreach($jams as $i => $jam){
 			if($jam["jam_number"] != $viewingJamNumber){
@@ -285,7 +286,7 @@ switch($page){
 			$pass = TRUE;
 			break;
 		}
-		
+
 		if($pass == FALSE){
 			die("jam does not exist");
 		}
@@ -350,14 +351,14 @@ if($page == "jam")
 						}else{
 							print $mustache->render(file_get_contents($templateBasePath."menu_user.html"), $dictionary);
 						}
-						
+
 						print $mustache->render(file_get_contents($templateBasePath."menu_shared.html"), $dictionary);
 					?>
 				</div>
-						
+
 				<?php
 					print $mustache->render(file_get_contents($templateBasePath."message.html"), $dictionary);
-				
+
 					switch($page){
 						case "main":
 							print $mustache->render(file_get_contents($templateBasePath."main.html"), $dictionary);
@@ -379,11 +380,11 @@ if($page == "jam")
 								if($game["author"] != $loggedInUser["username"]){
 									continue;
 								}
-								
+
 								if($game["jam_number"] != $jamNumber){
 									continue;
 								}
-								
+
 								if($game["entry_deleted"] == 1){
 									continue;
 								}
@@ -398,7 +399,7 @@ if($page == "jam")
 
 								$dictionary["user_entry_color_number"] = $colorNumber;
 								$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
-								
+
 								$dictionary["user_submitted_to_this_jam"] = true;
 								$dictionary["user_entry_name"] = $game["title"];
 								if($game["screenshot_url"] != "logo.png"){
@@ -415,7 +416,7 @@ if($page == "jam")
 								$dictionary["user_entry_desc"] = $game["description"];
 								//$dictionary["user_entry_color"] = $game["color"];
 								//$dictionary["user_entry_color_number"] = $game["color_number"];
-								
+
 								if($game["url_web"] != ""){
 									$dictionary["user_entry_share_url"] = $game["url_web"];
 								}else if($game["url_windows"] != ""){
@@ -433,7 +434,7 @@ if($page == "jam")
 								}else if($game["url_source"] != ""){
 									$dictionary["user_entry_share_url"] = $game["url_source"];
 								}
-								
+
 								if(isset($game["has_url"])){$dictionary["user_has_url"] = 1;}
 								if(isset($game["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
 								if(isset($game["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
@@ -537,7 +538,7 @@ if($page == "jam")
 				print $mustache->render(file_get_contents($templateBasePath."footer.html"), $dictionary);
 			?>
 		</div>
-	
+
 		<script src="bs/js/bootstrap.min.js"></script>
 	</body>
 </html>
