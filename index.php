@@ -71,7 +71,9 @@ if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editja
 	}
 }
 
-$nightmode = $_COOKIE["nightmode"];
+if(isset($_COOKIE["nightmode"]))
+	$nightmode = $_COOKIE["nightmode"];
+else $nightmode = NULL;
 if(isset($_GET["nightmode"])){
 	$nightmode = $_GET["nightmode"];
 	if($nightmode == 1){

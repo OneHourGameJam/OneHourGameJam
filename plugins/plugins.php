@@ -56,7 +56,7 @@
 					m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 					})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	
-					ga('create', '".$config["GOOGLE_ANALYTICS_CODE"]."', 'auto');
+					ga('create', '".json_encode($config["GOOGLE_ANALYTICS_CODE"])."', 'auto');
 					ga('send', 'pageview');
 	
 				</script>

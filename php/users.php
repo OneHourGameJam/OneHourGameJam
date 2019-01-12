@@ -90,7 +90,7 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
     $userData["recent_participation"] = 0;
 
     //Determine if this user is an author and their participation
-	StartTimer("RenderUser - foreach games");
+	StartTimer("RenderUser - foreach games");	if (isset($games))
     foreach($games as $j => $gameData){
         if($gameData["author"] != $username){
             continue;
@@ -144,23 +144,23 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
     if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]["VALUE"]){
         $userData["admin_candidate_recent_participation_check_pass"] = 1;
     }
-    if($userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]["VALUE"]){
+    if(isset($userData["entry_count"]) && $userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]["VALUE"]){
         $userData["admin_candidate_total_participation_check_pass"] = 1;
     }
-    if(	$userData["admin_candidate_recent_participation_check_pass"] &&
+    if(	isset($userData["admin_candidate_recent_participation_check_pass"]) && 			isset($userData["admin_candidate_total_participation_check_pass"]) &&				$userData["admin_candidate_recent_participation_check_pass"] &&
         $userData["admin_candidate_total_participation_check_pass"]){
             $userData["system_suggestsed_admin_candidate"] = 1;
     }
 	StopTimer("RenderUser - admin candidates");
     
     StartTimer("RenderUser - inactive admins");
-    //Find inactive admins (participation in jams)
-    $jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);
+    //Find inactive admins (participation in jams)	$last_jam_number = 0;	if (isset($userData["last_jam_number"])){
+		$jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);		$last_jam_number = $userData["last_jam_number"];	}	else		$jamsSinceLastParticipation = $currentJamData["NUMBER"];
     $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
-    if($userData["last_jam_number"] < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
+    if($last_jam_number < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
         $userData["activity_jam_participation"] = "inactive";
         $userData["activity_jam_participation_color"] = "#FFECEC";
-    }else if($userData["last_jam_number"] >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
+    }else if($last_jam_number >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
         $userData["activity_jam_participation"] = "highly active";
         $userData["activity_jam_participation_color"] = "#ECFFEC";
     }else{
@@ -251,8 +251,8 @@ function RenderUsers(&$users, &$games, &$jams, &$config){
     
     $authorCount = 0;    
     $gamesByUsername = GroupGamesByUsername($games);	
-    foreach($users as $i => $user){        
-        $userGames = $gamesByUsername[$user["username"]];        
+    foreach($users as $i => $user){        		if (isset($gamesByUsername[$user["username"]]))
+			$userGames = $gamesByUsername[$user["username"]];        
         $userData = RenderUser($user, $users, $userGames, $jams, $config);
 
         if(!isset($userData["entry_count"])){
