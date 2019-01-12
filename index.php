@@ -4,8 +4,10 @@
 //error_reporting(-1);
 //
 //print phpversion ();
-
-$nightmode = $_COOKIE["nightmode"];
+if(isset($_COOKIE["nightmode"]))
+	$nightmode = $_COOKIE["nightmode"];
+else 
+	$nightmode = NULL;
 if(isset($_GET["nightmode"])){
 	$nightmode = $_GET["nightmode"];
 	if($nightmode == 1){
@@ -83,19 +85,8 @@ if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editja
 	}
 }
 
-if(isset($_COOKIE["nightmode"]))
-	$nightmode = $_COOKIE["nightmode"];
-else $nightmode = NULL;
-if(isset($_GET["nightmode"])){
-	$nightmode = $_GET["nightmode"];
-	if($nightmode == 1){
-		setcookie("nightmode", 1, time() + (60 * 60 * 24 * 365));
-		$nightmode = 1;
-	}else{
-		setcookie("nightmode", null, -1);
-		$nightmode = 0;
-	}
-}
+
+
 if($nightmode == 1){
 	$dictionary["NIGHT_MODE"] = 1;
 }
