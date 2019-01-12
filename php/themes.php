@@ -4,6 +4,8 @@
 //Fills the list of suggested themes
 function LoadThemes(){
 	global $themes, $dictionary, $loggedInUser, $dbConn, $config;
+	AddActionLog("LoadThemes");
+	StartTimer("LoadThemes");
 	IsLoggedIn();
 
 	$clean_userName = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
@@ -214,11 +216,14 @@ function LoadThemes(){
 	$dictionary["js_formatted_themes_popularity_popularity_list"] = implode(",", $jsFormattedThemesPopularityPopularityList);
 	$dictionary["js_formatted_themes_popularity_fill_color_list"] = implode(",", $jsFormattedThemesPopularityFillColorList);
 	$dictionary["js_formatted_themes_popularity_border_color_list"] = implode(",", $jsFormattedThemesPopularityBorderColorList);
+	StopTimer("LoadThemes");
 }
 
 
 function GetThemesOfUserFormatted($username){
 	global $dbConn;
+	AddActionLog("GetThemesOfUserFormatted");
+	StartTimer("GetThemesOfUserFormatted");
 
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -229,11 +234,14 @@ function GetThemesOfUserFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
+	StopTimer("GetThemesOfUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 function GetThemeVotesOfUserFormatted($username){
 	global $dbConn;
+	AddActionLog("GetThemeVotesOfUserFormatted");
+	StartTimer("GetThemeVotesOfUserFormatted");
 
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -245,11 +253,14 @@ function GetThemeVotesOfUserFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
+	StopTimer("GetThemeVotesOfUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 function CalculateThemeSelectionProbabilityByVoteDifference(){
 	global $themes;
+	AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
+	StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 	$minimumVotes = 10;
 
 	$selectedTheme = "";
@@ -305,10 +316,13 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = round($selectionProbability * 100)."%";
 		}
 	}
+	StopTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 }
 
 function CalculateThemeSelectionProbabilityByPopularity(){
 	global $themes;
+	AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
+	StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 	$minimumVotes = 10;
 	$totalPopularity = 0;
 
@@ -366,6 +380,7 @@ function CalculateThemeSelectionProbabilityByPopularity(){
 			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = round($selectionProbability * 100)."%";
 		}
 	}
+	StopTimer("CalculateThemeSelectionProbabilityByPopularity");
 }
 
 

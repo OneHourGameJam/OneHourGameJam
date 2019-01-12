@@ -1,8 +1,8 @@
 <?php
 
 chdir("../../");
-include_once("php/db.php");
 include_once("php/helpers.php");
+include_once("php/db.php");
 include_once("php/config.php");
 $config = LoadConfig();
 

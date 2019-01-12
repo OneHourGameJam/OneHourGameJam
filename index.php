@@ -6,6 +6,7 @@
 //print phpversion ();
 
 include_once("php/site.php");
+StartTimer("index.php");
 
 //Determine whether the person is in streaming mode
 if(isset($_GET["streaming"])){
@@ -541,3 +542,18 @@ if($page == "jam")
 		<script src="bs/js/bootstrap.min.js"></script>
 	</body>
 </html>
+
+<?php
+
+StopTimer("index.php");
+
+
+if(IsAdmin()){
+	print_r($actionLog);
+	print "<br><br>";
+	print_r($actionTimers);
+	print "<br><br>";
+	print ArrayToHTML($actionTimers);
+}
+
+?>

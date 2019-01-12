@@ -3,6 +3,8 @@
 //Loads users
 function LoadUsers(){
 	global $dictionary, $dbConn;
+	AddActionLog("LoadUsers");
+	StartTimer("LoadUsers");
 
 	$users = Array();
 
@@ -73,10 +75,13 @@ function LoadUsers(){
         $users[$voteSubjectUsername]["sponsored_by"] = $voteVoterUsername;
     }
 
+	StopTimer("LoadUsers");
 	return $users;
 }
 
-function RenderUser($user, $users, $games, $jams, $config){
+function RenderUser(&$user, &$users, &$games, &$jams, &$config){
+	AddActionLog("RenderUser");
+	StartTimer("RenderUser");
     $userData = $user;
     
     $currentJamData = GetCurrentJamNumberAndID();
@@ -85,9 +90,8 @@ function RenderUser($user, $users, $games, $jams, $config){
     $userData["recent_participation"] = 0;
 
     //Determine if this user is an author and their participation
+	StartTimer("RenderUser - foreach games");
     foreach($games as $j => $gameData){
-        $gameAuthor = $gameData["author"];
-
         if($gameData["author"] != $username){
             continue;
         }
@@ -96,13 +100,16 @@ function RenderUser($user, $users, $games, $jams, $config){
             continue;
         }
 
+	    StartTimer("RenderUser - foreach games - Foreach Jams");
         foreach($jams as $k => $jam){
             if($jam["jam_id"] == $gameData["jam_id"]){
                 $jamData = $jam;
                 break;
             }
         }
+	    StopTimer("RenderUser - foreach games - Foreach Jams");
 
+	    StartTimer("RenderUser - foreach games - entry count, first and last jam, recent");
         $userData["is_author"] = 1;
         if(!isset($userData["entry_count"])){
             $userData["entry_count"] = 0;
@@ -123,10 +130,17 @@ function RenderUser($user, $users, $games, $jams, $config){
         if($isJamRecent){
             $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
         }
+
+	    StopTimer("RenderUser - foreach games - entry count, first and last jam, recent");
+        
+	    StartTimer("RenderUser - foreach games - RenderGame");
         $userData["entries"][] = RenderGame($gameData, $jams, $users);
+	    StopTimer("RenderUser - foreach games - RenderGame");
     }
+	StopTimer("RenderUser - foreach games");
     
     //Find admin candidates
+	StartTimer("RenderUser - admin candidates");
     if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]["VALUE"]){
         $userData["admin_candidate_recent_participation_check_pass"] = 1;
     }
@@ -137,7 +151,9 @@ function RenderUser($user, $users, $games, $jams, $config){
         $userData["admin_candidate_total_participation_check_pass"]){
             $userData["system_suggestsed_admin_candidate"] = 1;
     }
+	StopTimer("RenderUser - admin candidates");
     
+    StartTimer("RenderUser - inactive admins");
     //Find inactive admins (participation in jams)
     $jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);
     $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
@@ -210,7 +226,9 @@ function RenderUser($user, $users, $games, $jams, $config){
             $userData["activity_administration_highly_active"] = 1;
             break;
     }
+    StopTimer("RenderUser - inactive admins");
 
+    StartTimer("RenderUser - Finish");
     //Mark system suggested and admin-sponsored users as admin candidates
     if(isset($userData["system_suggestsed_admin_candidate"]) || isset($userData["is_sponsored"])){
         $userData["is_admin_candidate"] = 1;
@@ -221,20 +239,22 @@ function RenderUser($user, $users, $games, $jams, $config){
         $userData["is_admin"] = 1;
     }
 
+    StopTimer("RenderUser - Finish");
+	StopTimer("RenderUser");
     return $userData;
 }
 
-function RenderUsers($users, $games, $jams, $config){
+function RenderUsers(&$users, &$games, &$jams, &$config){
+	AddActionLog("RenderUsers");
+	StartTimer("RenderUsers");
     $render = Array("LIST" => Array());
+    
+    $authorCount = 0;    
+    $gamesByUsername = GroupGamesByUsername($games);	
+    foreach($users as $i => $user){        
+        $userGames = $gamesByUsername[$user["username"]];        
+        $userData = RenderUser($user, $users, $userGames, $jams, $config);
 
-    $authorCount = 0;
-	$gamesByUsername = GroupGamesByUsername($games);
-	
-	foreach($users as $i => $user){
-		$userGames = $gamesByUsername[$user["username"]];
-
-        $userData = RenderUser($user, $users, $userGames, $jams, $config);
-		
         if(!isset($userData["entry_count"])){
             $authorCount += 1;
         }
@@ -244,19 +264,21 @@ function RenderUsers($users, $games, $jams, $config){
     
 	$render["all_authors_count"] = $authorCount;
 
+	StopTimer("RenderUsers");
 	return $render;
 }
-function GroupGamesByUsername($games) {
-	$gamesByUsername = [];
-		foreach($games as $i => $game){
-		$username = $game["author"];
-		if (!isset($gamesByUsername[$username])) {
-			$gamesByUsername[$username] = [];
-		}
-		$gamesByUsername[$username][] = $game;
-	}
-	
-	return $gamesByUsername;
-}
-
+
+function GroupGamesByUsername($games) 
+{  
+	$gamesByUsername = [];	
+	foreach($games as $i => $game){   
+		$username = $game["author"];    
+		if (!isset($gamesByUsername[$username])) {
+			$gamesByUsername[$username] = [];    
+		}    
+		$gamesByUsername[$username][] = $game;  
+	}  
+	return $gamesByUsername;
+}
+
 ?>

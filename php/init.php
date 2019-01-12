@@ -8,6 +8,9 @@ AfterInit();	//Plugin hook
 function Init(){
 	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser;
 
+	AddActionLog("Init");
+	StartTimer("Init");
+	
 	$config = LoadConfig();
 
     RedirectToHttpsIfRequired($config);
@@ -39,6 +42,7 @@ function Init(){
 
 	$dictionary["assets"] = RenderAssets($assets);
 	
+	StopTimer("Init");
 }
 
 ?>

@@ -2,6 +2,8 @@
 
 function LoadGames(){
 	global $dbConn;	
+	AddActionLog("LoadGames");
+	StartTimer("LoadGames");
 	
 	$games = Array();
 
@@ -34,13 +36,17 @@ function LoadGames(){
 		$games[] = $gameData;
 	}
 
+	StopTimer("LoadGames");
 	return $games;
 }
 
-function RenderGames($games, $jams, $users){
+
+
+function RenderGames(&$games, &$jams, &$users){
+	AddActionLog("RenderGames");
+	StartTimer("RenderGames");
 	$render = Array("LIST" => Array());
     $nonDeletedGamesCounter = 0;
-
 	foreach($games as $i => $game){
         $render["LIST"][] = RenderGame($game, $jams, $users);
         if($game["entry_deleted"] != 1){
@@ -49,10 +55,13 @@ function RenderGames($games, $jams, $users){
     }
     $render["all_entries_count"] = $nonDeletedGamesCounter;
 
+	StopTimer("RenderGames");
 	return $render;
 }
 
-function RenderGame($game, $jams, $users){
+function RenderGame(&$game, &$jams, &$users){
+	AddActionLog("RenderGame");
+	StartTimer("RenderGame");
 	$gameData = Array();
 	$gameData["id"] = $game["id"];
 	$gameData["jam_id"] = intval($game["jam_id"]);
@@ -122,16 +131,20 @@ function RenderGame($game, $jams, $users){
 		$gameData["has_description"] = 1;
 	}
 	
+	StopTimer("RenderGame");
 	return $gameData;
 }
 
 //Returns true / false based on whether or not the specified entry exists (and has not been deleted)
 function EntryExists($gameID){
 	global $dbConn;
+	AddActionLog("EntryExists");
+	StartTimer("EntryExists");
 	
 	//Validate values
 	$gameID = intval($gameID);
 	if($gameID <= 0){
+		StopTimer("EntryExists");
 		return FALSE;
 	}
 	
@@ -147,14 +160,19 @@ function EntryExists($gameID){
 	$sql = "";
 	
 	if(mysqli_fetch_array($data)){
+		StopTimer("EntryExists");
 		return true;
 	}else{
+		StopTimer("EntryExists");
 		return false;
 	}
+	StopTimer("EntryExists");
 }
 
 function GetEntriesOfUserFormatted($author){
 	global $dbConn;
+	AddActionLog("GetEntriesOfUserFormatted");
+	StartTimer("GetEntriesOfUserFormatted");
 	
 	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
 	$sql = "
@@ -165,6 +183,7 @@ function GetEntriesOfUserFormatted($author){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetEntriesOfUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 
