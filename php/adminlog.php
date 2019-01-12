@@ -3,6 +3,9 @@
 function LoadAdminLog(){
     global $dbConn;
 
+	AddActionLog("LoadAdminLog");
+	StartTimer("LoadAdminLog");
+
     $adminLog = Array();
 
 	$sql = "select log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content from admin_log order by log_id desc";
@@ -25,11 +28,14 @@ function LoadAdminLog(){
         $adminLog[] = $log;
     }
 
+	StopTimer("LoadAdminLog");
     return $adminLog;
 }
 
 function AddToAdminLog($logType, $logContent, $logSubjectUsername){
     global $dbConn, $ip, $userAgent, $loggedInUser;
+	AddActionLog("AddToAdminLog");
+	StartTimer("AddToAdminLog");
 	
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip); 
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
@@ -55,14 +61,18 @@ function AddToAdminLog($logType, $logContent, $logSubjectUsername){
 
 	$data = mysqli_query($dbConn, $sql);
 	$sql = ""; 
+	StopTimer("AddToAdminLog");
 }
 
 function RenderAdminLog($adminLog){
+	AddActionLog("RenderAdminLog");
     return $adminLog;
 }
 
 function GetAdminLogForAdminFormatted($username){
 	global $dbConn;
+	AddActionLog("GetAdminLogForAdminFormatted");
+	StartTimer("GetAdminLogForAdminFormatted");
 	
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -73,11 +83,14 @@ function GetAdminLogForAdminFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetAdminLogForAdminFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 
 function GetAdminLogForSubjectFormatted($username){
 	global $dbConn;
+	AddActionLog("GetAdminLogForSubjectFormatted");
+	StartTimer("GetAdminLogForSubjectFormatted");
 	
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -88,6 +101,7 @@ function GetAdminLogForSubjectFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetAdminLogForSubjectFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 

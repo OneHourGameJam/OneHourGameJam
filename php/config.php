@@ -20,6 +20,8 @@ $configCategorySettings = Array(
 function LoadConfig(){
 	global $dbConn;
 
+	AddActionLog("LoadConfig");
+	StartTimer("LoadConfig");
 	$config = Array();
 
 	$sql = " SELECT * FROM config ORDER BY config_id; ";
@@ -83,12 +85,15 @@ function LoadConfig(){
 
 	$config = VerifyConfig($config);
 	
+	StopTimer("LoadConfig");
 	return $config;
 }
 
 function RenderConfig($config){
 	global $configCategorySettings;
 
+	AddActionLog("RenderConfig");
+	StartTimer("RenderConfig");
 	$render = Array("LIST" => Array(), "VALUES" => Array());
 
 	foreach($config as $i => $configEntry){
@@ -111,11 +116,14 @@ function RenderConfig($config){
 		$render["LIST"][$categoryIndex]["ENTRIES"][] = $configEntry;
 	}
 
+	StopTimer("RenderConfig");
 	return $render;
 }
 
 
 function VerifyConfig($config) {
+	AddActionLog("VerifyConfig");
+	StartTimer("VerifyConfig");
 	if (!isset($config["PEPPER"]["VALUE"]) || strlen($config["PEPPER"]["VALUE"]) < 1) {
 		$config = UpdateConfig($config, "PEPPER", GenerateSalt(), -1);
 	}
@@ -124,6 +132,7 @@ function VerifyConfig($config) {
 		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", rand(10000, 20000), -1);
 	}
 
+	StopTimer("VerifyConfig");
 	return $config;
 }
 
@@ -132,7 +141,10 @@ function VerifyConfig($config) {
 function UpdateConfig($config, $key, $value, $userID) {
 	global $dbConn;
 
+	AddActionLog("UpdateConfig");
+	StartTimer("UpdateConfig");
 	if(!IsAdmin()){
+		StopTimer("UpdateConfig");
 		return; //Lacks permissions to make edits
 	}
 
@@ -153,11 +165,14 @@ function UpdateConfig($config, $key, $value, $userID) {
     
 	AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
 	
+	StopTimer("UpdateConfig");
 	return $config;
 }
 
 
 function RedirectToHttpsIfRequired($config){
+	AddActionLog("RedirectToHttpsIfRequired");
+	StartTimer("RedirectToHttpsIfRequired");
     if($config["REDIRECT_TO_HTTPS"]["VALUE"]){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https
@@ -167,6 +182,7 @@ function RedirectToHttpsIfRequired($config){
             die();
         }
     }
+	StopTimer("RedirectToHttpsIfRequired");
 }
 
 

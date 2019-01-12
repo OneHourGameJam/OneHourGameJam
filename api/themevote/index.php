@@ -2,13 +2,22 @@
 
 
 chdir("../../");
+session_start();
+include_once("php/global.php");
+include_once("php/helpers.php");
+include_once("php/db.php");
 include_once("php/site.php");
+include_once("php/config.php");
+include_once("php/users.php");
 
+$config = LoadConfig();
+
+$users = LoadUsers();
 $usr = IsLoggedIn();
 
 if($usr == false){
 	print json_encode(Array("ERROR" => "Not logged in"));
-	die();
+	die(); 
 }
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);

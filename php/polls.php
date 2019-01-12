@@ -2,6 +2,8 @@
 
 function LoadPolls(){
 	global $dbConn, $dictionary, $polls, $loggedInUser;
+	AddActionLog("LoadPolls");
+	StartTimer("LoadPolls");
 	
 	//Clear public lists which get updated by this function
 	$dictionary["polls"] = Array();
@@ -100,10 +102,13 @@ function LoadPolls(){
 			$dictionary["active_polls"][] = $poll;
 		}
 	}
+	StopTimer("LoadPolls");
 }
 
 function LoadSatisfaction(){
 	global $dbConn, $satisfaction, $dictionary, $config;
+	AddActionLog("LoadSatisfaction");
+	StartTimer("LoadSatisfaction");
 	
 	$satisfaction = Array();
 	
@@ -201,17 +206,22 @@ function LoadSatisfaction(){
 		}
 	}
 	*/
+	StopTimer("LoadSatisfaction");
 }
 
 function SubmitSatisfaction($satisfactionQuestionId, $score){
 	global $dbConn, $ip, $userAgent, $loggedInUser;
+	AddActionLog("SubmitSatisfaction");
+	StartTimer("SubmitSatisfaction");
 	
 	if($score < -5){
 		AddDataWarning("Invalid satisfaction score", false);
+		StopTimer("SubmitSatisfaction");
 		return;
 	}
 	if($score > 5){
 		AddDataWarning("Invalid satisfaction score", false);
+		StopTimer("SubmitSatisfaction");
 		return;
 	}
 	
@@ -244,10 +254,13 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 	$sql = "";
 	
 	AddDataSuccess("Satisfaction score submitted", false);
+	StopTimer("SubmitSatisfaction");
 }
 
 function LoadLoggedInUsersAdminVotes(){
 	global $dbConn, $loggedInUser, $dictionary;
+	AddActionLog("LoadLoggedInUsersAdminVotes");
+	StartTimer("LoadLoggedInUsersAdminVotes");
 
 	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 	
@@ -317,10 +330,13 @@ function LoadLoggedInUsersAdminVotes(){
         $dictionary["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
 	}
 	*/
+	StopTimer("LoadLoggedInUsersAdminVotes");
 }
 
 function LoadAdminVotes(){
 	global $dbConn, $loggedInUser, $dictionary;
+	AddActionLog("LoadAdminVotes");
+	StartTimer("LoadAdminVotes");
 
 	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 	
@@ -376,10 +392,13 @@ function LoadAdminVotes(){
 		}
 		*/
 	}
+	StopTimer("LoadAdminVotes");
 }
 
 function GetPollVotesOfUserFormatted($username){
 	global $dbConn;
+	AddActionLog("GetPollVotesOfUserFormatted");
+	StartTimer("GetPollVotesOfUserFormatted");
 	
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -392,11 +411,14 @@ function GetPollVotesOfUserFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetPollVotesOfUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 
 function GetSatisfactionVotesOfUserFormatted($username){
 	global $dbConn;
+	AddActionLog("GetSatisfactionVotesOfUserFormatted");
+	StartTimer("GetSatisfactionVotesOfUserFormatted");
 	
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -407,11 +429,14 @@ function GetSatisfactionVotesOfUserFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetSatisfactionVotesOfUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 
 function GetAdminVotesCastByUserFormatted($username){
 	global $dbConn;
+	AddActionLog("GetAdminVotesCastByUserFormatted");
+	StartTimer("GetAdminVotesCastByUserFormatted");
 	
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -422,11 +447,14 @@ function GetAdminVotesCastByUserFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetAdminVotesCastByUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 
 function GetAdminVotesForSubjectUserFormatted($username){
 	global $dbConn;
+	AddActionLog("GetAdminVotesForSubjectUserFormatted");
+	StartTimer("GetAdminVotesForSubjectUserFormatted");
 	
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
@@ -437,6 +465,7 @@ function GetAdminVotesForSubjectUserFormatted($username){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
+	StopTimer("GetAdminVotesForSubjectUserFormatted");
 	return ArrayToHTML(MySQLDataToArray($data)); 
 }
 
