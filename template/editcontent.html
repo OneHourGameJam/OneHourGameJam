@@ -2,17 +2,17 @@
 	<p>
 		<h3>Edit content</h3>
 	</p>
-	
+
 	{{#jams.LIST}}
 		<div class='panel panel-info jamContener'>
-			<div class='panel-heading' style='background-color: {{#jam_deleted}}#F7D9D9{{/jam_deleted}}{{^jam_deleted}}#D9EDF7{{/jam_deleted}};'>
+			<div class='panel-heading {{#jam_deleted}}jamDeleted{{/jam_deleted}}{{^jam_deleted}}jamNotDeleted{{/jam_deleted}}'>
 				<span style='font-size: 16px;'>
 					<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
 					<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
 				</span>
 			</div>
-			
-			<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+
+			<div class='panel-body jamContent' id='entries{{jam_number}}'>
 				<div style='width: 100%; text-align: center;'>
 					<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
 					<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>

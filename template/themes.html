@@ -2,7 +2,7 @@
 	function VoteTheme(themeID, vote, btn_id){
 		$.get("api/themevote?themeID="+themeID+"&vote="+vote, function(data){
 			var d = jQuery.parseJSON(data)
-			
+
 			$("#"+btn_id+"-1").removeClass("btn-danger");
 			$("#"+btn_id+"-2").removeClass("btn-warning");
 			$("#"+btn_id+"-3").removeClass("btn-success");
@@ -30,16 +30,16 @@
 		</div>
 	</form>
 	<h4>Suggested themes</h4>
-	
+
 	<p>
 		Here you can vote on the themes you would like to appear in 1HGJ jams.
 	</p>
-	
+
 	<p>
-		Themes suggested above will appear in this list. Once a theme receives enough votes, it becomes considered for a jam, depending on its popularity. Themes which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested themes. Old themes are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any theme that gets removed due to unpopularity or age can be suggested again at any point. 
+		Themes suggested above will appear in this list. Once a theme receives enough votes, it becomes considered for a jam, depending on its popularity. Themes which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested themes. Old themes are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any theme that gets removed due to unpopularity or age can be suggested again at any point.
 	</p>
-	
-	{{#user.isadmin}}		
+
+	{{#user.isadmin}}
 	<p>
 		<b>Admin instructions</b>
 		<p>
@@ -57,7 +57,7 @@
 				<li>Themes which become marked as OLD between two jams can still be used in the next jam, if you think they're popular enough.</li>
 			</ul>
 		</p>
-			
+
 		<p>
 			<b>LEGEND:</b> Themes are marked in various ways, depending on their current status:
 			<ul>
@@ -69,7 +69,7 @@
 				<li><img src='{{{template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - Theme is not within the top rated themes and should be deleted after the next jam.</li>
 			</ul>
 		</p>
-		
+
 		<p>
 			<b>ICON COLOURS:</b> The theme status icons are coloured in a way, which reflects what to do about them:
 			<ul>
@@ -78,7 +78,7 @@
 				<li><img src='{{{template_path}}}images/red.png' style='width: 16px;'> <b>DELETE AFTER JAM</b> (OLD and UNPOPULAR) - Theme should be deleted after the next jam (due to unpopularity, age,... )</li>
 			</ul>
 		</p>
-		
+
 		<p>
 			<b>POPULARITY AND APATHY:</b> To help you choose the themes, two values are calculated: Popularity and Apathy. In the formulas below, the word UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number of +1 votes, -1 votes and 0 votes respectivelly.
 			<ul>
@@ -87,7 +87,7 @@
 			</ul>
 		</p>
 	</p>
-	
+
 	<div class='panel panel-info'>
 		<div class="chart-container" style="position: relative; max-height:500px; max-width:500px">
 			<canvas id="entriesChart" width="200" height="200"></canvas>
@@ -123,12 +123,12 @@
 					}
 				},
 			});
-			
+
 		</script>
 	</div>
-	
+
 	{{/user.isadmin}}
-	
+
 	<ul>
 		<table>
 			<tr>
@@ -181,11 +181,11 @@
 				{{#theme_visible}}
 					{{#user.isadmin}}
 						{{#banned}}
-							<tr style='background-color: #ffcccc;'>
+							<tr class="theme-banned">
 						{{/banned}}
 						{{^banned}}
 							{{#is_old}}
-								<tr style='background-color: #cccccc;'>
+								<tr class="theme-old">
 							{{/is_old}}
 							{{^is_old}}
 								<tr>
@@ -239,7 +239,7 @@
 							<button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}" onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
 						</td>
 						<td class='themeTableCell'>
-							{{{theme}}} 
+							{{{theme}}}
 						</td>
 						{{#user.isadmin}}
 							<td class='themeTableCell themeTableCellCentered'>
@@ -283,12 +283,12 @@
 											<li><button type="submit" name='action' value='deletetheme' class="btn btn-default">Delete</button></li>
 											<li>
 												{{#banned}}
-													<span style='color:red;'>BANNED</font> 
+													<span style='color:red;'>BANNED</font>
 													<button type="submit" name='action' value='unbantheme' class="btn btn-default">Unban</button>
 												{{/banned}}
 												{{^banned}}
 													<button type="submit" name='action' value='bantheme' class="btn btn-default">Ban</button>
-												{{/banned}}	
+												{{/banned}}
 											</li>
 										</ul>
 									</div>
