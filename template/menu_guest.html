@@ -22,19 +22,19 @@
 				<li><a href='?page=main&nightmode=1'>Enable Dark Mode</a> (<b>New!</b>)</li>
 			{{/NIGHT_MODE}}
 		</ul>
-		
+
 		{{#CONFIG.VALUES.TWITTER_ACCOUNT}}
 			<a href="https://twitter.com/{{CONFIG.VALUES.TWITTER_ACCOUNT}}" style='text-decoration: none;' target='_blank'>
 				<div class='mediaButton twitterButton'><img src='{{{template_path}}}images/twitter.png' style='width: 20px;' /> Follow</div>
 			</a>
 		{{/CONFIG.VALUES.TWITTER_ACCOUNT}}
-		
+
 		{{#CONFIG.VALUES.TWITCH_ACCOUNT}}
 			<a href="https://twitch.tv/{{CONFIG.VALUES.TWITCH_ACCOUNT}}" style='text-decoration: none;' target='_blank'>
 				<div class='mediaButton twitchButton'><img src='{{{template_path}}}images/twitch.png' style='width: 20px;' /> Watch</div>
 			</a>
 		{{/CONFIG.VALUES.TWITCH_ACCOUNT}}
-		
+
 		{{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
 		{{#CONFIG.VALUES.IRC_ADDRESS}}
 		{{#CONFIG.VALUES.IRC_CHANNEL}}
@@ -44,7 +44,7 @@
 		{{/CONFIG.VALUES.IRC_CHANNEL}}
 		{{/CONFIG.VALUES.IRC_ADDRESS}}
 		{{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
-		
+
 		{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
 			<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" style='text-decoration: none;' target='_blank'>
 				<div class='mediaButton discordButton'><img src='{{{template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>

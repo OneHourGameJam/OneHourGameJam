@@ -4,7 +4,7 @@
 			Entries ({{entries.all_entries_count}} total!)
 		</div>
 	</div>
-	
+
 	<input type="text" class="form-control" id='entrysearch' placeholder="Search by title, author, jam number or theme..." style='margin-bottom: 10px;' onkeyup="FilterEntryTable()">
 	<div class='panel-body jamContent'>
 		Click on a column header to sort.
@@ -45,13 +45,13 @@
 
 <script>
 	function FilterEntryTable() {
-		// Declare variables 
+		// Declare variables
 		var input, filter, table, tr, td_title, td_author, td_jam, td_theme, i;
 		input = document.getElementById("entrysearch");
 		filter = input.value.toUpperCase();
 		table = document.getElementById("entrytable");
 		tr = table.getElementsByTagName("tr");
-		
+
 		// Loop through all table rows, and hide those who don't match the search query
 		for (i = 0; i < tr.length; i++) {
 			td_title = tr[i].getElementsByTagName("td")[0];
@@ -59,15 +59,15 @@
 			td_jam = tr[i].getElementsByTagName("td")[2];
 			td_theme = tr[i].getElementsByTagName("td")[3];
 			if (td_title && td_author && td_jam && td_theme) {
-				if (	td_title.innerHTML.toUpperCase().indexOf(filter) > -1 || 
-						td_author.innerHTML.toUpperCase().indexOf(filter) > -1 || 
-						td_jam.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+				if (	td_title.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+						td_author.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+						td_jam.innerHTML.toUpperCase().indexOf(filter) > -1 ||
 						td_theme.innerHTML.toUpperCase().indexOf(filter) > -1) {
 					tr[i].style.display = "";
 				} else {
 					tr[i].style.display = "none";
 				}
-			} 
+			}
 		}
 	}
 </script>

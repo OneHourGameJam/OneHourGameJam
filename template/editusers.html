@@ -1,6 +1,6 @@
 <div class="col-md-10" id='jamlist'>
 	<h3>Edit users</h3>
-	
+
     <h4>Administrators</h4>
     <p>For more information on the Login, Jams and Admin activity indicators, hover your mouse over an indicator image.</p>
 	<table class="table sortable">
@@ -61,8 +61,8 @@
             {{/is_admin}}
         {{/users.LIST}}
 	</table>
-	
-	<h4>Admin candidates</h4> 
+
+	<h4>Admin candidates</h4>
 	<p>The following are users the system identified as potential admin candidates, because they participated in {{CONFIG.VALUES.ADMIN_SUGGESTION_TOTAL_PARTICIPATION}} or more jams and their recent participation is at or above {{CONFIG.VALUES.ADMIN_SUGGESTION_RECENT_PARTICIPATION}}%.</p>
 	<table class="table sortable">
 		<tr>
@@ -74,7 +74,7 @@
 			<th>Votes For</th>
 			<th>Neutral Votes</th>
 			<th>Votes Against</th>
-			<th style='width: 400px; text-align: center;'>Vote</th> 
+			<th style='width: 400px; text-align: center;'>Vote</th>
 			<th></th>
 		</tr>
         {{#users.LIST}}
@@ -134,7 +134,7 @@
             {{/is_admin_candidate}}
 		{{/users.LIST}}
 	</table>
-	
+
 	<h4>Registered users</h4>
 	<table class="table sortable">
 		<tr>
@@ -154,7 +154,7 @@
 			    	<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
 			    	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 			    	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
-			    	<td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td> 
+			    	<td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
                     <td>{{#is_admin_candidate}}Yes{{/is_admin_candidate}}</td>
                     <td>
                         <form method='POST' id='adminvote_{{{username}}}_1' style='display: inline;'>

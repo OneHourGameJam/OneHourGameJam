@@ -4,7 +4,7 @@
 			Jams ({{jams.all_jams_count}} total!)
 		</div>
 	</div>
-	
+
 	<input type="text" class="form-control" id='jamsearch' placeholder="Search by number, theme or date..." style='margin-bottom: 10px;' onkeyup="FilterJamsTable()">
 	<div class='panel-body jamContent'>
 		Click on a column header to sort.
@@ -31,27 +31,27 @@
 
 <script>
 	function FilterJamsTable() {
-		// Declare variables 
+		// Declare variables
 		var input, filter, table, tr, td_number, td_theme, td_date, i;
 		input = document.getElementById("jamsearch");
 		filter = input.value.toUpperCase();
 		table = document.getElementById("jamtable");
 		tr = table.getElementsByTagName("tr");
-		
+
 		// Loop through all table rows, and hide those who don't match the search query
 		for (i = 0; i < tr.length; i++) {
 			td_number = tr[i].getElementsByTagName("td")[0];
 			td_theme = tr[i].getElementsByTagName("td")[1];
 			td_date = tr[i].getElementsByTagName("td")[1];
 			if (td_number && td_theme && td_date) {
-				if (  td_number.innerHTML.toUpperCase().indexOf(filter) > -1 || 
-				      td_theme.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+				if (  td_number.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+				      td_theme.innerHTML.toUpperCase().indexOf(filter) > -1 ||
 				      td_date.innerHTML.toUpperCase().indexOf(filter) > -1) {
 					tr[i].style.display = "";
 				} else {
 					tr[i].style.display = "none";
 				}
-			} 
+			}
 		}
 	}
 </script>

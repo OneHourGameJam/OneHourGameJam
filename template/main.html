@@ -8,9 +8,9 @@
 			</div>
 		{{/IS_STREAM_ACTIVE}}
 	{{/is_streamer}}
-	
+
 	<input type="text" class="form-control" id='search' placeholder="Search for..." style='margin-bottom: 10px;'>
-	
+
 	{{#jams.LIST}}
 		{{^jam_deleted}}
 			<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
@@ -45,7 +45,7 @@
 							<div style='background: url({{{template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score5}}</div>
 						</div>
 					{{/enough_scores_to_show_satisfaction}}
-					
+
 					{{#entries}}
 						{{^entry_deleted}}
 							<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
@@ -57,7 +57,7 @@
 													<!-- Why is centering things such a collossal pain in CSS :s -->
 													<b><span class='entryTitle'>{{title}}</span></b><br />
 													by <span class='entryAuthor'>{{author_display}}</span>
-												</div>	
+												</div>
 											</div>
 										</div>
 									</div>
@@ -83,7 +83,7 @@
 							</div>
 						{{/entry_deleted}}
         	        {{/entries}}
-						
+
         	        {{#user}}
 					    {{#is_latest_started_jam}}
 					        {{^user_participated_in_jam}}
@@ -99,12 +99,12 @@
         	                                                    Submit game
         	                                                </div>
         	                                            </a>
-        	                                        </div>	
+        	                                        </div>
         	                                    </div>
         	                                </div>
         	                            </div>
         	                        </div>
-        	                    </div> 
+        	                    </div>
 					        {{/user_participated_in_jam}}
         	            {{/is_latest_started_jam}}
         	        {{/user}}

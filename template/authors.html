@@ -4,7 +4,7 @@
 			Authors ({{users.all_authors_count}} total!)
 		</div>
 	</div>
-	
+
 	<input type="text" class="form-control" id='authorsearch' placeholder="Search by username or twitter handle..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
 	<div class='panel-body jamContent'>
 		Click on a column header to sort.
@@ -33,25 +33,25 @@
 
 <script>
 	function FilterAuthorTable() {
-		// Declare variables 
+		// Declare variables
 		var input, filter, table, tr, td_username, td_twitter, i;
 		input = document.getElementById("authorsearch");
 		filter = input.value.toUpperCase();
 		table = document.getElementById("authortable");
 		tr = table.getElementsByTagName("tr");
-		
+
 		// Loop through all table rows, and hide those who don't match the search query
 		for (i = 0; i < tr.length; i++) {
 			td_username = tr[i].getElementsByTagName("td")[0];
 			td_twitter = tr[i].getElementsByTagName("td")[1];
 			if (td_username && td_twitter) {
-				if (td_username.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+				if (td_username.innerHTML.toUpperCase().indexOf(filter) > -1 ||
 				     td_twitter.innerHTML.toUpperCase().indexOf(filter) > -1) {
 					tr[i].style.display = "";
 				} else {
 					tr[i].style.display = "none";
 				}
-			} 
+			}
 		}
 	}
 </script>
