@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $dbConn, $ip, $userAgent;
+	global $themes, $dbConn, $ip, $userAgent, $actionResult;
 
 	if($isBot){
 		$user = "bot";
@@ -10,6 +10,7 @@ function AddTheme($newTheme, $isBot){
 		//Authorize user (logged in)
 		$user = IsLoggedIn();
 		if($user === false){
+			$actionResult = "NOT_LOGGED_IN";
 			AddAuthorizationWarning("Not logged in.", false);
 			return;
 		}
@@ -17,6 +18,7 @@ function AddTheme($newTheme, $isBot){
 
 	$newTheme = trim($newTheme);
 	if($newTheme == ""){
+		$actionResult = "INVALID_THEME";
 		AddDataWarning("Theme is blank", false);
 		return;
 	}
@@ -24,6 +26,7 @@ function AddTheme($newTheme, $isBot){
 	foreach($themes as $i => $theme){
 		if(strtolower($theme["theme"]) == strtolower($newTheme)){
 			//Theme is already suggested
+			$actionResult = "THEME_ALREADY_SUGGESTED";
 			AddDataWarning("This theme has already been suggested.", false);
 			return;
 		}
@@ -42,6 +45,7 @@ function AddTheme($newTheme, $isBot){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
+	$actionResult = "SUCCESS";
 	LoadThemes();
 
 	AddDataSuccess("Theme added", false);

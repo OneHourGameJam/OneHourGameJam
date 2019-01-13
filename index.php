@@ -91,107 +91,255 @@ $actions = Array(
 	Array(
 		"POST_REQUEST" => "login",
 		"PHP_FILE" => "php/actions/login.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=main"),
+			"REGISTRATION_SUCCESS" => Array("REDIRECT_URL" => "?page=login"),
+			"PASSWORD_TOO_SHORT" => Array("REDIRECT_URL" => "?page=login"),
+			"PASSWORD_TOO_LONG" => Array("REDIRECT_URL" => "?page=login"),
+			"USERNAME_TOO_SHORT" => Array("REDIRECT_URL" => "?page=login"),
+			"USERNAME_TOO_LONG" => Array("REDIRECT_URL" => "?page=login"),
+			"USERNAME_ALREADY_REGISTERED" => Array("REDIRECT_URL" => "?page=login"),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=login"),
+			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "logout",
 		"PHP_FILE" => "php/actions/logout.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=main")
+		)
 	),
 	Array(
 		"POST_REQUEST" => "submit",
 		"PHP_FILE" => "php/actions/submit.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS_ENTRY_ADDED" => Array("REDIRECT_URL" => "?page=main"),
+			"SUCCESS_ENTRY_UPDATED" => Array("REDIRECT_URL" => "?page=main"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"MISSING_GAME_NAME" => Array("REDIRECT_URL" => "?page=submit"),
+			"INVALID_GAME_URL" => Array("REDIRECT_URL" => "?page=submit"),
+			"INVALID_DESCRIPTION" => Array("REDIRECT_URL" => "?page=submit"),
+			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=submit"),
+			"NO_JAM_TO_SUBMIT_TO" => Array("REDIRECT_URL" => "?page=submit"),
+			"INVALID_COLOR" => Array("REDIRECT_URL" => "?page=submit"),
+			"SCREENSHOT_NOT_AN_IMAGE" => Array("REDIRECT_URL" => "?page=submit"),
+			"SCREENSHOT_TOO_BIT" => Array("REDIRECT_URL" => "?page=submit"),
+			"SCREENSHOT_WRONG_FILE_TYPE" => Array("REDIRECT_URL" => "?page=submit"),
+			"CANNOT_SUBMIT_TO_PAST_JAM" => Array("REDIRECT_URL" => "?page=submit"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "newjam",
 		"PHP_FILE" => "php/actions/newjam.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_TIME" => Array("REDIRECT_URL" => "?page=newjam"),
+			"INVALID_DATE" => Array("REDIRECT_URL" => "?page=newjam"),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=newjam"),
+			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=newjam"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "deletejam",
 		"PHP_FILE" => "php/actions/deletejam.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"CANNOT_DELETE_JAM" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=editcontent"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "deleteentry",
 		"PHP_FILE" => "php/actions/deleteentry.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"CANNOT_DELETE_ENTRY" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=editcontent"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "saveconfig",
 		"PHP_FILE" => "php/actions/saveconfig.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
-	),
-	Array(
-		"POST_REQUEST" => "editjam",
-		"PHP_FILE" => "php/actions/editjam.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=config"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NO_CHANGE" => Array("REDIRECT_URL" => "?page=config"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "saveassetedits",
 		"PHP_FILE" => "php/actions/saveassetedits.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS_INSERTED" => Array("REDIRECT_URL" => "?page=assets"),
+			"SUCCESS_UPDATED" => Array("REDIRECT_URL" => "?page=assets"),
+			"COULD_NOT_DETERMINE_URL" => Array("REDIRECT_URL" => "?page=assets"),
+			"UNLOADED_ASSET_TOO_BIG" => Array("REDIRECT_URL" => "?page=assets"),
+			"COULD_NOT_FIND_VALID_FILE_NAME" => Array("REDIRECT_URL" => "?page=assets"),
+			"INVALID_ASSET_TYPE" => Array("REDIRECT_URL" => "?page=assets"),
+			"ASSET_TYPE_EMPTY" => Array("REDIRECT_URL" => "?page=assets"),
+			"INVALID_DESCRIPTION" => Array("REDIRECT_URL" => "?page=assets"),
+			"INVALID_TITLE" => Array("REDIRECT_URL" => "?page=assets"),
+			"INVALID_AUTHOR" => Array("REDIRECT_URL" => "?page=assets"),
+			"AUTHOR_EMPTY" => Array("REDIRECT_URL" => "?page=assets"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "deleteasset",
 		"PHP_FILE" => "php/actions/deleteasset.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=assets"),
+			"ASSET_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=assets"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=assets"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "savejamedits",
 		"PHP_FILE" => "php/actions/savejamedits.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_TIME" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_DATE" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"INVALID_COLOR" => Array("REDIRECT_URL" => "?page=editcontent"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "saveuseredits",
 		"PHP_FILE" => "php/actions/saveuseredits.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers"),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers"),
+			"INVALID_ISADMIN" => Array("REDIRECT_URL" => "?page=editusers"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "savenewuserpassword",
 		"PHP_FILE" => "php/actions/savenewuserpassword.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers"),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers"),
+			"PASSWORD_TOO_LONG" => Array("REDIRECT_URL" => "?page=editusers"),
+			"PASSWORD_TOO_SHORT" => Array("REDIRECT_URL" => "?page=editusers"),
+			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=editusers"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "changepassword",
 		"PHP_FILE" => "php/actions/changepassword.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"PASSWORD_TOO_LONG" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"PASSWORD_TOO_SHORT" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "saveuserchanges",
 		"PHP_FILE" => "php/actions/saveuserchanges.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"INVALID_EMAIL" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"INVALID_DISPLAY_NAME" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "savenewtheme",
 		"PHP_FILE" => "php/actions/savenewtheme.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
+			"THEME_ALREADY_SUGGESTED" => Array("REDIRECT_URL" => "?page=themes"),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "deletetheme",
 		"PHP_FILE" => "php/actions/deletetheme.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
+			"THEME_NOT_BANNED" => Array("REDIRECT_URL" => "?page=themes"),
+			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "bantheme",
 		"PHP_FILE" => "php/actions/bantheme.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
+			"THEME_NOT_BANNED" => Array("REDIRECT_URL" => "?page=themes"),
+			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "unbantheme",
 		"PHP_FILE" => "php/actions/unbantheme.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
+			"THEME_NOT_BANNED" => Array("REDIRECT_URL" => "?page=themes"),
+			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	),
 	Array(
 		"POST_REQUEST" => "downloaddb",
 		"PHP_FILE" => "php/actions/downloaddb.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+
+		)
 	),
 	Array(
 		"POST_REQUEST" => "adminvote",
 		"PHP_FILE" => "php/actions/adminvote.php",
-		"REDIRECT_AFTER_EXECUTION" => "?page=main"
+		"REDIRECT_AFTER_EXECUTION" => "?page=main",
+		"ACTION_RESULT" => Array(
+			"SUCESS_UPDATE" => Array("REDIRECT_URL" => "?page=editusers"),
+			"SUCESS_INSERT" => Array("REDIRECT_URL" => "?page=editusers"),
+			"INVALID_VOTE_TYPE" => Array("REDIRECT_URL" => "?page=editusers"),
+			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+		)
 	)
 );
 
@@ -203,15 +351,21 @@ if(isset($_POST["action"])){
 		$actionRedirectAfterExecution = $action["REDIRECT_AFTER_EXECUTION"];
 
 		if($_POST["action"] == $actionPostRequest){
+			$actionResult = "PROCESSING";
 			include_once($actionPhpFile);
 
-			header("Location: $actionRedirectAfterExecution");
-			die("Redirecting to <a href='$actionRedirectAfterExecution'>$actionRedirectAfterExecution</a>...");
+			if(isset($action["ACTION_RESULT"][$actionResult]["REDIRECT_URL"])){
+				$redirectURL = $action["ACTION_RESULT"][$actionResult]["REDIRECT_URL"];
+				header("Location: ".$redirectURL);
+				die("Redirecting to <a href='$actionRedirectAfterExecution'>$actionRedirectAfterExecution</a>...");
+			}
+
+			die("Unknown action result $actionResult for action $actionPostRequest. Please report this error to administrators.  <a href='?page=mail'>back to index</a>...");
 		}
 	}
 }
 
-//Page actions!
+//Special processing for specific pages!
 switch($page){
 	case "logout":
 	break;

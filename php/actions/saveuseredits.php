@@ -4,10 +4,11 @@
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
 function EditUser($username, $isAdmin){
-	global $users, $dbConn;
+	global $users, $dbConn, $actionResult;
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
+		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can edit entries.", false);
 		return;
 	}
@@ -18,12 +19,14 @@ function EditUser($username, $isAdmin){
 	}else if($isAdmin == 1){
 		$isAdmin = 1;
 	}else{
+		$actionResult = "INVALID_ISADMIN";
 		AddDataWarning("Bad isadmin value", false);
 		return;
 	}
 
 	//Check that the user exists
 	if(!isset($users[$username])){
+		$actionResult = "USER_DOES_NOT_EXIST";
 		AddDataWarning("User does not exist", false);
 		return;
 	}
@@ -39,6 +42,7 @@ function EditUser($username, $isAdmin){
 	mysqli_query($dbConn, $sql) ;
     $sql = "";
 
+	$actionResult = "SUCCESS";
     AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username);
 
 	LoadUsers();

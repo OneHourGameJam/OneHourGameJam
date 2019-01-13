@@ -2,24 +2,27 @@
 
 //Changes data about the logged in user
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
-	global $users, $loggedInUser, $dbConn;
+	global $users, $loggedInUser, $dbConn, $actionResult;
 
 	$loggedInUser = IsLoggedIn();
 
 	//Authorize user (is admin)
 	if($loggedInUser === false){
+		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Validate values
-	if(!$displayName || strlen($displayName) <= 0 || strlen($displayName) > 50){
+	if(!$displayName || strlen($displayName) <= 0 || strlen($displayName) > 50){	//MAGIC
+		$actionResult = "INVALID_DISPLAY_NAME";
 		AddDataWarning("Display name must be between 0 and 50 characters long", false);
 		return;
 	}
 
 	//Validate email address
 	if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+		$actionResult = "INVALID_EMAIL";
 		AddDataWarning("Provided email address is not valid", false);
 		return;
 	}
@@ -42,6 +45,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
+	$actionResult = "SUCCESS";
 	LoadUsers();
 	$loggedInUser = IsLoggedIn(TRUE);
 }

@@ -24,15 +24,17 @@ function CanDeleteEntry($entryID){
 
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryID){
-	global $jams, $dbConn;
+	global $jams, $dbConn, $actionResult;
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
+		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete entries.", false);
 		return;
 	}
 
 	if(!CanDeleteEntry($entryID)){
+		$actionResult = "CANNOT_DELETE_ENTRY";
 		AddDataWarning("This entry cannot be deleted.", false);
 		return;
 	}
@@ -40,11 +42,13 @@ function DeleteEntry($entryID){
 	//Validate values
 	$entryID = intval($entryID);
 	if($entryID <= 0){
+		$actionResult = "INVALID_JAM_ID";
 		AddDataWarning("invalid jam ID", false);
 		return;
 	}
 
 	if(count($jams) == 0){
+		$actionResult = "NO_JAMS_EXIST";
 		return; //No jams exist
 	}
 
@@ -56,6 +60,7 @@ function DeleteEntry($entryID){
 
     AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "");
 
+	$actionResult = "SUCCESS";
     AddDataSuccess("Game Deleted");
 }
 

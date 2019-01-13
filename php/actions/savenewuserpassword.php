@@ -2,10 +2,11 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $users, $dbConn;
+	global $users, $dbConn, $actionResult;
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
+		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can edit entries.", false);
 		return;
 	}
@@ -13,19 +14,29 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$newPassword1 = trim($newPassword1);
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
+		$actionResult = "PASSWORDS_DONT_MATCH";
 		AddDataWarning("passwords don't match", false);
 		return;
 	}
 	$password = $newPassword1;
 
 	//Check password length
-	if(strlen($password) < 8){
+	if(strlen($password) < 8){	//MAGIC
+		$actionResult = "PASSWORD_TOO_SHORT";
 		AddDataWarning("password must be longer than 8 characters", false);
+		return;
+	}
+
+	//Check password length
+	if(strlen($password) > 128){	//MAGIC
+		$actionResult = "PASSWORD_TOO_LONG";
+		AddDataWarning("password must be shorter than 128 characters", false);
 		return;
 	}
 
 	//Check that the user exists
 	if(!isset($users[$username])){
+		$actionResult = "USER_DOES_NOT_EXIST";
 		AddDataWarning("User does not exist", false);
 		return;
 	}
@@ -57,6 +68,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 
     AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username);
 
+	$actionResult = "SUCCESS";
 	LoadUsers();
 	$loggedInUser = IsLoggedIn(TRUE);
 }

@@ -4,7 +4,7 @@
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
-	global $users;
+	global $users, $actionResult;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -17,12 +17,14 @@ function LogInOrRegister($username, $password){
 
 	//Check password length
 	if(strlen($password) < 8){
+		$actionResult = "PASSWORD_TOO_SHORT";
 		AddDataWarning("password must be at least 8 characters long", false);
 		return;
 	}
 
 	//Check password length
 	if(strlen($password) > 128){
+		$actionResult = "PASSWORD_TOO_LONG";
 		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
 		return;
 	}
@@ -39,25 +41,35 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $users, $dbConn, $ip, $userAgent;
+	global $users, $dbConn, $ip, $userAgent, $actionResult;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
 	//Check username length
-	if(strlen($username) < 2 || strlen($username) > 20){
+	if(strlen($username) < 2){	//MAGIC
+		$actionResult = "USERNAME_TOO_SHORT";
+		AddDataWarning("username must be between 2 and 20 characters", false);
+		return;
+	}
+
+	//Check username length
+	if(strlen($username) > 20){	//MAGIC
+		$actionResult = "USERNAME_TOO_LONG";
 		AddDataWarning("username must be between 2 and 20 characters", false);
 		return;
 	}
 
 	//Check password length
-	if(strlen($password) < 8){
+	if(strlen($password) < 8){	//MAGIC
+		$actionResult = "PASSWORD_TOO_SHORT";
 		AddDataWarning("password must be at least 8 characters long", false);
 		return;
 	}
 
 	//Check password length
-	if(strlen($password) > 128){
+	if(strlen($password) > 128){	//MAGIC
+		$actionResult = "PASSWORD_TOO_LONG";
 		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
 		return;
 	}
@@ -68,6 +80,7 @@ function RegisterUser($username, $password){
 	$admin = (count($users) == 0) ? 1 : 0;
 
 	if(isset($users[$username])){
+		$actionResult = "USERNAME_ALREADY_REGISTERED";
 		AddDataWarning("Username already registered", false);
 		return;
 	}else{
@@ -116,6 +129,7 @@ function RegisterUser($username, $password){
 		mysqli_query($dbConn, $sql) ;
 		$sql = "";
 
+		$actionResult = "REGISTRATION_SUCCESS";
 	}
 
 	$users = LoadUsers();
@@ -126,18 +140,27 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
 function LogInUser($username, $password){
-	global $config, $users, $dbConn;
+	global $config, $users, $dbConn, $actionResult;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
 	//Check username length
-	if(strlen($username) < 2 || strlen($username) > 20){
+	if(strlen($username) < 2){	//MAGIC
+		$actionResult = "USERNAME_TOO_SHORT";
+		AddDataWarning("username must be between 2 and 20 characters", false);
+		return;
+	}
+
+	//Check username length
+	if(strlen($username) > 20){	//MAGIC
+		$actionResult = "USERNAME_TOO_LONG";
 		AddDataWarning("username must be between 2 and 20 characters", false);
 		return;
 	}
 
 	if(!isset($users[$username])){
+		$actionResult = "USER_DOES_NOT_EXIST";
 		AddDataWarning("User does not exist", false);
 		return;
 	}
@@ -174,9 +197,11 @@ function LogInUser($username, $password){
 		$sql = "";
 	}else{
 		//User password incorrect!
+		$actionResult = "INCORRECT_PASSWORD";
 		AddDataWarning("Incorrect username / password combination.", false);
 		return;
 	}
+	$actionResult = "SUCCESS";
 }
 
 $username = (isset($_POST["un"])) ? $_POST["un"] : "";

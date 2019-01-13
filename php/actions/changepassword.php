@@ -2,12 +2,13 @@
 
 //Changes the logged in user's password if the old one matches.
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
-	global $users, $loggedInUser, $dbConn;
+	global $users, $loggedInUser, $dbConn, $actionResult;
 
 	$loggedInUser = IsLoggedIn();
 
 	//Authorize user (is admin)
 	if($loggedInUser === false){
+		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
@@ -15,6 +16,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$newPassword1 = trim($newPassword1);
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
+		$actionResult = "PASSWORDS_DONT_MATCH";
 		AddDataWarning("passwords don't match", false);
 		return;
 	}
@@ -22,12 +24,21 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 
 	//Check password length
 	if(strlen($password) < 8){
+		$actionResult = "PASSWORD_TOO_SHORT";
 		AddDataWarning("password must be longer than 8 characters", false);
+		return;
+	}
+
+	//Check password length
+	if(strlen($password) > 128){	//MAGIC
+		$actionResult = "PASSWORD_TOO_LONG";
+		AddDataWarning("password must be shorter than 128 characters", false);
 		return;
 	}
 
 	//Check that the user exists
 	if(!isset($users[$loggedInUser["username"]])){
+		$actionResult = "USER_DOES_NOT_EXIST";
 		AddDataWarning("User does not exist", false);
 		return;
 	}
@@ -38,6 +49,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$userPasswordIterations = intval($user["password_iterations"]);
 	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations);
 	if($correctPasswordHash != $passwordHash){
+		$actionResult = "INCORRECT_PASSWORD";
 		AddDataWarning("The entered password is incorrect.", false);
 		return;
 	}
@@ -66,6 +78,8 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
+	
+	$actionResult = "SUCCESS";
 
 	LoadUsers();
 	$loggedInUser = IsLoggedIn(TRUE);

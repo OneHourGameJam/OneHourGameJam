@@ -1,11 +1,12 @@
 <?php
 
 function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assets;
+	global $loggedInUser, $dbConn, $assets, $actionResult;
 	$assetID = trim($assetID);
 
 	//Authorize user
 	if(!IsAdmin()){
+		$actionResult = "NOT_AUTHORIZED";
 		AddAdminAuthorizationWarning(false);
 		return;
 	}
@@ -16,6 +17,7 @@ function DeleteAsset($assetID){
 	}
 
 	if(!$assetExists){
+		$actionResult = "ASSET_DOES_NOT_EXIST";
 		AddDataWarning("The specified asset does not exist.", false);
 		return;
 	}
@@ -49,6 +51,7 @@ function DeleteAsset($assetID){
 
 	LoadAssets();
 
+	$actionResult = "SUCCESS";
     AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor);
 }
 

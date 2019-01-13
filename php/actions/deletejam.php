@@ -30,15 +30,17 @@ function JamExists($jamID){
 
 //Deletes an existing jam, identified by the jam number.
 function DeleteJam($jamID){
-	global $jams, $dbConn;
+	global $jams, $dbConn, $actionResult;
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
+		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete jams.", false);
 		return;
 	}
 
 	if(!CanDeleteJam($jamID)){
+		$actionResult = "CANNOT_DELETE_JAM";
 		AddInternalDataError("This jam cannot be deleted.", false);
 		return;
 	}
@@ -46,11 +48,13 @@ function DeleteJam($jamID){
 	//Validate values
 	$jamID = intval($jamID);
 	if($jamID <= 0){
+		$actionResult = "INVALID_JAM_ID";
 		AddDataWarning("invalid jam ID", false);
 		return;
 	}
 
 	if(count($jams) == 0){
+		$actionResult = "NO_JAMS_EXIST";
 		return; //No jams exist
 	}
 
@@ -60,6 +64,7 @@ function DeleteJam($jamID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
+	$actionResult = "SUCCESS";
 	AddDataSuccess("Jam Deleted");
 
     AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "");

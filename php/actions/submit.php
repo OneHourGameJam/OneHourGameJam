@@ -6,7 +6,7 @@
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $games;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $games, $actionResult;
 
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -23,12 +23,14 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 	//Authorize user
 	if(IsLoggedIn() === false){
+		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Validate game name
 	if(strlen($gameName) < 1){
+		$actionResult = "MISSING_GAME_NAME";
 		AddDataWarning("Game name not provided", false);
 		return;
 	}
@@ -50,35 +52,41 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 	//Did at least one url pass validation?
 	if($urlValid == FALSE){
+		$actionResult = "INVALID_GAME_URL";
 		AddDataWarning("Invalid game url", false);
 		return;
 	}
 
 	//Validate description
 	if(strlen($description) <= 0){
+		$actionResult = "INVALID_DESCRIPTION";
 		AddDataWarning("Invalid description", false);
 		return;
 	}
 
 	//Check that a jam exists
 	if (!is_int($jam_number)) {
+		$actionResult = "INVALID_JAM_NUMBER";
 		AddDataWarning('Invalid jam number', false);
 		return;
 	}
 
 	$jam = GetJamByNumber($jams, $jam_number);
 	if($jam == null || $jam["jam_number"] == 0){
+		$actionResult = "NO_JAM_TO_SUBMIT_TO";
 		AddInternalDataError("No jam to submit to", false);
 		return;
 	}
 
 	if(count($jams) == 0){
+		$actionResult = "NO_JAM_TO_SUBMIT_TO";
 		AddInternalDataError("No jam to submit to", false);
 		return;
 	}
 
 	//Validate color
 	if($jamColorNumber < 0 || count($jam["colors"]) <= $jamColorNumber){
+		$actionResult = "INVALID_COLOR";
 		AddDataWarning("Selected invalid color", false);
 		return;
 	}
@@ -96,12 +104,14 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			$uploadPass = 1;
 		} else {
 			AddDataWarning("Uploaded screenshot is not an image", false);
+			$actionResult = "SCREENSHOT_NOT_AN_IMAGE";
 			return;
 			$uploadPass = 0;
 		}
 
 		if ($_FILES["screenshotfile"]["size"] > 5000000) {
 			AddDataWarning("Uploaded screenshot is too big (max 5MB)", false);
+			$actionResult = "SCREENSHOT_TOO_BIT";
 			return;
 			$uploadPass = 0;
 		}
@@ -109,6 +119,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 		&& $imageFileType != "gif" ) {
 			AddDataWarning("Uploaded screenshot is not jpeg, png or gif", false);
+			$actionResult = "SCREENSHOT_WRONG_FILE_TYPE";
 			return;
 			$uploadPass = 0;
 		}
@@ -192,6 +203,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 		AddDataSuccess("Game Updated");
 
+		$actionResult = "SUCCESS_ENTRY_UPDATED";
 		$entryUpdated = true;
 	}
 
@@ -200,6 +212,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 		if ($jam_number != $currentJamData["NUMBER"]) {
 			AddDataWarning('Cannot make a new submission to a past jam', false);
+			$actionResult = "CANNOT_SUBMIT_TO_PAST_JAM";
 			return;
 		}
 
@@ -266,6 +279,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 
+		$actionResult = "SUCCESS_ENTRY_ADDED";
 		AddDataSuccess("Game Submitted");
 	}
 }

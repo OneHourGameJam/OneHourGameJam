@@ -2,23 +2,26 @@
 
 //Marks a suggested theme as banned
 function BanTheme($bannedTheme){
-	global $themes, $dbConn, $ip, $userAgent;
+	global $themes, $dbConn, $ip, $userAgent, $actionResult;
 
 	//Authorize user (logged in)
 	$user = IsAdmin();
 	if($user === false){
+		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
+		$actionResult = "NOT_AHTORIZED";
 		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
 	}
 
 	$bannedTheme = trim($bannedTheme);
 	if($bannedTheme == ""){
+		$actionResult = "INVALID_THEME";
 		AddDataWarning("Theme is blank", false);
 		return;
 	}
@@ -33,6 +36,7 @@ function BanTheme($bannedTheme){
 	$sql = "";
 
 	if(mysqli_num_rows($data) == 0){
+		$actionResult = "THEME_NOT_BANNED";
 		AddDataWarning("Theme does not exist", false);
 		return;
 	}
@@ -43,6 +47,7 @@ function BanTheme($bannedTheme){
 
     AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "");
 
+	$actionResult = "SUCCESS";
 	LoadThemes();
 
 	AddDataSuccess("Theme Banned", false);

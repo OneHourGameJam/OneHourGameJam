@@ -2,23 +2,26 @@
 
 //Removes a suggested theme
 function RemoveTheme($removedTheme){
-	global $themes, $dbConn, $ip, $userAgent;
+	global $themes, $dbConn, $ip, $userAgent, $actionResult;
 
 	//Authorize user (logged in)
 	$user = IsAdmin();
 	if($user === false){
+		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
+		$actionResult = "NOT_AHTORIZED";
 		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
 	}
 
 	$removedTheme = trim($removedTheme);
 	if($removedTheme == ""){
+		$actionResult = "INVALID_THEME";
 		AddDataWarning("Theme is blank", false);
 		return;
 	}
@@ -33,6 +36,7 @@ function RemoveTheme($removedTheme){
 	$sql = "";
 
 	if(mysqli_num_rows($data) == 0){
+		$actionResult = "THEME_NOT_BANNED";
 		AddDataWarning("Theme does not exist", false);
 		return;
 	}
@@ -43,6 +47,7 @@ function RemoveTheme($removedTheme){
 
     AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "");
 
+	$actionResult = "SUCCESS";
 	LoadThemes();
 
 	AddDataSuccess("Theme Removed", false);
