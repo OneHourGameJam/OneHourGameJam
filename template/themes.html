@@ -36,7 +36,7 @@
 	</p>
 
 	<p>
-		Themes suggested above will appear in this list. Once a theme receives enough votes, it becomes considered for a jam, depending on its popuparity. Themes which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested themes. Old themes are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any theme that gets removed due to unpopularity or age can be sugested again at any point.
+		Themes suggested above will appear in this list. Once a theme receives enough votes, it becomes considered for a jam, depending on its popularity. Themes which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested themes. Old themes are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any theme that gets removed due to unpopularity or age can be suggested again at any point.
 	</p>
 
 	{{#user.isadmin}}
@@ -181,11 +181,11 @@
 				{{#theme_visible}}
 					{{#user.isadmin}}
 						{{#banned}}
-							<tr style='background-color: #ffcccc;'>
+							<tr class="theme-banned">
 						{{/banned}}
 						{{^banned}}
 							{{#is_old}}
-								<tr style='background-color: #cccccc;'>
+								<tr class="theme-old">
 							{{/is_old}}
 							{{^is_old}}
 								<tr>
@@ -248,10 +248,10 @@
 							<td class='themeTableCell themeTableCellCentered'>
 								{{votes_total}}
 							</td>
-							<td class='themeTableCell themeTableCellCentered' style='border: solid 1px; border-color: {{popularity_color}}; color: {{popularity_color}};'>
+							<td class='themeTableCell themeTableCellCentered' style='background-color: {{popularity_color}}'>
 								{{votes_popularity}}
 							</td>
-							<td class='themeTableCell themeTableCellCentered' style='border: solid 1px; border-color: {{apathy_color}}; color: {{apathy_color}};'>
+							<td class='themeTableCell themeTableCellCentered' style='background-color: {{apathy_color}}'>
 								{{votes_apathy}}
 							</td>
 							<td class='themeTableCell themeTableCellCentered'>

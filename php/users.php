@@ -80,6 +80,8 @@ function LoadUsers(){
 }
 
 function RenderUser(&$user, &$users, &$games, &$jams, &$config){
+    global $nightmode;
+
 	AddActionLog("RenderUser");
 	StartTimer("RenderUser");
     $userData = $user;
@@ -154,42 +156,54 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
 	StopTimer("RenderUser - admin candidates");
 
     StartTimer("RenderUser - inactive admins");
+
+    $inactiveColor = "#FFECEC";
+    $activeColor = "#F6FFEC";
+    $highlyAciveColor = "#ECFFEC";
+
+    if($nightmode == 1)
+    {
+        $inactiveColor = "#4A3636";
+        $activeColor = "#3E4A36";
+        $highlyAciveColor = "#364A36";
+    }
+
     //Find inactive admins (participation in jams)
     $jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);
     $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
     if($userData["last_jam_number"] < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
         $userData["activity_jam_participation"] = "inactive";
-        $userData["activity_jam_participation_color"] = "#FFECEC";
+        $userData["activity_jam_participation_color"] = $inactiveColor;
     }else if($userData["last_jam_number"] >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
         $userData["activity_jam_participation"] = "highly active";
-        $userData["activity_jam_participation_color"] = "#ECFFEC";
+        $userData["activity_jam_participation_color"] = $highlyAciveColor;
     }else{
         $userData["activity_jam_participation"] = "active";
-        $userData["activity_jam_participation_color"] = "#F6FFEC";
+        $userData["activity_jam_participation_color"] = $activeColor;
     }
 
     //Find inactive admins (days since last login)
     if($userData["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]["VALUE"]){
         $userData["activity_login"] = "inactive";
-        $userData["activity_login_color"] = "#FFECEC";
+        $userData["activity_login_color"] = $inactiveColor;
     }else if($userData["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]["VALUE"]){
         $userData["activity_login"] = "highly active";
-        $userData["activity_login_color"] = "#ECFFEC";
+        $userData["activity_login_color"] = $highlyAciveColor;
     }else{
         $userData["activity_login"] = "active";
-        $userData["activity_login_color"] = "#F6FFEC";
+        $userData["activity_login_color"] = $activeColor;
     }
 
     //Find inactive admins (days since last login)
     if($userData["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]["VALUE"]){
         $userData["activity_administration"] = "inactive";
-        $userData["activity_administration_color"] = "#FFECEC";
+        $userData["activity_administration_color"] = $inactiveColor;
     }else if($userData["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]["VALUE"]){
         $userData["activity_administration"] = "highly active";
-        $userData["activity_administration_color"] = "#ECFFEC";
+        $userData["activity_administration_color"] = $highlyAciveColor;
     }else{
         $userData["activity_administration"] = "active";
-        $userData["activity_administration_color"] = "#F6FFEC";
+        $userData["activity_administration_color"] = $activeColor;
     }
 
     //Render activity related statuses (inactive, active, highly active)

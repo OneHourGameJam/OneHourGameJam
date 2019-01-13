@@ -4,7 +4,6 @@
 //error_reporting(-1);
 //
 //print phpversion ();
-
 $nightmode = $_COOKIE["nightmode"];
 if(isset($_GET["nightmode"])){
 	$nightmode = $_GET["nightmode"];
