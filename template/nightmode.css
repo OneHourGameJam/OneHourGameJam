@@ -18,8 +18,28 @@ body{
     border-color: #7B8991;
 }
 
+.panel-info>.jamNotDeleted{
+    background-color: #576065;
+}
+
+.panel-info>.jamDeleted{
+    background-color: #7E4B4B;
+}
+
+.panel-info>.chart-container{
+    background-color: #383838;
+}
+
 .panel{
     border-color: #7B8991;
+}
+
+.theme-old{
+		background-color: #424242;
+}
+
+.theme-banned{
+		background-color: #7E4B4B;
 }
 
 a{
@@ -45,6 +65,11 @@ a:hover{
     color: white;
 }
 
+.form-control[disabled]{
+    background-color: #333333;
+    color: #777777;
+}
+
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
     background-color: #606060;
     color: white;
@@ -53,6 +78,21 @@ a:hover{
 .btn-default{
     background-color: #606060;
     color: white;
+}
+
+.btn-success{
+    background-color: #29a329;
+    border-color: #29a329;
+}
+
+.btn-warning{
+    background-color: #eb9114;
+    border-color: #eb9114;
+}
+
+.btn-danger{
+	 background-color: #ac2925;
+   border-color: #ac2925;
 }
 
 .authorPageEntry{
