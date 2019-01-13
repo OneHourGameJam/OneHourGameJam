@@ -17,7 +17,7 @@ $usr = IsLoggedIn();
 
 if($usr == false){
 	print json_encode(Array("ERROR" => "Not logged in"));
-	die(); 
+	die();
 }
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);

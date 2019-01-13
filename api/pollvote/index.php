@@ -45,12 +45,12 @@ $sql = "";
 
 if($pollVote = mysqli_fetch_array($data)){
 	//toggle poll vote
-	
+
 	$newVote = 0;
 	if(intval($pollVote["vote_deleted"]) == 0){
 		$newVote = 1;
 	}
-	
+
 	$voteID = $pollVote["vote_id"];
 	$sql = "UPDATE poll_vote SET vote_deleted = $newVote WHERE vote_id = $voteID";
 	$data = mysqli_query($dbConn, $sql);
