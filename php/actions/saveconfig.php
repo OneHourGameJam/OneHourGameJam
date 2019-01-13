@@ -8,6 +8,11 @@ function SaveConfig($key, $newValue){
 		return; //Lacks permissions to make edits
 	}
 
+	if (!isset($config[$key])) {
+		//Invalid configuration key
+		return;
+	}
+
 	if ($config[$key]["EDITABLE"] != true) {
 		//Some configuration settings cannot be set via this interface for security reasons.
 		return;
