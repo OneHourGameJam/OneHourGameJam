@@ -1,8 +1,8 @@
-<?php
-
-if(IsAdmin()){
-    print GetJSONDataForAllTables();
-    die();
-}
-
+<?php
+
+if(IsAdmin()){
+    print GetJSONDataForAllTables();
+    die();
+}
+
 ?>
