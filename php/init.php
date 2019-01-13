@@ -10,7 +10,7 @@ function Init(){
 
 	AddActionLog("Init");
 	StartTimer("Init");
-	
+
 	$config = LoadConfig();
 
     RedirectToHttpsIfRequired($config);
@@ -30,8 +30,8 @@ function Init(){
     LoadSatisfaction();
     LoadAdminVotes();
 	LoadLoggedInUsersAdminVotes();
-	//InitStream();
-	GetNextJamDateAndTime(); 
+	InitStream();
+	GetNextJamDateAndTime();
 
 	$dictionary["CONFIG"] = RenderConfig($config);
 	$dictionary["adminlog"] = RenderAdminLog($adminLog);
@@ -41,7 +41,7 @@ function Init(){
 
 
 	$dictionary["assets"] = RenderAssets($assets);
-	
+
 	StopTimer("Init");
 }
 

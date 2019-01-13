@@ -19,7 +19,7 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 			//Each admin can sponsor and veto only one candidate
 			$sql = "
 				SELECT vote_id
-				FROM admin_vote 
+				FROM admin_vote
 				WHERE vote_voter_username = '$escapedVoterUsername'
 				  AND vote_type = '$escapedVoteType'
 			";
@@ -45,13 +45,13 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 
 	$sql = "
 		SELECT vote_id
-		FROM admin_vote 
+		FROM admin_vote
 		WHERE vote_voter_username = '$escapedVoterUsername'
 		  AND vote_subject_username = '$escapedSubjectUsername'
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	if($info = mysqli_fetch_array($data)){
 		//A vote already exists, update it
 		$sql = "

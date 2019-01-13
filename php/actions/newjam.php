@@ -6,7 +6,7 @@
 //(checks whether or not they are an admin).
 function CreateJam($theme, $date, $time, $colorsList){
 	global $ip, $userAgent, $loggedInUser;
-	
+
 	$currentJamData = GetCurrentJamNumberAndID();
 	$jamNumber = intval($currentJamData["NUMBER"] + 1);
 	$theme = trim($theme);
@@ -21,31 +21,31 @@ function CreateJam($theme, $date, $time, $colorsList){
 		}
 		$colorsList[$i] = $clr;
 	}
-	
+
 	//Authorize user (logged in)
 	if(IsLoggedIn() === false){
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
-	
+
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
 		AddAuthorizationWarning("Only admins can create jams.", false);
 		return;
 	}
-	
+
 	//Validate jam number
 	if($jamNumber <= 0){
 		AddDataWarning("Invalid jam number", false);
 		return;
 	}
-	
+
 	//Validate theme
 	if(strlen($theme) <= 0){
 		AddDataWarning("Invalid theme", false);
 		return;
 	}
-	
+
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
 		AddDataWarning("Invalid date", false);
@@ -56,9 +56,9 @@ function CreateJam($theme, $date, $time, $colorsList){
 	}else{
 		$datetime = strtotime($date." ".$time." UTC");
 	}
-	
+
 	$colors = implode("|", $colorsList);
-	
+
 	$newJam = Array();
 	$newJam["jam_number"] = $jamNumber;
 	$newJam["theme"] = $theme;
@@ -66,9 +66,9 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$newJam["time"] = gmdate("H:i", $datetime);
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
-	
+
 	AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors);
-	
+
 	AddDataSuccess("Jam Scheduled");
 }
 

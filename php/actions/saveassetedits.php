@@ -2,19 +2,19 @@
 
 function AddAsset($assetID, $author, $title, $description, $type){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assets, $users;
-	
+
 	$assetID = trim($assetID);
 	$author = trim($author);
 	$title = trim($title);
 	$description = trim($description);
 	$type = trim($type);
-	
+
 	//Authorize user
 	if(!IsAdmin()){
 		AddAdminAuthorizationWarning(false);
 		return;
 	}
-	
+
 	//Validate author
 	if(strlen($author) < 1){
 		AddDataWarning("Asset author is empty", false);
@@ -24,19 +24,19 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		AddDataWarning("Author is not a valid user (must use their username)", false);
 		return;
 	}
-	
+
 	//Validate title
 	if(strlen($title) < 1){
 		AddDataWarning("Asset title is empty", false);
 		return;
 	}
-	
+
 	//Validate description
 	if(strlen($description) < 1){
 		AddDataWarning("Asset description is empty", false);
 		return;
 	}
-	
+
 	//Validate type
 	if(strlen($type) < 1){
 		AddDataWarning("Asset type is blank", false);
@@ -55,12 +55,12 @@ function AddAsset($assetID, $author, $title, $description, $type){
 			return;
 		break;
 	}
-	
+
 	$assetExists = false;
 	if(isset($assetID) && $assetID !== null && isset($assets[$assetID])){
 		$assetExists = true;
 	}
-	
+
 	$ext = pathinfo($_FILES["assetfile"]["name"], PATHINFO_EXTENSION);
 	$fileNumber = -1;
 	mkdir("assets/$author");
@@ -74,7 +74,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		AddInternalDataError("Could not find valid file name for asset.", false);
 		return;
 	}
-	
+
 	//Upload asset
 	$assetURL = "";
 	$asset_folder = "assets/$author";
@@ -82,13 +82,13 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	if(isset($_FILES["assetfile"]) && $_FILES["assetfile"] != null && $_FILES["assetfile"]["size"] != 0){
 		$uploadPass = 1;
 		$target_file = $asset_folder ."/". $asset_name;
-		
+
 		if ($_FILES["assetfile"]["size"] > 15000000) {
 			AddDataWarning("Uploaded screenshot is too big (max 15MB)", false);
 			return;
 			$uploadPass = 0;
 		}
-		
+
 		if($uploadPass == 1){
 			if(!file_exists($asset_folder)){
 				mkdir($asset_folder);
@@ -98,16 +98,16 @@ function AddAsset($assetID, $author, $title, $description, $type){
 			$assetURL = $target_file;
 		}
 	}
-	
+
 	if($assetURL == "" && !$assetExists){
 		AddInternalDataError("Upload failure - Could not determine URL", false);
 		return;
 	}
-	
+
 	//Create or update entry
 	if($assetExists){
 		//Update entry
-		
+
 		$assets[$assetID]["id"] = $assetID;
 		$assets[$assetID]["author"] = $author;
 		$assets[$assetID]["title"] = $title;
@@ -124,7 +124,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$escapedDescription = mysqli_real_escape_string($dbConn, $assets[$assetID]["description"]);
 		$escapedType = mysqli_real_escape_string($dbConn, $assets[$assetID]["type"]);
 		$escapedContent = mysqli_real_escape_string($dbConn, $assets[$assetID]["content"]);
-		
+
 		$sql = "
 			UPDATE asset
 			SET
@@ -137,7 +137,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		";
 		$data = mysqli_query($dbConn, $sql);
         $sql = "";
-        
+
         AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author);
 	}else{
 		$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
@@ -145,7 +145,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 		$escapedType = mysqli_real_escape_string($dbConn, $type);
 		$escapedContent = mysqli_real_escape_string($dbConn, $assetURL);
-			
+
 		$sql = "
 			INSERT INTO asset
 			(asset_id,
@@ -173,10 +173,10 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		";
 		$data = mysqli_query($dbConn, $sql);
         $sql = "";
-        
+
         AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author);
 	}
-	
+
 	LoadAssets();
 }
 
@@ -186,7 +186,7 @@ if(IsAdmin()){
     $title = $_POST["title"];
     $description = $_POST["description"];
     $type = $_POST["type"];
-    
+
     AddAsset($assetID, $author, $title, $description, $type);
 }
 $page = "assets";

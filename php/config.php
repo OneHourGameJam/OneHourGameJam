@@ -25,7 +25,7 @@ function LoadConfig(){
 	$config = Array();
 
 	$sql = " SELECT * FROM config ORDER BY config_id; ";
-	$data = mysqli_query($dbConn, $sql); 
+	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
 	while($configEntry = mysqli_fetch_array($data)) {
@@ -79,12 +79,12 @@ function LoadConfig(){
 				$configEntry["TYPE_TEXTAREA"] = 1;
 			break;
 		}
-		
+
 		$config[$key] = $configEntry;
 	}
 
 	$config = VerifyConfig($config);
-	
+
 	StopTimer("LoadConfig");
 	return $config;
 }
@@ -148,23 +148,25 @@ function UpdateConfig($config, $key, $value, $userID) {
 		return; //Lacks permissions to make edits
 	}
 
-	$userIDClean = mysqli_real_escape_string($dbConn, $userID);
-	$keyClean = mysqli_real_escape_string($dbConn, $key);
-	$valueClean = mysqli_real_escape_string($dbConn, $value);
+	if($config[$key]["VALUE"] != $value){
+		$userIDClean = mysqli_real_escape_string($dbConn, $userID);
+		$keyClean = mysqli_real_escape_string($dbConn, $key);
+		$valueClean = mysqli_real_escape_string($dbConn, $value);
 
-	$config[$key]["VALUE"] = $value;
-	$sql = "
-		UPDATE config
-		SET config_value = '$valueClean',
-		config_lastedited = Now(),
-		config_lasteditedby = '$userIDClean'
-		WHERE config_key = '$keyClean';
-	";
-	mysqli_query($dbConn, $sql);
-    $sql = "";
-    
-	AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
-	
+		$config[$key]["VALUE"] = $value;
+		$sql = "
+			UPDATE config
+			SET config_value = '$valueClean',
+			config_lastedited = Now(),
+			config_lasteditedby = '$userIDClean'
+			WHERE config_key = '$keyClean';
+		";
+		mysqli_query($dbConn, $sql);
+    	$sql = "";
+
+		AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
+	}
+
 	StopTimer("UpdateConfig");
 	return $config;
 }
@@ -177,8 +179,8 @@ function RedirectToHttpsIfRequired($config){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https
             $url = "https://". $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
-            header("HTTP/1.1 301 Moved Permanently"); 
-            header("Location: $url"); 
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: $url");
             die();
         }
     }

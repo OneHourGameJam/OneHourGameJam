@@ -4,12 +4,12 @@ function LoadPolls(){
 	global $dbConn, $dictionary, $polls, $loggedInUser;
 	AddActionLog("LoadPolls");
 	StartTimer("LoadPolls");
-	
+
 	//Clear public lists which get updated by this function
 	$dictionary["polls"] = Array();
 	$dictionary["active_polls"] = Array();
 	$polls = Array();
-	
+
 	$sql = "
 		SELECT * FROM
 		(SELECT *, NOW() BETWEEN p.poll_start_datetime AND p.poll_end_datetime AS is_active FROM poll p, poll_option o WHERE p.poll_deleted = 0 and p.poll_id = o.option_poll_id) a
@@ -19,7 +19,7 @@ function LoadPolls(){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	//Get data
 	while($info = mysqli_fetch_array($data)){
 		$pollID = intval($info["poll_id"]);
@@ -31,7 +31,7 @@ function LoadPolls(){
 		$optionID = intval($info["option_id"]);
 		$optionText = $info["option_poll_text"];
 		$optionVotes = intval($info["vote_num"]);
-		
+
 		if(!isset($polls[$pollID])){
 			$polls[$pollID] = Array();
 			$polls[$pollID]["POLL_ID"] = $pollID;
@@ -40,16 +40,16 @@ function LoadPolls(){
 			$polls[$pollID]["DATE_START"] = $pollDateStart;
 			$polls[$pollID]["DATE_END"] = $pollDateEnd;
 			$polls[$pollID]["IS_ACTIVE"] = $pollIsActive;
-			
+
 			$polls[$pollID]["OPTIONS"] = Array();
 		}
-		
+
 		$polls[$pollID]["OPTIONS"][$optionID] = Array();
 		$polls[$pollID]["OPTIONS"][$optionID]["OPTION_ID"] = $optionID;
 		$polls[$pollID]["OPTIONS"][$optionID]["TEXT"] = $optionText;
 		$polls[$pollID]["OPTIONS"][$optionID]["VOTES"] = $optionVotes;
 	}
-	
+
 	//Get data about logged in user's votes
 	if(IsLoggedIn()){
 		$sql = "
@@ -61,7 +61,7 @@ function LoadPolls(){
 		";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
-		
+
 		//Get data
 		while($info = mysqli_fetch_array($data)){
 			$votePollID = intval($info["option_poll_id"]);
@@ -72,23 +72,23 @@ function LoadPolls(){
 			}
 		}
 	}
-	
+
 	//Process data
 	foreach($polls as $pollID => $poll){
 		$polls[$pollID]["TOTAL_VOTES"] = 0;
-		
+
 		//Compute total votes for each poll
 		foreach($poll["OPTIONS"] as $optionID => $option){
 			$polls[$pollID]["TOTAL_VOTES"] += $option["VOTES"];
 		}
-		
+
 		//Compute percentages
 		foreach($poll["OPTIONS"] as $optionID => $option){
 			$polls[$pollID]["OPTIONS"][$optionID]["PERCENTAGE"] = $option["VOTES"] / $polls[$pollID]["TOTAL_VOTES"];
 			$polls[$pollID]["OPTIONS"][$optionID]["PERCENTAGE_DISPLAY"] = (intval($polls[$pollID]["OPTIONS"][$optionID]["PERCENTAGE"] * 100)) . "%";
 		}
 	}
-    
+
 	//Insert into dictionary
 	foreach($polls as $pollID => $poll){
 		//Remap options so they go from 0..n instead of over their option IDs (Mustache expects this)
@@ -96,7 +96,7 @@ function LoadPolls(){
 		foreach($polls[$pollID]["OPTIONS"] as $optionID => $option){
 			$poll["OPTIONS"][] = $option;
 		}
-		
+
 		$dictionary["polls"][] = $poll;
 		if($poll["IS_ACTIVE"]){
 			$dictionary["active_polls"][] = $poll;
@@ -109,56 +109,56 @@ function LoadSatisfaction(){
 	global $dbConn, $satisfaction, $dictionary, $config;
 	AddActionLog("LoadSatisfaction");
 	StartTimer("LoadSatisfaction");
-	
+
 	$satisfaction = Array();
-	
+
 	$sql = "
-		SELECT 
-			satisfaction_question_id, 
+		SELECT
+			satisfaction_question_id,
 			AVG(satisfaction_score) AS average_score,
 			COUNT(satisfaction_score) AS submitted_scores
-		FROM satisfaction 
+		FROM satisfaction
 		GROUP BY satisfaction_question_id
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	//Get data
 	while($info = mysqli_fetch_array($data)){
 		$row = Array();
-		
+
 		$questionId = $info["satisfaction_question_id"];
 		$averageScore = $info["average_score"];
 		$submittedScores = $info["submitted_scores"];
-		
+
 		$row["question_id"] = $questionId;
 		$row["average_score"] = $averageScore;
 		$row["submitted_scores"] = $submittedScores;
 		$row["enough_scores_to_show_satisfaction"] = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
-		
+
 		$satisfaction[$questionId] = $row;
 	}
-	
+
 	$sql = "
-		SELECT 
-			satisfaction_question_id, 
+		SELECT
+			satisfaction_question_id,
 			satisfaction_score,
 			COUNT(1) AS votes_for_score
-		FROM satisfaction 
+		FROM satisfaction
 		GROUP BY satisfaction_question_id, satisfaction_score
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	//Get data
 	while($info = mysqli_fetch_array($data)){
 		$questionId = $info["satisfaction_question_id"];
 		$satisfactionScore = $info["satisfaction_score"];
 		$votesForScore = $info["votes_for_score"];
-		
+
 		$satisfaction[$questionId]["scores"][$satisfactionScore] = $votesForScore;
 	}
-	
+
 	/*
 	foreach($dictionary["jams_with_deleted"] as $id => $jam){
 		$jamNumber = $jam["jam_number"];
@@ -182,7 +182,7 @@ function LoadSatisfaction(){
 		}
 	}
 	*/
-	
+
 	/*
 	foreach($dictionary["jams"] as $id => $jam){
 		$jamNumber = $jam["jam_number"];
@@ -201,7 +201,7 @@ function LoadSatisfaction(){
 			$dictionary["jams"][$id]["score1"] = $satisfaction[$arrayId]["scores"][1];
 			$dictionary["jams"][$id]["score2"] = $satisfaction[$arrayId]["scores"][2];
 			$dictionary["jams"][$id]["score3"] = $satisfaction[$arrayId]["scores"][3];
-			$dictionary["jams"][$id]["score4"] = $satisfaction[$arrayId]["scores"][4]; 
+			$dictionary["jams"][$id]["score4"] = $satisfaction[$arrayId]["scores"][4];
 			$dictionary["jams"][$id]["score5"] = $satisfaction[$arrayId]["scores"][5];
 		}
 	}
@@ -213,7 +213,7 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 	global $dbConn, $ip, $userAgent, $loggedInUser;
 	AddActionLog("SubmitSatisfaction");
 	StartTimer("SubmitSatisfaction");
-	
+
 	if($score < -5){
 		AddDataWarning("Invalid satisfaction score", false);
 		StopTimer("SubmitSatisfaction");
@@ -224,15 +224,15 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 		StopTimer("SubmitSatisfaction");
 		return;
 	}
-	
+
 	$username = trim($loggedInUser["username"]);
-	
+
 	$escapedSatisfactionQuestionId = mysqli_real_escape_string($dbConn, $satisfactionQuestionId);
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$escapedScore = mysqli_real_escape_string($dbConn, $score);
-	
+
 	$sql = "
 		INSERT INTO satisfaction
 		(satisfaction_id,
@@ -252,7 +252,7 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 		'$escapedScore');";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	AddDataSuccess("Satisfaction score submitted", false);
 	StopTimer("SubmitSatisfaction");
 }
@@ -263,18 +263,18 @@ function LoadLoggedInUsersAdminVotes(){
 	StartTimer("LoadLoggedInUsersAdminVotes");
 
 	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
-	
+
 	$sql = "
 		SELECT vote_subject_username, vote_type
-		FROM admin_vote 
+		FROM admin_vote
 		WHERE vote_voter_username = '$escapedVoterUsername';
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-    
+
 	unset($dictionary["missing_admin_candidate_votes"]);
 	unset($dictionary["missing_admin_candidate_votes_number"]);
-	
+
 	/*
 	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 		unset($dictionary["admin_candidates"][$i]["vote_type"]);
@@ -316,7 +316,7 @@ function LoadLoggedInUsersAdminVotes(){
 		}
 		*/
     }
-	
+
 	/*
     $missingAdminCandidateVotes = 0;
 	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
@@ -324,7 +324,7 @@ function LoadLoggedInUsersAdminVotes(){
             $missingAdminCandidateVotes += 1;
 		}
     }
-    
+
     if($missingAdminCandidateVotes > 0){
         $dictionary["missing_admin_candidate_votes"] = 1;
         $dictionary["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
@@ -339,7 +339,7 @@ function LoadAdminVotes(){
 	StartTimer("LoadAdminVotes");
 
 	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
-	
+
 	$sql = "
 		SELECT v.vote_subject_username, v.vote_type
 		FROM admin_vote v, user u
@@ -348,7 +348,7 @@ function LoadAdminVotes(){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	/*
 	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
 		unset($dictionary["admin_candidates"][$i]["is_sponsored"]);
@@ -399,7 +399,7 @@ function GetPollVotesOfUserFormatted($username){
 	global $dbConn;
 	AddActionLog("GetPollVotesOfUserFormatted");
 	StartTimer("GetPollVotesOfUserFormatted");
-	
+
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
 		SELECT poll.poll_question, poll_option.option_poll_text, poll_vote.*
@@ -410,16 +410,16 @@ function GetPollVotesOfUserFormatted($username){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	StopTimer("GetPollVotesOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data)); 
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 function GetSatisfactionVotesOfUserFormatted($username){
 	global $dbConn;
 	AddActionLog("GetSatisfactionVotesOfUserFormatted");
 	StartTimer("GetSatisfactionVotesOfUserFormatted");
-	
+
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
 		SELECT *
@@ -428,16 +428,16 @@ function GetSatisfactionVotesOfUserFormatted($username){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	StopTimer("GetSatisfactionVotesOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data)); 
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 function GetAdminVotesCastByUserFormatted($username){
 	global $dbConn;
 	AddActionLog("GetAdminVotesCastByUserFormatted");
 	StartTimer("GetAdminVotesCastByUserFormatted");
-	
+
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
 		SELECT *
@@ -446,16 +446,16 @@ function GetAdminVotesCastByUserFormatted($username){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	StopTimer("GetAdminVotesCastByUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data)); 
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 function GetAdminVotesForSubjectUserFormatted($username){
 	global $dbConn;
 	AddActionLog("GetAdminVotesForSubjectUserFormatted");
 	StartTimer("GetAdminVotesForSubjectUserFormatted");
-	
+
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
         SELECT vote_id, vote_datetime, 'redacted' AS vote_voter_username, vote_subject_username, 'redacted' AS vote_type
@@ -464,9 +464,9 @@ function GetAdminVotesForSubjectUserFormatted($username){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	StopTimer("GetAdminVotesForSubjectUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data)); 
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 

@@ -40,8 +40,8 @@ function UnbanTheme($unbannedTheme){
 	$sql = "UPDATE theme SET theme_banned = 0 WHERE theme_banned = 1 AND theme_text = '$clean_unbannedTheme'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-    
-    AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", ""); 
+
+    AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "");
 
 	LoadThemes();
 

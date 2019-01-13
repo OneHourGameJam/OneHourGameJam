@@ -1,22 +1,22 @@
-body{
-    background-color: #202020;
-    color: white;
-}
-.panel-body{
-    background-color: #383838;
-    border-color: #7B8991;
-}
-
-.jamContent{
-    background-color: #383838;
-    border-color: #7B8991;
-}
-
-.panel-info>.panel-heading{
-    background-color: #576065;
-    color: #D8F2FF;
-    border-color: #7B8991;
-}
+body{
+    background-color: #202020;
+    color: white;
+}
+.panel-body{
+    background-color: #383838;
+    border-color: #7B8991;
+}
+
+.jamContent{
+    background-color: #383838;
+    border-color: #7B8991;
+}
+
+.panel-info>.panel-heading{
+    background-color: #576065;
+    color: #D8F2FF;
+    border-color: #7B8991;
+}
 
 .panel-info>.jamNotDeleted{
     background-color: #576065;
@@ -29,10 +29,10 @@ body{
 .panel-info>.chart-container{
     background-color: #383838;
 }
-
-.panel{
-    border-color: #7B8991;
-}
+
+.panel{
+    border-color: #7B8991;
+}
 
 .theme-old{
 		background-color: #424242;
@@ -42,43 +42,43 @@ body{
 		background-color: #7E4B4B;
 }
 
-a{
-    color: #76B2E5;
-}
-.a:visited{
-    color: #76B2E5;
-}
-
-.a:link{
-    color: #76B2E5;
-}
-
-a:hover{
-    color: #99CAF4;
-}
-.a:active{
-    color: #99CAF4;
-}
-
-.form-control{
-    background-color: #606060;
-    color: white;
-}
+a{
+    color: #76B2E5;
+}
+.a:visited{
+    color: #76B2E5;
+}
+
+.a:link{
+    color: #76B2E5;
+}
+
+a:hover{
+    color: #99CAF4;
+}
+.a:active{
+    color: #99CAF4;
+}
+
+.form-control{
+    background-color: #606060;
+    color: white;
+}
 
 .form-control[disabled]{
     background-color: #333333;
     color: #777777;
 }
-
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
-    background-color: #606060;
-    color: white;
-}
-
-.btn-default{
-    background-color: #606060;
-    color: white;
-}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+    background-color: #606060;
+    color: white;
+}
+
+.btn-default{
+    background-color: #606060;
+    color: white;
+}
 
 .btn-success{
     background-color: #29a329;
@@ -94,16 +94,16 @@ a:hover{
 	 background-color: #ac2925;
    border-color: #ac2925;
 }
-
-.authorPageEntry{
-    background-color: #484848;
-}
-
-.trumbowyg{
-    background-color: #606060;
-    color: white;
-}
-
-.trumbowyg-button-pane{
-    background-color: #7B8991;
+
+.authorPageEntry{
+    background-color: #484848;
+}
+
+.trumbowyg{
+    background-color: #606060;
+    color: white;
+}
+
+.trumbowyg-button-pane{
+    background-color: #7B8991;
 }

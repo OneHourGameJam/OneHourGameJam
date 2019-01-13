@@ -5,28 +5,28 @@
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
 	global $users;
-	
+
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
-	
+
 	//Check username length
 	if(strlen($username) < 2 || strlen($username) > 20){
 		AddDataWarning("username must be between 2 and 20 characters", false);
 		return;
 	}
-	
+
 	//Check password length
 	if(strlen($password) < 8){
 		AddDataWarning("password must be at least 8 characters long", false);
 		return;
 	}
-	
+
 	//Check password length
 	if(strlen($password) > 128){
 		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
 		return;
 	}
-	
+
 	if(isset($users[$username])){
 		//User is registered already, log them in
 		LogInUser($username, $password);
@@ -40,33 +40,33 @@ function LogInOrRegister($username, $password){
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
 	global $users, $dbConn, $ip, $userAgent;
-	
+
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
-	
+
 	//Check username length
 	if(strlen($username) < 2 || strlen($username) > 20){
 		AddDataWarning("username must be between 2 and 20 characters", false);
 		return;
 	}
-	
+
 	//Check password length
 	if(strlen($password) < 8){
 		AddDataWarning("password must be at least 8 characters long", false);
 		return;
 	}
-	
+
 	//Check password length
 	if(strlen($password) > 128){
 		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
 		return;
 	}
-	
+
 	$userSalt = GenerateSalt();
 	$userPasswordIterations = intval(rand(10000, 20000));
 	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
 	$admin = (count($users) == 0) ? 1 : 0;
-	
+
 	if(isset($users[$username])){
 		AddDataWarning("Username already registered", false);
 		return;
@@ -76,11 +76,11 @@ function RegisterUser($username, $password){
 		$newUser["password_hash"] = $passwordHash;
 		$newUser["password_iterations"] = $userPasswordIterations;
 		$newUser["admin"] = $admin;
-		
+
 		$users[$username] = $newUser;
-		
+
 		$usernameClean = mysqli_real_escape_string($dbConn, $username);
-		
+
 		$sql = "
 			INSERT INTO user
 			(user_id,
@@ -117,7 +117,7 @@ function RegisterUser($username, $password){
 		$sql = "";
 
 	}
-	
+
 	$users = LoadUsers();
 	LogInUser($username, $password);
 }

@@ -2,16 +2,16 @@
 
 function AddMessage($type, $title, $body, $bounceToIndex){
 	global $warnings, $dictionary, $page;
-	
+
 	$newWarning = Array();
-	
+
 	$newWarning["warning_type"] = $type;
 	$newWarning["warning_title"] = $title;
 	$newWarning["warning_body"] = $body;
-	
+
 	$warnings[] = $newWarning;
 	$dictionary["warnings"][] = $newWarning;
-	
+
 	if($bounceToIndex){
 		$page = "main";
 	}

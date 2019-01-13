@@ -26,4 +26,4 @@ if(IsAdmin()){
     LoadConfig(); //reload config
 }
 
-?> 
+?>

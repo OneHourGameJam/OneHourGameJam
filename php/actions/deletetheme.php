@@ -40,7 +40,7 @@ function RemoveTheme($removedTheme){
 	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-    
+
     AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "");
 
 	LoadThemes();

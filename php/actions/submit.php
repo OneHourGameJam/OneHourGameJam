@@ -7,7 +7,7 @@
 //Function also authorizes the user (must be logged in)
 function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $games;
-	
+
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
 	$gameURLWeb = trim($gameURLWeb);
@@ -26,13 +26,13 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
-	
+
 	//Validate game name
 	if(strlen($gameName) < 1){
 		AddDataWarning("Game name not provided", false);
 		return;
 	}
-	
+
 	$urlValid = FALSE;
 	//Validate that at least one of the provided game URLs is valid
 	$gameURL = SanitizeURL($gameURL);
@@ -43,35 +43,35 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$gameURLiOS = SanitizeURL($gameURLiOS);
 	$gameURLAndroid = SanitizeURL($gameURLAndroid);
 	$gameURLSource = SanitizeURL($gameURLSource);
-	
+
 	if($gameURL || $gameURLWeb || $gameURLWin || $gameURLMac || $gameURLLinux || $gameURLiOS || $gameURLAndroid){
 		$urlValid = TRUE;
 	}
-	
+
 	//Did at least one url pass validation?
 	if($urlValid == FALSE){
 		AddDataWarning("Invalid game url", false);
 		return;
 	}
-	
+
 	//Validate description
 	if(strlen($description) <= 0){
 		AddDataWarning("Invalid description", false);
 		return;
 	}
-	
+
 	//Check that a jam exists
 	if (!is_int($jam_number)) {
 		AddDataWarning('Invalid jam number', false);
 		return;
 	}
-	
+
 	$jam = GetJamByNumber($jams, $jam_number);
 	if($jam == null || $jam["jam_number"] == 0){
 		AddInternalDataError("No jam to submit to", false);
 		return;
 	}
-	
+
 	if(count($jams) == 0){
 		AddInternalDataError("No jam to submit to", false);
 		return;
@@ -83,7 +83,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		return;
 	}
 	$color = $jam["colors"][$jamColorNumber];
-	
+
 	//Upload screenshot
 	$jam_folder = "data/jams/jam_$jam_number";
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
@@ -91,7 +91,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		$imageFileType = strtolower(pathinfo($_FILES["screenshotfile"]["name"], PATHINFO_EXTENSION));
 		$target_file = $jam_folder . "/".$loggedInUser["username"]."." . $imageFileType;
 		$check = getimagesize($_FILES["screenshotfile"]["tmp_name"]);
-		
+
 		if($check !== false) {
 			$uploadPass = 1;
 		} else {
@@ -99,20 +99,20 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			return;
 			$uploadPass = 0;
 		}
-		
+
 		if ($_FILES["screenshotfile"]["size"] > 5000000) {
 			AddDataWarning("Uploaded screenshot is too big (max 5MB)", false);
 			return;
 			$uploadPass = 0;
 		}
-		
+
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 		&& $imageFileType != "gif" ) {
 			AddDataWarning("Uploaded screenshot is not jpeg, png or gif", false);
 			return;
 			$uploadPass = 0;
 		}
-		
+
 		if($uploadPass == 1){
 			if(!file_exists($jam_folder)){
 				mkdir($jam_folder);
@@ -122,12 +122,12 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			$screenshotURL = $target_file;
 		}
 	}
-	
+
 	//Default screenshot URL
 	if($screenshotURL == ""){
 		$screenshotURL = "logo.png";
 	}
-	
+
 	//Create or update entry
 	$entryUpdated = false;
 	foreach($games as $i => $game){
@@ -142,7 +142,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		if($game["author"] != $loggedInUser["username"]){
 			continue;
 		}
-		
+
 		//Updating existing entry
 		$existingScreenshot = $game["screenshot_url"];
 		if($screenshotURL == "logo.png"){
@@ -181,7 +181,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			entry_screenshot_url = '$escapedScreenshotURL',
 			entry_description = '$escapedDescription',
 			entry_color = '$escaped_color'
-		WHERE 
+		WHERE
 			entry_author = '$escapedAuthorName'
 		AND entry_jam_number = $escaped_jamNumber
 		AND entry_deleted = 0;
@@ -197,7 +197,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 	if(!$entryUpdated){
 		$currentJamData = GetCurrentJamNumberAndID();
-		
+
 		if ($jam_number != $currentJamData["NUMBER"]) {
 			AddDataWarning('Cannot make a new submission to a past jam', false);
 			return;
@@ -220,7 +220,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		$escaped_gameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 		$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 		$escaped_color = mysqli_real_escape_string($dbConn, $color);
-		
+
 		$sql = "
 			INSERT INTO entry
 			(entry_id,

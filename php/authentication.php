@@ -18,7 +18,7 @@ function HashPassword($password, $salt, $iterations){
 	StartTimer("HashPassword");
 	$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "";
 	$pswrd = $pepper.$password.$salt;
-	
+
 	//Check that we have sufficient iterations for password generation.
 	if($iterations < 100){
 		AddInternalDataError("Insufficient iterations for password generation.", false);
@@ -29,7 +29,7 @@ function HashPassword($password, $salt, $iterations){
 		StopTimer("HashPassword");
 		return;
 	}
-	
+
 	for($i = 0; $i < $iterations; $i++){
 		$pswrd = hash("sha256", $pswrd);
 	}
@@ -82,7 +82,7 @@ function IsLoggedIn($force = FALSE){
 	$sessionID = "".$_COOKIE["sessionID"];
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
 	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
-        
+
     $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
 
 	$sql = "
@@ -113,7 +113,7 @@ function IsLoggedIn($force = FALSE){
 		";
 		$data = mysqli_query($dbConn, $sql);
         $sql = "";
-        
+
         $cleanUserId = mysqli_real_escape_string($dbConn, $userID);
         $cleanIp = mysqli_real_escape_string($dbConn, $ip);
         $cleanUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
@@ -151,7 +151,7 @@ function IsAdmin(){
 		StopTimer("IsAdmin");
 		return false;
 	}
-	
+
 	if($loggedInUser["admin"] != 0){
 		StopTimer("IsAdmin");
 		return true;
@@ -182,7 +182,7 @@ function LoadBio($user) {
 
 function GetUsersOfUserFormatted($username){
 	global $dbConn;
-	
+
 	AddActionLog("GetUsersOfUserFormatted");
 	StartTimer("GetUsersOfUserFormatted");
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);

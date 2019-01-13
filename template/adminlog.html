@@ -1,32 +1,32 @@
-<p>
-	<h3>Admin Log</h3>
-</p>
-<p>
-	This page shows the administration log
-</p>
-
-<div class="col-md-10">
-     <div class='panel-body jamContent' id='entries{{jam_number}}'>
-         Click on a column header to sort.
-         <table class="table sortable" id="authortable">
-             <tr style='cursor: pointer;'>
-                 <th>ID</th>
-                 <th>Time</th>
-                 <th>Admin Username</th>
-                 <th>Subject Username</th>
-                 <th>Log Type</th>
-                 <th>Log Content</th>
-             </tr>
-             {{#adminlog}}
-                 <tr>
-                     <td>{{id}}</td>
-                     <td>{{datetime}}</td>
-                     <td>{{admin_username}}</td>
-                     <td>{{subject_username}}</td>
-                     <td>{{log_type}}</td>
-                     <td>{{log_content}}</td>
-                 </tr>
-             {{/adminlog}}
-         </table>
-     </div>
+<p>
+	<h3>Admin Log</h3>
+</p>
+<p>
+	This page shows the administration log
+</p>
+
+<div class="col-md-10">
+     <div class='panel-body jamContent' id='entries{{jam_number}}'>
+         Click on a column header to sort.
+         <table class="table sortable" id="authortable">
+             <tr style='cursor: pointer;'>
+                 <th>ID</th>
+                 <th>Time</th>
+                 <th>Admin Username</th>
+                 <th>Subject Username</th>
+                 <th>Log Type</th>
+                 <th>Log Content</th>
+             </tr>
+             {{#adminlog}}
+                 <tr>
+                     <td>{{id}}</td>
+                     <td>{{datetime}}</td>
+                     <td>{{admin_username}}</td>
+                     <td>{{subject_username}}</td>
+                     <td>{{log_type}}</td>
+                     <td>{{log_content}}</td>
+                 </tr>
+             {{/adminlog}}
+         </table>
+     </div>
  </div>

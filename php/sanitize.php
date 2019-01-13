@@ -13,20 +13,20 @@ function SanitizeURL($url) {
 		// ERROR: Expected URL in UTF-8 encoding.
 		return false;
 	}
-	
+
 	// Step 1. Trim whitespace.
 	$url = trim($url);
-	
+
 	if(!$url){
 		return false;
 	}
-	
+
 	// Step 2. Confirm that it's a valid URL (i.e. has a scheme).
 	$protocols = Array(
 		// Standard URLs (scheme://path/?query).
 		'http', 'https'
 	);
-	
+
 	// NOTE: parse_url isn't multibyte aware, so you should only rely on scheme and the existence of other members.
 	$parsed = parse_url($url);
 	$protocol = false;
@@ -45,16 +45,16 @@ function SanitizeURL($url) {
 			$protocol = 'http';
 		}
 	}
-	
+
 	if($protocol === false){
 		// ERROR: Unknown URL scheme.
 		return false;
 	}
 	// We now know the protocol. It will always be lower case.
-	
+
 	// Step 3. Escape URL.
 	$url = htmlspecialchars($url, ENT_QUOTES | ENT_HTML5, 'UTF-8', false);
-	
+
 	return $url;
 }
 

@@ -548,6 +548,7 @@ if($page == "jam")
 
 StopTimer("index.php");
 
+
 if(IsAdmin()){
 	print_r($actionLog);
 	print "<br><br>";

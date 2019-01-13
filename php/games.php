@@ -1,10 +1,10 @@
 <?php
 
 function LoadGames(){
-	global $dbConn;	
+	global $dbConn;
 	AddActionLog("LoadGames");
 	StartTimer("LoadGames");
-	
+
 	$games = Array();
 
 	$sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author, entry_url, entry_url_web, entry_url_windows, entry_url_linux, entry_url_mac, entry_url, entry_url_android, entry_url_source, entry_screenshot_url, entry_color, entry_deleted
@@ -87,7 +87,7 @@ function RenderGame(&$game, &$jams, &$users){
 	if($game["entry_deleted"] == 1){
 		$gameData["entry_deleted"] = $game["entry_deleted"];
 	}
-	
+
 	//Entry color
 	$gameData["color"] = "#".$game["color"];
 	$gameData["color256_red"] = hexdec(substr($game["color"], 0, 2));
@@ -98,7 +98,7 @@ function RenderGame(&$game, &$jams, &$users){
 
 	$gameData["jam_number"] = $jamData["jam_number"];
 	$gameData["jam_theme"] = $jamData["theme"];
-	
+
 	//Entry author
 	$author = $gameData["author"];
 	$author_display = $author;
@@ -108,7 +108,7 @@ function RenderGame(&$game, &$jams, &$users){
 	$gameData["author_display"] = $author_display;
 	$gameData["author"] = $author;
 	$gameData["author_url_encoded"] = urlencode($author);
-	
+
 	if($gameData["url"] != ""){$gameData["has_url"] = 1;}
 	if($gameData["url_web"] != ""){$gameData["has_url_web"] = 1;}
 	if($gameData["url_windows"] != ""){$gameData["has_url_windows"] = 1;}
@@ -117,7 +117,7 @@ function RenderGame(&$game, &$jams, &$users){
 	if($gameData["url_ios"] != ""){$gameData["has_url_ios"] = 1;}
 	if($gameData["url_android"] != ""){$gameData["has_url_android"] = 1;}
 	if($gameData["url_source"] != ""){$gameData["has_url_source"] = 1;}
-	
+
 	if($gameData["screenshot_url"] != "logo.png" &&
 	   $gameData["screenshot_url"] != ""){
 		$gameData["has_screenshot"] = 1;
@@ -130,7 +130,7 @@ function RenderGame(&$game, &$jams, &$users){
 	if(trim($gameData["description"]) != ""){
 		$gameData["has_description"] = 1;
 	}
-	
+
 	StopTimer("RenderGame");
 	return $gameData;
 }
@@ -140,16 +140,16 @@ function EntryExists($gameID){
 	global $dbConn;
 	AddActionLog("EntryExists");
 	StartTimer("EntryExists");
-	
+
 	//Validate values
 	$gameID = intval($gameID);
 	if($gameID <= 0){
 		StopTimer("EntryExists");
 		return FALSE;
 	}
-	
+
 	$escapedEntryID = mysqli_real_escape_string($dbConn, "$gameID");
-	
+
 	$sql = "
 		SELECT 1
 		FROM entry
@@ -158,7 +158,7 @@ function EntryExists($gameID){
 		";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	if(mysqli_fetch_array($data)){
 		StopTimer("EntryExists");
 		return true;
@@ -173,7 +173,7 @@ function GetEntriesOfUserFormatted($author){
 	global $dbConn;
 	AddActionLog("GetEntriesOfUserFormatted");
 	StartTimer("GetEntriesOfUserFormatted");
-	
+
 	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
 	$sql = "
 		SELECT *
@@ -182,9 +182,9 @@ function GetEntriesOfUserFormatted($author){
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
+
 	StopTimer("GetEntriesOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data)); 
+	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 ?>

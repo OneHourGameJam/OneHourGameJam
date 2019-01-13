@@ -23,7 +23,7 @@ $satisfaction = Array();
 $adminLog = Array();
 
 $nextJamTime = "";
-$ip = $_SERVER['REMOTE_ADDR']; 
+$ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
 require "Mustache/Autoloader.php";

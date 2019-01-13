@@ -14,7 +14,7 @@ function AddActionLog($logEntry){
 
 function StartTimer($timerName){
 	global $actionTimers;
-	
+
 	if(!isset($actionTimers[$timerName])){
 		$actionTimers[$timerName] = Array("totalTime" => 0, "timerRunning" => false, "lastTimestamp" => 0);
 	}
@@ -29,7 +29,7 @@ function StartTimer($timerName){
 
 function StopTimer($timerName){
 	global $actionTimers;
-	
+
 	if(!isset($actionTimers[$timerName])){
 		die("timer $timerName does not exist");
 	}
@@ -125,7 +125,7 @@ function GetNextJamDateAndTime(){
 	$now = time();
 	$interval = $suggestedDay - $now;
 	$dictionary["seconds_until_jam_suggested_time"] = $interval;
-	
+
 	StopTimer("GetNextJamDateAndTime");
 	return $suggestedDay;
 }
@@ -145,7 +145,7 @@ function GetCurrentJamNumberAndID(){
 		SELECT j.jam_id, j.jam_jam_number
 		FROM (
 			SELECT MAX(jam_id) as max_jam_id
-			FROM jam 
+			FROM jam
 			WHERE jam_start_datetime <= Now()
 			  AND jam_deleted = 0
 		) past_jams, jam j

@@ -40,7 +40,7 @@ function BanTheme($bannedTheme){
 	$sql = "UPDATE theme SET theme_banned = 1 WHERE theme_banned != 1 AND theme_text = '$clean_bannedTheme'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-    
+
     AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "");
 
 	LoadThemes();
