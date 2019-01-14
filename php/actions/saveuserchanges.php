@@ -2,7 +2,7 @@
 
 //Changes data about the logged in user
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
-	global $users, $loggedInUser, $dbConn, $actionResult;
+	global $users, $loggedInUser, $dbConn, $actionResult, $config;
 
 	$loggedInUser = IsLoggedIn();
 
@@ -14,7 +14,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
 	}
 
 	//Validate values
-	if(!$displayName || strlen($displayName) <= 0 || strlen($displayName) > 50){	//MAGIC
+	if(!$displayName || strlen($displayName) < $config["MINIMUM_DISPLAY_NAME_LENGTH"]["VALUE"] || strlen($displayName) > $config["MAXIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]){
 		$actionResult = "INVALID_DISPLAY_NAME";
 		AddDataWarning("Display name must be between 0 and 50 characters long", false);
 		return;

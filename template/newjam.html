@@ -20,7 +20,7 @@
 
 			<label for="jamcolors">Number of Colours</label>
 			<div class="slidecontainer">
-				<input type="number" min="1" max="16" value="{{CONFIG.VALUES.DEFAULT_NUMBER_OF_COLORS}}" class="form-control" id="NumberOfColors" onchange="UpdateNumberOfColors();">
+				<input type="number" min="1" max="{{CONFIG.VALUES.MAX_COLORS_FOR_JAM}}" value="{{CONFIG.VALUES.DEFAULT_NUMBER_OF_COLORS}}" class="form-control" id="NumberOfColors" onchange="UpdateNumberOfColors();">
 			</div>
 
 			<label for="jamcolors">Saturation</label>

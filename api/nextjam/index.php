@@ -7,7 +7,7 @@ include_once("php/config.php");
 $config = LoadConfig();
 
 //Number of minutes after jam to be considered active.
-$jamDurationMinutes = 60;
+$jamDurationMinutes = $config["JAM_DURATION"]["VALUE"];
 
 $sql = "
 	SELECT jam_jam_number, jam_theme, jam_start_datetime, UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(jam_start_datetime) - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff

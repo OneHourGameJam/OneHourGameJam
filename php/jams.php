@@ -178,14 +178,17 @@ function RenderJams(&$jams, &$config, &$games, &$users, $loggedInUser){
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
 function CheckNextJamSchedule(){
-	global $themes, $jams;
+	global $themes, $jams, $config;
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule");
 
 	StopTimer("CheckNextJamSchedule");
-	return;
 
-	$autoScheduleThreshold = 2 * 60 * 60;
+	if($config["JAM_AUTO_SCHEDULER_ENABLED"]["VALUE"] == 0){
+		return;
+	}
+
+	$autoScheduleThreshold = $config["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]["VALUE"] * 60;
 
 	$suggestedNextJamTime = GetNextJamDateAndTime();
 	$now = time();
@@ -241,11 +244,11 @@ function CheckNextJamSchedule(){
 //Selects a random theme (or "" if none can be selected) by calculating the difference between positive and negative votes and
 //selecting a proportional random theme by this difference
 function SelectRandomThemeByVoteDifference(){
-	global $themes;
+	global $themes, $config;
 	AddActionLog("SelectRandomThemeByVoteDifference");
 	StartTimer("SelectRandomThemeByVoteDifference");
 
-	$minimumVotes = 10;
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 
 	$selectedTheme = "";
 
@@ -304,11 +307,11 @@ function SelectRandomThemeByVoteDifference(){
 
 //Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
 function SelectRandomThemeByPopularity(){
-	global $themes;
+	global $themes, $config;
 	AddActionLog("SelectRandomThemeByPopularity");
 	StartTimer("SelectRandomThemeByPopularity");
 
-	$minimumVotes = 10;
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 
 	$selectedTheme = "";
 
@@ -370,8 +373,6 @@ function SelectRandomTheme(){
 	global $themes;
 	AddActionLog("SelectRandomTheme");
 	StartTimer("SelectRandomTheme");
-
-	$minimumVotes = 10;
 
 	$selectedTheme = "";
 

@@ -258,10 +258,10 @@ function GetThemeVotesOfUserFormatted($username){
 }
 
 function CalculateThemeSelectionProbabilityByVoteDifference(){
-	global $themes;
+	global $themes, $config;
 	AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 	StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
-	$minimumVotes = 10;
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 
 	$selectedTheme = "";
 
@@ -320,10 +320,10 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 }
 
 function CalculateThemeSelectionProbabilityByPopularity(){
-	global $themes;
+	global $themes, $config;
 	AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 	StartTimer("CalculateThemeSelectionProbabilityByPopularity");
-	$minimumVotes = 10;
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 	$totalPopularity = 0;
 
 	$selectedTheme = "";

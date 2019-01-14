@@ -8,10 +8,6 @@ function GenerateSalt(){
 
 //Hashes the given password and salt the number of iterations. Also uses the
 //whole-site salt (called pepper), as defined in config.
-//There is a minimum and maximum number of iterations for security and performance
-//reasons, set to 100 < iterations < 100k. We suggest that passwords and session IDs
-//are hashed at least 10k times
-//TODO: Move min and max iterations to config
 function HashPassword($password, $salt, $iterations){
 	global $config;
 	AddActionLog("HashPassword");
@@ -20,12 +16,9 @@ function HashPassword($password, $salt, $iterations){
 	$pswrd = $pepper.$password.$salt;
 
 	//Check that we have sufficient iterations for password generation.
-	if($iterations < 100){
-		AddInternalDataError("Insufficient iterations for password generation.", false);
-		StopTimer("HashPassword");
-		return;
-	}else if($iterations > 100000){
-		AddInternalDataError("Too many iterations for password generation.", false);
+	
+	if(!ValidateHashingIterationNumber($iterations, $config)){
+		AddInternalDataError("Insufficient/Too many iterations for password generation.", false);
 		StopTimer("HashPassword");
 		return;
 	}
@@ -216,5 +209,45 @@ function GetSessionsOfUserFormatted($userId){
 	return ArrayToHTML(MySQLDataToArray($data));
 }
 
+function ValidatePassword($password, &$config){
+	//Check password length
+	if(strlen($password) < $config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]){
+		return false;
+	}
+	if(strlen($password) > $config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]){
+		return false;
+	}
+
+	return true;
+}
+
+function GenerateUserHashIterations(&$config){
+	$minimumHashIterations = $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"];
+	$maximumHashIterations = $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"];
+
+	return intval(rand($minimumHashIterations, $maximumHashIterations));
+}
+
+function ValidateHashingIterationNumber($iterations, &$config){
+	if($iterations < $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"]){
+		return false;
+	}
+	if($iterations > $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"]){
+		return false;
+	}
+
+	return true;
+}
+
+function ValidateUsername($username, &$config){
+	if(strlen($username) < $config["MINIMUM_USERNAME_LENGTH"]["VALUE"]){
+		return false;
+	}
+	if(strlen($username) > $config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]){
+		return false;
+	}
+
+	return true;
+}
 
 ?>

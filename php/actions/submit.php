@@ -6,7 +6,7 @@
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $games, $actionResult;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $games, $actionResult, $config;
 
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -109,7 +109,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			$uploadPass = 0;
 		}
 
-		if ($_FILES["screenshotfile"]["size"] > 5000000) {
+		if ($_FILES["screenshotfile"]["size"] > $config["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]["VALUE"]) {
 			AddDataWarning("Uploaded screenshot is too big (max 5MB)", false);
 			$actionResult = "SCREENSHOT_TOO_BIT";
 			return;

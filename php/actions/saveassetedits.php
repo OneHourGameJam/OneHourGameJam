@@ -1,7 +1,7 @@
 <?php
 
 function AddAsset($assetID, $author, $title, $description, $type){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assets, $users, $actionResult;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assets, $users, $actionResult, $config;
 
 	$assetID = trim($assetID);
 	$author = trim($author);
@@ -91,7 +91,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$uploadPass = 1;
 		$target_file = $asset_folder ."/". $asset_name;
 
-		if ($_FILES["assetfile"]["size"] > 15000000) { //MAGIC
+		if ($_FILES["assetfile"]["size"] > $config["MAX_ASSET_FILE_SIZE_IN_BYTES"]["VALUE"]) {
 			$actionResult = "UNLOADED_ASSET_TOO_BIG";
 			AddDataWarning("Uploaded asset is too big (max 15MB)", false);
 			return;

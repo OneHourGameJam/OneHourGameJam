@@ -4,28 +4,20 @@
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
-	global $users, $actionResult;
+	global $users, $actionResult, $config;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	//Check username length
-	if(strlen($username) < 2 || strlen($username) > 20){
-		AddDataWarning("username must be between 2 and 20 characters", false);
+	if(!ValidateUsername($username, $config)){
+		$actionResult = "INVALID_USERNAME_LENGTH";
+		AddDataWarning("username must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
-	//Check password length
-	if(strlen($password) < 8){
-		$actionResult = "PASSWORD_TOO_SHORT";
-		AddDataWarning("password must be at least 8 characters long", false);
-		return;
-	}
-
-	//Check password length
-	if(strlen($password) > 128){
-		$actionResult = "PASSWORD_TOO_LONG";
-		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
+	if(!ValidatePassword($password, $config)){
+		$actionResult = "INVALID_PASSWORD_LENGTH";
+		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
@@ -41,41 +33,25 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $users, $dbConn, $ip, $userAgent, $actionResult;
+	global $users, $dbConn, $ip, $userAgent, $actionResult,  $config;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	//Check username length
-	if(strlen($username) < 2){	//MAGIC
-		$actionResult = "USERNAME_TOO_SHORT";
-		AddDataWarning("username must be between 2 and 20 characters", false);
+	if(!ValidateUsername($username, $config)){
+		$actionResult = "INVALID_USERNAME_LENGTH";
+		AddDataWarning("username must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
-	//Check username length
-	if(strlen($username) > 20){	//MAGIC
-		$actionResult = "USERNAME_TOO_LONG";
-		AddDataWarning("username must be between 2 and 20 characters", false);
-		return;
-	}
-
-	//Check password length
-	if(strlen($password) < 8){	//MAGIC
-		$actionResult = "PASSWORD_TOO_SHORT";
-		AddDataWarning("password must be at least 8 characters long", false);
-		return;
-	}
-
-	//Check password length
-	if(strlen($password) > 128){	//MAGIC
-		$actionResult = "PASSWORD_TOO_LONG";
-		AddDataWarning("Okay, okay... okay... No! That's long enough! 128 character max password length is enough! Please, you're making me cry! ;_;", false);
+	if(!ValidatePassword($password, $config)){
+		$actionResult = "INVALID_PASSWORD_LENGTH";
+		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	$userSalt = GenerateSalt();
-	$userPasswordIterations = intval(rand(10000, 20000));
+	$userPasswordIterations = GenerateUserHashIterations($config);
 	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
 	$admin = (count($users) == 0) ? 1 : 0;
 
@@ -145,17 +121,15 @@ function LogInUser($username, $password){
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	//Check username length
-	if(strlen($username) < 2){	//MAGIC
-		$actionResult = "USERNAME_TOO_SHORT";
-		AddDataWarning("username must be between 2 and 20 characters", false);
+	if(!ValidateUsername($username, $config)){
+		$actionResult = "INVALID_USERNAME_LENGTH";
+		AddDataWarning("username must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
-	//Check username length
-	if(strlen($username) > 20){	//MAGIC
-		$actionResult = "USERNAME_TOO_LONG";
-		AddDataWarning("username must be between 2 and 20 characters", false);
+	if(!ValidatePassword($password, $config)){
+		$actionResult = "INVALID_PASSWORD_LENGTH";
+		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
@@ -177,7 +151,8 @@ function LogInUser($username, $password){
 		$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
 		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
 
-		setcookie("sessionID", $sessionID, time()+60*60*24*30);
+		$daysToKeepLoggedIn = $config["DAYS_TO_KEEP_LOGGED_IN"]["VALUE"];
+		setcookie("sessionID", $sessionID, time()+60*60*$daysToKeepLoggedIn);
 		$_COOKIE["sessionID"] = $sessionID;
 
 		$sql = "

@@ -94,10 +94,8 @@ $actions = Array(
 		"ACTION_RESULT" => Array(
 			"SUCCESS" => Array("REDIRECT_URL" => "?page=main"),
 			"REGISTRATION_SUCCESS" => Array("REDIRECT_URL" => "?page=login"),
-			"PASSWORD_TOO_SHORT" => Array("REDIRECT_URL" => "?page=login"),
-			"PASSWORD_TOO_LONG" => Array("REDIRECT_URL" => "?page=login"),
-			"USERNAME_TOO_SHORT" => Array("REDIRECT_URL" => "?page=login"),
-			"USERNAME_TOO_LONG" => Array("REDIRECT_URL" => "?page=login"),
+			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=login"),
+			"INVALID_USERNAME_LENGTH" => Array("REDIRECT_URL" => "?page=login"),
 			"USERNAME_ALREADY_REGISTERED" => Array("REDIRECT_URL" => "?page=login"),
 			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=login"),
 			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=login"),
@@ -242,8 +240,7 @@ $actions = Array(
 		"ACTION_RESULT" => Array(
 			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers"),
 			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers"),
-			"PASSWORD_TOO_LONG" => Array("REDIRECT_URL" => "?page=editusers"),
-			"PASSWORD_TOO_SHORT" => Array("REDIRECT_URL" => "?page=editusers"),
+			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=editusers"),
 			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=editusers"),
 			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
 		)
@@ -255,8 +252,7 @@ $actions = Array(
 		"ACTION_RESULT" => Array(
 			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings"),
 			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"PASSWORD_TOO_LONG" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"PASSWORD_TOO_SHORT" => Array("REDIRECT_URL" => "?page=usersettings"),
+			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=usersettings"),
 			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=usersettings"),
 			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=usersettings"),
 			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),

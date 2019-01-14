@@ -137,7 +137,7 @@ function VerifyConfig($config) {
 }
 
 
-// Actually updates the config. Doesn't check auth.
+// Actually updates the config
 function UpdateConfig($config, $key, $value, $userID) {
 	global $dbConn;
 

@@ -2,7 +2,7 @@
 
 //Changes the logged in user's password if the old one matches.
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
-	global $users, $loggedInUser, $dbConn, $actionResult;
+	global $users, $loggedInUser, $dbConn, $actionResult, $config;
 
 	$loggedInUser = IsLoggedIn();
 
@@ -22,17 +22,9 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	}
 	$password = $newPassword1;
 
-	//Check password length
-	if(strlen($password) < 8){
-		$actionResult = "PASSWORD_TOO_SHORT";
-		AddDataWarning("password must be longer than 8 characters", false);
-		return;
-	}
-
-	//Check password length
-	if(strlen($password) > 128){	//MAGIC
-		$actionResult = "PASSWORD_TOO_LONG";
-		AddDataWarning("password must be shorter than 128 characters", false);
+	if(!ValidatePassword($password, $config)){
+		$actionResult = "INVALID_PASSWORD_LENGTH";
+		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
@@ -56,7 +48,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 
 	//Generate new salt, number of iterations and hashed password.
 	$newUserSalt = GenerateSalt();
-	$newUserPasswordIterations = intval(rand(10000, 20000));
+	$newUserPasswordIterations = GenerateUserHashIterations($config);
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations);
 
 	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;

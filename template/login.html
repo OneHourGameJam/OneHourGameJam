@@ -5,11 +5,11 @@
 	<form method='post'>
 		<div class="form-group">
 			<label for="username">Username</label>
-			<input type="text" class="form-control" id="username" name='un' placeholder="Username" minlength='2' maxlength='20'>
+			<input type="text" class="form-control" id="username" name='un' placeholder="Username" minlength='{{{CONFIG.VALUES.MINIMUM_USERNAME_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_USERNAME_LENGTH}}}'>
 		</div>
 		<div class="form-group">
 			<label for="password">Password</label>
-			<input type="password" class="form-control" id="password" name='pw' placeholder="Password" minlength='8'>
+			<input type="password" class="form-control" id="password" name='pw' placeholder="Password" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}'>
 		</div>
 		<button type="submit" name='action' value='login' class="btn btn-default">Log in / register</button>
 	</form>

@@ -26,7 +26,7 @@
 
 					<div class="form-group">
 						<label for="screenshotfile">Screenshot / Icon (Change)</label>
-						<br />Square icons work best. Supported formats: png, jpg, gif (up to 5MB)
+						<br />Square icons work best. Supported formats: png, jpg, gif (up to {{CONFIG.VALUES.MAX_SCREENSHOT_FILE_SIZE_IN_BYTES}} Bytes)
 						<input type="file" class="form-control" id="screenshotfile" name='screenshotfile' placeholder="Screenshot file" value="{{user_entry_screenshot}}">
 					</div>
 					<div class="form-group">
