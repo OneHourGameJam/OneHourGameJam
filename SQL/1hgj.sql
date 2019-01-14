@@ -577,7 +577,7 @@ VALUES
 (null,Now(),'-1','DEFAULT_SATURATION','160','NEW_JAM_DEFAULTS','Default saturation (0..255)','NUMBER','[]',1,1,1),
 (null,Now(),'-1','DEFAULT_NUMBER_OF_COLORS','10','NEW_JAM_DEFAULTS','Default number of colors (0..16)','NUMBER','[]',1,1,1),
 (null,Now(),'-1','GOOGLE_ANALYTICS_CODE','','ANALYTICS','Google Analytics code for site. Will look something like this: UA-00000000-1. If blank, Google analytics code will not even be inserted.','TEXT','[]',0,0,0),
-(null,Now(),'-1','TWITTER_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitter account, appears in the left menu.','TEXT','[]',1,0,1),(55,'2018-10-24 02:29:45','-1','TWITCH_ACCOUNT','onehourgamejam','SOCIAL_MEDIA','Game Jam\'s twitch account, appears in the left menu.','TEXT','[]',1,0,1),
+(null,Now(),'-1','TWITTER_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitter account, appears in the left menu.','TEXT','[]',1,0,1),(55,'2018-10-24 02:29:45','-1','TWITCH_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitch account, appears in the left menu.','TEXT','[]',1,0,1),
 (null,Now(),'-1','IRC_ADDRESS','','SOCIAL_MEDIA','IRC address','TEXT','[]',1,0,1),
 (null,Now(),'-1','IRC_CHANNEL','','SOCIAL_MEDIA','IRC Channel','TEXT','[]',1,0,1),
 (null,Now(),'-1','IRC_CHAT_IN_BROWSER','','SOCIAL_MEDIA','IRC Chat in browser URL','TEXT','[]',1,0,1),
@@ -623,7 +623,7 @@ VALUES
 (null,Now(),'-1','DAYS_TO_KEEP_LOGGED_IN', '30', 'SECURITY', 'Number of dayts after the last visit that the user will be kept logged in', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','MAX_COLORS_FOR_JAM', '16', 'NEW_JAM_DEFAULTS', 'Maximum number of colors that will be available for each jam', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','MINIMUM_DISPLAY_NAME_LENGTH', '1', 'USERS', 'Shortest user display name', 'NUMBER', '[]', '1', '1', '1'),
-(null,Now(),'-1','MAXIMUM_DISPLAY_NAME_LENGTH', '50', 'USERS', 'Longestuser display name', 'NUMBER', '[]', '1', '1', '1'),
+(null,Now(),'-1','MAXIMUM_DISPLAY_NAME_LENGTH', '50', 'USERS', 'Longest user display name', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','MAX_SCREENSHOT_FILE_SIZE_IN_BYTES', '5000000', 'JAM_SETTINGS', 'Maximum screenshot file size in bytes', 'NUMBER', '[]', '0', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM', '120', 'JAM_SETTINGS', 'How many minutes before the next jam should the jam autoscheduler schedule a jam?', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_ENABLED', '0', 'JAM_SETTINGS', 'Should the jam autoscheduler automatically schedule jams?', 'ENUM', '[{\"VALUE\":0,\"TEXT\":\"No\"},{\"VALUE\":1,\"TEXT\":\"Yes\"}]', '1', '1', '1');
