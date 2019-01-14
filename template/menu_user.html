@@ -10,7 +10,9 @@
 	<div class="panel-body">
 		<ul id='mainmenu' style='padding-left: 12px;'>
 			<li><a href='?page=main'>Home</a></li>
-			<li><b><a href='?page=submit'>Submit game</a></b></li>
+            {{#jams.current_jam}}
+			    <li><b><a href='?page=submit'>Submit game</a></b></li>
+            {{/jams.current_jam}}
 			<li><b><a href='?page=themes'>Theme voting</a></b></li>
 			<li><a href='?page=rules'>How it works</a></li>
 			<li><a href='?page=assets'>Assets</a></li>

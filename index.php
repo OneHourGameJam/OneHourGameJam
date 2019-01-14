@@ -450,6 +450,9 @@ switch($page){
 		$dictionary["viewing_author"] = RenderUser($users[$viewingAuthor], $users, $games, $jams, $config);
 	break;
 	case "submit":
+		if(!isset($dictionary["jams"]["current_jam"]["jam_number"])){
+			die("no jam to submit to");
+		}
 		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["jams"]["current_jam"]["jam_number"];
 	break;
 	case "userdata":
