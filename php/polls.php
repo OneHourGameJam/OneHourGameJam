@@ -105,8 +105,8 @@ function LoadPolls(){
 	StopTimer("LoadPolls");
 }
 
-function LoadSatisfaction(){
-	global $dbConn, $satisfaction, $dictionary, $config;
+function LoadSatisfaction(&$config){
+	global $dbConn;
 	AddActionLog("LoadSatisfaction");
 	StartTimer("LoadSatisfaction");
 
@@ -159,54 +159,8 @@ function LoadSatisfaction(){
 		$satisfaction[$questionId]["scores"][$satisfactionScore] = $votesForScore;
 	}
 
-	/*
-	foreach($dictionary["jams_with_deleted"] as $id => $jam){
-		$jamNumber = $jam["jam_number"];
-		$dictionary["jams_with_deleted"][$id]["satisfaction"] = "No Data";
-		if(isset($satisfaction["JAM_".$jamNumber])){
-			$arrayId = "JAM_".$jamNumber;
-			$dictionary["jams_with_deleted"][$id]["satisfaction_average_score"] = $satisfaction[$arrayId]["average_score"];
-			$dictionary["jams_with_deleted"][$id]["satisfaction_submitted_scores"] = $satisfaction[$arrayId]["submitted_scores"];
-			$dictionary["jams_with_deleted"][$id]["enough_scores_to_show_satisfaction"] = $satisfaction[$arrayId]["enough_scores_to_show_satisfaction"];
-			$dictionary["jams_with_deleted"][$id]["score-5"] = $satisfaction[$arrayId]["scores"][-5];
-			$dictionary["jams_with_deleted"][$id]["score-4"] = $satisfaction[$arrayId]["scores"][-4];
-			$dictionary["jams_with_deleted"][$id]["score-3"] = $satisfaction[$arrayId]["scores"][-3];
-			$dictionary["jams_with_deleted"][$id]["score-2"] = $satisfaction[$arrayId]["scores"][-2];
-			$dictionary["jams_with_deleted"][$id]["score-1"] = $satisfaction[$arrayId]["scores"][-1];
-			$dictionary["jams_with_deleted"][$id]["score0"] = $satisfaction[$arrayId]["scores"][0];
-			$dictionary["jams_with_deleted"][$id]["score1"] = $satisfaction[$arrayId]["scores"][1];
-			$dictionary["jams_with_deleted"][$id]["score2"] = $satisfaction[$arrayId]["scores"][2];
-			$dictionary["jams_with_deleted"][$id]["score3"] = $satisfaction[$arrayId]["scores"][3];
-			$dictionary["jams_with_deleted"][$id]["score4"] = $satisfaction[$arrayId]["scores"][4];
-			$dictionary["jams_with_deleted"][$id]["score5"] = $satisfaction[$arrayId]["scores"][5];
-		}
-	}
-	*/
-
-	/*
-	foreach($dictionary["jams"] as $id => $jam){
-		$jamNumber = $jam["jam_number"];
-		$dictionary["jams"][$id]["satisfaction"] = "No Data";
-		if(isset($satisfaction["JAM_".$jamNumber])){
-			$arrayId = "JAM_".$jamNumber;
-			$dictionary["jams"][$id]["satisfaction_average_score"] = $satisfaction[$arrayId]["average_score"];
-			$dictionary["jams"][$id]["satisfaction_submitted_scores"] = $satisfaction[$arrayId]["submitted_scores"];
-			$dictionary["jams"][$id]["enough_scores_to_show_satisfaction"] = $satisfaction[$arrayId]["enough_scores_to_show_satisfaction"];
-			$dictionary["jams"][$id]["score-5"] = $satisfaction[$arrayId]["scores"][-5];
-			$dictionary["jams"][$id]["score-4"] = $satisfaction[$arrayId]["scores"][-4];
-			$dictionary["jams"][$id]["score-3"] = $satisfaction[$arrayId]["scores"][-3];
-			$dictionary["jams"][$id]["score-2"] = $satisfaction[$arrayId]["scores"][-2];
-			$dictionary["jams"][$id]["score-1"] = $satisfaction[$arrayId]["scores"][-1];
-			$dictionary["jams"][$id]["score0"] = $satisfaction[$arrayId]["scores"][0];
-			$dictionary["jams"][$id]["score1"] = $satisfaction[$arrayId]["scores"][1];
-			$dictionary["jams"][$id]["score2"] = $satisfaction[$arrayId]["scores"][2];
-			$dictionary["jams"][$id]["score3"] = $satisfaction[$arrayId]["scores"][3];
-			$dictionary["jams"][$id]["score4"] = $satisfaction[$arrayId]["scores"][4];
-			$dictionary["jams"][$id]["score5"] = $satisfaction[$arrayId]["scores"][5];
-		}
-	}
-	*/
 	StopTimer("LoadSatisfaction");
+	return $satisfaction;
 }
 
 function SubmitSatisfaction($satisfactionQuestionId, $score){

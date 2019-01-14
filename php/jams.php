@@ -46,7 +46,7 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, $loggedInUser){
+function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, &$satisfaction, $loggedInUser){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
@@ -120,17 +120,36 @@ function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, $lo
 	}else{
 		$jamData["jam_started"] = true;
 	}
+	
+	$jamData["satisfaction"] = "No Data";
+	if(isset($satisfaction["JAM_".$jamData["jam_number"]])){
+		$arrayId = "JAM_".$jamData["jam_number"];
+		$jamData["satisfaction_average_score"] = $satisfaction[$arrayId]["average_score"];
+		$jamData["satisfaction_submitted_scores"] = $satisfaction[$arrayId]["submitted_scores"];
+		$jamData["enough_scores_to_show_satisfaction"] = $satisfaction[$arrayId]["enough_scores_to_show_satisfaction"];
+		$jamData["score-5"] = $satisfaction[$arrayId]["scores"][-5];
+		$jamData["score-4"] = $satisfaction[$arrayId]["scores"][-4];
+		$jamData["score-3"] = $satisfaction[$arrayId]["scores"][-3];
+		$jamData["score-2"] = $satisfaction[$arrayId]["scores"][-2];
+		$jamData["score-1"] = $satisfaction[$arrayId]["scores"][-1];
+		$jamData["score0"] = $satisfaction[$arrayId]["scores"][0];
+		$jamData["score1"] = $satisfaction[$arrayId]["scores"][1];
+		$jamData["score2"] = $satisfaction[$arrayId]["scores"][2];
+		$jamData["score3"] = $satisfaction[$arrayId]["scores"][3];
+		$jamData["score4"] = $satisfaction[$arrayId]["scores"][4];
+		$jamData["score5"] = $satisfaction[$arrayId]["scores"][5];
+	}
 
 	StopTimer("RenderJam");
 	return $jamData;
 }
 
-function RenderSubmitJam($jam, $config, $games, $users, $loggedInUser){
+function RenderSubmitJam($jam, $config, $games, $users, &$satisfaction, $loggedInUser){
 	AddActionLog("RenderSubmitJam");
-	return RenderJam($jam, 0, $config, $games, $users, $loggedInUser);
+	return RenderJam($jam, 0, $config, $games, $users, $satisfaction,  $loggedInUser);
 }
 
-function RenderJams(&$jams, &$config, &$games, &$users, $loggedInUser){
+function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedInUser){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -146,7 +165,7 @@ function RenderJams(&$jams, &$config, &$games, &$users, $loggedInUser){
 			$nonDeletedJamCounter += 1;
 		}
 
-		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser);
+		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $satisfaction, $loggedInUser);
 
 		$now = new DateTime();
 		$datetime = new DateTime($jamData["start_time"] . " UTC");
