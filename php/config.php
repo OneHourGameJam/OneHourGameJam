@@ -13,6 +13,7 @@ $configCategorySettings = Array(
 	"ANALYTICS" => "Analytics",
 	"NEW_JAM_DEFAULTS" => "New Jam Defaults",
 	"ADMIN_SUGGESTIONS" => "Admin Suggestions",
+    "USERS" => "Users",
 );
 
 //Initializes configuration, stores it in the global $config variable.
@@ -129,7 +130,8 @@ function VerifyConfig($config) {
 	}
 
 	if (!isset($config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]) || strlen($config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]) < 1) {
-		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", rand(10000, 20000), -1);
+		$sessionPasswordIterations = GenerateUserHashIterations($config);
+		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1);
 	}
 
 	StopTimer("VerifyConfig");
@@ -137,16 +139,12 @@ function VerifyConfig($config) {
 }
 
 
-// Actually updates the config
+// Saves config to database, does not authorize to ensure VerifyConfig() continues to work
 function UpdateConfig($config, $key, $value, $userID) {
 	global $dbConn;
 
 	AddActionLog("UpdateConfig");
 	StartTimer("UpdateConfig");
-	if(!IsAdmin()){
-		StopTimer("UpdateConfig");
-		return; //Lacks permissions to make edits
-	}
 
 	if($config[$key]["VALUE"] != $value){
 		$userIDClean = mysqli_real_escape_string($dbConn, $userID);

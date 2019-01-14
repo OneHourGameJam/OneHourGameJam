@@ -7,7 +7,7 @@ function LoadGames(){
 
 	$games = Array();
 
-	$sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author, entry_url, entry_url_web, entry_url_windows, entry_url_linux, entry_url_mac, entry_url, entry_url_android, entry_url_source, entry_screenshot_url, entry_color, entry_deleted
+	$sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author, entry_url, entry_url_web, entry_url_windows, entry_url_linux, entry_url_mac, entry_url, entry_url_android, entry_url_ios, entry_url_source, entry_screenshot_url, entry_color, entry_deleted
 	 FROM entry ORDER BY entry_id DESC";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

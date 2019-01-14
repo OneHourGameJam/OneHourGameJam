@@ -269,7 +269,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
 
-		if($theme["banned"]){
+		if(isset($theme["banned"])){
 			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
 			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 			continue;

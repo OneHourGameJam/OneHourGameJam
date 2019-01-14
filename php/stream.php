@@ -40,7 +40,7 @@ function InitStream(){
 		file_put_contents("cache/twitch_stream.json", json_encode($data));
 	}
 
-	if(isset($data) && $data["stream"] != null && count($data["stream"]) > 0){
+	if(isset($data) && isset($data["stream"]) && $data["stream"] != null && count($data["stream"]) > 0){
 		$dictionary["IS_STREAM_ACTIVE"] = 1;
 		$dictionary["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]["VALUE"];
 	}
