@@ -93,6 +93,7 @@ function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, $lo
 			}
 		}
 	}
+	$jamData["entries"] = array_reverse($jamData["entries"]);
 
 	//Hide theme of not-yet-started jams
 	$now = new DateTime();
