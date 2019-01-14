@@ -2,6 +2,7 @@
 
 function InitStream(){
 	global $config, $dictionary;
+	StartTimer("InitStream");
 
 	$timeDiff = 0;
 	if(file_exists("cache/twitch_stream.json")){
@@ -45,6 +46,7 @@ function InitStream(){
 		$dictionary["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]["VALUE"];
 	}
 
+	StopTimer("InitStream");
 }
 
 ?>
