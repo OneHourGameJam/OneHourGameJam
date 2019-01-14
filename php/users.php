@@ -89,10 +89,14 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
     $currentJamData = GetCurrentJamNumberAndID();
 
     $username = $userData["username"];
+    $userData["entry_count"] = 0;
     $userData["recent_participation"] = 0;
+    $userData["first_jam_number"] = 0;
+    $userData["last_jam_number"] = 0;
 
     //Determine if this user is an author and their participation
 	StartTimer("RenderUser - foreach games");
+    $userData["entry_count"] = 0;
     foreach($games as $j => $gameData){
         if($gameData["author"] != $username){
             continue;
@@ -149,8 +153,8 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
     if($userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]["VALUE"]){
         $userData["admin_candidate_total_participation_check_pass"] = 1;
     }
-    if(	$userData["admin_candidate_recent_participation_check_pass"] &&
-        $userData["admin_candidate_total_participation_check_pass"]){
+    if(	isset($userData["admin_candidate_recent_participation_check_pass"]) &&
+    isset($userData["admin_candidate_total_participation_check_pass"])){
             $userData["system_suggestsed_admin_candidate"] = 1;
     }
 	StopTimer("RenderUser - admin candidates");

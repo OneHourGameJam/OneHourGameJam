@@ -383,7 +383,7 @@ switch($page){
 			$jamFound = false;
 			foreach($jams as $i => $jam){
 				if(intval($jam["jam_id"]) == $jamID){
-					$dictionary["editingjam"] = RenderJam($jam, 0, $config, $games, $users, $loggedInUser);
+					$dictionary["editingjam"] = RenderJam($jam, 0, $config, $games, $users, $satisfaction, $loggedInUser);
 					$jamFound = true;
 					break;
 				}
@@ -432,7 +432,7 @@ switch($page){
 				continue;
 			}
 
-			$dictionary["viewing_jam"] = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $loggedInUser);
+			$dictionary["viewing_jam"] = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $satisfaction, $loggedInUser);
 			$pass = TRUE;
 			break;
 		}
@@ -522,7 +522,7 @@ if($page == "jam")
 								die('jam not found');
 							}
 
-							$dictionary["submit_jam"] = RenderSubmitJam($jam, $config, $games, $users, $loggedInUser);
+							$dictionary["submit_jam"] = RenderSubmitJam($jam, $config, $games, $users, $satisfaction, $loggedInUser);
 							$colorNumber = rand(0, count($jam["colors"]) - 1);
 							$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
 
