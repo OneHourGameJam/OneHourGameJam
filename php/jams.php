@@ -202,9 +202,8 @@ function CheckNextJamSchedule(){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule");
 
-	StopTimer("CheckNextJamSchedule");
-
 	if($config["JAM_AUTO_SCHEDULER_ENABLED"]["VALUE"] == 0){
+		StopTimer("CheckNextJamSchedule");
 		return;
 	}
 
@@ -213,6 +212,7 @@ function CheckNextJamSchedule(){
 	$suggestedNextJamTime = GetNextJamDateAndTime();
 	$now = time();
 	$interval = $suggestedNextJamTime - $now;
+
 	$colors = "e38484|e3b684|dee384|ade384|84e38d|84e3be|84d6e3|84a4e3|9684e3|c784e3";
 
 	if($interval > 0 && $interval <= $autoScheduleThreshold){
