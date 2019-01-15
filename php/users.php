@@ -79,7 +79,7 @@ function LoadUsers(){
 	return $users;
 }
 
-function RenderUser(&$user, &$users, &$games, &$jams, &$config){
+function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$loggedInUserAdminVotes){
     global $nightmode;
 
 	AddActionLog("RenderUser");
@@ -245,6 +245,61 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
             break;
     }
     StopTimer("RenderUser - inactive admins");
+    
+    StartTimer("RenderUser - Admin Votes");
+    $userData["votes_for"] = 0;
+    $userData["votes_neutral"] = 0;
+    $userData["votes_against"] = 0;
+    foreach($adminVotes as $j => $adminVoteData){
+        if($userData["username"] == $adminVoteData["subject_username"]){
+            switch($adminVoteData["vote_type"]){
+                case "FOR":
+                    $userData["votes_for"] += 1;
+                    break;
+                case "NEUTRAL":
+                    $userData["votes_neutral"] += 1;
+                    break;
+                case "AGAINST":
+                    $userData["votes_against"] += 1;
+                    break;
+                case "SPONSOR":
+                    $userData["votes_for"] += 1;
+                    $userData["is_sponsored"] = 1;
+                    break;
+                case "VETO":
+                    $userData["votes_vetos"] += 1;
+                    $userData["is_vetoed"] = 1;
+                    break;
+            }
+        }
+    }
+    StopTimer("RenderUser - Admin Votes");
+    
+    StartTimer("RenderUser - Logged in users admin votes");
+    foreach($loggedInUserAdminVotes as $j => $adminVoteData){
+        if($userData["username"] == $adminVoteData["subject_username"]){
+            $userData["vote_type"] = $adminVoteData["vote_type"];
+
+            switch($adminVoteData["vote_type"]){
+                case "FOR":
+                    $userData["vote_type_for"] = 1;
+                    break;
+                case "NEUTRAL":
+                    $userData["vote_type_neutral"] = 1;
+                    break;
+                case "AGAINST":
+                    $userData["vote_type_against"] = 1;
+                    break;
+                case "SPONSOR":
+                    $userData["vote_type_sponsor"] = 1;
+                    break;
+                case "VETO":
+                    $userData["vote_type_veto"] = 1;
+                    break;
+            }
+        }
+    }
+    StopTimer("RenderUser - Logged in users admin votes");
 
     StartTimer("RenderUser - Finish");
     //Mark system suggested and admin-sponsored users as admin candidates
@@ -262,7 +317,7 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config){
     return $userData;
 }
 
-function RenderUsers(&$users, &$games, &$jams, &$config){
+function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedInUserAdminVotes){
 	AddActionLog("RenderUsers");
 	StartTimer("RenderUsers");
     $render = Array("LIST" => Array());
@@ -276,7 +331,7 @@ function RenderUsers(&$users, &$games, &$jams, &$config){
             $userGames = $gamesByUsername[$username];
         }
 
-        $userData = RenderUser($user, $users, $userGames, $jams, $config);
+        $userData = RenderUser($user, $users, $userGames, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
 
         if(!isset($userData["entry_count"])){
             $authorCount += 1;
@@ -284,6 +339,25 @@ function RenderUsers(&$users, &$games, &$jams, &$config){
 
         $render["LIST"][] = $userData;
     }
+    
+    
+    $missingAdminCandidateVotes = 0;
+	foreach($render["LIST"] as $i => $userRender){
+		if(!isset($userRender["is_admin_candidate"])){
+            continue;
+		}
+		if(isset($userRender["is_admin"])){
+            continue;
+		}
+		if(!isset($userRender["vote_type"])){
+            $missingAdminCandidateVotes += 1;
+        }
+    }
+
+    if($missingAdminCandidateVotes > 0){
+        $render["missing_admin_candidate_votes"] = 1;
+        $render["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
+	}
 
 	$render["all_authors_count"] = $authorCount;
 

@@ -211,10 +211,12 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 	StopTimer("SubmitSatisfaction");
 }
 
-function LoadLoggedInUsersAdminVotes(){
-	global $dbConn, $loggedInUser, $dictionary;
+function LoadLoggedInUsersAdminVotes(&$loggedInUser){
+	global $dbConn, $dictionary;
 	AddActionLog("LoadLoggedInUsersAdminVotes");
 	StartTimer("LoadLoggedInUsersAdminVotes");
+
+	$loggedInUserAdminVotes = Array();
 
 	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 
@@ -226,73 +228,25 @@ function LoadLoggedInUsersAdminVotes(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	unset($dictionary["missing_admin_candidate_votes"]);
-	unset($dictionary["missing_admin_candidate_votes_number"]);
-
-	/*
-	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
-		unset($dictionary["admin_candidates"][$i]["vote_type"]);
-		unset($dictionary["admin_candidates"][$i]["vote_type_for"]);
-		unset($dictionary["admin_candidates"][$i]["vote_type_neutral"]);
-		unset($dictionary["admin_candidates"][$i]["vote_type_against"]);
-		unset($dictionary["admin_candidates"][$i]["vote_type_sponsor"]);
-		unset($dictionary["admin_candidates"][$i]["vote_type_veto"]);
-	}
-	*/
-
 	while($info = mysqli_fetch_array($data)){
-		$voteSubjectUsername = $info["vote_subject_username"];
-		$voteType = $info["vote_type"];
+		$adminVoteData = Array();
 
-		/*
-		foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
-			if($dictUserInfo["username"] == $voteSubjectUsername){
-				$dictionary["admin_candidates"][$i]["vote_type"] = $info["vote_type"];
+		$adminVoteData["subject_username"] = $info["vote_subject_username"];
+		$adminVoteData["vote_type"] = $info["vote_type"];
 
-				switch($info["vote_type"]){
-					case "FOR":
-						$dictionary["admin_candidates"][$i]["vote_type_for"] = 1;
-						break;
-					case "NEUTRAL":
-						$dictionary["admin_candidates"][$i]["vote_type_neutral"] = 1;
-						break;
-					case "AGAINST":
-						$dictionary["admin_candidates"][$i]["vote_type_against"] = 1;
-						break;
-					case "SPONSOR":
-						$dictionary["admin_candidates"][$i]["vote_type_sponsor"] = 1;
-						break;
-					case "VETO":
-						$dictionary["admin_candidates"][$i]["vote_type_veto"] = 1;
-						break;
-				}
-			}
-		}
-		*/
+		$loggedInUserAdminVotes[] = $adminVoteData;
     }
 
-	/*
-    $missingAdminCandidateVotes = 0;
-	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
-		if(!isset($dictionary["admin_candidates"][$i]["vote_type"])){
-            $missingAdminCandidateVotes += 1;
-		}
-    }
-
-    if($missingAdminCandidateVotes > 0){
-        $dictionary["missing_admin_candidate_votes"] = 1;
-        $dictionary["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
-	}
-	*/
 	StopTimer("LoadLoggedInUsersAdminVotes");
+	return $loggedInUserAdminVotes;
 }
 
 function LoadAdminVotes(){
-	global $dbConn, $loggedInUser, $dictionary;
+	global $dbConn, $dictionary;
 	AddActionLog("LoadAdminVotes");
 	StartTimer("LoadAdminVotes");
 
-	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$adminVotes = Array();
 
 	$sql = "
 		SELECT v.vote_subject_username, v.vote_type
@@ -303,50 +257,17 @@ function LoadAdminVotes(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	/*
-	foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
-		unset($dictionary["admin_candidates"][$i]["is_sponsored"]);
-		unset($dictionary["admin_candidates"][$i]["is_vetoed"]);
-		unset($dictionary["admin_candidates"][$i]["votes_for"]);
-		unset($dictionary["admin_candidates"][$i]["votes_neutral"]);
-		unset($dictionary["admin_candidates"][$i]["votes_against"]);
-		unset($dictionary["admin_candidates"][$i]["votes_vetos"]);
-	}
-	*/
-
 	while($info = mysqli_fetch_array($data)){
-		$voteSubjectUsername = $info["vote_subject_username"];
-		$voteType = $info["vote_type"];
+		$adminVoteData = Array();
 
-		/*
-		foreach($dictionary["admin_candidates"] as $i => $dictUserInfo){
-			if($dictUserInfo["username"] == $voteSubjectUsername){
-				$dictionary["admin_candidates"][$i]["vote_type"] = $info["vote_type"];
+		$adminVoteData["subject_username"] = $info["vote_subject_username"];
+		$adminVoteData["vote_type"] = $info["vote_type"];
 
-				switch($info["vote_type"]){
-					case "FOR":
-						$dictionary["admin_candidates"][$i]["votes_for"] += 1;
-						break;
-					case "NEUTRAL":
-						$dictionary["admin_candidates"][$i]["votes_neutral"] += 1;
-						break;
-					case "AGAINST":
-						$dictionary["admin_candidates"][$i]["votes_against"] += 1;
-						break;
-					case "SPONSOR":
-						$dictionary["admin_candidates"][$i]["votes_for"] += 1;
-						$dictionary["admin_candidates"][$i]["is_sponsored"] = 1;
-						break;
-					case "VETO":
-						$dictionary["admin_candidates"][$i]["votes_vetos"] += 1;
-						$dictionary["admin_candidates"][$i]["is_vetoed"] = 1;
-						break;
-				}
-			}
-		}
-		*/
+		$adminVotes[] = $adminVoteData;
 	}
+
 	StopTimer("LoadAdminVotes");
+	return $adminVotes;
 }
 
 function GetPollVotesOfUserFormatted($username){

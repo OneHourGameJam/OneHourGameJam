@@ -20,6 +20,8 @@ $themes = Array();
 $assets = Array();
 $polls = Array();
 $satisfaction = Array();
+$adminVotes = Array();
+$loggedInUserAdminVotes = Array();
 $adminLog = Array();
 
 $nextJamTime = "";
