@@ -15,7 +15,7 @@
 				{{/jam_started}}
 			</div>
 		</div>
-		<div class='panel-body jamContent' style='background: none; background-color: #F7FBFD;' id='entries{{jam_number}}'>
+		<div class='panel-body jamContent' id='entries{{jam_number}}'>
 			<table style='width: 100%' class='table'>
 				{{#entries}}
 					{{^entry_deleted}}
@@ -25,19 +25,19 @@
 									<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
 								</td>
 							{{/has_screenshot}}
-							<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' style='background-color: #F5F5F5;'>
+							<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
 								<b><span class='entryTitle'>{{title}}</span></b><br />
 								by <a href='?page=author&author={{author}}'>{{author_display}}</a>
 							</div>
-							<td style='background-color: #F5F5F5; text-align: right; min-width: 200px;'>
-								{{#has_url_web}}<a href='#' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}
-								{{#has_url_windows}}<a href='#' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' style='width: 16px;' title='Windows'></a>{{/has_url_windows}}
-								{{#has_url_mac}}<a href='#' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' style='width: 16px;' title='Mac'></a>{{/has_url_mac}}
-								{{#has_url_linux}}<a href='#' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' style='width: 16px;' title='Linux'></a>{{/has_url_linux}}
-								{{#has_url_android}}<a href='#' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}
-								{{#has_url_ios}}<a href='#' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' style='width: 16px;' title='iOS'></a>{{/has_url_ios}}
-								{{#has_url}}<a href='#' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}
-								{{#has_url_source}}<a href='{{url_source}}' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' style='width: 16px;' title='Source'></a>{{/has_url_source}}
+							<td class='authorPageEntry' style='text-align: right;'>
+								{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
+								{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
+								{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
+								{{#has_url_linux}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
+								{{#has_url_android}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
+								{{#has_url_ios}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
+								{{#has_url}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
+								{{#has_url_source}}<a href='{{url_source}}' class='btn entryButton' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source'></a>{{/has_url_source}}
 							</td>
 						</tr>
 						<tr>

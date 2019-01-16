@@ -64,6 +64,10 @@ body{
 	border: 1px solid rgba(0,0,0,1);
 }
 
+.entry{
+    color: black;
+}
+
 .form-control{
 	border-radius: 0px;
 }
