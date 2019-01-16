@@ -28,7 +28,7 @@ $nextJamTime = "";
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
-require "Mustache/Autoloader.php";
+require __DIR__ . '/../vendor/Mustache/Autoloader.php';
 Mustache_Autoloader::register();
 $mustache = new Mustache_Engine;
 

@@ -27,21 +27,12 @@ body{
 	border-radius: 0px;
 }
 
-.panel-info>.jamNotDeleted{
-  background-color: #D9EDF7;
-}
-
-.panel-info>.jamDeleted{
-  background-color: #F7D9D9;
-}
-
 .entryScreenshot{
 	position: absolute;
 	border: solid 1px #DDDDDD;
 	transform: scale(1, 1);
 	transition: 0.3s;
 	width: 100%;
-	color: black;
 }
 .entryScreenshot.hiddenFace{
 	transform: scale(0, 1);
@@ -90,14 +81,6 @@ body{
 	text-align: center;
 }
 
-.theme-old{
-		background-color: #cccccc;
-}
-
-.theme-banned{
-		background-color: #ffcccc;
-}
-
 .wrapper {
   width: 100%;
   /* whatever width you want */
@@ -134,44 +117,44 @@ body{
 }
 
 .mediaButton{
-	width: 100px;
-	border-radius: 5px;
-	color: white;
-	text-align: center;
+	width: 100px; 
+	border-radius: 5px; 
+	color: white; 
+	text-align: center; 
 	padding: 4px 0px;
 	margin-bottom: 5px;
 }
 
 .twitterButton{
-	background-color: #1B95E0;
+	background-color: #1B95E0; 
 }
 
 .twitterButton:hover{
-	background-color: #0C7ABF;
+	background-color: #0C7ABF; 
 }
 
 .twitchButton{
-	background-color: #6441A5;
+	background-color: #6441A5; 
 }
 
 .twitchButton:hover{
-	background-color: #472B7C;
+	background-color: #472B7C; 
 }
 
 .ircButton{
-	background-color: #777777;
+	background-color: #777777; 
 }
 
 .ircButton:hover{
-	background-color: #4B4B4B;
+	background-color: #4B4B4B; 
 }
 
 .discordButton{
-	background-color: #7289DA;
+	background-color: #7289DA; 
 }
 
 .discordButton:hover{
-	background-color: #6676AE;
+	background-color: #6676AE; 
 }
 
 .authorPageEntry{

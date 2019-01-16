@@ -12,7 +12,7 @@ This file is meant to help transition your installation from the JSON file based
 <html lang="en">
 	<head>
 		<meta charset='utf-8'>
-		<script src="js/jquery.js"></script>
+		<script src="../vendor/components/jquery/jquery.js"></script>
 		<title>One hour game jam</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 

@@ -692,7 +692,7 @@ if($page == "jam")
 			?>
 		</div>
 
-		<script src="bs/js/bootstrap.min.js"></script>
+		<script src="vendor/components/Bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>
 

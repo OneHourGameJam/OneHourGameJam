@@ -3,21 +3,21 @@
 <html lang="en">
 	<head>
 		<meta charset='utf-8'>
-		<script src="js/jquery.js"></script>
+		<script src="vendor/components/jquery/jquery.js"></script>
 		<title>{{CONFIG.VALUES.JAMNAME}} - {{page_title}}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<link href="bs/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="/css/trumbowyg.css">
-		<link href="css/site.css" rel="stylesheet">
+		<link href="vendor/components/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="{{{template_path}}}css/trumbowyg.css">
+		<link href="{{{template_path}}}css/site.css" rel="stylesheet">
 		{{#NIGHT_MODE}}
-			<link href="{{{template_path}}}nightmode.css" rel="stylesheet">
+			<link href="{{{template_path}}}css/nightmode.css" rel="stylesheet">
 		{{/NIGHT_MODE}}
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
-		<script src='js/1hgj.js' type='text/javascript'></script>
-		<script src='js/sorttable.js' type='text/javascript'></script>
-		<script src='js/chart.min.js' type='text/javascript'></script>
+		<script src='{{{template_path}}}js/1hgj.js' type='text/javascript'></script>
+		<script src='vendor/components/sorttable/sorttable.js' type='text/javascript'></script>
+		<script src='vendor/components/chartjs/chart.min.js' type='text/javascript'></script>
 		{{{ANALYTICS}}}
 	</head>
 	<body>
