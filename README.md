@@ -1,6 +1,11 @@
 # OneHourGameJam
 Source code required to run your very own One hour game jam event.
 
+* Requirements
+* Installing
+* Common Tasks
+* Contributing
+
 # Requirements
 Requires a web server with PHP 5.4 or later and MySQL.
 
@@ -83,3 +88,18 @@ The simplest way to migrate is to simply copy the files from one server and past
 In order to ensure security of passwords and sessions, the site salts and peppers them, then hashes them with SHA256 between 10k and 20k times, by default. If the site takes too long to load for users, you might want to change these values to something lower. They can be found in php/authentication.php -> RegisterUser(), HashPassword() and EditUserPassword().
 
 It's also possible for the number of sessions to build up. If data/sessions.json becomes too large it may cause performance issues, consider deleting data/sessions.json if this happen. Note that this logs out all users.
+
+# Contributing
+
+You're welcome to contribute to this project whether you know how to code or not. 
+
+If you know how to code, please search the issues by technology you know:
+* [HTML / CSS](https://github.com/OneHourGameJam/OneHourGameJam/issues?q=is%3Aissue+is%3Aopen+label%3AHTML%2FCSS)
+* [PHP](https://github.com/OneHourGameJam/OneHourGameJam/issues?q=is%3Aissue+is%3Aopen+label%3APHP)
+* [JavaScript](https://github.com/OneHourGameJam/OneHourGameJam/issues?q=is%3Aissue+is%3Aopen+label%3AJavaScript)
+* [MySQL / MariaDB](https://github.com/OneHourGameJam/OneHourGameJam/issues?q=is%3Aissue+is%3Aopen+label%3AMySQL%2FMariaDB)
+
+Issues found in the [Good First Issue](https://github.com/OneHourGameJam/OneHourGameJam/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+First+Issue%22) label are probably a good place to start. The issues there tend to require less familiarity with how the project works in-depth.
+
+If you don't know how to code, that's okay. You can still offer a lot of value by reading and commenting on [Issues](https://github.com/OneHourGameJam/OneHourGameJam/issues), identifying issues which are out of date or no longer relevant, and reporting new issues - either bugs or suggestions. 
+
