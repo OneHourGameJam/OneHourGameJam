@@ -333,7 +333,7 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
 
         $userData = RenderUser($user, $users, $userGames, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
 
-        if(!isset($userData["entry_count"])){
+        if(isset($userData["entry_count"])){
             $authorCount += 1;
         }
 
