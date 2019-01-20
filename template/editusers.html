@@ -19,7 +19,7 @@
 		    {{#is_admin}}
 			    <tr>
 			    	<td><b>{{username}}</b></td>
-			    	<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
+			    	<td>{{entry_count}}</td>
 			    	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 			    	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
 			    	<td>{{recent_participation}}%</td>
@@ -82,7 +82,7 @@
                 {{^is_admin}}
 			        <tr>
 			        	<td><b>{{username}} {{#is_sponsored}}(<span style='color: green;'>Sponsored</span>){{/is_sponsored}}</b></td>
-			        	<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
+			        	<td>{{entry_count}}</td>
 			        	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 			        	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
                         <td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
@@ -151,7 +151,7 @@
             {{^is_admin}}
 			    <tr>
 			    	<td><b>{{username}}</b></td>
-			    	<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
+			    	<td>{{entry_count}}</td>
 			    	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
 			    	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
 			    	<td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>

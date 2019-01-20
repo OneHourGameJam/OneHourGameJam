@@ -89,10 +89,7 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
     $currentJamData = GetCurrentJamNumberAndID();
 
     $username = $userData["username"];
-    $userData["entry_count"] = 0;
     $userData["recent_participation"] = 0;
-    $userData["first_jam_number"] = 0;
-    $userData["last_jam_number"] = 0;
 
     //Determine if this user is an author and their participation
 	StartTimer("RenderUser - foreach games");
@@ -119,7 +116,13 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
         $userData["is_author"] = 1;
         if(!isset($userData["entry_count"])){
             $userData["entry_count"] = 0;
+        }
+        
+        if(!isset($userData["first_jam_number"])){
             $userData["first_jam_number"] = $gameData["jam_number"];
+        }
+        
+        if(!isset($userData["last_jam_number"])){
             $userData["last_jam_number"] = $gameData["jam_number"];
         }
 
