@@ -152,7 +152,7 @@ function LogInUser($username, $password){
 		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
 
 		$daysToKeepLoggedIn = $config["DAYS_TO_KEEP_LOGGED_IN"]["VALUE"];
-		setcookie("sessionID", $sessionID, time()+60*60*$daysToKeepLoggedIn);
+		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
 		$_COOKIE["sessionID"] = $sessionID;
 
 		$sql = "

@@ -474,8 +474,6 @@ switch($page){
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
 
-$dictionary["ANALYTICS"] = GetAnalyticsCode();
-
 $dictionary["page_title"] = $pageTitles[$page];
 
 if($page == "author")

@@ -13,39 +13,9 @@
 
 	//Called in site.php, before Init() is called. 
 	function BeforeInit(){
-		
-		//Redirect to new URL if viewing from old one
-		$url = strtolower($_SERVER['HTTP_HOST']);
-		$reqURI = $_SERVER["REQUEST_URI"];
-		if($url == "weekjam.com" || $url == "www.weekjam.com"){
-			header("HTTP/1.1 301 Moved Permanently"); 
-			header("Location: http://onehourgamejam.com".$reqURI);
-		}
-		
 	}
 	
 	//Called in site.php, as soon as Init() concludes. 
 	function AfterInit(){
-		
-		//Bot actions
-		if(isset($_GET["theme"]) && isset($_GET["password"])){
-			$theme = $_GET["theme"];
-			$pw = $_GET["password"];
-			if($pw == "DvyhsjRBdr218EMJJKdE"){
-				AddTheme($theme, true);
-			}
-		}
-		if(isset($_POST["theme"]) && isset($_POST["password"])){
-			$theme = $_POST["theme"];
-			$pw = $_POST["password"];
-			if($pw == "DvyhsjRBdr218EMJJKdE"){
-				AddTheme($theme, true);
-			}
-		}
-		
-	}
-	
-	//Called at the end of the <head> tag, intended to contain Analytics code.
-	function GetAnalyticsCode(){
 	}
 ?>
