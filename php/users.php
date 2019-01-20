@@ -370,11 +370,11 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
 
 function GroupGamesByUsername($games)
 {
-	$gamesByUsername = [];
+	$gamesByUsername = Array();
 	foreach($games as $i => $game){
 		$username = $game["author"];
 		if (!isset($gamesByUsername[$username])) {
-			$gamesByUsername[$username] = [];
+			$gamesByUsername[$username] = Array();
 		}
 		$gamesByUsername[$username][] = $game;
 	}

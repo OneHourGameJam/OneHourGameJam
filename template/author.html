@@ -9,11 +9,11 @@
 			{{{ viewing_author.bio }}}
 		</div>
 		<div class='panel-body jamContent'>
-			{{^entries}}
+			{{^viewing_author.entries}}
 				This user did not submit any games.
-			{{/entries}}
+			{{/viewing_author.entries}}
 			<table style='width: 100%' class='table'>
-				{{#entries}}
+				{{#viewing_author.entries}}
 					{{^entry_deleted}}
 						<tr style='height: 40px;'>
 							{{#has_screenshot}}
@@ -50,7 +50,7 @@
 							{{/has_description}}
 						</tr>
 					{{/entry_deleted}}
-				{{/entries}}
+				{{/viewing_author.entries}}
 			</table>
 		</div>
 	{{/viewing_author}}

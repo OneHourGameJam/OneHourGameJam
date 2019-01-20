@@ -445,7 +445,7 @@ switch($page){
 		$viewingAuthor = ((isset($_GET["author"])) ? ("".$_GET["author"]) : "");
 		if($viewingAuthor == ""){
 			die("invalid author name");
-		}
+        }
 
 		$dictionary["viewing_author"] = RenderUser($users[$viewingAuthor], $users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
 	break;
