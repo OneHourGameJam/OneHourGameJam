@@ -86,19 +86,20 @@ if($nightmode == 1){
 	$dictionary["NIGHT_MODE"] = 1;
 }
 
+//Action data
 $actions = Array(
 	Array(
 		"POST_REQUEST" => "login",
 		"PHP_FILE" => "php/actions/login.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=main"),
-			"REGISTRATION_SUCCESS" => Array("REDIRECT_URL" => "?page=login"),
-			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=login"),
-			"INVALID_USERNAME_LENGTH" => Array("REDIRECT_URL" => "?page=login"),
-			"USERNAME_ALREADY_REGISTERED" => Array("REDIRECT_URL" => "?page=login"),
-			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=login"),
-			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Logged in successfully"),
+			"REGISTRATION_SUCCESS" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Registration succeeded but login failed. Please contact administrators for help."),
+			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
+			"INVALID_USERNAME_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect username length. Must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long."),
+			"USERNAME_ALREADY_REGISTERED" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "There is already a user with that username. Please log in or choose another."),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "The user does not exist."),
+			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect username/password combination."),
 		)
 	),
 	Array(
@@ -106,7 +107,7 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/logout.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=main")
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Logged out successfully")
 		)
 	),
 	Array(
@@ -114,19 +115,19 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/submit.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS_ENTRY_ADDED" => Array("REDIRECT_URL" => "?page=main"),
-			"SUCCESS_ENTRY_UPDATED" => Array("REDIRECT_URL" => "?page=main"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
-			"MISSING_GAME_NAME" => Array("REDIRECT_URL" => "?page=submit"),
-			"INVALID_GAME_URL" => Array("REDIRECT_URL" => "?page=submit"),
-			"INVALID_DESCRIPTION" => Array("REDIRECT_URL" => "?page=submit"),
-			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=submit"),
-			"NO_JAM_TO_SUBMIT_TO" => Array("REDIRECT_URL" => "?page=submit"),
-			"INVALID_COLOR" => Array("REDIRECT_URL" => "?page=submit"),
-			"SCREENSHOT_NOT_AN_IMAGE" => Array("REDIRECT_URL" => "?page=submit"),
-			"SCREENSHOT_TOO_BIT" => Array("REDIRECT_URL" => "?page=submit"),
-			"SCREENSHOT_WRONG_FILE_TYPE" => Array("REDIRECT_URL" => "?page=submit"),
-			"CANNOT_SUBMIT_TO_PAST_JAM" => Array("REDIRECT_URL" => "?page=submit"),
+			"SUCCESS_ENTRY_ADDED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Game Added."),
+			"SUCCESS_ENTRY_UPDATED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Game Updated."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not Logged In."),
+			"MISSING_GAME_NAME" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Missing Game Name."),
+			"INVALID_GAME_URL" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid Game URL."),
+			"INVALID_DESCRIPTION" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Missing Description."),
+			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Invalid Jam Number, please contact administrators."),
+			"NO_JAM_TO_SUBMIT_TO" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "There is no active jam to submit to, please contact administrators."),
+			"INVALID_COLOR" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "The selected color is not valid."),
+			"SCREENSHOT_NOT_AN_IMAGE" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "The uploaded screenshot is not an image."),
+			"SCREENSHOT_TOO_BIG" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "The uploaded screenshot is too big."),
+			"SCREENSHOT_WRONG_FILE_TYPE" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Screenshot is not of a valid file type."),
+			"CANNOT_SUBMIT_TO_PAST_JAM" => Array("REDIRECT_URL" => "?page=submit", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Cannot submit to a past jam, please contact administrators."),
 		)
 	),
 	Array(
@@ -134,13 +135,13 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/newjam.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_TIME" => Array("REDIRECT_URL" => "?page=newjam"),
-			"INVALID_DATE" => Array("REDIRECT_URL" => "?page=newjam"),
-			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=newjam"),
-			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=newjam"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Jam scheduled."),
+			"INVALID_TIME" => Array("REDIRECT_URL" => "?page=newjam", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Time is not valid."),
+			"INVALID_DATE" => Array("REDIRECT_URL" => "?page=newjam", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Date is not valid."),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=newjam", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
+			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=newjam", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Jam number is not valid."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -148,11 +149,11 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/deletejam.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"CANNOT_DELETE_JAM" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Jam Deleted."),
+			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "No jams exist."),
+			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Invalid jam id."),
+			"CANNOT_DELETE_JAM" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Cannot delete jam."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
 		)
 	),
 	Array(
@@ -160,11 +161,11 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/deleteentry.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"CANNOT_DELETE_ENTRY" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Entry deleted."),
+			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "No jams exist."),
+			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Invalid jam id."),
+			"CANNOT_DELETE_ENTRY" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "cannot delete entry."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
 		)
 	),
 	Array(
@@ -172,9 +173,9 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/saveconfig.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=config"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NO_CHANGE" => Array("REDIRECT_URL" => "?page=config"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=config", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Config updated."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NO_CHANGE" => Array("REDIRECT_URL" => "?page=config", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "No changes to config."),
 		)
 	),
 	Array(
@@ -182,18 +183,18 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/saveassetedits.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS_INSERTED" => Array("REDIRECT_URL" => "?page=assets"),
-			"SUCCESS_UPDATED" => Array("REDIRECT_URL" => "?page=assets"),
-			"COULD_NOT_DETERMINE_URL" => Array("REDIRECT_URL" => "?page=assets"),
-			"UNLOADED_ASSET_TOO_BIG" => Array("REDIRECT_URL" => "?page=assets"),
-			"COULD_NOT_FIND_VALID_FILE_NAME" => Array("REDIRECT_URL" => "?page=assets"),
-			"INVALID_ASSET_TYPE" => Array("REDIRECT_URL" => "?page=assets"),
-			"ASSET_TYPE_EMPTY" => Array("REDIRECT_URL" => "?page=assets"),
-			"INVALID_DESCRIPTION" => Array("REDIRECT_URL" => "?page=assets"),
-			"INVALID_TITLE" => Array("REDIRECT_URL" => "?page=assets"),
-			"INVALID_AUTHOR" => Array("REDIRECT_URL" => "?page=assets"),
-			"AUTHOR_EMPTY" => Array("REDIRECT_URL" => "?page=assets"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"SUCCESS_INSERTED" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Asset added."),
+			"SUCCESS_UPDATED" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Asset updated"),
+			"COULD_NOT_DETERMINE_URL" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Could not find a URL for the asset. Please look at the assets folder on the web server."),
+			"UNLOADED_ASSET_TOO_BIG" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Asset too big."),
+			"COULD_NOT_FIND_VALID_FILE_NAME" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Could not find a file name for the asset. Please look at the assets folder on the web server."),
+			"INVALID_ASSET_TYPE" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid asset type."),
+			"ASSET_TYPE_EMPTY" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Missing asset type."),
+			"INVALID_DESCRIPTION" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid description."),
+			"INVALID_TITLE" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid title."),
+			"INVALID_AUTHOR" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid author - must match a username of a registered user."),
+			"AUTHOR_EMPTY" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "missing author."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
 		)
 	),
 	Array(
@@ -201,9 +202,9 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/deleteasset.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=assets"),
-			"ASSET_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=assets"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=assets"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Asset deleted."),
+			"ASSET_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "asset does not exist."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
 		)
 	),
 	Array(
@@ -211,15 +212,15 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/savejamedits.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_TIME" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_DATE" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent"),
-			"INVALID_COLOR" => Array("REDIRECT_URL" => "?page=editcontent"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Jam updated."),
+			"INVALID_TIME" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid time."),
+			"INVALID_DATE" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid date."),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
+			"INVALID_JAM_NUMBER" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Invalid jam number"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NO_JAMS_EXIST" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "No jams exist."),
+			"INVALID_JAM_ID" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Invalid jam id."),
+			"INVALID_COLOR" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid colors."),
 		)
 	),
 	Array(
@@ -227,10 +228,10 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/saveuseredits.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers"),
-			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers"),
-			"INVALID_ISADMIN" => Array("REDIRECT_URL" => "?page=editusers"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "User successfully edited"),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "User does not exist."),
+			"INVALID_ISADMIN" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Invalid IsAdmin."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
 		)
 	),
 	Array(
@@ -238,11 +239,11 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/savenewuserpassword.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers"),
-			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers"),
-			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=editusers"),
-			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=editusers"),
-			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Password Updated."),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "User does not exist."),
+			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
+			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Passwords do not match."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
 		)
 	),
 	Array(
@@ -250,12 +251,12 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/changepassword.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Password Updated."),
+			"USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "User does not exist."),
+			"INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
+			"PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Passwords do not match."),
+			"INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Old password is not correct."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -263,10 +264,10 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/saveuserchanges.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"INVALID_EMAIL" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"INVALID_DISPLAY_NAME" => Array("REDIRECT_URL" => "?page=usersettings"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "User settings updated."),
+			"INVALID_EMAIL" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Email is not valid."),
+			"INVALID_DISPLAY_NAME" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect display name length. Must be between ".$config["MINIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]." characters long."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -274,10 +275,10 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/savenewtheme.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
-			"THEME_ALREADY_SUGGESTED" => Array("REDIRECT_URL" => "?page=themes"),
-			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "The added."),
+			"THEME_ALREADY_SUGGESTED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is already suggested."),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -285,11 +286,11 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/deletetheme.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
-			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
-			"THEME_NOT_BANNED" => Array("REDIRECT_URL" => "?page=themes"),
-			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme deleted."),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
+			"THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -297,11 +298,11 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/bantheme.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
-			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
-			"THEME_NOT_BANNED" => Array("REDIRECT_URL" => "?page=themes"),
-			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme banned."),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
+			"THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -309,11 +310,11 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/unbantheme.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes"),
-			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes"),
-			"THEME_NOT_BANNED" => Array("REDIRECT_URL" => "?page=themes"),
-			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme unbanned."),
+			"INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
+			"THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist"),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	),
 	Array(
@@ -329,14 +330,59 @@ $actions = Array(
 		"PHP_FILE" => "php/actions/adminvote.php",
 		"REDIRECT_AFTER_EXECUTION" => "?page=main",
 		"ACTION_RESULT" => Array(
-			"SUCESS_UPDATE" => Array("REDIRECT_URL" => "?page=editusers"),
-			"SUCESS_INSERT" => Array("REDIRECT_URL" => "?page=editusers"),
-			"INVALID_VOTE_TYPE" => Array("REDIRECT_URL" => "?page=editusers"),
-			"NOT_AHTORIZED" => Array("REDIRECT_URL" => "?page=main"),
-			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login"),
+			"SUCESS_UPDATE" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Admin vote updated."),
+			"SUCESS_INSERT" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Admin vote cast."),
+			"INVALID_VOTE_TYPE" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid vote type."),
+			"NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+			"NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
 		)
 	)
 );
+
+//Messages and warnings
+if(isset($_COOKIE["actionResult"]) && isset($_COOKIE["actionResultAction"])){
+    $messageActionResult = $_COOKIE["actionResult"];
+    $messageActionResultAction = $_COOKIE["actionResultAction"];
+
+    $actionFound = false;
+	foreach($actions as $i => $action){
+		if($messageActionResultAction == $action["POST_REQUEST"]){
+            $actionFound = true;
+            if(isset($action["ACTION_RESULT"][$messageActionResult])){
+                $actionResultData = $action["ACTION_RESULT"][$messageActionResult];
+
+                $messageType = $actionResultData["MESSAGE_TYPE"];
+                $messageText = $actionResultData["MESSAGE_TEXT"];
+
+                switch($messageType){
+                    case "success":
+                        AddSuccess("Success", $messageText, false);
+                        break;
+                    case "warning":
+                        AddWarning("Warning", $messageText, false);
+                        break;
+                    case "error":
+                        AddError("Error", $messageText, false);
+                        break;
+                    case "none":
+                        break;
+                    default:
+                        die("Unknown message type $messageType");
+                        break;
+                }
+            }else{
+                die("Action result $messageActionResult for $messageActionResultAction not found in actions list");
+            }
+        }
+    }
+    
+    if(!$actionFound){
+        die("Action $messageActionResultAction not found in actions list");
+    }
+
+    setcookie("actionResult", "", 0);
+    setcookie("actionResultAction", "", 0);
+}
 
 //Actions!
 if(isset($_POST["action"])){
@@ -350,6 +396,8 @@ if(isset($_POST["action"])){
 			include_once($actionPhpFile);
 
 			if(isset($action["ACTION_RESULT"][$actionResult]["REDIRECT_URL"])){
+                setcookie("actionResultAction", $actionPostRequest, time() + 30);
+                setcookie("actionResult", $actionResult, time() + 30);
 				$redirectURL = $action["ACTION_RESULT"][$actionResult]["REDIRECT_URL"];
 				header("Location: ".$redirectURL);
 				die("Redirecting to <a href='$actionRedirectAfterExecution'>$actionRedirectAfterExecution</a>...");

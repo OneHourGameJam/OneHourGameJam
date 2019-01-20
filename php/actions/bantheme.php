@@ -14,7 +14,7 @@ function BanTheme($bannedTheme){
 
 	//Authorize user (is admin)
 	if(IsAdmin() === false){
-		$actionResult = "NOT_AHTORIZED";
+		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
 	}
@@ -36,7 +36,7 @@ function BanTheme($bannedTheme){
 	$sql = "";
 
 	if(mysqli_num_rows($data) == 0){
-		$actionResult = "THEME_NOT_BANNED";
+		$actionResult = "THEME_DOES_NOT_EXIST";
 		AddDataWarning("Theme does not exist", false);
 		return;
 	}

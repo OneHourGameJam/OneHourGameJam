@@ -111,7 +111,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 		if ($_FILES["screenshotfile"]["size"] > $config["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]["VALUE"]) {
 			AddDataWarning("Uploaded screenshot is too big (max 5MB)", false);
-			$actionResult = "SCREENSHOT_TOO_BIT";
+			$actionResult = "SCREENSHOT_TOO_BIG";
 			return;
 			$uploadPass = 0;
 		}
