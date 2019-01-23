@@ -50,11 +50,13 @@ while($info = mysqli_fetch_array($data)){
 if(count($return["upcoming_jams"]) == 0){
     //No jam scheduled yet, insert stub.
 
-    $now =  time();
-    $saturday = GetNextJamDateAndTime();
+    $now = time();
+    $saturday = GetSuggestedNextJamDateTime($config);
+
+	$interval = $saturday - $now;
 
     //$timediff = intval(date("U", $saturday)) - intval(date("U", $now));
-	$timediff = intval($dictionary["seconds_until_jam_suggested_time"]);
+	$timediff = $interval;
 	if($timediff < 0){
 		$saturday = strtotime("+7 day", $saturday);
     	//$timediff = intval(date("U", $saturday)) - intval(date("U", $now));

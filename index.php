@@ -518,6 +518,10 @@ switch($page){
         $dictionary["userdata_admin_vote_voter"] = GetAdminVotesCastByUserFormatted($loggedInUser["username"]);
         $dictionary["userdata_admin_vote_subject"] = GetAdminVotesForSubjectUserFormatted($loggedInUser["username"]);
 	break;
+	case "newjam":
+		$dictionary["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);
+		$dictionary["next_jam_suggested_time"] = gmdate("H:i", $nextSuggestedJamDateTime);
+	break;
 }
 
 $dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());

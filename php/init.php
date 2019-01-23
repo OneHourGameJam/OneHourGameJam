@@ -6,12 +6,13 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes;
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime;
 
 	AddActionLog("Init");
 	StartTimer("Init");
 
 	$config = LoadConfig();
+	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($config);
 
     RedirectToHttpsIfRequired($config);
 
@@ -31,7 +32,6 @@ function Init(){
     $adminVotes = LoadAdminVotes();
 	$loggedInUserAdminVotes = LoadLoggedInUsersAdminVotes($loggedInUser);
 	InitStream();
-	GetNextJamDateAndTime();
 
 	$dictionary["CONFIG"] = RenderConfig($config);
 	$dictionary["adminlog"] = RenderAdminLog($adminLog);

@@ -150,11 +150,12 @@ function RenderSubmitJam($jam, $config, $games, $users, &$satisfaction, $loggedI
 }
 
 function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedInUser){
+    global $nextJamTime;
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
 	$render = Array("LIST" => Array());
-	$render["next_jam_timer_code"] = "".gmdate("Y-m-d H:i", GetNextJamDateAndTime());
+	$render["next_jam_timer_code"] = "".gmdate("Y-m-d H:i", GetSuggestedNextJamDateTime($config));
 
     $nonDeletedJamCounter = 0;
 	$latestStartedJamFound = false;
@@ -198,7 +199,7 @@ function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedI
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
 function CheckNextJamSchedule(){
-	global $themes, $jams, $config;
+	global $themes, $jams, $config, $nextJamTime;
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule");
 
@@ -209,7 +210,7 @@ function CheckNextJamSchedule(){
 
 	$autoScheduleThreshold = $config["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]["VALUE"] * 60;
 
-	$suggestedNextJamTime = GetNextJamDateAndTime();
+	$suggestedNextJamTime = $nextJamTime;
 	$now = time();
 	$interval = $suggestedNextJamTime - $now;
 

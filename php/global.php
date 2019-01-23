@@ -27,6 +27,7 @@ $adminLog = Array();
 $nextJamTime = "";
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
+$nextSuggestedJamDateTime = "";
 
 require __DIR__ . '/../vendor/Mustache/Autoloader.php';
 Mustache_Autoloader::register();

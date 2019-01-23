@@ -89,10 +89,9 @@ function ordinal($number) {
 	StopTimer("ordinal");
 }
 
-function GetNextJamDateAndTime(){
-	global $dictionary, $config;
-	AddActionLog("GetNextJamDateAndTime");
-	StartTimer("GetNextJamDateAndTime");
+function GetSuggestedNextJamDateTime(&$config){
+	AddActionLog("GetSuggestedNextJamDateTime");
+	StartTimer("GetSuggestedNextJamDateTime");
 
     $jamDay = "monday";
     switch($config["JAM_DAY"]["VALUE"]){
@@ -120,13 +119,8 @@ function GetNextJamDateAndTime(){
     }
 
 	$suggestedDay = strtotime("$jamDay +" . intval($config["JAM_TIME"]["VALUE"]) . " hours UTC");
-	$dictionary["next_jam_suggested_date"] = gmdate("Y-m-d", $suggestedDay);
-	$dictionary["next_jam_suggested_time"] = gmdate("H:i", $suggestedDay);
-	$now = time();
-	$interval = $suggestedDay - $now;
-	$dictionary["seconds_until_jam_suggested_time"] = $interval;
 
-	StopTimer("GetNextJamDateAndTime");
+	StopTimer("GetSuggestedNextJamDateTime");
 	return $suggestedDay;
 }
 
