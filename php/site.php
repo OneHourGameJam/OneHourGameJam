@@ -23,7 +23,6 @@ include_once("php/adminlog.php");
 include_once("php/users.php");
 include_once("php/jams.php");
 include_once("php/games.php");
-include_once("php/entries.php");
 include_once("php/themes.php");
 include_once("php/assets.php");
 include_once("php/polls.php");
