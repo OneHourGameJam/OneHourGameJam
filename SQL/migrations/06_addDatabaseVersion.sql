@@ -1,0 +1,1 @@
+INSERT INTO `config` (`config_key`, `config_value`, `config_category`, `config_description`, `config_type`, `config_options`, `config_editable`, `config_required`, `config_added_to_dictionary`) VALUES ('DATABASE_VERSION', '1', 'SYSTEM', 'The version of the database. Used to determine required database migration.', 'NUMBER', '[]', '0', '1', '1');

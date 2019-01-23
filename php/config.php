@@ -14,6 +14,7 @@ $configCategorySettings = Array(
 	"NEW_JAM_DEFAULTS" => "New Jam Defaults",
 	"ADMIN_SUGGESTIONS" => "Admin Suggestions",
     "USERS" => "Users",
+    "SYSTEM" => "System",
 );
 
 //Initializes configuration, stores it in the global $config variable.
