@@ -367,9 +367,9 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
     if($missingAdminCandidateVotes > 0){
         $render["missing_admin_candidate_votes"] = 1;
         $render["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
-  }
+    }
   
-  $render["all_authors_count"] = $authorCount;
+    $render["all_authors_count"] = $authorCount;
 
 	StopTimer("RenderUsers");
 	return $render;
@@ -377,27 +377,27 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
 
 function GroupGamesByUsername(&$games)
 {
-	$gamesByUsername = Array();
-	foreach($games as $i => $game) {
-		$username = $game["author"];
-		if (!isset($gamesByUsername[$username])) {
-			$gamesByUsername[$username] = Array();
-		}
-		$gamesByUsername[$username][] = $game;
-	}
-	return $gamesByUsername;
+    $gamesByUsername = Array();
+    foreach($games as $i => $game) {
+        $username = $game["author"];
+        if (!isset($gamesByUsername[$username])){
+            $gamesByUsername[$username] = Array();
+        }
+        $gamesByUsername[$username][] = $game;
+    }
+    return $gamesByUsername;
 }
 
 function GroupJamsByUsername(&$jams, &$gamesByUsername)
 {
-	$jamsByUsername = Array();
-	foreach($gamesByUsername as $username => $games) {
-    $jamsByUsername[$username] = Array();
-    foreach($games as $i => $game) {
-      $jamsByUsername[$username][$game['jam_id']] = $jams[$game['jam_id']];
+    $jamsByUsername = Array();
+    foreach($gamesByUsername as $username => $games){
+        $jamsByUsername[$username] = Array();
+        foreach($games as $i => $game){
+            $jamsByUsername[$username][$game['jam_id']] = $jams[$game['jam_id']];
+        }
     }
-	}
-	return $jamsByUsername;
+    return $jamsByUsername;
 }
 
 ?>
