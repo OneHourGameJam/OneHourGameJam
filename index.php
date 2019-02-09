@@ -547,15 +547,7 @@ if($page == "jam")
 			<div class="row">
 				<div class="col-md-2">
 					<?php
-						if(IsLoggedIn() === false){
-							print $mustache->render(file_get_contents($templateBasePath."menu_guest.html"), $dictionary);
-						}else if(IsAdmin()){
-							print $mustache->render(file_get_contents($templateBasePath."menu_admin.html"), $dictionary);
-						}else{
-							print $mustache->render(file_get_contents($templateBasePath."menu_user.html"), $dictionary);
-						}
-
-						print $mustache->render(file_get_contents($templateBasePath."menu_shared.html"), $dictionary);
+						print $mustache->render(file_get_contents($templateBasePath."menu.html"), $dictionary);
 					?>
 				</div>
 

@@ -27,6 +27,48 @@ body{
 	border-radius: 0px;
 }
 
+.notification {
+  background-color: #ffdcea;
+  padding: 5px;
+  text-align: center;
+  line-height: 16px;
+}
+
+#mainmenu {
+  list-style-type: none;
+  padding-left: 0;
+  margin: -15px;
+  margin-bottom: 15px;
+}
+
+#mainmenu li {
+  padding: 1px 7px;
+}
+#mainmenu li.mainmenu-separator {
+  border-top: 1px solid white;
+  margin-top: -1px;
+  color: #777777;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-top: 12px;
+}
+#mainmenu-social {
+  text-align: center;
+}
+#mainmenu-social a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.new::before {
+  content: 'New!';
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  font-size: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .entryScreenshot{
 	position: absolute;
 	border: solid 1px #DDDDDD;

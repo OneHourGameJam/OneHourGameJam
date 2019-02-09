@@ -1,0 +1,109 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    {{#user}}
+      <h3 class="panel-title">Hello {{user.display_name}}</h3>
+      <form method='post'>
+        <button type="submit" name='action' value='logout' class="btn btn-default">Log out</button>
+      </form>
+    {{/user}}
+    {{^user}}
+      <h3 class="panel-title">Menu</h3>
+    {{/user}}
+  </div>
+
+  {{#user.admin}}
+  {{#users.missing_admin_candidate_votes}}
+  <div class="panel-body notification">
+    <a href='?page=editusers'><span style='background-color: red; color: white; font-weight: bold;'>{{{users.missing_admin_candidate_votes_number}}}</span> admin candidate(s) need(s) your vote</a>
+  </div>
+  {{/users.missing_admin_candidate_votes}}
+  {{/user.admin}}
+
+	<div class="panel-body">
+		<ul id='mainmenu'>
+      <li><a href='?page=main'>Home</a></li>
+      {{#user}}
+      {{#jams.current_jam}}
+      <li><b><a href='?page=submit'>Submit game</a></b></li>
+      {{/jams.current_jam}}
+      <li><b><a href='?page=themes'>Theme voting</a></b></li>
+      {{/user}}
+      {{^user}}
+			<li><a href='?page=login'>Log in / register</a></li>
+      {{/user}}
+			<li><a href='?page=rules'>How it works</a></li>
+			<li><a href='?page=assets'>Assets</a></li>
+			<li><a href='?page=privacy'>Privacy</a></li>
+      {{#user}}
+			<li><a href='?page=userdata'>User Data</a></li>
+      {{/user}}
+
+			<li class="mainmenu-separator">Browse</li>
+			<li><a href='?page=entries'>Games</a></li>
+			<li><a href='?page=authors'>Developers</a></li>
+			<li><a href='?page=jams'>Jams</a></li>
+
+      {{#user}}
+			<li class="mainmenu-separator">User</li>
+			<li><a href='?page=author&author={{user.username}}'>Profile</a></li>
+			<li><a href='?page=usersettings'>User Settings</a></li>
+      {{/user}}
+
+			<li class="mainmenu-separator">Misc</li>
+			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report bug</a></li>
+      {{#user}}
+			{{#is_streamer}}
+				<li><a href='?page=main&streaming=0'>Disable streamer Mode</a></li>
+			{{/is_streamer}}
+			{{^is_streamer}}
+				<li><a href='?page=main&streaming=1'>Streamer Mode</a></li>
+			{{/is_streamer}}
+      {{/user}}
+			{{#NIGHT_MODE}}
+				<li><a href='?page=main&nightmode=0'>Enable Light Mode</a></li>
+			{{/NIGHT_MODE}}
+			{{^NIGHT_MODE}}
+				<li><a href='?page=main&nightmode=1'>Enable Dark Mode</a> <span class="new"></span></li>
+			{{/NIGHT_MODE}}
+      
+      {{#user.admin}}
+			<li class="mainmenu-separator">Administration</li>
+			<li><a href='?page=newjam'>Schedule jam</a></li>
+			<li><a href='?page=config'>Configuration</a></li>
+			<li><a href='?page=editcontent'>Manage content</a></li>
+			<li><a href='?page=editusers'>Manage users</a> <span class="new"></span></li>
+			<li><a href='?page=adminlog'>Admin Log</a> <span class="new"></span></li>
+      {{/user.admin}}
+		</ul>
+    
+    <div id="mainmenu-social">
+		{{#CONFIG.VALUES.TWITTER_ACCOUNT}}
+			<a href="https://twitter.com/{{CONFIG.VALUES.TWITTER_ACCOUNT}}" target='_blank'>
+				<div class='mediaButton twitterButton'><img src='{{{template_path}}}images/twitter.png' style='width: 20px;' /> Follow</div>
+			</a>
+		{{/CONFIG.VALUES.TWITTER_ACCOUNT}}
+
+		{{#CONFIG.VALUES.TWITCH_ACCOUNT}}
+			<a href="https://twitch.tv/{{CONFIG.VALUES.TWITCH_ACCOUNT}}" target='_blank'>
+				<div class='mediaButton twitchButton'><img src='{{{template_path}}}images/twitch.png' style='width: 20px;' /> Watch</div>
+			</a>
+		{{/CONFIG.VALUES.TWITCH_ACCOUNT}}
+
+		{{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
+		{{#CONFIG.VALUES.IRC_ADDRESS}}
+		{{#CONFIG.VALUES.IRC_CHANNEL}}
+			<a href="{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}" target='_blank'>
+				<div class='mediaButton ircButton'><img src='{{{template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
+			</a>
+		{{/CONFIG.VALUES.IRC_CHANNEL}}
+		{{/CONFIG.VALUES.IRC_ADDRESS}}
+		{{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
+
+		{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
+			<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" target='_blank'>
+				<div class='mediaButton discordButton'><img src='{{{template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>
+			</a>
+		{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
+    </div>
+	</div>
+</div>
