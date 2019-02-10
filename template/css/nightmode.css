@@ -112,4 +112,8 @@ a:hover{
 #mainmenu li.mainmenu-separator {
     border-top: 1px solid #7B8991;
     color: white;
-  }
+}
+
+.btn[disabled]{
+    color: black;
+}

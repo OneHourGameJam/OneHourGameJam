@@ -69,6 +69,15 @@ body{
   vertical-align: middle;
 }
 
+.updated::before {
+  content: 'Updated!';
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  font-size: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .entryScreenshot{
 	position: absolute;
 	border: solid 1px #DDDDDD;
@@ -220,5 +229,9 @@ body{
 }
 
 .authorPageEntry{
-    background-color: #F5F5F5;
+  background-color: #F5F5F5;
+}
+
+.bold{
+  font-weight: bold;
 }

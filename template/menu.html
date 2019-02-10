@@ -11,31 +11,37 @@
     {{/user}}
   </div>
 
-  {{#user.admin}}
-  {{#users.missing_admin_candidate_votes}}
-  <div class="panel-body notification">
-    <a href='?page=editusers'><span style='background-color: red; color: white; font-weight: bold;'>{{{users.missing_admin_candidate_votes_number}}}</span> admin candidate(s) need(s) your vote</a>
-  </div>
-  {{/users.missing_admin_candidate_votes}}
+	{{#user.admin}}
+		{{^is_streamer}}
+  		{{#users.missing_admin_candidate_votes}}
+  			<div class="panel-body notification">
+  			  <a href='?page=editusers'><span style='background-color: red; color: white; font-weight: bold;'>{{{users.missing_admin_candidate_votes_number}}}</span> admin candidate(s) need(s) your vote</a>
+  			</div>
+			{{/users.missing_admin_candidate_votes}}
+		{{/is_streamer}}
   {{/user.admin}}
 
 	<div class="panel-body">
 		<ul id='mainmenu'>
       <li><a href='?page=main'>Home</a></li>
       {{#user}}
-      {{#jams.current_jam}}
-      <li><b><a href='?page=submit'>Submit game</a></b></li>
-      {{/jams.current_jam}}
-      <li><b><a href='?page=themes'>Theme voting</a></b></li>
+      	{{#jams.current_jam}}
+					{{^is_streamer}}
+      			<li><b><a href='?page=submit'>Submit game</a></b></li>
+					{{/is_streamer}}
+      	{{/jams.current_jam}}
+      	<li><b><a href='?page=themes'>Theme voting</a></b></li>
       {{/user}}
       {{^user}}
-			<li><a href='?page=login'>Log in / register</a></li>
+				<li><a href='?page=login'>Log in / register</a></li>
       {{/user}}
 			<li><a href='?page=rules'>How it works</a></li>
 			<li><a href='?page=assets'>Assets</a></li>
 			<li><a href='?page=privacy'>Privacy</a></li>
       {{#user}}
-			<li><a href='?page=userdata'>User Data</a></li>
+				{{^is_streamer}}
+					<li><a href='?page=userdata'>User Data</a></li>
+				{{/is_streamer}}
       {{/user}}
 
 			<li class="mainmenu-separator">Browse</li>
@@ -44,20 +50,22 @@
 			<li><a href='?page=jams'>Jams</a></li>
 
       {{#user}}
-			<li class="mainmenu-separator">User</li>
-			<li><a href='?page=author&author={{user.username}}'>Profile</a></li>
-			<li><a href='?page=usersettings'>User Settings</a></li>
+				<li class="mainmenu-separator">User</li>
+				<li><a href='?page=author&author={{user.username}}'>Profile</a></li>
+				{{^is_streamer}}
+					<li><a href='?page=usersettings'>User Settings</a></li>
+				{{/is_streamer}}
       {{/user}}
 
 			<li class="mainmenu-separator">Misc</li>
 			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report bug</a></li>
       {{#user}}
-			{{#is_streamer}}
-				<li><a href='?page=main&streaming=0'>Disable streamer Mode</a></li>
-			{{/is_streamer}}
-			{{^is_streamer}}
-				<li><a href='?page=main&streaming=1'>Streamer Mode</a></li>
-			{{/is_streamer}}
+				{{#is_streamer}}
+					<li><a href='?page=main&streaming=0'>Disable streamer Mode</a></li>
+				{{/is_streamer}}
+				{{^is_streamer}}
+					<li><a href='?page=main&streaming=1'>Streamer Mode</a> <span class="updated"></li>
+				{{/is_streamer}}
       {{/user}}
 			{{#NIGHT_MODE}}
 				<li><a href='?page=main&nightmode=0'>Enable Light Mode</a></li>
@@ -67,13 +75,19 @@
 			{{/NIGHT_MODE}}
       
       {{#user.admin}}
-			<li class="mainmenu-separator">Administration</li>
-			<li><a href='?page=newjam'>Schedule jam</a></li>
-			<li><a href='?page=config'>Configuration</a></li>
-			<li><a href='?page=editcontent'>Manage content</a></li>
-			<li><a href='?page=editusers'>Manage users</a> <span class="new"></span></li>
-			<li><a href='?page=adminlog'>Admin Log</a> <span class="new"></span></li>
+				{{^is_streamer}}
+					<li class="mainmenu-separator">Administration</li>
+					<li><a href='?page=newjam'>Schedule jam</a></li>
+					<li><a href='?page=config'>Configuration</a></li>
+					<li><a href='?page=editcontent'>Manage content</a></li>
+					<li><a href='?page=editusers'>Manage users</a></li>
+					<li><a href='?page=adminlog'>Admin Log</a></li>
+				{{/is_streamer}}
       {{/user.admin}}
+      
+			{{#is_streamer}}
+				<li class="mainmenu-separator">Some menu items are hidden in streamer mode (<a href='?page=main&streaming=0'>Disable Streamer Mode</a>)</li>
+			{{/is_streamer}}
 		</ul>
     
     <div id="mainmenu-social">
@@ -90,13 +104,13 @@
 		{{/CONFIG.VALUES.TWITCH_ACCOUNT}}
 
 		{{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
-		{{#CONFIG.VALUES.IRC_ADDRESS}}
-		{{#CONFIG.VALUES.IRC_CHANNEL}}
-			<a href="{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}" target='_blank'>
-				<div class='mediaButton ircButton'><img src='{{{template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
-			</a>
-		{{/CONFIG.VALUES.IRC_CHANNEL}}
-		{{/CONFIG.VALUES.IRC_ADDRESS}}
+			{{#CONFIG.VALUES.IRC_ADDRESS}}
+				{{#CONFIG.VALUES.IRC_CHANNEL}}
+					<a href="{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}" target='_blank'>
+						<div class='mediaButton ircButton'><img src='{{{template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
+					</a>
+				{{/CONFIG.VALUES.IRC_CHANNEL}}
+			{{/CONFIG.VALUES.IRC_ADDRESS}}
 		{{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
 
 		{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
