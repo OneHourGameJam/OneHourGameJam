@@ -89,6 +89,7 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
     $currentJamData = GetCurrentJamNumberAndID();
 
     $username = $userData["username"];
+    $userData["username_alphanumeric"] = preg_replace("/[^a-zA-Z0-9]+/", "", $username);
     $userData["recent_participation"] = 0;
 
     //Determine if this user is an author and their participation

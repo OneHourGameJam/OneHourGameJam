@@ -118,10 +118,10 @@ function GetSuggestedNextJamDateTime(&$config){
         break;
     }
 
-	$suggestedDay = strtotime("$jamDay +" . intval($config["JAM_TIME"]["VALUE"]) . " hours UTC");
+	$nextSuggestedJamTime = strtotime("$jamDay +" . intval($config["JAM_TIME"]["VALUE"]) . " hours UTC");
 
 	StopTimer("GetSuggestedNextJamDateTime");
-	return $suggestedDay;
+	return $nextSuggestedJamTime;
 }
 
 $currentJamNumberArchive = FALSE;

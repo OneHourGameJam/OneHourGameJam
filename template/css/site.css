@@ -72,6 +72,22 @@ body{
 	border-radius: 0px;
 }
 
+.alignCenter{
+    text-align: center;
+}
+
+.alignRight{
+    text-align: center;
+}
+
+.fullWidth{
+	width: 100%;
+}
+
+.maxFullWidth{
+	max-width: 100%;
+}
+
 .btn{
 	border-radius: 0px;
 }

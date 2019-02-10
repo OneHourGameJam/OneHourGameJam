@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime;
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime;
 
 	AddActionLog("Init");
 	StartTimer("Init");
@@ -25,7 +25,9 @@ function Init(){
 	$games = LoadGames();
 
 	LoadThemes();
-	CheckNextJamSchedule();
+	$nextScheduledJamTime = GetNextJamDateAndTime($jams);
+	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config);
+	CheckNextJamSchedule($nextScheduledJamTime , $nextSuggestedJamTime);
 	$assets = LoadAssets();
 	LoadPolls();
     $satisfaction = LoadSatisfaction($config);

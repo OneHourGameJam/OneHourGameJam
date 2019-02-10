@@ -1,7 +1,7 @@
 <?php
 
 function LoadJams(){
-	global $dbConn;
+	global $dbConn, $nextJamTime;
 
 	AddActionLog("LoadJams");
 	StartTimer("LoadJams");
@@ -30,6 +30,21 @@ function LoadJams(){
 
 	StopTimer("LoadJams");
 	return $jams;
+}
+
+function GetNextJamDateAndTime(&$jams){
+	$nextJamStartTime = null;
+
+	$now = time();
+	foreach($jams as $i => $jamData){
+		$nextJamTime = strtotime($jamData["start_time"] . " UTC");
+
+		if($nextJamTime > $now){
+			$nextJamStartTime = $nextJamTime;
+		}
+	}
+
+	return $nextJamStartTime;
 }
 
 function ParseJamColors($colorString){
@@ -150,12 +165,12 @@ function RenderSubmitJam($jam, $config, $games, $users, &$satisfaction, $loggedI
 }
 
 function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedInUser){
-    global $nextJamTime;
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
 	$render = Array("LIST" => Array());
-	$render["next_jam_timer_code"] = "".gmdate("Y-m-d H:i", GetSuggestedNextJamDateTime($config));
+	$suggestedNextGameJamTime = GetSuggestedNextJamDateTime($config);
+	$render["next_jam_timer_code"] = gmdate("Y-m-d", $suggestedNextGameJamTime)."T".gmdate("H:i", $suggestedNextGameJamTime).":00Z";
 
     $nonDeletedJamCounter = 0;
 	$latestStartedJamFound = false;
@@ -168,11 +183,10 @@ function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedI
 
 		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $satisfaction, $loggedInUser);
 
-		$now = new DateTime();
-		$datetime = new DateTime($jamData["start_time"] . " UTC");
+		$now = time();
+		$datetime = strtotime($jamData["start_time"] . " UTC");
 		if($datetime > $now){
-			$nextJamTime = strtotime($jamData["start_time"]);
-			$render["next_jam_timer_code"] = date("Y-m-d", $nextJamTime)."T".date("H:i", $nextJamTime).":00Z";
+			$render["next_jam_timer_code"] = gmdate("Y-m-d", $datetime)."T".gmdate("H:i", $datetime).":00Z";
 		}else{
 			if(!isset($jamData["jam_deleted"])){
 				if($latestStartedJamFound == false){
@@ -198,46 +212,48 @@ function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedI
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule(){
-	global $themes, $jams, $config, $nextJamTime;
+function CheckNextJamSchedule($nextScheduledJamTime, $nextSuggestedJamTime){
+	global $themes, $jams, $config;
 	AddActionLog("CheckNextJamSchedule");
-	StartTimer("CheckNextJamSchedule");
+	StartTimer("CheckNextJamSchedule"); 
+
+	//print "<br>CHECK JAM SCHEDULING";
 
 	if($config["JAM_AUTO_SCHEDULER_ENABLED"]["VALUE"] == 0){
+		//print "<br>AUTO SCHEDULER DISABLED";
 		StopTimer("CheckNextJamSchedule");
 		return;
 	}
 
+	//print "<br>AUTO SCHEDULER ENABLED";
 	$autoScheduleThreshold = $config["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]["VALUE"] * 60;
 
-	$suggestedNextJamTime = $nextJamTime;
 	$now = time();
-	$interval = $suggestedNextJamTime - $now;
+	$timeToNextScheduledJam = $nextScheduledJamTime - $now;
+	$timeToNextSuggestedJam = $nextSuggestedJamTime - $now;
+
+	$isTimeToScheduleJam = $timeToNextSuggestedJam > 0 && $timeToNextSuggestedJam <= $autoScheduleThreshold;
+	$isAJamAlreadyScheduled = $timeToNextScheduledJam > 0;
+	$isAJamScheduledInAuthSchedulerThresholdTime = $isAJamAlreadyScheduled && $timeToNextScheduledJam <= $autoScheduleThreshold;
+
+	//print "<br>nextScheduledJamTime = ".gmdate("Y-m-d H:i:s", $nextScheduledJamTime);
+	//print "<br>nextSuggestedJamTime = ".gmdate("Y-m-d H:i:s", $nextSuggestedJamTime);
+	//print "<br>now = ".gmdate("Y-m-d H:i:s", $now);
+	//print "<br>timeToNextScheduledJam = $timeToNextScheduledJam";
+	//print "<br>timeToNextSuggestedJam = $timeToNextSuggestedJam";
+	//print "<br>autoScheduleThreshold = $autoScheduleThreshold";
+	//print "<br>isTimeToScheduleJam = ".($isTimeToScheduleJam ? "YES" : "NO");
+	//print "<br>isAJamAlreadyScheduled = ".($isAJamAlreadyScheduled ? "YES" : "NO");
+	//print "<br>isAJamScheduledInAuthSchedulerThresholdTime = ".($isAJamScheduledInAuthSchedulerThresholdTime ? "YES" : "NO");
 
 	$colors = "e38484|e3b684|dee384|ade384|84e38d|84e3be|84d6e3|84a4e3|9684e3|c784e3";
 
-	if($interval > 0 && $interval <= $autoScheduleThreshold){
-		if($nextJamTime != ""){
+	if($isTimeToScheduleJam){
+		//print "<br>IT IS TIME TO SCHEDULE A JAM";
+
+		if($isAJamScheduledInAuthSchedulerThresholdTime){
 			//A future jam is already scheduled
-			StopTimer("CheckNextJamSchedule");
-			return;
-		}
-
-		$jamAlreadyScheduled = false;
-
-		foreach($jams as $i => $jam){
-			if($jam["jam_deleted"]){
-				continue;
-			}
-
-			$jamStartTime = strtotime($jam["start_time"]);
-			if($jamStartTime > $now){
-				$jamAlreadyScheduled = true;
-			}
-		}
-
-		if($jamAlreadyScheduled){
-			StopTimer("CheckNextJamSchedule");
+			//print "<br>A JAM IS ALREADY SCHEDULED";
 			return;
 		}
 
@@ -254,10 +270,13 @@ function CheckNextJamSchedule(){
 			$selectedTheme = "Any theme";
 		}
 
+		//print "<br>A THEME WAS SELECTED";
+
 		$currentJamData = GetCurrentJamNumberAndID();
 		$jamNumber = intval($currentJamData["NUMBER"] + 1);
+		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $suggestedNextJamTime), $colors);
+		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors);
 	}
 	StopTimer("CheckNextJamSchedule");
 }

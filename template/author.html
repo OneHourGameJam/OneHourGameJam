@@ -1,6 +1,6 @@
-<div class="col-md-10" id='jamlist'>
+<div class="col-md-10">
 	{{#viewing_author}}
-		<div class='panel panel-info jamContener'>
+		<div class='panel panel-info'>
 			<div class='panel-heading'>
 				{{display_name}}
 			</div>
@@ -8,24 +8,24 @@
 		<div class='panel-body'>
 			{{{ viewing_author.bio }}}
 		</div>
-		<div class='panel-body jamContent'>
+		<div class='panel-body'>
 			{{^viewing_author.entries}}
 				This user did not submit any games.
 			{{/viewing_author.entries}}
-			<table style='width: 100%' class='table'>
+			<table class='table fullWidth'>
 				{{#viewing_author.entries}}
 					{{^entry_deleted}}
 						<tr style='height: 40px;'>
 							{{#has_screenshot}}
-								<td rowspan='2' style='width: 220px; text-align: center;'>
-									<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+								<td rowspan='2' style='width: 220px;' class='alignCenter'>
+									<img src='{{screenshot_url}}' class='small_screenshot maxFullWidth' hidden_src='{{screenshot_url}}' style='max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
 								</td>
 							{{/has_screenshot}}
 							<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
 								<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
 								for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
 							</div>
-							<td class='authorPageEntry' style='text-align: right;'>
+							<td class='authorPageEntry alignRight'>
 								{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
 								{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
 								{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}

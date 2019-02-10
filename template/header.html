@@ -22,13 +22,13 @@
 	<body>
 		<div class="container">
 <div class="row">
-	<div class="col-md-12" style='text-align: center; margin-top: 10px;'>
+	<div class="col-md-12 alignCenter" style='margin-top: 10px;'>
 		<div class="panel panel-info">
 			<div class="panel-body">
-				<div class="col-md-3 hidden-xs hidden-sm" style='text-align: center; margin-top: 10px;'>
+				<div class="col-md-3 hidden-xs hidden-sm alignCenter" style='margin-top: 10px;'>
 					<a href='.'><img src='{{{template_path}}}/images/logos/logo_hourglass.svg' alt='Logo' style='float: left; max-height: 100px; border: 0;' /></a>
 				</div>
-				<div class="col-md-6" style='text-align: center; margin-top: 10px;'>
+				<div class="col-md-6 alignCenter" style='margin-top: 10px;'>
 					<a href='.'><img src='{{{template_path}}}images/logos/logo_onehourgamejam.png' alt='Logo' style='max-width: 100%; width: 400px; border: 0;' /></a><br />
 					{{{CONFIG.VALUES.JAMDESC}}}<br />
 					{{#CONFIG.VALUES.IRC_ADDRESS}}
@@ -45,7 +45,7 @@
 						</a>
 					{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
 				</div>
-				<div class="col-md-3" style='text-align: center; margin-top: 10px; color: #FF0066'>
+				<div class="col-md-3 alignCenter" style='margin-top: 10px; color: #FF0066'>
 					<p>
 						<b>Next jam:</b><br />
 						<script type='text/javascript'>
@@ -142,17 +142,17 @@
 	</div>
 </div>
 <div class="row" style="font-size: 24px; font-weight: bold;">
-	<div class="col-md-12" style='text-align: center;'>
+	<div class="col-md-12 alignCenter">
 	</div>
 </div>
 <div class="row" style="font-size: 16px; font-weight: bold;">
-	<div class="col-md-offset-3 col-md-2" style='text-align: center; margin-bottom: 10px;'>
+	<div class="col-md-offset-3 col-md-2 alignCenter" style='margin-bottom: 10px;'>
 		<a href='?page=jams'>{{jams.all_jams_count}} Jams</a>
 	</div>
-	<div class="col-md-2" style='text-align: center; margin-bottom: 10px;'>
+	<div class="col-md-2 alignCenter" style='margin-bottom: 10px;'>
 		<a href='?page=entries'>{{entries.all_entries_count}} Games</a>
 	</div>
-	<div class="col-md-2" style='text-align: center; margin-bottom: 10px;'>
+	<div class="col-md-2 alignCenter" style='margin-bottom: 10px;'>
 		<a href='?page=authors'>{{users.all_authors_count}} Developers</a>
 	</div>
 </div>
@@ -160,7 +160,7 @@
 {{^is_streamer}}
 	{{#CONFIG.VALUES.NOTIFICATION}}
 	<div class="row" style="font-size: 16px;">
-		<div class="col-md-12" style='text-align: center;'>
+		<div class="col-md-12 alignCenter">
 			<div class="alert alert-warning" style='{{#CONFIG.VALUES.NOTIFICATION_IMAGE}}height: 100px;{{/CONFIG.VALUES.NOTIFICATION_IMAGE}}'>
 				{{#CONFIG.VALUES.NOTIFICATION_IMAGE}}
 					{{#CONFIG.VALUES.NOTIFICATION_URL}}
@@ -180,7 +180,7 @@
 	{{#user}}
 		{{#active_polls}}
 		<div class="row" style="font-size: 16px;">
-			<div class="col-md-12" style='text-align: center;'>
+			<div class="col-md-12 alignCenter">
 				<div class="alert alert-info">
 					<b>Poll:</b> {{{QUESTION}}}
 					(<a href='#' onclick='$("#PollOptionsContainer_{{POLL_ID}}").slideToggle(); return false;'>Show / hide</a>)

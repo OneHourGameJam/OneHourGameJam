@@ -1,4 +1,4 @@
-<div class="col-md-10" id='jamlist'>
+<div class="col-md-10">
 	{{^is_streamer}}
 		{{#IS_STREAM_ACTIVE}}
 			<div class="wrapper">
@@ -31,7 +31,7 @@
 
 				<div class='panel-body jamContent' style='{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
 					{{#enough_scores_to_show_satisfaction}}
-						<div style='width: 100%; text-align: center;'>
+						<div class='alignCenter fullWidth'>
 							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
 							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>
 							<div style='background: url({{{template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-3}}</div>
@@ -49,7 +49,7 @@
 					{{#entries}}
 						{{^entry_deleted}}
 							<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
-								<div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
+								<div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
 									<div style="display:table; height: 100%; width: 100%;">
 										<div style="display:table-cell;vertical-align:bottom;">
 											<div style="margin-left:auto;margin-right:auto;">
@@ -62,7 +62,7 @@
 										</div>
 									</div>
 								</div>
-								<div class='panel-body entryScreenshot description hiddenFace' style='text-align: center; height: 226px; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
+								<div class='panel-body entryScreenshot description hiddenFace alignCenter' style='height: 226px; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_non_white}}; background-color: {{color_lighter}}'>
 									<div>
 										<b>Play</b><br />
 										{{#has_url_web}}<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
@@ -88,7 +88,7 @@
 					    {{#is_latest_started_jam}}
 					        {{^user_participated_in_jam}}
         	                    <div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
-        	                        <div class='panel-body entryScreenshot screenshot' style='text-align: center; height: 226px;'>
+        	                        <div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px;'>
         	                            <div style="display:table; height: 100%; width: 100%;">
         	                                <div style="display:table-cell;vertical-align:middle;">
         	                                    <div style="margin-left:auto;margin-right:auto;">
