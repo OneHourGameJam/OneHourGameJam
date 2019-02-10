@@ -97,15 +97,15 @@
 			var entriesChart = new Chart(entriesChartCtx, {
 				type: 'pie',
 				data: {
-					labels: [{{{js_formatted_themes_popularity_themes_list}}}],
+					labels: [{{{themes.js_formatted_themes_popularity_themes_list}}}],
 					datasets: [{
 						label: '# of Entries',
-						data: [{{{js_formatted_themes_popularity_popularity_list}}}],
+						data: [{{{themes.js_formatted_themes_popularity_popularity_list}}}],
 						backgroundColor: [
-							{{{js_formatted_themes_popularity_fill_color_list}}}
+							{{{themes.js_formatted_themes_popularity_fill_color_list}}}
 						],
 						borderColor: [
-							{{{js_formatted_themes_popularity_border_color_list}}}
+							{{{themes.js_formatted_themes_popularity_border_color_list}}}
 						],
 						borderWidth: 1
 					}]
@@ -177,7 +177,7 @@
 					</th>
 				{{/user.isadmin}}
 			</tr>
-			{{#suggested_themes}}
+			{{#themes.suggested_themes}}
 				{{#theme_visible}}
 					{{#user.isadmin}}
 						{{#banned}}
@@ -298,7 +298,7 @@
 						{{/user.isadmin}}
 					</tr>
 				{{/theme_visible}}
-			{{/suggested_themes}}
+			{{/themes.suggested_themes}}
 		</table>
 	</ul>
 </div>

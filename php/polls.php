@@ -155,6 +155,12 @@ function LoadSatisfaction(&$config){
 		$questionId = $info["satisfaction_question_id"];
 		$satisfactionScore = $info["satisfaction_score"];
 		$votesForScore = $info["votes_for_score"];
+		
+		for($score = -5; $score <= 5; $score++){
+			if(!isset($satisfaction[$questionId]["scores"][$score])){
+				$satisfaction[$questionId]["scores"][$score] = 0;
+			}
+		}
 
 		$satisfaction[$questionId]["scores"][$satisfactionScore] = $votesForScore;
 	}

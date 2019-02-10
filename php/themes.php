@@ -2,17 +2,13 @@
 
 
 //Fills the list of suggested themes
-function LoadThemes(){
-	global $themes, $dictionary, $loggedInUser, $dbConn, $config;
+function LoadThemes(&$loggedInUser, &$config){
+	global $dbConn;
 	AddActionLog("LoadThemes");
 	StartTimer("LoadThemes");
-	IsLoggedIn();
-
-	$clean_userName = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
-
-	//Clear relevant lists
+	
 	$themes = Array();
-	$dictionary["suggested_themes"] = Array();
+	$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 
 	//Fill list of themes - will return same row multiple times (once for each valid themevote_type)
 	$sql = "
@@ -86,7 +82,7 @@ function LoadThemes(){
 	$sql = "
 		SELECT themevote_theme_id, themevote_type
 		FROM themevote
-		WHERE themevote_username = '$clean_userName';
+		WHERE themevote_username = '$clean_username';
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
@@ -128,7 +124,6 @@ function LoadThemes(){
 		}
 		$themes[$themeID]["votes_total"] = $votesTotal;
 
-
 		if($votesTotal >= intval($config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"])){
 			$themes[$themeID]["has_enough_votes"] = true;
 			if($themes[$themeID]["popularity_num"] >= 0.5){
@@ -165,9 +160,21 @@ function LoadThemes(){
 			$count++;
 		}
 	}
+	StopTimer("LoadThemes");
 
-	CalculateThemeSelectionProbabilityByVoteDifference();
-	CalculateThemeSelectionProbabilityByPopularity();
+	return $themes;
+}
+
+function RenderThemes(&$themes){
+	AddActionLog("RenderThemes");
+	StartTimer("RenderThemes");
+	
+	$render = Array();
+
+	$render["suggested_themes"] = Array();
+	
+	$voteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes, $config);
+	$popularity = CalculateThemeSelectionProbabilityByPopularity($themes, $config);
 
 	$jsFormattedThemesPopularityThemeList = Array();
 	$jsFormattedThemesPopularityPopularityList = Array();
@@ -175,13 +182,13 @@ function LoadThemes(){
 	$jsFormattedThemesPopularityBorderColorList = Array();
 
 	foreach($themes as $i => $theme){
-		$dictionary["suggested_themes"][] = $theme;
+		$render["suggested_themes"][] = $theme;
 		if(isset($theme["top_theme"]) && $theme["top_theme"]){
-			$dictionary["top_themes"][] = $theme;
+			$render["top_themes"][] = $theme;
 		}
 
-		if($theme["ThemeSelectionProbabilityByVoteDifference"] > 0){
-			$popularity = floor($theme["ThemeSelectionProbabilityByVoteDifference"] * 10000) / 100;
+		if($voteDifference[$i]["ThemeSelectionProbabilityByVoteDifference"] > 0){
+			$popularity = floor($voteDifference[$i]["ThemeSelectionProbabilityByVoteDifference"] * 10000) / 100;
 			$popularityUnmodified = $popularity;
 
 			if(isset($jsFormattedThemesPopularityThemeList["".$popularity])){
@@ -212,11 +219,13 @@ function LoadThemes(){
 	krsort($jsFormattedThemesPopularityFillColorList);
 	krsort($jsFormattedThemesPopularityBorderColorList);
 
-	$dictionary["js_formatted_themes_popularity_themes_list"] = implode(",", $jsFormattedThemesPopularityThemeList);
-	$dictionary["js_formatted_themes_popularity_popularity_list"] = implode(",", $jsFormattedThemesPopularityPopularityList);
-	$dictionary["js_formatted_themes_popularity_fill_color_list"] = implode(",", $jsFormattedThemesPopularityFillColorList);
-	$dictionary["js_formatted_themes_popularity_border_color_list"] = implode(",", $jsFormattedThemesPopularityBorderColorList);
-	StopTimer("LoadThemes");
+	$render["js_formatted_themes_popularity_themes_list"] = implode(",", $jsFormattedThemesPopularityThemeList);
+	$render["js_formatted_themes_popularity_popularity_list"] = implode(",", $jsFormattedThemesPopularityPopularityList);
+	$render["js_formatted_themes_popularity_fill_color_list"] = implode(",", $jsFormattedThemesPopularityFillColorList);
+	$render["js_formatted_themes_popularity_border_color_list"] = implode(",", $jsFormattedThemesPopularityBorderColorList);
+
+	StopTimer("RenderThemes");
+	return $render;
 }
 
 
@@ -257,21 +266,20 @@ function GetThemeVotesOfUserFormatted($username){
 	return ArrayToHTML(MySQLDataToArray($data));
 }
 
-function CalculateThemeSelectionProbabilityByVoteDifference(){
-	global $themes, $config;
+function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 	AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 	StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 
-	$selectedTheme = "";
+	$result = Array();
 
 	$totalVotesDifference = 0;
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
+		$result[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
+		$result[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 
 		if(isset($theme["banned"])){
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 			continue;
 		}
 
@@ -284,16 +292,12 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 		$votesOpinionatedTotal = $votesFor + $votesAgainst;
 
 		if($votesOpinionatedTotal <= 0){
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 			continue;
 		}
 
 		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
 
 		if($votesTotal <= 0 || $votesTotal < $minimumVotes){
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 			continue;
 		}
 
@@ -303,8 +307,6 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 		$themeOption["popularity"] = $votesPopularity;
 		$totalVotesDifference += max(0, $votesDifference);
 
-		$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = 0;
-		$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 		$availableThemes[$id] = $themeOption;
 	}
 
@@ -312,29 +314,29 @@ function CalculateThemeSelectionProbabilityByVoteDifference(){
 		foreach($availableThemes as $id => $availableTheme){
 			$voteDifference = $availableTheme["votes_difference"];
 			$selectionProbability = max(0, $voteDifference / $totalVotesDifference);
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifference"] = $selectionProbability;
-			$themes[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = round($selectionProbability * 100)."%";
+			$result[$id]["ThemeSelectionProbabilityByVoteDifference"] = $selectionProbability;
+			$result[$id]["ThemeSelectionProbabilityByVoteDifferenceText"] = round($selectionProbability * 100)."%";
 		}
 	}
 	StopTimer("CalculateThemeSelectionProbabilityByVoteDifference");
+	return $result;
 }
 
-function CalculateThemeSelectionProbabilityByPopularity(){
-	global $themes, $config;
+function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 	AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 	StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 	$totalPopularity = 0;
 
-	$selectedTheme = "";
+	$result = Array();
 
 	$totalVotesDifference = 0;
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
+		$result[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
+		$result[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
 
-		if($theme["banned"]){
-			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
-			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
+		if(isset($theme["banned"])){
 			continue;
 		}
 
@@ -347,16 +349,12 @@ function CalculateThemeSelectionProbabilityByPopularity(){
 		$votesOpinionatedTotal = $votesFor + $votesAgainst;
 
 		if($votesOpinionatedTotal <= 0){
-			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
-			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
 			continue;
 		}
 
 		$votesPopularity = $votesFor / ($votesOpinionatedTotal);
 
 		if($votesTotal <= 0 || $votesTotal < $minimumVotes){
-			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
-			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
 			continue;
 		}
 
@@ -366,9 +364,6 @@ function CalculateThemeSelectionProbabilityByPopularity(){
 		$themeOption["popularity"] = $votesPopularity;
 		$totalPopularity += max(0, $votesPopularity);
 
-		$themes[$id]["ThemeSelectionProbabilityByPopularity"] = 0;
-		$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = "0%";
-
 		$availableThemes[] = $themeOption;
 	}
 
@@ -376,11 +371,12 @@ function CalculateThemeSelectionProbabilityByPopularity(){
 		foreach($availableThemes as $id => $availableTheme){
 			$popularity = $availableTheme["popularity"];
 			$selectionProbability = max(0, $popularity / $totalPopularity);
-			$themes[$id]["ThemeSelectionProbabilityByPopularity"] = $selectionProbability;
-			$themes[$id]["ThemeSelectionProbabilityByPopularityText"] = round($selectionProbability * 100)."%";
+			$result[$id]["ThemeSelectionProbabilityByPopularity"] = $selectionProbability;
+			$result[$id]["ThemeSelectionProbabilityByPopularityText"] = round($selectionProbability * 100)."%";
 		}
 	}
 	StopTimer("CalculateThemeSelectionProbabilityByPopularity");
+	return $result;
 }
 
 

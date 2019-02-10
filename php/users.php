@@ -95,6 +95,8 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
     //Determine if this user is an author and their participation
 	StartTimer("RenderUser - foreach games");
     $userData["entry_count"] = 0;
+    $userData["first_jam_number"] = 0;
+    $userData["last_jam_number"] = 0;
     foreach($games as $j => $gameData){
         if($gameData["author"] != $username){
             continue;
@@ -115,15 +117,12 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
 
 	    StartTimer("RenderUser - foreach games - entry count, first and last jam, recent");
         $userData["is_author"] = 1;
-        if(!isset($userData["entry_count"])){
-            $userData["entry_count"] = 0;
-        }
         
-        if(!isset($userData["first_jam_number"])){
+        if($userData["first_jam_number"] == 0){
             $userData["first_jam_number"] = $gameData["jam_number"];
         }
         
-        if(!isset($userData["last_jam_number"])){
+        if($userData["last_jam_number"] == 0){
             $userData["last_jam_number"] = $gameData["jam_number"];
         }
 
@@ -254,6 +253,7 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
     $userData["votes_for"] = 0;
     $userData["votes_neutral"] = 0;
     $userData["votes_against"] = 0;
+    $userData["votes_vetos"] = 0;
     foreach($adminVotes as $j => $adminVoteData){
         if($userData["username"] == $adminVoteData["subject_username"]){
             switch($adminVoteData["vote_type"]){

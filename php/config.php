@@ -15,6 +15,7 @@ $configCategorySettings = Array(
 	"ADMIN_SUGGESTIONS" => "Admin Suggestions",
     "USERS" => "Users",
     "SYSTEM" => "System",
+    "ASSETS" => "Assets",
 );
 
 //Initializes configuration, stores it in the global $config variable.
