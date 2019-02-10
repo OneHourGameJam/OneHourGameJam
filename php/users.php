@@ -328,14 +328,21 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
 
     $authorCount = 0;
     $gamesByUsername = GroupGamesByUsername($games);
+    $jamsByUsername = GroupJamsByUsername($jams, $gamesByUsername);
+
     foreach($users as $i => $user){
         $username = $user["username"];
         $userGames = Array();
         if(isset($gamesByUsername[$username])){
             $userGames = $gamesByUsername[$username];
         }
+        $userJams = Array();
+        if(isset($jamsByUsername[$username])){
+            $userJams = $jamsByUsername[$username];
+        }
+        $userAsArray = Array($user);
 
-        $userData = RenderUser($user, $users, $userGames, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
+        $userData = RenderUser($user, $userAsArray, $userGames, $userJams, $config, $adminVotes, $loggedInUserAdminVotes);
 
         if(isset($userData["entry_count"])){
             $authorCount += 1;
@@ -361,25 +368,37 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
     if($missingAdminCandidateVotes > 0){
         $render["missing_admin_candidate_votes"] = 1;
         $render["missing_admin_candidate_votes_number"] = $missingAdminCandidateVotes;
-	}
-
-	$render["all_authors_count"] = $authorCount;
+    }
+  
+    $render["all_authors_count"] = $authorCount;
 
 	StopTimer("RenderUsers");
 	return $render;
 }
 
-function GroupGamesByUsername($games)
+function GroupGamesByUsername(&$games)
 {
-	$gamesByUsername = Array();
-	foreach($games as $i => $game){
-		$username = $game["author"];
-		if (!isset($gamesByUsername[$username])) {
-			$gamesByUsername[$username] = Array();
-		}
-		$gamesByUsername[$username][] = $game;
-	}
-	return $gamesByUsername;
+    $gamesByUsername = Array();
+    foreach($games as $i => $game) {
+        $username = $game["author"];
+        if (!isset($gamesByUsername[$username])){
+            $gamesByUsername[$username] = Array();
+        }
+        $gamesByUsername[$username][] = $game;
+    }
+    return $gamesByUsername;
+}
+
+function GroupJamsByUsername(&$jams, &$gamesByUsername)
+{
+    $jamsByUsername = Array();
+    foreach($gamesByUsername as $username => $games){
+        $jamsByUsername[$username] = Array();
+        foreach($games as $i => $game){
+            $jamsByUsername[$username][$game['jam_id']] = $jams[$game['jam_id']];
+        }
+    }
+    return $jamsByUsername;
 }
 
 ?>
