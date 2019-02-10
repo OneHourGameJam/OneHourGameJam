@@ -111,9 +111,5 @@ a:hover{
 
 #mainmenu li.mainmenu-separator {
     border-top: 1px solid #7B8991;
-    margin-top: -1px;
     color: white;
-    font-size: 10px;
-    text-transform: uppercase;
-    padding-top: 12px;
   }
