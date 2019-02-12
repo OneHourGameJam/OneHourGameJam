@@ -88,6 +88,25 @@ function ordinal($number) {
 	}
 	StopTimer("ordinal");
 }
+// Converts bytes to a string with a more accurate unit. Returns "5 kilobytes" instead of 5120 bytes, for example.
+// Used in the mustache helper for printing bytes
+function bytesToString($bytes) {
+	$byteConversions = array( 
+		"Terabyte" => 1099511627776,
+		"Gigabyte" => 1073741824,
+		"Megabyte" => 1048576,
+		"Kilobyte" => 1024,
+		"Byte" => 1
+    );
+	foreach ($byteConversions as $name => $ratio) {
+		if ($bytes >= $ratio){
+      		$amount = $bytes / $ratio;
+		  	$plural = $amount > 1 ? "s" : "";
+			return strval($amount) . " " . $name . $plural;
+		}
+	}
+	return "less than 1 Byte. This is a bug.";
+}
 
 function GetSuggestedNextJamDateTime(&$config){
 	AddActionLog("GetSuggestedNextJamDateTime");
