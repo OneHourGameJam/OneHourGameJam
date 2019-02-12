@@ -645,6 +645,9 @@ if($page == "jam")
 								die('Cannot make a new submission to a past jam');
 							}
 
+							// Get the maximum size of the entry screenshot
+							$dictionary["user_entry_screenshot_max_size"] = bytesToString($config["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]["VALUE"]);
+
 							print $mustache->render(file_get_contents($templateBasePath."submit.html"), $dictionary);
 						break;
 						case "newjam":
