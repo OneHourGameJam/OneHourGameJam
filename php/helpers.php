@@ -102,7 +102,7 @@ function bytesToString($bytes) {
 		if ($bytes >= $ratio){
       		$amount = $bytes / $ratio;
 		  	$plural = $amount > 1 ? "s" : "";
-			return strval($amount) . " " . $name . $plural;
+			return number_format($amount, 2) . " " . $name . $plural;
 		}
 	}
 	return "less than 1 Byte. This is a bug.";
