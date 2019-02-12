@@ -37,7 +37,7 @@ $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
+if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog", "tools")))){
 	$page = "main";
 }
 
@@ -65,7 +65,8 @@ $pageTitles = Array(
 	"authors" => "Authors",
 	"privacy" => "Privacy",
     "userdata" => "User Data",
-    "adminlog" => "Admin Log"
+    "adminlog" => "Admin Log",
+    "tools" => "Tools"
 );
 
 //List of pages which require user to be logged in
@@ -725,6 +726,9 @@ if($page == "jam")
 						break;
 						case "adminlog":
 							print $mustache->render(file_get_contents($templateBasePath."adminlog.html"), $dictionary);
+						break;
+						case "tools":
+							print $mustache->render(file_get_contents($templateBasePath."tools.html"), $dictionary);
 						break;
 					}
 				?>

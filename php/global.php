@@ -23,6 +23,7 @@ $satisfaction = Array();
 $adminVotes = Array();
 $loggedInUserAdminVotes = Array();
 $adminLog = Array();
+$tools = Array();
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];

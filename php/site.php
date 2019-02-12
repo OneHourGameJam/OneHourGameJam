@@ -24,6 +24,7 @@ include_once("php/users.php");
 include_once("php/jams.php");
 include_once("php/games.php");
 include_once("php/themes.php");
+include_once("php/tools.php");
 include_once("php/assets.php");
 include_once("php/polls.php");
 include_once("php/stream.php");

@@ -1,0 +1,68 @@
+<div class="col-md-10">
+    <div class='panel panel-info'>
+        <div class='panel-heading'>
+            Tools
+        </div>
+    </div>
+
+    {{#tools.TOOL_CATEGORY}}
+        <div class='panel panel-info'>
+            <div class='panel-heading'>
+                <h3>{{CATEGORY_TITLE}}</h3>
+            </div>
+            <div class='panel-body'>
+                {{#TOOL_SUBCATEGORY}}
+                    <h4>{{SUBCATEGORY_TITLE}}</h4>
+                    <table class="table">
+                        <tr>
+                            <th>Tool</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Pricing Model</th>
+                            <th title='Suitable for Beginner gamedevs'>B</th>
+                            <th title='Suitable for Enthusiast gamedevs'>E</th>
+                            <th title='Suitable for Advanced gamedevs'>A</th>
+                            <th title='Runs on Windows'>Windows</th>
+                            <th title='Runs on Linux'>Linux</th>
+                            <th title='Runs on macOS'>macOS</th>
+                        </tr>
+                        {{#LIST}}
+                            {{^tool_deleted}}
+                                <tr>
+                                    <td><a href='{{{url}}}' target='_BLANK'>{{title}}</a></td>
+                                    <td>{{description}}</td>
+                                    <td>
+                                        {{#is_free}}Free{{/is_free}}
+                                        {{^is_free}}{{price}}{{/is_free}}
+                                    </td>
+                                    <td>
+                                        {{pricing_model}}
+                                    </td>
+                                    <td>{{#intended_audience_beginner}}✅{{/intended_audience_beginner}}</td>
+                                    <td>{{#intended_audience_enthusiast}}✅{{/intended_audience_enthusiast}}</td>
+                                    <td>{{#intended_audience_advanced}}✅{{/intended_audience_advanced}}</td>
+
+                                    <td>
+                                        {{#platform_windows_good}}✅{{/platform_windows_good}}
+                                        {{#platform_windows_wip}}⚠️{{/platform_windows_wip}}
+                                        {{#platform_windows_bad}}❌{{/platform_windows_bad}}
+                                    </td>
+                                    <td>
+                                        {{#platform_linux_good}}✅{{/platform_linux_good}}
+                                        {{#platform_linux_wip}}⚠️{{/platform_linux_wip}}
+                                        {{#platform_linux_bad}}❌{{/platform_linux_bad}}
+                                    </td>
+                                    <td>
+                                        {{#platform_mac_good}}✅{{/platform_mac_good}}
+                                        {{#platform_mac_wip}}⚠️{{/platform_mac_wip}}
+                                        {{#platform_mac_bad}}❌{{/platform_mac_bad}}
+                                    </td>
+                                </tr>
+                            {{/tool_deleted}}
+                        {{/LIST}}
+                    </table>
+                {{/TOOL_SUBCATEGORY}}
+            </div>
+        </div>
+    {{/tools.TOOL_CATEGORY}}
+</div>
