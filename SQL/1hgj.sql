@@ -576,7 +576,8 @@ INSERT INTO `config`
 VALUES 
 (null,Now(),'-1','DEFAULT_SATURATION','160','NEW_JAM_DEFAULTS','Default saturation (0..255)','NUMBER','[]',1,1,1),
 (null,Now(),'-1','DEFAULT_NUMBER_OF_COLORS','10','NEW_JAM_DEFAULTS','Default number of colors (0..16)','NUMBER','[]',1,1,1),
-(null,Now(),'-1','TWITTER_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitter account, appears in the left menu.','TEXT','[]',1,0,1),(55,'2018-10-24 02:29:45','-1','TWITCH_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitch account, appears in the left menu.','TEXT','[]',1,0,1),
+(null,Now(),'-1','TWITTER_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitter account, appears in the left menu.','TEXT','[]',1,0,1),
+(null,Now(),'-1','TWITCH_ACCOUNT','','SOCIAL_MEDIA','Game Jam\'s twitch account, appears in the left menu.','TEXT','[]',1,0,1),
 (null,Now(),'-1','IRC_ADDRESS','','SOCIAL_MEDIA','IRC address','TEXT','[]',1,0,1),
 (null,Now(),'-1','IRC_CHANNEL','','SOCIAL_MEDIA','IRC Channel','TEXT','[]',1,0,1),
 (null,Now(),'-1','IRC_CHAT_IN_BROWSER','','SOCIAL_MEDIA','IRC Chat in browser URL','TEXT','[]',1,0,1),
