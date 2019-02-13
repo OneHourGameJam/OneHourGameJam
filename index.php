@@ -667,6 +667,8 @@ if($page == "jam")
 							}
 						break;
 						case "editasset":
+							// Get the maximum size of the entry screenshot
+							$dictionary["asset_max_size"] = bytesToString($config["MAX_ASSET_FILE_SIZE_IN_BYTES"]["VALUE"]);
 							if(IsAdmin()){
 								print $mustache->render(file_get_contents($templateBasePath."editasset.html"), $dictionary);
 							}
