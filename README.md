@@ -27,7 +27,9 @@ This will setup a scotchbox vagrant box with 1hgj fully installed. You only need
 ## Manually:
 What you need is a web server capable of running PHP, for example Apache.
 
-If you prefer to follow a video tutorial, [click here](https://www.youtube.com/watch?v=NiaaSXDoVf0).
+If you prefer to follow a video tutorial, please watch the following:
+
+[![OneHourGameJam Local Copy Setup](http://img.youtube.com/vi/NiaaSXDoVf0/0.jpg)](http://www.youtube.com/watch?v=NiaaSXDoVf0 "OneHourGameJam Local Copy Setup")
 
 ### 1: Download XAMPP
 
