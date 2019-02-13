@@ -27,6 +27,8 @@ This will setup a scotchbox vagrant box with 1hgj fully installed. You only need
 ## Manually:
 What you need is a web server capable of running PHP, for example Apache.
 
+If you prefer to follow a video tutorial, [click here](https://www.youtube.com/watch?v=NiaaSXDoVf0).
+
 ### 1: Download XAMPP
 
 * Go to [Apache](https://www.apachefriends.org/download.html) and download a version for your operating system (For PHP 5.6, not a VM version)
