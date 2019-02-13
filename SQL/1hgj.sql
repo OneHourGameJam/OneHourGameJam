@@ -623,8 +623,8 @@ VALUES
 (null,Now(),'-1','MAX_COLORS_FOR_JAM', '16', 'NEW_JAM_DEFAULTS', 'Maximum number of colors that will be available for each jam', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','MINIMUM_DISPLAY_NAME_LENGTH', '1', 'USERS', 'Shortest user display name', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','MAXIMUM_DISPLAY_NAME_LENGTH', '50', 'USERS', 'Longest user display name', 'NUMBER', '[]', '1', '1', '1'),
-(null,Now(),'-1','MAX_SCREENSHOT_FILE_SIZE_IN_BYTES', '5000000', 'JAM_SETTINGS', 'Maximum screenshot file size in bytes', 'NUMBER', '[]', '0', '1', '1'),
-(null,Now(),'-1','MAX_ASSET_FILE_SIZE_IN_BYTES', '5000000', 'ASSETS', 'Maximum asset file size in bytes', 'NUMBER', '[]', '0', '1', '1'),
+(null,Now(),'-1','MAX_SCREENSHOT_FILE_SIZE_IN_BYTES', '5242880', 'JAM_SETTINGS', 'Maximum screenshot file size in bytes', 'NUMBER', '[]', '0', '1', '1'),
+(null,Now(),'-1','MAX_ASSET_FILE_SIZE_IN_BYTES', '15728640', 'ASSETS', 'Maximum asset file size in bytes', 'NUMBER', '[]', '0', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM', '120', 'JAM_SETTINGS', 'How many minutes before the next jam should the jam autoscheduler schedule a jam?', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_ENABLED', '0', 'JAM_SETTINGS', 'Should the jam autoscheduler automatically schedule jams?', 'ENUM', '[{\"VALUE\":0,\"TEXT\":\"No\"},{\"VALUE\":1,\"TEXT\":\"Yes\"}]', '1', '1', '1'),
 (null,Now(),'-1','DATABASE_VERSION', '1', 'SYSTEM', 'The version of the database. Used to determine required database migration.', 'NUMBER', '[]', '0', '1', '1');
