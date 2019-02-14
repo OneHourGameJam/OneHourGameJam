@@ -181,6 +181,8 @@ function RenderThemes(&$themes){
 	$jsFormattedThemesPopularityFillColorList = Array();
 	$jsFormattedThemesPopularityBorderColorList = Array();
 
+	$themesUserHasNotVotedFor = 0;
+
 	foreach($themes as $i => $theme){
 		$render["suggested_themes"][] = $theme;
 		if(isset($theme["top_theme"]) && $theme["top_theme"]){
@@ -211,6 +213,18 @@ function RenderThemes(&$themes){
 			$randomB = 0x10 + (rand(0,14) * 0x10);
 			$jsFormattedThemesPopularityFillColorList["".$popularity] = "'rgba(".$randomR.", ".$randomG.", ".$randomB.", 0.2)'";
 			$jsFormattedThemesPopularityBorderColorList["".$popularity] = "'rgba(".$randomR.", ".$randomG.", ".$randomB.", 1)'";
+		}
+
+		if(!isset($theme["banned"]) && !isset($theme["user_vote_for"]) && !isset($theme["user_vote_neutral"]) && !isset($theme["user_vote_against"])){
+			$themesUserHasNotVotedFor++;
+		}
+	}
+
+	if($themesUserHasNotVotedFor != 0){
+		$render["user_has_not_voted_for_all_themes"] = 1;
+		$render["themes_user_has_not_voted_for"] = $themesUserHasNotVotedFor;
+		if($themesUserHasNotVotedFor != 0 && $themesUserHasNotVotedFor != 1){
+			$render["themes_user_has_not_voted_for_plural"] = 1;
 		}
 	}
 

@@ -1,15 +1,19 @@
 <?php
 
+$userPreferenceSettings = Array(
+	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
+);
+
 //Loads users
 function LoadUsers(){
-	global $dictionary, $dbConn;
+	global $dbConn, $userPreferenceSettings;
 	AddActionLog("LoadUsers");
 	StartTimer("LoadUsers");
 
 	$users = Array();
 
 	$sql = "SELECT user_id, user_username, user_display_name, user_twitter, user_email,
-                   user_password_salt, user_password_hash, user_password_iterations, user_role,
+                   user_password_salt, user_password_hash, user_password_iterations, user_role, user_preferences,
                    DATEDIFF(Now(), user_last_login_datetime) AS days_since_last_login,
                    DATEDIFF(Now(), log_max_datetime) AS days_since_last_admin_action
             FROM
@@ -35,6 +39,15 @@ function LoadUsers(){
 		$currentUser["password_hash"] = $info["user_password_hash"];
 		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
         $currentUser["admin"] = intval($info["user_role"]);
+        $currentUser["user_preferences"] = intval($info["user_preferences"]);
+
+        $currentUser["preferences"] = Array();
+        foreach($userPreferenceSettings as $i => $preferenceSetting){
+            $preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);
+            $preferenceKey = $preferenceSetting["PREFERENCE_KEY"];
+
+            $currentUser["preferences"][$preferenceKey] = $currentUser["user_preferences"] & $preferenceFlag;
+        }
 
         //This fixes an issue where user_last_login_datetime was not set properly in the database, which results in days_since_last_login being null for users who have not logged in since the fix was applied
         if($info["days_since_last_login"] == null){
@@ -145,6 +158,14 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
 	    StartTimer("RenderUser - foreach games - RenderGame");
         $userData["entries"][] = RenderGame($gameData, $jams, $users);
 	    StopTimer("RenderUser - foreach games - RenderGame");
+
+	    StartTimer("RenderUser - preferences");
+        foreach($userData["preferences"] as $preferenceKey => $preferenceValue){
+            if($preferenceValue != 0){
+                $render[$preferenceKey] = 1;
+            }
+        }
+	    StopTimer("RenderUser - preferences");
     }
 	StopTimer("RenderUser - foreach games");
 

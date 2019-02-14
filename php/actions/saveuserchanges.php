@@ -1,12 +1,12 @@
 <?php
 
 //Changes data about the logged in user
-function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
+function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
 	global $users, $loggedInUser, $dbConn, $actionResult, $config;
 
 	$loggedInUser = IsLoggedIn();
 
-	//Authorize user (is admin)
+	//Authorize user
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
@@ -26,11 +26,12 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
 		AddDataWarning("Provided email address is not valid", false);
 		return;
 	}
-
+	
 	$displayNameClean = mysqli_real_escape_string($dbConn, $displayName);
 	$twitterHandleClean = mysqli_real_escape_string($dbConn, $twitterHandle);
 	$emailAddressClean = mysqli_real_escape_string($dbConn, $emailAddress);
 	$bioClean = mysqli_real_escape_string($dbConn, CleanHtml($bio));
+	$preferencesClean = mysqli_real_escape_string($dbConn, $preferences);
 	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
 
 	$sql = "
@@ -39,7 +40,8 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio){
 		user_display_name = '$displayNameClean',
 		user_twitter = '$twitterHandleClean',
 		user_email = '$emailAddressClean',
-		user_bio = '$bioClean'
+		user_bio = '$bioClean',
+		user_preferences = $preferencesClean
 		WHERE user_username = '$usernameClean';
 	";
 	$data = mysqli_query($dbConn, $sql);
@@ -54,9 +56,21 @@ if(IsLoggedIn()){
     $displayName = $_POST["displayname"];
     $twitterHandle = $_POST["twitterhandle"];
     $emailAddress = $_POST["emailaddress"];
-    $bio = $_POST["bio"];
+	$bio = $_POST["bio"];
 
-    ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio);
+	$preferenceValue = 0;
+	foreach($userPreferenceSettings as $i => $preferenceSetting){
+		$preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);
+		$preferenceKey = $preferenceSetting["PREFERENCE_KEY"];
+
+		if(isset($_POST[$preferenceKey])){
+			if($_POST[$preferenceKey] == "on"){
+				$preferenceValue = $preferenceValue | $preferenceFlag;
+			}
+		}
+	}
+
+	ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferenceValue);
 }
 $page = "usersettings";
 
