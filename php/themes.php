@@ -165,7 +165,7 @@ function LoadThemes(&$loggedInUser, &$config){
 	return $themes;
 }
 
-function RenderThemes(&$themes){
+function RenderThemes(&$themes, &$config){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -174,7 +174,7 @@ function RenderThemes(&$themes){
 	$render["suggested_themes"] = Array();
 	
 	$voteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes, $config);
-	$popularity = CalculateThemeSelectionProbabilityByPopularity($themes, $config);
+	$popularityArray = CalculateThemeSelectionProbabilityByPopularity($themes, $config);
 
 	$jsFormattedThemesPopularityThemeList = Array();
 	$jsFormattedThemesPopularityPopularityList = Array();
@@ -184,10 +184,13 @@ function RenderThemes(&$themes){
 	$themesUserHasNotVotedFor = 0;
 
 	foreach($themes as $i => $theme){
-		$render["suggested_themes"][] = $theme;
+		$render["suggested_themes"][$i] = $theme;
 		if(isset($theme["top_theme"]) && $theme["top_theme"]){
 			$render["top_themes"][] = $theme;
 		}
+
+		$render["suggested_themes"][$i]["ThemeSelectionProbabilityByVoteDifferenceText"] = $voteDifference[$i]["ThemeSelectionProbabilityByVoteDifferenceText"];
+		$render["suggested_themes"][$i]["ThemeSelectionProbabilityByPopularityText"] = $popularityArray[$i]["ThemeSelectionProbabilityByPopularityText"];
 
 		if($voteDifference[$i]["ThemeSelectionProbabilityByVoteDifference"] > 0){
 			$popularity = floor($voteDifference[$i]["ThemeSelectionProbabilityByVoteDifference"] * 10000) / 100;
@@ -378,7 +381,7 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 		$themeOption["popularity"] = $votesPopularity;
 		$totalPopularity += max(0, $votesPopularity);
 
-		$availableThemes[] = $themeOption;
+		$availableThemes[$id] = $themeOption;
 	}
 
 	if($totalPopularity > 0 && count($availableThemes) > 0){

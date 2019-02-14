@@ -40,7 +40,7 @@ function Init(){
 	$dictionary["users"] = RenderUsers($users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
 	$dictionary["jams"] = RenderJams($jams, $config, $games, $users, $satisfaction, $loggedInUser);
 	$dictionary["entries"] = RenderGames($games, $jams, $users);
-	$dictionary["themes"] = RenderThemes($themes);
+	$dictionary["themes"] = RenderThemes($themes, $config);
 
 
 	$dictionary["assets"] = RenderAssets($assets);
