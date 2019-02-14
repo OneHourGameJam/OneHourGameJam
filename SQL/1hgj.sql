@@ -142,7 +142,7 @@ CREATE TABLE `entry` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errora14`@`localhost`*/ /*!50003 TRIGGER `entry_insert` AFTER INSERT ON `entry` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `entry_insert` AFTER INSERT ON `entry` FOR EACH ROW BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
 		`change_type`,
@@ -206,7 +206,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errora14`@`localhost`*/ /*!50003 TRIGGER `entry_update` BEFORE UPDATE ON `entry` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `entry_update` BEFORE UPDATE ON `entry` FOR EACH ROW BEGIN
   IF OLD.entry_id = NEW.entry_id OR
 	 OLD.entry_datetime = NEW.entry_datetime OR
 	 OLD.entry_ip = NEW.entry_ip OR
@@ -291,7 +291,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`errora14`@`localhost`*/ /*!50003 TRIGGER `entry_delete` BEFORE DELETE ON `entry` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `entry_delete` BEFORE DELETE ON `entry` FOR EACH ROW BEGIN
     INSERT INTO `entry_changelog`
 		(`change_id`,
 		`change_type`,

@@ -22,7 +22,7 @@
 		{{#themes.user_has_not_voted_for_all_themes}}
 			{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
 				<div class="panel-body notification">
-					<a href='?page=themes'><span style='background-color: red; color: white; font-weight: bold;'>{{{themes.themes_user_has_not_voted_for}}}</span> theme{{#themes_user_has_not_voted_for_plural}}s{{/themes_user_has_not_voted_for_plural}} need{{^themes_user_has_not_voted_for_plural}}s{{/themes_user_has_not_voted_for_plural}} your vote</a>
+					<a href='?page=themes'><span style='background-color: red; color: white; font-weight: bold;'>{{{themes.themes_user_has_not_voted_for}}}</span> theme{{#themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} need{{^themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} your vote</a>
 				</div>
 			{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
 		{{/themes.user_has_not_voted_for_all_themes}}
