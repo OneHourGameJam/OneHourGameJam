@@ -277,10 +277,10 @@
 							<td class='themeTableCell themeTableCellCentered'>
 								{{votes_total}}
 							</td>
-							<td class='themeTableCell themeTableCellCentered' style='background-color: {{popularity_color}}'>
+							<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}}style='background-color: {{popularity_color}}'{{/has_enough_votes}}>
 								{{votes_popularity}}
 							</td>
-							<td class='themeTableCell themeTableCellCentered' style='background-color: {{apathy_color}}'>
+							<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}} style='background-color: {{apathy_color}}'{{/has_enough_votes}}>
 								{{votes_apathy}}
 							</td>
 							<td class='themeTableCell themeTableCellCentered'>

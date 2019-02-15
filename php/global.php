@@ -17,12 +17,15 @@ $jams = Array();
 $authors = Array();
 $entries = Array();
 $themes = Array();
+$loggedInUserThemeVotes = Array();
 $assets = Array();
 $polls = Array();
 $satisfaction = Array();
 $adminVotes = Array();
 $loggedInUserAdminVotes = Array();
 $adminLog = Array();
+$themesByVoteDifference = Array();
+$themesByPopularity = Array();
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
