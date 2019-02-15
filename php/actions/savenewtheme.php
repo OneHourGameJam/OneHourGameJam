@@ -46,8 +46,6 @@ function AddTheme($newTheme, $isBot){
 	$sql = "";
 
 	$actionResult = "SUCCESS";
-	LoadThemes();
-
 	AddDataSuccess("Theme added", false);
 }
 
