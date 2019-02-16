@@ -12,6 +12,7 @@ StartTimer("site.php - Include");
 //Global variable definition
 session_start();
 include_once("php/global.php");
+include_once("php/dependencies.php");
 
 //Global functions
 include_once("php/sanitize.php");

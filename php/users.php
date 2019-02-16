@@ -91,8 +91,8 @@ function LoadUsers(){
 	StopTimer("LoadUsers");
 	return $users;
 }
-
-function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$loggedInUserAdminVotes){
+                            
+function RenderUser(&$config, &$user, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, $print = false){
     global $nightmode;
 
 	AddActionLog("RenderUser");
@@ -155,8 +155,8 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
 
 	    StopTimer("RenderUser - foreach games - entry count, first and last jam, recent");
 
-	    StartTimer("RenderUser - foreach games - RenderGame");
-        $userData["entries"][] = RenderGame($gameData, $jams, $users);
+        StartTimer("RenderUser - foreach games - RenderGame");
+        $userData["entries"][] = RenderGame($users, $gameData, $jams);
 	    StopTimer("RenderUser - foreach games - RenderGame");
 
 	    StartTimer("RenderUser - preferences");
@@ -342,7 +342,7 @@ function RenderUser(&$user, &$users, &$games, &$jams, &$config, &$adminVotes, &$
     return $userData;
 }
 
-function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedInUserAdminVotes){
+function RenderUsers(&$config, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes){
 	AddActionLog("RenderUsers");
 	StartTimer("RenderUsers");
     $render = Array("LIST" => Array());
@@ -362,8 +362,8 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
             $userJams = $jamsByUsername[$username];
         }
         $userAsArray = Array($user);
-
-        $userData = RenderUser($user, $userAsArray, $userGames, $userJams, $config, $adminVotes, $loggedInUserAdminVotes);
+        
+        $userData = RenderUser($config, $user, $users, $games, $userJams, $adminVotes, $loggedInUserAdminVotes);
 
         if(isset($userData["entry_count"])){
             $authorCount += 1;
@@ -395,6 +395,10 @@ function RenderUsers(&$users, &$games, &$jams, &$config, &$adminVotes, &$loggedI
 
 	StopTimer("RenderUsers");
 	return $render;
+}
+
+function RenderLoggedInUser(&$config, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser){
+    return RenderUser($config, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, true);
 }
 
 function GroupGamesByUsername(&$games)

@@ -61,7 +61,7 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, &$satisfaction, $loggedInUser){
+function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
@@ -72,6 +72,7 @@ function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, &$s
 	$jamData["jam_number"] = $jam["jam_number"];
 	$jamData["theme"] = $jam["theme"];
 	$jamData["start_time"] = $jam["start_time"];
+
 	if($jam["jam_deleted"] == 1){
 		$jamData["jam_deleted"] = 1;
 	}
@@ -95,7 +96,7 @@ function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, &$s
 	$jamData["entries_count"] = 0;
 	foreach($games as $j => $game){
 		if($game["jam_id"] == $jamData["jam_id"]){
-			$jamData["entries"][] = RenderGame($game, $jams, $users);
+			$jamData["entries"][] = RenderGame($users, $game, $jams);
 
 			if(!$game["entry_deleted"]){
 				//Has logged in user participated in this jam?
@@ -159,12 +160,12 @@ function RenderJam(&$jam, $nonDeletedJamCounter, &$config, &$games, &$users, &$s
 	return $jamData;
 }
 
-function RenderSubmitJam($jam, $config, $games, $users, &$satisfaction, $loggedInUser){
+function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser){
 	AddActionLog("RenderSubmitJam");
-	return RenderJam($jam, 0, $config, $games, $users, $satisfaction,  $loggedInUser);
+	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0);
 }
 
-function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedInUser){
+function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -181,7 +182,7 @@ function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedI
 			$nonDeletedJamCounter += 1;
 		}
 
-		$jamData = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $satisfaction, $loggedInUser);
+		$jamData = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter);
 
 		$now = time();
 		$datetime = strtotime($jamData["start_time"] . " UTC");
@@ -212,7 +213,7 @@ function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedI
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule(&$themes, &$jams, &$config, $nextScheduledJamTime, $nextSuggestedJamTime){
+function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime, $nextSuggestedJamTime){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule"); 
 

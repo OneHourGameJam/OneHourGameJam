@@ -78,7 +78,7 @@ function LoadUserThemeVotes(&$loggedInUser){
 	return $userThemeVotes;
 }
 
-function RenderThemes(&$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$config){
+function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	

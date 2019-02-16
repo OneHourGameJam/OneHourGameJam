@@ -42,13 +42,13 @@ function LoadGames(){
 
 
 
-function RenderGames(&$games, &$jams, &$users){
+function RenderGames(&$users, &$games, &$jams){
 	AddActionLog("RenderGames");
 	StartTimer("RenderGames");
 	$render = Array("LIST" => Array());
     $nonDeletedGamesCounter = 0;
 	foreach($games as $i => $game){
-        $render["LIST"][] = RenderGame($game, $jams, $users);
+        $render["LIST"][] = RenderGame($users, $game, $jams);
         if($game["entry_deleted"] != 1){
             $nonDeletedGamesCounter += 1;
         }
@@ -59,9 +59,10 @@ function RenderGames(&$games, &$jams, &$users){
 	return $render;
 }
 
-function RenderGame(&$game, &$jams, &$users){
+function RenderGame(&$users, &$game, &$jams){
 	AddActionLog("RenderGame");
 	StartTimer("RenderGame");
+	
 	$gameData = Array();
 	$gameData["id"] = $game["id"];
 	$gameData["jam_id"] = intval($game["jam_id"]);

@@ -37,14 +37,13 @@ $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
 
 //List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "logout", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
+if(!(in_array($page, Array("main", "login", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
 	$page = "main";
 }
 
 $pageTitles = Array(
 	"main" => "Main Page",
 	"login" => "Login",
-	"logout" => "Logout",
 	"submit" => "Submit Game",
 	"newjam" => "Schedule New Jam",
 	"assets" => "Assets",
@@ -410,8 +409,6 @@ if(isset($_POST["action"])){
 
 //Special processing for specific pages!
 switch($page){
-	case "logout":
-	break;
 	case "edituser":
 		if(IsAdmin($loggedInUser) !== false){
 			$editingUsername = $_GET["username"];
@@ -431,7 +428,7 @@ switch($page){
 			$jamFound = false;
 			foreach($jams as $i => $jam){
 				if(intval($jam["jam_id"]) == $jamID){
-					$dictionary["editingjam"] = RenderJam($jam, 0, $config, $games, $users, $satisfaction, $loggedInUser);
+					$dictionary["editingjam"] = RenderJam($config, $users, $games, $jam, $satisfaction, $loggedInUser, 0);
 					$jamFound = true;
 					break;
 				}
@@ -457,7 +454,7 @@ switch($page){
 			$dictionary["editingentry"] = Array();
 			foreach($games as $i => $game){
 				if($game["id"] == $entryID){
-					$dictionary["editingentry"] = RenderGame($game, $jams, $users);
+					$dictionary["editingentry"] = RenderGame($users, $game, $jams);
 					break;
 				}
 			}
@@ -482,7 +479,7 @@ switch($page){
 				continue;
 			}
 
-			$dictionary["viewing_jam"] = RenderJam($jam, $nonDeletedJamCounter, $config, $games, $users, $satisfaction, $loggedInUser);
+			$dictionary["viewing_jam"] = RenderJam($config, $users, $games, $jam, $nonDeletedJamCounter, $satisfaction, $loggedInUser);
 			$pass = TRUE;
 			break;
 		}
@@ -497,7 +494,7 @@ switch($page){
 			die("invalid author name");
         }
 
-		$dictionary["viewing_author"] = RenderUser($users[$viewingAuthor], $users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
+		$dictionary["viewing_author"] = RenderUser($config, $users[$viewingAuthor], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
 	break;
 	case "submit":
 		if(!isset($dictionary["jams"]["current_jam"]["jam_number"])){
@@ -569,7 +566,7 @@ if($page == "jam")
 								die('jam not found');
 							}
 
-							$dictionary["submit_jam"] = RenderSubmitJam($jam, $config, $games, $users, $satisfaction, $loggedInUser);
+							$dictionary["submit_jam"] = RenderSubmitJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser);
 							$colorNumber = rand(0, count($jam["colors"]) - 1);
 							$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
 

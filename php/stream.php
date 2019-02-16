@@ -1,8 +1,10 @@
 <?php
 
 function InitStream(){
-	global $config, $dictionary;
+	global $config;
 	StartTimer("InitStream");
+
+	$render = Array();
 
 	$timeDiff = 0;
 	if(file_exists("cache/twitch_stream.json")){
@@ -42,9 +44,11 @@ function InitStream(){
 	}
 
 	if(isset($data) && isset($data["stream"]) && $data["stream"] != null && count($data["stream"]) > 0){
-		$dictionary["IS_STREAM_ACTIVE"] = 1;
-		$dictionary["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]["VALUE"];
+		$render["IS_STREAM_ACTIVE"] = 1;
+		$render["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]["VALUE"];
 	}
+
+	return $render;
 
 	StopTimer("InitStream");
 }

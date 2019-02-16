@@ -19,7 +19,7 @@ function Init(){
 	$adminLog = LoadAdminLog();
 	$users = LoadUsers();
 
-	$loggedInUser = IsLoggedIn($users, $config);
+	$loggedInUser = IsLoggedIn($config, $users);
 
 	$jams =  LoadJams();
 	$games = LoadGames();
@@ -31,26 +31,27 @@ function Init(){
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jams);
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config);
-	CheckNextJamSchedule($themes, $jams, $config, $nextScheduledJamTime , $nextSuggestedJamTime);
+	CheckNextJamSchedule($config, $jams, $themes, $nextScheduledJamTime, $nextSuggestedJamTime);
+
 	$assets = LoadAssets();
 	$polls = LoadPolls();
 	$loggedInUserPollVotes = LoadLoggedInUserPollVotes($loggedInUser);
     $satisfaction = LoadSatisfaction($config);
     $adminVotes = LoadAdminVotes();
 	$loggedInUserAdminVotes = LoadLoggedInUsersAdminVotes($loggedInUser);
-	InitStream();
 
+	$dictionary["stream"] = InitStream();
 	$dictionary["CONFIG"] = RenderConfig($config);
 	$dictionary["adminlog"] = RenderAdminLog($adminLog);
-	$dictionary["users"] = RenderUsers($users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
-	$dictionary["jams"] = RenderJams($jams, $config, $games, $users, $satisfaction, $loggedInUser);
-	$dictionary["entries"] = RenderGames($games, $jams, $users);
-	$dictionary["themes"] = RenderThemes($themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $config);
+	$dictionary["users"] = RenderUsers($config, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
+	$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser);
+	$dictionary["entries"] = RenderGames($users, $games, $jams);
+	$dictionary["themes"] = RenderThemes($config, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	$dictionary["assets"] = RenderAssets($assets);
 	$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
 	
 	if($loggedInUser !== false){
-		$dictionary["user"] = RenderUser($loggedInUser, $users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
+		$dictionary["user"] = RenderLoggedInUser($config, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);
 	}
 
 	StopTimer("Init");
