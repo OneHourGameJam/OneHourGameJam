@@ -1,11 +1,11 @@
 <?php
 
 BeforeInit();	//Plugin hook
-Init();
+Init($page);
 AfterInit();	//Plugin hook
 
 //Initializes the site.
-function Init(){
+function Init($page){
 	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies;
 	AddActionLog("Init");
 	StartTimer("Init");
@@ -52,6 +52,7 @@ function Init(){
 	$dictionary["assets"] = RenderAssets($assets);
 	$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
 	$dictionary["cookies"] = RenderCookies($cookies);
+	$dictionary["page"] = RenderPageSpecific($page, $config, $users, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);

@@ -1,5 +1,5 @@
 <div class="col-md-10">
-	{{#viewing_jam}}
+	{{#page.viewing_jam}}
 		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
 			<div class='panel-heading'>
 				<a name='jam{{jam_number}}'></a>
@@ -30,14 +30,14 @@
 								by <a href='?page=author&author={{author}}'>{{author_display}}</a>
 							</div>
 							<td class='authorPageEntry' style='text-align: right;'>
-								{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
-								{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
-								{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
-								{{#has_url_linux}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
-								{{#has_url_android}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
-								{{#has_url_ios}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
-								{{#has_url}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
-								{{#has_url_source}}<a href='{{url_source}}' class='btn entryButton' target='_blank'><img src='{{{template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source'></a>{{/has_url_source}}
+								{{#has_url_web}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_web}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/web.png' class='entryPlayIcon' title='Web'></a>{{/has_url_web}}
+								{{#has_url_windows}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_windows}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/windows.png' class='entryPlayIcon' title='Windows'></a>{{/has_url_windows}}
+								{{#has_url_mac}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_mac}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/mac.png' class='entryPlayIcon' title='Mac'></a>{{/has_url_mac}}
+								{{#has_url_linux}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_linux}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/linux.png' class='entryPlayIcon' title='Linux'></a>{{/has_url_linux}}
+								{{#has_url_android}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_android}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/android.png' class='entryPlayIcon' title='Android'></a>{{/has_url_android}}
+								{{#has_url_ios}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url_ios}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/ios.png' class='entryPlayIcon' title='iOS'></a>{{/has_url_ios}}
+								{{#has_url}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
+								{{#has_url_source}}<a href='{{url_source}}' class='btn entryButton' target='_blank'><img src='{{{page.template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source'></a>{{/has_url_source}}
 							</td>
 						</tr>
 						<tr>
@@ -53,5 +53,5 @@
 				{{/entries}}
 			</table>
 		</div>
-	{{/viewing_jam}}
+	{{/page.viewing_jam}}
 </div>

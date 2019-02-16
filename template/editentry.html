@@ -3,7 +3,7 @@
 		<h3>Edit entry</h3>
 	</p>
 	<form method='post'>
-		{{#editingentry}}
+		{{#page.editingentry}}
 			<div class="form-group">
 				<label for="entryID">Entry ID</label>
 				<input type="text" class="form-control" id="entryID" name='entryID' placeholder="Entry ID" value="{{{id}}}" readonly required>
@@ -52,7 +52,7 @@
 				<label for="screenshot_url">Screenshot URL</label>
 				<input type="text" class="form-control" id="screenshot_url" name='screenshot_url' placeholder="Screenshot URL" value="{{{screenshot_url}}}" readonly required>
 			</div>
-		{{/editingentry}}
+		{{/page.editingentry}}
 		<button type="submit" name='action' value='deleteentry' class="btn btn-default">Delete Entry</button>
 	</form>
 </div>

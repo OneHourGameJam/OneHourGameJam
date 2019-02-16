@@ -4,7 +4,7 @@
 	</p>
 
 	<form method='post'>
-		{{#editinguser}}
+		{{#page.editinguser}}
 			<p>
 				<div class="form-group">
 					<label for="username">Username</label>
@@ -30,6 +30,6 @@
 				</div>
 				<button type="submit" name='action' value='savenewuserpassword' class="btn btn-default">Change password</button>
 			</p>
-		{{/editinguser}}
+		{{/page.editinguser}}
 	</form>
 </div>

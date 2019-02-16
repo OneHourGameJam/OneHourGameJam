@@ -150,21 +150,22 @@ function IsAdmin($user){
 }
 
 // Fetchs the user bio in the database, and sets it under the "bio" key.
-function LoadBio($user) {
+function LoadBio($username) {
 	global $dbConn;
 	AddActionLog("LoadBio");
 	StartTimer("LoadBio");
 
-	if (isset($user)) {
-		$clean_username = mysqli_real_escape_string($dbConn, $user["username"]);
+	if ($username != "") {
+		$clean_username = mysqli_real_escape_string($dbConn, $username);
 		$sql = "SELECT user_bio FROM user WHERE user_username = '$clean_username'";
 		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
 		$info = mysqli_fetch_array($data);
-		$user["bio"] = $info["user_bio"];
+		$bio = $info["user_bio"];
 	}
 
 	StopTimer("LoadBio");
-	return $user;
+	return $bio;
 }
 
 function GetUsersOfUserFormatted($username){

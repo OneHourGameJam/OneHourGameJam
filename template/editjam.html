@@ -3,7 +3,7 @@
 		<h3>Edit jam</h3>
 	</p>
 	<form method='post'>
-		{{#editingjam}}
+		{{#page.editingjam}}
 			<input type="hidden" name="jamID" value="{{{jam_id}}}">
 			<div class="form-group">
 				<label for="jam_number">Jam number</label>
@@ -28,6 +28,6 @@
 
 			<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
 			<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete Jam</button>
-		{{/editingjam}}
+		{{/page.editingjam}}
 	</form>
 </div>

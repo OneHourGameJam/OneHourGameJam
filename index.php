@@ -8,39 +8,10 @@
 include_once("php/site.php");
 StartTimer("index.php");
 
-$templateBasePath = "template/";
-$dictionary["template_path"] = $templateBasePath;
-
 //List allowed page identifiers here.
 if(!(in_array($page, Array("main", "login", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
 	$page = "main";
 }
-
-$pageTitles = Array(
-	"main" => "Main Page",
-	"login" => "Login",
-	"submit" => "Submit Game",
-	"newjam" => "Schedule New Jam",
-	"assets" => "Assets",
-	"editasset" => "Edit Asset",
-	"rules" => "Rules",
-	"config" => "Configuration",
-	"editcontent" => "Manage Content",
-	"editjam" => "Edit Jam",
-	"editentry" => "Edit Entry",
-	"editusers" => "Manage Users",
-	"edituser" => "Edit User",
-	"themes" => "Theme Voting",
-	"usersettings" => "User Settings",
-	"entries" => "Entries",
-	"jam" => "Jam",
-	"jams" => "Jams",
-	"author" => "Author",
-	"authors" => "Authors",
-	"privacy" => "Privacy",
-    "userdata" => "User Data",
-    "adminlog" => "Admin Log"
-);
 
 //List of pages which require user to be logged in
 if(in_array($page, Array("submit", "newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "userdata"))){
@@ -378,137 +349,6 @@ if(isset($_POST["action"])){
 	}
 }
 
-//Special processing for specific pages!
-switch($page){
-	case "edituser":
-		if(IsAdmin($loggedInUser) !== false){
-			$editingUsername = $_GET["username"];
-			$editingUsername = trim(strtolower($editingUsername));
-			if(!isset($users[$editingUsername])){
-				die("no user selected");
-			}
-			$dictionary["editinguser"] = $users[$editingUsername];
-			if($users[$editingUsername]["admin"] != 0){
-				$dictionary["editinguser"]["is_admin"] = 1;
-			}
-		}
-	break;
-	case "editjam":
-		if(IsAdmin($loggedInUser) !== false){
-			$jamID = intval($_GET["jam_id"]);
-			$jamFound = false;
-			foreach($jams as $i => $jam){
-				if(intval($jam["jam_id"]) == $jamID){
-					$dictionary["editingjam"] = RenderJam($config, $users, $games, $jam, $satisfaction, $loggedInUser, 0);
-					$jamFound = true;
-					break;
-				}
-			}
-			if(!$jamFound){
-				die("no jam selected");
-			}
-			$editingJamDate = date("Y-m-d", strtotime($dictionary["editingjam"]["date"]));
-			$dictionary["editingjam"]["html_startdate"] = $editingJamDate;
-		}
-	break;
-	case "editasset":
-		if(IsAdmin($loggedInUser) !== false){
-			if(isset($_GET["asset_id"])){
-				$assetID = intval($_GET["asset_id"]);
-				$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
-			}
-		}
-	break;
-	case "editentry":
-		if(IsAdmin($loggedInUser) !== false){
-			$entryID = intval($_GET["entry_id"]);
-			$dictionary["editingentry"] = Array();
-			foreach($games as $i => $game){
-				if($game["id"] == $entryID){
-					$dictionary["editingentry"] = RenderGame($users, $game, $jams);
-					break;
-				}
-			}
-			if(count($dictionary["editingentry"]) == 0){
-				die("no entry selected");
-			}
-		}
-	break;
-	case "jam":
-		$viewingJamNumber = ((isset($_GET["jam"])) ? intval($_GET["jam"]) : 0);
-		if($viewingJamNumber == 0){
-			die("invalid jam number");
-		}
-
-		$pass = FALSE;
-		foreach($jams as $i => $jam){
-			if($jam["jam_number"] != $viewingJamNumber){
-				continue;
-			}
-
-			if($jam["jam_deleted"] == 1){
-				continue;
-			}
-
-			$dictionary["viewing_jam"] = RenderJam($config, $users, $games, $jam, $nonDeletedJamCounter, $satisfaction, $loggedInUser);
-			$pass = TRUE;
-			break;
-		}
-
-		if($pass == FALSE){
-			die("jam does not exist");
-		}
-	break;
-	case "author":
-		$viewingAuthor = ((isset($_GET["author"])) ? ("".$_GET["author"]) : "");
-		if($viewingAuthor == ""){
-			die("invalid author name");
-        }
-
-		$dictionary["viewing_author"] = RenderUser($config, $cookies, $users[$viewingAuthor], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
-	break;
-	case "submit":
-		if(!isset($dictionary["jams"]["current_jam"]["jam_number"])){
-			die("no jam to submit to");
-		}
-		$jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $dictionary["jams"]["current_jam"]["jam_number"];
-	break;
-	case "userdata":
-		$dictionary["userdata_assets"] = GetAssetsOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_entries"] = GetEntriesOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_poll_votes"] = GetPollVotesOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_themes"] = GetThemesOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
-		$dictionary["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser["username"]);
-        $dictionary["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser["username"]);
-        $dictionary["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser["id"]);
-        $dictionary["userdata_adminlog_admin"] = GetAdminLogForAdminFormatted($loggedInUser["username"]);
-        $dictionary["userdata_adminlog_subject"] = GetAdminLogForSubjectFormatted($loggedInUser["username"]);
-        $dictionary["userdata_admin_vote_voter"] = GetAdminVotesCastByUserFormatted($loggedInUser["username"]);
-        $dictionary["userdata_admin_vote_subject"] = GetAdminVotesForSubjectUserFormatted($loggedInUser["username"]);
-	break;
-	case "newjam":
-		$dictionary["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);
-		$dictionary["next_jam_suggested_time"] = gmdate("H:i", $nextSuggestedJamDateTime);
-	break;
-}
-
-$dictionary["CURRENT_TIME"] = gmdate("d M Y H:i", time());
-
-$dictionary["page_title"] = $pageTitles[$page];
-
-if($page == "author")
-{
-	$dictionary["page_title"] = $viewingAuthor;
-}
-if($page == "jam")
-{
-	$dictionary["page_title"] = "Jam #" . $viewingJamNumber . ": ".$dictionary["viewing_jam"]["theme"];
-}
-
-//print_r($authors[0]);
-
 ?>
 
 			<?php
@@ -532,88 +372,6 @@ if($page == "jam")
 							print $mustache->render(file_get_contents($templateBasePath."login.html"), $dictionary);
 						break;
 						case "submit":
-							$jam = GetJamByNumber($jams, $jamNumber);
-							if (!$jam) {
-								die('jam not found');
-							}
-
-							$dictionary["submit_jam"] = RenderSubmitJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser);
-							$colorNumber = rand(0, count($jam["colors"]) - 1);
-							$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
-
-							foreach($games as $i => $game){
-								if($game["author"] != $loggedInUser["username"]){
-									continue;
-								}
-
-								if($game["jam_number"] != $jamNumber){
-									continue;
-								}
-
-								if($game["entry_deleted"] == 1){
-									continue;
-								}
-
-								//Determine entry color number
-								foreach($jam["colors"] as $colorIndex => $color){
-									if($color == $game["color"]){
-										$colorNumber = $colorIndex;
-										break;
-									}
-								}
-
-								$dictionary["user_entry_color_number"] = $colorNumber;
-								$dictionary["user_entry_color"] = $jam["colors"][$colorNumber];
-
-								$dictionary["user_submitted_to_this_jam"] = true;
-								$dictionary["user_entry_name"] = $game["title"];
-								if($game["screenshot_url"] != "logo.png"){
-									$dictionary["user_entry_screenshot"] = $game["screenshot_url"];
-								}
-								$dictionary["user_entry_url"] = $game["url"];
-								$dictionary["user_entry_url_web"] = $game["url_web"];
-								$dictionary["user_entry_url_windows"] = $game["url_windows"];
-								$dictionary["user_entry_url_mac"] = $game["url_mac"];
-								$dictionary["user_entry_url_linux"] = $game["url_linux"];
-								$dictionary["user_entry_url_ios"] = $game["url_ios"];
-								$dictionary["user_entry_url_android"] = $game["url_android"];
-								$dictionary["user_entry_url_source"] = $game["url_source"];
-								$dictionary["user_entry_desc"] = $game["description"];
-								//$dictionary["user_entry_color"] = $game["color"];
-								//$dictionary["user_entry_color_number"] = $game["color_number"];
-
-								if($game["url_web"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_web"];
-								}else if($game["url_windows"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_windows"];
-								}else if($game["url_mac"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_mac"];
-								}else if($game["url_linux"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_linux"];
-								}else if($game["url_ios"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_ios"];
-								}else if($game["url_android"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_android"];
-								}else if($game["url"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url"];
-								}else if($game["url_source"] != ""){
-									$dictionary["user_entry_share_url"] = $game["url_source"];
-								}
-
-								if(isset($game["has_url"])){$dictionary["user_has_url"] = 1;}
-								if(isset($game["has_url_web"])){$dictionary["user_has_url_web"] = 1;}
-								if(isset($game["has_url_windows"])){$dictionary["user_has_url_windows"] = 1;}
-								if(isset($game["has_url_mac"])){$dictionary["user_has_url_mac"] = 1;}
-								if(isset($game["has_url_linux"])){$dictionary["user_has_url_linux"] = 1;}
-								if(isset($game["has_url_ios"])){$dictionary["user_has_url_ios"] = 1;}
-								if(isset($game["has_url_android"])){$dictionary["user_has_url_android"] = 1;}
-								if(isset($game["has_url_source"])){$dictionary["user_has_url_source"] = 1;}
-								break;
-							}
-
-							if (!isset($dictionary["user_entry_name"]) && $jamNumber != $dictionary["jams"]["current_jam"]["jam_number"]) {
-								die('Cannot make a new submission to a past jam');
-							}
 
 							print $mustache->render(file_get_contents($templateBasePath."submit.html"), $dictionary);
 						break;
@@ -667,7 +425,6 @@ if($page == "jam")
 							print $mustache->render(file_get_contents($templateBasePath."themes.html"), $dictionary);
 						break;
 						case "usersettings":
-							$dictionary["user"] = LoadBio($dictionary["user"]);
 							print $mustache->render(file_get_contents($templateBasePath."usersettings.html"), $dictionary);
 						break;
 						case "entries":
@@ -680,8 +437,6 @@ if($page == "jam")
 							print $mustache->render(file_get_contents($templateBasePath."jams.html"), $dictionary);
 						break;
 						case "author":
-							$dictionary['show_edit_link'] = $dictionary["viewing_author"]["id"] == $loggedInUser["id"];
-							$dictionary["viewing_author"] = LoadBio($dictionary["viewing_author"]);
 							print $mustache->render(file_get_contents($templateBasePath."author.html"), $dictionary);
 						break;
 						case "authors":
@@ -714,6 +469,11 @@ StopTimer("index.php");
 
 
 if(IsAdmin($loggedInUser) !== false){
+
+	print "<pre>";
+	var_dump($dictionary);
+	print "</pre>";
+
 	foreach($actionLog as $actionLogKey => $actionLogValue){
 		if(isset($actionTimers[$actionLogKey])){
 			$actionTimers[$actionLogKey]["calls"] = $actionLogValue;
