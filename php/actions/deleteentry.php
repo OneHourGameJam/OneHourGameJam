@@ -64,12 +64,16 @@ function DeleteEntry($entryID){
     AddDataSuccess("Game Deleted");
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
-    if($entryID != ""){
-        DeleteEntry(intval($entryID));
-        $page = "editcontent";
-    }
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
+		if($entryID != ""){
+			DeleteEntry(intval($entryID));
+			$page = "editcontent";
+		}
+	}
 }
 
 ?>

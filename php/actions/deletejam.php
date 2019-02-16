@@ -107,12 +107,15 @@ function CanDeleteJam($jamID){
 	}
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
-    if($jamID != ""){
-        DeleteJam(intval($jamID));
-        $page = "editcontent";
-    }
+function PerformAction(&$loggedInUser){
+	global $_POST;
+
+	if(IsAdmin($loggedInUser) !== false){
+		$jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
+		if($jamID != ""){
+			DeleteJam(intval($jamID));
+		}
+	}
 }
 
 ?>

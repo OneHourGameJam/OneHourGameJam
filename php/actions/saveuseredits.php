@@ -46,15 +46,18 @@ function EditUser($username, $isAdmin){
     AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username, $loggedInUser["username"]);
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $username = $_POST["username"];
-    $isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
-    if($isAdmin != 0 && $isAdmin != 1){
-        die("invalid isadmin value");
-    }
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$username = $_POST["username"];
+		$isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
+		if($isAdmin != 0 && $isAdmin != 1){
+			die("invalid isadmin value");
+		}
 
-    EditUser($username, $isAdmin);
+		EditUser($username, $isAdmin);
+	}
 }
-$page = "editusers";
 
 ?>

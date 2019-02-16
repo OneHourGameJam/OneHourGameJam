@@ -26,12 +26,16 @@ function SaveConfig($key, $newValue){
 	$actionResult = "SUCCESS";
 }
 
-if(IsAdmin($loggedInUser) !== false){
-	$actionResult = "NO_CHANGE";
-    foreach($_POST as $key => $value){
-        SaveConfig($key, $value);
-    }
-    LoadConfig(); //reload config
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$actionResult = "NO_CHANGE";
+		foreach($_POST as $key => $value){
+			SaveConfig($key, $value);
+		}
+		LoadConfig(); //reload config
+	}
 }
 
 ?>

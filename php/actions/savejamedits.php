@@ -81,15 +81,18 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
     AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser["username"]);
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $jamID = intval($_POST["jamID"]);
-    $theme = $_POST["theme"];
-    $date = $_POST["date"];
-    $time = $_POST["time"];
-    $jamcolors = $_POST["jamcolors"];
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$jamID = intval($_POST["jamID"]);
+		$theme = $_POST["theme"];
+		$date = $_POST["date"];
+		$time = $_POST["time"];
+		$jamcolors = $_POST["jamcolors"];
 
-    EditJam($jamID, $theme, $date, $time, $jamcolors);
+		EditJam($jamID, $theme, $date, $time, $jamcolors);
+	}
 }
-$page = "main";
 
 ?>

@@ -179,12 +179,16 @@ function LogInUser($username, $password){
 	$actionResult = "SUCCESS";
 }
 
-$username = (isset($_POST["un"])) ? $_POST["un"] : "";
-$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
-$loginChecked = false;
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	$username = (isset($_POST["un"])) ? $_POST["un"] : "";
+	$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
+	$loginChecked = false;
 
-$username = strtolower(trim($username));
-$password = trim($password);
-LogInOrRegister($username, $password);
+	$username = strtolower(trim($username));
+	$password = trim($password);
+	LogInOrRegister($username, $password);
+}
 
 ?>

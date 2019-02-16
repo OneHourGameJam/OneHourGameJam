@@ -52,9 +52,13 @@ function UnbanTheme($unbannedTheme){
 	AddDataSuccess("Theme Unbanned", false);
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $unbannedTheme = $_POST["theme"];
-    UnbanTheme($unbannedTheme);
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$unbannedTheme = $_POST["theme"];
+		UnbanTheme($unbannedTheme);
+	}
 }
 
 ?>

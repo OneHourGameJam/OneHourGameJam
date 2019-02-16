@@ -25,8 +25,8 @@ function LogOut(){
 	$actionResult = "SUCCESS";
 }
 
-$loginChecked = false;
-LogOut();
-$page = "main";
+function PerformAction(&$loggedInUser){
+	LogOut();
+}
 
 ?>

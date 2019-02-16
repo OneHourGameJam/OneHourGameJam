@@ -55,10 +55,14 @@ function DeleteAsset($assetID){
     AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser["username"]);
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $assetID = $_POST["asset_id"];
-    DeleteAsset($assetID);
+
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$assetID = $_POST["asset_id"];
+		DeleteAsset($assetID);
+	}
 }
-$page = "assets";
 
 ?>

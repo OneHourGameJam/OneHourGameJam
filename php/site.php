@@ -17,6 +17,7 @@ include_once("php/dependencies.php");
 //Global functions
 include_once("php/sanitize.php");
 include_once("php/page.php");
+include_once("php/actions.php");
 include_once("php/cookies.php");
 include_once("php/warnings.php");
 include_once("php/config.php");

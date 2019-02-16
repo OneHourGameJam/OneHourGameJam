@@ -49,9 +49,13 @@ function AddTheme($newTheme, $isBot){
 	AddDataSuccess("Theme added", false);
 }
 
-if($loggedInUser !== false){
-    $newTheme = $_POST["theme"];
-    AddTheme($newTheme, false);
+function PerformAction(&$loggedInUser){
+	global $_POST;
+
+	if($loggedInUser !== false){
+		$newTheme = $_POST["theme"];
+		AddTheme($newTheme, false);
+	}
 }
 
 ?>

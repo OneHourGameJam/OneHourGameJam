@@ -72,13 +72,16 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$actionResult = "SUCCESS";
 }
 
-if($loggedInUser !== false){
-    $passwordold = $_POST["passwordold"];
-    $password1 = $_POST["password1"];
-    $password2 = $_POST["password2"];
+function PerformAction(&$loggedInUser){
+	global $_POST;
 
-    ChangePassword($passwordold, $password1, $password2);
+	if($loggedInUser !== false){
+		$passwordold = $_POST["passwordold"];
+		$password1 = $_POST["password1"];
+		$password2 = $_POST["password2"];
+
+		ChangePassword($passwordold, $password1, $password2);
+	}
 }
-$page = "usersettings";
 
 ?>

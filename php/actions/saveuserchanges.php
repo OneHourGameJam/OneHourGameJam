@@ -48,26 +48,29 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	$actionResult = "SUCCESS";
 }
 
-if($loggedInUser !== false){
-    $displayName = $_POST["displayname"];
-    $twitterHandle = $_POST["twitterhandle"];
-    $emailAddress = $_POST["emailaddress"];
-	$bio = $_POST["bio"];
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if($loggedInUser !== false){
+		$displayName = $_POST["displayname"];
+		$twitterHandle = $_POST["twitterhandle"];
+		$emailAddress = $_POST["emailaddress"];
+		$bio = $_POST["bio"];
 
-	$preferenceValue = 0;
-	foreach($userPreferenceSettings as $i => $preferenceSetting){
-		$preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);
-		$preferenceKey = $preferenceSetting["PREFERENCE_KEY"];
+		$preferenceValue = 0;
+		foreach($userPreferenceSettings as $i => $preferenceSetting){
+			$preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);
+			$preferenceKey = $preferenceSetting["PREFERENCE_KEY"];
 
-		if(isset($_POST[$preferenceKey])){
-			if($_POST[$preferenceKey] == "on"){
-				$preferenceValue = $preferenceValue | $preferenceFlag;
+			if(isset($_POST[$preferenceKey])){
+				if($_POST[$preferenceKey] == "on"){
+					$preferenceValue = $preferenceValue | $preferenceFlag;
+				}
 			}
 		}
-	}
 
-	ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferenceValue);
+		ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferenceValue);
+	}
 }
-$page = "usersettings";
 
 ?>

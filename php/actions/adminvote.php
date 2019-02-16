@@ -100,10 +100,14 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 	}
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
-    $voteType = $_POST["adminVoteType"];
-    CastVoteForAdmin($voteSubjectUsername, $voteType);
+function PerformAction($loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+			$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
+			$voteType = $_POST["adminVoteType"];
+			CastVoteForAdmin($voteSubjectUsername, $voteType);
+	}
 }
 
 ?>

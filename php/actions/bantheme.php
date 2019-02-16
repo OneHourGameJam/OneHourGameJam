@@ -52,9 +52,13 @@ function BanTheme($bannedTheme){
 	AddDataSuccess("Theme Banned", false);
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $bannedTheme = $_POST["theme"];
-    BanTheme($bannedTheme);
+function PerformAction(&$loggedInUser){
+	global $_POST;
+
+	if(IsAdmin($loggedInUser) !== false){
+		$bannedTheme = $_POST["theme"];
+		BanTheme($bannedTheme);
+	}
 }
 
 ?>

@@ -52,9 +52,13 @@ function RemoveTheme($removedTheme){
 	AddDataSuccess("Theme Removed", false);
 }
 
-if(IsAdmin($loggedInUser) !== false){
-    $deletedTheme = $_POST["theme"];
-    RemoveTheme($deletedTheme);
+function PerformAction(&$loggedInUser){
+	global $_POST;
+	
+	if(IsAdmin($loggedInUser) !== false){
+		$deletedTheme = $_POST["theme"];
+		RemoveTheme($deletedTheme);
+	}
 }
 
 ?>
