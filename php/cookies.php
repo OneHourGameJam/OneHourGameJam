@@ -8,6 +8,7 @@ function UpdateCookies(){
     //TODO: This section should be removed after 31 March 2019 while as it's just transition code to get from the cookie being named nightmode to it being named darkmode
     if(isset($_COOKIE["nightmode"])){
         setcookie("darkmode", 1, time() + (60 * 60 * 24 * 365));
+        setcookie("nightmode", null, -1);
         $_COOKIE["darkmode"] = 1;
     }
     //TODO: End removal here
@@ -33,6 +34,7 @@ function UpdateCookies(){
             unset($_COOKIE["streaming"]);
         }
     }
+
 	StopTimer("UpdateCookies");
 }
 
@@ -58,7 +60,8 @@ function LoadCookies(){
 
 function RenderCookies(&$cookies){
 	AddActionLog("RenderCookies");
-	StartTimer("RenderCookies");
+    StartTimer("RenderCookies");
+    
     $render = Array();
 
     $render["is_streamer"] = $cookies["is_streamer"];

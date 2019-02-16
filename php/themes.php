@@ -44,8 +44,8 @@ function LoadThemes(){
 
 		$themes[$themeID] = $themeData;
 	}
-	StopTimer("LoadThemes");
 
+	StopTimer("LoadThemes");
 	return $themes;
 }
 
@@ -53,6 +53,7 @@ function LoadUserThemeVotes(&$loggedInUser){
 	global $dbConn;
 	AddActionLog("LoadUserThemeVotes");
 	StartTimer("LoadUserThemeVotes");
+
 	$userThemeVotes = Array();
 
 	$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
@@ -260,6 +261,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 }
 
 function ThemeVoteTypeToKey($themeVoteType){
+	AddActionLog("ThemeVoteTypeToKey");
 	switch($themeVoteType){
 		case "1":
 			return "votes_against";
@@ -271,6 +273,7 @@ function ThemeVoteTypeToKey($themeVoteType){
 }
 
 function UserThemeVoteTypeToKey($themeVoteType){
+	AddActionLog("UserThemeVoteTypeToKey");
 	switch($themeVoteType){
 		case "1":
 			return "user_vote_against";
@@ -321,6 +324,7 @@ function GetThemeVotesOfUserFormatted($username){
 function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 	AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 	StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
+
 	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 
 	$result = Array();
@@ -372,6 +376,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 			$result[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"] = round($selectionProbability * 100)."%";
 		}
 	}
+
 	StopTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 	return $result;
 }
@@ -379,6 +384,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 	AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 	StartTimer("CalculateThemeSelectionProbabilityByPopularity");
+
 	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
 	$totalPopularity = 0;
 
@@ -431,6 +437,7 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 			$result[$themeID]["ThemeSelectionProbabilityByPopularityText"] = round($selectionProbability * 100)."%";
 		}
 	}
+	
 	StopTimer("CalculateThemeSelectionProbabilityByPopularity");
 	return $result;
 }

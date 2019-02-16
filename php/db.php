@@ -21,6 +21,7 @@ function GetTables(){
 	global $dbConn;
 	AddActionLog("GetTables");
 	StartTimer("GetTables");
+
 	$tables = Array();
 	$data = mysqli_query($dbConn, "SHOW TABLES");
 	while($info = mysqli_fetch_array($data)){
@@ -33,9 +34,9 @@ function GetTables(){
 
 function GetColumnsForTable($tabName){
 	global $dbConn;
-
 	AddActionLog("GetColumnsForTable");
 	StartTimer("GetColumnsForTable");
+
 	$tabName = mysqli_real_escape_string($dbConn, $tabName);
 
 	$columns = Array();
@@ -50,9 +51,9 @@ function GetColumnsForTable($tabName){
 
 function GetDataForTable($tabName){
 	global $dbConn;
-
 	AddActionLog("GetDataForTable");
 	StartTimer("GetDataForTable");
+
 	$tabName = mysqli_real_escape_string($dbConn, $tabName);
 
 	$columns = GetColumnsForTable($tabName);
@@ -74,9 +75,9 @@ function GetDataForTable($tabName){
 
 function GetJSONDataForTable($tabName){
 	global $dbConn;
-
 	AddActionLog("GetJSONDataForTable");
 	StartTimer("GetJSONDataForTable");
+
 	$tabName = mysqli_real_escape_string($dbConn, $tabName);
 
 	StopTimer("GetJSONDataForTable");
@@ -85,9 +86,9 @@ function GetJSONDataForTable($tabName){
 
 function GetJSONDataForAllTables(){
 	global $dbConn;
-
 	AddActionLog("GetJSONDataForAllTables");
 	StartTimer("GetJSONDataForAllTables");
+	
 	$tables = GetTables();
 	$allData = Array();
 

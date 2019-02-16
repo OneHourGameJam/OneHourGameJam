@@ -165,6 +165,7 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 
 function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser){
 	AddActionLog("RenderSubmitJam");
+
 	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0);
 }
 
@@ -281,6 +282,7 @@ function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime,
 
 		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, Array("username" => "AUTOMATIC"));
 	}
+	
 	StopTimer("CheckNextJamSchedule");
 }
 

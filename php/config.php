@@ -24,7 +24,7 @@ function LoadConfig(){
 	global $dbConn;
 	AddActionLog("LoadConfig");
 	StartTimer("LoadConfig");
-	
+
 	$config = Array();
 
 	$sql = " SELECT * FROM config ORDER BY config_id; ";
@@ -94,9 +94,9 @@ function LoadConfig(){
 
 function RenderConfig($config){
 	global $configCategorySettings;
-
 	AddActionLog("RenderConfig");
 	StartTimer("RenderConfig");
+
 	$render = Array("LIST" => Array(), "VALUES" => Array());
 
 	foreach($config as $i => $configEntry){
@@ -127,6 +127,7 @@ function RenderConfig($config){
 function VerifyConfig($config) {
 	AddActionLog("VerifyConfig");
 	StartTimer("VerifyConfig");
+
 	if (!isset($config["PEPPER"]["VALUE"]) || strlen($config["PEPPER"]["VALUE"]) < 1) {
 		$config = UpdateConfig($config, "PEPPER", GenerateSalt(), -1, "AUTOMATIC");
 	}
@@ -144,7 +145,6 @@ function VerifyConfig($config) {
 // Saves config to database, does not authorize to ensure VerifyConfig() continues to work
 function UpdateConfig($config, $key, $value, $userID, $userUsername) {
 	global $dbConn;
-
 	AddActionLog("UpdateConfig");
 	StartTimer("UpdateConfig");
 
@@ -175,6 +175,7 @@ function UpdateConfig($config, $key, $value, $userID, $userUsername) {
 function RedirectToHttpsIfRequired($config){
 	AddActionLog("RedirectToHttpsIfRequired");
 	StartTimer("RedirectToHttpsIfRequired");
+	
     if($config["REDIRECT_TO_HTTPS"]["VALUE"]){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https

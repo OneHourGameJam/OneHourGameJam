@@ -363,7 +363,7 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
         }
         $userAsArray = Array($user);
         
-        $userData = RenderUser($config, $cookies, $user, $users, $games, $userJams, $adminVotes, $loggedInUserAdminVotes);
+        $userData = RenderUser($config, $cookies, $user, $users, $userGames, $userJams, $adminVotes, $loggedInUserAdminVotes);
 
         if(isset($userData["entry_count"])){
             $authorCount += 1;

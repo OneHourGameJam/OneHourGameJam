@@ -4,6 +4,7 @@ function LoadPolls(){
 	global $dbConn;
 	AddActionLog("LoadPolls");
 	StartTimer("LoadPolls");
+
 	$polls = Array();
 	
 	$sql = "
@@ -55,6 +56,7 @@ function LoadLoggedInUserPollVotes(&$loggedInUser){
 	global $dbConn;
 	AddActionLog("LoadLoggedInUserPollVotes");
 	StartTimer("LoadLoggedInUserPollVotes");
+
 	$loggedInUserPollVotes = Array();
 	
 	//Get data about logged in user's votes
@@ -86,6 +88,7 @@ function LoadLoggedInUserPollVotes(&$loggedInUser){
 function RenderPolls(&$polls, &$loggedInUserPollVotes){
 	AddActionLog("RenderPolls");
 	StartTimer("RenderPolls");
+	
 	$render = Array();
 
 	//Process data
