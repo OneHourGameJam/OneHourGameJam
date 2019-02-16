@@ -37,7 +37,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$correctPasswordHash = $user["password_hash"];
 	$userSalt = $user["salt"];
 	$userPasswordIterations = intval($user["password_iterations"]);
-	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations);
+	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $config);
 	if($correctPasswordHash != $passwordHash){
 		$actionResult = "INCORRECT_PASSWORD";
 		AddDataWarning("The entered password is incorrect.", false);
@@ -47,7 +47,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	//Generate new salt, number of iterations and hashed password.
 	$newUserSalt = GenerateSalt();
 	$newUserPasswordIterations = GenerateUserHashIterations($config);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations);
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config);
 
 	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
 	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;

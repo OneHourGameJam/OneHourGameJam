@@ -8,8 +8,7 @@ function GenerateSalt(){
 
 //Hashes the given password and salt the number of iterations. Also uses the
 //whole-site salt (called pepper), as defined in config.
-function HashPassword($password, $salt, $iterations){
-	global $config;
+function HashPassword($password, $salt, $iterations, &$config){
 	AddActionLog("HashPassword");
 	StartTimer("HashPassword");
 	$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "";
@@ -73,7 +72,7 @@ function IsLoggedIn(&$users, &$config){
 
 	$sessionID = "".$_COOKIE["sessionID"];
 	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
+	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"], $config);
 
     $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
 

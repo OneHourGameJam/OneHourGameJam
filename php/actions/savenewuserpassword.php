@@ -36,7 +36,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	//Generate new salt, number of iterations and hashed password.
 	$newUserSalt = GenerateSalt();
 	$newUserPasswordIterations = GenerateUserHashIterations($config);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations);
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config);
 
 	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
 	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;

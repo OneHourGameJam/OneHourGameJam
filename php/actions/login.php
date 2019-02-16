@@ -33,7 +33,7 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $users, $dbConn, $ip, $userAgent, $actionResult,  $config;
+	global $users, $dbConn, $ip, $userAgent, $actionResult, $config;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -52,7 +52,7 @@ function RegisterUser($username, $password){
 
 	$userSalt = GenerateSalt();
 	$userPasswordIterations = GenerateUserHashIterations($config);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $config);
 	$admin = (count($users) == 0) ? 1 : 0;
 
 	if(isset($users[$username])){
@@ -144,12 +144,12 @@ function LogInUser($username, $password){
 	$correctPasswordHash = $user["password_hash"];
 	$userSalt = $user["salt"];
 	$userPasswordIterations = intval($user["password_iterations"]);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations);
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $config);
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
 		$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
-		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]);
+		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"], $config);
 
 		$daysToKeepLoggedIn = $config["DAYS_TO_KEEP_LOGGED_IN"]["VALUE"];
 		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
