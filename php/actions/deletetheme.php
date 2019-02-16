@@ -44,7 +44,7 @@ function RemoveTheme($removedTheme){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "");
+    AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser["username"]);
 
 	$actionResult = "SUCCESS";
 	LoadThemes();

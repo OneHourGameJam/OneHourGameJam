@@ -43,7 +43,7 @@ function EditUser($username, $isAdmin){
     $sql = "";
 
 	$actionResult = "SUCCESS";
-    AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username);
+    AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username, $loggedInUser["username"]);
 }
 
 if(IsAdmin($loggedInUser) !== false){

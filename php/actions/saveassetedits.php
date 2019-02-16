@@ -149,7 +149,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
         $sql = "";
 
 		$actionResult = "SUCCESS_UPDATED";
-        AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author);
+        AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser["username"]);
 	}else{
 		$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
 		$escapedTitle = mysqli_real_escape_string($dbConn, $title);
@@ -186,7 +186,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
         $sql = "";
 
 		$actionResult = "SUCCESS_INSERTED";
-        AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author);
+        AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser["username"]);
 	}
 
 	LoadAssets();

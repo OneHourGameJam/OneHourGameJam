@@ -22,7 +22,7 @@ function SaveConfig($key, $newValue){
 		return;
 	}
 
-	UpdateConfig($config, $key, $newValue, $loggedInUser['id']);
+	UpdateConfig($config, $key, $newValue, $loggedInUser['id'], $loggedInUser["username"]);
 	$actionResult = "SUCCESS";
 }
 

@@ -44,7 +44,7 @@ function BanTheme($bannedTheme){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "");
+    AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "", $loggedInUser);
 
 	$actionResult = "SUCCESS";
 	LoadThemes();

@@ -128,12 +128,12 @@ function VerifyConfig($config) {
 	AddActionLog("VerifyConfig");
 	StartTimer("VerifyConfig");
 	if (!isset($config["PEPPER"]["VALUE"]) || strlen($config["PEPPER"]["VALUE"]) < 1) {
-		$config = UpdateConfig($config, "PEPPER", GenerateSalt(), -1);
+		$config = UpdateConfig($config, "PEPPER", GenerateSalt(), -1, "AUTOMATIC");
 	}
 
 	if (!isset($config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]) || strlen($config["SESSION_PASSWORD_ITERATIONS"]["VALUE"]) < 1) {
 		$sessionPasswordIterations = GenerateUserHashIterations($config);
-		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1);
+		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1, "AUTOMATIC");
 	}
 
 	StopTimer("VerifyConfig");
@@ -142,7 +142,7 @@ function VerifyConfig($config) {
 
 
 // Saves config to database, does not authorize to ensure VerifyConfig() continues to work
-function UpdateConfig($config, $key, $value, $userID) {
+function UpdateConfig($config, $key, $value, $userID, $userUsername) {
 	global $dbConn;
 
 	AddActionLog("UpdateConfig");
@@ -164,7 +164,7 @@ function UpdateConfig($config, $key, $value, $userID) {
 		mysqli_query($dbConn, $sql);
     	$sql = "";
 
-		AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "");
+		AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "", $userUsername);
 	}
 
 	StopTimer("UpdateConfig");

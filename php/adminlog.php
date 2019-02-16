@@ -32,14 +32,14 @@ function LoadAdminLog(){
     return $adminLog;
 }
 
-function AddToAdminLog($logType, $logContent, $logSubjectUsername){
-    global $dbConn, $ip, $userAgent, $loggedInUser;
+function AddToAdminLog($logType, $logContent, $logSubjectUsername, $logAdminUsername){
+    global $dbConn, $ip, $userAgent;
 	AddActionLog("AddToAdminLog");
 	StartTimer("AddToAdminLog");
 
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$escapedAdminUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$escapedAdminUsername = mysqli_real_escape_string($dbConn, $logAdminUsername);
 	$escapedSubjectUsername = mysqli_real_escape_string($dbConn, $logSubjectUsername);
 	$escapedLogType = mysqli_real_escape_string($dbConn, $logType);
 	$escapedLogContent = mysqli_real_escape_string($dbConn, $logContent);

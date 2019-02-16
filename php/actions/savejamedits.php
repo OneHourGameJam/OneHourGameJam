@@ -78,7 +78,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	AddDataSuccess("Jam Updated");
 
 	$actionResult = "SUCCESS";
-    AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "");
+    AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser["username"]);
 }
 
 if(IsAdmin($loggedInUser) !== false){

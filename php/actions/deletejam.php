@@ -67,7 +67,7 @@ function DeleteJam($jamID){
 	$actionResult = "SUCCESS";
 	AddDataSuccess("Jam Deleted");
 
-    AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "");
+    AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser["username"]);
 }
 
 //Returns true / false based on whether or not the specified jam can be deleted

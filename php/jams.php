@@ -276,7 +276,7 @@ function CheckNextJamSchedule($nextScheduledJamTime, $nextSuggestedJamTime){
 		$jamNumber = intval($currentJamData["NUMBER"] + 1);
 		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors);
+		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, Array("username" => "AUTOMATIC"));
 	}
 	StopTimer("CheckNextJamSchedule");
 }
@@ -439,7 +439,7 @@ function SelectRandomTheme(){
 }
 
 //Adds the jam with the provided data into the database
-function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors){
+function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors, $loggedInUser){
 	global $dbConn;
 	AddActionLog("AddJamToDatabase");
 	StartTimer("AddJamToDatabase");
@@ -480,7 +480,7 @@ function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $start
     $sql = "";
 
 	StopTimer("AddJamToDatabase");
-    AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "");
+    AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "", $loggedInUser["username"]);
 }
 
 function GetJamsOfUserFormatted($username){
