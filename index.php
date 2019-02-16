@@ -615,8 +615,6 @@ if($page == "jam")
 								die('Cannot make a new submission to a past jam');
 							}
 
-							$dictionary["user_entry_screenshot_max_size"] = bytesToString($config["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]["VALUE"]);
-
 							print $mustache->render(file_get_contents($templateBasePath."submit.html"), $dictionary);
 						break;
 						case "newjam":
@@ -636,7 +634,6 @@ if($page == "jam")
 							}
 						break;
 						case "editasset":
-							$dictionary["asset_max_size"] = bytesToString($config["MAX_ASSET_FILE_SIZE_IN_BYTES"]["VALUE"]);
 							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."editasset.html"), $dictionary);
 							}

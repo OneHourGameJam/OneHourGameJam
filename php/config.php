@@ -18,6 +18,11 @@ $configCategorySettings = Array(
     "ASSETS" => "Assets",
 );
 
+$configPrettyPrintFunctions = Array(
+	"MAX_SCREENSHOT_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
+	"MAX_ASSET_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
+);
+
 //Initializes configuration, stores it in the global $config variable.
 
 function LoadConfig(){
@@ -93,11 +98,11 @@ function LoadConfig(){
 }
 
 function RenderConfig($config){
-	global $configCategorySettings;
+	global $configCategorySettings, $configPrettyPrintFunctions;
 	AddActionLog("RenderConfig");
 	StartTimer("RenderConfig");
 
-	$render = Array("LIST" => Array(), "VALUES" => Array());
+	$render = Array("LIST" => Array(), "VALUES" => Array(), "PRETTY_PRINT" => Array());
 
 	foreach($config as $i => $configEntry){
 		$configKey = $configEntry["KEY"];
@@ -105,7 +110,16 @@ function RenderConfig($config){
 		$category = $configEntry["CATEGORY"];
 		$configCategoryHeader = $configCategorySettings[$category];
 
+		//Raw value
 		$render["VALUES"][$configKey] = $configValue;
+
+		//Pretty Print
+		$configPrettyPrint = $configValue;
+		if(isset($configPrettyPrintFunctions[$configKey])){
+			$configPrettyPrint = $configPrettyPrintFunctions[$configKey]($configValue);
+		}
+		$render["PRETTY_PRINT"][$configKey] = $configPrettyPrint;
+
 
 		$categoryIndex = count($render["LIST"]);
 		foreach($render["LIST"] as $index => $configDictionaryEntry){
@@ -175,7 +189,7 @@ function UpdateConfig($config, $key, $value, $userID, $userUsername) {
 function RedirectToHttpsIfRequired($config){
 	AddActionLog("RedirectToHttpsIfRequired");
 	StartTimer("RedirectToHttpsIfRequired");
-	
+
     if($config["REDIRECT_TO_HTTPS"]["VALUE"]){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https
