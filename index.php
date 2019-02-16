@@ -465,7 +465,7 @@ switch($page){
 			die("invalid author name");
         }
 
-		$dictionary["viewing_author"] = RenderUser($config, $users[$viewingAuthor], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
+		$dictionary["viewing_author"] = RenderUser($config, $cookies, $users[$viewingAuthor], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
 	break;
 	case "submit":
 		if(!isset($dictionary["jams"]["current_jam"]["jam_number"])){
