@@ -29,13 +29,11 @@ function DeleteEntry($entryID){
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can delete entries.", false);
 		return;
 	}
 
 	if(!CanDeleteEntry($entryID)){
 		$actionResult = "CANNOT_DELETE_ENTRY";
-		AddDataWarning("This entry cannot be deleted.", false);
 		return;
 	}
 
@@ -43,7 +41,6 @@ function DeleteEntry($entryID){
 	$entryID = intval($entryID);
 	if($entryID <= 0){
 		$actionResult = "INVALID_JAM_ID";
-		AddDataWarning("invalid jam ID", false);
 		return;
 	}
 
@@ -61,17 +58,15 @@ function DeleteEntry($entryID){
     AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser["username"]);
 
 	$actionResult = "SUCCESS";
-    AddDataSuccess("Game Deleted");
 }
 
 function PerformAction(&$loggedInUser){
 	global $_POST;
-	
+
 	if(IsAdmin($loggedInUser) !== false){
 		$entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
 		if($entryID != ""){
 			DeleteEntry(intval($entryID));
-			$page = "editcontent";
 		}
 	}
 }

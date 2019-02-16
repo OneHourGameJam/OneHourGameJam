@@ -7,21 +7,18 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	//Authorize user
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
-		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Validate values
 	if(!$displayName || strlen($displayName) < $config["MINIMUM_DISPLAY_NAME_LENGTH"]["VALUE"] || strlen($displayName) > $config["MAXIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]){
 		$actionResult = "INVALID_DISPLAY_NAME";
-		AddDataWarning("Display name must be between 0 and 50 characters long", false);
 		return;
 	}
 
 	//Validate email address
 	if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
 		$actionResult = "INVALID_EMAIL";
-		AddDataWarning("Provided email address is not valid", false);
 		return;
 	}
 	

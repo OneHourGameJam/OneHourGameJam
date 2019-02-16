@@ -17,7 +17,6 @@ function HashPassword($password, $salt, $iterations, &$config){
 
 	//Check that we have sufficient iterations for password generation.
 	if(!ValidateHashingIterationNumber($iterations, $config)){
-		AddInternalDataError("Insufficient/Too many iterations for password generation.", false);
 		StopTimer("HashPassword");
 		return;
 	}

@@ -7,7 +7,6 @@ function DeleteAsset($assetID){
 	//Authorize user
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAdminAuthorizationWarning(false);
 		return;
 	}
 
@@ -18,7 +17,6 @@ function DeleteAsset($assetID){
 
 	if(!$assetExists){
 		$actionResult = "ASSET_DOES_NOT_EXIST";
-		AddDataWarning("The specified asset does not exist.", false);
 		return;
 	}
 
@@ -49,8 +47,6 @@ function DeleteAsset($assetID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	LoadAssets();
-
 	$actionResult = "SUCCESS";
     AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser["username"]);
 }
@@ -58,7 +54,7 @@ function DeleteAsset($assetID){
 
 function PerformAction(&$loggedInUser){
 	global $_POST;
-	
+
 	if(IsAdmin($loggedInUser) !== false){
 		$assetID = $_POST["asset_id"];
 		DeleteAsset($assetID);

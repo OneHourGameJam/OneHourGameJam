@@ -9,7 +9,6 @@ function EditUser($username, $isAdmin){
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can edit entries.", false);
 		return;
 	}
 
@@ -20,14 +19,12 @@ function EditUser($username, $isAdmin){
 		$isAdmin = 1;
 	}else{
 		$actionResult = "INVALID_ISADMIN";
-		AddDataWarning("Bad isadmin value", false);
 		return;
 	}
 
 	//Check that the user exists
 	if(!isset($users[$username])){
 		$actionResult = "USER_DOES_NOT_EXIST";
-		AddDataWarning("User does not exist", false);
 		return;
 	}
 

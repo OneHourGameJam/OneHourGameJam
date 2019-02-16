@@ -7,21 +7,18 @@ function BanTheme($bannedTheme){
 	//Authorize user (logged in)
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
-		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
 	}
 
 	$bannedTheme = trim($bannedTheme);
 	if($bannedTheme == ""){
 		$actionResult = "INVALID_THEME";
-		AddDataWarning("Theme is blank", false);
 		return;
 	}
 
@@ -36,7 +33,6 @@ function BanTheme($bannedTheme){
 
 	if(mysqli_num_rows($data) == 0){
 		$actionResult = "THEME_DOES_NOT_EXIST";
-		AddDataWarning("Theme does not exist", false);
 		return;
 	}
 
@@ -47,9 +43,6 @@ function BanTheme($bannedTheme){
     AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "", $loggedInUser["username"]);
 
 	$actionResult = "SUCCESS";
-	LoadThemes();
-
-	AddDataSuccess("Theme Banned", false);
 }
 
 function PerformAction(&$loggedInUser){

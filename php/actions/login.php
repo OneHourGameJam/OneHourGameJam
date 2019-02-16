@@ -11,13 +11,11 @@ function LogInOrRegister($username, $password){
 
 	if(!ValidateUsername($username, $config)){
 		$actionResult = "INVALID_USERNAME_LENGTH";
-		AddDataWarning("username must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	if(!ValidatePassword($password, $config)){
 		$actionResult = "INVALID_PASSWORD_LENGTH";
-		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
@@ -40,13 +38,11 @@ function RegisterUser($username, $password){
 
 	if(!ValidateUsername($username, $config)){
 		$actionResult = "INVALID_USERNAME_LENGTH";
-		AddDataWarning("username must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	if(!ValidatePassword($password, $config)){
 		$actionResult = "INVALID_PASSWORD_LENGTH";
-		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
@@ -57,7 +53,6 @@ function RegisterUser($username, $password){
 
 	if(isset($users[$username])){
 		$actionResult = "USERNAME_ALREADY_REGISTERED";
-		AddDataWarning("Username already registered", false);
 		return;
 	}else{
 		$newUser = Array();
@@ -123,19 +118,16 @@ function LogInUser($username, $password){
 
 	if(!ValidateUsername($username, $config)){
 		$actionResult = "INVALID_USERNAME_LENGTH";
-		AddDataWarning("username must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	if(!ValidatePassword($password, $config)){
 		$actionResult = "INVALID_PASSWORD_LENGTH";
-		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	if(!isset($users[$username])){
 		$actionResult = "USER_DOES_NOT_EXIST";
-		AddDataWarning("User does not exist", false);
 		return;
 	}
 
@@ -173,7 +165,6 @@ function LogInUser($username, $password){
 	}else{
 		//User password incorrect!
 		$actionResult = "INCORRECT_PASSWORD";
-		AddDataWarning("Incorrect username / password combination.", false);
 		return;
 	}
 	$actionResult = "SUCCESS";
@@ -181,7 +172,7 @@ function LogInUser($username, $password){
 
 function PerformAction(&$loggedInUser){
 	global $_POST;
-	
+
 	$username = (isset($_POST["un"])) ? $_POST["un"] : "";
 	$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
 	$loginChecked = false;

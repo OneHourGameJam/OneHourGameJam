@@ -35,13 +35,11 @@ function DeleteJam($jamID){
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can delete jams.", false);
 		return;
 	}
 
 	if(!CanDeleteJam($jamID)){
 		$actionResult = "CANNOT_DELETE_JAM";
-		AddInternalDataError("This jam cannot be deleted.", false);
 		return;
 	}
 
@@ -49,7 +47,6 @@ function DeleteJam($jamID){
 	$jamID = intval($jamID);
 	if($jamID <= 0){
 		$actionResult = "INVALID_JAM_ID";
-		AddDataWarning("invalid jam ID", false);
 		return;
 	}
 
@@ -65,7 +62,6 @@ function DeleteJam($jamID){
 	$sql = "";
 
 	$actionResult = "SUCCESS";
-	AddDataSuccess("Jam Deleted");
 
     AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser["username"]);
 }

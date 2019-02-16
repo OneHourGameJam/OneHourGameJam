@@ -7,7 +7,6 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	//Authorize user (is admin)
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
-		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
@@ -15,21 +14,18 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
 		$actionResult = "PASSWORDS_DONT_MATCH";
-		AddDataWarning("passwords don't match", false);
 		return;
 	}
 	$password = $newPassword1;
 
 	if(!ValidatePassword($password, $config)){
 		$actionResult = "INVALID_PASSWORD_LENGTH";
-		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	//Check that the user exists
 	if(!isset($users[$loggedInUser["username"]])){
 		$actionResult = "USER_DOES_NOT_EXIST";
-		AddDataWarning("User does not exist", false);
 		return;
 	}
 
@@ -40,7 +36,6 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $config);
 	if($correctPasswordHash != $passwordHash){
 		$actionResult = "INCORRECT_PASSWORD";
-		AddDataWarning("The entered password is incorrect.", false);
 		return;
 	}
 

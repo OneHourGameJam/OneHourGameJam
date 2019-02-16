@@ -12,40 +12,34 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	//Authorize user
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAdminAuthorizationWarning(false);
 		return;
 	}
 
 	//Validate author
 	if(strlen($author) < 1){
 		$actionResult = "AUTHOR_EMPTY";
-		AddDataWarning("Asset author is empty", false);
 		return;
 	}
 	if(!isset($users[$author])){
 		$actionResult = "INVALID_AUTHOR";
-		AddDataWarning("Author is not a valid user (must use their username)", false);
 		return;
 	}
 
 	//Validate title
 	if(strlen($title) < 1){
 		$actionResult = "INVALID_TITLE";
-		AddDataWarning("Asset title is empty", false);
 		return;
 	}
 
 	//Validate description
 	if(strlen($description) < 1){
 		$actionResult = "INVALID_DESCRIPTION";
-		AddDataWarning("Asset description is empty", false);
 		return;
 	}
 
 	//Validate type
 	if(strlen($type) < 1){
 		$actionResult = "ASSET_TYPE_EMPTY";
-		AddDataWarning("Asset type is blank", false);
 		return;
 	}
 	switch($type){
@@ -58,7 +52,6 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		break;
 		default:
 			$actionResult = "INVALID_ASSET_TYPE";
-			AddDataWarning("Invalid asset type", false);
 			return;
 		break;
 	}
@@ -79,7 +72,6 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	}
 	if($fileNumber == -1){
 		$actionResult = "COULD_NOT_FIND_VALID_FILE_NAME";
-		AddInternalDataError("Could not find valid file name for asset.", false);
 		return;
 	}
 
@@ -93,7 +85,6 @@ function AddAsset($assetID, $author, $title, $description, $type){
 
 		if ($_FILES["assetfile"]["size"] > $config["MAX_ASSET_FILE_SIZE_IN_BYTES"]["VALUE"]) {
 			$actionResult = "UNLOADED_ASSET_TOO_BIG";
-			AddDataWarning("Uploaded asset is too big (max 15MB)", false);
 			return;
 			$uploadPass = 0;
 		}
@@ -110,7 +101,6 @@ function AddAsset($assetID, $author, $title, $description, $type){
 
 	if($assetURL == "" && !$assetExists){
 		$actionResult = "COULD_NOT_DETERMINE_URL";
-		AddInternalDataError("Upload failure - Could not determine URL", false);
 		return;
 	}
 
@@ -188,8 +178,6 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$actionResult = "SUCCESS_INSERTED";
         AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser["username"]);
 	}
-
-	LoadAssets();
 }
 
 function PerformAction(&$loggedInUser){

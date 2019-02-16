@@ -11,7 +11,6 @@ function AddTheme($newTheme, $isBot){
 		$user = $loggedInUser;
 		if($user === false){
 			$actionResult = "NOT_LOGGED_IN";
-			AddAuthorizationWarning("Not logged in.", false);
 			return;
 		}
 	}
@@ -19,7 +18,6 @@ function AddTheme($newTheme, $isBot){
 	$newTheme = trim($newTheme);
 	if($newTheme == ""){
 		$actionResult = "INVALID_THEME";
-		AddDataWarning("Theme is blank", false);
 		return;
 	}
 
@@ -27,7 +25,6 @@ function AddTheme($newTheme, $isBot){
 		if(strtolower($theme["theme"]) == strtolower($newTheme)){
 			//Theme is already suggested
 			$actionResult = "THEME_ALREADY_SUGGESTED";
-			AddDataWarning("This theme has already been suggested.", false);
 			return;
 		}
 	}
@@ -46,7 +43,6 @@ function AddTheme($newTheme, $isBot){
 	$sql = "";
 
 	$actionResult = "SUCCESS";
-	AddDataSuccess("Theme added", false);
 }
 
 function PerformAction(&$loggedInUser){

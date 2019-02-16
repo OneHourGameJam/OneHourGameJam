@@ -6,14 +6,12 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 	//Authorize user (logged in)
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
-		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
 	}
 
@@ -54,7 +52,6 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 			break;
 		default:
 			$actionResult = "INVALID_VOTE_TYPE";
-			AddDataWarning("Failed to cast vote for admin: Invalid vote type", false);
 			return;
 	}
 
@@ -78,7 +75,6 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 		$actionResult = "SUCESS_UPDATE";
-		AddDataSuccess("Admin vote updated", false);
 	}else{
 		//New vote for admin
 		$sql = "
@@ -96,13 +92,12 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 		$actionResult = "SUCESS_INSERT";
-		AddDataSuccess("Admin vote cast", false);
 	}
 }
 
 function PerformAction($loggedInUser){
 	global $_POST;
-	
+
 	if(IsAdmin($loggedInUser) !== false){
 			$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
 			$voteType = $_POST["adminVoteType"];

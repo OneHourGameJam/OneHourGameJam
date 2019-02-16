@@ -7,7 +7,6 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can edit entries.", false);
 		return;
 	}
 
@@ -15,21 +14,18 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
 		$actionResult = "PASSWORDS_DONT_MATCH";
-		AddDataWarning("passwords don't match", false);
 		return;
 	}
 	$password = $newPassword1;
 
 	if(!ValidatePassword($password, $config)){
 		$actionResult = "INVALID_PASSWORD_LENGTH";
-		AddDataWarning("password must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long", false);
 		return;
 	}
 
 	//Check that the user exists
 	if(!isset($users[$username])){
 		$actionResult = "USER_DOES_NOT_EXIST";
-		AddDataWarning("User does not exist", false);
 		return;
 	}
 

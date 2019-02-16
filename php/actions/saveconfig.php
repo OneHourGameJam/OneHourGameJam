@@ -34,7 +34,6 @@ function PerformAction(&$loggedInUser){
 		foreach($_POST as $key => $value){
 			SaveConfig($key, $value);
 		}
-		LoadConfig(); //reload config
 	}
 }
 

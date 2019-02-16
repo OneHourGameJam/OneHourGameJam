@@ -147,9 +147,9 @@ StopTimer("index.php");
 
 if(IsAdmin($loggedInUser) !== false){
 
-	print "<pre>";
-	var_dump($dictionary);
-	print "</pre>";
+	//print "<pre>";
+	//var_dump($dictionary);
+	//print "</pre>";
 
 	foreach($actionLog as $actionLogKey => $actionLogValue){
 		if(isset($actionTimers[$actionLogKey])){

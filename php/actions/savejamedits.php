@@ -8,7 +8,6 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can edit jams.", false);
 		return;
 	}
 
@@ -22,7 +21,6 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
 			$actionResult = "INVALID_COLOR";
-			AddDataWarning("Invalid color: ".$clr." Must be a string of 6 hex values, which represent a color. Example:<br />FFFFFF-067BC2-D56062-F37748-ECC30B-84BCDA", false);
 			return;
 		}
 		$colorSHexCodes[] = $clr;
@@ -33,24 +31,20 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	$jamID = intval($jamID);
 	if($jamID <= 0){
 		$actionResult = "INVALID_JAM_ID";
-		AddDataWarning("invalid jam id", false);
 		return;
 	}
 
 	if(strlen($theme) <= 0){
 		$actionResult = "INVALID_THEME";
-		AddDataWarning("invalid theme", false);
 		return;
 	}
 
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
 		$actionResult = "INVALID_DATE";
-		AddDataWarning("Invalid date", false);
 		return;
 	}else if(strlen($time) <= 0){
 		$actionResult = "INVALID_TIME";
-		AddDataWarning("Invalid time", false);
 		return;
 	}else{
 		$datetime = strtotime($date." ".$time." UTC");
@@ -74,8 +68,6 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 		WHERE jam_id = $escapedJamID";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-
-	AddDataSuccess("Jam Updated");
 
 	$actionResult = "SUCCESS";
     AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser["username"]);

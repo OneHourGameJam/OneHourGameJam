@@ -7,21 +7,18 @@ function RemoveTheme($removedTheme){
 	//Authorize user (logged in)
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
-		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
-		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
 	}
 
 	$removedTheme = trim($removedTheme);
 	if($removedTheme == ""){
 		$actionResult = "INVALID_THEME";
-		AddDataWarning("Theme is blank", false);
 		return;
 	}
 
@@ -36,7 +33,6 @@ function RemoveTheme($removedTheme){
 
 	if(mysqli_num_rows($data) == 0){
 		$actionResult = "THEME_DOES_NOT_EXIST";
-		AddDataWarning("Theme does not exist", false);
 		return;
 	}
 
@@ -47,14 +43,11 @@ function RemoveTheme($removedTheme){
     AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser["username"]);
 
 	$actionResult = "SUCCESS";
-	LoadThemes();
-
-	AddDataSuccess("Theme Removed", false);
 }
 
 function PerformAction(&$loggedInUser){
 	global $_POST;
-	
+
 	if(IsAdmin($loggedInUser) !== false){
 		$deletedTheme = $_POST["theme"];
 		RemoveTheme($deletedTheme);

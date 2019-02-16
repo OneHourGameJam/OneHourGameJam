@@ -70,12 +70,10 @@ function SubmitSatisfaction(&$loggedInUser, $satisfactionQuestionId, $score){
 	StartTimer("SubmitSatisfaction");
 
 	if($score < -5){
-		AddDataWarning("Invalid satisfaction score", false);
 		StopTimer("SubmitSatisfaction");
 		return;
 	}
 	if($score > 5){
-		AddDataWarning("Invalid satisfaction score", false);
 		StopTimer("SubmitSatisfaction");
 		return;
 	}
@@ -108,7 +106,6 @@ function SubmitSatisfaction(&$loggedInUser, $satisfactionQuestionId, $score){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	AddDataSuccess("Satisfaction score submitted", false);
 	StopTimer("SubmitSatisfaction");
 }
 
