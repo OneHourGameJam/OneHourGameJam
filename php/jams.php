@@ -1,7 +1,7 @@
 <?php
 
 function LoadJams(){
-	global $dbConn, $nextJamTime;
+	global $dbConn;
 
 	AddActionLog("LoadJams");
 	StartTimer("LoadJams");
@@ -212,8 +212,7 @@ function RenderJams(&$jams, &$config, &$games, &$users, &$satisfaction, $loggedI
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule($nextScheduledJamTime, $nextSuggestedJamTime){
-	global $themes, $jams, $config;
+function CheckNextJamSchedule(&$themes, &$jams, &$config, $nextScheduledJamTime, $nextSuggestedJamTime){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule"); 
 
@@ -259,12 +258,12 @@ function CheckNextJamSchedule($nextScheduledJamTime, $nextSuggestedJamTime){
 
 		$selectedTheme = "";
 
-		$selectedTheme = SelectRandomThemeByVoteDifference();
+		$selectedTheme = SelectRandomThemeByVoteDifference($themes, $config);
 		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomThemeByPopularity();
+			$selectedTheme = SelectRandomThemeByPopularity($themes, $config);
 		}
 		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomTheme();
+			$selectedTheme = SelectRandomTheme($themes);
 		}
 		if($selectedTheme == ""){
 			$selectedTheme = "Any theme";
@@ -283,8 +282,7 @@ function CheckNextJamSchedule($nextScheduledJamTime, $nextSuggestedJamTime){
 
 //Selects a random theme (or "" if none can be selected) by calculating the difference between positive and negative votes and
 //selecting a proportional random theme by this difference
-function SelectRandomThemeByVoteDifference(){
-	global $themes, $config;
+function SelectRandomThemeByVoteDifference(&$themes, &$config){
 	AddActionLog("SelectRandomThemeByVoteDifference");
 	StartTimer("SelectRandomThemeByVoteDifference");
 
@@ -346,8 +344,7 @@ function SelectRandomThemeByVoteDifference(){
 }
 
 //Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
-function SelectRandomThemeByPopularity(){
-	global $themes, $config;
+function SelectRandomThemeByPopularity(&$themes, &$config){
 	AddActionLog("SelectRandomThemeByPopularity");
 	StartTimer("SelectRandomThemeByPopularity");
 
@@ -409,8 +406,7 @@ function SelectRandomThemeByPopularity(){
 }
 
 //Selects a random theme with equal probability for all themes, not caring for number of votes
-function SelectRandomTheme(){
-	global $themes;
+function SelectRandomTheme(&$themes){
 	AddActionLog("SelectRandomTheme");
 	StartTimer("SelectRandomTheme");
 
@@ -503,7 +499,7 @@ function GetJamsOfUserFormatted($username){
 
 // Returns a jam given its number.
 // The dictionary of jams must have been previously loaded.
-function GetJamByNumber($jams, $jamNumber) {
+function GetJamByNumber(&$jams, $jamNumber) {
 	AddActionLog("GetJamByNumber");
 	StartTimer("GetJamByNumber");
 

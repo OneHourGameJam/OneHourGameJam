@@ -31,7 +31,7 @@ function Init(){
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jams);
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config);
-	CheckNextJamSchedule($nextScheduledJamTime , $nextSuggestedJamTime);
+	CheckNextJamSchedule($themes, $jams, $config, $nextScheduledJamTime , $nextSuggestedJamTime);
 	$assets = LoadAssets();
 	LoadPolls();
     $satisfaction = LoadSatisfaction($config);

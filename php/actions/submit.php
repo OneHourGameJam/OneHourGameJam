@@ -284,7 +284,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	}
 }
 
-if($loggedInUSer !== false){
+if($loggedInUser !== false){
     $gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
     $gameURL = (isset($_POST["gameurl"])) ? $_POST["gameurl"] : "";
     $gameURLWeb = (isset($_POST["gameurlweb"])) ? $_POST["gameurlweb"] : "";
@@ -303,7 +303,7 @@ if($loggedInUSer !== false){
 
     $satisfaction = (isset($_POST["satisfaction"])) ? intval($_POST["satisfaction"]) : 0;
     if($satisfaction != 0){
-        SubmitSatisfaction("JAM_$jamNumber", $satisfaction);
+        SubmitSatisfaction($loggedInUser, "JAM_$jamNumber", $satisfaction);
     }
 }
 

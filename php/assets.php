@@ -1,7 +1,7 @@
 <?php
 
 function LoadAssets(){
-	global $dictionary, $dbConn;
+	global $dbConn;
 
 	AddActionLog("LoadAssets");
 	StartTimer("LoadAssets");

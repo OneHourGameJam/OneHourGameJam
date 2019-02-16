@@ -169,8 +169,8 @@ function LoadSatisfaction(&$config){
 	return $satisfaction;
 }
 
-function SubmitSatisfaction($satisfactionQuestionId, $score){
-	global $dbConn, $ip, $userAgent, $loggedInUser;
+function SubmitSatisfaction(&$loggedInUser, $satisfactionQuestionId, $score){
+	global $dbConn, $ip, $userAgent;
 	AddActionLog("SubmitSatisfaction");
 	StartTimer("SubmitSatisfaction");
 
@@ -218,7 +218,7 @@ function SubmitSatisfaction($satisfactionQuestionId, $score){
 }
 
 function LoadLoggedInUsersAdminVotes(&$loggedInUser){
-	global $dbConn, $dictionary;
+	global $dbConn;
 	AddActionLog("LoadLoggedInUsersAdminVotes");
 	StartTimer("LoadLoggedInUsersAdminVotes");
 
@@ -248,7 +248,7 @@ function LoadLoggedInUsersAdminVotes(&$loggedInUser){
 }
 
 function LoadAdminVotes(){
-	global $dbConn, $dictionary;
+	global $dbConn;
 	AddActionLog("LoadAdminVotes");
 	StartTimer("LoadAdminVotes");
 
