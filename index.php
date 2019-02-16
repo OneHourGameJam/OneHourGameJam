@@ -717,10 +717,14 @@ StopTimer("index.php");
 
 
 if(IsAdmin($loggedInUser) !== false){
-	print_r($actionLog);
-	print "<br><br>";
-	print_r($actionTimers);
-	print "<br><br>";
+	foreach($actionLog as $actionLogKey => $actionLogValue){
+		if(isset($actionTimers[$actionLogKey])){
+			$actionTimers[$actionLogKey]["calls"] = $actionLogValue;
+		}else{
+			$actionTimers[$actionLogKey] = Array("totalTime" => "not logged", "timerRunning" => "not logged", "lastTimestamp" => "not logged", "timeInSeconds" => "not logged", "calls" => $actionLogValue);
+		}
+	}
+	
 	print ArrayToHTML($actionTimers);
 }
 
