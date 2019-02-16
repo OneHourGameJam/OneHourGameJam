@@ -31,7 +31,6 @@ function HashPassword($password, $salt, $iterations, &$config){
 
 //Returns the username of the user associated with the provided user id
 function GetUsernameForUserId($userID, &$users){
-	global $users;
 	AddActionLog("GetUsernameForUserId");
 	StartTimer("GetUsernameForUserId");
 
@@ -89,7 +88,6 @@ function IsLoggedIn(&$users, &$config){
 		$userID = $session["session_user_id"];
 		$username = GetUsernameForUserId($userID, $users);
 		$loggedInUser = $users[$username];
-		$loggedInUser["username"] = $username;
         $loginChecked = true;
 
 		$sql = "
