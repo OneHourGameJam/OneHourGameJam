@@ -39,14 +39,14 @@
 		Themes suggested above will appear in this list. Once a theme receives enough votes, it becomes considered for a jam, depending on its popularity. Themes which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested themes. Old themes are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any theme that gets removed due to unpopularity or age can be suggested again at any point.
 	</p>
 	
-	{{#is_streamer}}
+	{{#cookies.is_streamer}}
 	<p class='bold'>
 		Please disable streamer mode to vote on themes.
 	</p>
-	{{/is_streamer}}
+	{{/cookies.is_streamer}}
 
 	{{#user.is_admin}}
-		{{^is_streamer}}
+		{{^cookies.is_streamer}}
 			<p>
 				<b>Admin instructions</b>
 				<p>
@@ -133,16 +133,16 @@
 				
 				</script>
 			</div>
-		{{/is_streamer}}
+		{{/cookies.is_streamer}}
 	{{/user.is_admin}}
 
 	<ul>
 		<table>
 			<tr>
 				{{#user.is_admin}}
-					{{^is_streamer}}
+					{{^cookies.is_streamer}}
 						<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
-					{{/is_streamer}}
+					{{/cookies.is_streamer}}
 				{{/user.is_admin}}
 				<th colspan='3' class='themeTableCell themeTableCellCentered'>
 					Vote
@@ -151,7 +151,7 @@
 					Theme
 				</th>
 				{{#user.is_admin}}
-					{{^is_streamer}}
+					{{^cookies.is_streamer}}
 						<th class='themeTableCell themeTableCellCentered'>
 							Author
 						</th>
@@ -185,13 +185,13 @@
 						<th class='themeTableCell themeTableCellCentered'>
 							Admin actions
 						</th>
-					{{/is_streamer}}
+					{{/cookies.is_streamer}}
 				{{/user.is_admin}}
 			</tr>
 			{{#themes.suggested_themes}}
 				{{#theme_visible}}
 					{{#user.is_admin}}
-						{{^is_streamer}}
+						{{^cookies.is_streamer}}
 							{{#banned}}
 								<tr class="theme-banned">
 							{{/banned}}
@@ -237,40 +237,40 @@
 									{{/is_old}}
 								{{/banned}}
 							</td>
-						{{/is_streamer}}
+						{{/cookies.is_streamer}}
 					{{/user.is_admin}}
 					{{^user.is_admin}}
 						<tr>
 					{{/user.is_admin}}
 					<td class='themeTableCell'>
-						{{#is_streamer}}
+						{{#cookies.is_streamer}}
 							<div class="btn btn-default" disabled>+1</div>
-						{{/is_streamer}}
-						{{^is_streamer}}
+						{{/cookies.is_streamer}}
+						{{^cookies.is_streamer}}
 							<button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}" onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
-						{{/is_streamer}}
+						{{/cookies.is_streamer}}
 					</td>
 					<td class='themeTableCell'>
-						{{#is_streamer}}
+						{{#cookies.is_streamer}}
 							<div class="btn btn-default" disabled>0</div>
-						{{/is_streamer}}
-						{{^is_streamer}}
+						{{/cookies.is_streamer}}
+						{{^cookies.is_streamer}}
 							<button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}" onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
-						{{/is_streamer}}
+						{{/cookies.is_streamer}}
 					</td>
 					<td class='themeTableCell'>
-						{{#is_streamer}}
+						{{#cookies.is_streamer}}
 							<div class="btn btn-default" disabled>-1</div>
-						{{/is_streamer}}
-						{{^is_streamer}}
+						{{/cookies.is_streamer}}
+						{{^cookies.is_streamer}}
 							<button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}" onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
-						{{/is_streamer}}
+						{{/cookies.is_streamer}}
 					</td>
 					<td class='themeTableCell'>
 						{{{theme}}}
 					</td>
 					{{#user.is_admin}}
-						{{^is_streamer}}
+						{{^cookies.is_streamer}}
 							<td class='themeTableCell themeTableCellCentered'>
 								{{author}}
 							</td>
@@ -324,7 +324,7 @@
 									<input type='hidden' name='theme' value='{{{theme}}}'>
 								</form>
 							</td>
-						{{/is_streamer}}
+						{{/cookies.is_streamer}}
 					{{/user.is_admin}}
 					</tr>
 				{{/theme_visible}}

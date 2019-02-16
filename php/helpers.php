@@ -44,14 +44,16 @@ function StopTimer($timerName){
 }
 
 function StartsWith($haystack, $needle) {
-    // search backwards starting from haystack length characters from the end
 	AddActionLog("StartsWith");
+
+    // search backwards starting from haystack length characters from the end
     return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
 }
 
 function EndsWith($haystack, $needle) {
-    // search forward starting from end minus needle length characters
 	AddActionLog("EndsWith");
+
+    // search forward starting from end minus needle length characters
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
 }
 
@@ -59,6 +61,7 @@ function EndsWith($haystack, $needle) {
 function CmpArrayByPropertyPopularityNum($a, $b)
 {
 	AddActionLog("CmpArrayByPropertyPopularityNum");
+
 	if(isset($a["banned"]) && $a["banned"] == 1){
 		return 1;
 	}
@@ -69,6 +72,7 @@ function CmpArrayByPropertyPopularityNum($a, $b)
 function CmpArrayByProperty($a, $b, $property)
 {
 	AddActionLog("CmpArrayByProperty");
+
 	return $a[$property] < $b[$property];
 }
 
@@ -76,6 +80,7 @@ function CmpArrayByProperty($a, $b, $property)
 function ordinal($number) {
 	AddActionLog("ordinal");
 	StartTimer("ordinal");
+
 	$number = intval($number);
     $ends = array('th','st','nd','rd','th','th','th','th','th','th');
     if ((($number % 100) >= 11) && (($number%100) <= 13)){
@@ -91,7 +96,9 @@ function ordinal($number) {
 // Converts bytes to a string with a more accurate unit. Returns "5 kilobytes" instead of 5120 bytes, for example.
 // Used in the mustache helper for printing bytes
 function bytesToString($bytes) {
-	$byteConversions = array( 
+	AddActionLog("bytesToString");
+	
+	$byteConversions = Array( 
 		"Terabyte" => 1099511627776,
 		"Gigabyte" => 1073741824,
 		"Megabyte" => 1048576,
@@ -172,6 +179,7 @@ function GetCurrentJamNumberAndID(){
 	}else{
 		$currentJamNumberArchive = Array("NUMBER" => 0, "ID" => 0);
 	}
+
 	StopTimer("GetCurrentJamNumberAndID");
 	return $currentJamNumberArchive;
 }
@@ -212,6 +220,7 @@ function CleanHtml($html) {
 		StopTimer("CleanHtml");
 		return NULL;
 	}
+	
 	StopTimer("CleanHtml");
 }
 

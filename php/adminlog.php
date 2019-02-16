@@ -2,7 +2,6 @@
 
 function LoadAdminLog(){
     global $dbConn;
-
 	AddActionLog("LoadAdminLog");
 	StartTimer("LoadAdminLog");
 

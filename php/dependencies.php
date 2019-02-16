@@ -1,21 +1,22 @@
 <?php
 
 //These correspond to the data which needs to be retrieved with LoadXYZ()
-define("DEPENDENCY_CONFIG", pow(2, 0));
-define("DEPENDENCY_ADMIN_LOG", pow(2, 1));
-define("DEPENDENCY_USERS", pow(2, 2));
-define("DEPENDENCY_GAMES", pow(2, 3));
-define("DEPENDENCY_JAMS", pow(2, 4));
-define("DEPENDENCY_ADMIN_VOTES", pow(2, 5));
-define("DEPENDENCY_LOGGED_IN_USER_ADMIN_VOTES", pow(2, 6));
-define("DEPENDENCY_SATISFACTION", pow(2, 7));
-define("DEPENDENCY_THEMES", pow(2, 8));
-define("DEPENDENCY_LOGGED_IN_USER_THEME_VOTES", pow(2, 9));
-define("DEPENDENCY_THEMES_BY_VOTE_DIFFERENCE", pow(2, 10));
-define("DEPENDENCY_THEMES_BY_POPULARITY", pow(2, 11));
-define("DEPENDENCY_ASSETS", pow(2, 12));
-define("DEPENDENCY_POLLS", pow(2, 13));
-define("DEPENDENCY_LOGGED_IN_USER_POLL_VOTES", pow(2, 14));
+define("DEPENDENCY_CONFIG",         pow(2, 0));
+define("DEPENDENCY_COOKIES",        pow(2, 1));
+define("DEPENDENCY_ADMIN_LOG",      pow(2, 2));
+define("DEPENDENCY_USERS",          pow(2, 3));
+define("DEPENDENCY_GAMES",          pow(2, 4));
+define("DEPENDENCY_JAMS",           pow(2, 5));
+define("DEPENDENCY_ADMIN_VOTES",    pow(2, 6));
+define("DEPENDENCY_LOGGED_IN_USER_ADMIN_VOTES", pow(2, 7));
+define("DEPENDENCY_SATISFACTION",   pow(2, 8));
+define("DEPENDENCY_THEMES",         pow(2, 9));
+define("DEPENDENCY_LOGGED_IN_USER_THEME_VOTES", pow(2, 10));
+define("DEPENDENCY_THEMES_BY_VOTE_DIFFERENCE",  pow(2, 11));
+define("DEPENDENCY_THEMES_BY_POPULARITY",       pow(2, 12));
+define("DEPENDENCY_ASSETS",         pow(2, 13));
+define("DEPENDENCY_POLLS",          pow(2, 14));
+define("DEPENDENCY_LOGGED_IN_USER_POLL_VOTES",  pow(2, 15));
 //define("DEPENDENCY_", pow(2, 15));
 //define("DEPENDENCY_", pow(2, 16));
 //define("DEPENDENCY_", pow(2, 17));

@@ -11,11 +11,11 @@ function GenerateSalt(){
 function HashPassword($password, $salt, $iterations, &$config){
 	AddActionLog("HashPassword");
 	StartTimer("HashPassword");
+
 	$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "";
 	$pswrd = $pepper.$password.$salt;
 
 	//Check that we have sufficient iterations for password generation.
-	
 	if(!ValidateHashingIterationNumber($iterations, $config)){
 		AddInternalDataError("Insufficient/Too many iterations for password generation.", false);
 		StopTimer("HashPassword");
@@ -25,6 +25,7 @@ function HashPassword($password, $salt, $iterations, &$config){
 	for($i = 0; $i < $iterations; $i++){
 		$pswrd = hash("sha256", $pswrd);
 	}
+
 	StopTimer("HashPassword");
 	return $pswrd;
 }
@@ -40,6 +41,7 @@ function GetUsernameForUserId($userID, &$users){
 			return $user["username"];
 		}
 	}
+
 	StopTimer("GetUsernameForUserId");
 }
 
@@ -121,6 +123,7 @@ function IsLoggedIn(&$config, &$users){
 		StopTimer("IsLoggedIn");
 		return false;
 	}
+
 	StopTimer("IsLoggedIn");
 }
 
@@ -129,6 +132,7 @@ function IsLoggedIn(&$config, &$users){
 function IsAdmin($user){
 	AddActionLog("IsAdmin");
 	StartTimer("IsAdmin");
+
 	if($user === false){
 		StopTimer("IsAdmin");
 		return false;
@@ -150,6 +154,7 @@ function LoadBio($user) {
 	global $dbConn;
 	AddActionLog("LoadBio");
 	StartTimer("LoadBio");
+
 	if (isset($user)) {
 		$clean_username = mysqli_real_escape_string($dbConn, $user["username"]);
 		$sql = "SELECT user_bio FROM user WHERE user_username = '$clean_username'";
@@ -164,9 +169,9 @@ function LoadBio($user) {
 
 function GetUsersOfUserFormatted($username){
 	global $dbConn;
-
 	AddActionLog("GetUsersOfUserFormatted");
 	StartTimer("GetUsersOfUserFormatted");
+
 	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
 	$sql = "
 		SELECT *
@@ -182,9 +187,9 @@ function GetUsersOfUserFormatted($username){
 
 function GetSessionsOfUserFormatted($userId){
 	global $dbConn;
-
 	AddActionLog("GetSessionsOfUserFormatted");
 	StartTimer("GetSessionsOfUserFormatted");
+
 	$escapedID = mysqli_real_escape_string($dbConn, $userId);
 	$sql = "
 		SELECT *
@@ -199,6 +204,8 @@ function GetSessionsOfUserFormatted($userId){
 }
 
 function ValidatePassword($password, &$config){
+	AddActionLog("ValidatePassword");
+
 	//Check password length
 	if(strlen($password) < $config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]){
 		return false;
@@ -211,6 +218,8 @@ function ValidatePassword($password, &$config){
 }
 
 function GenerateUserHashIterations(&$config){
+	AddActionLog("GenerateUserHashIterations");
+
 	$minimumHashIterations = $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"];
 	$maximumHashIterations = $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"];
 
@@ -218,6 +227,8 @@ function GenerateUserHashIterations(&$config){
 }
 
 function ValidateHashingIterationNumber($iterations, &$config){
+	AddActionLog("ValidateHashingIterationNumber");
+
 	if($iterations < $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"]){
 		return false;
 	}
@@ -229,6 +240,8 @@ function ValidateHashingIterationNumber($iterations, &$config){
 }
 
 function ValidateUsername($username, &$config){
+	AddActionLog("ValidateUsername");
+
 	if(strlen($username) < $config["MINIMUM_USERNAME_LENGTH"]["VALUE"]){
 		return false;
 	}

@@ -4,34 +4,9 @@
 //error_reporting(-1);
 //
 //print phpversion ();
-$nightmode = (isset($_COOKIE["nightmode"])) ? $_COOKIE["nightmode"] : 0;
-if(isset($_GET["nightmode"])){
-	$nightmode = $_GET["nightmode"];
-	if($nightmode == 1){
-		setcookie("nightmode", 1, time() + (60 * 60 * 24 * 365));
-		$nightmode = 1;
-	}else{
-		setcookie("nightmode", null, -1);
-		$nightmode = 0;
-	}
-}
 
 include_once("php/site.php");
 StartTimer("index.php");
-
-//Determine whether the person is in streaming mode
-if(isset($_GET["streaming"])){
-	if($_GET["streaming"] == 1){
-		setcookie("streaming", 1, time() + (60 * 60 * 3));	//Streamer mode lasts for 3 hours
-		$dictionary["is_streamer"] = 1;
-	}else{
-		setcookie("streaming", null, -1);
-	}
-}else{
-	if(isset($_COOKIE["streaming"]) && $_COOKIE["streaming"] == 1){
-		$dictionary["is_streamer"] = 1;
-	}
-}
 
 $templateBasePath = "template/";
 $dictionary["template_path"] = $templateBasePath;
@@ -79,10 +54,6 @@ if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editja
 	if(IsAdmin($loggedInUser) === false){
 		$page = "main";
 	}
-}
-
-if($nightmode == 1){
-	$dictionary["NIGHT_MODE"] = 1;
 }
 
 //Action data

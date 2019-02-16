@@ -2,6 +2,7 @@
 
 function InitStream(){
 	global $config;
+	AddActionLog("InitStream");
 	StartTimer("InitStream");
 
 	$render = Array();
@@ -48,9 +49,8 @@ function InitStream(){
 		$render["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]["VALUE"];
 	}
 
-	return $render;
-
 	StopTimer("InitStream");
+	return $render;
 }
 
 ?>

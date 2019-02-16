@@ -8,6 +8,8 @@
 // Given a URL, returns a valid (escaped) URL, or false if it's bad. //
 //function validate_url($url) {
 function SanitizeURL($url) {
+	AddActionLog("SanitizeURL");
+
 	// Step 0. Confirm that the input is UTF-8 encoded.
 	if(!mb_check_encoding($url, 'UTF-8')){
 		// ERROR: Expected URL in UTF-8 encoding.

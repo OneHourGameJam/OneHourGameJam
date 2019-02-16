@@ -6,10 +6,12 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes;
-
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies;
 	AddActionLog("Init");
 	StartTimer("Init");
+
+	UpdateCookies();
+	$cookies = LoadCookies();
 
 	$config = LoadConfig();
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($config);
@@ -43,15 +45,16 @@ function Init(){
 	$dictionary["stream"] = InitStream();
 	$dictionary["CONFIG"] = RenderConfig($config);
 	$dictionary["adminlog"] = RenderAdminLog($adminLog);
-	$dictionary["users"] = RenderUsers($config, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
+	$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
 	$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser);
 	$dictionary["entries"] = RenderGames($users, $games, $jams);
 	$dictionary["themes"] = RenderThemes($config, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	$dictionary["assets"] = RenderAssets($assets);
 	$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
+	$dictionary["cookies"] = RenderCookies($cookies);
 	
 	if($loggedInUser !== false){
-		$dictionary["user"] = RenderLoggedInUser($config, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);
+		$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);
 	}
 
 	StopTimer("Init");

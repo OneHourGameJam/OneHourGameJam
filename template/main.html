@@ -1,5 +1,5 @@
 <div class="col-md-10">
-	{{^is_streamer}}
+	{{^cookies.is_streamer}}
 		{{#stream.IS_STREAM_ACTIVE}}
 			<div class="wrapper">
 				<div class="main">
@@ -7,7 +7,7 @@
 				</div>
 			</div>
 		{{/stream.IS_STREAM_ACTIVE}}
-	{{/is_streamer}}
+	{{/cookies.is_streamer}}
 
 	<input type="text" class="form-control" id='search' placeholder="Search for..." style='margin-bottom: 10px;'>
 

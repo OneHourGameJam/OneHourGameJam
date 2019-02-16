@@ -2,9 +2,9 @@
 
 function LoadAssets(){
 	global $dbConn;
-
 	AddActionLog("LoadAssets");
 	StartTimer("LoadAssets");
+
 	$assets = Array();
 
 	$sql = "
@@ -69,9 +69,9 @@ function RenderAssets($assets){
 
 function GetAssetsOfUserFormatted($author){
 	global $dbConn;
-
 	AddActionLog("GetAssetsOfUserFormatted");
 	StartTimer("GetAssetsOfUserFormatted");
+	
 	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
 	$sql = "
 		SELECT *

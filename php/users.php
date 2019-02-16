@@ -92,11 +92,10 @@ function LoadUsers(){
 	return $users;
 }
                             
-function RenderUser(&$config, &$user, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, $print = false){
-    global $nightmode;
-
+function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes){
 	AddActionLog("RenderUser");
-	StartTimer("RenderUser");
+    StartTimer("RenderUser");
+    
     $userData = $user;
 
     $currentJamData = GetCurrentJamNumberAndID();
@@ -189,7 +188,7 @@ function RenderUser(&$config, &$user, &$users, &$games, &$jams, &$adminVotes, &$
     $activeColor = "#F6FFEC";
     $highlyAciveColor = "#ECFFEC";
 
-    if($nightmode == 1)
+    if($cookies["darkmode"] == 1)
     {
         $inactiveColor = "#4A3636";
         $activeColor = "#3E4A36";
@@ -342,9 +341,10 @@ function RenderUser(&$config, &$user, &$users, &$games, &$jams, &$adminVotes, &$
     return $userData;
 }
 
-function RenderUsers(&$config, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes){
+function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes){
 	AddActionLog("RenderUsers");
-	StartTimer("RenderUsers");
+    StartTimer("RenderUsers");
+    
     $render = Array("LIST" => Array());
 
     $authorCount = 0;
@@ -363,7 +363,7 @@ function RenderUsers(&$config, &$users, &$games, &$jams, &$adminVotes, &$loggedI
         }
         $userAsArray = Array($user);
         
-        $userData = RenderUser($config, $user, $users, $games, $userJams, $adminVotes, $loggedInUserAdminVotes);
+        $userData = RenderUser($config, $cookies, $user, $users, $games, $userJams, $adminVotes, $loggedInUserAdminVotes);
 
         if(isset($userData["entry_count"])){
             $authorCount += 1;
@@ -397,12 +397,16 @@ function RenderUsers(&$config, &$users, &$games, &$jams, &$adminVotes, &$loggedI
 	return $render;
 }
 
-function RenderLoggedInUser(&$config, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser){
-    return RenderUser($config, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, true);
+function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser){
+	AddActionLog("RenderLoggedInUser");
+    return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
 }
 
 function GroupGamesByUsername(&$games)
 {
+	AddActionLog("GroupGamesByUsername");
+    StartTimer("GroupGamesByUsername");
+    
     $gamesByUsername = Array();
     foreach($games as $i => $game) {
         $username = $game["author"];
@@ -411,11 +415,16 @@ function GroupGamesByUsername(&$games)
         }
         $gamesByUsername[$username][] = $game;
     }
+
+	StopTimer("GroupGamesByUsername");
     return $gamesByUsername;
 }
 
 function GroupJamsByUsername(&$jams, &$gamesByUsername)
 {
+	AddActionLog("GroupJamsByUsername");
+    StartTimer("GroupJamsByUsername");
+
     $jamsByUsername = Array();
     foreach($gamesByUsername as $username => $games){
         $jamsByUsername[$username] = Array();
@@ -423,6 +432,8 @@ function GroupJamsByUsername(&$jams, &$gamesByUsername)
             $jamsByUsername[$username][$game['jam_id']] = $jams[$game['jam_id']];
         }
     }
+
+	StopTimer("GroupJamsByUsername");
     return $jamsByUsername;
 }
 

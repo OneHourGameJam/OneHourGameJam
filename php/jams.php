@@ -2,7 +2,6 @@
 
 function LoadJams(){
 	global $dbConn;
-
 	AddActionLog("LoadJams");
 	StartTimer("LoadJams");
 
@@ -33,6 +32,9 @@ function LoadJams(){
 }
 
 function GetNextJamDateAndTime(&$jams){
+	AddActionLog("GetNextJamDateAndTime");
+	StartTimer("GetNextJamDateAndTime");
+
 	$nextJamStartTime = null;
 
 	$now = time();
@@ -44,6 +46,7 @@ function GetNextJamDateAndTime(&$jams){
 		}
 	}
 
+	StopTimer("GetNextJamDateAndTime");
 	return $nextJamStartTime;
 }
 

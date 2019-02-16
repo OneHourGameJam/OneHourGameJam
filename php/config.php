@@ -22,9 +22,9 @@ $configCategorySettings = Array(
 
 function LoadConfig(){
 	global $dbConn;
-
 	AddActionLog("LoadConfig");
 	StartTimer("LoadConfig");
+	
 	$config = Array();
 
 	$sql = " SELECT * FROM config ORDER BY config_id; ";
