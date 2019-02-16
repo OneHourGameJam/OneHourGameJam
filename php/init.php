@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity;
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes;
 
 	AddActionLog("Init");
 	StartTimer("Init");
@@ -33,7 +33,8 @@ function Init(){
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config);
 	CheckNextJamSchedule($themes, $jams, $config, $nextScheduledJamTime , $nextSuggestedJamTime);
 	$assets = LoadAssets();
-	LoadPolls();
+	$polls = LoadPolls();
+	$loggedInUserPollVotes = LoadLoggedInUserPollVotes($loggedInUser);
     $satisfaction = LoadSatisfaction($config);
     $adminVotes = LoadAdminVotes();
 	$loggedInUserAdminVotes = LoadLoggedInUsersAdminVotes($loggedInUser);
@@ -46,6 +47,7 @@ function Init(){
 	$dictionary["entries"] = RenderGames($games, $jams, $users);
 	$dictionary["themes"] = RenderThemes($themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $config);
 	$dictionary["assets"] = RenderAssets($assets);
+	$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
 	
 	if($loggedInUser !== false){
 		$dictionary["user"] = RenderUser($loggedInUser, $users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);

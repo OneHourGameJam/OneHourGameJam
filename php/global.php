@@ -20,6 +20,7 @@ $themes = Array();
 $loggedInUserThemeVotes = Array();
 $assets = Array();
 $polls = Array();
+$loggedInUserPollVotes = Array();
 $satisfaction = Array();
 $adminVotes = Array();
 $loggedInUserAdminVotes = Array();

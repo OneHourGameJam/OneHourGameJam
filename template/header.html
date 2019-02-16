@@ -178,7 +178,7 @@
 	{{/CONFIG.VALUES.NOTIFICATION}}
 
 	{{#user}}
-		{{#active_polls}}
+		{{#polls.ACTIVE_POLLS}}
 		<div class="row" style="font-size: 16px;">
 			<div class="col-md-12 alignCenter">
 				<div class="alert alert-info">
@@ -193,7 +193,7 @@
 				</div>
 			</div>
 		</div>
-		{{/active_polls}}
+		{{/polls.ACTIVE_POLLS}}
 	{{/user}}
 {{/is_streamer}}
 

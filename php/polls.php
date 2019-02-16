@@ -1,15 +1,11 @@
 <?php
 
 function LoadPolls(){
-	global $dbConn, $dictionary, $polls, $loggedInUser;
+	global $dbConn;
 	AddActionLog("LoadPolls");
 	StartTimer("LoadPolls");
-
-	//Clear public lists which get updated by this function
-	$dictionary["polls"] = Array();
-	$dictionary["active_polls"] = Array();
 	$polls = Array();
-
+	
 	$sql = "
 		SELECT * FROM
 		(SELECT *, NOW() BETWEEN p.poll_start_datetime AND p.poll_end_datetime AS is_active FROM poll p, poll_option o WHERE p.poll_deleted = 0 and p.poll_id = o.option_poll_id) a
@@ -20,28 +16,29 @@ function LoadPolls(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	//Get data
-	while($info = mysqli_fetch_array($data)){
-		$pollID = intval($info["poll_id"]);
-		$pollQuestion = $info["poll_question"];
-		$pollType = $info["poll_type"];
-		$pollDateStart = $info["poll_start_datetime"];
-		$pollDateEnd = $info["poll_end_datetime"];
-		$pollIsActive = intval($info["is_active"]);
-		$optionID = intval($info["option_id"]);
-		$optionText = $info["option_poll_text"];
-		$optionVotes = intval($info["vote_num"]);
+	while($pollData = mysqli_fetch_array($data)){
+		$pollID = intval($pollData["poll_id"]);
+		$pollQuestion = $pollData["poll_question"];
+		$pollType = $pollData["poll_type"];
+		$pollDateStart = $pollData["poll_start_datetime"];
+		$pollDateEnd = $pollData["poll_end_datetime"];
+		$pollIsActive = intval($pollData["is_active"]);
+		$optionID = intval($pollData["option_id"]);
+		$optionText = $pollData["option_poll_text"];
+		$optionVotes = intval($pollData["vote_num"]);
 
 		if(!isset($polls[$pollID])){
-			$polls[$pollID] = Array();
-			$polls[$pollID]["POLL_ID"] = $pollID;
-			$polls[$pollID]["QUESTION"] = $pollQuestion;
-			$polls[$pollID]["TYPE"] = $pollType;
-			$polls[$pollID]["DATE_START"] = $pollDateStart;
-			$polls[$pollID]["DATE_END"] = $pollDateEnd;
-			$polls[$pollID]["IS_ACTIVE"] = $pollIsActive;
+			$poll = Array();
 
-			$polls[$pollID]["OPTIONS"] = Array();
+			$poll["POLL_ID"] = $pollID;
+			$poll["QUESTION"] = $pollQuestion;
+			$poll["TYPE"] = $pollType;
+			$poll["DATE_START"] = $pollDateStart;
+			$poll["DATE_END"] = $pollDateEnd;
+			$poll["IS_ACTIVE"] = $pollIsActive;
+			$poll["OPTIONS"] = Array();
+
+			$polls[$pollID] = $poll;
 		}
 
 		$polls[$pollID]["OPTIONS"][$optionID] = Array();
@@ -50,59 +47,99 @@ function LoadPolls(){
 		$polls[$pollID]["OPTIONS"][$optionID]["VOTES"] = $optionVotes;
 	}
 
+	StopTimer("LoadPolls");
+	return $polls;
+}
+
+function LoadLoggedInUserPollVotes(&$loggedInUser){
+	global $dbConn;
+	AddActionLog("LoadLoggedInUserPollVotes");
+	StartTimer("LoadLoggedInUserPollVotes");
+	$loggedInUserPollVotes = Array();
+	
 	//Get data about logged in user's votes
 	if($loggedInUser !== false){
+		$escapedUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+
 		$sql = "
 			SELECT o.option_poll_id, o.option_id
 			FROM poll_vote v, poll_option o
 			WHERE v.vote_option_id = o.option_id
 			  AND v.vote_deleted != 1
-			  AND v.vote_username = '".$loggedInUser["username"]."'
+			  AND v.vote_username = '".$escapedUsername."'
 		";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 
 		//Get data
-		while($info = mysqli_fetch_array($data)){
-			$votePollID = intval($info["option_poll_id"]);
-			$voteOptionID = intval($info["option_id"]);
-			if(isset($polls[$votePollID])){
-				$polls[$votePollID]["OPTIONS"][$voteOptionID]["USER_VOTED"] = 1;
-				$polls[$votePollID]["USER_VOTED_IN_POLL"] = 1;
-			}
+		while($userVoteData = mysqli_fetch_array($data)){
+			$votePollID = intval($userVoteData["option_poll_id"]);
+			$voteOptionID = intval($userVoteData["option_id"]);
+			$loggedInUserPollVotes[$votePollID][$voteOptionID] = true;
 		}
 	}
+
+	StopTimer("LoadLoggedInUserPollVotes");
+	return $loggedInUserPollVotes;
+}
+
+function RenderPolls(&$polls, &$loggedInUserPollVotes){
+	AddActionLog("RenderPolls");
+	StartTimer("RenderPolls");
+	$render = Array();
 
 	//Process data
-	foreach($polls as $pollID => $poll){
-		$polls[$pollID]["TOTAL_VOTES"] = 0;
+	foreach($polls as $pollID => $pollData){
+		$poll = Array();
 
-		//Compute total votes for each poll
-		foreach($poll["OPTIONS"] as $optionID => $option){
-			$polls[$pollID]["TOTAL_VOTES"] += $option["VOTES"];
-		}
+		$pollID = $pollData["POLL_ID"];
+		$totalVotes = 0;
 
-		//Compute percentages
-		foreach($poll["OPTIONS"] as $optionID => $option){
-			$polls[$pollID]["OPTIONS"][$optionID]["PERCENTAGE"] = $option["VOTES"] / $polls[$pollID]["TOTAL_VOTES"];
-			$polls[$pollID]["OPTIONS"][$optionID]["PERCENTAGE_DISPLAY"] = (intval($polls[$pollID]["OPTIONS"][$optionID]["PERCENTAGE"] * 100)) . "%";
-		}
-	}
-
-	//Insert into dictionary
-	foreach($polls as $pollID => $poll){
-		//Remap options so they go from 0..n instead of over their option IDs (Mustache expects this)
+		$poll["QUESTION"] = $pollData["QUESTION"];
+		$poll["POLL_ID"] = $pollID;
+		$poll["USER_VOTED_IN_POLL"] = false;
 		$poll["OPTIONS"] = Array();
-		foreach($polls[$pollID]["OPTIONS"] as $optionID => $option){
+		$poll["IS_ACTIVE"] = $pollData["IS_ACTIVE"];
+		
+		foreach($pollData["OPTIONS"] as $optionID => $optionData){
+			$option = Array();
+			
+			$optionID = $optionData["OPTION_ID"];
+
+			$option["OPTION_ID"] = $optionID;
+			$option["USER_VOTED"] = false;
+			$option["TEXT"] = $optionData["TEXT"];
+			$option["VOTES"] = $optionData["VOTES"];
+
+			if(isset($loggedInUserPollVotes[$pollID][$optionID]) && $loggedInUserPollVotes[$pollID][$optionID] == true){
+				$option["USER_VOTED"] = true;
+				$poll["USER_VOTED_IN_POLL"] = true;
+			}
+
+			$totalVotes += $optionData["VOTES"];
+
 			$poll["OPTIONS"][] = $option;
 		}
 
-		$dictionary["polls"][] = $poll;
-		if($poll["IS_ACTIVE"]){
-			$dictionary["active_polls"][] = $poll;
+		$poll["TOTAL_Votes"] = $totalVotes;
+
+		//Compute percentages
+		if($totalVotes > 0){
+			foreach($poll["OPTIONS"] as $i => $optionData){
+				$optionPercentage = $optionData["VOTES"] / $totalVotes;
+				$poll["OPTIONS"][$i]["PERCENTAGE"] = $optionPercentage;
+				$poll["OPTIONS"][$i]["PERCENTAGE_DISPLAY"] = (intval($optionPercentage * 100)) . "%";
+			}
 		}
+			
+		if($poll["IS_ACTIVE"]){
+			$render["ACTIVE_POLLS"][] = $poll;
+		}
+		$render["LIST"][] = $poll;
 	}
-	StopTimer("LoadPolls");
+
+	StopTimer("RenderPolls");
+	return $render;
 }
 
 function LoadSatisfaction(&$config){
@@ -124,19 +161,19 @@ function LoadSatisfaction(&$config){
 	$sql = "";
 
 	//Get data
-	while($info = mysqli_fetch_array($data)){
-		$row = Array();
+	while($satisfactionData = mysqli_fetch_array($data)){
+		$satisfaction = Array();
 
-		$questionId = $info["satisfaction_question_id"];
-		$averageScore = $info["average_score"];
-		$submittedScores = $info["submitted_scores"];
+		$questionId = $satisfactionData["satisfaction_question_id"];
+		$averageScore = $satisfactionData["average_score"];
+		$submittedScores = $satisfactionData["submitted_scores"];
 
-		$row["question_id"] = $questionId;
-		$row["average_score"] = $averageScore;
-		$row["submitted_scores"] = $submittedScores;
-		$row["enough_scores_to_show_satisfaction"] = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
+		$satisfaction["question_id"] = $questionId;
+		$satisfaction["average_score"] = $averageScore;
+		$satisfaction["submitted_scores"] = $submittedScores;
+		$satisfaction["enough_scores_to_show_satisfaction"] = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
 
-		$satisfaction[$questionId] = $row;
+		$satisfaction[$questionId] = $satisfaction;
 	}
 
 	$sql = "
