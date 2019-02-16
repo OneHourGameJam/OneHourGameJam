@@ -30,10 +30,10 @@ function JamExists($jamID){
 
 //Deletes an existing jam, identified by the jam number.
 function DeleteJam($jamID){
-	global $jams, $dbConn, $actionResult;
+	global $jams, $dbConn, $actionResult, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete jams.", false);
 		return;
@@ -72,10 +72,10 @@ function DeleteJam($jamID){
 
 //Returns true / false based on whether or not the specified jam can be deleted
 function CanDeleteJam($jamID){
-	global $jams, $dbConn;
+	global $jams, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		return FALSE;
 	}
 
@@ -107,7 +107,7 @@ function CanDeleteJam($jamID){
 	}
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
     if($jamID != ""){
         DeleteJam(intval($jamID));

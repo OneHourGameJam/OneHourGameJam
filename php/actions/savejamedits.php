@@ -3,10 +3,10 @@
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
 function EditJam($jamID, $theme, $date, $time, $colorsString){
-	global $jams, $dbConn, $actionResult;
+	global $jams, $dbConn, $actionResult, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can edit jams.", false);
 		return;
@@ -81,7 +81,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
     AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "");
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $jamID = intval($_POST["jamID"]);
     $theme = $_POST["theme"];
     $date = $_POST["date"];

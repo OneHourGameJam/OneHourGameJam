@@ -24,14 +24,14 @@ function CreateJam($theme, $date, $time, $colorsList){
 	}
 
 	//Authorize user (logged in)
-	if(IsLoggedIn() === false){
+	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can create jams.", false);
 		return;
@@ -80,7 +80,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$actionResult = "SUCCESS";
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
     $date = (isset($_POST["date"])) ? $_POST["date"] : "";
     $time = (isset($_POST["time"])) ? $_POST["time"] : "";

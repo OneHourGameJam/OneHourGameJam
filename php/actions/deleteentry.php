@@ -2,10 +2,10 @@
 
 //Returns true / false based on whether or not the specified entry can be deleted
 function CanDeleteEntry($entryID){
-	global $jams, $dbConn;
+	global $jams, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		return FALSE;
 	}
 
@@ -24,10 +24,10 @@ function CanDeleteEntry($entryID){
 
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryID){
-	global $jams, $dbConn, $actionResult;
+	global $jams, $dbConn, $actionResult, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete entries.", false);
 		return;
@@ -64,7 +64,7 @@ function DeleteEntry($entryID){
     AddDataSuccess("Game Deleted");
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
     if($entryID != ""){
         DeleteEntry(intval($entryID));

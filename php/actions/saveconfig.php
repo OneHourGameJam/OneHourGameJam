@@ -3,7 +3,7 @@
 function SaveConfig($key, $newValue){
 	global $config, $dictionary, $loggedInUser, $actionResult;
 
-	if(!IsAdmin()){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		return; //Lacks permissions to make edits
 	}
@@ -19,14 +19,14 @@ function SaveConfig($key, $newValue){
 	}
 
 	if ($newValue == $config[$key]) {
-		$actionResult = "SUCCESS";
 		return;
 	}
 
 	UpdateConfig($config, $key, $newValue, $loggedInUser['id']);
+	$actionResult = "SUCCESS";
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
 	$actionResult = "NO_CHANGE";
     foreach($_POST as $key => $value){
         SaveConfig($key, $value);

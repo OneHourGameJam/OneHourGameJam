@@ -4,8 +4,6 @@
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
 	global $users, $loggedInUser, $dbConn, $actionResult, $config;
 
-	$loggedInUser = IsLoggedIn();
-
 	//Authorize user
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
@@ -48,11 +46,9 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	$sql = "";
 
 	$actionResult = "SUCCESS";
-	LoadUsers();
-	$loggedInUser = IsLoggedIn(TRUE);
 }
 
-if(IsLoggedIn()){
+if($loggedInUser !== false){
     $displayName = $_POST["displayname"];
     $twitterHandle = $_POST["twitterhandle"];
     $emailAddress = $_POST["emailaddress"];

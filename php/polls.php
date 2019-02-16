@@ -51,7 +51,7 @@ function LoadPolls(){
 	}
 
 	//Get data about logged in user's votes
-	if(IsLoggedIn()){
+	if($loggedInUser !== false){
 		$sql = "
 			SELECT o.option_poll_id, o.option_id
 			FROM poll_vote v, poll_option o

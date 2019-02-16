@@ -1,11 +1,11 @@
 <?php
 
 function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assets, $actionResult;
+	global $loggedInUser, $dbConn, $assets, $actionResult, $loggedInUser;
 	$assetID = trim($assetID);
 
 	//Authorize user
-	if(!IsAdmin()){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAdminAuthorizationWarning(false);
 		return;
@@ -55,7 +55,7 @@ function DeleteAsset($assetID){
     AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor);
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $assetID = $_POST["asset_id"];
     DeleteAsset($assetID);
 }

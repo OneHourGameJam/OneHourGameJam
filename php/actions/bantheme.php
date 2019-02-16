@@ -2,18 +2,17 @@
 
 //Marks a suggested theme as banned
 function BanTheme($bannedTheme){
-	global $themes, $dbConn, $ip, $userAgent, $actionResult;
+	global $themes, $dbConn, $ip, $userAgent, $actionResult, $loggedInUser;
 
 	//Authorize user (logged in)
-	$user = IsAdmin();
-	if($user === false){
+	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
@@ -53,7 +52,7 @@ function BanTheme($bannedTheme){
 	AddDataSuccess("Theme Banned", false);
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $bannedTheme = $_POST["theme"];
     BanTheme($bannedTheme);
 }

@@ -70,14 +70,14 @@ $pageTitles = Array(
 
 //List of pages which require user to be logged in
 if(in_array($page, Array("submit", "newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "userdata"))){
-	if(!IsLoggedIn()){
+	if($loggedInUser === false){
 		$page = "main";
 	}
 }
 
 //List of pages which require administrator access
 if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "adminlog"))){
-	if(!IsAdmin()){
+	if(IsAdmin($loggedInUser) === false){
 		$page = "main";
 	}
 }
@@ -413,7 +413,7 @@ switch($page){
 	case "logout":
 	break;
 	case "edituser":
-		if(IsAdmin()){
+		if(IsAdmin($loggedInUser) !== false){
 			$editingUsername = $_GET["username"];
 			$editingUsername = trim(strtolower($editingUsername));
 			if(!isset($users[$editingUsername])){
@@ -421,12 +421,12 @@ switch($page){
 			}
 			$dictionary["editinguser"] = $users[$editingUsername];
 			if($users[$editingUsername]["admin"] != 0){
-				$dictionary["editinguser"]["isadmin"] = 1;
+				$dictionary["editinguser"]["is_admin"] = 1;
 			}
 		}
 	break;
 	case "editjam":
-		if(IsAdmin()){
+		if(IsAdmin($loggedInUser) !== false){
 			$jamID = intval($_GET["jam_id"]);
 			$jamFound = false;
 			foreach($jams as $i => $jam){
@@ -444,13 +444,15 @@ switch($page){
 		}
 	break;
 	case "editasset":
-		if(IsAdmin()){
-			$assetID = intval($_GET["asset_id"]);
-			$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
+		if(IsAdmin($loggedInUser) !== false){
+			if(isset($_GET["asset_id"])){
+				$assetID = intval($_GET["asset_id"]);
+				$dictionary["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
+			}
 		}
 	break;
 	case "editentry":
-		if(IsAdmin()){
+		if(IsAdmin($loggedInUser) !== false){
 			$entryID = intval($_GET["entry_id"]);
 			$dictionary["editingentry"] = Array();
 			foreach($games as $i => $game){
@@ -650,7 +652,7 @@ if($page == "jam")
 							print $mustache->render(file_get_contents($templateBasePath."submit.html"), $dictionary);
 						break;
 						case "newjam":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."newjam.html"), $dictionary);
 							}
 						break;
@@ -661,38 +663,38 @@ if($page == "jam")
 							print $mustache->render(file_get_contents($templateBasePath."rules.html"), $dictionary);
 						break;
 						case "config":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."config.html"), $dictionary);
 							}
 						break;
 						case "editasset":
 							$dictionary["asset_max_size"] = bytesToString($config["MAX_ASSET_FILE_SIZE_IN_BYTES"]["VALUE"]);
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."editasset.html"), $dictionary);
 							}
 						break;
 						case "editcontent":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."editcontent.html"), $dictionary);
 							}
 						break;
 						case "editjam":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."editjam.html"), $dictionary);
 							}
 						break;
 						case "editentry":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."editentry.html"), $dictionary);
 							}
 						break;
 						case "editusers":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."editusers.html"), $dictionary);
 							}
 						break;
 						case "edituser":
-							if(IsAdmin()){
+							if(IsAdmin($loggedInUser) !== false){
 								print $mustache->render(file_get_contents($templateBasePath."edituser.html"), $dictionary);
 							}
 						break;
@@ -746,7 +748,7 @@ if($page == "jam")
 StopTimer("index.php");
 
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
 	print_r($actionLog);
 	print "<br><br>";
 	print_r($actionTimers);

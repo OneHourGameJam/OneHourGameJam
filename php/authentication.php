@@ -31,7 +31,7 @@ function HashPassword($password, $salt, $iterations){
 }
 
 //Returns the username of the user associated with the provided user id
-function GetUsernameForUserId($userID){
+function GetUsernameForUserId($userID, &$users){
 	global $users;
 	AddActionLog("GetUsernameForUserId");
 	StartTimer("GetUsernameForUserId");
@@ -51,13 +51,12 @@ function GetUsernameForUserId($userID){
 //returns that. This is to prevent re-hashing the provided sessionID multiple times.
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
-//Set $force to TRUE to force reloading (for example if a user setting was changed for the logged in user)
-function IsLoggedIn($force = FALSE){
-	global $loginChecked, $loggedInUser, $config, $users, $dictionary, $dbConn, $ip, $userAgent;
+function IsLoggedIn(&$users, &$config){
+	global $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
 
-	if($loginChecked && !$force){
+	if($loginChecked){
 		StopTimer("IsLoggedIn");
 		return $loggedInUser;
 	}
@@ -89,14 +88,9 @@ function IsLoggedIn($force = FALSE){
 	if($session = mysqli_fetch_array($data)){
 		//Session ID does in fact exist
 		$userID = $session["session_user_id"];
-		$username = GetUsernameForUserId($userID);
+		$username = GetUsernameForUserId($userID, $users);
 		$loggedInUser = $users[$username];
 		$loggedInUser["username"] = $username;
-		$dictionary["user"] = $loggedInUser;
-		$dictionary["user"]["username"] = $username;
-		if($loggedInUser["admin"] != 0){
-			$dictionary["user"]["isadmin"] = 1;
-		}
         $loginChecked = true;
 
 		$sql = "
@@ -135,17 +129,15 @@ function IsLoggedIn($force = FALSE){
 
 //Returns TRUE or FALSE depending on whether the logged in user is an admin.
 //returns FALSE if there is no logged in user.
-function IsAdmin(){
-	global $adminList;
+function IsAdmin($user){
 	AddActionLog("IsAdmin");
 	StartTimer("IsAdmin");
-	$loggedInUser = IsLoggedIn();
-	if($loggedInUser === false){
+	if($user === false){
 		StopTimer("IsAdmin");
 		return false;
 	}
 
-	if($loggedInUser["admin"] != 0){
+	if($user["admin"] != 0){
 		StopTimer("IsAdmin");
 		return true;
 	}else{

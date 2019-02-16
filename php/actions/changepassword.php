@@ -4,8 +4,6 @@
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	global $users, $loggedInUser, $dbConn, $actionResult, $config;
 
-	$loggedInUser = IsLoggedIn();
-
 	//Authorize user (is admin)
 	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
@@ -72,12 +70,9 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$sql = "";
 	
 	$actionResult = "SUCCESS";
-
-	LoadUsers();
-	$loggedInUser = IsLoggedIn(TRUE);
 }
 
-if(IsLoggedIn()){
+if($loggedInUser !== false){
     $passwordold = $_POST["passwordold"];
     $password1 = $_POST["password1"];
     $password2 = $_POST["password2"];

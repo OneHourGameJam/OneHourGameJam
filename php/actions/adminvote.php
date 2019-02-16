@@ -4,15 +4,14 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 	global $dbConn, $ip, $userAgent, $loggedInUser, $actionResult;
 
 	//Authorize user (logged in)
-	$user = IsAdmin();
-	if($user === false){
+	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
@@ -101,7 +100,7 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 	}
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
     $voteType = $_POST["adminVoteType"];
     CastVoteForAdmin($voteSubjectUsername, $voteType);

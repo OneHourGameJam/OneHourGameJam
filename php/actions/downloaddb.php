@@ -1,6 +1,6 @@
 <?php
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     print GetJSONDataForAllTables();
     die();
 }

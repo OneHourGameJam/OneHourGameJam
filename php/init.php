@@ -19,7 +19,7 @@ function Init(){
 	$adminLog = LoadAdminLog();
 	$users = LoadUsers();
 
-	IsLoggedIn();	//Sets $loggedInUser
+	$loggedInUser = IsLoggedIn($users, $config);
 
 	$jams =  LoadJams();
 	$games = LoadGames();
@@ -44,10 +44,12 @@ function Init(){
 	$dictionary["users"] = RenderUsers($users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
 	$dictionary["jams"] = RenderJams($jams, $config, $games, $users, $satisfaction, $loggedInUser);
 	$dictionary["entries"] = RenderGames($games, $jams, $users);
-	$dictionary["themes"] = RenderThemes($themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $config);
-
-
+	$dictionary["themes"] = RenderThemes($themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $config);
 	$dictionary["assets"] = RenderAssets($assets);
+	
+	if($loggedInUser !== false){
+		$dictionary["user"] = RenderUser($loggedInUser, $users, $games, $jams, $config, $adminVotes, $loggedInUserAdminVotes);
+	}
 
 	StopTimer("Init");
 }

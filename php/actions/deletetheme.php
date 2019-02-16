@@ -2,18 +2,17 @@
 
 //Removes a suggested theme
 function RemoveTheme($removedTheme){
-	global $themes, $dbConn, $ip, $userAgent, $actionResult;
+	global $themes, $dbConn, $ip, $userAgent, $actionResult, $loggedInUser;
 
 	//Authorize user (logged in)
-	$user = IsAdmin();
-	if($user === false){
+	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
 	}
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can delete themes.", false);
 		return;
@@ -53,7 +52,7 @@ function RemoveTheme($removedTheme){
 	AddDataSuccess("Theme Removed", false);
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $deletedTheme = $_POST["theme"];
     RemoveTheme($deletedTheme);
 }

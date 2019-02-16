@@ -22,7 +22,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$jamColorNumber = intval(trim($jamColorNumber));
 
 	//Authorize user
-	if(IsLoggedIn() === false){
+	if($loggedInUser === false){
 		$actionResult = "NOT_LOGGED_IN";
 		AddAuthorizationWarning("Not logged in.", false);
 		return;
@@ -284,7 +284,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	}
 }
 
-if(IsLoggedIn()){
+if($loggedInUSer !== false){
     $gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
     $gameURL = (isset($_POST["gameurl"])) ? $_POST["gameurl"] : "";
     $gameURLWeb = (isset($_POST["gameurlweb"])) ? $_POST["gameurlweb"] : "";

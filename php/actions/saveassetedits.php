@@ -10,7 +10,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	$type = trim($type);
 
 	//Authorize user
-	if(!IsAdmin()){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAdminAuthorizationWarning(false);
 		return;
@@ -192,7 +192,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	LoadAssets();
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $assetID = $_POST["asset_id"];
     $author = $_POST["author"];
     $title = $_POST["title"];

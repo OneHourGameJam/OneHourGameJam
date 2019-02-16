@@ -2,13 +2,13 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $dbConn, $ip, $userAgent, $actionResult;
+	global $themes, $dbConn, $ip, $userAgent, $actionResult, $loggedInUser;
 
 	if($isBot){
 		$user = "bot";
 	}else{
 		//Authorize user (logged in)
-		$user = IsLoggedIn();
+		$user = $loggedInUser;
 		if($user === false){
 			$actionResult = "NOT_LOGGED_IN";
 			AddAuthorizationWarning("Not logged in.", false);
@@ -49,7 +49,7 @@ function AddTheme($newTheme, $isBot){
 	AddDataSuccess("Theme added", false);
 }
 
-if(IsLoggedIn()){
+if($loggedInUser !== false){
     $newTheme = $_POST["theme"];
     AddTheme($newTheme, false);
 }

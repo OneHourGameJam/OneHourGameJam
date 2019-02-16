@@ -4,10 +4,10 @@
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
 function EditUser($username, $isAdmin){
-	global $users, $dbConn, $actionResult;
+	global $users, $dbConn, $actionResult, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can edit entries.", false);
 		return;
@@ -44,12 +44,9 @@ function EditUser($username, $isAdmin){
 
 	$actionResult = "SUCCESS";
     AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username);
-
-	LoadUsers();
-	$loggedInUser = IsLoggedIn(TRUE);
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $username = $_POST["username"];
     $isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
     if($isAdmin != 0 && $isAdmin != 1){

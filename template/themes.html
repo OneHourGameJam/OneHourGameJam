@@ -45,7 +45,7 @@
 	</p>
 	{{/is_streamer}}
 
-	{{#user.isadmin}}
+	{{#user.is_admin}}
 		{{^is_streamer}}
 			<p>
 				<b>Admin instructions</b>
@@ -134,23 +134,23 @@
 				</script>
 			</div>
 		{{/is_streamer}}
-	{{/user.isadmin}}
+	{{/user.is_admin}}
 
 	<ul>
 		<table>
 			<tr>
-				{{#user.isadmin}}
+				{{#user.is_admin}}
 					{{^is_streamer}}
 						<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
 					{{/is_streamer}}
-				{{/user.isadmin}}
+				{{/user.is_admin}}
 				<th colspan='3' class='themeTableCell themeTableCellCentered'>
 					Vote
 				</th>
 				<th class='themeTableCell themeTableCellCentered'>
 					Theme
 				</th>
-				{{#user.isadmin}}
+				{{#user.is_admin}}
 					{{^is_streamer}}
 						<th class='themeTableCell themeTableCellCentered'>
 							Author
@@ -186,11 +186,11 @@
 							Admin actions
 						</th>
 					{{/is_streamer}}
-				{{/user.isadmin}}
+				{{/user.is_admin}}
 			</tr>
 			{{#themes.suggested_themes}}
 				{{#theme_visible}}
-					{{#user.isadmin}}
+					{{#user.is_admin}}
 						{{^is_streamer}}
 							{{#banned}}
 								<tr class="theme-banned">
@@ -238,10 +238,10 @@
 								{{/banned}}
 							</td>
 						{{/is_streamer}}
-					{{/user.isadmin}}
-					{{^user.isadmin}}
+					{{/user.is_admin}}
+					{{^user.is_admin}}
 						<tr>
-					{{/user.isadmin}}
+					{{/user.is_admin}}
 					<td class='themeTableCell'>
 						{{#is_streamer}}
 							<div class="btn btn-default" disabled>+1</div>
@@ -269,7 +269,7 @@
 					<td class='themeTableCell'>
 						{{{theme}}}
 					</td>
-					{{#user.isadmin}}
+					{{#user.is_admin}}
 						{{^is_streamer}}
 							<td class='themeTableCell themeTableCellCentered'>
 								{{author}}
@@ -325,7 +325,7 @@
 								</form>
 							</td>
 						{{/is_streamer}}
-					{{/user.isadmin}}
+					{{/user.is_admin}}
 					</tr>
 				{{/theme_visible}}
 			{{/themes.suggested_themes}}

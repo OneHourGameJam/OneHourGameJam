@@ -2,10 +2,10 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $users, $dbConn, $actionResult, $config;
+	global $users, $dbConn, $actionResult, $config, $loggedInUser;
 
 	//Authorize user (is admin)
-	if(IsAdmin() === false){
+	if(IsAdmin($loggedInUser) === false){
 		$actionResult = "NOT_AUTHORIZED";
 		AddAuthorizationWarning("Only admins can edit entries.", false);
 		return;
@@ -61,11 +61,9 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
     AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username);
 
 	$actionResult = "SUCCESS";
-	LoadUsers();
-	$loggedInUser = IsLoggedIn(TRUE);
 }
 
-if(IsAdmin()){
+if(IsAdmin($loggedInUser) !== false){
     $username = $_POST["username"];
     $password1 = $_POST["password1"];
     $password2 = $_POST["password2"];

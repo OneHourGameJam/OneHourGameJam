@@ -78,7 +78,7 @@ function LoadUserThemeVotes(&$loggedInUser){
 	return $userThemeVotes;
 }
 
-function RenderThemes(&$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$config){
+function RenderThemes(&$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$config){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -135,7 +135,7 @@ function RenderThemes(&$themes, &$userThemeVotes, &$themesByVoteDifference, &$th
 		//Visibility of banned themes
 		if($banned == 1){
 			$theme["banned"] = 1;
-			if(IsAdmin()){
+			if(IsAdmin($loggedInUser) !== false){
 				$theme["theme_visible"] = 1;
 			}
 		}else{
@@ -220,7 +220,7 @@ function RenderThemes(&$themes, &$userThemeVotes, &$themesByVoteDifference, &$th
 	}
 
 	//Determine top themes and themes to mark to keep
-	if(IsAdmin()){
+	if(IsAdmin($loggedInUser) !== false){
 		usort($render["suggested_themes"], "CmpArrayByPropertyPopularityNum");
 		$count = 0;
 		foreach($render["suggested_themes"] as $i => $theme){
@@ -249,7 +249,7 @@ function RenderThemes(&$themes, &$userThemeVotes, &$themesByVoteDifference, &$th
 	krsort($jsFormattedThemesPopularityPopularityList);
 	krsort($jsFormattedThemesPopularityFillColorList);
 	krsort($jsFormattedThemesPopularityBorderColorList);
-	
+
 	$render["js_formatted_themes_popularity_themes_list"] = implode(",", $jsFormattedThemesPopularityThemeList);
 	$render["js_formatted_themes_popularity_popularity_list"] = implode(",", $jsFormattedThemesPopularityPopularityList);
 	$render["js_formatted_themes_popularity_fill_color_list"] = implode(",", $jsFormattedThemesPopularityFillColorList);
