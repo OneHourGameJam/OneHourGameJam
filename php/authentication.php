@@ -87,6 +87,7 @@ function IsLoggedIn(&$config, &$users){
 	if($session = mysqli_fetch_array($data)){
 		//Session ID does in fact exist
 		$userID = $session["session_user_id"];
+
 		$username = GetUsernameForUserId($userID, $users);
 		$loggedInUser = $users[$username];
         $loginChecked = true;

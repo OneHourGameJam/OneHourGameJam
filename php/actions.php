@@ -10,7 +10,6 @@ function LoadSiteActions(&$config){
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Logged in successfully"),
-                "REGISTRATION_SUCCESS" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Registration succeeded but login failed. Please contact administrators for help."),
                 "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
                 "INVALID_USERNAME_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect username length. Must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long."),
                 "USERNAME_ALREADY_REGISTERED" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "There is already a user with that username. Please log in or choose another."),
@@ -259,7 +258,7 @@ function LoadSiteActions(&$config){
 }
 
 function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
-    global $_POST,$actionResult;
+    global $_POST;
 
     //Actions!
     if(isset($_POST["action"])){
@@ -271,7 +270,7 @@ function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
             if($_POST["action"] == $actionPostRequest){
                 $actionResult = "PROCESSING";
                 include_once($actionPhpFile);
-                PerformAction($loggedInUser);
+                $actionResult = PerformAction($loggedInUser);
 
                 if(isset($action["ACTION_RESULT"][$actionResult]["REDIRECT_URL"])){
                     setcookie("actionResultAction", $actionPostRequest, time() + 30);

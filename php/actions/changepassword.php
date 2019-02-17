@@ -2,31 +2,27 @@
 
 //Changes the logged in user's password if the old one matches.
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
-	global $users, $loggedInUser, $dbConn, $actionResult, $config;
+	global $users, $loggedInUser, $dbConn, $config;
 
 	//Authorize user (is admin)
 	if($loggedInUser === false){
-		$actionResult = "NOT_LOGGED_IN";
-		return;
+		return "NOT_LOGGED_IN";
 	}
 
 	$newPassword1 = trim($newPassword1);
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
-		$actionResult = "PASSWORDS_DONT_MATCH";
-		return;
+		return "PASSWORDS_DONT_MATCH";
 	}
 	$password = $newPassword1;
 
 	if(!ValidatePassword($password, $config)){
-		$actionResult = "INVALID_PASSWORD_LENGTH";
-		return;
+		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	//Check that the user exists
 	if(!isset($users[$loggedInUser["username"]])){
-		$actionResult = "USER_DOES_NOT_EXIST";
-		return;
+		return "USER_DOES_NOT_EXIST";
 	}
 
 	$user = $users[$loggedInUser["username"]];
@@ -35,8 +31,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$userPasswordIterations = intval($user["password_iterations"]);
 	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $config);
 	if($correctPasswordHash != $passwordHash){
-		$actionResult = "INCORRECT_PASSWORD";
-		return;
+		return "INCORRECT_PASSWORD";
 	}
 
 	//Generate new salt, number of iterations and hashed password.
@@ -64,7 +59,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -75,7 +70,7 @@ function PerformAction(&$loggedInUser){
 		$password1 = $_POST["password1"];
 		$password2 = $_POST["password2"];
 
-		ChangePassword($passwordold, $password1, $password2);
+		return ChangePassword($passwordold, $password1, $password2);
 	}
 }
 

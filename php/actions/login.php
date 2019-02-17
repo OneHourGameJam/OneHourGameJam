@@ -4,46 +4,42 @@
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
-	global $users, $actionResult, $config;
+	global $users, $config;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
 	if(!ValidateUsername($username, $config)){
-		$actionResult = "INVALID_USERNAME_LENGTH";
-		return;
+		return "INVALID_USERNAME_LENGTH";
 	}
 
 	if(!ValidatePassword($password, $config)){
-		$actionResult = "INVALID_PASSWORD_LENGTH";
-		return;
+		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	if(isset($users[$username])){
 		//User is registered already, log them in
-		LogInUser($username, $password);
+		return LogInUser($username, $password);
 	}else{
 		//User not yet registered, register now.
-		RegisterUser($username, $password);
+		return RegisterUser($username, $password);
 	}
 }
 
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $users, $dbConn, $ip, $userAgent, $actionResult, $config;
+	global $users, $dbConn, $ip, $userAgent, $config;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
 	if(!ValidateUsername($username, $config)){
-		$actionResult = "INVALID_USERNAME_LENGTH";
-		return;
+		return "INVALID_USERNAME_LENGTH";
 	}
 
 	if(!ValidatePassword($password, $config)){
-		$actionResult = "INVALID_PASSWORD_LENGTH";
-		return;
+		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	$userSalt = GenerateSalt();
@@ -52,8 +48,7 @@ function RegisterUser($username, $password){
 	$admin = (count($users) == 0) ? 1 : 0;
 
 	if(isset($users[$username])){
-		$actionResult = "USERNAME_ALREADY_REGISTERED";
-		return;
+		return "USERNAME_ALREADY_REGISTERED";
 	}else{
 		$newUser = Array();
 		$newUser["salt"] = $userSalt;
@@ -99,36 +94,31 @@ function RegisterUser($username, $password){
 		";
 		mysqli_query($dbConn, $sql) ;
 		$sql = "";
-
-		$actionResult = "REGISTRATION_SUCCESS";
 	}
-
+	
 	$users = LoadUsers();
-	LogInUser($username, $password);
+	return LogInUser($username, $password);
 }
 
 //Logs in the user with the provided credentials.
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
 function LogInUser($username, $password){
-	global $config, $users, $dbConn, $actionResult;
+	global $config, $users, $dbConn;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
 	if(!ValidateUsername($username, $config)){
-		$actionResult = "INVALID_USERNAME_LENGTH";
-		return;
+		return "INVALID_USERNAME_LENGTH";
 	}
 
 	if(!ValidatePassword($password, $config)){
-		$actionResult = "INVALID_PASSWORD_LENGTH";
-		return;
+		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	if(!isset($users[$username])){
-		$actionResult = "USER_DOES_NOT_EXIST";
-		return;
+		return "USER_DOES_NOT_EXIST";
 	}
 
 	$user = $users[$username];
@@ -163,11 +153,10 @@ function LogInUser($username, $password){
 		mysqli_query($dbConn, $sql) ;
 		$sql = "";
 	}else{
-		//User password incorrect!
-		$actionResult = "INCORRECT_PASSWORD";
-		return;
+		return "INCORRECT_PASSWORD";
 	}
-	$actionResult = "SUCCESS";
+
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -179,7 +168,7 @@ function PerformAction(&$loggedInUser){
 
 	$username = strtolower(trim($username));
 	$password = trim($password);
-	LogInOrRegister($username, $password);
+	return LogInOrRegister($username, $password);
 }
 
 ?>

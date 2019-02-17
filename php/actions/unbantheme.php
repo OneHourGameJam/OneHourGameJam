@@ -2,24 +2,21 @@
 
 //Unmarks a suggested theme as banned (unbans it)
 function UnbanTheme($unbannedTheme){
-	global $themes, $dbConn, $ip, $userAgent, $actionResult, $loggedInUser;
+	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
-		$actionResult = "NOT_LOGGED_IN";
-		return;
+		return "NOT_LOGGED_IN";
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	$unbannedTheme = trim($unbannedTheme);
 	if($unbannedTheme == ""){
-		$actionResult = "INVALID_THEME";
-		return;
+		return "INVALID_THEME";
 	}
 
 	$clean_unbannedTheme = mysqli_real_escape_string($dbConn, $unbannedTheme);
@@ -32,8 +29,7 @@ function UnbanTheme($unbannedTheme){
 	$sql = "";
 
 	if(mysqli_num_rows($data) == 0){
-		$actionResult = "THEME_DOES_NOT_EXIST";
-		return;
+		return "THEME_DOES_NOT_EXIST";
 	}
 
 	$sql = "UPDATE theme SET theme_banned = 0 WHERE theme_banned = 1 AND theme_text = '$clean_unbannedTheme'";
@@ -42,7 +38,7 @@ function UnbanTheme($unbannedTheme){
 
     AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "", $loggedInUser["username"]);
 
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -50,7 +46,7 @@ function PerformAction(&$loggedInUser){
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$unbannedTheme = $_POST["theme"];
-		UnbanTheme($unbannedTheme);
+		return UnbanTheme($unbannedTheme);
 	}
 }
 

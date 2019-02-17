@@ -5,7 +5,7 @@
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
 function CreateJam($theme, $date, $time, $colorsList){
-	global $ip, $userAgent, $loggedInUser, $actionResult;
+	global $ip, $userAgent, $loggedInUser;
 
 	$currentJamData = GetCurrentJamNumberAndID();
 	$jamNumber = intval($currentJamData["NUMBER"] + 1);
@@ -16,43 +16,36 @@ function CreateJam($theme, $date, $time, $colorsList){
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
-			$actionResult = "INVALID_COLOR";
-			return;
+			return "INVALID_COLOR";
 		}
 		$colorsList[$i] = $clr;
 	}
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
-		$actionResult = "NOT_LOGGED_IN";
-		return;
+		return "NOT_LOGGED_IN";
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	//Validate jam number
 	if($jamNumber <= 0){
-		$actionResult = "INVALID_JAM_NUMBER";
-		return;
+		return "INVALID_JAM_NUMBER";
 	}
 
 	//Validate theme
 	if(strlen($theme) <= 0){
-		$actionResult = "INVALID_THEME";
-		return;
+		return "INVALID_THEME";
 	}
 
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
-		$actionResult = "INVALID_DATE";
-		return;
+		return "INVALID_DATE";
 	}else if(strlen($time) <= 0){
-		$actionResult = "INVALID_TIME";
-		return;
+		return "INVALID_TIME";
 	}else{
 		$datetime = strtotime($date." ".$time." UTC");
 	}
@@ -69,7 +62,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 
 	AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $loggedInUser);
 
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -89,7 +82,7 @@ function PerformAction(&$loggedInUser){
 			$jamColors = Array("FFFFFF");
 		}
 
-		CreateJam($theme, $date, $time, $jamColors);
+		return CreateJam($theme, $date, $time, $jamColors);
 	}
 }
 

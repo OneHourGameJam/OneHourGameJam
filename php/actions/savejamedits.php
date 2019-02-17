@@ -3,12 +3,11 @@
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
 function EditJam($jamID, $theme, $date, $time, $colorsString){
-	global $jams, $dbConn, $actionResult, $loggedInUser;
+	global $jams, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	$theme = trim($theme);
@@ -20,8 +19,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
-			$actionResult = "INVALID_COLOR";
-			return;
+			return "INVALID_COLOR";
 		}
 		$colorSHexCodes[] = $clr;
 	}
@@ -29,30 +27,24 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 
 	//Validate values
 	$jamID = intval($jamID);
-	if($jamID <= 0){
-		$actionResult = "INVALID_JAM_ID";
-		return;
+		return "INVALID_JAM_ID";
 	}
 
 	if(strlen($theme) <= 0){
-		$actionResult = "INVALID_THEME";
-		return;
+		return "INVALID_THEME";
 	}
 
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
-		$actionResult = "INVALID_DATE";
-		return;
+		return "INVALID_DATE";
 	}else if(strlen($time) <= 0){
-		$actionResult = "INVALID_TIME";
-		return;
+		return "INVALID_TIME";
 	}else{
 		$datetime = strtotime($date." ".$time." UTC");
 	}
 
 	if(count($jams) == 0){
-		$actionResult = "NO_JAMS_EXIST";
-		return; //No jams exist
+		return "NO_JAMS_EXIST";
 	}
 
 	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
@@ -69,8 +61,9 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$actionResult = "SUCCESS";
-    AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser["username"]);
+	AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser["username"]);
+	
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -83,7 +76,7 @@ function PerformAction(&$loggedInUser){
 		$time = $_POST["time"];
 		$jamcolors = $_POST["jamcolors"];
 
-		EditJam($jamID, $theme, $date, $time, $jamcolors);
+		return EditJam($jamID, $theme, $date, $time, $jamcolors);
 	}
 }
 

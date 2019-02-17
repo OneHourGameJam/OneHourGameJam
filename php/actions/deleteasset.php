@@ -1,13 +1,12 @@
 <?php
 
 function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assets, $actionResult;
+	global $loggedInUser, $dbConn, $assets;
 	$assetID = trim($assetID);
 
 	//Authorize user
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	$assetExists = false;
@@ -16,8 +15,7 @@ function DeleteAsset($assetID){
 	}
 
 	if(!$assetExists){
-		$actionResult = "ASSET_DOES_NOT_EXIST";
-		return;
+		return "ASSET_DOES_NOT_EXIST";
 	}
 
 	$escapedID = mysqli_real_escape_string($dbConn, $assetID);
@@ -47,8 +45,8 @@ function DeleteAsset($assetID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$actionResult = "SUCCESS";
-    AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser["username"]);
+	AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser["username"]);
+	return "SUCCESS";
 }
 
 
@@ -57,7 +55,7 @@ function PerformAction(&$loggedInUser){
 
 	if(IsAdmin($loggedInUser) !== false){
 		$assetID = $_POST["asset_id"];
-		DeleteAsset($assetID);
+		return DeleteAsset($assetID);
 	}
 }
 

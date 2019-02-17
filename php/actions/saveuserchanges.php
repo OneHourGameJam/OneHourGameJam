@@ -2,24 +2,21 @@
 
 //Changes data about the logged in user
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
-	global $users, $loggedInUser, $dbConn, $actionResult, $config;
+	global $users, $loggedInUser, $dbConn, $config;
 
 	//Authorize user
 	if($loggedInUser === false){
-		$actionResult = "NOT_LOGGED_IN";
-		return;
+		return "NOT_LOGGED_IN";
 	}
 
 	//Validate values
 	if(!$displayName || strlen($displayName) < $config["MINIMUM_DISPLAY_NAME_LENGTH"]["VALUE"] || strlen($displayName) > $config["MAXIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]){
-		$actionResult = "INVALID_DISPLAY_NAME";
-		return;
+		return "INVALID_DISPLAY_NAME";
 	}
 
 	//Validate email address
 	if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-		$actionResult = "INVALID_EMAIL";
-		return;
+		return "INVALID_EMAIL";
 	}
 	
 	$displayNameClean = mysqli_real_escape_string($dbConn, $displayName);
@@ -42,7 +39,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -66,7 +63,7 @@ function PerformAction(&$loggedInUser){
 			}
 		}
 
-		ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferenceValue);
+		return ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferenceValue);
 	}
 }
 

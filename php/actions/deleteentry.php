@@ -24,29 +24,25 @@ function CanDeleteEntry($entryID){
 
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryID){
-	global $jams, $dbConn, $actionResult, $loggedInUser;
+	global $jams, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	if(!CanDeleteEntry($entryID)){
-		$actionResult = "CANNOT_DELETE_ENTRY";
-		return;
+		return "CANNOT_DELETE_ENTRY";
 	}
 
 	//Validate values
 	$entryID = intval($entryID);
 	if($entryID <= 0){
-		$actionResult = "INVALID_JAM_ID";
-		return;
+		return "INVALID_JAM_ID";
 	}
 
 	if(count($jams) == 0){
-		$actionResult = "NO_JAMS_EXIST";
-		return; //No jams exist
+		return "NO_JAMS_EXIST";
 	}
 
 	$escapedEntryID = mysqli_real_escape_string($dbConn, "$entryID");
@@ -57,7 +53,7 @@ function DeleteEntry($entryID){
 
     AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser["username"]);
 
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -66,7 +62,7 @@ function PerformAction(&$loggedInUser){
 	if(IsAdmin($loggedInUser) !== false){
 		$entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
 		if($entryID != ""){
-			DeleteEntry(intval($entryID));
+			return DeleteEntry(intval($entryID));
 		}
 	}
 }

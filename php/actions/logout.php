@@ -3,7 +3,7 @@
 //Logs out the current user by setting their sessionID cookie to blank and expiring it.
 //TODO: Clear session from on-server session data
 function LogOut(){
-	global $dbConn, $config, $actionResult;
+	global $dbConn, $config;
 
 	// Delete the session out of our DB
 	$sessionID = "".$_COOKIE["sessionID"];
@@ -22,11 +22,11 @@ function LogOut(){
 	setcookie("sessionID", "", time());
 	$_COOKIE["sessionID"] = "";
 	
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
-	LogOut();
+	return LogOut();
 }
 
 ?>

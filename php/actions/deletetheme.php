@@ -2,24 +2,21 @@
 
 //Removes a suggested theme
 function RemoveTheme($removedTheme){
-	global $themes, $dbConn, $ip, $userAgent, $actionResult, $loggedInUser;
+	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
-		$actionResult = "NOT_LOGGED_IN";
-		return;
+		return "NOT_LOGGED_IN";
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	$removedTheme = trim($removedTheme);
 	if($removedTheme == ""){
-		$actionResult = "INVALID_THEME";
-		return;
+		return "INVALID_THEME";
 	}
 
 	$clean_removedTheme = mysqli_real_escape_string($dbConn, $removedTheme);
@@ -32,8 +29,7 @@ function RemoveTheme($removedTheme){
 	$sql = "";
 
 	if(mysqli_num_rows($data) == 0){
-		$actionResult = "THEME_DOES_NOT_EXIST";
-		return;
+		return "THEME_DOES_NOT_EXIST";
 	}
 
 	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
@@ -42,7 +38,7 @@ function RemoveTheme($removedTheme){
 
     AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser["username"]);
 
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -50,7 +46,7 @@ function PerformAction(&$loggedInUser){
 
 	if(IsAdmin($loggedInUser) !== false){
 		$deletedTheme = $_POST["theme"];
-		RemoveTheme($deletedTheme);
+		return RemoveTheme($deletedTheme);
 	}
 }
 

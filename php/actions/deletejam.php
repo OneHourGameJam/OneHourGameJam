@@ -30,29 +30,25 @@ function JamExists($jamID){
 
 //Deletes an existing jam, identified by the jam number.
 function DeleteJam($jamID){
-	global $jams, $dbConn, $actionResult, $loggedInUser;
+	global $jams, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	if(!CanDeleteJam($jamID)){
-		$actionResult = "CANNOT_DELETE_JAM";
-		return;
+		return "CANNOT_DELETE_JAM";
 	}
 
 	//Validate values
 	$jamID = intval($jamID);
 	if($jamID <= 0){
-		$actionResult = "INVALID_JAM_ID";
-		return;
+		return "INVALID_JAM_ID";
 	}
 
 	if(count($jams) == 0){
-		$actionResult = "NO_JAMS_EXIST";
-		return; //No jams exist
+		return "NO_JAMS_EXIST";
 	}
 
 	$escapedJamID = mysqli_real_escape_string($dbConn, "$jamID");
@@ -61,9 +57,9 @@ function DeleteJam($jamID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$actionResult = "SUCCESS";
-
-    AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser["username"]);
+	AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser["username"]);
+	
+	return "SUCCESS";
 }
 
 //Returns true / false based on whether or not the specified jam can be deleted
@@ -109,7 +105,7 @@ function PerformAction(&$loggedInUser){
 	if(IsAdmin($loggedInUser) !== false){
 		$jamID = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
 		if($jamID != ""){
-			DeleteJam(intval($jamID));
+			return DeleteJam(intval($jamID));
 		}
 	}
 }

@@ -4,12 +4,11 @@
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
 function EditUser($username, $isAdmin){
-	global $users, $dbConn, $actionResult, $loggedInUser;
+	global $users, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	//Validate values
@@ -18,14 +17,12 @@ function EditUser($username, $isAdmin){
 	}else if($isAdmin == 1){
 		$isAdmin = 1;
 	}else{
-		$actionResult = "INVALID_ISADMIN";
-		return;
+		return "INVALID_ISADMIN";
 	}
 
 	//Check that the user exists
 	if(!isset($users[$username])){
-		$actionResult = "USER_DOES_NOT_EXIST";
-		return;
+		return "USER_DOES_NOT_EXIST";
 	}
 
 	$usernameClean = mysqli_real_escape_string($dbConn, $username);
@@ -37,10 +34,11 @@ function EditUser($username, $isAdmin){
 		WHERE user_username = '$usernameClean';
 	";
 	mysqli_query($dbConn, $sql) ;
-    $sql = "";
-
-	$actionResult = "SUCCESS";
+	$sql = "";
+	
     AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username, $loggedInUser["username"]);
+
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -53,7 +51,7 @@ function PerformAction(&$loggedInUser){
 			die("invalid isadmin value");
 		}
 
-		EditUser($username, $isAdmin);
+		return EditUser($username, $isAdmin);
 	}
 }
 

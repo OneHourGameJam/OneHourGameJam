@@ -1,18 +1,16 @@
 <?php
 
 function CastVoteForAdmin($subjectUsername, $voteType){
-	global $dbConn, $ip, $userAgent, $loggedInUser, $actionResult;
+	global $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
-		$actionResult = "NOT_LOGGED_IN";
-		return;
+		return "NOT_LOGGED_IN";
 	}
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
@@ -51,8 +49,7 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 			}
 			break;
 		default:
-			$actionResult = "INVALID_VOTE_TYPE";
-			return;
+			return "INVALID_VOTE_TYPE";
 	}
 
 	$sql = "
@@ -74,7 +71,7 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 		";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
-		$actionResult = "SUCESS_UPDATE";
+		return "SUCESS_UPDATE";
 	}else{
 		//New vote for admin
 		$sql = "
@@ -91,7 +88,8 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 		";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
-		$actionResult = "SUCESS_INSERT";
+		
+		return "SUCESS_INSERT";
 	}
 }
 
@@ -101,7 +99,7 @@ function PerformAction($loggedInUser){
 	if(IsAdmin($loggedInUser) !== false){
 			$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
 			$voteType = $_POST["adminVoteType"];
-			CastVoteForAdmin($voteSubjectUsername, $voteType);
+			return CastVoteForAdmin($voteSubjectUsername, $voteType);
 	}
 }
 

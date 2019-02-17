@@ -2,31 +2,27 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $users, $dbConn, $actionResult, $config, $loggedInUser;
+	global $users, $dbConn, $config, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
-		$actionResult = "NOT_AUTHORIZED";
-		return;
+		return "NOT_AUTHORIZED";
 	}
 
 	$newPassword1 = trim($newPassword1);
 	$newPassword2 = trim($newPassword2);
 	if($newPassword1 != $newPassword2){
-		$actionResult = "PASSWORDS_DONT_MATCH";
-		return;
+		return "PASSWORDS_DONT_MATCH";
 	}
 	$password = $newPassword1;
 
 	if(!ValidatePassword($password, $config)){
-		$actionResult = "INVALID_PASSWORD_LENGTH";
-		return;
+		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	//Check that the user exists
 	if(!isset($users[$username])){
-		$actionResult = "USER_DOES_NOT_EXIST";
-		return;
+		return "USER_DOES_NOT_EXIST";
 	}
 
 	//Generate new salt, number of iterations and hashed password.
@@ -56,7 +52,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 
     AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username, $loggedInUser["username"]);
 
-	$actionResult = "SUCCESS";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -67,7 +63,7 @@ function PerformAction(&$loggedInUser){
 		$password1 = $_POST["password1"];
 		$password2 = $_POST["password2"];
 
-		EditUserPassword($username, $password1, $password2);
+		return EditUserPassword($username, $password1, $password2);
 	}
 }
 
