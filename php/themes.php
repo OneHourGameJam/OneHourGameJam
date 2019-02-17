@@ -95,7 +95,6 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 	$themesUserHasNotVotedFor = 0;
 
 	foreach($themes as $i => $themeData){
-		//print $i."<br>";
 
 		$themeID = intval($themeData["theme_id"]);
 		$themeText = $themeData["theme"];
@@ -437,7 +436,7 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 			$result[$themeID]["ThemeSelectionProbabilityByPopularityText"] = round($selectionProbability * 100)."%";
 		}
 	}
-	
+
 	StopTimer("CalculateThemeSelectionProbabilityByPopularity");
 	return $result;
 }

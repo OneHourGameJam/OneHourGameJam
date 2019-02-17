@@ -8,25 +8,6 @@
 include_once("php/site.php");
 StartTimer("index.php");
 
-//List allowed page identifiers here.
-if(!(in_array($page, Array("main", "login", "submit", "newjam", "assets", "editasset", "rules", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "entries", "jam", "jams", "author", "authors", "privacy", "userdata", "adminlog")))){
-	$page = "main";
-}
-
-//List of pages which require user to be logged in
-if(in_array($page, Array("submit", "newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "themes", "usersettings", "userdata"))){
-	if($loggedInUser === false){
-		$page = "main";
-	}
-}
-
-//List of pages which require administrator access
-if(in_array($page, Array("newjam", "editasset", "config", "editcontent", "editjam", "editentry", "editusers", "edituser", "adminlog"))){
-	if(IsAdmin($loggedInUser) === false){
-		$page = "main";
-	}
-}
-
 ?>
 
 			<?php

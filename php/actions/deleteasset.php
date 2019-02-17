@@ -46,6 +46,7 @@ function DeleteAsset($assetID){
 	$sql = "";
 
 	AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser["username"]);
+	
 	return "SUCCESS";
 }
 

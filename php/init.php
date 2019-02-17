@@ -1,12 +1,12 @@
 <?php
 
 BeforeInit();	//Plugin hook
-Init($page);
+Init();
 AfterInit();	//Plugin hook
 
 //Initializes the site.
-function Init($page){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies, $actions;
+function Init(){
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies, $actions, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -22,6 +22,8 @@ function Init($page){
 	$users = LoadUsers();
 
 	$loggedInUser = IsLoggedIn($config, $users);
+	
+	$page = ValidatePage($page, $loggedInUser);
 
 	$jams =  LoadJams();
 	$games = LoadGames();

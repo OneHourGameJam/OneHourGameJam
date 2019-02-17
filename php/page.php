@@ -1,41 +1,33 @@
 <?php
 $templateBasePath = "template/";
 
-$pageTitles = Array(
-	"main" => "Main Page",
-	"login" => "Login",
-	"submit" => "Submit Game",
-	"newjam" => "Schedule New Jam",
-	"assets" => "Assets",
-	"editasset" => "Edit Asset",
-	"rules" => "Rules",
-	"config" => "Configuration",
-	"editcontent" => "Manage Content",
-	"editjam" => "Edit Jam",
-	"editentry" => "Edit Entry",
-	"editusers" => "Manage Users",
-	"edituser" => "Edit User",
-	"themes" => "Theme Voting",
-	"usersettings" => "User Settings",
-	"entries" => "Entries",
-	"jam" => "Jam",
-	"jams" => "Jams",
-	"author" => "Author",
-	"authors" => "Authors",
-	"privacy" => "Privacy",
-    "userdata" => "User Data",
-    "adminlog" => "Admin Log"
-);
+function ValidatePage($page, &$loggedInUser){
+    global $pageSettings;
+
+    if(!isset($pageSettings[$page])){
+        return "main";
+    }
+
+    if($pageSettings[$page]["authorization_level"] == "USER" && $loggedInUser === false){
+        return "main";
+    }
+
+    if($pageSettings[$page]["authorization_level"] == "ADMIN" && !IsAdmin($loggedInUser)){
+        return "main";
+    }
+
+    return $page;
+}
 
 function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, &$assets, &$cookies, &$adminVotes, &$loggedInUserAdminVotes, &$nextSuggestedJamDateTime){
-    global $_GET, $templateBasePath, $pageTitles;
+    global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
 
     $render = Array();
     
     //$render["CURRENT_TIME"] = gmdate("d M Y H:i", time());
-    $render["page_title"] = $pageTitles[$page];
+    $render["page_title"] = $pageSettings[$page]["page_title"];
     $render["template_path"] = $templateBasePath;
 
     //Special processing for specific pages
