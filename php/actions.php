@@ -192,7 +192,7 @@ function LoadSiteActions(&$config){
             "PHP_FILE" => "php/actions/theme/savenewtheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
-                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "The added."),
+                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme added."),
                 "THEME_ALREADY_SUGGESTED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is already suggested."),
                 "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
@@ -206,6 +206,17 @@ function LoadSiteActions(&$config){
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme deleted."),
                 "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
                 "THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist."),
+                "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
+                "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
+            )
+        ),
+        Array(
+            "POST_REQUEST" => "deletethemes",
+            "PHP_FILE" => "php/actions/theme/deletethemes.php",
+            "REDIRECT_AFTER_EXECUTION" => "?page=main",
+            "ACTION_RESULT" => Array(
+                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Themes deleted."),
+                "FAILURE" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "One or more themes couldn't be deleted."),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
             )
@@ -285,7 +296,7 @@ function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
                     die("Redirecting to <a href='$actionRedirectAfterExecution'>$actionRedirectAfterExecution</a>...");
                 }
 
-                die("Unknown action result $actionResult for action $actionPostRequest. Please report this error to administrators.  <a href='?page=mail'>back to index</a>...");
+                die("Unknown action result $actionResult for action $actionPostRequest. Please report this error to administrators.  <a href='?page=main'>back to index</a>...");
             }
         }
     }

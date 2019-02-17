@@ -139,6 +139,8 @@
 	<table>
 		<tr>
 			{{#user.is_admin}}
+				<th class='themeTableCell themeTableCellCentered'>Select</th>
+				<form id="delete-themes" method='POST'></form>
 				{{^cookies.is_streamer}}
 					<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
 				{{/cookies.is_streamer}}
@@ -202,6 +204,9 @@
 								<tr>
 							{{/is_old}}
 						{{/banned}}
+						<td class='themeTableCell themeTableCellCentered'>
+							<input type="checkbox" name="selected-themes[]" value="{{{theme}}}" form="delete-themes">
+						</td>
 						<td class='themeTableCell themeTableCellCentered'>
 							{{#banned}}
 								<!-- Ban cross -->
@@ -330,3 +335,10 @@
 		{{/themes.suggested_themes}}
 	</table>
 </ul>
+{{#user.is_admin}}
+	<br>
+	<em>With selected: </em> 
+	<button type="submit" name='action' value='deletethemes' form="delete-themes" class="btn btn-default" style="border: none; background-color: transparent;">
+		<img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> Delete
+	</button>
+{{/user.is_admin}}
