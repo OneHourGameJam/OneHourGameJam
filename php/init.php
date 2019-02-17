@@ -6,9 +6,12 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies, $actions, $page;
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies, $actions, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
+
+	
+	StartTimer("Init - Load Data");
 
 	UpdateCookies();
 	$cookies = LoadCookies();
@@ -45,26 +48,55 @@ function Init(){
     $adminVotes = LoadAdminVotes();
 	$loggedInUserAdminVotes = LoadLoggedInUsersAdminVotes($loggedInUser);
 	$messages = LoadMessages($actions);
+	
+	StopTimer("Init - Load Data");
+	StartTimer("Init - Render");
 
 	PerformPendingSiteAction($config, $actions, $loggedInUser);
  
-	$dictionary["stream"] = InitStream();
-	$dictionary["CONFIG"] = RenderConfig($config);
-	$dictionary["adminlog"] = RenderAdminLog($adminLog);
-	$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
-	$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser);
-	$dictionary["entries"] = RenderGames($users, $games, $jams);
-	$dictionary["themes"] = RenderThemes($config, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
-	$dictionary["assets"] = RenderAssets($assets);
-	$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
-	$dictionary["cookies"] = RenderCookies($cookies);
+	if(array_search("RenderStream", $dep) !== false){
+		$dictionary["stream"] = InitStream();
+	}
+	if(array_search("RenderConfig", $dep) !== false){
+		$dictionary["CONFIG"] = RenderConfig($config);
+	}
+	if(array_search("RenderAdminLog", $dep) !== false){
+		$dictionary["adminlog"] = RenderAdminLog($adminLog);
+	}
+	if(array_search("RenderUsers", $dep) !== false){
+		$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
+	}
+	if(array_search("RenderJams", $dep) !== false){
+		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser);
+	}
+	if(array_search("RenderGames", $dep) !== false){
+		$dictionary["entries"] = RenderGames($users, $games, $jams);
+	}
+	if(array_search("RenderThemes", $dep) !== false){
+		$dictionary["themes"] = RenderThemes($config, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+	}
+	if(array_search("RenderAssets", $dep) !== false){
+		$dictionary["assets"] = RenderAssets($assets);
+	}
+	if(array_search("RenderPolls", $dep) !== false){
+		$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
+	}
+	if(array_search("RenderCookies", $dep) !== false){
+		$dictionary["cookies"] = RenderCookies($cookies);
+	}
+	if(array_search("RenderMessages", $dep) !== false){
+		$dictionary["messages"] = RenderMessages($messages);
+	}
+	
 	$dictionary["page"] = RenderPageSpecific($page, $config, $users, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
-	$dictionary["messages"] = RenderMessages($messages);
 	
 	if($loggedInUser !== false){
-		$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);
+		if(array_search("RenderLoggedInUser", $dep) !== false){
+			$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);
+		}
 	}
-
+	
+	StopTimer("Init - Render");
 	StopTimer("Init");
 }
 
