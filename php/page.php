@@ -3,19 +3,25 @@ $templateBasePath = "template/";
 
 function ValidatePage($page, &$loggedInUser){
     global $pageSettings;
+	AddActionLog("ValidatePage");
+	StartTimer("ValidatePage");
 
     if(!isset($pageSettings[$page])){
+        StopTimer("ValidatePage");
         return "main";
     }
 
     if($pageSettings[$page]["authorization_level"] == "USER" && $loggedInUser === false){
+        StopTimer("ValidatePage");
         return "main";
     }
 
     if($pageSettings[$page]["authorization_level"] == "ADMIN" && !IsAdmin($loggedInUser)){
+        StopTimer("ValidatePage");
         return "main";
     }
 
+	StopTimer("ValidatePage");
     return $page;
 }
 

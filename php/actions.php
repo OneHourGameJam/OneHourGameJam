@@ -1,12 +1,14 @@
 <?php
 
 function LoadSiteActions(&$config){
+	AddActionLog("LoadSiteActions");
+	StartTimer("LoadSiteActions");
     
     //Actions data: The data in this list governs how site actions are performed
     $actions = Array(
         Array(
             "POST_REQUEST" => "login",
-            "PHP_FILE" => "php/actions/login.php",
+            "PHP_FILE" => "php/actions/authentication/login.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Logged in successfully"),
@@ -19,7 +21,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "logout",
-            "PHP_FILE" => "php/actions/logout.php",
+            "PHP_FILE" => "php/actions/authentication/logout.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Logged out successfully")
@@ -27,7 +29,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "submit",
-            "PHP_FILE" => "php/actions/submit.php",
+            "PHP_FILE" => "php/actions/games/submit.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS_ENTRY_ADDED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Game Added."),
@@ -47,7 +49,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "newjam",
-            "PHP_FILE" => "php/actions/newjam.php",
+            "PHP_FILE" => "php/actions/jam/newjam.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Jam scheduled."),
@@ -61,7 +63,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "deletejam",
-            "PHP_FILE" => "php/actions/deletejam.php",
+            "PHP_FILE" => "php/actions/jam/deletejam.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Jam Deleted."),
@@ -73,7 +75,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "deleteentry",
-            "PHP_FILE" => "php/actions/deleteentry.php",
+            "PHP_FILE" => "php/actions/games/deleteentry.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Entry deleted."),
@@ -85,7 +87,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "saveconfig",
-            "PHP_FILE" => "php/actions/saveconfig.php",
+            "PHP_FILE" => "php/actions/config/saveconfig.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=config", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Config updated."),
@@ -95,7 +97,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "saveassetedits",
-            "PHP_FILE" => "php/actions/saveassetedits.php",
+            "PHP_FILE" => "php/actions/asset/saveassetedits.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS_INSERTED" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Asset added."),
@@ -114,7 +116,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "deleteasset",
-            "PHP_FILE" => "php/actions/deleteasset.php",
+            "PHP_FILE" => "php/actions/asset/deleteasset.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=assets", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Asset deleted."),
@@ -124,7 +126,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "savejamedits",
-            "PHP_FILE" => "php/actions/savejamedits.php",
+            "PHP_FILE" => "php/actions/jam/savejamedits.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editcontent", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Jam updated."),
@@ -140,7 +142,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "saveuseredits",
-            "PHP_FILE" => "php/actions/saveuseredits.php",
+            "PHP_FILE" => "php/actions/user/saveuseredits.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "User successfully edited"),
@@ -151,7 +153,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "savenewuserpassword",
-            "PHP_FILE" => "php/actions/savenewuserpassword.php",
+            "PHP_FILE" => "php/actions/user/savenewuserpassword.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Password Updated."),
@@ -163,7 +165,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "changepassword",
-            "PHP_FILE" => "php/actions/changepassword.php",
+            "PHP_FILE" => "php/actions/user/changepassword.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Password Updated."),
@@ -176,7 +178,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "saveuserchanges",
-            "PHP_FILE" => "php/actions/saveuserchanges.php",
+            "PHP_FILE" => "php/actions/user/saveuserchanges.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "User settings updated."),
@@ -187,7 +189,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "savenewtheme",
-            "PHP_FILE" => "php/actions/savenewtheme.php",
+            "PHP_FILE" => "php/actions/theme/savenewtheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "The added."),
@@ -198,7 +200,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "deletetheme",
-            "PHP_FILE" => "php/actions/deletetheme.php",
+            "PHP_FILE" => "php/actions/theme/deletetheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme deleted."),
@@ -210,7 +212,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "bantheme",
-            "PHP_FILE" => "php/actions/bantheme.php",
+            "PHP_FILE" => "php/actions/theme/bantheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme banned."),
@@ -222,7 +224,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "unbantheme",
-            "PHP_FILE" => "php/actions/unbantheme.php",
+            "PHP_FILE" => "php/actions/theme/unbantheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme unbanned."),
@@ -234,7 +236,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "downloaddb",
-            "PHP_FILE" => "php/actions/downloaddb.php",
+            "PHP_FILE" => "php/actions/db/downloaddb.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
 
@@ -242,7 +244,7 @@ function LoadSiteActions(&$config){
         ),
         Array(
             "POST_REQUEST" => "adminvote",
-            "PHP_FILE" => "php/actions/adminvote.php",
+            "PHP_FILE" => "php/actions/adminvote/adminvote.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCESS_UPDATE" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Admin vote updated."),
@@ -254,11 +256,14 @@ function LoadSiteActions(&$config){
         )
     );
 
+	StopTimer("LoadSiteActions");
     return $actions;
 }
 
 function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
     global $_POST;
+	AddActionLog("PerformPendingSiteAction");
+	StartTimer("PerformPendingSiteAction");
 
     //Actions!
     if(isset($_POST["action"])){
@@ -284,6 +289,8 @@ function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
             }
         }
     }
+
+	StopTimer("PerformPendingSiteAction");
 }
 
 ?>

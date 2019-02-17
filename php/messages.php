@@ -2,6 +2,8 @@
 
 function LoadMessages($actions){
 	global $_COOKIE;
+	AddActionLog("LoadMessages");
+	StartTimer("LoadMessages");
 
 	$messages = Array();
 
@@ -56,11 +58,14 @@ function LoadMessages($actions){
 		setcookie("actionResultAction", "", 0);
 	}
 
+	StopTimer("LoadMessages");
 	return $messages;
 }
 
 function RenderMessages($messages){
 	$render = Array();
+	AddActionLog("RenderMessages");
+	StartTimer("RenderMessages");
 
 	foreach($messages as $i => $messageData){
 		$message = Array();
@@ -72,6 +77,7 @@ function RenderMessages($messages){
 		$render[] = $message;
 	}
 
+	StopTimer("RenderMessages");
 	return $messages;
 }
 

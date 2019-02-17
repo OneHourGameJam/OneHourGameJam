@@ -398,7 +398,8 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
 }
 
 function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser){
-	AddActionLog("RenderLoggedInUser");
+    AddActionLog("RenderLoggedInUser");
+    
     return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
 }
 
