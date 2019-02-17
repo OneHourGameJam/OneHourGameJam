@@ -85,7 +85,7 @@ $dependencies = Array(
 );
 
 $commonDependencies = Array(
-    "header" => Array("RenderConfig"),
+    "header" => Array("RenderConfig", "RenderUsers", "RenderGames"),
     "message" => Array("RenderMessages"),
     "menu" => Array("RenderConfig", "RenderLoggedInUser", "RenderCookies", "RenderThemes", "RenderJams"),
     "footer" => Array(),
