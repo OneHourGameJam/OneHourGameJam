@@ -1,33 +1,31 @@
-<div class="col-md-10">
-	<p>
-		<h3>Edit jam</h3>
-	</p>
-	<form method='post'>
-		{{#page.editingjam}}
-			<input type="hidden" name="jamID" value="{{{jam_id}}}">
-			<div class="form-group">
-				<label for="jam_number">Jam number</label>
-				<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
-			</div>
-			<div class="form-group">
-				<label for="theme">Theme</label>
-				<input type="text" class="form-control" id="theme" name='theme' placeholder="Theme" value="{{{theme_visible}}}" required>
-			</div>
-			<div class="form-group">
-				<label for="date">Date</label>
-				<input type="date" class="form-control" id="date" name='date' placeholder="date" value="{{{html_startdate}}}" required>
-			</div>
-			<div class="form-group">
-				<label for="time">Time</label>
-				<input type="time" class="form-control" id="time" name='time' placeholder="Time" value="{{{time}}}" required>
-			</div>
-			<div class="form-group">
-				<label for="jamcolors">Jam colours (Users can choose between these to customize their game's appearance on the site)</label>
-				<input type="text" class="form-control" id="jamcolors" name='jamcolors' value='{{colors_input_string}}' placeholder="" required>
-			</div>
+<p>
+	<h3>Edit jam</h3>
+</p>
+<form method='post'>
+	{{#page.editingjam}}
+		<input type="hidden" name="jamID" value="{{{jam_id}}}">
+		<div class="form-group">
+			<label for="jam_number">Jam number</label>
+			<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
+		</div>
+		<div class="form-group">
+			<label for="theme">Theme</label>
+			<input type="text" class="form-control" id="theme" name='theme' placeholder="Theme" value="{{{theme_visible}}}" required>
+		</div>
+		<div class="form-group">
+			<label for="date">Date</label>
+			<input type="date" class="form-control" id="date" name='date' placeholder="date" value="{{{html_startdate}}}" required>
+		</div>
+		<div class="form-group">
+			<label for="time">Time</label>
+			<input type="time" class="form-control" id="time" name='time' placeholder="Time" value="{{{time}}}" required>
+		</div>
+		<div class="form-group">
+			<label for="jamcolors">Jam colours (Users can choose between these to customize their game's appearance on the site)</label>
+			<input type="text" class="form-control" id="jamcolors" name='jamcolors' value='{{colors_input_string}}' placeholder="" required>
+		</div>
 
-			<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
-			<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete Jam</button>
-		{{/page.editingjam}}
-	</form>
-</div>
+		<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
+		<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete Jam</button>
+	{{/page.editingjam}}
+</form>

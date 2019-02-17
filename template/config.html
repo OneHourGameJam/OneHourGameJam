@@ -1,41 +1,39 @@
-<div class="col-md-10">
-	<p>
-		<h3>Edit configuration</h3>
-	</p>
-	<form method='post'>
-		{{#CONFIG.LIST}}
-			<div class='panel panel-info'>
-				<div class='panel-heading'>
-					<b>{{CATEGORY_HEADER}}</b>
-				</div>
-				<div class='panel-body'>
-					{{#ENTRIES}}
-						<div class="form-group">
-							<label for="{{KEY}}">{{DESCRIPTION}}</label>
-							{{#TYPE_TEXT}}
-								<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
-							{{/TYPE_TEXT}}
-							{{#TYPE_NUMBER}}
-								<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
-							{{/TYPE_NUMBER}}
-							{{#TYPE_TEXTAREA}}
-								<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE_HTML_ENCODED}}}</textarea>
-							{{/TYPE_TEXTAREA}}
-							{{#TYPE_ENUM}}
-								<select class="form-control" id="{{KEY}}" name='{{KEY}}' {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
-								{{#ENUM_OPTIONS}}
-									<option value="{{{VALUE}}}" {{#ENUM_SELECTED}}selected{{/ENUM_SELECTED}}>{{TEXT}}</value>
-								{{/ENUM_OPTIONS}}
-								</select>
-							{{/TYPE_ENUM}}
-						</div>
-					{{/ENTRIES}}
-				</div>
+<p>
+	<h3>Edit configuration</h3>
+</p>
+<form method='post'>
+	{{#CONFIG.LIST}}
+		<div class='panel panel-info'>
+			<div class='panel-heading'>
+				<b>{{CATEGORY_HEADER}}</b>
 			</div>
-		{{/CONFIG.LIST}}
-		<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>
-	</form>
-	<form method='post'>
-		<button type="submit" name='action' value='downloaddb' class="btn btn-default">Download Database</button>
-	</form>
-</div>
+			<div class='panel-body'>
+				{{#ENTRIES}}
+					<div class="form-group">
+						<label for="{{KEY}}">{{DESCRIPTION}}</label>
+						{{#TYPE_TEXT}}
+							<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
+						{{/TYPE_TEXT}}
+						{{#TYPE_NUMBER}}
+							<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
+						{{/TYPE_NUMBER}}
+						{{#TYPE_TEXTAREA}}
+							<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE_HTML_ENCODED}}}</textarea>
+						{{/TYPE_TEXTAREA}}
+						{{#TYPE_ENUM}}
+							<select class="form-control" id="{{KEY}}" name='{{KEY}}' {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
+							{{#ENUM_OPTIONS}}
+								<option value="{{{VALUE}}}" {{#ENUM_SELECTED}}selected{{/ENUM_SELECTED}}>{{TEXT}}</value>
+							{{/ENUM_OPTIONS}}
+							</select>
+						{{/TYPE_ENUM}}
+					</div>
+				{{/ENTRIES}}
+			</div>
+		</div>
+	{{/CONFIG.LIST}}
+	<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>
+</form>
+<form method='post'>
+	<button type="submit" name='action' value='downloaddb' class="btn btn-default">Download Database</button>
+</form>

@@ -1,0 +1,18 @@
+{{#CONFIG.VALUES.NOTIFICATION}}
+    <div class="row" style="font-size: 16px;">
+        <div class="col-md-12 alignCenter">
+            <div class="alert alert-warning" style='{{#CONFIG.VALUES.NOTIFICATION_IMAGE}}height: 100px;{{/CONFIG.VALUES.NOTIFICATION_IMAGE}}'>
+                {{#CONFIG.VALUES.NOTIFICATION_IMAGE}}
+                    {{#CONFIG.VALUES.NOTIFICATION_URL}}
+                        <a href='{{CONFIG.VALUES.NOTIFICATION_URL}}' target='_BLANK'>
+                    {{/CONFIG.VALUES.NOTIFICATION_URL}}
+                    <img src='{{CONFIG.VALUES.NOTIFICATION_IMAGE}}' style='max-height: 80px; float: left;'>
+                    {{#CONFIG.VALUES.NOTIFICATION_URL}}
+                        </a>
+                    {{/CONFIG.VALUES.NOTIFICATION_URL}}
+                {{/CONFIG.VALUES.NOTIFICATION_IMAGE}}
+                {{{CONFIG.VALUES.NOTIFICATION}}}
+            </div>
+        </div>
+    </div>
+{{/CONFIG.VALUES.NOTIFICATION}}

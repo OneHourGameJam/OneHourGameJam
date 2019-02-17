@@ -1,55 +1,53 @@
-<div class="col-md-10">
-	<p>
-		<h3>Create a new jam</h3>
-	</p>
-	<form method='post'>
-		<div class="form-group">
-			<label for="theme">Jam theme</label> (Top themes:{{#themes.top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/themes.top_themes}})
-			<input type="text" class="form-control" id="theme" name='theme' placeholder="Jam theme" required>
+<p>
+	<h3>Create a new jam</h3>
+</p>
+<form method='post'>
+	<div class="form-group">
+		<label for="theme">Jam theme</label> (Top themes:{{#themes.top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/themes.top_themes}})
+		<input type="text" class="form-control" id="theme" name='theme' placeholder="Jam theme" required>
+	</div>
+	<div class="form-group">
+		<label for="date">Jam date</label>
+		<input type="date" class="form-control" id="date" name='date' placeholder="" value='{{page.next_jam_suggested_date}}' required>
+	</div>
+	<div class="form-group">
+		<label for="time">Jam start time (in UTC - Jam theme will only become visible once this date and time passes)</label>
+		<input type="time" class="form-control" id="time" name='time' value='{{page.next_jam_suggested_time}}' placeholder="" required>
+	</div>
+	<div class="form-group">
+		<label for="jamcolors">Jam colours (Users can choose between these to customize their game's appearance on the site)</label><br>
+
+		<label for="jamcolors">Number of Colours</label>
+		<div class="slidecontainer">
+			<input type="number" min="1" max="{{CONFIG.VALUES.MAX_COLORS_FOR_JAM}}" value="{{CONFIG.VALUES.DEFAULT_NUMBER_OF_COLORS}}" class="form-control" id="NumberOfColors" onchange="UpdateNumberOfColors();">
 		</div>
-		<div class="form-group">
-			<label for="date">Jam date</label>
-			<input type="date" class="form-control" id="date" name='date' placeholder="" value='{{page.next_jam_suggested_date}}' required>
+
+		<label for="jamcolors">Saturation</label>
+		<div class="slidecontainer">
+			<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_SATURATION}}" class="slider" id="Saturation" oninput="UpdateAutoJamcolors();">
 		</div>
-		<div class="form-group">
-			<label for="time">Jam start time (in UTC - Jam theme will only become visible once this date and time passes)</label>
-			<input type="time" class="form-control" id="time" name='time' value='{{page.next_jam_suggested_time}}' placeholder="" required>
+
+		<label for="jamcolors">Brightness</label>
+		<div class="slidecontainer">
+			<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_BRIGHTNESS}}" class="slider" id="Brightness" oninput="UpdateAutoJamcolors();">
 		</div>
-		<div class="form-group">
-			<label for="jamcolors">Jam colours (Users can choose between these to customize their game's appearance on the site)</label><br>
 
-			<label for="jamcolors">Number of Colours</label>
-			<div class="slidecontainer">
-				<input type="number" min="1" max="{{CONFIG.VALUES.MAX_COLORS_FOR_JAM}}" value="{{CONFIG.VALUES.DEFAULT_NUMBER_OF_COLORS}}" class="form-control" id="NumberOfColors" onchange="UpdateNumberOfColors();">
-			</div>
-
-			<label for="jamcolors">Saturation</label>
-			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_SATURATION}}" class="slider" id="Saturation" oninput="UpdateAutoJamcolors();">
-			</div>
-
-			<label for="jamcolors">Brightness</label>
-			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_BRIGHTNESS}}" class="slider" id="Brightness" oninput="UpdateAutoJamcolors();">
-			</div>
-
-			<label for="jamcolors">Min Hue</label>
-			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_HUE_MIN}}" class="slider" id="MinHue" oninput="UpdateAutoJamcolors();">
-			</div>
-
-			<label for="jamcolors">Max Hue</label>
-			<div class="slidecontainer">
-				<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_HUE_MAX}}" class="slider" id="MaxHue" oninput="UpdateAutoJamcolors();">
-			</div>
-
-			<span id="ColorPreviews">
-
-			</span>
+		<label for="jamcolors">Min Hue</label>
+		<div class="slidecontainer">
+			<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_HUE_MIN}}" class="slider" id="MinHue" oninput="UpdateAutoJamcolors();">
 		</div>
-		<button type="submit" name='action' value='newjam' class="btn btn-default">New jam</button>
-	</form>
-</div>
+
+		<label for="jamcolors">Max Hue</label>
+		<div class="slidecontainer">
+			<input type="range" min="0" max="256" value="{{CONFIG.VALUES.DEFAULT_HUE_MAX}}" class="slider" id="MaxHue" oninput="UpdateAutoJamcolors();">
+		</div>
+
+		<span id="ColorPreviews">
+
+		</span>
+	</div>
+	<button type="submit" name='action' value='newjam' class="btn btn-default">New jam</button>
+</form>
 <script type='text/javascript'>
 	function SelectThemeForJam(themeButtonID){
 		var themeText = $("#"+themeButtonID).text();

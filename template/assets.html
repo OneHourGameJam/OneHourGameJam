@@ -1,62 +1,60 @@
-<div class="col-md-10" id='assets'>
-	<p>
-		<h3>Assets</h3>
-	</p>
-	<p>
-		Here you can find some jam-specific assets which can help you make your 1 hour game jam games.
-	</p>
-	{{#user.is_admin}}
-		<form action='?page=editasset' method='POST'>
-			<input type='hidden' name='action' value='editasset'>
-			<input type='submit' name='action' value='New' class="btn btn-default">
-		</form>
-	{{/user.is_admin}}
+<p>
+	<h3>Assets</h3>
+</p>
+<p>
+	Here you can find some jam-specific assets which can help you make your 1 hour game jam games.
+</p>
+{{#user.is_admin}}
+	<form action='?page=editasset' method='POST'>
+		<input type='hidden' name='action' value='editasset'>
+		<input type='submit' name='action' value='New' class="btn btn-default">
+	</form>
+{{/user.is_admin}}
 
-	{{#assets}}
+{{#assets}}
+	<p>
+		<h4>{{title}}</h4>
+		{{#user.is_admin}}
+			<a href='?page=editasset&asset_id={{id}}'><button type="submit" name='action' value='editasset' class="btn btn-default">Edit asset</button></a>
+		{{/user.is_admin}}
+	</p>
+	<p>
+		By {{author_display_name}}<br />
+		{{description}}
+	</p>
+	{{#is_audio}}
 		<p>
-			<h4>{{title}}</h4>
-			{{#user.is_admin}}
-				<a href='?page=editasset&asset_id={{id}}'><button type="submit" name='action' value='editasset' class="btn btn-default">Edit asset</button></a>
-			{{/user.is_admin}}
+			<audio controls="controls">
+				Your browser does not support the <code>audio</code> element.
+				<source src="{{content}}" type="audio/wav">
+			</audio>
+			<br /><a href='{{content}}'>Download</a>
 		</p>
+	{{/is_audio}}
+	{{#is_image}}
 		<p>
-			By {{author_display_name}}<br />
-			{{description}}
+			<a href='{{content}}'><img src='{{content}}' style='max-width: 600px; max-height: 200px; border: 0;'></a>
+			<br /><a href='{{content}}'>Download</a>
 		</p>
-		{{#is_audio}}
-			<p>
-				<audio controls="controls">
-					Your browser does not support the <code>audio</code> element.
-					<source src="{{content}}" type="audio/wav">
-				</audio>
-				<br /><a href='{{content}}'>Download</a>
-			</p>
-		{{/is_audio}}
-		{{#is_image}}
-			<p>
-				<a href='{{content}}'><img src='{{content}}' style='max-width: 600px; max-height: 200px; border: 0;'></a>
-				<br /><a href='{{content}}'>Download</a>
-			</p>
-		{{/is_image}}
-		{{#is_file}}
-			<p>
-				<a href='{{content}}'>Download</a>
-			</p>
-		{{/is_file}}
-		{{#is_text}}
-			<p>
-				{{content}}
-			</p>
-		{{/is_text}}
-		{{#is_link}}
-			<p>
-				<a href='{{content}}'>{{content}}</a>
-			</p>
-		{{/is_link}}
-		{{#is_other}}
-			<p>
-				{{content}}
-			</p>
-		{{/is_other}}
-	{{/assets}}
-</div>
+	{{/is_image}}
+	{{#is_file}}
+		<p>
+			<a href='{{content}}'>Download</a>
+		</p>
+	{{/is_file}}
+	{{#is_text}}
+		<p>
+			{{content}}
+		</p>
+	{{/is_text}}
+	{{#is_link}}
+		<p>
+			<a href='{{content}}'>{{content}}</a>
+		</p>
+	{{/is_link}}
+	{{#is_other}}
+		<p>
+			{{content}}
+		</p>
+	{{/is_other}}
+{{/assets}}

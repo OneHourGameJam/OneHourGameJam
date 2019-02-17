@@ -36,6 +36,8 @@ $nextSuggestedJamDateTime = "";
 
 require __DIR__ . '/../vendor/Mustache/Autoloader.php';
 Mustache_Autoloader::register();
-$mustache = new Mustache_Engine;
+$mustache = new Mustache_Engine();
+
+
 
 ?>

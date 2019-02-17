@@ -1,40 +1,38 @@
-<div class="col-md-10">
-	<p>
-		<h3>Edit content</h3>
-	</p>
+<p>
+	<h3>Edit content</h3>
+</p>
 
-	{{#jams.LIST}}
-		<div class='panel panel-info jamContener'>
-			<div class='panel-heading {{#jam_deleted}}jamDeleted{{/jam_deleted}}{{^jam_deleted}}jamNotDeleted{{/jam_deleted}}'>
-				<span style='font-size: 16px;'>
-					<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
-					<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
-				</span>
-			</div>
-
-			<div class='panel-body jamContent' id='entries{{jam_number}}'>
-				<div style='width: 100%; text-align: center;'>
-					<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-3}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-2}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-1}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score0}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score1}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score2}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score3}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score4}}</div>
-					<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score5}}</div>
-				</div>
-				{{#entries}}
-					<div class='panel panel-default col-md-12' style='padding-left: 0px; padding-right: 0px; {{#entry_deleted}}background-color: #FDF7F7{{/entry_deleted}}'>
-						<div class='panel-body' style='text-align: center;'>
-							{{#entry_deleted}}Deleted - {{/entry_deleted}}{{title}} by {{author}}
-							<a href='?page=editentry&entry_id={{id}}'><button type="submit" name='action' value='editentry' class="btn btn-default">Edit entry</button></a>
-						</div>
-					</div>
-				{{/entries}}
-			</div>
+{{#jams.LIST}}
+	<div class='panel panel-info jamContener'>
+		<div class='panel-heading {{#jam_deleted}}jamDeleted{{/jam_deleted}}{{^jam_deleted}}jamNotDeleted{{/jam_deleted}}'>
+			<span style='font-size: 16px;'>
+				<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
+				<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
+			</span>
 		</div>
-	{{/jams.LIST}}
-</div>
+
+		<div class='panel-body jamContent' id='entries{{jam_number}}'>
+			<div style='width: 100%; text-align: center;'>
+				<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-5}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-4}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-3}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-2}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score-1}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score0}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score1}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score2}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score3}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score4}}</div>
+				<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score5}}</div>
+			</div>
+			{{#entries}}
+				<div class='panel panel-default col-md-12' style='padding-left: 0px; padding-right: 0px; {{#entry_deleted}}background-color: #FDF7F7{{/entry_deleted}}'>
+					<div class='panel-body' style='text-align: center;'>
+						{{#entry_deleted}}Deleted - {{/entry_deleted}}{{title}} by {{author}}
+						<a href='?page=editentry&entry_id={{id}}'><button type="submit" name='action' value='editentry' class="btn btn-default">Edit entry</button></a>
+					</div>
+				</div>
+			{{/entries}}
+		</div>
+	</div>
+{{/jams.LIST}}

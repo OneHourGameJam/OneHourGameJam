@@ -1,194 +1,192 @@
-<div class="col-md-10">
-	<p>
-		<h3>Submit your entry</h3>
-	</p>
+<p>
+	<h3>Submit your entry</h3>
+</p>
 
-	<div class="panel panel-info">
-		<div class='panel-heading'>
-			<h3 class='panel-title' style='font-size: 24px;'>
-				{{page.submit_jam.jam_number_ordinal}} {{CONFIG.VALUES.JAMNAME}} ({{page.submit_jam.date}})
-			</h3>
-			Theme: {{page.submit_jam.theme}}
-		</div>
+<div class="panel panel-info">
+	<div class='panel-heading'>
+		<h3 class='panel-title' style='font-size: 24px;'>
+			{{page.submit_jam.jam_number_ordinal}} {{CONFIG.VALUES.JAMNAME}} ({{page.submit_jam.date}})
+		</h3>
+		Theme: {{page.submit_jam.theme}}
+	</div>
 
-		<form method='post' enctype="multipart/form-data" class="panel-body jamContent">
-			<div class="panel panel-info">
-				<div class='panel-heading'>
-					<h3 class='panel-title' style='font-size: 16px;'>
-						Game Info
-					</h3>
+	<form method='post' enctype="multipart/form-data" class="panel-body jamContent">
+		<div class="panel panel-info">
+			<div class='panel-heading'>
+				<h3 class='panel-title' style='font-size: 16px;'>
+					Game Info
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label for="gamename">Game title</label>
+					<input type="text" class="form-control" id="gamename" name='gamename' placeholder="Game name" value="{{page.user_entry_name}}" required>
 				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label for="gamename">Game title</label>
-						<input type="text" class="form-control" id="gamename" name='gamename' placeholder="Game name" value="{{page.user_entry_name}}" required>
-					</div>
 
-					<div class="form-group">
-						<label for="screenshotfile">Screenshot / Icon (Change)</label>
-						<br />Square icons work best. Supported formats: png, jpg, gif (up to {{CONFIG.PRETTY_PRINT.MAX_SCREENSHOT_FILE_SIZE_IN_BYTES}})
-						<input type="file" class="form-control" id="screenshotfile" name='screenshotfile' placeholder="Screenshot file" value="{{page.user_entry_screenshot}}">
-					</div>
-					<div class="form-group">
-						<label for="description">Brief game description</label>
-						<textarea class="form-control" id="description" name='description' placeholder="Game description">{{page.user_entry_desc}}</textarea>
-					</div>
+				<div class="form-group">
+					<label for="screenshotfile">Screenshot / Icon (Change)</label>
+					<br />Square icons work best. Supported formats: png, jpg, gif (up to {{CONFIG.PRETTY_PRINT.MAX_SCREENSHOT_FILE_SIZE_IN_BYTES}})
+					<input type="file" class="form-control" id="screenshotfile" name='screenshotfile' placeholder="Screenshot file" value="{{page.user_entry_screenshot}}">
+				</div>
+				<div class="form-group">
+					<label for="description">Brief game description</label>
+					<textarea class="form-control" id="description" name='description' placeholder="Game description">{{page.user_entry_desc}}</textarea>
 				</div>
 			</div>
+		</div>
 
-			<div class="panel panel-info">
-				<div class='panel-heading'>
-					<h3 class='panel-title' style='font-size: 16px;'>
-						Link to game
-					</h3>
-				</div>
-				<div class="panel-body">
-					<ul class="nav nav-tabs">
-						<li role="presentation" class="active"><a data-toggle="tab" href="#platformInfo">Info</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformWeb">Web (Browser) {{#page.user_has_url_web}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_web}}</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformWindows">Windows {{#page.user_has_url_windows}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_windows}}</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformMac">macOS {{#page.user_has_url_mac}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_mac}}</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformLinux">Linux {{#page.user_has_url_linux}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_linux}}</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformAndroid">Android {{#page.user_has_url_android}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_android}}</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformCustom">Other Platform {{#page.user_has_url}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url}}</a></li>
-						<li role="presentation"><a data-toggle="tab" href="#platformSource">Source Code {{#page.user_has_url_source}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_source}}</a></li>
-					</ul>
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<div class="tab-content">
-								<div id="platformInfo" class="tab-pane fade in active">
-									<p>You need to host the game files yourself. If you don't have a website, you might want to consider hosting files on a service like Dropbox or Google Drive, or as a release if you're using Github.</p>
+		<div class="panel panel-info">
+			<div class='panel-heading'>
+				<h3 class='panel-title' style='font-size: 16px;'>
+					Link to game
+				</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="active"><a data-toggle="tab" href="#platformInfo">Info</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformWeb">Web (Browser) {{#page.user_has_url_web}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_web}}</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformWindows">Windows {{#page.user_has_url_windows}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_windows}}</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformMac">macOS {{#page.user_has_url_mac}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_mac}}</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformLinux">Linux {{#page.user_has_url_linux}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_linux}}</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformAndroid">Android {{#page.user_has_url_android}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_android}}</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformCustom">Other Platform {{#page.user_has_url}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url}}</a></li>
+					<li role="presentation"><a data-toggle="tab" href="#platformSource">Source Code {{#page.user_has_url_source}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/page.user_has_url_source}}</a></li>
+				</ul>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="tab-content">
+							<div id="platformInfo" class="tab-pane fade in active">
+								<p>You need to host the game files yourself. If you don't have a website, you might want to consider hosting files on a service like Dropbox or Google Drive, or as a release if you're using Github.</p>
 
-									<p>Add <b>at least one build.</b> You can add source code too, however a build is required.</p>
+								<p>Add <b>at least one build.</b> You can add source code too, however a build is required.</p>
 
-									<p>To remove a platform, leave the URL for that platform blank and submit.</p>
+								<p>To remove a platform, leave the URL for that platform blank and submit.</p>
 
-									<p>If your game supports <b>multiple platforms</b>, insert the URL in fields for all supported platforms.</p>
-								</div>
-								<div id="platformWeb" class="tab-pane fade">
-									<p>
-										Add the URL to where the player can play your game in their browser.
-									</p>
-									<p>
-										<label for="gameurlweb">URL to web build</label>
-										<input type="url" class="form-control" id="gameurlweb" name='gameurlweb' placeholder="http://game-url" value="{{page.user_entry_url_web}}">
-									</p>
-								</div>
-								<div id="platformWindows" class="tab-pane fade">
-									<p>
-										Add the URL to where the player can download your game for Windows.
-									</p>
-									<p>
-										<label for="gameurlwin">URL to Windows build</label>
-										<input type="url" class="form-control" id="gameurlwin" name='gameurlwin' placeholder="http://game-url" value="{{page.user_entry_url_windows}}">
-									</p>
-								</div>
-								<div id="platformMac" class="tab-pane fade">
-									<p>
-										Add the URL to where the player can download your game for macOS.
-									</p>
-									<p>
-										<label for="gameurlmac">URL to Mac build</label>
-										<input type="url" class="form-control" id="gameurlmac" name='gameurlmac' placeholder="http://game-url" value="{{page.user_entry_url_mac}}">
-									</p>
-								</div>
-								<div id="platformLinux" class="tab-pane fade">
-									<p>
-										Add the URL to where the player can download your game for Linux.
-									</p>
-									<p>
-										<label for="gameurllinux">URL to Linux build</label>
-										<input type="url" class="form-control" id="gameurllinux" name='gameurllinux' placeholder="http://game-url" value="{{page.user_entry_url_linux}}">
-									</p>
-								</div>
-								<div id="platformAndroid" class="tab-pane fade">
-									<p>
-										Add the URL to where the player can download your game for Android.
-									</p>
-									<p>
-										<label for="gameurlandroid">URL to Android build</label>
-										<input type="url" class="form-control" id="gameurlandroid" name='gameurlandroid' placeholder="http://game-url" value="{{page.user_entry_url_android}}">
-									</p>
-								</div>
-								<div id="platformCustom" class="tab-pane fade">
-									<p>
-										If your game is meant to be played on a platform which isn't listed, you can add the URL to where the player can download your game for that platform. Write the platform in the description though.
-									</p>
-									<p>
-										<label for="gameurl">URL to build for another platform</label>
-										<input type="url" class="form-control" id="gameurl" name='gameurl' placeholder="http://game-url" value="{{page.user_entry_url}}">
-									</p>
-								</div>
-								<div id="platformSource" class="tab-pane fade">
-									<p>
-										If you want to share your game's source code, add the URL to it here. <b>You must submit a build too, source code alone is not enough.</b>
-									</p>
-									<p>
-										<label for="gameurl">URL to source code</label>
-										<input type="url" class="form-control" id="gameurlsource" name='gameurlsource' placeholder="http://source-url" value="{{page.user_entry_url_source}}">
-									</p>
-								</div>
+								<p>If your game supports <b>multiple platforms</b>, insert the URL in fields for all supported platforms.</p>
+							</div>
+							<div id="platformWeb" class="tab-pane fade">
+								<p>
+									Add the URL to where the player can play your game in their browser.
+								</p>
+								<p>
+									<label for="gameurlweb">URL to web build</label>
+									<input type="url" class="form-control" id="gameurlweb" name='gameurlweb' placeholder="http://game-url" value="{{page.user_entry_url_web}}">
+								</p>
+							</div>
+							<div id="platformWindows" class="tab-pane fade">
+								<p>
+									Add the URL to where the player can download your game for Windows.
+								</p>
+								<p>
+									<label for="gameurlwin">URL to Windows build</label>
+									<input type="url" class="form-control" id="gameurlwin" name='gameurlwin' placeholder="http://game-url" value="{{page.user_entry_url_windows}}">
+								</p>
+							</div>
+							<div id="platformMac" class="tab-pane fade">
+								<p>
+									Add the URL to where the player can download your game for macOS.
+								</p>
+								<p>
+									<label for="gameurlmac">URL to Mac build</label>
+									<input type="url" class="form-control" id="gameurlmac" name='gameurlmac' placeholder="http://game-url" value="{{page.user_entry_url_mac}}">
+								</p>
+							</div>
+							<div id="platformLinux" class="tab-pane fade">
+								<p>
+									Add the URL to where the player can download your game for Linux.
+								</p>
+								<p>
+									<label for="gameurllinux">URL to Linux build</label>
+									<input type="url" class="form-control" id="gameurllinux" name='gameurllinux' placeholder="http://game-url" value="{{page.user_entry_url_linux}}">
+								</p>
+							</div>
+							<div id="platformAndroid" class="tab-pane fade">
+								<p>
+									Add the URL to where the player can download your game for Android.
+								</p>
+								<p>
+									<label for="gameurlandroid">URL to Android build</label>
+									<input type="url" class="form-control" id="gameurlandroid" name='gameurlandroid' placeholder="http://game-url" value="{{page.user_entry_url_android}}">
+								</p>
+							</div>
+							<div id="platformCustom" class="tab-pane fade">
+								<p>
+									If your game is meant to be played on a platform which isn't listed, you can add the URL to where the player can download your game for that platform. Write the platform in the description though.
+								</p>
+								<p>
+									<label for="gameurl">URL to build for another platform</label>
+									<input type="url" class="form-control" id="gameurl" name='gameurl' placeholder="http://game-url" value="{{page.user_entry_url}}">
+								</p>
+							</div>
+							<div id="platformSource" class="tab-pane fade">
+								<p>
+									If you want to share your game's source code, add the URL to it here. <b>You must submit a build too, source code alone is not enough.</b>
+								</p>
+								<p>
+									<label for="gameurl">URL to source code</label>
+									<input type="url" class="form-control" id="gameurlsource" name='gameurlsource' placeholder="http://source-url" value="{{page.user_entry_url_source}}">
+								</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<div class="panel panel-info">
-				<div class='panel-heading'>
-					<h3 class='panel-title' style='font-size: 16px;'>
-						Customize
-					</h3>
-				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label for="gamename">Game color</label>
-						<input type='hidden' id="colorNumber" name="colorNumber" value='{{page.user_entry_color_number}}'>
-						<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: #{{page.user_entry_color}}; vertical-align: middle;'></div>
-						<div class="btn-group" data-toggle="buttons">
-							{{#page.submit_jam.colors}}
-								<label class="btn btn-default" style='background-color: {{color}}' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorNumber').val('{{number}}')">
-									<input type="radio" name="options" id="option2" autocomplete="off"> {{color}}
-								</label>
-							{{/page.submit_jam.colors}}
-						</div>
+		<div class="panel panel-info">
+			<div class='panel-heading'>
+				<h3 class='panel-title' style='font-size: 16px;'>
+					Customize
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label for="gamename">Game color</label>
+					<input type='hidden' id="colorNumber" name="colorNumber" value='{{page.user_entry_color_number}}'>
+					<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: #{{page.user_entry_color}}; vertical-align: middle;'></div>
+					<div class="btn-group" data-toggle="buttons">
+						{{#page.submit_jam.colors}}
+							<label class="btn btn-default" style='background-color: {{color}}' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorNumber').val('{{number}}')">
+								<input type="radio" name="options" id="option2" autocomplete="off"> {{color}}
+							</label>
+						{{/page.submit_jam.colors}}
 					</div>
 				</div>
 			</div>
-			{{^page.user_submitted_to_this_jam}}
-			<div class="panel panel-info">
-				<div class='panel-heading'>
-					<h3 class='panel-title' style='font-size: 16px;'>
-						Satisfaction
-					</h3>
-				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<input type="hidden" id="satisfaction" name='satisfaction' value="0">
-						<p>How did you find this jam? (Optional)
-						<div onclick='SetSatisfaction("no");' class="btn btn-default">No rating</div>
-						</p>
-						<img id='satisfaction_star_-5' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-5);'>
-						<img id='satisfaction_star_-4' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-4);'>
-						<img id='satisfaction_star_-3' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-3);'>
-						<img id='satisfaction_star_-2' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-2);'>
-						<img id='satisfaction_star_-1' src='{{{page.template_path}}}images/star_yellow_outline.png' onclick='SetSatisfaction(-1);'>
-						<img id='satisfaction_star_0' src='{{{page.template_path}}}images/star_yellow_outline.png' onclick='SetSatisfaction(0);'>
-						<img id='satisfaction_star_1' src='{{{page.template_path}}}images/star_yellow_outline.png' onclick='SetSatisfaction(1);'>
-						<img id='satisfaction_star_2' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(2);'>
-						<img id='satisfaction_star_3' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(3);'>
-						<img id='satisfaction_star_4' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(4);'>
-						<img id='satisfaction_star_5' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(5);'>
-						<p id='satisfaction_description'>No rating</p>
-					</div>
+		</div>
+		{{^page.user_submitted_to_this_jam}}
+		<div class="panel panel-info">
+			<div class='panel-heading'>
+				<h3 class='panel-title' style='font-size: 16px;'>
+					Satisfaction
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<input type="hidden" id="satisfaction" name='satisfaction' value="0">
+					<p>How did you find this jam? (Optional)
+					<div onclick='SetSatisfaction("no");' class="btn btn-default">No rating</div>
+					</p>
+					<img id='satisfaction_star_-5' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-5);'>
+					<img id='satisfaction_star_-4' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-4);'>
+					<img id='satisfaction_star_-3' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-3);'>
+					<img id='satisfaction_star_-2' src='{{{page.template_path}}}images/star_red_outline.png' onclick='SetSatisfaction(-2);'>
+					<img id='satisfaction_star_-1' src='{{{page.template_path}}}images/star_yellow_outline.png' onclick='SetSatisfaction(-1);'>
+					<img id='satisfaction_star_0' src='{{{page.template_path}}}images/star_yellow_outline.png' onclick='SetSatisfaction(0);'>
+					<img id='satisfaction_star_1' src='{{{page.template_path}}}images/star_yellow_outline.png' onclick='SetSatisfaction(1);'>
+					<img id='satisfaction_star_2' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(2);'>
+					<img id='satisfaction_star_3' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(3);'>
+					<img id='satisfaction_star_4' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(4);'>
+					<img id='satisfaction_star_5' src='{{{page.template_path}}}images/star_green_outline.png' onclick='SetSatisfaction(5);'>
+					<p id='satisfaction_description'>No rating</p>
 				</div>
 			</div>
-			{{/page.user_submitted_to_this_jam}}
+		</div>
+		{{/page.user_submitted_to_this_jam}}
 
-			<input type="hidden" name="jam_number" value="{{page.submit_jam.jam_number}}" />
-			<button type="submit" name='action' value='submit' class="btn btn-default">Submit</button>
-		</form>
-	</div>
+		<input type="hidden" name="jam_number" value="{{page.submit_jam.jam_number}}" />
+		<button type="submit" name='action' value='submit' class="btn btn-default">Submit</button>
+	</form>
 </div>
 
 <script type='text/javascript'>

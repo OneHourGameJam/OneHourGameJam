@@ -1,175 +1,173 @@
-<div class="col-md-10">
-	<h3>Edit users</h3>
+<h3>Edit users</h3>
 
-    <h4>Administrators</h4>
-    <p>For more information on the Login, Jams and Admin activity indicators, hover your mouse over an indicator image.</p>
-	<table class="table sortable">
-		<tr>
-			<th>Username</th>
-			<th>Entries</th>
-			<th>First Jam</th>
-			<th>Last Jam</th>
-			<th>Recent Participation</th>
-            <th>Login</th>
-            <th>Jams</th>
-            <th>Admin</th>
-			<th></th>
-        </tr>
-		{{#users.LIST}}
-		    {{#is_admin}}
-			    <tr>
-			    	<td><b>{{username}}</b></td>
-			    	<td>{{entry_count}}</td>
-			    	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
-			    	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
-			    	<td>{{recent_participation}}%</td>
-                    <td style='width: 30px; text-align:center; background-color: {{{activity_login_color}}};'>
-                        {{#activity_login_inactive}}
-                            <img src='{{{page.template_path}}}images/cross.png' style='width: 24px;' title='Login Status: User is inactive - Has not logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING}} days'>
-                        {{/activity_login_inactive}}
-                        {{#activity_login_active}}
-                            <img src='{{{page.template_path}}}images/tick.png' style='width: 24px;' title='Login Status: User is active - Has logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING}} days'>
-                        {{/activity_login_active}}
-                        {{#activity_login_highly_active}}
-                            <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Login Status: User is highly active - Has logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD}} days'>
-                        {{/activity_login_highly_active}}
-                    </td>
-                    <td style='width: 30px; text-align:center; background-color: {{{activity_jam_participation_color}}};'>
-                        {{#activity_jam_participation_inactive}}
-                            <img src='{{{page.template_path}}}images/cross.png' style='width: 24px;' title='Jam Participation Status: User is inactive - Has not participated in any jams in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING}} jams'>
-                        {{/activity_jam_participation_inactive}}
-                        {{#activity_jam_participation_active}}
-                            <img src='{{{page.template_path}}}images/tick.png' style='width: 24px;' title='Jam Participation Status: User is active - Has participated in at least one jam in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING}} jams'>
-                        {{/activity_jam_participation_active}}
-                        {{#activity_jam_participation_highly_active}}
-                            <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Jam Participation Status: User is highly active - Has participated in at least one jam in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD}} jams'>
-                        {{/activity_jam_participation_highly_active}}
-                    </td>
-                    <td style='width: 30px; text-align:center; background-color: {{{activity_administration_color}}};'>
-                        {{#activity_administration_inactive}}
-                            <img src='{{{page.template_path}}}images/cross.png' style='width: 24px;' title='Admin Actions Status: User is inactive - Has not performed any admin actions in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING}} days'>
-                        {{/activity_administration_inactive}}
-                        {{#activity_administration_active}}
-                            <img src='{{{page.template_path}}}images/tick.png' style='width: 24px;' title='Admin Actions Status: User is active - Has performed at least one admin action in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING}} days'>
-                        {{/activity_administration_active}}
-                        {{#activity_administration_highly_active}}
-                            <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Admin Actions Status: User is highly active - Has performed at least one admin action in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD}} days'>
-                        {{/activity_administration_highly_active}}
-                    </td>
-			    	<td><a href='?page=edituser&username={{username}}'>edit</a></td>
-			    </tr>
-            {{/is_admin}}
-        {{/users.LIST}}
-	</table>
+<h4>Administrators</h4>
+<p>For more information on the Login, Jams and Admin activity indicators, hover your mouse over an indicator image.</p>
+<table class="table sortable">
+    <tr>
+        <th>Username</th>
+        <th>Entries</th>
+        <th>First Jam</th>
+        <th>Last Jam</th>
+        <th>Recent Participation</th>
+        <th>Login</th>
+        <th>Jams</th>
+        <th>Admin</th>
+        <th></th>
+    </tr>
+    {{#users.LIST}}
+        {{#is_admin}}
+            <tr>
+                <td><b>{{username}}</b></td>
+                <td>{{entry_count}}</td>
+                <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
+                <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+                <td>{{recent_participation}}%</td>
+                <td style='width: 30px; text-align:center; background-color: {{{activity_login_color}}};'>
+                    {{#activity_login_inactive}}
+                        <img src='{{{page.template_path}}}images/cross.png' style='width: 24px;' title='Login Status: User is inactive - Has not logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING}} days'>
+                    {{/activity_login_inactive}}
+                    {{#activity_login_active}}
+                        <img src='{{{page.template_path}}}images/tick.png' style='width: 24px;' title='Login Status: User is active - Has logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING}} days'>
+                    {{/activity_login_active}}
+                    {{#activity_login_highly_active}}
+                        <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Login Status: User is highly active - Has logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD}} days'>
+                    {{/activity_login_highly_active}}
+                </td>
+                <td style='width: 30px; text-align:center; background-color: {{{activity_jam_participation_color}}};'>
+                    {{#activity_jam_participation_inactive}}
+                        <img src='{{{page.template_path}}}images/cross.png' style='width: 24px;' title='Jam Participation Status: User is inactive - Has not participated in any jams in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING}} jams'>
+                    {{/activity_jam_participation_inactive}}
+                    {{#activity_jam_participation_active}}
+                        <img src='{{{page.template_path}}}images/tick.png' style='width: 24px;' title='Jam Participation Status: User is active - Has participated in at least one jam in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING}} jams'>
+                    {{/activity_jam_participation_active}}
+                    {{#activity_jam_participation_highly_active}}
+                        <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Jam Participation Status: User is highly active - Has participated in at least one jam in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD}} jams'>
+                    {{/activity_jam_participation_highly_active}}
+                </td>
+                <td style='width: 30px; text-align:center; background-color: {{{activity_administration_color}}};'>
+                    {{#activity_administration_inactive}}
+                        <img src='{{{page.template_path}}}images/cross.png' style='width: 24px;' title='Admin Actions Status: User is inactive - Has not performed any admin actions in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING}} days'>
+                    {{/activity_administration_inactive}}
+                    {{#activity_administration_active}}
+                        <img src='{{{page.template_path}}}images/tick.png' style='width: 24px;' title='Admin Actions Status: User is active - Has performed at least one admin action in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING}} days'>
+                    {{/activity_administration_active}}
+                    {{#activity_administration_highly_active}}
+                        <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Admin Actions Status: User is highly active - Has performed at least one admin action in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD}} days'>
+                    {{/activity_administration_highly_active}}
+                </td>
+                <td><a href='?page=edituser&username={{username}}'>edit</a></td>
+            </tr>
+        {{/is_admin}}
+    {{/users.LIST}}
+</table>
 
-	<h4>Admin candidates</h4>
-	<p>The following are users the system identified as potential admin candidates, because they participated in {{CONFIG.VALUES.ADMIN_SUGGESTION_TOTAL_PARTICIPATION}} or more jams and their recent participation is at or above {{CONFIG.VALUES.ADMIN_SUGGESTION_RECENT_PARTICIPATION}}%.</p>
-	<table class="table sortable">
-		<tr>
-			<th>Username</th>
-			<th>Entries</th>
-			<th>First Jam</th>
-			<th>Last Jam</th>
-			<th>Recent Participation</th>
-			<th>Votes For</th>
-			<th>Neutral Votes</th>
-			<th>Votes Against</th>
-			<th style='width: 400px; text-align: center;'>Vote</th>
-			<th></th>
-		</tr>
-        {{#users.LIST}}
-            {{#is_admin_candidate}}
-                {{^is_admin}}
-			        <tr>
-			        	<td><b>{{username}} {{#is_sponsored}}(<span style='color: green;'>Sponsored</span>){{/is_sponsored}}</b></td>
-			        	<td>{{entry_count}}</td>
-			        	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
-			        	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
-                        <td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
-                        {{#is_vetoed}}
-			        	    <td colspan='3' style='text-align:center; color: red; font-weight: bold;'>Vetoed</td>
-                        {{/is_vetoed}}
-                        {{^is_vetoed}}
-			        	    <td style='text-align:center;'>{{votes_for}}</td>
-			        	    <td style='text-align:center;'>{{votes_neutral}}</td>
-			        	    <td style='text-align:center;'>{{votes_against}}</td>
-                        {{/is_vetoed}}
-			        	<td style='text-align: right;'>
-                            {{#vote_type_sponsor}}
-                            <form method='POST' id='adminvote_{{username_alphanumeric}}_1' style='display: inline;'>
-                                <input type='hidden' name='action' value='adminvote'>
-                                <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
-                                <input type='hidden' name='adminVoteType' value='SPONSOR'>
-                                <button type="button" class="btn btn-default {{#vote_type_sponsor}}btn-success{{/vote_type_sponsor}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_1");'><img src='{{{page.template_path}}}images/sponsor.png'></button>
-                            </form>
-                            {{/vote_type_sponsor}}
-                            <form method='POST' id='adminvote_{{username_alphanumeric}}_2' style='display: inline;'>
-                                <input type='hidden' name='action' value='adminvote'>
-                                <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
-                                <input type='hidden' name='adminVoteType' value='FOR'>
-                                <button type="button" class="btn btn-default {{#vote_type_for}}btn-success{{/vote_type_for}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_2");'><img src='{{{page.template_path}}}images/like.png'></button>
-                            </form>
-                            <form method='POST' id='adminvote_{{username_alphanumeric}}_3' style='display: inline;'>
-                                <input type='hidden' name='action' value='adminvote'>
-                                <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
-                                <input type='hidden' name='adminVoteType' value='NEUTRAL'>
-                                <button type="button" class="btn btn-default {{#vote_type_neutral}}btn-warning{{/vote_type_neutral}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_3");'><img src='{{{page.template_path}}}images/no_preference.png'></button>
-                            </form>
-                            <form method='POST' id='adminvote_{{username_alphanumeric}}_4' style='display: inline;'>
-                                <input type='hidden' name='action' value='adminvote'>
-                                <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
-                                <input type='hidden' name='adminVoteType' value='AGAINST'>
-                                <button type="button" class="btn btn-default {{#vote_type_against}}btn-danger{{/vote_type_against}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_4");'><img src='{{{page.template_path}}}images/dislike.png'></button>
-                            </form>
-                            <form method='POST' id='adminvote_{{username_alphanumeric}}_5' style='display: inline;'>
-                                <input type='hidden' name='action' value='adminvote'>
-                                <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
-                                <input type='hidden' name='adminVoteType' value='VETO'>
-                                <button type="button" class="btn btn-default {{#vote_type_veto}}btn-danger{{/vote_type_veto}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_5");'><img src='{{{page.template_path}}}images/veto.png'></button>
-                            </form>
-                        </td>
-			        	<td><a href='?page=edituser&username={{username}}'>edit</a></td>
-			        </tr>
-                {{/is_admin}}
-            {{/is_admin_candidate}}
-		{{/users.LIST}}
-	</table>
-
-	<h4>Registered users</h4>
-	<table class="table sortable">
-		<tr>
-			<th>Username</th>
-			<th>Entries</th>
-			<th>First Jam</th>
-			<th>Last Jam</th>
-			<th>Recent Participation</th>
-            <th>Admin candidate</th>
-            <th>Sponsor for admin</th>
-			<th></th>
-		</tr>
-        {{#users.LIST}}
+<h4>Admin candidates</h4>
+<p>The following are users the system identified as potential admin candidates, because they participated in {{CONFIG.VALUES.ADMIN_SUGGESTION_TOTAL_PARTICIPATION}} or more jams and their recent participation is at or above {{CONFIG.VALUES.ADMIN_SUGGESTION_RECENT_PARTICIPATION}}%.</p>
+<table class="table sortable">
+    <tr>
+        <th>Username</th>
+        <th>Entries</th>
+        <th>First Jam</th>
+        <th>Last Jam</th>
+        <th>Recent Participation</th>
+        <th>Votes For</th>
+        <th>Neutral Votes</th>
+        <th>Votes Against</th>
+        <th style='width: 400px; text-align: center;'>Vote</th>
+        <th></th>
+    </tr>
+    {{#users.LIST}}
+        {{#is_admin_candidate}}
             {{^is_admin}}
-			    <tr>
-			    	<td><b>{{username}}</b></td>
-			    	<td>{{entry_count}}</td>
-			    	<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
-			    	<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
-			    	<td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
-                    <td>{{#is_admin_candidate}}Yes{{/is_admin_candidate}}</td>
-                    <td>
+                <tr>
+                    <td><b>{{username}} {{#is_sponsored}}(<span style='color: green;'>Sponsored</span>){{/is_sponsored}}</b></td>
+                    <td>{{entry_count}}</td>
+                    <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
+                    <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+                    <td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
+                    {{#is_vetoed}}
+                        <td colspan='3' style='text-align:center; color: red; font-weight: bold;'>Vetoed</td>
+                    {{/is_vetoed}}
+                    {{^is_vetoed}}
+                        <td style='text-align:center;'>{{votes_for}}</td>
+                        <td style='text-align:center;'>{{votes_neutral}}</td>
+                        <td style='text-align:center;'>{{votes_against}}</td>
+                    {{/is_vetoed}}
+                    <td style='text-align: right;'>
+                        {{#vote_type_sponsor}}
                         <form method='POST' id='adminvote_{{username_alphanumeric}}_1' style='display: inline;'>
                             <input type='hidden' name='action' value='adminvote'>
                             <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                             <input type='hidden' name='adminVoteType' value='SPONSOR'>
-                            <button type="button" class="btn btn-default {{#vote_type_sponsor}}btn-success{{/vote_type_sponsor}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_1");' title='Sponsor for administrator role - User will be added to Admin Candidates list, where other administrators can vote. You can only nominate one user for admin at a time.'><img src='{{{page.template_path}}}images/sponsor.png' style='width: 24px; height: 24px;'></button>
+                            <button type="button" class="btn btn-default {{#vote_type_sponsor}}btn-success{{/vote_type_sponsor}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_1");'><img src='{{{page.template_path}}}images/sponsor.png'></button>
+                        </form>
+                        {{/vote_type_sponsor}}
+                        <form method='POST' id='adminvote_{{username_alphanumeric}}_2' style='display: inline;'>
+                            <input type='hidden' name='action' value='adminvote'>
+                            <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
+                            <input type='hidden' name='adminVoteType' value='FOR'>
+                            <button type="button" class="btn btn-default {{#vote_type_for}}btn-success{{/vote_type_for}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_2");'><img src='{{{page.template_path}}}images/like.png'></button>
+                        </form>
+                        <form method='POST' id='adminvote_{{username_alphanumeric}}_3' style='display: inline;'>
+                            <input type='hidden' name='action' value='adminvote'>
+                            <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
+                            <input type='hidden' name='adminVoteType' value='NEUTRAL'>
+                            <button type="button" class="btn btn-default {{#vote_type_neutral}}btn-warning{{/vote_type_neutral}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_3");'><img src='{{{page.template_path}}}images/no_preference.png'></button>
+                        </form>
+                        <form method='POST' id='adminvote_{{username_alphanumeric}}_4' style='display: inline;'>
+                            <input type='hidden' name='action' value='adminvote'>
+                            <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
+                            <input type='hidden' name='adminVoteType' value='AGAINST'>
+                            <button type="button" class="btn btn-default {{#vote_type_against}}btn-danger{{/vote_type_against}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_4");'><img src='{{{page.template_path}}}images/dislike.png'></button>
+                        </form>
+                        <form method='POST' id='adminvote_{{username_alphanumeric}}_5' style='display: inline;'>
+                            <input type='hidden' name='action' value='adminvote'>
+                            <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
+                            <input type='hidden' name='adminVoteType' value='VETO'>
+                            <button type="button" class="btn btn-default {{#vote_type_veto}}btn-danger{{/vote_type_veto}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_5");'><img src='{{{page.template_path}}}images/veto.png'></button>
                         </form>
                     </td>
-			    	<td><a href='?page=edituser&username={{username}}'>edit</a></td>
-			    </tr>
+                    <td><a href='?page=edituser&username={{username}}'>edit</a></td>
+                </tr>
             {{/is_admin}}
-        {{/users.LIST}}
-	</table>
-</div>
+        {{/is_admin_candidate}}
+    {{/users.LIST}}
+</table>
+
+<h4>Registered users</h4>
+<table class="table sortable">
+    <tr>
+        <th>Username</th>
+        <th>Entries</th>
+        <th>First Jam</th>
+        <th>Last Jam</th>
+        <th>Recent Participation</th>
+        <th>Admin candidate</th>
+        <th>Sponsor for admin</th>
+        <th></th>
+    </tr>
+    {{#users.LIST}}
+        {{^is_admin}}
+            <tr>
+                <td><b>{{username}}</b></td>
+                <td>{{entry_count}}</td>
+                <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
+                <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+                <td>{{#recent_participation}}{{recent_participation}}%{{/recent_participation}}</td>
+                <td>{{#is_admin_candidate}}Yes{{/is_admin_candidate}}</td>
+                <td>
+                    <form method='POST' id='adminvote_{{username_alphanumeric}}_1' style='display: inline;'>
+                        <input type='hidden' name='action' value='adminvote'>
+                        <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
+                        <input type='hidden' name='adminVoteType' value='SPONSOR'>
+                        <button type="button" class="btn btn-default {{#vote_type_sponsor}}btn-success{{/vote_type_sponsor}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_1");' title='Sponsor for administrator role - User will be added to Admin Candidates list, where other administrators can vote. You can only nominate one user for admin at a time.'><img src='{{{page.template_path}}}images/sponsor.png' style='width: 24px; height: 24px;'></button>
+                    </form>
+                </td>
+                <td><a href='?page=edituser&username={{username}}'>edit</a></td>
+            </tr>
+        {{/is_admin}}
+    {{/users.LIST}}
+</table>
 
 <script type='text/javascript'>
 	function CastAdminVote(form_id){

@@ -1,34 +1,32 @@
-<div class="col-md-10">
-	<div class='panel panel-info'>
-		<div class='panel-heading'>
-			Authors ({{users.all_authors_count}} total!)
-		</div>
+<div class='panel panel-info'>
+	<div class='panel-heading'>
+		Authors ({{users.all_authors_count}} total!)
 	</div>
+</div>
 
-	<input type="text" class="form-control" id='authorsearch' placeholder="Search by username or twitter handle..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
-	<div class='panel-body jamContent'>
-		Click on a column header to sort.
-		<table class="table sortable">
-			<tr style='cursor: pointer;'>
-				<th>Username</th>
-				<th>Twitter</th>
-				<th>Entries</th>
-				<th>First Jam</th>
-				<th>Last Jam</th>
-			</tr>
-			{{#users.LIST}}
-				{{#is_author}}
-					<tr>
-						<td><b><a href='?page=author&author={{username}}'>{{display_name}}</a></b></td>
-						<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
-						<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
-						<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
-						<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
-					</tr>
-				{{/is_author}}
-			{{/users.LIST}}
-		</table>
-	</div>
+<input type="text" class="form-control" id='authorsearch' placeholder="Search by username or twitter handle..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
+<div class='panel-body jamContent'>
+	Click on a column header to sort.
+	<table class="table sortable">
+		<tr style='cursor: pointer;'>
+			<th>Username</th>
+			<th>Twitter</th>
+			<th>Entries</th>
+			<th>First Jam</th>
+			<th>Last Jam</th>
+		</tr>
+		{{#users.LIST}}
+			{{#is_author}}
+				<tr>
+					<td><b><a href='?page=author&author={{username}}'>{{display_name}}</a></b></td>
+					<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
+					<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
+					<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
+					<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+				</tr>
+			{{/is_author}}
+		{{/users.LIST}}
+	</table>
 </div>
 
 <script>
