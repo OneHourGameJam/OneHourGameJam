@@ -66,7 +66,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 }
 
 function PerformAction(&$loggedInUser){
-	global $_POST;
+	global $_POST, $config;
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";

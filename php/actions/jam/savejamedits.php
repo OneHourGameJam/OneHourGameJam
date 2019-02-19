@@ -27,6 +27,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 
 	//Validate values
 	$jamID = intval($jamID);
+	if(!isset($jams[$jamID])){
 		return "INVALID_JAM_ID";
 	}
 

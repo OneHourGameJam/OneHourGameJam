@@ -29,11 +29,14 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$actionResult = "NO_CHANGE";
+		$overallActionResult = "NO_CHANGE";
 		foreach($_POST as $key => $value){
 			$actionResult = SaveConfig($key, $value);
+			if($actionResult != ""){
+				$overallActionResult = $actionResult;
+			}
 		}
-		return $actionResult;
+		return $overallActionResult;
 	}
 }
 
