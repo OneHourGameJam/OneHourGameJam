@@ -143,9 +143,18 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 	$jamData["satisfaction"] = "No Data";
 	if(isset($satisfaction["JAM_".$jamData["jam_number"]])){
 		$arrayId = "JAM_".$jamData["jam_number"];
-		$jamData["satisfaction_average_score"] = $satisfaction[$arrayId]["average_score"];
-		$jamData["satisfaction_submitted_scores"] = $satisfaction[$arrayId]["submitted_scores"];
-		$jamData["enough_scores_to_show_satisfaction"] = $satisfaction[$arrayId]["enough_scores_to_show_satisfaction"];
+
+		$satisfactionSum = 0;
+		$satisfactionCount = 0;
+		foreach($satisfaction[$arrayId]["scores"] as $score => $votes){
+			$satisfactionSum += $score * $votes;
+			$satisfactionCount += $votes;
+		}
+		$satisfactionAverage = $satisfactionSum / $satisfactionCount;
+
+		$jamData["satisfaction_average_score"] = $satisfactionAverage;
+		$jamData["satisfaction_submitted_scores"] = $satisfactionCount;
+		$jamData["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
 		$jamData["score-5"] = $satisfaction[$arrayId]["scores"][-5];
 		$jamData["score-4"] = $satisfaction[$arrayId]["scores"][-4];
 		$jamData["score-3"] = $satisfaction[$arrayId]["scores"][-3];
