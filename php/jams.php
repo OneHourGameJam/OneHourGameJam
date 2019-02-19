@@ -178,7 +178,7 @@ function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfacti
 	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0);
 }
 
-function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser){
+function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $loadAll = false){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -190,34 +190,39 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 	$latestStartedJamFound = false;
 	$currentJamData = GetCurrentJamNumberAndID();
 
+	$jamsToLoad = $config["JAMS_TO_LOAD"]["VALUE"];
+
 	foreach($jams as $i => $jam){
 		if($jam["jam_deleted"] != 1){
 			$nonDeletedJamCounter += 1;
 		}
+		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
+		{
+			$jamData = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter);
 
-		$jamData = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter);
-
-		$now = time();
-		$datetime = strtotime($jamData["start_time"] . " UTC");
-		if($datetime > $now){
-			$render["next_jam_timer_code"] = gmdate("Y-m-d", $datetime)."T".gmdate("H:i", $datetime).":00Z";
-		}else{
-			if(!isset($jamData["jam_deleted"])){
-				if($latestStartedJamFound == false){
-					$jamData["is_latest_started_jam"] = 1;
-					$latestStartedJamFound = true;
+			$now = time();
+			$datetime = strtotime($jamData["start_time"] . " UTC");
+			if($datetime > $now){
+				$render["next_jam_timer_code"] = gmdate("Y-m-d", $datetime)."T".gmdate("H:i", $datetime).":00Z";
+			}else{
+				if(!isset($jamData["jam_deleted"])){
+					if($latestStartedJamFound == false){
+						$jamData["is_latest_started_jam"] = 1;
+						$latestStartedJamFound = true;
+					}
 				}
 			}
-		}
 
-		$render["LIST"][] = $jamData;
+			$render["LIST"][] = $jamData;
 
-		if($currentJamData["ID"] == $jamData["jam_id"]){
-			$render["current_jam"] = $jamData;
+			if($currentJamData["ID"] == $jamData["jam_id"]){
+				$render["current_jam"] = $jamData;
+			}
 		}
     }
 
-    $render["all_jams_count"] = $nonDeletedJamCounter;
+	$render["load_all_jams"] = $loadAll;
+	$render["all_jams_count"] = $nonDeletedJamCounter;
 
 	StopTimer("RenderJams");
 	return $render;
