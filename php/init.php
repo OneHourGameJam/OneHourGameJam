@@ -73,6 +73,9 @@ function Init(){
 		}
 		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $loadAll);
 	}
+	if(array_search("RenderAllJams", $dep) !== false){
+		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, true);
+	}
 	if(array_search("RenderGames", $dep) !== false){
 		$dictionary["entries"] = RenderGames($users, $games, $jams);
 	}

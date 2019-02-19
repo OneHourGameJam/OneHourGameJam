@@ -146,7 +146,7 @@ $pageSettings = Array(
         "page_title" => "Manage Content",
         "authorization_level" => "ADMIN",
         "template_file" => "editcontent.html",
-        "dependencies" => Array("RenderJams"),
+        "dependencies" => Array("RenderAllJams"),
     ),  
     "editjam" => Array(
         "page_title" => "Edit Jam",
@@ -200,7 +200,7 @@ $pageSettings = Array(
         "page_title" => "Jams",
         "authorization_level" => "NONE",
         "template_file" => "jams.html",
-        "dependencies" => Array("RenderJams"),
+        "dependencies" => Array("RenderAllJams"),
     ),  
     "author" => Array(
         "page_title" => "Author",
