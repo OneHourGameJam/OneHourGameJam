@@ -67,7 +67,11 @@ function Init(){
 		$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
 	}
 	if(array_search("RenderJams", $dep) !== false){
-		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser);
+		$loadAll = false;
+		if(isset($_GET["loadAll"])){
+			$loadAll = true;
+		}
+		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $loadAll);
 	}
 	if(array_search("RenderGames", $dep) !== false){
 		$dictionary["entries"] = RenderGames($users, $games, $jams);
