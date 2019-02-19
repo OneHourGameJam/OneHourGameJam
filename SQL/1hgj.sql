@@ -133,6 +133,219 @@ CREATE TABLE `entry` (
   PRIMARY KEY (`entry_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `entry_insert` AFTER INSERT ON `entry` FOR EACH ROW BEGIN
+    INSERT INTO `entry_changelog`
+		(`change_id`,
+		`change_type`,
+		`change_datetime`,
+		`entry_id`,
+		`entry_datetime`,
+		`entry_ip`,
+		`entry_user_agent`,
+		`entry_jam_id`,
+		`entry_jam_number`,
+		`entry_title`,
+		`entry_description`,
+		`entry_author`,
+		`entry_url`,
+		`entry_url_web`,
+		`entry_url_windows`,
+		`entry_url_linux`,
+		`entry_url_mac`,
+		`entry_url_android`,
+		`entry_url_ios`,
+		`entry_url_source`,
+		`entry_screenshot_url`,
+		`entry_color`,
+		`entry_deleted`)
+	VALUES
+		(null,
+		"INSERT",
+		Now(),
+		NEW.entry_id,
+		NEW.entry_datetime,
+		NEW.entry_ip,
+		NEW.entry_user_agent,
+		NEW.entry_jam_id,
+		NEW.entry_jam_number,
+		NEW.entry_title,
+		NEW.entry_description,
+		NEW.entry_author,
+		NEW.entry_url,
+		NEW.entry_url_web,
+		NEW.entry_url_windows,
+		NEW.entry_url_linux,
+		NEW.entry_url_mac,
+		NEW.entry_url_android,
+		NEW.entry_url_ios,
+		NEW.entry_url_source,
+		NEW.entry_screenshot_url,
+		NEW.entry_color,
+		NEW.entry_deleted);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `entry_update` BEFORE UPDATE ON `entry` FOR EACH ROW BEGIN
+  IF OLD.entry_id = NEW.entry_id OR
+	 OLD.entry_datetime = NEW.entry_datetime OR
+	 OLD.entry_ip = NEW.entry_ip OR
+	 OLD.entry_user_agent = NEW.entry_user_agent OR
+	 OLD.entry_jam_id = NEW.entry_jam_id OR
+	 OLD.entry_jam_number = NEW.entry_jam_number OR
+	 OLD.entry_title = NEW.entry_title OR
+	 OLD.entry_description = NEW.entry_description OR
+	 OLD.entry_author = NEW.entry_author OR
+	 OLD.entry_url = NEW.entry_url OR
+	 OLD.entry_url_web = NEW.entry_url_web OR
+	 OLD.entry_url_windows = NEW.entry_url_windows OR
+	 OLD.entry_url_linux = NEW.entry_url_linux OR
+	 OLD.entry_url_mac = NEW.entry_url_mac OR
+	 OLD.entry_url_android = NEW.entry_url_android OR
+	 OLD.entry_url_ios = NEW.entry_url_ios OR
+	 OLD.entry_url_source = NEW.entry_url_source OR
+	 OLD.entry_screenshot_url = NEW.entry_screenshot_url OR
+	 OLD.entry_deleted = NEW.entry_deleted
+  THEN BEGIN
+    INSERT INTO `entry_changelog`
+		(`change_id`,
+		`change_type`,
+		`change_datetime`,
+		`entry_id`,
+		`entry_datetime`,
+		`entry_ip`,
+		`entry_user_agent`,
+		`entry_jam_id`,
+		`entry_jam_number`,
+		`entry_title`,
+		`entry_description`,
+		`entry_author`,
+		`entry_url`,
+		`entry_url_web`,
+		`entry_url_windows`,
+		`entry_url_linux`,
+		`entry_url_mac`,
+		`entry_url_android`,
+		`entry_url_ios`,
+		`entry_url_source`,
+		`entry_screenshot_url`,
+		`entry_color`,
+		`entry_deleted`)
+	VALUES
+		(null,
+		"UPDATE",
+		Now(),
+		NEW.entry_id,
+		NEW.entry_datetime,
+		NEW.entry_ip,
+		NEW.entry_user_agent,
+		NEW.entry_jam_id,
+		NEW.entry_jam_number,
+		NEW.entry_title,
+		NEW.entry_description,
+		NEW.entry_author,
+		NEW.entry_url,
+		NEW.entry_url_web,
+		NEW.entry_url_windows,
+		NEW.entry_url_linux,
+		NEW.entry_url_mac,
+		NEW.entry_url_android,
+		NEW.entry_url_ios,
+		NEW.entry_url_source,
+		NEW.entry_screenshot_url,
+		NEW.entry_color,
+		NEW.entry_deleted);
+  END; END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `entry_delete` BEFORE DELETE ON `entry` FOR EACH ROW BEGIN
+    INSERT INTO `entry_changelog`
+		(`change_id`,
+		`change_type`,
+		`change_datetime`,
+		`entry_id`,
+		`entry_datetime`,
+		`entry_ip`,
+		`entry_user_agent`,
+		`entry_jam_id`,
+		`entry_jam_number`,
+		`entry_title`,
+		`entry_description`,
+		`entry_author`,
+		`entry_url`,
+		`entry_url_web`,
+		`entry_url_windows`,
+		`entry_url_linux`,
+		`entry_url_mac`,
+		`entry_url_android`,
+		`entry_url_ios`,
+		`entry_url_source`,
+		`entry_screenshot_url`,
+		`entry_color`,
+		`entry_deleted`)
+	VALUES
+		(null,
+		"DELETE",
+		Now(),
+		old.entry_id,
+		old.entry_datetime,
+		old.entry_ip,
+		old.entry_user_agent,
+		old.entry_jam_id,
+		old.entry_jam_number,
+		old.entry_title,
+		old.entry_description,
+		old.entry_author,
+		old.entry_url,
+		old.entry_url_web,
+		old.entry_url_windows,
+		old.entry_url_linux,
+		old.entry_url_mac,
+		old.entry_url_android,
+		old.entry_url_ios,
+		old.entry_url_source,
+		old.entry_screenshot_url,
+		old.entry_color,
+		old.entry_deleted);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `entry_changelog`
@@ -416,7 +629,8 @@ VALUES
 (null,Now(),'-1','MAX_ASSET_FILE_SIZE_IN_BYTES', '15728640', 'ASSETS', 'Maximum asset file size in bytes', 'NUMBER', '[]', '0', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM', '120', 'JAM_SETTINGS', 'How many minutes before the next jam should the jam autoscheduler schedule a jam?', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_ENABLED', '0', 'JAM_SETTINGS', 'Should the jam autoscheduler automatically schedule jams?', 'ENUM', '[{\"VALUE\":0,\"TEXT\":\"No\"},{\"VALUE\":1,\"TEXT\":\"Yes\"}]', '1', '1', '1'),
-(null,Now(),'-1','DATABASE_VERSION', '7', 'SYSTEM', 'The version of the database. Used to determine required database migration.', 'NUMBER', '[]', '0', '1', '1');
+(null,Now(),'-1','DATABASE_VERSION', '7', 'SYSTEM', 'The version of the database. Used to determine required database migration.', 'NUMBER', '[]', '0', '1', '1'),
+(null,Now(), '1', 'JAMS_TO_LOAD', '25', 'JAM_SETTINGS', 'Number of jams to load on the main page by default', 'NUMBER', '[]', '1', '1', '1');
 
 
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
