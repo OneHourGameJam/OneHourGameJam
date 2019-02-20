@@ -54,52 +54,60 @@ function Init(){
 
 	PerformPendingSiteAction($config, $actions, $loggedInUser);
  
-	if(array_search("RenderStream", $dep) !== false){
+	if(FindDependency("RenderStream", $dep) !== false){
 		$dictionary["stream"] = InitStream();
 	}
-	if(array_search("RenderConfig", $dep) !== false){
+	if(FindDependency("RenderConfig", $dep) !== false){
 		$dictionary["CONFIG"] = RenderConfig($config);
 	}
-	if(array_search("RenderAdminLog", $dep) !== false){
+	if(FindDependency("RenderAdminLog", $dep) !== false){
 		$dictionary["adminlog"] = RenderAdminLog($adminLog);
 	}
-	if(array_search("RenderUsers", $dep) !== false){
-		$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
+	if(FindDependency("RenderUsers", $dep) !== false){
+		$dependency = FindDependency("RenderUsers", $dep);
+		$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
 	}
-	if(array_search("RenderJams", $dep) !== false){
+	if(FindDependency("RenderAllJams", $dep) !== false){
+		$dependency1 = FindDependency("RenderAllJams", $dep);
+		$dependency2 = FindDependency("RenderJams", $dep);
+		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
+		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $renderDepth);
+	}else if(FindDependency("RenderJams", $dep) !== false){
+		$dependency1 = FindDependency("RenderAllJams", $dep);
+		$dependency2 = FindDependency("RenderJams", $dep);
+		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$loadAll = false;
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $loadAll);
+		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, $loadAll);
 	}
-	if(array_search("RenderAllJams", $dep) !== false){
-		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, true);
+	if(FindDependency("RenderGames", $dep) !== false){
+		$dependency = FindDependency("RenderGames", $dep);
+		$dictionary["entries"] = RenderGames($users, $games, $jams, $dependency["RenderDepth"]);
 	}
-	if(array_search("RenderGames", $dep) !== false){
-		$dictionary["entries"] = RenderGames($users, $games, $jams);
-	}
-	if(array_search("RenderThemes", $dep) !== false){
+	if(FindDependency("RenderThemes", $dep) !== false){
 		$dictionary["themes"] = RenderThemes($config, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
-	if(array_search("RenderAssets", $dep) !== false){
+	if(FindDependency("RenderAssets", $dep) !== false){
 		$dictionary["assets"] = RenderAssets($assets);
 	}
-	if(array_search("RenderPolls", $dep) !== false){
+	if(FindDependency("RenderPolls", $dep) !== false){
 		$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
 	}
-	if(array_search("RenderCookies", $dep) !== false){
+	if(FindDependency("RenderCookies", $dep) !== false){
 		$dictionary["cookies"] = RenderCookies($cookies);
 	}
-	if(array_search("RenderMessages", $dep) !== false){
+	if(FindDependency("RenderMessages", $dep) !== false){
 		$dictionary["messages"] = RenderMessages($messages);
 	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $config, $users, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
-		if(array_search("RenderLoggedInUser", $dep) !== false){
-			$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser);
+		if(FindDependency("RenderLoggedInUser", $dep) !== false){
+			$dependency = FindDependency("RenderLoggedInUser", $dep);
+			$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	

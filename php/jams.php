@@ -64,7 +64,7 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter){
+function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
@@ -99,7 +99,9 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 	$jamData["entries_count"] = 0;
 	foreach($games as $j => $game){
 		if($game["jam_id"] == $jamData["jam_id"]){
-			$jamData["entries"][] = RenderGame($users, $game, $jams);
+			if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
+				$jamData["entries"][] = RenderGame($users, $game, $jams, $renderDepth & ~RENDER_DEPTH_JAMS);
+			}
 
 			if(!$game["entry_deleted"]){
 				//Has logged in user participated in this jam?
@@ -172,13 +174,13 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 	return $jamData;
 }
 
-function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser){
+function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $renderDepth){
 	AddActionLog("RenderSubmitJam");
 
-	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0);
+	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0, $renderDepth);
 }
 
-function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $loadAll = false){
+function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll = false){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -193,31 +195,34 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 	$jamsToLoad = $config["JAMS_TO_LOAD"]["VALUE"];
 
 	$allJamsLoaded = true;
+	$render["current_jam"] = $currentJamData["NUMBER"] !== 0;
 	foreach($jams as $i => $jam){
 		if($jam["jam_deleted"] != 1){
 			$nonDeletedJamCounter += 1;
 		}
 		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 		{
-			$jamData = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter);
+			if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
+				$jamData = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 
-			$now = time();
-			$datetime = strtotime($jamData["start_time"] . " UTC");
-			if($datetime > $now){
-				$render["next_jam_timer_code"] = gmdate("Y-m-d", $datetime)."T".gmdate("H:i", $datetime).":00Z";
-			}else{
-				if(!isset($jamData["jam_deleted"])){
-					if($latestStartedJamFound == false){
-						$jamData["is_latest_started_jam"] = 1;
-						$latestStartedJamFound = true;
+				$now = time();
+				$datetime = strtotime($jamData["start_time"] . " UTC");
+				if($datetime > $now){
+					$render["next_jam_timer_code"] = gmdate("Y-m-d", $datetime)."T".gmdate("H:i", $datetime).":00Z";
+				}else{
+					if(!isset($jamData["jam_deleted"])){
+						if($latestStartedJamFound == false){
+							$jamData["is_latest_started_jam"] = 1;
+							$latestStartedJamFound = true;
+						}
 					}
 				}
-			}
+	
+				$render["LIST"][] = $jamData;
 
-			$render["LIST"][] = $jamData;
-
-			if($currentJamData["ID"] == $jamData["jam_id"]){
-				$render["current_jam"] = $jamData;
+				if($currentJamData["ID"] == $jamData["jam_id"]){
+					$render["current_jam"] = $jamData;
+				}
 			}
 		}else{
 			$allJamsLoaded = false;

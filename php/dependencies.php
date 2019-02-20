@@ -30,6 +30,15 @@ define("DEPENDENCY_MESSAGES",       pow(2, 16));
 
 define("DEPENDENCY_LOGGED_IN_USER", pow(2, 99));
 
+
+
+define("RENDER_DEPTH_NONE",         0);
+define("RENDER_DEPTH_USERS",        pow(2, 0));
+define("RENDER_DEPTH_JAMS",         pow(2, 1));
+define("RENDER_DEPTH_GAMES",        pow(2, 2));
+define("RENDER_DEPTH_JAMS_GAMES",   RENDER_DEPTH_JAMS + RENDER_DEPTH_GAMES);
+define("RENDER_DEPTH_USERS_GAMES",  RENDER_DEPTH_USERS + RENDER_DEPTH_GAMES);
+
 //These correspond to which data is necessary to perform the processing or rendering of each module
 $dependencies = Array(
     "IsLoggedIn" =>   Array(
@@ -88,12 +97,12 @@ $dependencies = Array(
 );
 
 $commonDependencies = Array(
-    "header" => Array("RenderConfig", "RenderUsers", "RenderGames", "RenderJams"),
-    "message" => Array("RenderMessages"),
-    "menu" => Array("RenderConfig", "RenderLoggedInUser", "RenderCookies", "RenderThemes", "RenderJams"),
+    "header" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderUsers" => RENDER_DEPTH_NONE, "RenderGames" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_NONE),
+    "message" => Array("RenderMessages" => RENDER_DEPTH_NONE),
+    "menu" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_NONE),
     "footer" => Array(),
-    "poll" => Array("RenderLoggedInUser", "RenderPolls"),
-    "notification" => Array("RenderConfig"),
+    "poll" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderPolls" => RENDER_DEPTH_NONE),
+    "notification" => Array("RenderConfig" => RENDER_DEPTH_NONE),
 );
 
 $pageSettings = Array(
@@ -101,61 +110,61 @@ $pageSettings = Array(
         "page_title" => "Main Page",
         "authorization_level" => "NONE",
         "template_file" => "main.html",
-        "dependencies" => Array("RenderJams", "RenderLoggedInUser", "RenderStream"),
+        "dependencies" => Array("RenderJams" => RENDER_DEPTH_JAMS_GAMES, "RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderStream" => RENDER_DEPTH_NONE),
     ), 
     "login" => Array(
         "page_title" => "Login",
         "authorization_level" => "NONE",
         "template_file" => "login.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),
     "submit" => Array(
         "page_title" => "Submit Game",
         "authorization_level" => "USER",
         "template_file" => "submit.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),  
     "newjam" => Array(
         "page_title" => "Schedule New Jam",
         "authorization_level" => "ADMIN",
         "template_file" => "newjam.html",
-        "dependencies" => Array("RenderThemes", "RenderConfig"),
+        "dependencies" => Array("RenderThemes" => RENDER_DEPTH_NONE, "RenderConfig" => RENDER_DEPTH_NONE),
     ),  
     "assets" => Array(
         "page_title" => "Assets",
         "authorization_level" => "NONE",
         "template_file" => "assets.html",
-        "dependencies" => Array("RenderLoggedInUser", "RenderAssets"),
+        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderAssets" => RENDER_DEPTH_NONE),
     ),  
     "editasset" => Array(
         "page_title" => "Edit Asset",
         "authorization_level" => "ADMIN",
         "template_file" => "editasset.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),
     "rules" => Array(
         "page_title" => "Rules",
         "authorization_level" => "NONE",
         "template_file" => "rules.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),  
     "config" => Array(
         "page_title" => "Configuration",
         "authorization_level" => "ADMIN",
         "template_file" => "config.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),  
     "editcontent" => Array(
         "page_title" => "Manage Content",
         "authorization_level" => "ADMIN",
         "template_file" => "editcontent.html",
-        "dependencies" => Array("RenderAllJams"),
+        "dependencies" => Array("RenderAllJams" => RENDER_DEPTH_JAMS_GAMES),
     ),  
     "editjam" => Array(
         "page_title" => "Edit Jam",
         "authorization_level" => "ADMIN",
         "template_file" => "editjam.html",
-        "dependencies" => Array(  ),
+        "dependencies" => Array(),
     ),  
     "editentry" => Array(
         "page_title" => "Edit Entry",
@@ -167,43 +176,43 @@ $pageSettings = Array(
         "page_title" => "Manage Users",
         "authorization_level" => "ADMIN",
         "template_file" => "editusers.html",
-        "dependencies" => Array("RenderConfig", "RenderUsers"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderUsers" => RENDER_DEPTH_USERS),
     ),  
     "edituser" => Array(
         "page_title" => "Edit User",
         "authorization_level" => "ADMIN",
         "template_file" => "edituser.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),  
     "themes" => Array(
         "page_title" => "Theme Voting",
         "authorization_level" => "USER",
         "template_file" => "themes.html",
-        "dependencies" => Array("RenderLoggedInUser", "RenderCookies", "RenderThemes"),
+        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE),
     ),  
     "usersettings" => Array(
         "page_title" => "User Settings",
         "authorization_level" => "USER",
         "template_file" => "usersettings.html",
-        "dependencies" => Array("RenderConfig", "RenderLoggedInUser"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE),
     ),  
     "entries" => Array(
         "page_title" => "Entries",
         "authorization_level" => "NONE",
         "template_file" => "entries.html",
-        "dependencies" => Array("RenderGames"),
+        "dependencies" => Array("RenderGames" => RENDER_DEPTH_GAMES),
     ),  
     "jam" => Array(
         "page_title" => "Jam",
         "authorization_level" => "NONE",
         "template_file" => "jam.html",
-        "dependencies" => Array("RenderConfig"),
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),  
     "jams" => Array(
         "page_title" => "Jams",
         "authorization_level" => "NONE",
         "template_file" => "jams.html",
-        "dependencies" => Array("RenderAllJams"),
+        "dependencies" => Array("RenderAllJams" => RENDER_DEPTH_JAMS),
     ),  
     "author" => Array(
         "page_title" => "Author",
@@ -215,7 +224,7 @@ $pageSettings = Array(
         "page_title" => "Authors",
         "authorization_level" => "NONE",
         "template_file" => "authors.html",
-        "dependencies" => Array("RenderUsers"),
+        "dependencies" => Array("RenderUsers" => RENDER_DEPTH_USERS),
     ),  
     "privacy" => Array(
         "page_title" => "Privacy",
@@ -233,23 +242,52 @@ $pageSettings = Array(
         "page_title" => "Admin Log",
         "authorization_level" => "ADMIN",
         "template_file" => "adminlog.html",
-        "dependencies" => Array("RenderAdminLog"),
+        "dependencies" => Array("RenderAdminLog" => RENDER_DEPTH_NONE),
     ), 
 );
 
 $dep = Array();
 foreach($commonDependencies as $i => $dependency){
-    foreach($dependency as $j => $dependencyKey){
-        if(array_search($dependencyKey, $dep) === false){
-            $dep[] = $dependencyKey;
+    foreach($dependency as $dependencyKey => $dependencyRenderDepth){
+        $depIndex = false;
+        foreach($dep as $j => $depEntry){
+            if($depEntry["Key"] == $dependencyKey){
+                $depIndex = $j;
+                break;
+            }
+        }
+
+        if($depIndex !== false){
+            $dep[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+        }else{
+            $dep[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
         }
     }
 }
 
-foreach($pageSettings[$page]["dependencies"] as $i => $dependencyKey){
-    if(array_search($dependencyKey, $dep) === false){
-        $dep[] = $dependencyKey;
+foreach($pageSettings[$page]["dependencies"] as $dependencyKey => $dependencyRenderDepth){
+    $depIndex = false;
+    foreach($dep as $j => $depEntry){
+        if($depEntry["Key"] == $dependencyKey){
+            $depIndex = $j;
+            break;
+        }
     }
+
+    if($depIndex !== false){
+        $dep[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+    }else{
+        $dep[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
+    }
+}
+
+function FindDependency($dependencyKey, &$dep){
+    foreach($dep as $j => $depEntry){
+        if($depEntry["Key"] == $dependencyKey){
+            return $depEntry;
+        }
+    }
+    return false;
 }
 
 

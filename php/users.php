@@ -92,7 +92,7 @@ function LoadUsers(){
 	return $users;
 }
                             
-function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes){
+function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -155,7 +155,9 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
 	    StopTimer("RenderUser - foreach games - entry count, first and last jam, recent");
 
         StartTimer("RenderUser - foreach games - RenderGame");
-        $userData["entries"][] = RenderGame($users, $gameData, $jams);
+        if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
+            $userData["entries"][] = RenderGame($users, $gameData, $jams, $renderDepth & ~RENDER_DEPTH_USERS);
+        }
 	    StopTimer("RenderUser - foreach games - RenderGame");
 
 	    StartTimer("RenderUser - preferences");
@@ -341,7 +343,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     return $userData;
 }
 
-function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes){
+function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
@@ -363,13 +365,14 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
         }
         $userAsArray = Array($user);
         
-        $userData = RenderUser($config, $cookies, $user, $users, $userGames, $userJams, $adminVotes, $loggedInUserAdminVotes);
-
-        if(isset($userData["entry_count"]) && $userData["entry_count"] > 0){
-            $authorCount += 1;
+		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
+            $userData = RenderUser($config, $cookies, $user, $users, $userGames, $userJams, $adminVotes, $loggedInUserAdminVotes, $renderDepth);
+            $render["LIST"][] = $userData;
         }
 
-        $render["LIST"][] = $userData;
+        if(count($userGames) > 0){
+            $authorCount += 1;
+        }
     }
     
     
@@ -397,10 +400,10 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
 	return $render;
 }
 
-function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser){
+function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes);
+    return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $renderDepth);
 }
 
 function GroupGamesByUsername(&$games)

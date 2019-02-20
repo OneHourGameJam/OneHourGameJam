@@ -42,14 +42,16 @@ function LoadGames(){
 
 
 
-function RenderGames(&$users, &$games, &$jams){
+function RenderGames(&$users, &$games, &$jams, $renderDepth){
 	AddActionLog("RenderGames");
 	StartTimer("RenderGames");
 
 	$render = Array("LIST" => Array());
     $nonDeletedGamesCounter = 0;
 	foreach($games as $i => $game){
-        $render["LIST"][] = RenderGame($users, $game, $jams);
+		if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
+			$render["LIST"][] = RenderGame($users, $game, $jams, $renderDepth);
+		}
         if($game["entry_deleted"] != 1){
             $nonDeletedGamesCounter += 1;
         }
@@ -60,7 +62,7 @@ function RenderGames(&$users, &$games, &$jams){
 	return $render;
 }
 
-function RenderGame(&$users, &$game, &$jams){
+function RenderGame(&$users, &$game, &$jams, $renderDepth){
 	AddActionLog("RenderGame");
 	StartTimer("RenderGame");
 
@@ -98,10 +100,11 @@ function RenderGame(&$users, &$game, &$jams){
 	$gameData["color_lighter"] = "#".str_pad(dechex( ($gameData["color256_red"] + 255) / 2 ), 2, "0", STR_PAD_LEFT).str_pad(dechex( ($gameData["color256_green"] + 255) / 2 ), 2, "0", STR_PAD_LEFT).str_pad(dechex( ($gameData["color256_blue"] + 255) / 2 ), 2, "0", STR_PAD_LEFT);
 	$gameData["color_non_white"] = "#".str_pad(dechex(min($gameData["color256_red"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($gameData["color256_green"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($gameData["color256_blue"], 0xDD)), 2, "0", STR_PAD_LEFT);
 
+	//Mini RenderJam()
 	$gameData["jam_number"] = $jamData["jam_number"];
 	$gameData["jam_theme"] = $jamData["theme"];
 
-	//Entry author
+	//Mini RenderUser()
 	$author = $gameData["author"];
 	$author_display = $author;
 	if(isset($users[$author]["display_name"])){
