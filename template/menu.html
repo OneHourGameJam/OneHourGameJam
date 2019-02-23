@@ -36,7 +36,10 @@
       {{#user}}
       	{{#jams.current_jam}}
 					{{^cookies.is_streamer}}
-      			<li><b><a href='?page=submit'>Submit game</a></b></li>
+							<li><b><a href='?page=submit'>
+								{{^user_participated_in_jam}}Submit game{{/user_participated_in_jam}}
+								{{#user_participated_in_jam}}Edit game{{/user_participated_in_jam}}
+							</a></b></li>
 					{{/cookies.is_streamer}}
       	{{/jams.current_jam}}
       	<li><b><a href='?page=themes'>Theme voting</a></b></li>

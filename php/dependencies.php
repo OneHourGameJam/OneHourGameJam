@@ -99,7 +99,7 @@ $dependencies = Array(
 $commonDependencies = Array(
     "header" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderUsers" => RENDER_DEPTH_NONE, "RenderGames" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_NONE),
     "message" => Array("RenderMessages" => RENDER_DEPTH_NONE),
-    "menu" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_NONE),
+    "menu" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_JAMS),
     "footer" => Array(),
     "poll" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderPolls" => RENDER_DEPTH_NONE),
     "notification" => Array("RenderConfig" => RENDER_DEPTH_NONE),

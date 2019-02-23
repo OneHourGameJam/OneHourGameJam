@@ -336,9 +336,11 @@
 	</table>
 </ul>
 {{#user.is_admin}}
-	<br>
+<div style="padding-top: 10px; padding-bottom: 10px;">
 	<em>With selected: </em> 
 	<button type="submit" name='action' value='deletethemes' form="delete-themes" class="btn btn-default" style="border: none; background-color: transparent;">
 		<img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> Delete
 	</button>
+</div>
+
 {{/user.is_admin}}
