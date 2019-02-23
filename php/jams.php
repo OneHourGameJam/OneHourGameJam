@@ -180,7 +180,7 @@ function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfacti
 	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0, $renderDepth);
 }
 
-function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll = false){
+function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
