@@ -196,6 +196,7 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 
 	$allJamsLoaded = true;
 	$render["current_jam"] = $currentJamData["NUMBER"] !== 0;
+
 	foreach($jams as $i => $jam){
 		if($jam["jam_deleted"] != 1){
 			$nonDeletedJamCounter += 1;
@@ -225,7 +226,7 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 			}
 		}else{
 			$allJamsLoaded = false;
-			break;
+			continue;
 		}
     }
 
