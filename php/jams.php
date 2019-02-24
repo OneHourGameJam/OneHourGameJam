@@ -219,10 +219,9 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 				}
 	
 				$render["LIST"][] = $jamData;
-
-				if($currentJamData["ID"] == $jamData["jam_id"]){
-					$render["current_jam"] = $jamData;
-				}
+			}
+			if($currentJamData["ID"] == $jam["jam_id"]){
+				$render["current_jam"] = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 			}
 		}else{
 			$allJamsLoaded = false;
