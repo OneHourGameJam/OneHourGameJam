@@ -16,7 +16,8 @@ $mustache->setPartials(Array(
 	"footer" => file_get_contents($templateBasePath."footer.html"),
 	"poll" => file_get_contents($templateBasePath."poll.html"),
 	"notification" => file_get_contents($templateBasePath."notification.html"),
-	"page" => file_get_contents($pageTemplateFile),
+	"cookie_notice" => file_get_contents($templateBasePath."cookienotice.html"),
+	"page" => file_get_contents($pageTemplateFile)
 ));
 
 print $mustache->render(file_get_contents($templateBasePath."index.html"), $dictionary);

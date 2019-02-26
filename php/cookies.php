@@ -1,7 +1,7 @@
 <?php
 
 function UpdateCookies(){
-    global $_COOKIE, $_GET;
+    global $_COOKIE, $_GET, $_POST;
 	AddActionLog("UpdateCookies");
 	StartTimer("UpdateCookies");
 
@@ -35,6 +35,15 @@ function UpdateCookies(){
         }
     }
 
+    //Update cookie notification cookie
+    if(isset($_POST["cookienotice-accepted"])){
+        setcookie("cookienotice", 1, time() + (60 * 60 * 24 * 365));
+        echo "<meta http-equiv='refresh' content='0'>";
+    }
+    if((isset($_GET["streaming"]) || isset($_GET["darkmode"])) && !isset($_COOKIE["cookienotice"])){
+        setcookie("cookienotice", 0, time() + (60 * 60 * 24 * 365));
+    }
+
 	StopTimer("UpdateCookies");
 }
 
@@ -54,6 +63,9 @@ function LoadCookies(){
     //Determine whether the person is in streaming mode
     $cookies["is_streamer"] = (isset($_COOKIE["streaming"])) ? $_COOKIE["streaming"] : 0;
 
+    //Determine whether the user has seen or dismissed the cookie notice
+    $cookies["cookienotice"] = (isset($_COOKIE["cookienotice"])) ? $_COOKIE["cookienotice"] : -1;
+
 	StopTimer("LoadCookies");
     return $cookies;
 }
@@ -66,6 +78,13 @@ function RenderCookies(&$cookies){
 
     $render["is_streamer"] = $cookies["is_streamer"];
     $render["darkmode"] = $cookies["darkmode"];
+
+    if ($cookies["cookienotice"] != -1)
+        $render["show_cookie_notice"] = !$cookies["cookienotice"];
+    else if(isset($_GET["streaming"]) || isset($_GET["darkmode"]))
+        $render["show_cookie_notice"] = 1;
+    else
+            $render["show_cookie_notice"] = 0;
 
 	StopTimer("RenderCookies");
     return $render;

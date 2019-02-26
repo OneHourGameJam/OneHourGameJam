@@ -117,3 +117,12 @@ a:hover{
 .btn[disabled]{
     color: black;
 }
+
+.cookieNotice{
+    background: whitesmoke;
+    color: #222222;
+}
+
+.cookieNotice>.btn-xs{
+    color: black;
+  }

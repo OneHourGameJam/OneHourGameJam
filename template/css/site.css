@@ -235,3 +235,43 @@ body{
 .bold{
   font-weight: bold;
 }
+
+.cookieNotice{
+  position: fixed;
+  bottom: 1.5%;
+  z-index: 999;
+  padding: 10px 15px;
+  text-align: left;
+
+  width: 50%;
+  margin-right: 25%;
+  margin-left: 25%;
+
+  border-radius: 10px;
+
+  background: #576065;
+  color: white;
+
+  font-size: 15px;
+  line-height: 25px;
+
+  animation: 2s slide-up;
+}
+
+@keyframes slide-up {
+  from {
+    bottom: -15%;
+  }
+
+  25%{
+    bottom: -15%;
+  }
+
+  to {
+    bottom: 1.5%;
+  }
+}
+
+.cookieNotice>.btn-xs{
+  color: white;
+}
