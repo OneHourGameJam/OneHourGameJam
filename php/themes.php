@@ -165,6 +165,26 @@ function LoadThemes(&$loggedInUser, &$config){
 	return $themes;
 }
 
+// Returns an array of the JAMS_CONSIDERED_RECENT most recent themes
+function GetRecentThemes() {
+	global $dbConn, $config;
+	$escapedJamsConsideredRecent = mysqli_real_escape_string($dbConn,$config["JAMS_CONSIDERED_RECENT"]["VALUE"]);
+	$sql = "
+		SELECT jam_theme AS theme
+		FROM jam
+		WHERE jam_deleted != 1
+		ORDER BY jam_jam_number DESC
+		LIMIT $escapedJamsConsideredRecent
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	$themes = Array();
+	while ($jam = mysqli_fetch_array($data)) {
+		array_push($themes, $jam["theme"]);
+	}
+	return $themes;
+}
+
 function RenderThemes(&$themes){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");

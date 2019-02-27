@@ -32,6 +32,13 @@ function AddTheme($newTheme, $isBot){
 		}
 	}
 
+	$recentThemes = GetRecentThemes();
+	if (in_array($newTheme, $recentThemes)) {
+		$actionResult = "THEME_RECENTLY_USED";
+		AddDataWarning("This theme has been used in a recent jam.", false);
+		return;
+	}
+
 	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
 	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
 	$clean_newTheme = mysqli_real_escape_string($dbConn, $newTheme);
