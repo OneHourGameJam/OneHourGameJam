@@ -54,9 +54,6 @@ function Init(){
 
 	PerformPendingSiteAction($config, $actions, $loggedInUser);
  
-	if(FindDependency("RenderStream", $dep) !== false){
-		$dictionary["stream"] = InitStream();
-	}
 	if(FindDependency("RenderConfig", $dep) !== false){
 		$dictionary["CONFIG"] = RenderConfig($config);
 	}
@@ -100,6 +97,14 @@ function Init(){
 	}
 	if(FindDependency("RenderMessages", $dep) !== false){
 		$dictionary["messages"] = RenderMessages($messages);
+	}
+	if(FindDependency("RenderStream", $dep) !== false){
+		$now = Time();
+		$jamTime = strtotime($dictionary["jams"]["current_jam"]["start_time"] . " UTC");
+		$dictionary["stream"] = Array();
+
+		if($jamTime + 3600 <= $now && $now <= $jamTime + 7 * 3600)
+			$dictionary["stream"] = InitStream();
 	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $config, $users, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
