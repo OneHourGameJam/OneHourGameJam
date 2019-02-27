@@ -126,3 +126,9 @@ a:hover{
 .cookieNotice>.btn-xs{
     color: black;
   }
+
+.poll{
+    background: #32444c !important;
+    border-color: #7cb0c9 !important;
+    color: #7cb0c9 !important;
+}
