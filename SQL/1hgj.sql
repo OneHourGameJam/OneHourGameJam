@@ -418,8 +418,9 @@ VALUES
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_ENABLED', '0', 'JAM_SETTINGS', 'Should the jam autoscheduler automatically schedule jams?', 'ENUM', '[{\"VALUE\":0,\"TEXT\":\"No\"},{\"VALUE\":1,\"TEXT\":\"Yes\"}]', '1', '1', '1'),
 (null,Now(),'-1','DATABASE_VERSION', '7', 'SYSTEM', 'The version of the database. Used to determine required database migration.', 'NUMBER', '[]', '0', '1', '1'),
 (null,Now(), '1', 'JAMS_TO_LOAD', '25', 'JAM_SETTINGS', 'Number of jams to load on the main page by default', 'NUMBER', '[]', '1', '1', '1'),
-(null,Now(), '1', 'JAM_THEMES_CONSIDERED_RECENT', '26', 'JAM_SETTINGS', 'Minimum number of jams to pass before allowing suggestion of a recently used theme.', 'NUMBER', '[]', '1', '1', '1');
-
+(null,Now(), '1', 'JAM_THEMES_CONSIDERED_RECENT', '26', 'THEME_SELECTION', 'Minimum number of jams to pass before allowing suggestion of a recently used theme.', 'NUMBER', '[]', '1', '1', '1'),
+(null,Now(), '1', 'THEMES_PER_USER', '6', 'THEME_SELECTION', 'Maximum number of themes suggested by a single user.', 'NUMBER', '[]', '1', '1', '1'),
+(null, Now(), '1', 'DISPLAY_THEME_PROBABILITY', '1', 'THEME_SELECTION', 'Whether or not to show users the probablity of their themes being selected. 0 or 1', 'NUMBER', '[]', '1', '1', '1');
 
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
 UNLOCK TABLES;

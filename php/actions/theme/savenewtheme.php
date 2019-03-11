@@ -35,6 +35,16 @@ function AddTheme($newTheme, $isBot){
 		}
 	}
 
+	$themesByThisUser = 0;
+	foreach($themes as $i => $theme) {
+		if ($theme["author"] == $user["username"]) {
+			$themesByThisUser ++;
+		}
+	}
+	if ($themesByThisUser >= $config["THEMES_PER_USER"]["VALUE"]) {
+		return "TOO_MANY_THEMES";
+	}
+
 	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
 	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
 	$clean_newTheme = mysqli_real_escape_string($dbConn, $newTheme);

@@ -196,7 +196,8 @@ function LoadSiteActions(&$config){
                 "THEME_ALREADY_SUGGESTED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is already suggested."),
                 "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
-                "THEME_RECENTLY_USED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme has been used in a recent jam.")
+                "THEME_RECENTLY_USED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme has been used in a recent jam."),
+                "TOO_MANY_THEMES" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "You can only submit ".$config["THEMES_PER_USER"]["VALUE"]." themes. Please delete past themes to submit again.")
             )
         ),
         Array(
@@ -204,7 +205,8 @@ function LoadSiteActions(&$config){
             "PHP_FILE" => "php/actions/theme/deletetheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
-                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme deleted."),
+                "SUCCESS_THEMES" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme deleted."),
+                "SUCCESS_MANAGETHEMES" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme deleted."),
                 "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
                 "THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist."),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
@@ -216,8 +218,8 @@ function LoadSiteActions(&$config){
             "PHP_FILE" => "php/actions/theme/deletethemes.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
-                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Themes deleted."),
-                "FAILURE" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "One or more themes couldn't be deleted."),
+                "SUCCESS" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Themes deleted."),
+                "FAILURE" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "One or more themes couldn't be deleted."),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
             )
@@ -288,7 +290,7 @@ function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
                 $actionResult = "PROCESSING";
                 include_once($actionPhpFile);
                 $actionResult = PerformAction($loggedInUser);
-
+                
                 if(isset($action["ACTION_RESULT"][$actionResult]["REDIRECT_URL"])){
                     setcookie("actionResultAction", $actionPostRequest, time() + 30);
                     setcookie("actionResult", $actionResult, time() + 30);

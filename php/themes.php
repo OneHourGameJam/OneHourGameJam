@@ -85,7 +85,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 	
 	$render = Array();
 
-	$render["suggested_themes"] = Array();
+	$render["all_themes"] = Array();
 
 	$jsFormattedThemesPopularityThemeList = Array();
 	$jsFormattedThemesPopularityPopularityList = Array();
@@ -216,20 +216,20 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 			$theme["apathy_color"] = "#".str_pad(dechex(0xBB + round(0x44 * $votesApathy)), 2, "0", STR_PAD_LEFT)."DD".str_pad(dechex(0xBB + round(0x44 * (1 - $votesApathy))), 2, "0", STR_PAD_LEFT);
 		}
 		
-		$render["suggested_themes"][] = $theme;
+		$render["all_themes"][] = $theme;
 	}
 
 	//Determine top themes and themes to mark to keep
 	if(IsAdmin($loggedInUser) !== false){
-		usort($render["suggested_themes"], "CmpArrayByPropertyPopularityNum");
+		usort($render["all_themes"], "CmpArrayByPropertyPopularityNum");
 		$count = 0;
-		foreach($render["suggested_themes"] as $i => $theme){
+		foreach($render["all_themes"] as $i => $theme){
 			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"]["VALUE"])){
-				$render["suggested_themes"][$i]["top_theme"] = 1;
+				$render["all_themes"][$i]["top_theme"] = 1;
 				$render["top_themes"][] = $theme;
 			}
 			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]["VALUE"]) || !$theme["has_enough_votes"]){
-				$render["suggested_themes"][$i]["keep_theme"] = 1;
+				$render["all_themes"][$i]["keep_theme"] = 1;
 			}
 			$count++;
 		}
@@ -243,6 +243,24 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 			$render["themes_user_has_not_voted_for_plural"] = 1;
 		}
 	}
+
+	//Create theme sections for seperate rendering.
+	$render["own_themes"] = Array();
+	$render["banned_themes"] = Array();
+	$render["other_themes"] = Array();
+	foreach($render["all_themes"] as $i => $theme) {
+		$usr = isLoggedIn();
+		if ($theme["banned"]) {
+			$render["banned_themes"][] = $theme;
+		} elseif ($theme["author"] == $usr["username"]) {
+			$render["own_themes"][] = $theme;
+		} else {
+			$render["other_themes"][] = $theme;
+		}
+	}
+	$render["has_own_themes"] = count($render["own_themes"]) > 0;
+	$render["has_banned_themes"] = count($render["banned_themes"]) > 0;
+	$render["has_other_themes"] = count($render["other_themes"]) > 0;
 
 	//Finalize JavaScript formatted data for the pie chart
 	krsort($jsFormattedThemesPopularityThemeList);

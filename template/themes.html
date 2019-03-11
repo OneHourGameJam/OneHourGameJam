@@ -28,10 +28,11 @@
 		<button type="submit" name='action' value='savenewtheme' class="btn btn-default">Save Theme</button>
 	</div>
 </form>
-<h4>Suggested themes</h4>
+
+<h4>Theme Voting</h4>
 
 <p>
-	Here you can vote on the themes you would like to appear in jams.
+	Here you can vote on the themes you would like to appear in jams. You can suggest up to {{CONFIG.PRETTY_PRINT.THEMES_PER_USER}} themes.
 </p>
 
 <p>
@@ -44,303 +45,151 @@
 </p>
 {{/cookies.is_streamer}}
 
-{{#user.is_admin}}
-	{{^cookies.is_streamer}}
-		<p>
-			<b>Admin instructions</b>
-			<p>
-				<b>GENERAL:</b>
-				<ul>
-					<li>Below is an ordered list of themes, ordered by popularity. Non-admin users only see the following columns: VOTE and THEME. Their lists are also not ordered in any particular way.</li>
-					<li>Themes must get a minimum number of votes before their popularity is shown. Old themes are also marked as old, as their votes likely no longer reflect the opinions of current 		participants. If a theme is deleted, it can be suggested again and starts from 0 votes. If it's banned then it can't be suggested until unbanned or deleted. </li>
-					<li>After each jam, the themes in this list should be pruned. I suggest the following:
-						<ul>
-							<li>Delete the theme used in the jam.</li>
-							<li>Delete themes marked as OLD.</li>
-							<li>Delete themes, which remain marked as UNPOPULAR.</li>
-						</ul>
-					</li>
-					<li>Themes which become marked as OLD between two jams can still be used in the next jam, if you think they're popular enough.</li>
-				</ul>
-			</p>
-		
-			<p>
-				<b>LEGEND:</b> Themes are marked in various ways, depending on their current status:
-				<ul>
-					<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - Theme is one of the top voted themes. The number of themes marked as "Top" can be set on the <a href='?		page=config'>Configuration page</a> (default is top 5). These themes appear as suggestions on the <a href='?page=newjam'>Schedule Jam page</a>.</li>
-					<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - Theme is not one of the top themes, but is popular enough to be kept in voting for the next jam. The 		number of themes to keep between jams can be set on the <a href='?page=config'>Configuration page</a> (default is top 20)</li>
-					<li><img src='{{{page.template_path}}}images/ban.png' style='width: 16px;'> <b>BANNED</b> - Theme is not visible to users and cannot be suggested again. To ban/unban a theme, click the Action 		dropdown.</li>
-					<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - Theme has not yet received enough votes to get a popularity rating. These themes should be kept 		between jams. The minimum number of votes for a theme's popularity to appear can be set on the <a href='?page=config'>Configuration page</a> (default is top 10).</li>
-					<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - Theme was suggested a long time ago and its popularity likely no longer reflects the opinion of current 		participants. Should be deleted after the next jam. The threshold for a theme to be marked as old can be set on the <a href='?page=config'>Configuration page</a> (default is 90 days).</li>
-					<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - Theme is not within the top rated themes and should be deleted after the next jam.</li>
-				</ul>
-			</p>
-		
-			<p>
-				<b>ICON COLOURS:</b> The theme status icons are coloured in a way, which reflects what to do about them:
-				<ul>
-					<li><img src='{{{page.template_path}}}images/green.png' style='width: 16px;'> <b>KEEP AND CAN BE SELECTED</b> (TOP and KEEP) - Theme should be kept between jams and can be selected as the theme 		for a jam (due to sufficient votes, popularity,... )</li>
-					<li><img src='{{{page.template_path}}}images/yellow.png' style='width: 16px;'> <b>KEEP BUT DO NOT SELECT</b> (BANNED and TOO FEW VOTES) - Theme should be kept between jams, but not selected (due 		to insufficient votes, being banned,... )</li>
-					<li><img src='{{{page.template_path}}}images/red.png' style='width: 16px;'> <b>DELETE AFTER JAM</b> (OLD and UNPOPULAR) - Theme should be deleted after the next jam (due to unpopularity, age,... )		</li>
-				</ul>
-			</p>
-		
-			<p>
-				<b>POPULARITY AND APATHY:</b> To help you choose the themes, two values are calculated: Popularity and Apathy. In the formulas below, the word UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number 		of +1 votes, -1 votes and 0 votes respectivelly.
-				<ul>
-					<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>POPULARITY</b> Meant to represnet how popular a theme is among the people who have an opinion about it. Note that 		voting 0 has no effect on popularity. The higher the number, the better. The formula is UPVOTE / (UPVOTE + DOWNVOTE)</li>
-					<li><img src='{{{page.template_path}}}images/apathy.png' style='width: 16px;'> <b>APATHY</b> Meant to represent how opinionated people are about this theme. A theme with one +1 vote and lots of 0 		votes is likely a worse choice than one with 9 +1 votes and 3 -1 votes, after all. The lower the number, the better. While popularity will likely govern most decisions on which theme to 		select, apathy can be a good way to decide between two themes with similar popularity scores. The formula is NEUTRALVOTE / (UPVOTE + DOWNVOTE)</li>
-				</ul>
-			</p>
-		</p>
-	
-		<div class='panel panel-info'>
-			<div class="chart-container" style="position: relative; max-height:500px; max-width:500px">
-				<canvas id="entriesChart" width="200" height="200"></canvas>
-			</div>
-			<script type='text/javascript'>
-				var entriesChartCtx = $("#entriesChart");
-				var entriesChart = new Chart(entriesChartCtx, {
-					type: 'pie',
-					data: {
-						labels: [{{{themes.js_formatted_themes_popularity_themes_list}}}],
-						datasets: [{
-							label: '# of Entries',
-							data: [{{{themes.js_formatted_themes_popularity_popularity_list}}}],
-							backgroundColor: [
-								{{{themes.js_formatted_themes_popularity_fill_color_list}}}
-							],
-							borderColor: [
-								{{{themes.js_formatted_themes_popularity_border_color_list}}}
-							],
-							borderWidth: 1
-						}]
-					},
-					options: {
-						animation: {
-							duration: 0
-						},
-						tooltips: {
-							mode: 'index'
-						},
-						title: {
-							display: true,
-							text: "Theme Selection Probability"
-						}
-					},
-				});
-			
-			</script>
-		</div>
-	{{/cookies.is_streamer}}
-{{/user.is_admin}}
+{{#user.admin}}
+<p><strong>Admin Note: Deletion and banning of themes has moved to <a href='?page=managethemes'>Manage Themes</a></strong></p>
+{{/user.admin}}
 
-<ul>
-	<table>
-		<tr>
-			{{#user.is_admin}}
-				<th class='themeTableCell themeTableCellCentered'>Select</th>
-				<form id="delete-themes" method='POST'></form>
-				{{^cookies.is_streamer}}
-					<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
-				{{/cookies.is_streamer}}
-			{{/user.is_admin}}
-			<th colspan='3' class='themeTableCell themeTableCellCentered'>
-				Vote
-			</th>
-			<th class='themeTableCell themeTableCellCentered'>
-				Theme
-			</th>
-			{{#user.is_admin}}
-				{{^cookies.is_streamer}}
-					<th class='themeTableCell themeTableCellCentered'>
-						Author
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Votes
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Popularity
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Apathy
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						+1
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						0
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						-1
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Days old
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Selection Probability by Vote Difference
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Selection Probability by Popularity
-					</th>
-					<th class='themeTableCell themeTableCellCentered'>
-						Admin actions
-					</th>
-				{{/cookies.is_streamer}}
-			{{/user.is_admin}}
-		</tr>
-		{{#themes.suggested_themes}}
-			{{#theme_visible}}
-				{{#user.is_admin}}
-					{{^cookies.is_streamer}}
-						{{#banned}}
-							<tr class="theme-banned">
-						{{/banned}}
-						{{^banned}}
-							{{#is_old}}
-								<tr class="theme-old">
-							{{/is_old}}
-							{{^is_old}}
-								<tr>
-							{{/is_old}}
-						{{/banned}}
-						<td class='themeTableCell themeTableCellCentered'>
-							<input type="checkbox" name="selected-themes[]" value="{{{theme}}}" form="delete-themes">
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{#banned}}
-								<!-- Ban cross -->
-								<img src='{{{page.template_path}}}images/ban.png' title='Banned'>
-							{{/banned}}
-							{{^banned}}
-								{{#is_old}}
-									<!-- Old theme hourglass -->
-									<img src='{{{page.template_path}}}images/clock.png' title='Theme is old, votes likely don&quot;t reflect real opinions anymore.' >
-								{{/is_old}}
-								{{^is_old}}
-									{{#has_enough_votes}}
-										{{#top_theme}}
-											<!-- Top theme star -->
-											<img src='{{{page.template_path}}}images/star.png' title='Top theme'>
-										{{/top_theme}}
-										{{^top_theme}}
-											{{#keep_theme}}
-												<!-- Keep checkmark -->
-												<img src='{{{page.template_path}}}images/tick.png' title='Theme wil be kept in voting for the next jam'>
-											{{/keep_theme}}
-											{{^keep_theme}}
-												<!-- Unpopular theme half-star -->
-												<img src='{{{page.template_path}}}images/unpopular.png' title='Theme not within the top number of themes that are kept between jams.'>
-											{{/keep_theme}}
-										{{/top_theme}}
-									{{/has_enough_votes}}
-									{{^has_enough_votes}}
-										<!-- Not enough votes ballot box -->
-										<img src='{{{page.template_path}}}images/votes.png' title='Theme does not yet have enough votes.'>
-									{{/has_enough_votes}}
-								{{/is_old}}
-							{{/banned}}
-						</td>
-					{{/cookies.is_streamer}}
-				{{/user.is_admin}}
-				{{^user.is_admin}}
-					<tr>
-				{{/user.is_admin}}
-				<td class='themeTableCell'>
-					{{#cookies.is_streamer}}
-						<div class="btn btn-default" disabled>+1</div>
-					{{/cookies.is_streamer}}
-					{{^cookies.is_streamer}}
-						<button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}" onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
-					{{/cookies.is_streamer}}
-				</td>
-				<td class='themeTableCell'>
-					{{#cookies.is_streamer}}
-						<div class="btn btn-default" disabled>0</div>
-					{{/cookies.is_streamer}}
-					{{^cookies.is_streamer}}
-						<button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}" onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
-					{{/cookies.is_streamer}}
-				</td>
-				<td class='themeTableCell'>
-					{{#cookies.is_streamer}}
-						<div class="btn btn-default" disabled>-1</div>
-					{{/cookies.is_streamer}}
-					{{^cookies.is_streamer}}
-						<button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme' class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}" onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
-					{{/cookies.is_streamer}}
-				</td>
-				<td class='themeTableCell'>
-					{{{theme}}}
-				</td>
-				{{#user.is_admin}}
-					{{^cookies.is_streamer}}
-						<td class='themeTableCell themeTableCellCentered'>
-							{{author}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{votes_total}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}}style='background-color: {{popularity_color}}'{{/has_enough_votes}}>
-							{{votes_popularity}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}} style='background-color: {{apathy_color}}'{{/has_enough_votes}}>
-							{{votes_apathy}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{votes_for}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{votes_neutral}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{votes_against}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{days_ago}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{ThemeSelectionProbabilityByVoteDifferenceText}}
-						</td>
-						<td class='themeTableCell themeTableCellCentered'>
-							{{ThemeSelectionProbabilityByPopularityText}}
-						</td>
-						<td class='themeTableCell'>
-							<form method='POST' style='display: inline-block;'>
-								<div class="btn-group">
-									<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-										Action
-										<span class="caret"></span>
-									</a>
-									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-										<li><button type="submit" name='action' value='deletetheme' class="btn btn-default">Delete</button></li>
-										<li>
-											{{#banned}}
-												<span style='color:red;'>BANNED</font>
-												<button type="submit" name='action' value='unbantheme' class="btn btn-default">Unban</button>
-											{{/banned}}
-											{{^banned}}
-												<button type="submit" name='action' value='bantheme' class="btn btn-default">Ban</button>
-											{{/banned}}
-										</li>
-									</ul>
-								</div>
-								<input type='hidden' name='theme' value='{{{theme}}}'>
-							</form>
-						</td>
-					{{/cookies.is_streamer}}
-				{{/user.is_admin}}
-				</tr>
-			{{/theme_visible}}
-		{{/themes.suggested_themes}}
-	</table>
-</ul>
-{{#user.is_admin}}
-<div style="padding-top: 10px; padding-bottom: 10px;">
-	<em>With selected: </em> 
-	<button type="submit" name='action' value='deletethemes' form="delete-themes" class="btn btn-default" style="border: none; background-color: transparent;">
-		<img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> Delete
-	</button>
-</div>
+<h4>Your themes</h4>
 
-{{/user.is_admin}}
+{{#themes.has_own_themes}}
+    <ul>
+        <table>
+            <tr>
+                <th colspan='3' class='themeTableCell themeTableCellCentered'>
+                    Vote
+                </th>
+                <th class='themeTableCell themeTableCellCentered'>
+                    Theme
+                </th>
+                {{#CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
+                <th class='themeTableCell themeTableCellCentered'>
+                    Probability of Selection
+                </th>
+                {{/CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
+            </tr>
+            {{#themes.own_themes}}
+            {{#theme_visible}}
+            <tr>
+                <td class='themeTableCell'>
+                    {{#cookies.is_streamer}}
+                    <div class="btn btn-default" disabled>+1</div>
+                    {{/cookies.is_streamer}}
+                    {{^cookies.is_streamer}}
+                    <button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme'
+                        class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}"
+                        onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
+                    {{/cookies.is_streamer}}
+                </td>
+                <td class='themeTableCell'>
+                    {{#cookies.is_streamer}}
+                    <div class="btn btn-default" disabled>0</div>
+                    {{/cookies.is_streamer}}
+                    {{^cookies.is_streamer}}
+                    <button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme'
+                        class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}"
+                        onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
+                    {{/cookies.is_streamer}}
+                </td>
+                <td class='themeTableCell'>
+                    {{#cookies.is_streamer}}
+                    <div class="btn btn-default" disabled>-1</div>
+                    {{/cookies.is_streamer}}
+                    {{^cookies.is_streamer}}
+                    <button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme'
+                        class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}"
+                        onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
+                    {{/cookies.is_streamer}}
+                </td>
+                <td class='themeTableCell'>
+                    {{{theme}}}
+                </td>
+                {{#CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
+                <td class='themeTableCell themeTableCellCentered'>
+                    {{{ThemeSelectionProbabilityByVoteDifferenceText}}}
+                </td>
+                {{/CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
+                <td class='themeTableCell'>
+                    <form method='POST' style='display: inline-block;'>
+                        <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                <li><button type="submit" name='action' value='deletetheme' class="btn btn-default">Delete</button></li>
+                            </ul>
+                        </div>
+                        <input type='hidden' name='theme' value='{{{theme}}}'>
+                        <input type='hidden' name='pageid' value='themes'>
+                    </form>
+                </td>
+            </tr>
+            {{/theme_visible}}
+            {{/themes.own_themes}}
+        </table>
+    </ul>
+{{/themes.has_own_themes}}
+{{^themes.has_own_themes}}
+    <p>You haven't suggested any themes!</p>
+{{/themes.has_own_themes}}
+
+<h4>Other Themes</h4>
+
+{{#themes.has_other_themes}}
+    <ul>
+        <table>
+            <tr>
+                <th colspan='3' class='themeTableCell themeTableCellCentered'>
+                    Vote
+                </th>
+                <th class='themeTableCell themeTableCellCentered'>
+                    Theme
+                </th>
+            </tr>
+            {{#themes.other_themes}}
+            {{#theme_visible}}
+            <tr>
+                <td class='themeTableCell'>
+                    {{#cookies.is_streamer}}
+                    <div class="btn btn-default" disabled>+1</div>
+                    {{/cookies.is_streamer}}
+                    {{^cookies.is_streamer}}
+                    <button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme'
+                        class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}"
+                        onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
+                    {{/cookies.is_streamer}}
+                </td>
+                <td class='themeTableCell'>
+                    {{#cookies.is_streamer}}
+                    <div class="btn btn-default" disabled>0</div>
+                    {{/cookies.is_streamer}}
+                    {{^cookies.is_streamer}}
+                    <button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme'
+                        class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}"
+                        onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
+                    {{/cookies.is_streamer}}
+                </td>
+                <td class='themeTableCell'>
+                    {{#cookies.is_streamer}}
+                    <div class="btn btn-default" disabled>-1</div>
+                    {{/cookies.is_streamer}}
+                    {{^cookies.is_streamer}}
+                    <button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme'
+                        class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}"
+                        onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
+                    {{/cookies.is_streamer}}
+                </td>
+                <td class='themeTableCell'>
+                    {{{theme}}}
+                </td>
+            </tr>
+            {{/theme_visible}}
+            {{/themes.other_themes}}
+        </table>
+    </ul>
+{{/themes.has_other_themes}}
+{{^themes.has_other_themes}}
+    <b>Nobody has suggested other themes.</b>
+{{/themes.has_other_themes}}
+
+
