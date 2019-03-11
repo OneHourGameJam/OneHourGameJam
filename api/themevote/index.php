@@ -2,7 +2,6 @@
 
 
 chdir("../../");
-session_start();
 include_once("php/global.php");
 include_once("php/helpers.php");
 include_once("php/db.php");
