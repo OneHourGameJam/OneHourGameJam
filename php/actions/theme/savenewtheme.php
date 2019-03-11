@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themes, $jams, $config, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	if($isBot){
 		$user = "bot";
@@ -22,6 +22,16 @@ function AddTheme($newTheme, $isBot){
 	foreach($themes as $i => $theme){
 		if(strtolower($theme["theme"]) == strtolower($newTheme)){
 			return "THEME_ALREADY_SUGGESTED";
+		}
+	}
+
+	$jamNumber = 1; // Number of non deleted jams traversed
+	foreach ($jams as $i => $jam) {
+		if ($jam["jam_deleted"] == 0) {
+			if (strtolower($jam["theme"]) == strtolower($newTheme))
+				return "THEME_RECENTLY_USED";
+			if (++$jamNumber > $config["JAM_THEMES_CONSIDERED_RECENT"]["VALUE"])
+				break;
 		}
 	}
 

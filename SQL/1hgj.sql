@@ -417,7 +417,8 @@ VALUES
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM', '120', 'JAM_SETTINGS', 'How many minutes before the next jam should the jam autoscheduler schedule a jam?', 'NUMBER', '[]', '1', '1', '1'),
 (null,Now(),'-1','JAM_AUTO_SCHEDULER_ENABLED', '0', 'JAM_SETTINGS', 'Should the jam autoscheduler automatically schedule jams?', 'ENUM', '[{\"VALUE\":0,\"TEXT\":\"No\"},{\"VALUE\":1,\"TEXT\":\"Yes\"}]', '1', '1', '1'),
 (null,Now(),'-1','DATABASE_VERSION', '7', 'SYSTEM', 'The version of the database. Used to determine required database migration.', 'NUMBER', '[]', '0', '1', '1'),
-(null,Now(), '1', 'JAMS_TO_LOAD', '25', 'JAM_SETTINGS', 'Number of jams to load on the main page by default', 'NUMBER', '[]', '1', '1', '1');
+(null,Now(), '1', 'JAMS_TO_LOAD', '25', 'JAM_SETTINGS', 'Number of jams to load on the main page by default', 'NUMBER', '[]', '1', '1', '1'),
+(null,Now(), '1', 'JAM_THEMES_CONSIDERED_RECENT', '26', 'JAM_SETTINGS', 'Minimum number of jams to pass before allowing suggestion of a recently used theme.', 'NUMBER', '[]', '1', '1', '1');
 
 
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
