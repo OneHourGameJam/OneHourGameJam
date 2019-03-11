@@ -50,8 +50,8 @@ function GetUsernameForUserId($userID, &$users){
 //returns that. This is to prevent re-hashing the provided sessionID multiple times.
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
-function IsLoggedIn(&$config, &$users){
-	global $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
+function IsLoggedIn(){
+	global $config, $users, $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
 

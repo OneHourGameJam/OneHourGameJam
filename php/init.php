@@ -24,7 +24,7 @@ function Init(){
 	$adminLog = LoadAdminLog();
 	$users = LoadUsers();
 
-	$loggedInUser = IsLoggedIn($config, $users);
+	$loggedInUser = IsLoggedIn();
 	
 	$page = ValidatePage($page, $loggedInUser);
 
