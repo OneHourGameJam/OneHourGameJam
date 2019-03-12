@@ -250,12 +250,12 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 	$render["other_themes"] = Array();
 	foreach($render["all_themes"] as $i => $theme) {
 		$usr = isLoggedIn();
-		if ($theme["banned"]) {
-			$render["banned_themes"][] = $theme;
-		} elseif ($theme["author"] == $usr["username"]) {
-			$render["own_themes"][] = $theme;
-		} else {
-			$render["other_themes"][] = $theme;
+		if (!$theme["banned"]) {
+			if ($theme["author"] == $usr["username"]) {
+				$render["own_themes"][] = $theme;
+			} else {
+				$render["other_themes"][] = $theme;
+			}
 		}
 	}
 	$render["has_own_themes"] = count($render["own_themes"]) > 0;
