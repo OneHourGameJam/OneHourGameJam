@@ -110,15 +110,7 @@
                 {{/CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
                 <td class='themeTableCell'>
                     <form method='POST' style='display: inline-block;'>
-                        <div class="btn-group">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                Action
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                                <li><button type="submit" name='action' value='deletetheme' class="btn btn-default">Delete</button></li>
-                            </ul>
-                        </div>
+                        <button type="submit" name='action' value='deletetheme' class="btn btn-default">X</button>
                         <input type='hidden' name='theme' value='{{{theme}}}'>
                         <input type='hidden' name='pageid' value='themes'>
                     </form>

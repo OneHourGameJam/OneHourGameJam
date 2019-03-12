@@ -229,9 +229,9 @@ function LoadSiteActions(&$config){
             "PHP_FILE" => "php/actions/theme/bantheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
-                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme banned."),
-                "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
-                "THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist."),
+                "SUCCESS" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme banned."),
+                "INVALID_THEME" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
+                "THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist."),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
             )
@@ -241,9 +241,9 @@ function LoadSiteActions(&$config){
             "PHP_FILE" => "php/actions/theme/unbantheme.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
-                "SUCCESS" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme unbanned."),
-                "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
-                "THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist"),
+                "SUCCESS" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Theme unbanned."),
+                "INVALID_THEME" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Invalid theme."),
+                "THEME_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme does not exist"),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
             )
