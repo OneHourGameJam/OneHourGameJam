@@ -55,6 +55,9 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
+		if (!isset($_POST['selected-themes'])) {
+			return "NO_THEMES_SELECTED";
+		}
 		$deletedThemes = $_POST['selected-themes'];
 		if(!empty($deletedThemes)){
 			return RemoveThemes($deletedThemes);

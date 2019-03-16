@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themes, $jams, $config, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	if($isBot){
 		$user = "bot";
@@ -23,6 +23,20 @@ function AddTheme($newTheme, $isBot){
 		if(strtolower($theme["theme"]) == strtolower($newTheme)){
 			return "THEME_ALREADY_SUGGESTED";
 		}
+	}
+
+	if (IsRecentTheme($newTheme)) {
+		return "THEME_RECENTLY_USED";
+	}
+
+	$themesByThisUser = 0;
+	foreach($themes as $i => $theme) {
+		if ($theme["author"] == $user["username"] && !$theme["banned"]) {
+			$themesByThisUser ++;
+		}
+	}
+	if ($themesByThisUser >= $config["THEMES_PER_USER"]["VALUE"]) {
+		return "TOO_MANY_THEMES";
 	}
 
 	$clean_ip = mysqli_real_escape_string($dbConn, $ip);

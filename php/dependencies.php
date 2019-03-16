@@ -189,7 +189,13 @@ $pageSettings = Array(
         "authorization_level" => "USER",
         "template_file" => "themes.html",
         "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE),
-    ),  
+    ),
+    "managethemes" => Array(
+        "page_title" => "Manage Themes",
+        "authorization_level" => "ADMIN",
+        "template_file" => "managethemes.html",
+        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE),
+    ), 
     "usersettings" => Array(
         "page_title" => "User Settings",
         "authorization_level" => "USER",

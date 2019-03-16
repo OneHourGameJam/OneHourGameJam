@@ -1,7 +1,7 @@
 <?php
 
 //Removes a suggested theme
-function RemoveTheme($removedTheme){
+function RemoveTheme($removedTheme, $pageId){
 	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
@@ -9,8 +9,26 @@ function RemoveTheme($removedTheme){
 		return "NOT_LOGGED_IN";
 	}
 
-	//Authorize user (is admin)
-	if(IsAdmin($loggedInUser) === false){
+	//Check that the theme exists and get the user of the given theme
+	$themeAuthor = "";
+	foreach($themes as $id => $theme) {
+		if ($theme["theme_deleted"] != 0){
+			continue;
+		}
+		if ($theme["banned"] != 0){
+			continue;
+		}
+		if ($theme["theme"] == $removedTheme) {
+			$themeAuthor = $theme["author"];
+		}
+	}
+
+	if($themeAuthor == ""){
+		return "THEME_DOES_NOT_EXIST";
+	}
+
+	//Authorize user (is admin or suggested this theme originally)
+	if(!isAdmin($loggedInUser) && $themeAuthor != $loggedInUser["username"]){
 		return "NOT_AUTHORIZED";
 	}
 
@@ -38,16 +56,17 @@ function RemoveTheme($removedTheme){
 
     AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser["username"]);
 
-	return "SUCCESS";
+	// Can be triggered from both themes and managethemes, send user to correct location.
+	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";
 }
 
 function PerformAction(&$loggedInUser){
 	global $_POST;
 
-	if(IsAdmin($loggedInUser) !== false){
-		$deletedTheme = $_POST["theme"];
-		return RemoveTheme($deletedTheme);
-	}
+	$deletedTheme = $_POST["theme"];
+	$pageId = $_POST["pageid"];
+	return RemoveTheme($deletedTheme, $pageId);
+	
 }
 
 ?>

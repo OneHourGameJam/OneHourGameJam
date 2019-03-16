@@ -11,24 +11,38 @@
     {{/user}}
   </div>
 
-	{{#user}}
+	<div class="notifications-panel">
+		{{#user}}
 		{{^cookies.is_streamer}}
-			{{#user.admin}}
-				{{#users.missing_admin_candidate_votes}}
-					<div class="panel-body notification">
-						<a href='?page=editusers'><span style='background-color: red; color: white; font-weight: bold;'>{{{users.missing_admin_candidate_votes_number}}}</span> admin candidate(s) need(s) your vote</a>
-					</div>
-				{{/users.missing_admin_candidate_votes}}
-			{{/user.admin}}
-			{{#themes.user_has_not_voted_for_all_themes}}
-				{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
-					<div class="panel-body notification">
-						<a href='?page=themes'><span style='background-color: red; color: white; font-weight: bold;'>{{{themes.themes_user_has_not_voted_for}}}</span> theme{{#themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} need{{^themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} your vote</a>
-					</div>
-				{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
-			{{/themes.user_has_not_voted_for_all_themes}}
+		{{#user.admin}}
+		{{#themes.themes_are_marked_for_deletion}}
+		<div class="panel-body notification notification-major">
+			<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>{{{themes.number_of_themes_marked_for_deletion}}}
+				theme{{#themes.themes_marked_for_deletion_plural}}s{{/themes.themes_marked_for_deletion_plural}}
+				{{#themes.themes_marked_for_deletion_plural}}are{{/themes.themes_marked_for_deletion_plural}}{{^themes.themes_marked_for_deletion_plural}}is{{/themes.themes_marked_for_deletion_plural}}
+				marked for deletion.</a>
+		</div>
+		{{/themes.themes_are_marked_for_deletion}}
+		{{#users.missing_admin_candidate_votes}}
+		<div class="panel-body notification notification-major">
+			<a href='?page=editusers'><strong>Admin: </strong>{{{users.missing_admin_candidate_votes_number}}}
+				admin candidate(s) need(s) your vote</a>
+		</div>
+		{{/users.missing_admin_candidate_votes}}
+		{{/user.admin}}
+		{{#themes.user_has_not_voted_for_all_themes}}
+		{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
+		<div class="panel-body notification notification-minor">
+			<a href='?page=themes'>{{{themes.themes_user_has_not_voted_for}}}
+				theme{{#themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}}
+				need{{^themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} your vote</a>
+		</div>
+		{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
+		{{/themes.user_has_not_voted_for_all_themes}}
 		{{/cookies.is_streamer}}
-	{{/user}}
+		{{/user}}
+	</div>
+	
 
 	<div class="panel-body">
 		<ul id='mainmenu'>
@@ -42,7 +56,7 @@
 							</a></b></li>
 					{{/cookies.is_streamer}}
       	{{/jams.current_jam}}
-      	<li><b><a href='?page=themes'>Theme voting</a></b></li>
+				<li><b><a href='?page=themes'>Theme voting</a></b></li>
       {{/user}}
       {{^user}}
 				<li><a href='?page=login'>Log in / register</a></li>
@@ -91,6 +105,7 @@
 					<li class="mainmenu-separator">Administration</li>
 					<li><a href='?page=newjam'>Schedule jam</a></li>
 					<li><a href='?page=config'>Configuration</a></li>
+					<li><a href='?page=managethemes'>Manage themes</a> <span class="new"></span></li>
 					<li><a href='?page=editcontent'>Manage content</a></li>
 					<li><a href='?page=editusers'>Manage users</a></li>
 					<li><a href='?page=adminlog'>Admin Log</a></li>

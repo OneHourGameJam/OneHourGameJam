@@ -1,0 +1,7 @@
+UPDATE config SET config_value = '9' WHERE (config_key = 'DATABASE_VERSION');
+
+INSERT INTO config(config_id, config_lastedited, config_lasteditedby, config_key, config_value, config_category, config_description, config_type, config_options, config_editable, config_required, config_added_to_dictionary)VALUES (null,Now(), '1', 'JAM_THEMES_CONSIDERED_RECENT', '26', 'THEME_SELECTION', 'Minimum number of jams to pass before allowing suggestion of a recently used theme.', 'NUMBER', '[]', '1', '1', '1');
+
+INSERT INTO config(config_id, config_lastedited, config_lasteditedby, config_key, config_value, config_category, config_description, config_type, config_options, config_editable, config_required, config_added_to_dictionary)VALUES(null,Now(), '1', 'THEMES_PER_USER', '6', 'THEME_SELECTION', 'Maximum number of themes suggested by a single user.', 'NUMBER', '[]', '1', '1', '1');
+
+INSERT INTO config(config_id, config_lastedited, config_lasteditedby, config_key, config_value, config_category, config_description, config_type, config_options, config_editable, config_required, config_added_to_dictionary)VALUES(null, Now(), '1', 'DISPLAY_THEME_PROBABILITY', '1', 'THEME_SELECTION', 'Whether or not to show users the probablity of their themes being selected. 0 or 1', 'NUMBER', '[]', '1', '1', '1');
