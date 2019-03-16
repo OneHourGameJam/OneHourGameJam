@@ -218,8 +218,10 @@ function LoadSiteActions(&$config){
             "PHP_FILE" => "php/actions/theme/deletethemes.php",
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
-                "SUCCESS" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Themes deleted."),
-                "FAILURE" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "One or more themes couldn't be deleted."),
+                "SUCCESS_THEMES" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Themes deleted."),
+                "SUCCESS_MANAGETHEMES" => Array("REDIRECT_URL" => "?page=managethemes", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Themes deleted."),
+                "FAILURE" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "One or more themes couldn't be deleted."),
+                "NO_THEMES_SELECTED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "You must select at least one theme to delete."),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
             )

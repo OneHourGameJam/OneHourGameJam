@@ -27,11 +27,23 @@ body{
 	border-radius: 0px;
 }
 
-.notification {
+.notification-minor {
+  background-color: #fcffdc;
+}
+
+.notification-major {
   background-color: #ffdcea;
+}
+
+.notification {
   padding: 5px;
   text-align: center;
   line-height: 16px;
+}
+
+.notifications-panel {
+  border-bottom:1px solid #bce8f1;
+  margin-bottom:1rem;
 }
 
 #mainmenu {

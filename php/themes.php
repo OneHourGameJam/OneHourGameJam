@@ -229,6 +229,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		$render["suggested_themes"][] = $theme;
 	}
 
+	$themesMarkedForDeletion = 0;
 	if(IsAdmin($loggedInUser) !== false){
 		//Determine top themes and themes to mark to keep
 		usort($render["suggested_themes"], "CmpArrayByPropertyPopularityNum");
@@ -246,8 +247,9 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 
 		//Determine which themes to mark for automatic deletion
 		foreach($render["suggested_themes"] as $i => $theme) {
-			if (!$theme["keep_theme"] || $theme["is_old"] || $theme["is_recent"]) {
+			if (!$theme["banned"] && (!$theme["keep_theme"] || $theme["is_old"] || $theme["is_recent"])) {
 				$render["suggested_themes"][$i]["is_marked_for_deletion"] = 1;
+				$themesMarkedForDeletion ++;
 			} else {
 				$render["suggested_theme"][$i]["is_marked_for_deletion"] = 0;
 			}
@@ -256,12 +258,17 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 
 	//Add "Themes need a vote" notification
 	if($themesUserHasNotVotedFor != 0){
-		$render["user_has_not_voted_for_suggested_themes"] = 1;
+		$render["user_has_not_voted_for_all_themes"] = 1;
 		$render["themes_user_has_not_voted_for"] = $themesUserHasNotVotedFor;
 		if($themesUserHasNotVotedFor != 0 && $themesUserHasNotVotedFor != 1){
 			$render["themes_user_has_not_voted_for_plural"] = 1;
 		}
 	}
+
+	//Add "Themes marked for deletion" notification
+	$render["themes_are_marked_for_deletion"] = $themesMarkedForDeletion > 0;
+	$render["themes_marked_for_deletion_plural"] = $themesMarkedForDeletion > 1;
+	$render["number_of_themes_marked_for_deletion"] = $themesMarkedForDeletion;
 
 	//Finalize JavaScript formatted data for the pie chart
 	krsort($jsFormattedThemesPopularityThemeList);

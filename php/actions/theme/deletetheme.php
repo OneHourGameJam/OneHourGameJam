@@ -18,7 +18,7 @@ function RemoveTheme($removedTheme, $pageId){
 	}
 
 	//Authorize user (is admin or suggested this theme originally)
-	if(!isAdmin && $themeAuthor != $loggedInUser["username"]){
+	if(!isAdmin($loggedInUser) && $themeAuthor != $loggedInUser["username"]){
 		return "NOT_AUTHORIZED";
 	}
 
