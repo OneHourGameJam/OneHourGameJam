@@ -31,7 +31,7 @@ function AddTheme($newTheme, $isBot){
 
 	$themesByThisUser = 0;
 	foreach($themes as $i => $theme) {
-		if ($theme["author"] == $user["username"]) {
+		if ($theme["author"] == $user["username"] && !$theme["banned"]) {
 			$themesByThisUser ++;
 		}
 	}

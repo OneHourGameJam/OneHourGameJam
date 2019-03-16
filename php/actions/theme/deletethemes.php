@@ -1,12 +1,17 @@
 <?php
 
 //Removes an array of suggested themes
-function RemoveThemes($removedThemes, $pageId){
+function RemoveThemes($removedThemes){
 	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
 		return "NOT_LOGGED_IN";
+	}
+
+	//Authorize user (is admin or suggested this theme originally)
+	if(!isAdmin($loggedInUser)){
+		return "NOT_AUTHORIZED";
 	}
 
 	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
@@ -19,19 +24,6 @@ function RemoveThemes($removedThemes, $pageId){
 		if($removedTheme == ""){
 			$error = true;
 			continue;
-		}
-
-		//Get the user of the given theme
-		$themeAuthor = "";
-		foreach($themes as $id => $theme) {
-			if ($theme["theme"] == $removedTheme) {
-				$themeAuthor = $theme["author"];
-			}
-		}
-
-		//Authorize user (is admin or suggested this theme originally)
-		if(!isAdmin($loggedInUser) && $themeAuthor != $loggedInUser["username"]){
-			return "NOT_AUTHORIZED";
 		}
 
 		$clean_removedTheme = mysqli_real_escape_string($dbConn, $removedTheme);
@@ -56,7 +48,7 @@ function RemoveThemes($removedThemes, $pageId){
 		return "FAILURE";
 	}
 
-	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";
+	return "SUCCESS";
 }
 
 function PerformAction(&$loggedInUser){
@@ -67,9 +59,8 @@ function PerformAction(&$loggedInUser){
 			return "NO_THEMES_SELECTED";
 		}
 		$deletedThemes = $_POST['selected-themes'];
-		$pageId = $_POST["pageid"];
 		if(!empty($deletedThemes)){
-			return RemoveThemes($deletedThemes, $pageId);
+			return RemoveThemes($deletedThemes);
 		}
 	}
 	else{
