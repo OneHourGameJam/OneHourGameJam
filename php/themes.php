@@ -10,7 +10,7 @@ function LoadThemes(){
 
 	//Fill list of themes - will return same theme row multiple times (once for each valid themevote_type)
 	$sql = "
-		SELECT theme_id, theme_text, theme_author, theme_banned, themevote_type, count(themevote_id) AS themevote_count, DATEDIFF(Now(), theme_datetime) as theme_daysago
+		SELECT theme_id, theme_text, theme_author, theme_banned, themevote_type, count(themevote_id) AS themevote_count, DATEDIFF(Now(), theme_datetime) as theme_daysago, theme_deleted
 		FROM (theme LEFT JOIN themevote ON (themevote.themevote_theme_id = theme.theme_id))
 		WHERE theme_deleted != 1
 		GROUP BY theme_id, themevote_type
@@ -33,6 +33,7 @@ function LoadThemes(){
 		$themeData["theme"] = htmlspecialchars($theme["theme_text"], ENT_QUOTES);
 		$themeData["author"] = $theme["theme_author"];
 		$themeData["banned"] = $theme["theme_banned"];
+		$themeData["theme_deleted"] = $theme["theme_deleted"];
 		$themeData["votes_against"] = 0;
 		$themeData["votes_neutral"] = 0;
 		$themeData["votes_for"] = 0;
@@ -89,8 +90,6 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 
 	$render["has_own_themes"] = false;
 	$render["has_other_themes"] = false;
-	
-	$usr = isLoggedIn();
 
 	$jsFormattedThemesPopularityThemeList = Array();
 	$jsFormattedThemesPopularityPopularityList = Array();
@@ -130,13 +129,24 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		$theme["author"] = $themeData["author"];
 		$theme["theme_id"] = $themeID;
 		$theme["ThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
+		if($votesTotal < $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"]){
+			if($config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"] == 1){
+				$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = "$votesTotal / ".$config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"] ." Vote";
+			}else{
+				$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = "$votesTotal / ".$config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"] ." Votes";
+			}
+		}else{
+			$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
+		}
 		$theme["ThemeSelectionProbabilityByPopularityText"] = $themesByPopularity[$themeID]["ThemeSelectionProbabilityByPopularityText"];
 		$theme["days_ago"] = $themeData["days_ago"];
-		$theme["is_own_theme"] = ($themeData["author"] == $usr["username"]) && !$banned;
-		if ($theme["is_own_theme"]) {
-			$render["has_own_themes"] = true;
-		} else if (!$banned) {
-			$render["has_other_themes"] = true;
+		$theme["is_own_theme"] = $themeData["author"] == $loggedInUser["username"];
+		if($banned == 0){
+			if ($theme["is_own_theme"]) {
+				$render["has_own_themes"] = true;
+			}else{
+				$render["has_other_themes"] = true;
+			}
 		}
 		
 		//Generate theme vote button ID

@@ -9,12 +9,22 @@ function RemoveTheme($removedTheme, $pageId){
 		return "NOT_LOGGED_IN";
 	}
 
-	//Get the user of the given theme
+	//Check that the theme exists and get the user of the given theme
 	$themeAuthor = "";
 	foreach($themes as $id => $theme) {
+		if ($theme["theme_deleted"] != 0){
+			continue;
+		}
+		if ($theme["banned"] != 0){
+			continue;
+		}
 		if ($theme["theme"] == $removedTheme) {
 			$themeAuthor = $theme["author"];
 		}
+	}
+
+	if($themeAuthor == ""){
+		return "THEME_DOES_NOT_EXIST";
 	}
 
 	//Authorize user (is admin or suggested this theme originally)
