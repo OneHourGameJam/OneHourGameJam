@@ -299,8 +299,9 @@ function IsRecentTheme($theme) {
 	global $jams,$config;
 	$jamNumber = 1; // Number of non deleted jams traversed
 	foreach ($jams as $i => $jam) {
-		$timeDiff = time() - strtotime($jam["start_time"]);
-		if ($jam["jam_deleted"] == 0 && $timeDiff > 0) {
+		$currentTime = new DateTime();
+		$startTime = new DateTime($jam["start_time"] . " UTC");
+		if ($jam["jam_deleted"] == 0 && $startTime < $currentTime) {
 			if (strtolower($jam["theme"]) == strtolower($theme))
 				return "THEME_RECENTLY_USED";
 			if (++$jamNumber > $config["JAM_THEMES_CONSIDERED_RECENT"]["VALUE"])
