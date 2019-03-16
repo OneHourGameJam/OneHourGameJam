@@ -85,7 +85,12 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 	
 	$render = Array();
 
-	$render["all_themes"] = Array();
+	$render["suggested_themes"] = Array();
+
+	$render["has_own_themes"] = false;
+	$render["has_other_themes"] = false;
+	
+	$usr = isLoggedIn();
 
 	$jsFormattedThemesPopularityThemeList = Array();
 	$jsFormattedThemesPopularityPopularityList = Array();
@@ -127,6 +132,12 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		$theme["ThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
 		$theme["ThemeSelectionProbabilityByPopularityText"] = $themesByPopularity[$themeID]["ThemeSelectionProbabilityByPopularityText"];
 		$theme["days_ago"] = $themeData["days_ago"];
+		$theme["is_own_theme"] = ($themeData["author"] == $usr["username"]) && !$banned;
+		if ($theme["is_own_theme"]) {
+			$render["has_own_themes"] = true;
+		} else if (!$banned) {
+			$render["has_other_themes"] = true;
+		}
 		
 		//Generate theme vote button ID
 		$themeBtnID = preg_replace("/[^A-Za-z0-9]/", '', $themeText);
@@ -150,9 +161,8 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		}
 		
 		//Mark theme as old
-		if(intval($theme["days_ago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"]["VALUE"])){
-			$theme["is_old"] = 1;
-		}
+		$theme["is_old"] = intval($theme["days_ago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"]["VALUE"]);
+		$theme["is_recent"] = IsRecentTheme($themeText);
 
 		//Compute JavaScript formatted lists for themes pie chart
 		if($themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifference"] > 0){
@@ -216,51 +226,42 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 			$theme["apathy_color"] = "#".str_pad(dechex(0xBB + round(0x44 * $votesApathy)), 2, "0", STR_PAD_LEFT)."DD".str_pad(dechex(0xBB + round(0x44 * (1 - $votesApathy))), 2, "0", STR_PAD_LEFT);
 		}
 		
-		$render["all_themes"][] = $theme;
+		$render["suggested_themes"][] = $theme;
 	}
 
-	//Determine top themes and themes to mark to keep
 	if(IsAdmin($loggedInUser) !== false){
-		usort($render["all_themes"], "CmpArrayByPropertyPopularityNum");
+		//Determine top themes and themes to mark to keep
+		usort($render["suggested_themes"], "CmpArrayByPropertyPopularityNum");
 		$count = 0;
-		foreach($render["all_themes"] as $i => $theme){
+		foreach($render["suggested_themes"] as $i => $theme){
 			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"]["VALUE"])){
-				$render["all_themes"][$i]["top_theme"] = 1;
+				$render["suggested_themes"][$i]["top_theme"] = 1;
 				$render["top_themes"][] = $theme;
 			}
 			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]["VALUE"]) || !$theme["has_enough_votes"]){
-				$render["all_themes"][$i]["keep_theme"] = 1;
+				$render["suggested_themes"][$i]["keep_theme"] = 1;
 			}
 			$count++;
 		}
+
+		//Determine which themes to mark for automatic deletion
+		foreach($render["suggested_themes"] as $i => $theme) {
+			if (!$theme["keep_theme"] || $theme["is_old"] || $theme["is_recent"]) {
+				$render["suggested_themes"][$i]["is_marked_for_deletion"] = 1;
+			} else {
+				$render["suggested_theme"][$i]["is_marked_for_deletion"] = 0;
+			}
+		} 
 	}
 
 	//Add "Themes need a vote" notification
 	if($themesUserHasNotVotedFor != 0){
-		$render["user_has_not_voted_for_all_themes"] = 1;
+		$render["user_has_not_voted_for_suggested_themes"] = 1;
 		$render["themes_user_has_not_voted_for"] = $themesUserHasNotVotedFor;
 		if($themesUserHasNotVotedFor != 0 && $themesUserHasNotVotedFor != 1){
 			$render["themes_user_has_not_voted_for_plural"] = 1;
 		}
 	}
-
-	//Create theme sections for seperate rendering.
-	$render["own_themes"] = Array();
-	$render["banned_themes"] = Array();
-	$render["other_themes"] = Array();
-	foreach($render["all_themes"] as $i => $theme) {
-		$usr = isLoggedIn();
-		if (!$theme["banned"]) {
-			if ($theme["author"] == $usr["username"]) {
-				$render["own_themes"][] = $theme;
-			} else {
-				$render["other_themes"][] = $theme;
-			}
-		}
-	}
-	$render["has_own_themes"] = count($render["own_themes"]) > 0;
-	$render["has_banned_themes"] = count($render["banned_themes"]) > 0;
-	$render["has_other_themes"] = count($render["other_themes"]) > 0;
 
 	//Finalize JavaScript formatted data for the pie chart
 	krsort($jsFormattedThemesPopularityThemeList);
@@ -275,6 +276,19 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 
 	StopTimer("RenderThemes");
 	return $render;
+}
+
+function IsRecentTheme($theme) {
+	global $jams,$config;
+	$jamNumber = 1; // Number of non deleted jams traversed
+	foreach ($jams as $i => $jam) {
+		if ($jam["jam_deleted"] == 0) {
+			if (strtolower($jam["theme"]) == strtolower($theme))
+				return "THEME_RECENTLY_USED";
+			if (++$jamNumber > $config["JAM_THEMES_CONSIDERED_RECENT"]["VALUE"])
+				break;
+		}
+	}
 }
 
 function ThemeVoteTypeToKey($themeVoteType){

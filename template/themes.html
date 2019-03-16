@@ -67,8 +67,9 @@
                 </th>
                 {{/CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
             </tr>
-            {{#themes.own_themes}}
+            {{#themes.suggested_themes}}
             {{#theme_visible}}
+            {{#is_own_theme}}
             <tr>
                 <td class='themeTableCell'>
                     {{#cookies.is_streamer}}
@@ -116,8 +117,9 @@
                     </form>
                 </td>
             </tr>
+            {{/is_own_theme}}
             {{/theme_visible}}
-            {{/themes.own_themes}}
+            {{/themes.suggested_themes}}
         </table>
     </ul>
 {{/themes.has_own_themes}}
@@ -138,8 +140,9 @@
                     Theme
                 </th>
             </tr>
-            {{#themes.other_themes}}
+            {{#themes.suggested_themes}}
             {{#theme_visible}}
+            {{^is_own_theme}}
             <tr>
                 <td class='themeTableCell'>
                     {{#cookies.is_streamer}}
@@ -175,8 +178,9 @@
                     {{{theme}}}
                 </td>
             </tr>
+            {{/is_own_theme}}
             {{/theme_visible}}
-            {{/themes.other_themes}}
+            {{/themes.suggested_themes}}
         </table>
     </ul>
 {{/themes.has_other_themes}}

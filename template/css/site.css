@@ -152,6 +152,10 @@ body{
 	text-align: center;
 }
 
+.theme-to-delete{
+  background-color:rgba(255,0,0,0.5);
+}
+
 .wrapper {
   width: 100%;
   /* whatever width you want */

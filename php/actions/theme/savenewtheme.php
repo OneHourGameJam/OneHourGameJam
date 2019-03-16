@@ -25,14 +25,8 @@ function AddTheme($newTheme, $isBot){
 		}
 	}
 
-	$jamNumber = 1; // Number of non deleted jams traversed
-	foreach ($jams as $i => $jam) {
-		if ($jam["jam_deleted"] == 0) {
-			if (strtolower($jam["theme"]) == strtolower($newTheme))
-				return "THEME_RECENTLY_USED";
-			if (++$jamNumber > $config["JAM_THEMES_CONSIDERED_RECENT"]["VALUE"])
-				break;
-		}
+	if (IsRecentTheme($newTheme)) {
+		return "THEME_RECENTLY_USED";
 	}
 
 	$themesByThisUser = 0;
