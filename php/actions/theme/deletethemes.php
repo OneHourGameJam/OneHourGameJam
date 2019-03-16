@@ -9,8 +9,8 @@ function RemoveThemes($removedThemes){
 		return "NOT_LOGGED_IN";
 	}
 
-	//Authorize user (is admin or suggested this theme originally)
-	if(!isAdmin($loggedInUser)){
+	//Authorize user (is admin)
+	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
 	}
 

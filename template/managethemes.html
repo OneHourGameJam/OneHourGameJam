@@ -1,7 +1,5 @@
 <h3>Manage Themes</h3>
 
-<h4>Suggested themes</h4>
-
 {{#cookies.is_streamer}}
 <p class='bold'>
 	Please disable streamer mode to manage themes.
@@ -9,53 +7,8 @@
 {{/cookies.is_streamer}}
 
 {{^cookies.is_streamer}}
-	<p>
-		<b>Admin instructions</b>
-		<p>
-			<b>GENERAL:</b>
-			<ul>
-				<li>Below is an ordered list of themes, ordered by popularity. Non-admin users see only <a href="?page=themes">the themes page.</a></li>
-				<li>Themes must get a minimum number of votes before their popularity is shown. Old themes are also marked as old, as their votes likely no longer reflect the opinions of current participants. If a theme is deleted, it can be suggested again and starts from 0 votes. If it's banned then it can't be suggested until unbanned or deleted. </li>
-				<li>After each jam, the themes in this list should be pruned. I suggest the following:
-					<ul>
-						<li>Delete the theme used in the jam.</li>
-						<li>Delete themes marked as OLD.</li>
-						<li>Delete themes, which remain marked as UNPOPULAR.</li>
-					</ul>
-				</li>
-				<li>Themes which become marked as OLD between two jams can still be used in the next jam, if you think they're popular enough.</li>
-			</ul>
-		</p>
-	
-		<p>
-			<b>LEGEND:</b> Themes are marked in various ways, depending on their current status:
-			<ul>
-				<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - Theme is one of the top voted themes. The number of themes marked as "Top" can be set on the <a href='?		page=config'>Configuration page</a> (default is top 5). These themes appear as suggestions on the <a href='?page=newjam'>Schedule Jam page</a>.</li>
-				<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - Theme is not one of the top themes, but is popular enough to be kept in voting for the next jam. The 		number of themes to keep between jams can be set on the <a href='?page=config'>Configuration page</a> (default is top 20)</li>
-				<li><img src='{{{page.template_path}}}images/ban.png' style='width: 16px;'> <b>BANNED</b> - Theme is not visible to users and cannot be suggested again. To ban/unban a theme, click the Action 		dropdown.</li>
-				<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - Theme has not yet received enough votes to get a popularity rating. These themes should be kept 		between jams. The minimum number of votes for a theme's popularity to appear can be set on the <a href='?page=config'>Configuration page</a> (default is top 10).</li>
-				<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - Theme was suggested a long time ago and its popularity likely no longer reflects the opinion of current 		participants. Should be deleted after the next jam. The threshold for a theme to be marked as old can be set on the <a href='?page=config'>Configuration page</a> (default is 90 days).</li>
-				<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - Theme is not within the top rated themes and should be deleted after the next jam.</li>
-			</ul>
-		</p>
-	
-		<p>
-			<b>ICON COLOURS:</b> The theme status icons are coloured in a way, which reflects what to do about them:
-			<ul>
-				<li><img src='{{{page.template_path}}}images/green.png' style='width: 16px;'> <b>KEEP AND CAN BE SELECTED</b> (TOP and KEEP) - Theme should be kept between jams and can be selected as the theme 		for a jam (due to sufficient votes, popularity,... )</li>
-				<li><img src='{{{page.template_path}}}images/yellow.png' style='width: 16px;'> <b>KEEP BUT DO NOT SELECT</b> (BANNED and TOO FEW VOTES) - Theme should be kept between jams, but not selected (due 		to insufficient votes, being banned,... )</li>
-				<li><img src='{{{page.template_path}}}images/red.png' style='width: 16px;'> <b>DELETE AFTER JAM</b> (OLD and UNPOPULAR) - Theme should be deleted after the next jam (due to unpopularity, age,... )		</li>
-			</ul>
-		</p>
-	
-		<p>
-			<b>POPULARITY AND APATHY:</b> To help you choose the themes, two values are calculated: Popularity and Apathy. In the formulas below, the word UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number 		of +1 votes, -1 votes and 0 votes respectivelly.
-			<ul>
-				<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>POPULARITY</b> Meant to represnet how popular a theme is among the people who have an opinion about it. Note that 		voting 0 has no effect on popularity. The higher the number, the better. The formula is UPVOTE / (UPVOTE + DOWNVOTE)</li>
-				<li><img src='{{{page.template_path}}}images/apathy.png' style='width: 16px;'> <b>APATHY</b> Meant to represent how opinionated people are about this theme. A theme with one +1 vote and lots of 0 		votes is likely a worse choice than one with 9 +1 votes and 3 -1 votes, after all. The lower the number, the better. While popularity will likely govern most decisions on which theme to 		select, apathy can be a good way to decide between two themes with similar popularity scores. The formula is NEUTRALVOTE / (UPVOTE + DOWNVOTE)</li>
-			</ul>
-		</p>
-	</p>
+			<p>Use this page to manage theme suggestions, decide which theme to pick for a manually scheduled jam, and view probablity of certain themes being automatically selected for the next jam.</p>
+			</p>
 
 	<div class='panel panel-info'>
 		<div class="chart-container" style="position: relative; max-height:500px; max-width:500px">
@@ -97,9 +50,34 @@
 	</div>
 {{/cookies.is_streamer}}
 
-<h4>Live Themes</h4>
-
-
+<h4>Themes to Keep</h4>
+<p>These themes should be kept for the next jam.</p>
+<p>This list can be used to select the theme for the next jam, but the theme will be automatically selected if none is
+	chosen.</p>
+<ul>
+	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - Theme is one of the top
+		voted themes. The number of themes marked as "Top" can be set on the <a href='?		page=config'>Configuration
+			page</a> (default is top 5). These themes appear as suggestions on the <a href='?page=newjam'>Schedule Jam
+			page</a>.</li>
+	<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - Theme is not one of the
+		top themes, but is popular enough to be kept in voting for the next jam. The number of themes to keep between
+		jams can be set on the <a href='?page=config'>Configuration page</a> (default is top 20)</li>
+	<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - Theme has not
+		yet received enough votes to get a popularity rating. The minimum
+		number of votes for a theme's popularity to appear can be set on the <a href='?page=config'>Configuration
+			page</a> (default is top 10).</li>
+</ul>
+<p>The following metrics are used to judge opinion of a theme. In the formulas below, the words UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number of +1 votes, -1 votes and 0 votes respectively:</p>
+<ul>
+	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>POPULARITY</b> Meant to
+		represnet how popular a theme is among the people who have an opinion about it. Note that voting 0 has no
+		effect on popularity. The higher the number, the better. The formula is UPVOTE / (UPVOTE + DOWNVOTE)</li>
+	<li><img src='{{{page.template_path}}}images/apathy.png' style='width: 16px;'> <b>APATHY</b> Meant to represent
+		how opinionated people are about this theme. A theme with one +1 vote and lots of 0 votes is likely a worse
+		choice than one with 9 +1 votes and 3 -1 votes, after all. The lower the number, the better. While
+		popularity will likely govern most decisions on which theme to select, apathy can be a good way to decide
+		between two themes with similar popularity scores. The formula is NEUTRALVOTE / (UPVOTE + DOWNVOTE)</li>
+</ul>
 <table>
 	<tr>
 		
@@ -251,8 +229,22 @@
 	{{/themes.suggested_themes}}
 </table>
 
+<a id="markedfordeletion"></a>
 <h4>Themes Marked for Deletion</h4>
-
+<p>These themes should be deleted <strong>during or after the <em>next</em> jam.</strong> An old theme may be kept if it is very popular!</p>
+<p>Deleting a theme will remove it from theme voting, but it can still be suggested again. Ban a theme using the "Actions" panel next to it to prevent it from being suggested again. Deleting a theme will reset its voting information.</p>
+<ul>
+	<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - Theme was suggested a
+		long time ago and its popularity likely no longer reflects the opinion of current participants. Should be
+		deleted after the next jam. <strong>An old theme may be kept for a short time if it is very popular!</strong> The threshold for a theme to be marked as old can be set on the <a
+			href='?page=config'>Configuration page</a> (default is 90 days).</li>
+	<li><img src='{{{page.template_path}}}images/reused.png' style='width: 16px;'> <b>RECENT</b> - Theme was used in a
+		recent jam. It shouldn't be used again until a number of jams defined on the <a
+			href='?page=config'>Configuration
+			page</a>.</li>
+	<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - Theme is not
+		within the top rated themes.</li>
+</ul>
 <table>
 	<tr>
 
@@ -411,6 +403,10 @@
 </table>
 
 <h4>Banned Themes</h4>
+
+<p>These themes cannot be suggested again until they are deleted or unbanned. </p>
+
+<p>Unbanning theme returns them to the voting as if they were never banned (delete them if you just want to allow them to be suggested again). <strong>Do not delete these themes unless you want them unbanned!</strong> To add a theme to this list use the "Action" menu next to each theme.</p>
 
 <table>
 	<tr>

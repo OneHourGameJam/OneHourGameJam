@@ -17,7 +17,7 @@
 		{{#user.admin}}
 		{{#themes.themes_are_marked_for_deletion}}
 		<div class="panel-body notification notification-major">
-			<a href='?page=managethemes'><strong>Admins: </strong>{{{themes.number_of_themes_marked_for_deletion}}}
+			<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>{{{themes.number_of_themes_marked_for_deletion}}}
 				theme{{#themes.themes_marked_for_deletion_plural}}s{{/themes.themes_marked_for_deletion_plural}}
 				{{#themes.themes_marked_for_deletion_plural}}are{{/themes.themes_marked_for_deletion_plural}}{{^themes.themes_marked_for_deletion_plural}}is{{/themes.themes_marked_for_deletion_plural}}
 				marked for deletion.</a>
