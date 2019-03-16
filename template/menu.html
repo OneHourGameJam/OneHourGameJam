@@ -15,14 +15,11 @@
 		{{#user}}
 		{{^cookies.is_streamer}}
 		{{#user.admin}}
-		{{#themes.themes_are_marked_for_deletion}}
+		{{#themes.themes_must_be_pruned}}
 		<div class="panel-body notification notification-major">
-			<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>{{{themes.number_of_themes_marked_for_deletion}}}
-				theme{{#themes.themes_marked_for_deletion_plural}}s{{/themes.themes_marked_for_deletion_plural}}
-				{{#themes.themes_marked_for_deletion_plural}}are{{/themes.themes_marked_for_deletion_plural}}{{^themes.themes_marked_for_deletion_plural}}is{{/themes.themes_marked_for_deletion_plural}}
-				marked for deletion.</a>
+			<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>Themes must be pruned.</a>
 		</div>
-		{{/themes.themes_are_marked_for_deletion}}
+		{{/themes.themes_must_be_pruned}}
 		{{#users.missing_admin_candidate_votes}}
 		<div class="panel-body notification notification-major">
 			<a href='?page=editusers'><strong>Admin: </strong>{{{users.missing_admin_candidate_votes_number}}}
