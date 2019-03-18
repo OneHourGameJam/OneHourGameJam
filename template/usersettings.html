@@ -52,15 +52,17 @@
 </form>
 
 <script src="vendor/components/trumbowyg/trumbowyg.js"></script>
+<script src="vendor/components/trumbowyg/trumbowyg.emoji.js"></script>
 <script>
 	$.trumbowyg.svgPath = '/template/images/icons.svg';
 	$('.trumbowyg-editor').trumbowyg({
 	    btns: [
-	        'btnGrp-semantic',
-	        ['superscript', 'subscript'],
-	        ['link'],
-	        'btnGrp-lists',
-	        ['removeformat']
+					['emoji'],
+        	['strong', 'em', 'del'],
+        	['superscript', 'subscript'],
+        	['link'],
+        	['unorderedList', 'orderedList'],
+       		['removeformat']
 	    ],
 	    removeformatPasted: true,
 	    autogrow: true
