@@ -100,12 +100,12 @@ a:hover{
     background-color: #484848;
 }
 
-.trumbowyg{
+.trumbowyg, .trumbowyg .trumbowyg-modal-title, .trumbowyg label input, .trumbowyg label input:hover, .trumbowyg label input:focus {
     background-color: #606060;
     color: white;
 }
 
-.trumbowyg-button-pane{
+.trumbowyg-button-pane, .trumbowyg .trumbowyg-modal-box {
     background-color: #7B8991;
 }
 
