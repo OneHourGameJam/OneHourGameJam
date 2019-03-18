@@ -4,8 +4,8 @@
 	</div>
 </div>
 
-<input type="text" class="form-control" id='authorsearch' placeholder="Search by username or twitter handle..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
-<div class='panel-body table-responsive jamContent'>
+<input type="text" class="form-control" id='js-authorsearch' placeholder="Search by username or twitter handle..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
+<div id='js-authortable' class='tablepanel-body table-responsive jamContent'>
 	Click on a column header to sort.
 	<table class="table sortable">
 		<tr style='cursor: pointer;'>
@@ -33,9 +33,9 @@
 	function FilterAuthorTable() {
 		// Declare variables
 		var input, filter, table, tr, td_username, td_twitter, i;
-		input = document.getElementById("authorsearch");
+		input = document.getElementById("js-authorsearch");
 		filter = input.value.toUpperCase();
-		table = document.getElementById("authortable");
+		table = document.getElementById("js-authortable");
 		tr = table.getElementsByTagName("tr");
 
 		// Loop through all table rows, and hide those who don't match the search query
@@ -43,8 +43,8 @@
 			td_username = tr[i].getElementsByTagName("td")[0];
 			td_twitter = tr[i].getElementsByTagName("td")[1];
 			if (td_username && td_twitter) {
-				if (td_username.innerHTML.toUpperCase().indexOf(filter) > -1 ||
-				     td_twitter.innerHTML.toUpperCase().indexOf(filter) > -1) {
+				if (td_username.textContent.toUpperCase().indexOf(filter) > -1 ||
+				     td_twitter.textContent.toUpperCase().indexOf(filter) > -1) {
 					tr[i].style.display = "";
 				} else {
 					tr[i].style.display = "none";
