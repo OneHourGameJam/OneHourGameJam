@@ -195,7 +195,7 @@ function CleanHtml($html) {
 
 	// Parse non-empty HTML only
 	if (!empty(trim($html))) {
-		$dom = new DOMDocument();
+		$dom = new DOMDocument('1.0', 'utf-8');
 		$dom->loadHTML($halfCleanedHtml);
 
 		// Only keep whitelisted HTML attributes
@@ -210,10 +210,7 @@ function CleanHtml($html) {
 		}
 
 		// Stringify the DOMDocument <body> contents
-		$cleanedHtml = '';
-		foreach ($dom->getElementsByTagName('body')->item(0)->childNodes as $node) {
-		    $cleanedHtml .= $dom->saveXML($node);
-		}
+		$cleanedHtml = utf8_decode($dom->saveXML($dom->getElementsByTagName('body')->item(0)));
 		StopTimer("CleanHtml");
 		return $cleanedHtml;
 	} else {
