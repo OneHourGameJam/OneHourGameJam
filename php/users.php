@@ -4,6 +4,26 @@ $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
 
+class User
+{
+    public $Id;
+    public $Username;
+    public $DisplayName;
+    public $Twitter;
+    public $TwitterTextOnly;
+    public $Email;
+    public $Salt;
+    public $PasswordHash;
+    public $PasswordIterations;
+    public $Admin;
+    public $UserPreferences;
+    public $Preferences;
+    public $DaysSinceLastLogin;
+    public $DaysSinceLastAdminAction;
+    public $IsSponsored;
+    public $SponsoredBy;
+}
+
 //Loads users
 function LoadUsers(){
 	global $dbConn, $userPreferenceSettings;
@@ -28,25 +48,34 @@ function LoadUsers(){
 
 	while($info = mysqli_fetch_array($data)){
 		//Read data about the user
-		$currentUser = Array();
-		$currentUser["id"] = $info["user_id"];
-		$currentUser["username"] = $info["user_username"];
-		$currentUser["display_name"] = $info["user_display_name"];
-		$currentUser["twitter"] = $info["user_twitter"];
-		$currentUser["twitter_text_only"] = str_replace("@", "", $info["user_twitter"]);
-		$currentUser["email"] = $info["user_email"];
-		$currentUser["salt"] = $info["user_password_salt"];
-		$currentUser["password_hash"] = $info["user_password_hash"];
-		$currentUser["password_iterations"] = intval($info["user_password_iterations"]);
-        $currentUser["admin"] = intval($info["user_role"]);
-        $currentUser["user_preferences"] = intval($info["user_preferences"]);
+        $currentUser = Array();
+        $username = $info["user_username"];
+        
+        $user = new User();
+        $user->Id = $info["user_id"];
+        $user->Username = $username;
+        $user->DisplayName = $info["user_display_name"];
+        $user->Twitter = $info["user_twitter"];
+        $user->TwitterTextOnly = str_replace("@", "", $info["user_twitter"]);
+        $user->Email = $info["user_email"];
+        $user->Salt = $info["user_password_salt"];
+        $user->PasswordHash = $info["user_password_hash"];
+        $user->PasswordIterations = intval($info["user_password_iterations"]);
+        $user->Admin = intval($info["user_role"]);
+        $user->UserPreferences = intval($info["user_preferences"]);
+        $user->Preferences = Array();
+        $user->DaysSinceLastLogin = 1000000;
+        $user->DaysSinceLastAdminAction = 1000000;
+        $user->IsSponsored = 0;
+        $user->SponsoredBy = "";
 
-        $currentUser["preferences"] = Array();
+
+
         foreach($userPreferenceSettings as $i => $preferenceSetting){
             $preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);
             $preferenceKey = $preferenceSetting["PREFERENCE_KEY"];
 
-            $currentUser["preferences"][$preferenceKey] = $currentUser["user_preferences"] & $preferenceFlag;
+            $user->Preferences[$preferenceKey] = $user->UserPreferences & $preferenceFlag;
         }
 
         //This fixes an issue where user_last_login_datetime was not set properly in the database, which results in days_since_last_login being null for users who have not logged in since the fix was applied
@@ -59,10 +88,10 @@ function LoadUsers(){
             $info["days_since_last_admin_action"] = 1000000;
         }
 
-		$currentUser["days_since_last_login"] = intval($info["days_since_last_login"]);
-		$currentUser["days_since_last_admin_action"] = intval($info["days_since_last_admin_action"]);
+		$user->DaysSinceLastLogin = intval($info["days_since_last_login"]);
+		$user->DaysSinceLastAdminAction = intval($info["days_since_last_admin_action"]);
 
-		$users[$currentUser["username"]] = $currentUser;
+		$users[$username] = $user;
 	}
 
     ksort($users);
@@ -84,8 +113,8 @@ function LoadUsers(){
         $voteVoterUsername = $info["vote_voter_username"];
         $voteSubjectUsername = $info["vote_subject_username"];
 
-        $users[$voteSubjectUsername]["is_sponsored"] = 1;
-        $users[$voteSubjectUsername]["sponsored_by"] = $voteVoterUsername;
+        $users[$voteSubjectUsername]->IsSponsored = 1;
+        $users[$voteSubjectUsername]->SponsoredBy = $voteVoterUsername;
     }
 
 	StopTimer("LoadUsers");
@@ -96,7 +125,22 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
-    $userData = $user;
+    $userData["id"] = $user->Id;
+    $userData["username"] = $user->Username;
+    $userData["display_name"] = $user->DisplayName;
+    $userData["twitter"] = $user->Twitter;
+    $userData["twitter_text_only"] = $user->TwitterTextOnly;
+    $userData["email"] = $user->Email;
+    $userData["salt"] = $user->Salt;
+    $userData["password_hash"] = $user->PasswordHash;
+    $userData["password_iterations"] = $user->PasswordIterations;
+    $userData["admin"] = $user->Admin;
+    $userData["user_preferences"] = $user->UserPreferences;
+    $userData["preferences"] = $user->Preferences;
+    $userData["days_since_last_login"] = $user->DaysSinceLastLogin;
+    $userData["days_since_last_admin_action"] = $user->DaysSinceLastAdminAction;
+    $userData["is_sponsored"] = $user->IsSponsored;
+    $userData["sponsored_by"] = $user->SponsoredBy;
 
     $currentJamData = GetCurrentJamNumberAndID();
 
@@ -354,7 +398,7 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
     $jamsByUsername = GroupJamsByUsername($jams, $gamesByUsername);
 
     foreach($users as $i => $user){
-        $username = $user["username"];
+        $username = $user->Username;
         $userGames = Array();
         if(isset($gamesByUsername[$username])){
             $userGames = $gamesByUsername[$username];

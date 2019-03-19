@@ -21,7 +21,7 @@ function SaveConfig($key, $newValue){
 		return;
 	}
 
-	UpdateConfig($config, $key, $newValue, $loggedInUser['id'], $loggedInUser["username"]);
+	UpdateConfig($config, $key, $newValue, $loggedInUser->Id, $loggedInUser->Username);
 	return "SUCCESS";
 }
 

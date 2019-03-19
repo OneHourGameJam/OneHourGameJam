@@ -51,7 +51,7 @@ function DeleteEntry($entryID){
 	$data = mysqli_query($dbConn, $sql);
     $sql = "";
 
-    AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser["username"]);
+    AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser->Username);
 
 	return "SUCCESS";
 }

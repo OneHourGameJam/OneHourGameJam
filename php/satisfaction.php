@@ -78,7 +78,7 @@ function SubmitSatisfaction(&$loggedInUser, $satisfactionQuestionId, $score){
 		return;
 	}
 
-	$username = trim($loggedInUser["username"]);
+	$username = trim($loggedInUser->Username);
 
 	$escapedSatisfactionQuestionId = mysqli_real_escape_string($dbConn, $satisfactionQuestionId);
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);

@@ -24,7 +24,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	$emailAddressClean = mysqli_real_escape_string($dbConn, $emailAddress);
 	$bioClean = mysqli_real_escape_string($dbConn, CleanHtml($bio));
 	$preferencesClean = mysqli_real_escape_string($dbConn, $preferences);
-	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 	$sql = "
 		UPDATE user

@@ -35,9 +35,9 @@ function GetUsernameForUserId($userID, &$users){
 	StartTimer("GetUsernameForUserId");
 
 	foreach($users as $i => $user){
-		if($user["id"] == $userID){
+		if($user->Id == $userID){
 			StopTimer("GetUsernameForUserId");
-			return $user["username"];
+			return $user->Username;
 		}
 	}
 
@@ -138,7 +138,7 @@ function IsAdmin($user){
 		return false;
 	}
 
-	if($user["admin"] != 0){
+	if($user->Admin != 0){
 		StopTimer("IsAdmin");
 		return true;
 	}else{

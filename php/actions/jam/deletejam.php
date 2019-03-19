@@ -57,7 +57,7 @@ function DeleteJam($jamID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser["username"]);
+	AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser->Username);
 	
 	return "SUCCESS";
 }

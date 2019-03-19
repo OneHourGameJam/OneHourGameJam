@@ -80,7 +80,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$jam_folder = "data/jams/jam_$jam_number";
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
 		$imageFileType = strtolower(pathinfo($_FILES["screenshotfile"]["name"], PATHINFO_EXTENSION));
-		$target_file = $jam_folder . "/".$loggedInUser["username"]."." . $imageFileType;
+		$target_file = $jam_folder . "/".$loggedInUser->Username."." . $imageFileType;
 		$is_image = getimagesize($_FILES["screenshotfile"]["tmp_name"]) !== false;
 
 		if(!$is_image) {
@@ -119,7 +119,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			continue;
 		}
 
-		if($game["author"] != $loggedInUser["username"]){
+		if($game["author"] != $loggedInUser->Username){
 			continue;
 		}
 
@@ -185,7 +185,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam["jam_number"]);
 	$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
 	$escaped_description = mysqli_real_escape_string($dbConn, $description);
-	$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 	$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
 	$escaped_gameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
 	$escaped_gameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);

@@ -45,10 +45,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 if(!isset($users[$editingUsername])){
                     die("no user selected");
                 }
-                $render["editinguser"] = $users[$editingUsername];
-                if($users[$editingUsername]["admin"] != 0){
-                    $render["editinguser"]["is_admin"] = 1;
-                }
+                $render["editinguser"] = RenderUser($config, $cookies, $users[$editingUsername], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, RENDER_DEPTH_NONE);
             }
         break;
         case "editjam":
@@ -125,7 +122,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 die("invalid author name");
             }
 
-            $render['show_edit_link'] = $viewingAuthor == $loggedInUser["id"];
+            $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Id;
             $render["author_bio"] = LoadBio($viewingAuthor);
             $render["viewing_author"] = RenderUser($config, $cookies, $users[$viewingAuthor], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
@@ -146,7 +143,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             $render["user_entry_color"] = $jam["colors"][$colorNumber];
 
             foreach($games as $i => $game){
-                if($game["author"] != $loggedInUser["username"]){
+                if($game["author"] != $loggedInUser->Username){
                     continue;
                 }
 
@@ -202,26 +199,26 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             }
         break;
         case "userdata":
-            $render["userdata_assets"] = GetAssetsOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_entries"] = GetEntriesOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_poll_votes"] = GetPollVotesOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_themes"] = GetThemesOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_users"] = GetUsersOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser["username"]);
-            $render["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser["id"]);
-            $render["userdata_adminlog_admin"] = GetAdminLogForAdminFormatted($loggedInUser["username"]);
-            $render["userdata_adminlog_subject"] = GetAdminLogForSubjectFormatted($loggedInUser["username"]);
-            $render["userdata_admin_vote_voter"] = GetAdminVotesCastByUserFormatted($loggedInUser["username"]);
-            $render["userdata_admin_vote_subject"] = GetAdminVotesForSubjectUserFormatted($loggedInUser["username"]);
+            $render["userdata_assets"] = GetAssetsOfUserFormatted($loggedInUser->Username);
+            $render["userdata_entries"] = GetEntriesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_poll_votes"] = GetPollVotesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_themes"] = GetThemesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_users"] = GetUsersOfUserFormatted($loggedInUser->Username);
+            $render["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser->Username);
+            $render["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser->Id);
+            $render["userdata_adminlog_admin"] = GetAdminLogForAdminFormatted($loggedInUser->Username);
+            $render["userdata_adminlog_subject"] = GetAdminLogForSubjectFormatted($loggedInUser->Username);
+            $render["userdata_admin_vote_voter"] = GetAdminVotesCastByUserFormatted($loggedInUser->Username);
+            $render["userdata_admin_vote_subject"] = GetAdminVotesForSubjectUserFormatted($loggedInUser->Username);
         break;
         case "newjam":
             $render["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);
             $render["next_jam_suggested_time"] = gmdate("H:i", $nextSuggestedJamDateTime);
         break;
         case "usersettings":
-            $render["user_bio"] = LoadBio($loggedInUser["username"]);
+            $render["user_bio"] = LoadBio($loggedInUser->Username);
         break;
     }
 

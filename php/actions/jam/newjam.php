@@ -12,7 +12,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
-	$username = trim($loggedInUser["username"]);
+	$username = trim($loggedInUser->Username);
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){

@@ -21,14 +21,15 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	}
 
 	//Check that the user exists
-	if(!isset($users[$loggedInUser["username"]])){
+	if(!isset($users[$loggedInUser->Username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$user = $users[$loggedInUser["username"]];
-	$correctPasswordHash = $user["password_hash"];
-	$userSalt = $user["salt"];
-	$userPasswordIterations = intval($user["password_iterations"]);
+	$loggedInUserUsername = $loggedInUser->Username;
+	$user = $users[$loggedInUserUsername];
+	$correctPasswordHash = $user->PasswordHash;
+	$userSalt = $user->Salt;
+	$userPasswordIterations = intval($user->PasswordIterations);
 	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $config);
 	if($correctPasswordHash != $passwordHash){
 		return "INCORRECT_PASSWORD";
@@ -39,14 +40,14 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$newUserPasswordIterations = GenerateUserHashIterations($config);
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config);
 
-	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
-	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;
-	$users[$loggedInUser["username"]]["password_iterations"] = $newUserPasswordIterations;
+	$users[$loggedInUserUsername]->Salt = $newUserSalt;
+	$users[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
+	$users[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
 
 	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
 	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);
 	$newUserPasswordIterationsClean = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
-	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 	$sql = "
 		UPDATE user

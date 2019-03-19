@@ -36,7 +36,7 @@ function EditUser($username, $isAdmin){
 	mysqli_query($dbConn, $sql) ;
 	$sql = "";
 	
-    AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username, $loggedInUser["username"]);
+    AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $username, $loggedInUser->Username);
 
 	return "SUCCESS";
 }

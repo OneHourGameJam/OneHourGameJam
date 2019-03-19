@@ -36,7 +36,7 @@ function UnbanTheme($unbannedTheme){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "", $loggedInUser["username"]);
+    AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "", $loggedInUser->Username);
 
 	return "SUCCESS";
 }

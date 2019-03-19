@@ -31,7 +31,7 @@ function AddTheme($newTheme, $isBot){
 
 	$themesByThisUser = 0;
 	foreach($themes as $i => $theme) {
-		if ($theme["author"] == $user["username"] && !$theme["banned"]) {
+		if ($theme["author"] == $user->Username && !$theme["banned"]) {
 			$themesByThisUser ++;
 		}
 	}
@@ -42,7 +42,7 @@ function AddTheme($newTheme, $isBot){
 	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
 	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
 	$clean_newTheme = mysqli_real_escape_string($dbConn, $newTheme);
-	$clean_userName = mysqli_real_escape_string($dbConn, $user["username"]);
+	$clean_userName = mysqli_real_escape_string($dbConn, $user->Username);
 
 	//Insert new theme
 	$sql = "

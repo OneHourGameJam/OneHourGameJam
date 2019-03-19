@@ -1,5 +1,8 @@
 <?php
 
+$tz = date_default_timezone_get();
+print $tz;
+
 function LoadJams(){
 	global $dbConn;
 	AddActionLog("LoadJams");
@@ -105,8 +108,10 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 
 			if(!$game["entry_deleted"]){
 				//Has logged in user participated in this jam?
-				if($loggedInUser["username"] == $game["author"]){
-					$jamData["user_participated_in_jam"] = 1;
+				if($loggedInUser !== false){
+					if($loggedInUser->Username == $game["author"]){
+						$jamData["user_participated_in_jam"] = 1;
+					}
 				}
 
 				//Count non-deleted entries in jam
@@ -505,7 +510,7 @@ function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $start
     $sql = "";
 
 	StopTimer("AddJamToDatabase");
-    AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "", $loggedInUser["username"]);
+    AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "", $loggedInUser->Username);
 }
 
 function GetJamsOfUserFormatted($username){

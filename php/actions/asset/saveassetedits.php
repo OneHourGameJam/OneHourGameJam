@@ -124,7 +124,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$data = mysqli_query($dbConn, $sql);
         $sql = "";
 
-		AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser["username"]);
+		AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser->Username);
 		
 		return "SUCCESS_UPDATED";
 	}else{
@@ -162,7 +162,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 		
-		AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser["username"]);
+		AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $author, $loggedInUser->Username);
 		
 		return "SUCCESS_INSERTED";
 	}

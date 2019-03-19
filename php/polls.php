@@ -61,7 +61,7 @@ function LoadLoggedInUserPollVotes(&$loggedInUser){
 	
 	//Get data about logged in user's votes
 	if($loggedInUser !== false){
-		$escapedUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+		$escapedUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 		$sql = "
 			SELECT o.option_poll_id, o.option_id

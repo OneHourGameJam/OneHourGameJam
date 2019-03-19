@@ -28,7 +28,7 @@ function RemoveTheme($removedTheme, $pageId){
 	}
 
 	//Authorize user (is admin or suggested this theme originally)
-	if(!isAdmin($loggedInUser) && $themeAuthor != $loggedInUser["username"]){
+	if(!isAdmin($loggedInUser) && $themeAuthor != $loggedInUser->Username){
 		return "NOT_AUTHORIZED";
 	}
 
@@ -54,7 +54,7 @@ function RemoveTheme($removedTheme, $pageId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser["username"]);
+    AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
 
 	// Can be triggered from both themes and managethemes, send user to correct location.
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";

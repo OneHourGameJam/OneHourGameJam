@@ -50,14 +50,6 @@ function RegisterUser($username, $password){
 	if(isset($users[$username])){
 		return "USERNAME_ALREADY_REGISTERED";
 	}else{
-		$newUser = Array();
-		$newUser["salt"] = $userSalt;
-		$newUser["password_hash"] = $passwordHash;
-		$newUser["password_iterations"] = $userPasswordIterations;
-		$newUser["admin"] = $admin;
-
-		$users[$username] = $newUser;
-
 		$usernameClean = mysqli_real_escape_string($dbConn, $username);
 
 		$sql = "
@@ -122,10 +114,10 @@ function LogInUser($username, $password){
 	}
 
 	$user = $users[$username];
-	$userID = $user["id"];
-	$correctPasswordHash = $user["password_hash"];
-	$userSalt = $user["salt"];
-	$userPasswordIterations = intval($user["password_iterations"]);
+	$userID = $user->Id;
+	$correctPasswordHash = $user->PasswordHash;
+	$userSalt = $user->Salt;
+	$userPasswordIterations = intval($user->PasswordIterations);
 	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $config);
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!

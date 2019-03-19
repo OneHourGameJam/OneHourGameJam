@@ -57,7 +57,11 @@ function LoadUserThemeVotes(&$loggedInUser){
 
 	$userThemeVotes = Array();
 
-	$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	if($loggedInUser == false){
+		return $userThemeVotes;
+	}
+
+	$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 	//Update themes with what the user voted for
 	$sql = "
@@ -140,12 +144,14 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		}
 		$theme["ThemeSelectionProbabilityByPopularityText"] = $themesByPopularity[$themeID]["ThemeSelectionProbabilityByPopularityText"];
 		$theme["days_ago"] = $themeData["days_ago"];
-		$theme["is_own_theme"] = $themeData["author"] == $loggedInUser["username"];
-		if($banned == 0){
-			if ($theme["is_own_theme"]) {
-				$render["has_own_themes"] = true;
-			}else{
-				$render["has_other_themes"] = true;
+		if($loggedInUser !== false){
+			$theme["is_own_theme"] = $themeData["author"] == $loggedInUser->Username;
+			if($banned == 0){
+				if ($theme["is_own_theme"]) {
+					$render["has_own_themes"] = true;
+				}else{
+					$render["has_other_themes"] = true;
+				}
 			}
 		}
 		

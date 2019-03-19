@@ -15,7 +15,7 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 	$escapedSubjectUsername = mysqli_real_escape_string($dbConn, $subjectUsername);
 	$escapedVoteType = mysqli_real_escape_string($dbConn, $voteType);
 

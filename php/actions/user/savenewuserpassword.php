@@ -30,9 +30,10 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$newUserPasswordIterations = GenerateUserHashIterations($config);
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config);
 
-	$users[$loggedInUser["username"]]["salt"] = $newUserSalt;
-	$users[$loggedInUser["username"]]["password_hash"] = $newPasswordHash;
-	$users[$loggedInUser["username"]]["password_iterations"] = $newUserPasswordIterations;
+	$loggedInUserUsername = $loggedInUser->Username;
+	$users[$loggedInUserUsername]->Salt = $newUserSalt;
+	$users[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
+	$users[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
 
 	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
 	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);
@@ -50,7 +51,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username, $loggedInUser["username"]);
+    AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username, $loggedInUser->Username);
 
 	return "SUCCESS";
 }

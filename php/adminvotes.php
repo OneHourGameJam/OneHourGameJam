@@ -36,7 +36,11 @@ function LoadLoggedInUsersAdminVotes(&$loggedInUser){
 
 	$loggedInUserAdminVotes = Array();
 
-	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser["username"]);
+	if($loggedInUser == false){
+		return $loggedInUserAdminVotes;
+	}
+
+	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 	$sql = "
 		SELECT vote_subject_username, vote_type
