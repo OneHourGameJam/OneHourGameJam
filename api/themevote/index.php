@@ -21,7 +21,7 @@ if($usr == false){
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);
 $clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-$clean_username = mysqli_real_escape_string($dbConn, $usr["username"]);
+$clean_username = mysqli_real_escape_string($dbConn, $usr->Username);
 
 if(!isset($_GET["themeID"])){
 	print json_encode(Array("ERROR" => "Theme ID not set"));
