@@ -84,7 +84,6 @@ function RenderGame(&$users, &$game, &$jams, $renderDepth){
 	$gameData["screenshot_url"] = str_replace("'", "\\'", $game["screenshot_url"]);
 
 	$jamID = $gameData["jam_id"];
-	$jamData = $jams[$jamID];
 
 	$gameData["title_url_encoded"] = urlencode($game["title"]);
 
@@ -101,8 +100,9 @@ function RenderGame(&$users, &$game, &$jams, $renderDepth){
 	$gameData["color_non_white"] = "#".str_pad(dechex(min($gameData["color256_red"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($gameData["color256_green"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($gameData["color256_blue"], 0xDD)), 2, "0", STR_PAD_LEFT);
 
 	//Mini RenderJam()
-	$gameData["jam_number"] = $jamData["jam_number"];
-	$gameData["jam_theme"] = $jamData["theme"];
+	$jamData = $jams[$jamID];
+	$gameData["jam_number"] = $jamData->JamNumber;
+	$gameData["jam_theme"] = $jamData->Theme;
 
 	//Mini RenderUser()
 	$author = $gameData["author"];

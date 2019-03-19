@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $jams, $config, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themes, $config, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	if($isBot){
 		$user = "bot";

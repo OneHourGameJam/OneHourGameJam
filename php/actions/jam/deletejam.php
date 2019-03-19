@@ -64,7 +64,7 @@ function DeleteJam($jamID){
 
 //Returns true / false based on whether or not the specified jam can be deleted
 function CanDeleteJam($jamID){
-	global $jams, $dbConn, $loggedInUser;
+	global $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){

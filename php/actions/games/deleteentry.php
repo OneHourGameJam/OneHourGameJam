@@ -2,7 +2,7 @@
 
 //Returns true / false based on whether or not the specified entry can be deleted
 function CanDeleteEntry($entryID){
-	global $jams, $dbConn, $loggedInUser;
+	global $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){

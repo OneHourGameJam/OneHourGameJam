@@ -53,7 +53,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 $jamID = intval($_GET["jam_id"]);
                 $jamFound = false;
                 foreach($jams as $i => $jam){
-                    if(intval($jam["jam_id"]) == $jamID){
+                    if(intval($jam->Id) == $jamID){
                         $render["editingjam"] = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0, RENDER_DEPTH_JAMS);
                         $jamFound = true;
                         break;
@@ -97,11 +97,11 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
 
             $pass = FALSE;
             foreach($jams as $i => $jam){
-                if($jam["jam_number"] != $viewingJamNumber){
+                if($jam->JamNumber != $viewingJamNumber){
                     continue;
                 }
 
-                if($jam["jam_deleted"] == 1){
+                if($jam->Deleted == 1){
                     continue;
                 }
 
@@ -139,8 +139,8 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             }
 
             $render["submit_jam"] = RenderSubmitJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, RENDER_DEPTH_JAMS);
-            $colorNumber = rand(0, count($jam["colors"]) - 1);
-            $render["user_entry_color"] = $jam["colors"][$colorNumber];
+            $colorNumber = rand(0, count($jam->Colors) - 1);
+            $render["user_entry_color"] = $jam->Colors[$colorNumber];
 
             foreach($games as $i => $game){
                 if($game["author"] != $loggedInUser->Username){
@@ -156,7 +156,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 }
 
                 //Determine entry color number
-                foreach($jam["colors"] as $colorIndex => $color){
+                foreach($jam->Colors as $colorIndex => $color){
                     if($color == $game["color"]){
                         $colorNumber = $colorIndex;
                         break;
@@ -164,7 +164,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 }
 
                 $render["user_entry_color_number"] = $colorNumber;
-                $render["user_entry_color"] = $jam["colors"][$colorNumber];
+                $render["user_entry_color"] = $jam->Colors[$colorNumber];
 
                 $render["user_submitted_to_this_jam"] = true;
                 $render["user_entry_name"] = $game["title"];

@@ -139,8 +139,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     $userData["preferences"] = $user->Preferences;
     $userData["days_since_last_login"] = $user->DaysSinceLastLogin;
     $userData["days_since_last_admin_action"] = $user->DaysSinceLastAdminAction;
-    $userData["is_sponsored"] = $user->IsSponsored;
-    $userData["sponsored_by"] = $user->SponsoredBy;
+    if($user->IsSponsored){
+        $userData["is_sponsored"] = 1;
+        $userData["sponsored_by"] = $user->SponsoredBy;
+    }
 
     $currentJamData = GetCurrentJamNumberAndID();
 
@@ -164,7 +166,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
 
 	    StartTimer("RenderUser - foreach games - Foreach Jams");
         foreach($jams as $k => $jam){
-            if($jam["jam_id"] == $gameData["jam_id"]){
+            if($jam->Id == $gameData["jam_id"]){
                 $jamData = $jam;
                 break;
             }
@@ -191,7 +193,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
             $userData["last_jam_number"] = $gameData["jam_number"];
         }
 
-        $isJamRecent = intval($jamData["jam_number"]) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
+        $isJamRecent = intval($jamData->JamNumber) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
         if($isJamRecent){
             $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
         }

@@ -62,7 +62,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	}
 
 	$jam = GetJamByNumber($jams, $jam_number);
-	if($jam == null || $jam["jam_number"] == 0){
+	if($jam == null || $jam->JamNumber == 0){
 		return "NO_JAM_TO_SUBMIT_TO";
 	}
 
@@ -71,10 +71,10 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	}
 
 	//Validate color
-	if($jamColorNumber < 0 || count($jam["colors"]) <= $jamColorNumber){
+	if($jamColorNumber < 0 || count($jam->Colors) <= $jamColorNumber){
 		return "INVALID_COLOR";
 	}
-	$color = $jam["colors"][$jamColorNumber];
+	$color = $jam->Colors[$jamColorNumber];
 
 	//Upload screenshot
 	$jam_folder = "data/jams/jam_$jam_number";
@@ -181,8 +181,8 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 	$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
 	$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$escaped_jamId = mysqli_real_escape_string($dbConn, $jam["jam_id"]);
-	$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam["jam_number"]);
+	$escaped_jamId = mysqli_real_escape_string($dbConn, $jam->Id);
+	$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam->JamNumber);
 	$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
 	$escaped_description = mysqli_real_escape_string($dbConn, $description);
 	$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
