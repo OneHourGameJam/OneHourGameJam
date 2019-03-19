@@ -2,7 +2,7 @@
 
 //Unmarks a suggested theme as banned (unbans it)
 function UnbanTheme($unbannedTheme){
-	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){

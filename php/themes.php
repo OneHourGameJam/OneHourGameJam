@@ -1,5 +1,18 @@
 <?php
 
+class Theme{
+	public $Id;
+	public $Theme;
+	public $Author;
+	public $Banned;
+	public $Deleted;
+	public $VotesAgainst;
+	public $VotesNeutral;
+	public $VotesFor;
+	public $VotesReport;
+	public $DaysAgo;
+}
+
 //Fills the list of suggested themes
 function LoadThemes(){
 	global $dbConn;
@@ -19,31 +32,36 @@ function LoadThemes(){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	while($theme = mysqli_fetch_array($data)){
-		$themeID = $theme["theme_id"];
+	while($themeData = mysqli_fetch_array($data)){
+		$themeID = $themeData["theme_id"];
+		$themeVoteType = $themeData["themevote_type"];
+		$themeVoteCount = intval($themeData["themevote_count"]);
+		$themeVotesFor = ($themeVoteType == "3") ? $themeVoteCount : 0;
+		$themeVotesNeutral = ($themeVoteType == "2") ? $themeVoteCount : 0;
+		$themeVotesAgainst = ($themeVoteType == "1") ? $themeVoteCount : 0;
+
 		if(isset($themes[$themeID])){
 			//Theme already processed, simply log numbers for vote type
-			$themeVoteKey = ThemeVoteTypeToKey($theme["themevote_type"]);
-			$themes[$themeID][$themeVoteKey] = intval($theme["themevote_count"]);
+			$theme = $themes[$themeID];
+			$theme->VotesAgainst = max($theme->VotesAgainst, $themeVotesAgainst);
+			$theme->VotesNeutral =  max($theme->VotesNeutral, $themeVotesNeutral);
+			$theme->VotesFor =  max($theme->VotesFor, $themeVotesFor);
 			continue;
 		}
 
-		$themeData = Array();
-		$themeData["theme_id"] = $themeID;
-		$themeData["theme"] = htmlspecialchars($theme["theme_text"], ENT_QUOTES);
-		$themeData["author"] = $theme["theme_author"];
-		$themeData["banned"] = $theme["theme_banned"];
-		$themeData["theme_deleted"] = $theme["theme_deleted"];
-		$themeData["votes_against"] = 0;
-		$themeData["votes_neutral"] = 0;
-		$themeData["votes_for"] = 0;
-		$themeData["votes_report"] = 0;
-		$themeData["days_ago"] = intval($theme["theme_daysago"]);
+		$theme = new Theme();
+		$theme->Id = $themeID;
+		$theme->Theme = htmlspecialchars($themeData["theme_text"], ENT_QUOTES);
+		$theme->Author = $themeData["theme_author"];
+		$theme->Banned = $themeData["theme_banned"];
+		$theme->Deleted = $themeData["theme_deleted"];
+		$theme->VotesAgainst = $themeVotesAgainst;
+		$theme->VotesNeutral = $themeVotesNeutral;
+		$theme->VotesFor = $themeVotesFor;
+		$theme->VotesReport = 0;
+		$theme->DaysAgo = intval($themeData["theme_daysago"]);
 
-		$themeVoteKey = ThemeVoteTypeToKey($theme["themevote_type"]);
-		$themeData[$themeVoteKey] = intval($theme["themevote_count"]);
-
-		$themes[$themeID] = $themeData;
+		$themes[$themeID] = $theme;
 	}
 
 	StopTimer("LoadThemes");
@@ -104,12 +122,12 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 
 	foreach($themes as $i => $themeData){
 
-		$themeID = intval($themeData["theme_id"]);
-		$themeText = $themeData["theme"];
-		$banned = $themeData["banned"];
-		$votesFor = $themeData["votes_for"];
-		$votesNeutral = $themeData["votes_neutral"];
-		$votesAgainst = $themeData["votes_against"];
+		$themeID = intval($themeData->Id);
+		$themeText = $themeData->Theme;
+		$banned = $themeData->Banned;
+		$votesFor = $themeData->VotesFor;
+		$votesNeutral = $themeData->VotesNeutral;
+		$votesAgainst = $themeData->VotesAgainst;
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
 		$userCastAVoteForThisTheme = false;
 
@@ -118,7 +136,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		$theme["votes_for"] = $votesFor;
 		$theme["votes_neutral"] = $votesNeutral;
 		$theme["votes_against"] = $votesAgainst;
-		$theme["votes_report"] = $themeData["votes_report"];
+		$theme["votes_report"] = $themeData->VotesReport;
 		$theme["votes_total"] = $votesTotal;
 		$theme["votes_popularity"] = "?";
 		$theme["votes_apathy"] = "?";
@@ -130,7 +148,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		$theme["apathy_color"] = "#ffffff";
 		$theme["popularity_color"] = "#ffffff";
 		$theme["banned"] = $banned;
-		$theme["author"] = $themeData["author"];
+		$theme["author"] = $themeData->Author;
 		$theme["theme_id"] = $themeID;
 		$theme["ThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
 		if($votesTotal < $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"]){
@@ -143,9 +161,9 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 			$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
 		}
 		$theme["ThemeSelectionProbabilityByPopularityText"] = $themesByPopularity[$themeID]["ThemeSelectionProbabilityByPopularityText"];
-		$theme["days_ago"] = $themeData["days_ago"];
+		$theme["days_ago"] = $themeData->DaysAgo;
 		if($loggedInUser !== false){
-			$theme["is_own_theme"] = $themeData["author"] == $loggedInUser->Username;
+			$theme["is_own_theme"] = $themeData->Author == $loggedInUser->Username;
 			if($banned == 0){
 				if ($theme["is_own_theme"]) {
 					$render["has_own_themes"] = true;
@@ -313,18 +331,6 @@ function IsRecentTheme($theme) {
 	}
 }
 
-function ThemeVoteTypeToKey($themeVoteType){
-	AddActionLog("ThemeVoteTypeToKey");
-	switch($themeVoteType){
-		case "1":
-			return "votes_against";
-		case "2":
-			return "votes_neutral";
-		case "3":
-			return "votes_for";
-	}
-}
-
 function UserThemeVoteTypeToKey($themeVoteType){
 	AddActionLog("UserThemeVoteTypeToKey");
 	switch($themeVoteType){
@@ -386,17 +392,17 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 	$totalVotesDifference = 0;
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
-		$themeID = $theme["theme_id"];
+		$themeID = $theme->Id;
 		$result[$themeID]["ThemeSelectionProbabilityByVoteDifference"] = 0;
 		$result[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 
-		if($theme["banned"] == 1){
+		if($theme->Banned == 1){
 			continue;
 		}
 
-		$votesFor = $theme["votes_for"];
-		$votesNeutral = $theme["votes_neutral"];
-		$votesAgainst = $theme["votes_against"];
+		$votesFor = $theme->VotesFor;
+		$votesNeutral = $theme->VotesNeutral;
+		$votesAgainst = $theme->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -412,7 +418,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme["theme"];
+		$themeOption["theme"] = $theme->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -447,17 +453,17 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 	$totalVotesDifference = 0;
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
-		$themeID = $theme["theme_id"];
+		$themeID = $theme->Id;
 		$result[$themeID]["ThemeSelectionProbabilityByPopularity"] = 0;
 		$result[$themeID]["ThemeSelectionProbabilityByPopularityText"] = "0%";
 
-		if($theme["banned"] == 1){
+		if($theme->Banned == 1){
 			continue;
 		}
 
-		$votesFor = $theme["votes_for"];
-		$votesNeutral = $theme["votes_neutral"];
-		$votesAgainst = $theme["votes_against"];
+		$votesFor = $theme->VotesFor;
+		$votesNeutral = $theme->VotesNeutral;
+		$votesAgainst = $theme->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -473,7 +479,7 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme["theme"];
+		$themeOption["theme"] = $theme->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;

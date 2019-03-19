@@ -1,8 +1,5 @@
 <?php
 
-$tz = date_default_timezone_get();
-print $tz;
-
 function LoadJams(){
 	global $dbConn;
 	AddActionLog("LoadJams");
@@ -333,9 +330,9 @@ function SelectRandomThemeByVoteDifference(&$themes, &$config){
 			continue;
 		}
 
-		$votesFor = $theme["votes_for"];
-		$votesNeutral = $theme["votes_neutral"];
-		$votesAgainst = $theme["votes_against"];
+		$votesFor = $theme->VotesFor;
+		$votesNeutral = $theme->VotesNeutral;
+		$votesAgainst = $theme->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -351,7 +348,7 @@ function SelectRandomThemeByVoteDifference(&$themes, &$config){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme["theme"];
+		$themeOption["theme"] = $theme->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -395,9 +392,9 @@ function SelectRandomThemeByPopularity(&$themes, &$config){
 			continue;
 		}
 
-		$votesFor = $theme["votes_for"];
-		$votesNeutral = $theme["votes_neutral"];
-		$votesAgainst = $theme["votes_against"];
+		$votesFor = $theme->VotesFor;
+		$votesNeutral = $theme->VotesNeutral;
+		$votesAgainst = $theme->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -413,7 +410,7 @@ function SelectRandomThemeByPopularity(&$themes, &$config){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme["theme"];
+		$themeOption["theme"] = $theme->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -450,11 +447,11 @@ function SelectRandomTheme(&$themes){
 	foreach($themes as $id => $theme){
 		$themeOption = Array();
 
-		if($theme["banned"]){
+		if($theme->Banned){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme["theme"];
+		$themeOption["theme"] = $theme->Theme;
 
 		$availableThemes[] = $themeOption;
 	}

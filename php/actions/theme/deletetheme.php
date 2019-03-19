@@ -12,14 +12,14 @@ function RemoveTheme($removedTheme, $pageId){
 	//Check that the theme exists and get the user of the given theme
 	$themeAuthor = "";
 	foreach($themes as $id => $theme) {
-		if ($theme["theme_deleted"] != 0){
+		if ($theme->Deleted != 0){
 			continue;
 		}
-		if ($theme["banned"] != 0){
+		if ($theme->Banned != 0){
 			continue;
 		}
-		if ($theme["theme"] == $removedTheme) {
-			$themeAuthor = $theme["author"];
+		if ($theme->Theme == $removedTheme) {
+			$themeAuthor = $theme->Author;
 		}
 	}
 

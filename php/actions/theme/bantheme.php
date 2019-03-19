@@ -2,7 +2,7 @@
 
 //Marks a suggested theme as banned
 function BanTheme($bannedTheme){
-	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){

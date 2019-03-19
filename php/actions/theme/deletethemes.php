@@ -2,7 +2,7 @@
 
 //Removes an array of suggested themes
 function RemoveThemes($removedThemes){
-	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $dbConn, $ip, $userAgent, $loggedInUser;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
