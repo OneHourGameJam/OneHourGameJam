@@ -1,5 +1,13 @@
 <?php
 
+class Satisfaction{
+	public $QuestionId;
+	public $AverageScore;
+	public $SubmittedScores;
+	public $EnoughScoresToShowSatisfaction;
+	public $Scores;
+}
+
 function LoadSatisfaction(&$config){
 	global $dbConn;
 	AddActionLog("LoadSatisfaction");
@@ -20,18 +28,22 @@ function LoadSatisfaction(&$config){
 
 	//Get data
 	while($satisfactionData = mysqli_fetch_array($data)){
-		$satisfaction = Array();
+		$satisfactionEntry = new Satisfaction();
 
 		$questionId = $satisfactionData["satisfaction_question_id"];
 		$averageScore = $satisfactionData["average_score"];
 		$submittedScores = $satisfactionData["submitted_scores"];
 
-		$satisfaction["question_id"] = $questionId;
-		$satisfaction["average_score"] = $averageScore;
-		$satisfaction["submitted_scores"] = $submittedScores;
-		$satisfaction["enough_scores_to_show_satisfaction"] = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
+		$satisfactionEntry->QuestionId = $questionId;
+		$satisfactionEntry->AverageScore = $averageScore;
+		$satisfactionEntry->SubmittedScores = $submittedScores;
+		$satisfactionEntry->EnoughScoresToShowSatisfaction = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
+		
+		for($score = -5; $score <= 5; $score++){
+			$satisfactionEntry->Scores[$score] = 0;
+		}
 
-		$satisfaction[$questionId] = $satisfaction;
+		$satisfaction[$questionId] = $satisfactionEntry;
 	}
 
 	$sql = "
@@ -50,14 +62,8 @@ function LoadSatisfaction(&$config){
 		$questionId = $info["satisfaction_question_id"];
 		$satisfactionScore = $info["satisfaction_score"];
 		$votesForScore = $info["votes_for_score"];
-		
-		for($score = -5; $score <= 5; $score++){
-			if(!isset($satisfaction[$questionId]["scores"][$score])){
-				$satisfaction[$questionId]["scores"][$score] = 0;
-			}
-		}
 
-		$satisfaction[$questionId]["scores"][$satisfactionScore] = $votesForScore;
+		$satisfaction[$questionId]->Scores[$satisfactionScore] = $votesForScore;
 	}
 
 	StopTimer("LoadSatisfaction");

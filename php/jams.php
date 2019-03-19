@@ -150,7 +150,7 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 
 		$satisfactionSum = 0;
 		$satisfactionCount = 0;
-		foreach($satisfaction[$arrayId]["scores"] as $score => $votes){
+		foreach($satisfaction[$arrayId]->Scores as $score => $votes){
 			$satisfactionSum += $score * $votes;
 			$satisfactionCount += $votes;
 		}
@@ -159,17 +159,17 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 		$jamData["satisfaction_average_score"] = $satisfactionAverage;
 		$jamData["satisfaction_submitted_scores"] = $satisfactionCount;
 		$jamData["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
-		$jamData["score-5"] = $satisfaction[$arrayId]["scores"][-5];
-		$jamData["score-4"] = $satisfaction[$arrayId]["scores"][-4];
-		$jamData["score-3"] = $satisfaction[$arrayId]["scores"][-3];
-		$jamData["score-2"] = $satisfaction[$arrayId]["scores"][-2];
-		$jamData["score-1"] = $satisfaction[$arrayId]["scores"][-1];
-		$jamData["score0"] = $satisfaction[$arrayId]["scores"][0];
-		$jamData["score1"] = $satisfaction[$arrayId]["scores"][1];
-		$jamData["score2"] = $satisfaction[$arrayId]["scores"][2];
-		$jamData["score3"] = $satisfaction[$arrayId]["scores"][3];
-		$jamData["score4"] = $satisfaction[$arrayId]["scores"][4];
-		$jamData["score5"] = $satisfaction[$arrayId]["scores"][5];
+		$jamData["score-5"] = $satisfaction[$arrayId]->Scores[-5];
+		$jamData["score-4"] = $satisfaction[$arrayId]->Scores[-4];
+		$jamData["score-3"] = $satisfaction[$arrayId]->Scores[-3];
+		$jamData["score-2"] = $satisfaction[$arrayId]->Scores[-2];
+		$jamData["score-1"] = $satisfaction[$arrayId]->Scores[-1];
+		$jamData["score0"] = $satisfaction[$arrayId]->Scores[0];
+		$jamData["score1"] = $satisfaction[$arrayId]->Scores[1];
+		$jamData["score2"] = $satisfaction[$arrayId]->Scores[2];
+		$jamData["score3"] = $satisfaction[$arrayId]->Scores[3];
+		$jamData["score4"] = $satisfaction[$arrayId]->Scores[4];
+		$jamData["score5"] = $satisfaction[$arrayId]->Scores[5];
 	}
 
 	StopTimer("RenderJam");
