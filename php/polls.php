@@ -1,5 +1,21 @@
 <?php
 
+class Poll{
+	public $Id;
+	public $Question;
+	public $PollType;
+	public $DateStart;
+	public $DateEnd;
+	public $IsActive;
+	public $Options;
+}
+
+class PollOption{
+	public $Id;
+	public $Text;
+	public $Votes;
+}
+
 function LoadPolls(){
 	global $dbConn;
 	AddActionLog("LoadPolls");
@@ -18,34 +34,37 @@ function LoadPolls(){
 	$sql = "";
 
 	while($pollData = mysqli_fetch_array($data)){
-		$pollID = intval($pollData["poll_id"]);
+		$pollId = intval($pollData["poll_id"]);
 		$pollQuestion = $pollData["poll_question"];
 		$pollType = $pollData["poll_type"];
 		$pollDateStart = $pollData["poll_start_datetime"];
 		$pollDateEnd = $pollData["poll_end_datetime"];
 		$pollIsActive = intval($pollData["is_active"]);
-		$optionID = intval($pollData["option_id"]);
+		$optionId = intval($pollData["option_id"]);
 		$optionText = $pollData["option_poll_text"];
 		$optionVotes = intval($pollData["vote_num"]);
 
-		if(!isset($polls[$pollID])){
-			$poll = Array();
+		if(!isset($polls[$pollId])){
+			$poll = new Poll();
 
-			$poll["POLL_ID"] = $pollID;
-			$poll["QUESTION"] = $pollQuestion;
-			$poll["TYPE"] = $pollType;
-			$poll["DATE_START"] = $pollDateStart;
-			$poll["DATE_END"] = $pollDateEnd;
-			$poll["IS_ACTIVE"] = $pollIsActive;
-			$poll["OPTIONS"] = Array();
+			$poll->Id = $pollId;
+			$poll->Question = $pollQuestion;
+			$poll->PollType = $pollType;
+			$poll->DateStart = $pollDateStart;
+			$poll->DateEnd = $pollDateEnd;
+			$poll->IsActive = $pollIsActive;
+			$poll->Options = Array();
 
-			$polls[$pollID] = $poll;
+			$polls[$pollId] = $poll;
 		}
 
-		$polls[$pollID]["OPTIONS"][$optionID] = Array();
-		$polls[$pollID]["OPTIONS"][$optionID]["OPTION_ID"] = $optionID;
-		$polls[$pollID]["OPTIONS"][$optionID]["TEXT"] = $optionText;
-		$polls[$pollID]["OPTIONS"][$optionID]["VOTES"] = $optionVotes;
+		$pollOption = new PollOption();
+
+		$pollOption->Id = $optionId;
+		$pollOption->Text = $optionText;
+		$pollOption->Votes = $optionVotes;
+
+		$poll->Options[$optionId] = $pollOption;
 	}
 
 	StopTimer("LoadPolls");
@@ -95,31 +114,31 @@ function RenderPolls(&$polls, &$loggedInUserPollVotes){
 	foreach($polls as $pollID => $pollData){
 		$poll = Array();
 
-		$pollID = $pollData["POLL_ID"];
+		$pollID = $pollData->Id;
 		$totalVotes = 0;
 
-		$poll["QUESTION"] = $pollData["QUESTION"];
+		$poll["QUESTION"] = $pollData->Question;
 		$poll["POLL_ID"] = $pollID;
 		$poll["USER_VOTED_IN_POLL"] = false;
 		$poll["OPTIONS"] = Array();
-		$poll["IS_ACTIVE"] = $pollData["IS_ACTIVE"];
+		$poll["IS_ACTIVE"] = $pollData->IsActive;
 		
-		foreach($pollData["OPTIONS"] as $optionID => $optionData){
+		foreach($pollData->Options as $optionID => $optionData){
 			$option = Array();
 			
-			$optionID = $optionData["OPTION_ID"];
+			$optionID = $optionData->Id;
 
 			$option["OPTION_ID"] = $optionID;
 			$option["USER_VOTED"] = false;
-			$option["TEXT"] = $optionData["TEXT"];
-			$option["VOTES"] = $optionData["VOTES"];
+			$option["TEXT"] = $optionData->Text;
+			$option["VOTES"] = $optionData->Votes;
 
 			if(isset($loggedInUserPollVotes[$pollID][$optionID]) && $loggedInUserPollVotes[$pollID][$optionID] == true){
 				$option["USER_VOTED"] = true;
 				$poll["USER_VOTED_IN_POLL"] = true;
 			}
 
-			$totalVotes += $optionData["VOTES"];
+			$totalVotes += $optionData->Votes;
 
 			$poll["OPTIONS"][] = $option;
 		}
