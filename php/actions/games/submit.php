@@ -111,20 +111,20 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 
 	//Create or update entry
 	foreach($games as $i => $game){
-		if($game["entry_deleted"]){
+		if($game->Deleted){
 			continue;
 		}
 
-		if($game["jam_number"] != $jam_number){
+		if($game->JamNumber != $jam_number){
 			continue;
 		}
 
-		if($game["author"] != $loggedInUser->Username){
+		if($game->Author != $loggedInUser->Username){
 			continue;
 		}
 
 		//Updating existing entry
-		$existingScreenshot = $game["screenshot_url"];
+		$existingScreenshot = $game->UrlScreenshot;
 		if($screenshotURL == "logo.png"){
 			if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
 				$screenshotURL = $existingScreenshot;
@@ -142,7 +142,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		$escapedGameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 		$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
-		$escapedAuthorName = mysqli_real_escape_string($dbConn, $game["author"]);
+		$escapedAuthorName = mysqli_real_escape_string($dbConn, $game->Author);
 		$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
 		$escaped_color = mysqli_real_escape_string($dbConn, $color);
 

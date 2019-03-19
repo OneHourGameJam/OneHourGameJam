@@ -79,7 +79,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 $entryID = intval($_GET["entry_id"]);
                 $render["editingentry"] = Array();
                 foreach($games as $i => $game){
-                    if($game["id"] == $entryID){
+                    if($game->Id == $entryID){
                         $render["editingentry"] = RenderGame($users, $game, $jams, RENDER_DEPTH_GAMES);
                         break;
                     }
@@ -143,21 +143,21 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             $render["user_entry_color"] = $jam->Colors[$colorNumber];
 
             foreach($games as $i => $game){
-                if($game["author"] != $loggedInUser->Username){
+                if($game->Author != $loggedInUser->Username){
                     continue;
                 }
 
-                if($game["jam_number"] != $jamNumber){
+                if($game->JamNumber != $jamNumber){
                     continue;
                 }
 
-                if($game["entry_deleted"] == 1){
+                if($game->Deleted == 1){
                     continue;
                 }
 
                 //Determine entry color number
                 foreach($jam->Colors as $colorIndex => $color){
-                    if($color == $game["color"]){
+                    if($color == $game->Color){
                         $colorNumber = $colorIndex;
                         break;
                     }
@@ -167,30 +167,30 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 $render["user_entry_color"] = $jam->Colors[$colorNumber];
 
                 $render["user_submitted_to_this_jam"] = true;
-                $render["user_entry_name"] = $game["title"];
-                if($game["screenshot_url"] != "logo.png"){
-                    $render["user_entry_screenshot"] = $game["screenshot_url"];
+                $render["user_entry_name"] = $game->Title;
+                if($game->UrlScreenshot != "logo.png"){
+                    $render["user_entry_screenshot"] = $game->UrlScreenshot;
                 }
-                $render["user_entry_url"] = $game["url"];
-                $render["user_entry_url_web"] = $game["url_web"];
-                $render["user_entry_url_windows"] = $game["url_windows"];
-                $render["user_entry_url_mac"] = $game["url_mac"];
-                $render["user_entry_url_linux"] = $game["url_linux"];
-                $render["user_entry_url_ios"] = $game["url_ios"];
-                $render["user_entry_url_android"] = $game["url_android"];
-                $render["user_entry_url_source"] = $game["url_source"];
-                $render["user_entry_desc"] = $game["description"];
+                $render["user_entry_url"] = $game->Url;
+                $render["user_entry_url_web"] = $game->UrlWeb;
+                $render["user_entry_url_windows"] = $game->UrlWindows;
+                $render["user_entry_url_mac"] = $game->UrlMac;
+                $render["user_entry_url_linux"] = $game->UrlLinux;
+                $render["user_entry_url_ios"] = $game->UrliOs;
+                $render["user_entry_url_android"] = $game->UrlAndroid;
+                $render["user_entry_url_source"] = $game->UrlSource;
+                $render["user_entry_desc"] = $game->Description;
                 //$dictionary["user_entry_color"] = $game["color"];
                 //$dictionary["user_entry_color_number"] = $game["color_number"];
 
-                if(isset($game["has_url"])){$render["user_has_url"] = 1;}
-                if(isset($game["has_url_web"])){$render["user_has_url_web"] = 1;}
-                if(isset($game["has_url_windows"])){$render["user_has_url_windows"] = 1;}
-                if(isset($game["has_url_mac"])){$render["user_has_url_mac"] = 1;}
-                if(isset($game["has_url_linux"])){$render["user_has_url_linux"] = 1;}
-                if(isset($game["has_url_ios"])){$render["user_has_url_ios"] = 1;}
-                if(isset($game["has_url_android"])){$render["user_has_url_android"] = 1;}
-                if(isset($game["has_url_source"])){$render["user_has_url_source"] = 1;}
+                $render["user_has_url"] = ($game->Url) ? 1 : 0;
+                $render["user_has_url_web"] = ($game->UrlWeb) ? 1 : 0;
+                $render["user_has_url_windows"] = ($game->UrlWindows) ? 1 : 0;
+                $render["user_has_url_mac"] = ($game->UrlMac) ? 1 : 0;
+                $render["user_has_url_linux"] = ($game->UrlLinux) ? 1 : 0;
+                $render["user_has_url_ios"] = ($game->UrliOs) ? 1 : 0;
+                $render["user_has_url_android"] = ($game->UrlAndroid) ? 1 : 0;
+                $render["user_has_url_source"] = ($game->UrlSource) ? 1 : 0;
                 break;
             }
 

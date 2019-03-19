@@ -108,15 +108,15 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 	$render["entries"] = Array();
 	$render["entries_count"] = 0;
 	foreach($games as $j => $game){
-		if($game["jam_id"] == $render["jam_id"]){
+		if($game->JamId == $render["jam_id"]){
 			if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
 				$render["entries"][] = RenderGame($users, $game, $jams, $renderDepth & ~RENDER_DEPTH_JAMS);
 			}
 
-			if(!$game["entry_deleted"]){
+			if(!$game->Deleted){
 				//Has logged in user participated in this jam?
 				if($loggedInUser !== false){
-					if($loggedInUser->Username == $game["author"]){
+					if($loggedInUser->Username == $game->Author){
 						$render["user_participated_in_jam"] = 1;
 					}
 				}

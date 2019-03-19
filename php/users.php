@@ -156,17 +156,17 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     $userData["first_jam_number"] = 0;
     $userData["last_jam_number"] = 0;
     foreach($games as $j => $gameData){
-        if($gameData["author"] != $username){
+        if($gameData->Author != $username){
             continue;
         }
 
-        if($gameData["entry_deleted"] == 1){
+        if($gameData->Deleted == 1){
             continue;
         }
 
 	    StartTimer("RenderUser - foreach games - Foreach Jams");
         foreach($jams as $k => $jam){
-            if($jam->Id == $gameData["jam_id"]){
+            if($jam->Id == $gameData->JamId){
                 $jamData = $jam;
                 break;
             }
@@ -177,20 +177,20 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
         $userData["is_author"] = 1;
         
         if($userData["first_jam_number"] == 0){
-            $userData["first_jam_number"] = $gameData["jam_number"];
+            $userData["first_jam_number"] = $gameData->JamNumber;
         }
         
         if($userData["last_jam_number"] == 0){
-            $userData["last_jam_number"] = $gameData["jam_number"];
+            $userData["last_jam_number"] = $gameData->JamNumber;
         }
 
         $userData["entry_count"] += 1;
 
-        if($gameData["jam_number"] < $userData["first_jam_number"] ){
-            $userData["first_jam_number"] = $gameData["jam_number"];
+        if($gameData->JamNumber < $userData["first_jam_number"] ){
+            $userData["first_jam_number"] = $gameData->JamNumber;
         }
-        if($gameData["jam_number"] > $userData["last_jam_number"] ){
-            $userData["last_jam_number"] = $gameData["jam_number"];
+        if($gameData->JamNumber > $userData["last_jam_number"] ){
+            $userData["last_jam_number"] = $gameData->JamNumber;
         }
 
         $isJamRecent = intval($jamData->JamNumber) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
@@ -459,7 +459,7 @@ function GroupGamesByUsername(&$games)
     
     $gamesByUsername = Array();
     foreach($games as $i => $game) {
-        $username = $game["author"];
+        $username = $game->Author;
         if (!isset($gamesByUsername[$username])){
             $gamesByUsername[$username] = Array();
         }
@@ -479,7 +479,7 @@ function GroupJamsByUsername(&$jams, &$gamesByUsername)
     foreach($gamesByUsername as $username => $games){
         $jamsByUsername[$username] = Array();
         foreach($games as $i => $game){
-            $jamsByUsername[$username][$game['jam_id']] = $jams[$game['jam_id']];
+            $jamsByUsername[$username][$game->JamId] = $jams[$game->JamId];
         }
     }
 
