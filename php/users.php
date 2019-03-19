@@ -236,7 +236,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     $activeColor = "#F6FFEC";
     $highlyAciveColor = "#ECFFEC";
 
-    if($cookies["darkmode"] == 1)
+    if($cookies->DarkMode == 1)
     {
         $inactiveColor = "#4A3636";
         $activeColor = "#3E4A36";

@@ -1,5 +1,11 @@
 <?php
 
+class Cookies{
+    public $IsStreamer;
+    public $DarkMode;
+    public $CookieNotice;
+}
+
 function UpdateCookies(){
     global $_COOKIE, $_GET, $_POST;
 	AddActionLog("UpdateCookies");
@@ -52,19 +58,20 @@ function LoadCookies(){
 	AddActionLog("LoadCookies");
 	StartTimer("LoadCookies");
 
-    $cookies = Array();
+    $cookies = new Cookies();
 
-    $cookies["is_streamer"] = 0;
-    $cookies["darkmode"] = 0;
+    $cookies->IsStreamer = 0;
+    $cookies->DarkMode = 0;
+    $cookies->CookieNotice = -1;
 
     //Determine whether the person is in dark mode
-    $cookies["darkmode"] = (isset($_COOKIE["darkmode"])) ? $_COOKIE["darkmode"] : 0;
+    $cookies->DarkMode = (isset($_COOKIE["darkmode"])) ? $_COOKIE["darkmode"] : 0;
 
     //Determine whether the person is in streaming mode
-    $cookies["is_streamer"] = (isset($_COOKIE["streaming"])) ? $_COOKIE["streaming"] : 0;
+    $cookies->IsStreamer = (isset($_COOKIE["streaming"])) ? $_COOKIE["streaming"] : 0;
 
     //Determine whether the user has seen or dismissed the cookie notice
-    $cookies["cookienotice"] = (isset($_COOKIE["cookienotice"])) ? $_COOKIE["cookienotice"] : -1;
+    $cookies->CookieNotice = (isset($_COOKIE["cookienotice"])) ? $_COOKIE["cookienotice"] : -1;
 
 	StopTimer("LoadCookies");
     return $cookies;
@@ -76,11 +83,11 @@ function RenderCookies(&$cookies){
     
     $render = Array();
 
-    $render["is_streamer"] = $cookies["is_streamer"];
-    $render["darkmode"] = $cookies["darkmode"];
+    $render["is_streamer"] = $cookies->IsStreamer;
+    $render["darkmode"] = $cookies->DarkMode;
 
-    if ($cookies["cookienotice"] != -1)
-        $render["show_cookie_notice"] = !$cookies["cookienotice"];
+    if ($cookies->CookieNotice != -1)
+        $render["show_cookie_notice"] = !$cookies->CookieNotice;
     else if(isset($_GET["streaming"]) || isset($_GET["darkmode"]))
         $render["show_cookie_notice"] = 1;
     else
