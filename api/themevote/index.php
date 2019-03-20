@@ -1,25 +1,15 @@
 <?php
-
-
 chdir("../../");
-include_once("php/global.php");
-include_once("php/helpers.php");
-include_once("php/db.php");
 include_once("php/site.php");
-include_once("php/config.php");
-include_once("php/users.php");
 
-$users = LoadUsers();
-$usr = IsLoggedIn();
-
-if($usr == false){
+if($loggedInUser == false){
 	print json_encode(Array("ERROR" => "Not logged in"));
 	die();
 }
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);
 $clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-$clean_username = mysqli_real_escape_string($dbConn, $usr->Username);
+$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 if(!isset($_GET["themeID"])){
 	print json_encode(Array("ERROR" => "Theme ID not set"));

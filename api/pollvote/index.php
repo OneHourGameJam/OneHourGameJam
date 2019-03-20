@@ -1,12 +1,8 @@
 <?php
-
-
 chdir("../../");
 include_once("php/site.php");
 
-$usr = IsLoggedIn();
-
-if($usr == false){
+if($loggedInUser == false){
 	print json_encode(Array("ERROR" => "Not logged in"));
 	die();
 }

@@ -30,12 +30,12 @@ function HashPassword($password, $salt, $iterations, &$config){
 }
 
 //Returns the username of the user associated with the provided user id
-function GetUsernameForUserId($userID, &$users){
+function GetUsernameForUserId($userId, &$users){
 	AddActionLog("GetUsernameForUserId");
 	StartTimer("GetUsernameForUserId");
 
 	foreach($users as $i => $user){
-		if($user->Id == $userID){
+		if($user->Id == $userId){
 			StopTimer("GetUsernameForUserId");
 			return $user->Username;
 		}
@@ -50,8 +50,8 @@ function GetUsernameForUserId($userID, &$users){
 //returns that. This is to prevent re-hashing the provided sessionID multiple times.
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
-function IsLoggedIn(){
-	global $config, $users, $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
+function IsLoggedIn(&$config, &$users){
+	global $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
 

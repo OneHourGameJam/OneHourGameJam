@@ -22,9 +22,9 @@ function Init(){
     RedirectToHttpsIfRequired($config);
 
 	$adminLog = LoadAdminLog();
-	$users = LoadUsers();
+	$users = new UserModels();
 
-	$loggedInUser = IsLoggedIn();
+	$loggedInUser = IsLoggedIn($config, $users->UserModels);
 	
 	$page = ValidatePage($page, $loggedInUser);
 
@@ -62,13 +62,13 @@ function Init(){
 	}
 	if(FindDependency("RenderUsers", $dep) !== false){
 		$dependency = FindDependency("RenderUsers", $dep);
-		$dictionary["users"] = RenderUsers($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
+		$dictionary["users"] = RenderUsers($config, $cookies, $users->UserModels, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAllJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
@@ -77,11 +77,11 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($config, $users, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dep) !== false){
 		$dependency = FindDependency("RenderGames", $dep);
-		$dictionary["entries"] = RenderGames($users, $games, $jams, $dependency["RenderDepth"]);
+		$dictionary["entries"] = RenderGames($users->UserModels, $games, $jams, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
 		$dictionary["themes"] = RenderThemes($config, $jams, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
@@ -107,12 +107,12 @@ function Init(){
 			$dictionary["stream"] = InitStream($config);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $config, $users, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $config, $users->UserModels, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
 			$dependency = FindDependency("RenderLoggedInUser", $dep);
-			$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users->UserModels, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	

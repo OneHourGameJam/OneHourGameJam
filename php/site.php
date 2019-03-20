@@ -14,6 +14,9 @@ session_start();
 include_once("php/global.php");
 include_once("php/dependencies.php");
 
+//Models
+include_once("php/models/UserModel.php");
+
 //Global functions
 include_once("php/sanitize.php");
 include_once("php/page.php");
