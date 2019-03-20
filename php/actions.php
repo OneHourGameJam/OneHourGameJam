@@ -12,8 +12,8 @@ function LoadSiteActions(&$config){
             "REDIRECT_AFTER_EXECUTION" => "?page=main",
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Logged in successfully"),
-                "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
-                "INVALID_USERNAME_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect username length. Must be between ".$config["MINIMUM_USERNAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]." characters long."),
+                "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$config["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
+                "INVALID_USERNAME_LENGTH" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect username length. Must be between ".$config["MINIMUM_USERNAME_LENGTH"]->Value." and ".$config["MAXIMUM_USERNAME_LENGTH"]->Value." characters long."),
                 "USERNAME_ALREADY_REGISTERED" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "There is already a user with that username. Please log in or choose another."),
                 "USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "The user does not exist."),
                 "INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect username/password combination."),
@@ -158,7 +158,7 @@ function LoadSiteActions(&$config){
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Password Updated."),
                 "USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "User does not exist."),
-                "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
+                "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$config["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
                 "PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=editusers", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Passwords do not match."),
                 "NOT_AUTHORIZED" => Array("REDIRECT_URL" => "?page=main", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "Only admins can perform this action."),
             )
@@ -170,7 +170,7 @@ function LoadSiteActions(&$config){
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "Password Updated."),
                 "USER_DOES_NOT_EXIST" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "error", "MESSAGE_TEXT" => "User does not exist."),
-                "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]." characters long."),
+                "INVALID_PASSWORD_LENGTH" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$config["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
                 "PASSWORDS_DONT_MATCH" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Passwords do not match."),
                 "INCORRECT_PASSWORD" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Old password is not correct."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
@@ -183,7 +183,7 @@ function LoadSiteActions(&$config){
             "ACTION_RESULT" => Array(
                 "SUCCESS" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "success", "MESSAGE_TEXT" => "User settings updated."),
                 "INVALID_EMAIL" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Email is not valid."),
-                "INVALID_DISPLAY_NAME" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect display name length. Must be between ".$config["MINIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]." and ".$config["MAXIMUM_DISPLAY_NAME_LENGTH"]["VALUE"]." characters long."),
+                "INVALID_DISPLAY_NAME" => Array("REDIRECT_URL" => "?page=usersettings", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Incorrect display name length. Must be between ".$config["MINIMUM_DISPLAY_NAME_LENGTH"]->Value." and ".$config["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value." characters long."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
             )
         ),
@@ -197,7 +197,7 @@ function LoadSiteActions(&$config){
                 "INVALID_THEME" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme is not valid."),
                 "NOT_LOGGED_IN" => Array("REDIRECT_URL" => "?page=login", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Not logged in."),
                 "THEME_RECENTLY_USED" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "Theme has been used in a recent jam."),
-                "TOO_MANY_THEMES" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "You can only submit ".$config["THEMES_PER_USER"]["VALUE"]." themes. Please delete past themes to submit again.")
+                "TOO_MANY_THEMES" => Array("REDIRECT_URL" => "?page=themes", "MESSAGE_TYPE" => "warning", "MESSAGE_TEXT" => "You can only submit ".$config["THEMES_PER_USER"]->Value." themes. Please delete past themes to submit again.")
             )
         ),
         Array(

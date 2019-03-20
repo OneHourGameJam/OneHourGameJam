@@ -120,7 +120,7 @@ function GetSuggestedNextJamDateTime(&$config){
 	StartTimer("GetSuggestedNextJamDateTime");
 
     $jamDay = "monday";
-    switch($config["JAM_DAY"]["VALUE"]){
+    switch($config["JAM_DAY"]->Value){
         case 0:
             $jamDay = "sunday";
         break;
@@ -144,7 +144,7 @@ function GetSuggestedNextJamDateTime(&$config){
         break;
     }
 
-	$nextSuggestedJamTime = strtotime("$jamDay +" . intval($config["JAM_TIME"]["VALUE"]) . " hours UTC");
+	$nextSuggestedJamTime = strtotime("$jamDay +" . intval($config["JAM_TIME"]->Value) . " hours UTC");
 
 	StopTimer("GetSuggestedNextJamDateTime");
 	return $nextSuggestedJamTime;

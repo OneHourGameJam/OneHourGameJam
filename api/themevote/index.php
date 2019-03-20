@@ -9,8 +9,6 @@ include_once("php/site.php");
 include_once("php/config.php");
 include_once("php/users.php");
 
-$config = LoadConfig();
-
 $users = LoadUsers();
 $usr = IsLoggedIn();
 

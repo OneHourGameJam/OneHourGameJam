@@ -104,7 +104,7 @@ function Init(){
 		$dictionary["stream"] = Array();
 
 		if($jamTime + 3600 <= $now && $now <= $jamTime + 7 * 3600)
-			$dictionary["stream"] = InitStream();
+			$dictionary["stream"] = InitStream($config);
 	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $config, $users, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);

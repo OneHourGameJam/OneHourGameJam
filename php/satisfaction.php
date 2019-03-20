@@ -37,7 +37,7 @@ function LoadSatisfaction(&$config){
 		$satisfactionEntry->QuestionId = $questionId;
 		$satisfactionEntry->AverageScore = $averageScore;
 		$satisfactionEntry->SubmittedScores = $submittedScores;
-		$satisfactionEntry->EnoughScoresToShowSatisfaction = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
+		$satisfactionEntry->EnoughScoresToShowSatisfaction = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
 		
 		for($score = -5; $score <= 5; $score++){
 			$satisfactionEntry->Scores[$score] = 0;

@@ -12,12 +12,12 @@ function SaveConfig($key, $newValue){
 		return;
 	}
 
-	if ($config[$key]["EDITABLE"] != true) {
+	if ($config[$key]->Editable != true) {
 		//Some configuration settings cannot be set via this interface for security reasons.
 		return;
 	}
 
-	if ($newValue == $config[$key]) {
+	if ($newValue == $config[$key]->Value) {
 		return;
 	}
 

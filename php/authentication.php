@@ -12,7 +12,7 @@ function HashPassword($password, $salt, $iterations, &$config){
 	AddActionLog("HashPassword");
 	StartTimer("HashPassword");
 
-	$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "";
+	$pepper = isset($config["PEPPER"]->Value) ? $config["PEPPER"]->Value : "";
 	$pswrd = $pepper.$password.$salt;
 
 	//Check that we have sufficient iterations for password generation.
@@ -71,8 +71,8 @@ function IsLoggedIn(){
 	}
 
 	$sessionID = "".$_COOKIE["sessionID"];
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"], $config);
+	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"]->Value : "BetterThanNothing";
+	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]->Value, $config);
 
     $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
 
@@ -208,10 +208,10 @@ function ValidatePassword($password, &$config){
 	AddActionLog("ValidatePassword");
 
 	//Check password length
-	if(strlen($password) < $config["MINIMUM_PASSWORD_LENGTH"]["VALUE"]){
+	if(strlen($password) < $config["MINIMUM_PASSWORD_LENGTH"]->Value){
 		return false;
 	}
-	if(strlen($password) > $config["MAXIMUM_PASSWORD_LENGTH"]["VALUE"]){
+	if(strlen($password) > $config["MAXIMUM_PASSWORD_LENGTH"]->Value){
 		return false;
 	}
 
@@ -221,8 +221,8 @@ function ValidatePassword($password, &$config){
 function GenerateUserHashIterations(&$config){
 	AddActionLog("GenerateUserHashIterations");
 
-	$minimumHashIterations = $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"];
-	$maximumHashIterations = $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"];
+	$minimumHashIterations = $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
+	$maximumHashIterations = $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
 
 	return intval(rand($minimumHashIterations, $maximumHashIterations));
 }
@@ -230,10 +230,10 @@ function GenerateUserHashIterations(&$config){
 function ValidateHashingIterationNumber($iterations, &$config){
 	AddActionLog("ValidateHashingIterationNumber");
 
-	if($iterations < $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"]){
+	if($iterations < $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
 		return false;
 	}
-	if($iterations > $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]["VALUE"]){
+	if($iterations > $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
 		return false;
 	}
 
@@ -243,10 +243,10 @@ function ValidateHashingIterationNumber($iterations, &$config){
 function ValidateUsername($username, &$config){
 	AddActionLog("ValidateUsername");
 
-	if(strlen($username) < $config["MINIMUM_USERNAME_LENGTH"]["VALUE"]){
+	if(strlen($username) < $config["MINIMUM_USERNAME_LENGTH"]->Value){
 		return false;
 	}
-	if(strlen($username) > $config["MAXIMUM_USERNAME_LENGTH"]["VALUE"]){
+	if(strlen($username) > $config["MAXIMUM_USERNAME_LENGTH"]->Value){
 		return false;
 	}
 

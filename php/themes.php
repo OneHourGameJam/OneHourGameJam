@@ -151,11 +151,11 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		$theme["author"] = $themeData->Author;
 		$theme["theme_id"] = $themeID;
 		$theme["ThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
-		if($votesTotal < $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"]){
-			if($config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"] == 1){
-				$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = "$votesTotal / ".$config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"] ." Vote";
+		if($votesTotal < $config["THEME_MIN_VOTES_TO_SCORE"]->Value){
+			if($config["THEME_MIN_VOTES_TO_SCORE"]->Value == 1){
+				$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = "$votesTotal / ".$config["THEME_MIN_VOTES_TO_SCORE"]->Value ." Vote";
 			}else{
-				$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = "$votesTotal / ".$config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"] ." Votes";
+				$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = "$votesTotal / ".$config["THEME_MIN_VOTES_TO_SCORE"]->Value ." Votes";
 			}
 		}else{
 			$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
@@ -195,7 +195,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		}
 		
 		//Mark theme as old
-		$theme["is_old"] = intval($theme["days_ago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"]["VALUE"]);
+		$theme["is_old"] = intval($theme["days_ago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"]->Value);
 		$theme["is_recent"] = IsRecentTheme($themeText);
 
 		//Compute JavaScript formatted lists for themes pie chart
@@ -230,7 +230,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		}
 
 		//Calculate popularity and apathy
-		if($votesTotal >= intval($config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"])){
+		if($votesTotal >= intval($config["THEME_MIN_VOTES_TO_SCORE"]->Value)){
 			$theme["has_enough_votes"] = true;
 
 			$oppinionatedVotesTotal = $votesFor + $votesAgainst;
@@ -269,11 +269,11 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		usort($render["suggested_themes"], "CmpArrayByPropertyPopularityNum");
 		$count = 0;
 		foreach($render["suggested_themes"] as $i => $theme){
-			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"]["VALUE"])){
+			if($count < intval($config["THEME_NUMBER_TO_MARK_TOP"]->Value)){
 				$render["suggested_themes"][$i]["top_theme"] = 1;
 				$render["top_themes"][] = $theme;
 			}
-			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]["VALUE"]) || !$theme["has_enough_votes"]){
+			if($count < intval($config["THEME_NUMBER_TO_MARK_KEEP"]->Value) || !$theme["has_enough_votes"]){
 				$render["suggested_themes"][$i]["keep_theme"] = 1;
 			}
 			$count++;
@@ -317,7 +317,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 }
 
 function IsRecentTheme($theme) {
-	global $jams,$config;
+	global $jams, $config;
 	$jamNumber = 1; // Number of non deleted jams traversed
 	foreach ($jams as $i => $jam) {
 		$currentTime = new DateTime();
@@ -325,7 +325,7 @@ function IsRecentTheme($theme) {
 		if ($jam->Deleted == 0 && $startTime < $currentTime) {
 			if (strtolower($jam->Theme) == strtolower($theme))
 				return "THEME_RECENTLY_USED";
-			if (++$jamNumber > $config["JAM_THEMES_CONSIDERED_RECENT"]["VALUE"])
+			if (++$jamNumber > $config["JAM_THEMES_CONSIDERED_RECENT"]->Value)
 				break;
 		}
 	}
@@ -384,7 +384,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$config){
 	AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 	StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 
-	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
 	$result = Array();
 	$availableThemes = Array();
@@ -444,7 +444,7 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$config){
 	AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 	StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 
-	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]->Value;
 	$totalPopularity = 0;
 
 	$result = Array();

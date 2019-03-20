@@ -87,7 +87,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			return "SCREENSHOT_NOT_AN_IMAGE";
 		}
 
-		if($_FILES["screenshotfile"]["size"] > $config["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]["VALUE"]) {
+		if($_FILES["screenshotfile"]["size"] > $config["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]->Value) {
 			return "SCREENSHOT_TOO_BIG";
 		}
 

@@ -168,7 +168,7 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 
 		$render["satisfaction_average_score"] = $satisfactionAverage;
 		$render["satisfaction_submitted_scores"] = $satisfactionCount;
-		$render["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]["VALUE"];
+		$render["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
 		$render["score-5"] = $satisfaction[$arrayId]->Scores[-5];
 		$render["score-4"] = $satisfaction[$arrayId]->Scores[-4];
 		$render["score-3"] = $satisfaction[$arrayId]->Scores[-3];
@@ -204,7 +204,7 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 	$latestStartedJamFound = false;
 	$currentJamData = GetCurrentJamNumberAndID();
 
-	$jamsToLoad = $config["JAMS_TO_LOAD"]["VALUE"];
+	$jamsToLoad = $config["JAMS_TO_LOAD"]->Value;
 
 	$allJamsLoaded = true;
 	$render["current_jam"] = $currentJamData["NUMBER"] !== 0;
@@ -258,14 +258,14 @@ function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime,
 
 	//print "<br>CHECK JAM SCHEDULING";
 
-	if($config["JAM_AUTO_SCHEDULER_ENABLED"]["VALUE"] == 0){
+	if($config["JAM_AUTO_SCHEDULER_ENABLED"]->Value == 0){
 		//print "<br>AUTO SCHEDULER DISABLED";
 		StopTimer("CheckNextJamSchedule");
 		return;
 	}
 
 	//print "<br>AUTO SCHEDULER ENABLED";
-	$autoScheduleThreshold = $config["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]["VALUE"] * 60;
+	$autoScheduleThreshold = $config["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]->Value * 60;
 
 	$now = time();
 	$timeToNextScheduledJam = $nextScheduledJamTime - $now;
@@ -327,7 +327,7 @@ function SelectRandomThemeByVoteDifference(&$themes, &$config){
 	AddActionLog("SelectRandomThemeByVoteDifference");
 	StartTimer("SelectRandomThemeByVoteDifference");
 
-	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
 	$selectedTheme = "";
 
@@ -389,7 +389,7 @@ function SelectRandomThemeByPopularity(&$themes, &$config){
 	AddActionLog("SelectRandomThemeByPopularity");
 	StartTimer("SelectRandomThemeByPopularity");
 
-	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]["VALUE"];
+	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
 	$selectedTheme = "";
 

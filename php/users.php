@@ -193,9 +193,9 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
             $userData["last_jam_number"] = $gameData->JamNumber;
         }
 
-        $isJamRecent = intval($jamData->JamNumber) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]["VALUE"]));
+        $isJamRecent = intval($jamData->JamNumber) > (intval($currentJamData["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]->Value));
         if($isJamRecent){
-            $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]["VALUE"];
+            $userData["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]->Value;
         }
 
 	    StopTimer("RenderUser - foreach games - entry count, first and last jam, recent");
@@ -218,10 +218,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
 
     //Find admin candidates
 	StartTimer("RenderUser - admin candidates");
-    if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]["VALUE"]){
+    if($userData["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]->Value){
         $userData["admin_candidate_recent_participation_check_pass"] = 1;
     }
-    if($userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]["VALUE"]){
+    if($userData["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]->Value){
         $userData["admin_candidate_total_participation_check_pass"] = 1;
     }
     if(	isset($userData["admin_candidate_recent_participation_check_pass"]) &&
@@ -246,10 +246,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     //Find inactive admins (participation in jams)
     $jamsSinceLastParticipation = ($currentJamData["NUMBER"] - $userData["last_jam_number"]);
     $userData["jams_since_last_participation"] = $jamsSinceLastParticipation;
-    if($userData["last_jam_number"] < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]["VALUE"])){
+    if($userData["last_jam_number"] < ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]->Value)){
         $userData["activity_jam_participation"] = "inactive";
         $userData["activity_jam_participation_color"] = $inactiveColor;
-    }else if($userData["last_jam_number"] >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]["VALUE"])){
+    }else if($userData["last_jam_number"] >= ($currentJamData["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]->Value)){
         $userData["activity_jam_participation"] = "highly active";
         $userData["activity_jam_participation_color"] = $highlyAciveColor;
     }else{
@@ -258,10 +258,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     }
 
     //Find inactive admins (days since last login)
-    if($userData["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]["VALUE"]){
+    if($userData["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]->Value){
         $userData["activity_login"] = "inactive";
         $userData["activity_login_color"] = $inactiveColor;
-    }else if($userData["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]["VALUE"]){
+    }else if($userData["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]->Value){
         $userData["activity_login"] = "highly active";
         $userData["activity_login_color"] = $highlyAciveColor;
     }else{
@@ -270,10 +270,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     }
 
     //Find inactive admins (days since last login)
-    if($userData["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]["VALUE"]){
+    if($userData["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]->Value){
         $userData["activity_administration"] = "inactive";
         $userData["activity_administration_color"] = $inactiveColor;
-    }else if($userData["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]["VALUE"]){
+    }else if($userData["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]->Value){
         $userData["activity_administration"] = "highly active";
         $userData["activity_administration_color"] = $highlyAciveColor;
     }else{

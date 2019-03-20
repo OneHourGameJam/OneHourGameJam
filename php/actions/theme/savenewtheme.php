@@ -35,7 +35,7 @@ function AddTheme($newTheme, $isBot){
 			$themesByThisUser ++;
 		}
 	}
-	if ($themesByThisUser >= $config["THEMES_PER_USER"]["VALUE"]) {
+	if ($themesByThisUser >= $config["THEMES_PER_USER"]->Value) {
 		return "TOO_MANY_THEMES";
 	}
 

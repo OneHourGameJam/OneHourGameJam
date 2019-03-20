@@ -122,10 +122,10 @@ function LogInUser($username, $password){
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
-		$pepper = isset($config["PEPPER"]["VALUE"]) ? $config["PEPPER"]["VALUE"] : "BetterThanNothing";
-		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]["VALUE"], $config);
+		$pepper = isset($config["PEPPER"]->Value) ? $config["PEPPER"]->Value : "BetterThanNothing";
+		$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]->Value, $config);
 
-		$daysToKeepLoggedIn = $config["DAYS_TO_KEEP_LOGGED_IN"]["VALUE"];
+		$daysToKeepLoggedIn = $config["DAYS_TO_KEEP_LOGGED_IN"]->Value;
 		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
 		$_COOKIE["sessionID"] = $sessionID;
 

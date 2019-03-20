@@ -74,7 +74,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	if(isset($_FILES["assetfile"]) && $_FILES["assetfile"] != null && $_FILES["assetfile"]["size"] != 0){
 		$target_file = $asset_folder ."/". $asset_name;
 
-		if ($_FILES["assetfile"]["size"] > $config["MAX_ASSET_FILE_SIZE_IN_BYTES"]["VALUE"]) {
+		if ($_FILES["assetfile"]["size"] > $config["MAX_ASSET_FILE_SIZE_IN_BYTES"]->Value) {
 			return "UNLOADED_ASSET_TOO_BIG";
 		}
 
