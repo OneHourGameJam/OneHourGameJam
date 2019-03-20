@@ -70,7 +70,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             if(IsAdmin($loggedInUser) !== false){
                 if(isset($_GET["asset_id"])){
                     $assetID = intval($_GET["asset_id"]);
-                    $render["editingasset"] = ((isset($assets[$assetID])) ? $assets[$assetID] : Array());
+                    $render["editingasset"] = ((isset($assets[$assetID])) ? RenderAsset($assets[$assetID]) : Array());
                 }
             }
         break;

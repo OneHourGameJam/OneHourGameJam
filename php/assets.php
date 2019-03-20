@@ -1,5 +1,15 @@
 <?php
 
+class Asset{
+	public $Id;
+	public $Author;
+	public $AuthorDisplayName;
+	public $Title;
+	public $Description;
+	public $Type;
+	public $Content;
+}
+
 function LoadAssets(){
 	global $dbConn;
 	AddActionLog("LoadAssets");
@@ -25,45 +35,68 @@ function LoadAssets(){
 		$type = $asset["asset_type"];
 		$content = $asset["asset_content"];
 
-		$a = Array("id" => $id, "author" => $author, "author_display_name" => $author_display_name, "title" => $title, "description" => $description, "type" => $type, "content" => $content );
+		$asset = new Asset();
+		$asset->Id = $id;
+		$asset->Author = $author;
+		$asset->AuthorDisplayName = $author_display_name;
+		$asset->Title = $title;
+		$asset->Description = $description;
+		$asset->Type = $type;
+		$asset->Content = $content;
 
-		switch($type){
-			case "AUDIO":
-				$a["is_audio"] = 1;
-			break;
-			case "IMAGE":
-				$a["is_image"] = 1;
-			break;
-			case "TEXT":
-				$a["is_text"] = 1;
-			break;
-			case "LINK":
-				$a["is_link"] = 1;
-			break;
-			case "FILE":
-				$a["is_file"] = 1;
-			break;
-			default:
-				$a["is_other"] = 1;
-			break;
-		}
-
-		$assets[$id] = $a;
+		$assets[$id] = $asset;
 	}
 
 	StopTimer("LoadAssets");
 	return $assets;
 }
 
-function RenderAssets($assets){
+function RenderAssets(&$assets){
 	AddActionLog("RenderAssets");
 	StartTimer("RenderAssets");
 	$render = Array();
-	foreach($assets as $id => $asset){
+	foreach($assets as $id => $assetData){
+		$asset = RenderAsset($assetData);
 		$render[] = $asset;
 	}
 
 	StopTimer("RenderAssets");
+	return $render;
+}
+
+function RenderAsset(&$asset){
+	$type = $asset->Type;
+
+	$render = Array();
+	$render["id"] = $asset->Id;
+	$render["author"] = $asset->Author;
+	$render["author_display_name"] = $asset->AuthorDisplayName;
+	$render["title"] = $asset->Title;
+	$render["description"] = $asset->Description;
+	$render["type"] = $type;
+	$render["content"] = $asset->Content;
+
+	switch($type){
+		case "AUDIO":
+			$render["is_audio"] = 1;
+		break;
+		case "IMAGE":
+			$render["is_image"] = 1;
+		break;
+		case "TEXT":
+			$render["is_text"] = 1;
+		break;
+		case "LINK":
+			$render["is_link"] = 1;
+		break;
+		case "FILE":
+			$render["is_file"] = 1;
+		break;
+		default:
+			$render["is_other"] = 1;
+		break;
+	}
+
 	return $render;
 }
 
