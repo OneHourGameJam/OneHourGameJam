@@ -65,6 +65,8 @@ function RenderAssets(&$assets){
 }
 
 function RenderAsset(&$asset){
+	AddActionLog("RenderAsset");
+	StartTimer("RenderAsset");
 	$type = $asset->Type;
 
 	$render = Array();
@@ -97,6 +99,7 @@ function RenderAsset(&$asset){
 		break;
 	}
 
+	StopTimer("RenderAsset");
 	return $render;
 }
 

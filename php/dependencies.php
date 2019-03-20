@@ -1,5 +1,7 @@
 <?php
 
+StartTimer("Dependencies");
+
 //These correspond to the data which needs to be retrieved with LoadXYZ()
 define("DEPENDENCY_NONE",           0);
 define("DEPENDENCY_CONFIG",         pow(2, 0));
@@ -287,12 +289,18 @@ foreach($pageSettings[$page]["dependencies"] as $dependencyKey => $dependencyRen
     }
 }
 
+StopTimer("Dependencies");
+
 function FindDependency($dependencyKey, &$dep){
+	AddActionLog("FindDependency");
+	StartTimer("FindDependency");
     foreach($dep as $j => $depEntry){
         if($depEntry["Key"] == $dependencyKey){
+            StopTimer("FindDependency");
             return $depEntry;
         }
     }
+	StopTimer("FindDependency");
     return false;
 }
 

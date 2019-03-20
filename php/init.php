@@ -84,7 +84,7 @@ function Init(){
 		$dictionary["entries"] = RenderGames($users, $games, $jams, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
-		$dictionary["themes"] = RenderThemes($config, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+		$dictionary["themes"] = RenderThemes($config, $jams, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
 		$dictionary["assets"] = RenderAssets($assets);

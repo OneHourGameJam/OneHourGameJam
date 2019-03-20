@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $config, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themes, $config, $jams, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	if($isBot){
 		$user = "bot";
@@ -25,7 +25,7 @@ function AddTheme($newTheme, $isBot){
 		}
 	}
 
-	if (IsRecentTheme($newTheme)) {
+	if(IsRecentTheme($jams, $config, $newTheme)) {
 		return "THEME_RECENTLY_USED";
 	}
 

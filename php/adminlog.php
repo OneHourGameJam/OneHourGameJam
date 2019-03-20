@@ -75,6 +75,7 @@ function AddToAdminLog($logType, $logContent, $logSubjectUsername, $logAdminUser
 
 function RenderAdminLog(&$adminLog){
 	AddActionLog("RenderAdminLog");
+	StartTimer("RenderAdminLog");
 	$render = Array();
 
 	foreach($adminLog as $i => $logData){
@@ -92,6 +93,7 @@ function RenderAdminLog(&$adminLog){
 		$render[] = $log;
 	}
 
+	StopTimer("RenderAdminLog");
     return $render;
 }
 

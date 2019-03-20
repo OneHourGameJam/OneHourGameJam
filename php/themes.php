@@ -102,7 +102,7 @@ function LoadUserThemeVotes(&$loggedInUser){
 	return $userThemeVotes;
 }
 
-function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
+function RenderThemes(&$config, &$jams, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -196,7 +196,7 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 		
 		//Mark theme as old
 		$theme["is_old"] = intval($theme["days_ago"]) >= intval($config["THEME_DAYS_MARK_AS_OLD"]->Value);
-		$theme["is_recent"] = IsRecentTheme($themeText);
+		$theme["is_recent"] = IsRecentTheme($jams, $config, $themeText);
 
 		//Compute JavaScript formatted lists for themes pie chart
 		if($themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifference"] > 0){
@@ -316,8 +316,9 @@ function RenderThemes(&$config, &$themes, &$userThemeVotes, &$themesByVoteDiffer
 	return $render;
 }
 
-function IsRecentTheme($theme) {
-	global $jams, $config;
+function IsRecentTheme(&$jams, &$config, $theme) {
+	AddActionLog("IsRecentTheme");
+	StartTimer("IsRecentTheme");
 	$jamNumber = 1; // Number of non deleted jams traversed
 	foreach ($jams as $i => $jam) {
 		$currentTime = new DateTime();
@@ -329,6 +330,7 @@ function IsRecentTheme($theme) {
 				break;
 		}
 	}
+	StopTimer("IsRecentTheme");
 }
 
 function UserThemeVoteTypeToKey($themeVoteType){
