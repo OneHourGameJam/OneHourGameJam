@@ -14,7 +14,7 @@ function Init(){
 	StartTimer("Init - Load Data");
 
 	UpdateCookies();
-	$cookies = LoadCookies();
+	$cookies = new CookieData();
 
 	$config = LoadConfig();
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($config);
@@ -60,7 +60,7 @@ function Init(){
 	}
 	if(FindDependency("RenderUsers", $dep) !== false){
 		$dependency = FindDependency("RenderUsers", $dep);
-		$dictionary["users"] = RenderUsers($config, $cookies, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
+		$dictionary["users"] = RenderUsers($config, $cookies->CookieModel, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAllJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
@@ -91,7 +91,7 @@ function Init(){
 		$dictionary["polls"] = RenderPolls($polls->PollModels, $polls->LoggedInUserPollVotes);
 	}
 	if(FindDependency("RenderCookies", $dep) !== false){
-		$dictionary["cookies"] = RenderCookies($cookies);
+		$dictionary["cookies"] = RenderCookies($cookies->CookieModel);
 	}
 	if(FindDependency("RenderMessages", $dep) !== false){
 		$dictionary["messages"] = RenderMessages($messages);
@@ -105,12 +105,12 @@ function Init(){
 			$dictionary["stream"] = InitStream($config);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $config, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $config, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets, $cookies->CookieModel, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
 			$dependency = FindDependency("RenderLoggedInUser", $dep);
-			$dictionary["user"] = RenderLoggedInUser($config, $cookies, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = RenderLoggedInUser($config, $cookies->CookieModel, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	
