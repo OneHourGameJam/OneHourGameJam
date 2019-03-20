@@ -2,7 +2,7 @@
 
 //Changes data about the logged in user
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
-	global $users, $loggedInUser, $dbConn, $config;
+	global $loggedInUser, $dbConn, $config;
 
 	//Authorize user
 	if($loggedInUser === false){

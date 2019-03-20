@@ -18,7 +18,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	if(strlen($author) < 1){
 		return "AUTHOR_EMPTY";
 	}
-	if(!isset($users[$author])){
+	if(!isset($users->UserModels[$author])){
 		return "INVALID_AUTHOR";
 	}
 

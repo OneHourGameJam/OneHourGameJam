@@ -21,7 +21,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	}
 
 	//Check that the user exists
-	if(!isset($users[$username])){
+	if(!isset($users->UserModels[$username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
@@ -31,9 +31,9 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config);
 
 	$loggedInUserUsername = $loggedInUser->Username;
-	$users[$loggedInUserUsername]->Salt = $newUserSalt;
-	$users[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
-	$users[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
+	$users->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;
+	$users->UserModels[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
+	$users->UserModels[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
 
 	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
 	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);

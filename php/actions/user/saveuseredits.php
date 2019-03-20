@@ -21,7 +21,7 @@ function EditUser($username, $isAdmin){
 	}
 
 	//Check that the user exists
-	if(!isset($users[$username])){
+	if(!isset($users->UserModels[$username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 

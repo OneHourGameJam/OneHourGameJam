@@ -21,12 +21,12 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	}
 
 	//Check that the user exists
-	if(!isset($users[$loggedInUser->Username])){
+	if(!isset($users->UserModels[$loggedInUser->Username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
 	$loggedInUserUsername = $loggedInUser->Username;
-	$user = $users[$loggedInUserUsername];
+	$user = $users->UserModels[$loggedInUserUsername];
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
 	$userPasswordIterations = intval($user->PasswordIterations);
@@ -40,9 +40,9 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$newUserPasswordIterations = GenerateUserHashIterations($config);
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config);
 
-	$users[$loggedInUserUsername]->Salt = $newUserSalt;
-	$users[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
-	$users[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
+	$users->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;
+	$users->UserModels[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
+	$users->UserModels[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
 
 	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
 	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);

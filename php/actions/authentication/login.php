@@ -17,7 +17,7 @@ function LogInOrRegister($username, $password){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
-	if(isset($users[$username])){
+	if(isset($users->UserModels[$username])){
 		//User is registered already, log them in
 		return LogInUser($username, $password);
 	}else{
@@ -45,9 +45,9 @@ function RegisterUser($username, $password){
 	$userSalt = GenerateSalt();
 	$userPasswordIterations = GenerateUserHashIterations($config);
 	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $config);
-	$admin = (count($users) == 0) ? 1 : 0;
+	$admin = (count($users->UserModels) == 0) ? 1 : 0;
 
-	if(isset($users[$username])){
+	if(isset($users->UserModels[$username])){
 		return "USERNAME_ALREADY_REGISTERED";
 	}else{
 		$usernameClean = mysqli_real_escape_string($dbConn, $username);
@@ -88,7 +88,7 @@ function RegisterUser($username, $password){
 		$sql = "";
 	}
 	
-	$users = LoadUsers();
+	$users = new UserData();
 	return LogInUser($username, $password);
 }
 
@@ -109,11 +109,11 @@ function LogInUser($username, $password){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
-	if(!isset($users[$username])){
+	if(!isset($users->UserModels[$username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$user = $users[$username];
+	$user = $users->UserModels[$username];
 	$userID = $user->Id;
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
