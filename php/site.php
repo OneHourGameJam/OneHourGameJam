@@ -18,6 +18,7 @@ include_once("php/dependencies.php");
 include_once("php/models/UserModel.php");
 include_once("php/models/ThemeModel.php");
 include_once("php/models/SatisfactionModel.php");
+include_once("php/models/PollModel.php");
 
 //Global functions
 include_once("php/sanitize.php");

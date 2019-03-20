@@ -42,7 +42,7 @@ function Init(){
 
 	$actions = LoadSiteActions($config);
 	$assets = LoadAssets();
-	$polls = LoadPolls();
+	$polls = new PollData();
 	$loggedInUserPollVotes = LoadLoggedInUserPollVotes($loggedInUser);
     $satisfaction = new SatisfactionData($config);
     $adminVotes = LoadAdminVotes();
@@ -90,7 +90,7 @@ function Init(){
 		$dictionary["assets"] = RenderAssets($assets);
 	}
 	if(FindDependency("RenderPolls", $dep) !== false){
-		$dictionary["polls"] = RenderPolls($polls, $loggedInUserPollVotes);
+		$dictionary["polls"] = RenderPolls($polls->PollModels, $loggedInUserPollVotes);
 	}
 	if(FindDependency("RenderCookies", $dep) !== false){
 		$dictionary["cookies"] = RenderCookies($cookies);
