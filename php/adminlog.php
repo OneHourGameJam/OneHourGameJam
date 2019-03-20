@@ -1,5 +1,16 @@
 <?php
 
+class AdminLog{
+	public $Id;
+	public $DateTime;
+	public $Ip;
+	public $UserAgent;
+	public $AdminUsername;
+	public $SubjectUsername;
+	public $LogType;
+	public $LogContent;
+}
+
 function LoadAdminLog(){
     global $dbConn;
 	AddActionLog("LoadAdminLog");
@@ -12,17 +23,16 @@ function LoadAdminLog(){
 	$sql = "";
 
 	while($info = mysqli_fetch_array($data)){
+		$log = new AdminLog();
 
-		//Read data about the jam
-		$log = Array();
-		$log["id"] = $info["log_id"];
-		$log["datetime"] = $info["log_datetime"];
-		$log["ip"] = $info["log_ip"];
-		$log["user_agent"] = $info["log_user_agent"];
-		$log["admin_username"] = $info["log_admin_username"];
-		$log["subject_username"] = $info["log_subject_username"];
-		$log["log_type"] = $info["log_type"];
-        $log["log_content"] = $info["log_content"];
+		$log->Id = $info["log_id"];
+		$log->DateTime = $info["log_datetime"];
+		$log->Ip = $info["log_ip"];
+		$log->UserAgent = $info["log_user_agent"];
+		$log->AdminUsername = $info["log_admin_username"];
+		$log->SubjectUsername = $info["log_subject_username"];
+		$log->LogType = $info["log_type"];
+        $log->LogContent = $info["log_content"];
 
         $adminLog[] = $log;
     }
@@ -63,9 +73,26 @@ function AddToAdminLog($logType, $logContent, $logSubjectUsername, $logAdminUser
 	StopTimer("AddToAdminLog");
 }
 
-function RenderAdminLog($adminLog){
+function RenderAdminLog(&$adminLog){
 	AddActionLog("RenderAdminLog");
-    return $adminLog;
+	$render = Array();
+
+	foreach($adminLog as $i => $logData){
+		$log = Array();
+		
+		$log["id"] = $logData->Id;
+		$log["datetime"] = $logData->DateTime;
+		$log["ip"] = $logData->Ip;
+		$log["user_agent"] = $logData->UserAgent;
+		$log["admin_username"] = $logData->AdminUsername;
+		$log["subject_username"] = $logData->SubjectUsername;
+		$log["log_type"] = $logData->LogType;
+		$log["log_content"] = $logData->LogContent;
+
+		$render[] = $log;
+	}
+
+    return $render;
 }
 
 function GetAdminLogForAdminFormatted($username){
