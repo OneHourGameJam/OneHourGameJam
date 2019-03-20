@@ -1,46 +1,5 @@
 <?php
 
-class AdminLog{
-	public $Id;
-	public $DateTime;
-	public $Ip;
-	public $UserAgent;
-	public $AdminUsername;
-	public $SubjectUsername;
-	public $LogType;
-	public $LogContent;
-}
-
-function LoadAdminLog(){
-    global $dbConn;
-	AddActionLog("LoadAdminLog");
-	StartTimer("LoadAdminLog");
-
-    $adminLog = Array();
-
-	$sql = "select log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content from admin_log order by log_id desc";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	while($info = mysqli_fetch_array($data)){
-		$log = new AdminLog();
-
-		$log->Id = $info["log_id"];
-		$log->DateTime = $info["log_datetime"];
-		$log->Ip = $info["log_ip"];
-		$log->UserAgent = $info["log_user_agent"];
-		$log->AdminUsername = $info["log_admin_username"];
-		$log->SubjectUsername = $info["log_subject_username"];
-		$log->LogType = $info["log_type"];
-        $log->LogContent = $info["log_content"];
-
-        $adminLog[] = $log;
-    }
-
-	StopTimer("LoadAdminLog");
-    return $adminLog;
-}
-
 function AddToAdminLog($logType, $logContent, $logSubjectUsername, $logAdminUsername){
     global $dbConn, $ip, $userAgent;
 	AddActionLog("AddToAdminLog");

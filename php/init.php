@@ -21,7 +21,7 @@ function Init(){
 
     RedirectToHttpsIfRequired($config->ConfigModels);
 
-	$adminLog = LoadAdminLog();
+	$adminLog = new AdminLogData();
 	$users = new UserData();
 
 	$loggedInUser = IsLoggedIn($config->ConfigModels, $users->UserModels);
@@ -55,7 +55,7 @@ function Init(){
 		$dictionary["CONFIG"] = RenderConfig($config->ConfigModels);
 	}
 	if(FindDependency("RenderAdminLog", $dep) !== false){
-		$dictionary["adminlog"] = RenderAdminLog($adminLog);
+		$dictionary["adminlog"] = RenderAdminLog($adminLog->AdminLogModels);
 	}
 	if(FindDependency("RenderUsers", $dep) !== false){
 		$dependency = FindDependency("RenderUsers", $dep);
