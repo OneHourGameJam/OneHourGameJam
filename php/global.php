@@ -21,7 +21,6 @@ $assets = Array();
 $polls = Array();
 $satisfaction = Array();
 $adminVotes = Array();
-$loggedInUserAdminVotes = Array();
 $adminLog = Array();
 $themesByVoteDifference = Array();
 $themesByPopularity = Array();

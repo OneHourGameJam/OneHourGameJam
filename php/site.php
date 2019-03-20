@@ -24,6 +24,7 @@ include_once("php/models/GameModel.php");
 include_once("php/models/CookieModel.php");
 include_once("php/models/ConfigModel.php");
 include_once("php/models/AssetModel.php");
+include_once("php/models/AdminVotesModel.php");
 
 //Global functions
 include_once("php/sanitize.php");
