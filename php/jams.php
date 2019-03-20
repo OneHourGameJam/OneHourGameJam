@@ -7,8 +7,8 @@ function GetNextJamDateAndTime(&$jams){
 	$nextJamStartTime = null;
 
 	$now = time();
-	foreach($jams as $i => $jamData){
-		$nextJamTime = strtotime($jamData->StartTime . " UTC");
+	foreach($jams as $i => $jamModel){
+		$nextJamTime = strtotime($jamModel->StartTime . " UTC");
 
 		if($nextJamTime > $now){
 			$nextJamStartTime = $nextJamTime;
@@ -161,12 +161,12 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 
     $nonDeletedJamCounter = 0;
 	$latestStartedJamFound = false;
-	$currentJamData = GetCurrentJamNumberAndID();
+	$currentJam = GetCurrentJamNumberAndID();
 
 	$jamsToLoad = $config["JAMS_TO_LOAD"]->Value;
 
 	$allJamsLoaded = true;
-	$render["current_jam"] = $currentJamData["NUMBER"] !== 0;
+	$render["current_jam"] = $currentJam["NUMBER"] !== 0;
 
 	foreach($jams as $i => $jam){
 		if($jam->Deleted != 1){
@@ -175,24 +175,24 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 		{
 			if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
-				$jamData = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$jamRender = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 
 				$now = time();
-				$datetime = strtotime($jamData["start_time"] . " UTC");
+				$datetime = strtotime($jamRender["start_time"] . " UTC");
 				if($datetime > $now){
 					$render["next_jam_timer_code"] = gmdate("Y-m-d", $datetime)."T".gmdate("H:i", $datetime).":00Z";
 				}else{
-					if(!isset($jamData["jam_deleted"])){
+					if(!isset($jamRender["jam_deleted"])){
 						if($latestStartedJamFound == false){
-							$jamData["is_latest_started_jam"] = 1;
+							$jamRender["is_latest_started_jam"] = 1;
 							$latestStartedJamFound = true;
 						}
 					}
 				}
 	
-				$render["LIST"][] = $jamData;
+				$render["LIST"][] = $jamRender;
 			}
-			if($currentJamData["ID"] == $jam->Id){
+			if($currentJam["ID"] == $jam->Id){
 				$render["current_jam"] = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 			}
 		}else{
@@ -270,8 +270,8 @@ function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime,
 
 		//print "<br>A THEME WAS SELECTED";
 
-		$currentJamData = GetCurrentJamNumberAndID();
-		$jamNumber = intval($currentJamData["NUMBER"] + 1);
+		$currentJam = GetCurrentJamNumberAndID();
+		$jamNumber = intval($currentJam["NUMBER"] + 1);
 		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
 		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, Array("username" => "AUTOMATIC"));
