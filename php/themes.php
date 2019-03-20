@@ -18,14 +18,14 @@ function RenderThemes(&$config, &$jams, &$themes, &$userThemeVotes, &$themesByVo
 
 	$themesUserHasNotVotedFor = 0;
 
-	foreach($themes as $i => $themeData){
+	foreach($themes as $i => $themeModel){
 
-		$themeID = intval($themeData->Id);
-		$themeText = $themeData->Theme;
-		$banned = $themeData->Banned;
-		$votesFor = $themeData->VotesFor;
-		$votesNeutral = $themeData->VotesNeutral;
-		$votesAgainst = $themeData->VotesAgainst;
+		$themeID = intval($themeModel->Id);
+		$themeText = $themeModel->Theme;
+		$banned = $themeModel->Banned;
+		$votesFor = $themeModel->VotesFor;
+		$votesNeutral = $themeModel->VotesNeutral;
+		$votesAgainst = $themeModel->VotesAgainst;
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
 		$userCastAVoteForThisTheme = false;
 
@@ -34,7 +34,7 @@ function RenderThemes(&$config, &$jams, &$themes, &$userThemeVotes, &$themesByVo
 		$theme["votes_for"] = $votesFor;
 		$theme["votes_neutral"] = $votesNeutral;
 		$theme["votes_against"] = $votesAgainst;
-		$theme["votes_report"] = $themeData->VotesReport;
+		$theme["votes_report"] = $themeModel->VotesReport;
 		$theme["votes_total"] = $votesTotal;
 		$theme["votes_popularity"] = "?";
 		$theme["votes_apathy"] = "?";
@@ -46,7 +46,7 @@ function RenderThemes(&$config, &$jams, &$themes, &$userThemeVotes, &$themesByVo
 		$theme["apathy_color"] = "#ffffff";
 		$theme["popularity_color"] = "#ffffff";
 		$theme["banned"] = $banned;
-		$theme["author"] = $themeData->Author;
+		$theme["author"] = $themeModel->Author;
 		$theme["theme_id"] = $themeID;
 		$theme["ThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
 		if($votesTotal < $config["THEME_MIN_VOTES_TO_SCORE"]->Value){
@@ -59,9 +59,9 @@ function RenderThemes(&$config, &$jams, &$themes, &$userThemeVotes, &$themesByVo
 			$theme["UserThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
 		}
 		$theme["ThemeSelectionProbabilityByPopularityText"] = $themesByPopularity[$themeID]["ThemeSelectionProbabilityByPopularityText"];
-		$theme["days_ago"] = $themeData->DaysAgo;
+		$theme["days_ago"] = $themeModel->DaysAgo;
 		if($loggedInUser !== false){
-			$theme["is_own_theme"] = $themeData->Author == $loggedInUser->Username;
+			$theme["is_own_theme"] = $themeModel->Author == $loggedInUser->Username;
 			if($banned == 0){
 				if ($theme["is_own_theme"]) {
 					$render["has_own_themes"] = true;
