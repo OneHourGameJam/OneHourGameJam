@@ -10,7 +10,7 @@ function DeleteAsset($assetID){
 	}
 
 	$assetExists = false;
-	if(isset($assetID) && $assetID !== null && isset($assets[$assetID])){
+	if(isset($assetID) && $assetID !== null && isset($assets->AssetModels[$assetID])){
 		$assetExists = true;
 	}
 

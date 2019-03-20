@@ -40,7 +40,7 @@ function Init(){
 	CheckNextJamSchedule($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
 
 	$actions = LoadSiteActions($config->ConfigModels);
-	$assets = LoadAssets();
+	$assets = new AssetData();
 	$polls = new PollData($loggedInUser);
     $satisfaction = new SatisfactionData($config->ConfigModels);
     $adminVotes = LoadAdminVotes();
@@ -85,7 +85,7 @@ function Init(){
 		$dictionary["themes"] = RenderThemes($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $themes->LoggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
-		$dictionary["assets"] = RenderAssets($assets);
+		$dictionary["assets"] = RenderAssets($assets->AssetModels);
 	}
 	if(FindDependency("RenderPolls", $dep) !== false){
 		$dictionary["polls"] = RenderPolls($polls->PollModels, $polls->LoggedInUserPollVotes);
@@ -105,7 +105,7 @@ function Init(){
 			$dictionary["stream"] = InitStream($config->ConfigModels);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets, $cookies->CookieModel, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets->AssetModels, $cookies->CookieModel, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){

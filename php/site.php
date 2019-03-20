@@ -23,6 +23,7 @@ include_once("php/models/JamModel.php");
 include_once("php/models/GameModel.php");
 include_once("php/models/CookieModel.php");
 include_once("php/models/ConfigModel.php");
+include_once("php/models/AssetModel.php");
 
 //Global functions
 include_once("php/sanitize.php");
