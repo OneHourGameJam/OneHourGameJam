@@ -128,11 +128,11 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":
-            $currentJamData = GetCurrentJamNumberAndID();
-            if($currentJamData["NUMBER"] == 0){
+            $currentJam = GetCurrentJamNumberAndID();
+            if($currentJam["NUMBER"] == 0){
                 die("no jam to submit to");
             }
-            $jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $currentJamData["NUMBER"];
+            $jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $currentJam["NUMBER"];
             $jam = GetJamByNumber($jams, $jamNumber);
             if (!$jam) {
                 die('jam not found');
@@ -194,7 +194,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 break;
             }
 
-            if (!isset($render["user_submitted_to_this_jam"]) && $jamNumber != $currentJamData["NUMBER"]) {
+            if (!isset($render["user_submitted_to_this_jam"]) && $jamNumber != $currentJam["NUMBER"]) {
                 die('Cannot make a new submission to a past jam');
             }
         break;
