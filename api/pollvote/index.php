@@ -9,7 +9,7 @@ if($loggedInUser == false){
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);
 $clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-$clean_username = mysqli_real_escape_string($dbConn, $usr->Username);
+$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
 
 if(!isset($_GET["pollID"])){
 	print json_encode(Array("ERROR" => "poll ID not set"));
