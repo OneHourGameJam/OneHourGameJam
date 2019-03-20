@@ -1,18 +1,5 @@
 <?php
 
-class Theme{
-	public $Id;
-	public $Theme;
-	public $Author;
-	public $Banned;
-	public $Deleted;
-	public $VotesAgainst;
-	public $VotesNeutral;
-	public $VotesFor;
-	public $VotesReport;
-	public $DaysAgo;
-}
-
 //Fills the list of suggested themes
 function LoadThemes(){
 	global $dbConn;

@@ -16,6 +16,7 @@ include_once("php/dependencies.php");
 
 //Models
 include_once("php/models/UserModel.php");
+include_once("php/models/ThemeModel.php");
 
 //Global functions
 include_once("php/sanitize.php");

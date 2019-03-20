@@ -22,7 +22,7 @@ function Init(){
     RedirectToHttpsIfRequired($config);
 
 	$adminLog = LoadAdminLog();
-	$users = new UserModels();
+	$users = new UserData();
 
 	$loggedInUser = IsLoggedIn($config, $users->UserModels);
 	
@@ -31,14 +31,14 @@ function Init(){
 	$jams =  LoadJams();
 	$games = LoadGames();
 
-	$themes = LoadThemes();
+	$themes = new ThemeData();
 	$loggedInUserThemeVotes = LoadUserThemeVotes($loggedInUser);
-	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes, $config);
-	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themes, $config);
+	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes->ThemeModels, $config);
+	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themes->ThemeModels, $config);
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jams);
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config);
-	CheckNextJamSchedule($config, $jams, $themes, $nextScheduledJamTime, $nextSuggestedJamTime);
+	CheckNextJamSchedule($config, $jams, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
 
 	$actions = LoadSiteActions($config);
 	$assets = LoadAssets();
@@ -84,7 +84,7 @@ function Init(){
 		$dictionary["entries"] = RenderGames($users->UserModels, $games, $jams, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
-		$dictionary["themes"] = RenderThemes($config, $jams, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+		$dictionary["themes"] = RenderThemes($config, $jams, $themes->ThemeModels, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
 		$dictionary["assets"] = RenderAssets($assets);
