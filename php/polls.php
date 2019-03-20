@@ -1,38 +1,5 @@
 <?php
 
-function LoadLoggedInUserPollVotes(&$loggedInUser){
-	global $dbConn;
-	AddActionLog("LoadLoggedInUserPollVotes");
-	StartTimer("LoadLoggedInUserPollVotes");
-
-	$loggedInUserPollVotes = Array();
-	
-	//Get data about logged in user's votes
-	if($loggedInUser !== false){
-		$escapedUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
-
-		$sql = "
-			SELECT o.option_poll_id, o.option_id
-			FROM poll_vote v, poll_option o
-			WHERE v.vote_option_id = o.option_id
-			  AND v.vote_deleted != 1
-			  AND v.vote_username = '".$escapedUsername."'
-		";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-
-		//Get data
-		while($userVoteData = mysqli_fetch_array($data)){
-			$votePollID = intval($userVoteData["option_poll_id"]);
-			$voteOptionID = intval($userVoteData["option_id"]);
-			$loggedInUserPollVotes[$votePollID][$voteOptionID] = true;
-		}
-	}
-
-	StopTimer("LoadLoggedInUserPollVotes");
-	return $loggedInUserPollVotes;
-}
-
 function RenderPolls(&$polls, &$loggedInUserPollVotes){
 	AddActionLog("RenderPolls");
 	StartTimer("RenderPolls");
