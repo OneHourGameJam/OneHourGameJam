@@ -20,7 +20,7 @@ class UserModel
     public $SponsoredBy;
 }
 
-class UserModels{
+class UserData{
     public $UserModels;
 
     function __construct() {
