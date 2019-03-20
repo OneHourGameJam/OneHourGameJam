@@ -19,7 +19,7 @@ function AddTheme($newTheme, $isBot){
 		return "INVALID_THEME";
 	}
 
-	foreach($themes as $i => $theme){
+	foreach($themes->ThemeModels as $i => $theme){
 		if(strtolower($theme->Theme) == strtolower($newTheme)){
 			return "THEME_ALREADY_SUGGESTED";
 		}
@@ -30,7 +30,7 @@ function AddTheme($newTheme, $isBot){
 	}
 
 	$themesByThisUser = 0;
-	foreach($themes as $i => $theme) {
+	foreach($themes->ThemeModels as $i => $theme) {
 		if ($theme->Author == $user->Username && !$theme->Banned) {
 			$themesByThisUser ++;
 		}

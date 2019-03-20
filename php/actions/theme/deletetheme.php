@@ -11,7 +11,7 @@ function RemoveTheme($removedTheme, $pageId){
 
 	//Check that the theme exists and get the user of the given theme
 	$themeAuthor = "";
-	foreach($themes as $id => $theme) {
+	foreach($themes->ThemeModels as $id => $theme) {
 		if ($theme->Deleted != 0){
 			continue;
 		}
