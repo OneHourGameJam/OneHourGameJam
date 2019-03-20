@@ -44,7 +44,7 @@ function Init(){
 	$assets = LoadAssets();
 	$polls = LoadPolls();
 	$loggedInUserPollVotes = LoadLoggedInUserPollVotes($loggedInUser);
-    $satisfaction = LoadSatisfaction($config);
+    $satisfaction = new SatisfactionData($config);
     $adminVotes = LoadAdminVotes();
 	$loggedInUserAdminVotes = LoadLoggedInUsersAdminVotes($loggedInUser);
 	$messages = LoadMessages($actions);
@@ -68,7 +68,7 @@ function Init(){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games, $jams, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
@@ -77,7 +77,7 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games, $jams, $satisfaction, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games, $jams, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dep) !== false){
 		$dependency = FindDependency("RenderGames", $dep);
@@ -107,7 +107,7 @@ function Init(){
 			$dictionary["stream"] = InitStream($config);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $config, $users->UserModels, $games, $jams, $satisfaction, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $config, $users->UserModels, $games, $jams, $satisfaction->SatisfactionModels, $loggedInUser, $assets, $cookies, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
