@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $polls, $loggedInUserPollVotes, $cookies, $actions, $page, $dep;
+	global $dictionary, $config, $adminLog, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $polls, $cookies, $actions, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -31,8 +31,7 @@ function Init(){
 	$jams =  LoadJams();
 	$games = LoadGames();
 
-	$themes = new ThemeData();
-	$loggedInUserThemeVotes = LoadUserThemeVotes($loggedInUser);
+	$themes = new ThemeData($loggedInUser);
 	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes->ThemeModels, $config);
 	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themes->ThemeModels, $config);
 
@@ -83,7 +82,7 @@ function Init(){
 		$dictionary["entries"] = RenderGames($users->UserModels, $games, $jams, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
-		$dictionary["themes"] = RenderThemes($config, $jams, $themes->ThemeModels, $loggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+		$dictionary["themes"] = RenderThemes($config, $jams, $themes->ThemeModels, $themes->LoggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
 		$dictionary["assets"] = RenderAssets($assets);

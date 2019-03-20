@@ -1,39 +1,5 @@
 <?php
 
-function LoadUserThemeVotes(&$loggedInUser){
-	global $dbConn;
-	AddActionLog("LoadUserThemeVotes");
-	StartTimer("LoadUserThemeVotes");
-
-	$userThemeVotes = Array();
-
-	if($loggedInUser == false){
-		return $userThemeVotes;
-	}
-
-	$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
-
-	//Update themes with what the user voted for
-	$sql = "
-		SELECT themevote_theme_id, themevote_type
-		FROM themevote
-		WHERE themevote_username = '$clean_username';
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	while($themeVote = mysqli_fetch_array($data)){
-		$themeVoteData = Array();
-
-		$themeID = $themeVote["themevote_theme_id"];
-		$userThemeVoteType = $themeVote["themevote_type"];
-		$userThemeVotes[$themeID] = $userThemeVoteType;
-	}
-
-	StopTimer("LoadUserThemeVotes");
-	return $userThemeVotes;
-}
-
 function RenderThemes(&$config, &$jams, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
