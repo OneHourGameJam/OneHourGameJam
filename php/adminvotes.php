@@ -1,5 +1,10 @@
 <?php
 
+class AdminVote{
+	public $SubjectUsername;
+	public $VoteType;
+}
+
 function LoadAdminVotes(){
 	global $dbConn;
 	AddActionLog("LoadAdminVotes");
@@ -17,12 +22,12 @@ function LoadAdminVotes(){
 	$sql = "";
 
 	while($info = mysqli_fetch_array($data)){
-		$adminVoteData = Array();
+		$adminVote = new AdminVote();
 
-		$adminVoteData["subject_username"] = $info["vote_subject_username"];
-		$adminVoteData["vote_type"] = $info["vote_type"];
+		$adminVote->SubjectUsername = $info["vote_subject_username"];
+		$adminVote->VoteType = $info["vote_type"];
 
-		$adminVotes[] = $adminVoteData;
+		$adminVotes[] = $adminVote;
 	}
 
 	StopTimer("LoadAdminVotes");

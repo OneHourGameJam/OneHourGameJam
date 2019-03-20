@@ -323,8 +323,8 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     $userData["votes_against"] = 0;
     $userData["votes_vetos"] = 0;
     foreach($adminVotes as $j => $adminVoteData){
-        if($userData["username"] == $adminVoteData["subject_username"]){
-            switch($adminVoteData["vote_type"]){
+        if($userData["username"] == $adminVoteData->SubjectUsername){
+            switch($adminVoteData->VoteType){
                 case "FOR":
                     $userData["votes_for"] += 1;
                     break;
