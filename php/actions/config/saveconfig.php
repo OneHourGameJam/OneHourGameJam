@@ -1,27 +1,27 @@
 <?php
 
 function SaveConfig($key, $newValue){
-	global $config, $dictionary, $loggedInUser;
+	global $config, $config, $dictionary, $loggedInUser;
 
 	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
 	}
 
-	if (!isset($config[$key])) {
+	if (!isset($config->ConfigModels[$key])) {
 		//Invalid configuration key
 		return;
 	}
 
-	if ($config[$key]->Editable != true) {
+	if ($config->ConfigModels[$key]->Editable != true) {
 		//Some configuration settings cannot be set via this interface for security reasons.
 		return;
 	}
 
-	if ($newValue == $config[$key]->Value) {
+	if ($newValue == $config->ConfigModels[$key]->Value) {
 		return;
 	}
 
-	UpdateConfig($config, $key, $newValue, $loggedInUser->Id, $loggedInUser->Username);
+	$config->UpdateConfig($config->ConfigModels, $key, $newValue, $loggedInUser->Id, $loggedInUser->Username);
 	return "SUCCESS";
 }
 

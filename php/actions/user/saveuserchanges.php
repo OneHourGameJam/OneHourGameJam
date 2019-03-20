@@ -10,7 +10,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	}
 
 	//Validate values
-	if(!$displayName || strlen($displayName) < $config["MINIMUM_DISPLAY_NAME_LENGTH"]->Value || strlen($displayName) > $config["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value){
+	if(!$displayName || strlen($displayName) < $config->ConfigModels["MINIMUM_DISPLAY_NAME_LENGTH"]->Value || strlen($displayName) > $config->ConfigModels["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value){
 		return "INVALID_DISPLAY_NAME";
 	}
 

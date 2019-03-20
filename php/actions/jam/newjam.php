@@ -73,7 +73,7 @@ function PerformAction(&$loggedInUser){
 		$date = (isset($_POST["date"])) ? $_POST["date"] : "";
 		$time = (isset($_POST["time"])) ? $_POST["time"] : "";
 		$jamColors = Array();
-		for($colorIndex = 0; $colorIndex < $config["MAX_COLORS_FOR_JAM"]->Value; $colorIndex++){
+		for($colorIndex = 0; $colorIndex < $config->ConfigModels["MAX_COLORS_FOR_JAM"]->Value; $colorIndex++){
 			if(isset($_POST["jamcolor".$colorIndex])){
 				$jamColors[] = $_POST["jamcolor".$colorIndex];
 			}

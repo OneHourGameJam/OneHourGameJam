@@ -16,15 +16,15 @@ function Init(){
 	UpdateCookies();
 	$cookies = new CookieData();
 
-	$config = LoadConfig();
-	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($config);
+	$config = new ConfigData();
+	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($config->ConfigModels);
 
-    RedirectToHttpsIfRequired($config);
+    RedirectToHttpsIfRequired($config->ConfigModels);
 
 	$adminLog = LoadAdminLog();
 	$users = new UserData();
 
-	$loggedInUser = IsLoggedIn($config, $users->UserModels);
+	$loggedInUser = IsLoggedIn($config->ConfigModels, $users->UserModels);
 	
 	$page = ValidatePage($page, $loggedInUser);
 
@@ -32,17 +32,17 @@ function Init(){
 	$games = new GameData();
 
 	$themes = new ThemeData($loggedInUser);
-	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes->ThemeModels, $config);
-	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themes->ThemeModels, $config);
+	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes->ThemeModels, $config->ConfigModels);
+	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themes->ThemeModels, $config->ConfigModels);
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jams->JamModels);
-	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config);
-	CheckNextJamSchedule($config, $jams->JamModels, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
+	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config->ConfigModels);
+	CheckNextJamSchedule($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
 
-	$actions = LoadSiteActions($config);
+	$actions = LoadSiteActions($config->ConfigModels);
 	$assets = LoadAssets();
 	$polls = new PollData($loggedInUser);
-    $satisfaction = new SatisfactionData($config);
+    $satisfaction = new SatisfactionData($config->ConfigModels);
     $adminVotes = LoadAdminVotes();
 	$loggedInUserAdminVotes = LoadLoggedInUsersAdminVotes($loggedInUser);
 	$messages = LoadMessages($actions);
@@ -50,23 +50,23 @@ function Init(){
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Render");
 
-	PerformPendingSiteAction($config, $actions, $loggedInUser);
+	PerformPendingSiteAction($config->ConfigModels, $actions, $loggedInUser);
  
 	if(FindDependency("RenderConfig", $dep) !== false){
-		$dictionary["CONFIG"] = RenderConfig($config);
+		$dictionary["CONFIG"] = RenderConfig($config->ConfigModels);
 	}
 	if(FindDependency("RenderAdminLog", $dep) !== false){
 		$dictionary["adminlog"] = RenderAdminLog($adminLog);
 	}
 	if(FindDependency("RenderUsers", $dep) !== false){
 		$dependency = FindDependency("RenderUsers", $dep);
-		$dictionary["users"] = RenderUsers($config, $cookies->CookieModel, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
+		$dictionary["users"] = RenderUsers($config->ConfigModels, $cookies->CookieModel, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAllJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = RenderJams($config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
@@ -75,14 +75,14 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($config, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = RenderJams($config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dep) !== false){
 		$dependency = FindDependency("RenderGames", $dep);
 		$dictionary["entries"] = RenderGames($users->UserModels, $games->GameModels, $jams->JamModels, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
-		$dictionary["themes"] = RenderThemes($config, $jams->JamModels, $themes->ThemeModels, $themes->LoggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+		$dictionary["themes"] = RenderThemes($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $themes->LoggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
 		$dictionary["assets"] = RenderAssets($assets);
@@ -102,15 +102,15 @@ function Init(){
 		$dictionary["stream"] = Array();
 
 		if($jamTime + 3600 <= $now && $now <= $jamTime + 7 * 3600)
-			$dictionary["stream"] = InitStream($config);
+			$dictionary["stream"] = InitStream($config->ConfigModels);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $config, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets, $cookies->CookieModel, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets, $cookies->CookieModel, $adminVotes, $loggedInUserAdminVotes, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
 			$dependency = FindDependency("RenderLoggedInUser", $dep);
-			$dictionary["user"] = RenderLoggedInUser($config, $cookies->CookieModel, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = RenderLoggedInUser($config->ConfigModels, $cookies->CookieModel, $users->UserModels, $games->GameModels, $jams->JamModels, $adminVotes, $loggedInUserAdminVotes, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	

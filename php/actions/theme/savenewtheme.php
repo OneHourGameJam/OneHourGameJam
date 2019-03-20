@@ -25,7 +25,7 @@ function AddTheme($newTheme, $isBot){
 		}
 	}
 
-	if(IsRecentTheme($jams->JamModels, $config, $newTheme)) {
+	if(IsRecentTheme($jams->JamModels, $config->ConfigModels, $newTheme)) {
 		return "THEME_RECENTLY_USED";
 	}
 
@@ -35,7 +35,7 @@ function AddTheme($newTheme, $isBot){
 			$themesByThisUser ++;
 		}
 	}
-	if ($themesByThisUser >= $config["THEMES_PER_USER"]->Value) {
+	if ($themesByThisUser >= $config->ConfigModels["THEMES_PER_USER"]->Value) {
 		return "TOO_MANY_THEMES";
 	}
 

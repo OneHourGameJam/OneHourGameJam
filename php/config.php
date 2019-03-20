@@ -1,18 +1,4 @@
 <?php
-//Functions which have to do with reading/writing to the config file.
-
-class Config{
-	public $Key;
-	public $Value;
-	public $Category;
-	public $Description;
-	public $Disabled;
-	public $Editable;
-	public $Required;
-	public $Type;
-	public $Options;
-	public $AddedToDictionary;
-}
 
 $configCategorySettings = Array(
 	"JAM_SETTINGS" => "General Jam Settings",
@@ -35,51 +21,6 @@ $configPrettyPrintFunctions = Array(
 	"MAX_SCREENSHOT_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
 	"MAX_ASSET_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
 );
-
-//Initializes configuration, stores it in the global $config variable.
-
-function LoadConfig(){
-	global $dbConn;
-	AddActionLog("LoadConfig");
-	StartTimer("LoadConfig");
-
-	$config = Array();
-
-	$sql = " SELECT * FROM config ORDER BY config_id; ";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	while($configData = mysqli_fetch_array($data)) {
-		$key = $configData["config_key"];
-		$value = $configData["config_value"];
-		$category = $configData["config_category"];
-		$description = $configData["config_description"];
-		$type = $configData["config_type"];
-		$options = json_decode($configData["config_options"], true);
-		$editable = $configData["config_editable"];
-		$required = $configData["config_required"];
-		$addedToDictionary = $configData["config_added_to_dictionary"];
-
-		$configEntry = new Config();
-		$configEntry->Key = $key;
-		$configEntry->Value = $value;
-		$configEntry->Category = $category;
-		$configEntry->Description = $description;
-		$configEntry->Disabled = !$editable;
-		$configEntry->Editable = $editable;
-		$configEntry->Required = $required;
-		$configEntry->Type = $type;
-		$configEntry->Options = $options;
-		$configEntry->AddedToDictionary = $addedToDictionary;
-
-		$config[$key] = $configEntry;
-	}
-
-	$config = VerifyConfig($config);
-
-	StopTimer("LoadConfig");
-	return $config;
-}
 
 function RenderConfig($config){
 	global $configCategorySettings, $configPrettyPrintFunctions;
@@ -164,54 +105,6 @@ function RenderConfig($config){
 
 	StopTimer("RenderConfig");
 	return $render;
-}
-
-
-function VerifyConfig($config) {
-	AddActionLog("VerifyConfig");
-	StartTimer("VerifyConfig");
-
-	if (!isset($config["PEPPER"]->Value) || strlen($config["PEPPER"]->Value) < 1) {
-		$config = UpdateConfig($config, "PEPPER", GenerateSalt(), -1, "AUTOMATIC");
-	}
-
-	if (!isset($config["SESSION_PASSWORD_ITERATIONS"]->Value) || strlen($config["SESSION_PASSWORD_ITERATIONS"]->Value) < 1) {
-		$sessionPasswordIterations = GenerateUserHashIterations($config);
-		$config = UpdateConfig($config, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1, "AUTOMATIC");
-	}
-
-	StopTimer("VerifyConfig");
-	return $config;
-}
-
-
-// Saves config to database, does not authorize to ensure VerifyConfig() continues to work
-function UpdateConfig($config, $key, $value, $userID, $userUsername) {
-	global $dbConn;
-	AddActionLog("UpdateConfig");
-	StartTimer("UpdateConfig");
-
-	if($config[$key]->Value != $value){
-		$userIDClean = mysqli_real_escape_string($dbConn, $userID);
-		$keyClean = mysqli_real_escape_string($dbConn, $key);
-		$valueClean = mysqli_real_escape_string($dbConn, $value);
-
-		$config[$key]->Value = $value;
-		$sql = "
-			UPDATE config
-			SET config_value = '$valueClean',
-			config_lastedited = Now(),
-			config_lasteditedby = '$userIDClean'
-			WHERE config_key = '$keyClean';
-		";
-		mysqli_query($dbConn, $sql);
-    	$sql = "";
-
-		AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "", $userUsername);
-	}
-
-	StopTimer("UpdateConfig");
-	return $config;
 }
 
 
