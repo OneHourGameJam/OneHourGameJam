@@ -27,7 +27,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 
 	//Validate values
 	$jamID = intval($jamID);
-	if(!isset($jams[$jamID])){
+	if(!isset($jams->JamModels[$jamID])){
 		return "INVALID_JAM_ID";
 	}
 
@@ -44,7 +44,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 		$datetime = strtotime($date." ".$time." UTC");
 	}
 
-	if(count($jams) == 0){
+	if(count($jams->JamModels) == 0){
 		return "NO_JAMS_EXIST";
 	}
 

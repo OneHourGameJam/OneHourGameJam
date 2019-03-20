@@ -41,7 +41,7 @@ function DeleteEntry($entryID){
 		return "INVALID_JAM_ID";
 	}
 
-	if(count($jams) == 0){
+	if(count($jams->JamModels) == 0){
 		return "NO_JAMS_EXIST";
 	}
 
