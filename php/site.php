@@ -20,6 +20,7 @@ include_once("php/models/ThemeModel.php");
 include_once("php/models/SatisfactionModel.php");
 include_once("php/models/PollModel.php");
 include_once("php/models/JamModel.php");
+include_once("php/models/GameModel.php");
 
 //Global functions
 include_once("php/sanitize.php");

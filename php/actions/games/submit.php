@@ -110,7 +110,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	}
 
 	//Create or update entry
-	foreach($games as $i => $game){
+	foreach($games->GameModels as $i => $game){
 		if($game->Deleted){
 			continue;
 		}
