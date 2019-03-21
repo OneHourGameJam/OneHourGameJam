@@ -29,17 +29,17 @@ function RenderConfig($config){
 
 	$render = Array("LIST" => Array(), "VALUES" => Array(), "PRETTY_PRINT" => Array());
 
-	foreach($config as $i => $configData){
-		$addedToDictionary = $configData->AddedToDictionary;
+	foreach($config as $i => $configModel){
+		$addedToDictionary = $configModel->AddedToDictionary;
 
 		if(!$addedToDictionary){
 			continue;
 		}
 
-		$configKey = $configData->Key;
-		$configValue = $configData->Value;
-		$category = $configData->Category;
-		$type = $configData->Type;
+		$configKey = $configModel->Key;
+		$configValue = $configModel->Value;
+		$category = $configModel->Category;
+		$type = $configModel->Type;
 		$configCategoryHeader = $configCategorySettings[$category];
 
 		//Raw value
@@ -60,14 +60,14 @@ function RenderConfig($config){
 		}
 
 		$configEntry = Array();
-		$configEntry["KEY"] = $configData->Key;
-		$configEntry["VALUE"] = $configData->Value;
-		$configEntry["VALUE_HTML_ENCODED"] = htmlentities($configData->Value);
+		$configEntry["KEY"] = $configModel->Key;
+		$configEntry["VALUE"] = $configModel->Value;
+		$configEntry["VALUE_HTML_ENCODED"] = htmlentities($configModel->Value);
 		$configEntry["CATEGORY"] = $category;
-		$configEntry["DESCRIPTION"] = $configData->Description;
-		$configEntry["DISABLED"] = $configData->Disabled;
-		$configEntry["EDITABLE"] = $configData->Editable;
-		$configEntry["REQUIRED"] = $configData->Required;
+		$configEntry["DESCRIPTION"] = $configModel->Description;
+		$configEntry["DISABLED"] = $configModel->Disabled;
+		$configEntry["EDITABLE"] = $configModel->Editable;
+		$configEntry["REQUIRED"] = $configModel->Required;
 		$configEntry["TYPE"] = $type;
 
 		switch($type) {
@@ -80,7 +80,7 @@ function RenderConfig($config){
 			case "ENUM":
 				$configEntry["TYPE_ENUM"] = 1;
 				$configEntry["ENUM_OPTIONS"] = Array();
-				foreach($configData->Options as $index => $enumOption){
+				foreach($configModel->Options as $index => $enumOption){
 					$configEnumOption = Array(
 						"TEXT" => $enumOption["TEXT"],
 						"VALUE" => $enumOption["VALUE"]

@@ -4,8 +4,8 @@ function RenderAssets(&$assets){
 	AddActionLog("RenderAssets");
 	StartTimer("RenderAssets");
 	$render = Array();
-	foreach($assets as $id => $assetData){
-		$asset = RenderAsset($assetData);
+	foreach($assets as $id => $assetModel){
+		$asset = RenderAsset($assetModel);
 		$render[] = $asset;
 	}
 

@@ -26,14 +26,14 @@ class MessageData{
             $messageActionResultAction = $_COOKIE["actionResultAction"];
         
             $actionFound = false;
-            foreach($actions as $i => $action){
-                if($messageActionResultAction == $action["POST_REQUEST"]){
+            foreach($actions as $i => $siteActionModel){
+                if($messageActionResultAction == $siteActionModel->PostRequest){
                     $actionFound = true;
-                    if(isset($action["ACTION_RESULT"][$messageActionResult])){
-                        $actionResultData = $action["ACTION_RESULT"][$messageActionResult];
+                    if(isset($siteActionModel->ActionResult[$messageActionResult])){
+                        $actionResultData = $siteActionModel->ActionResult[$messageActionResult];
         
-                        $messageType = $actionResultData["MESSAGE_TYPE"];
-                        $messageText = $actionResultData["MESSAGE_TEXT"];
+                        $messageType = $actionResultData->MessageType;
+                        $messageText = $actionResultData->MessageText;
         
                         switch($messageType){
                             case "success":

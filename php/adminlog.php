@@ -37,17 +37,17 @@ function RenderAdminLog(&$adminLog){
 	StartTimer("RenderAdminLog");
 	$render = Array();
 
-	foreach($adminLog as $i => $logData){
+	foreach($adminLog as $i => $adminLogModel){
 		$log = Array();
 		
-		$log["id"] = $logData->Id;
-		$log["datetime"] = $logData->DateTime;
-		$log["ip"] = $logData->Ip;
-		$log["user_agent"] = $logData->UserAgent;
-		$log["admin_username"] = $logData->AdminUsername;
-		$log["subject_username"] = $logData->SubjectUsername;
-		$log["log_type"] = $logData->LogType;
-		$log["log_content"] = $logData->LogContent;
+		$log["id"] = $adminLogModel->Id;
+		$log["datetime"] = $adminLogModel->DateTime;
+		$log["ip"] = $adminLogModel->Ip;
+		$log["user_agent"] = $adminLogModel->UserAgent;
+		$log["admin_username"] = $adminLogModel->AdminUsername;
+		$log["subject_username"] = $adminLogModel->SubjectUsername;
+		$log["log_type"] = $adminLogModel->LogType;
+		$log["log_content"] = $adminLogModel->LogContent;
 
 		$render[] = $log;
 	}

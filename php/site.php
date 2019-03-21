@@ -17,6 +17,7 @@ include_once("php/dependencies.php");
 //Models
 include_once("php/models/UserModel.php");
 include_once("php/models/ThemeModel.php");
+include_once("php/models/SiteActionModel.php");
 include_once("php/models/SatisfactionModel.php");
 include_once("php/models/PollModel.php");
 include_once("php/models/MessageModel.php");

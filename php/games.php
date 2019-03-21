@@ -55,15 +55,16 @@ function RenderGame(&$users, &$game, &$jams, $renderDepth){
 	$render["color_non_white"] = "#".str_pad(dechex(min($render["color256_red"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($render["color256_green"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($render["color256_blue"], 0xDD)), 2, "0", STR_PAD_LEFT);
 
 	//Mini RenderJam()
-	$jamData = $jams[$jamId];
-	$render["jam_number"] = $jamData->JamNumber;
-	$render["jam_theme"] = $jamData->Theme;
+	$jamModel = $jams[$jamId];
+	$render["jam_number"] = $jamModel->JamNumber;
+	$render["jam_theme"] = $jamModel->Theme;
 
 	//Mini RenderUser()
 	$author = $render["author"];
+	$userModel = $users[$author];
 	$author_display = $author;
-	if(isset($users[$author]->DisplayName)){
-		$author_display = $users[$author]->DisplayName;
+	if(isset($userModel->DisplayName)){
+		$author_display = $userModel->DisplayName;
 	}
 	$render["author_display"] = $author_display;
 	$render["author"] = $author;

@@ -39,17 +39,17 @@ function Init(){
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($config->ConfigModels);
 	CheckNextJamSchedule($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
 
-	$actions = LoadSiteActions($config->ConfigModels);
+	$actions = new SiteActionData($config->ConfigModels);
 	$assets = new AssetData();
 	$polls = new PollData($loggedInUser);
     $satisfaction = new SatisfactionData($config->ConfigModels);
     $adminVotes = new AdminVoteData($loggedInUser);
-	$messages = new MessageData($actions);
+	$messages = new MessageData($actions->SiteActionModels);
 	
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Render");
 
-	PerformPendingSiteAction($config->ConfigModels, $actions, $loggedInUser);
+	PerformPendingSiteAction($config->ConfigModels, $actions->SiteActionModels, $loggedInUser);
  
 	if(FindDependency("RenderConfig", $dep) !== false){
 		$dictionary["CONFIG"] = RenderConfig($config->ConfigModels);
