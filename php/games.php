@@ -1,6 +1,6 @@
 <?php
 
-function RenderGames(&$users, &$gameData, &$jams, $renderDepth){
+function RenderGames(&$users, &$gameData, &$jamData, $renderDepth){
 	AddActionLog("RenderGames");
 	StartTimer("RenderGames");
 
@@ -8,7 +8,7 @@ function RenderGames(&$users, &$gameData, &$jams, $renderDepth){
     $nonDeletedGamesCounter = 0;
 	foreach($gameData->GameModels as $i => $gameModel){
 		if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-			$render["LIST"][] = RenderGame($users, $gameModel, $jams, $renderDepth);
+			$render["LIST"][] = RenderGame($users, $gameModel, $jamData, $renderDepth);
 		}
         if($gameModel->Deleted != 1){
             $nonDeletedGamesCounter += 1;
@@ -20,7 +20,7 @@ function RenderGames(&$users, &$gameData, &$jams, $renderDepth){
 	return $render;
 }
 
-function RenderGame(&$users, &$game, &$jams, $renderDepth){
+function RenderGame(&$users, &$game, &$jamData, $renderDepth){
 	AddActionLog("RenderGame");
 	StartTimer("RenderGame");
 	
@@ -55,7 +55,7 @@ function RenderGame(&$users, &$game, &$jams, $renderDepth){
 	$render["color_non_white"] = "#".str_pad(dechex(min($render["color256_red"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($render["color256_green"], 0xDD)), 2, "0", STR_PAD_LEFT).str_pad(dechex(min($render["color256_blue"], 0xDD)), 2, "0", STR_PAD_LEFT);
 
 	//Mini RenderJam()
-	$jamModel = $jams[$jamId];
+	$jamModel = $jamData->JamModels[$jamId];
 	$render["jam_number"] = $jamModel->JamNumber;
 	$render["jam_theme"] = $jamModel->Theme;
 

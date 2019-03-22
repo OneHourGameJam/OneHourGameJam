@@ -3,7 +3,7 @@
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
 function EditJam($jamID, $theme, $date, $time, $colorsString){
-	global $jams, $dbConn, $loggedInUser;
+	global $jamData, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -27,7 +27,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 
 	//Validate values
 	$jamID = intval($jamID);
-	if(!isset($jams->JamModels[$jamID])){
+	if(!isset($jamData->JamModels[$jamID])){
 		return "INVALID_JAM_ID";
 	}
 

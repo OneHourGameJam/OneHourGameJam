@@ -30,7 +30,7 @@ function JamExists($jamID){
 
 //Deletes an existing jam, identified by the jam number.
 function DeleteJam($jamID){
-	global $jams, $dbConn, $loggedInUser;
+	global $jamData, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -47,7 +47,7 @@ function DeleteJam($jamID){
 		return "INVALID_JAM_ID";
 	}
 
-	if(count($jams->JamModels) == 0){
+	if(count($jamData->JamModels) == 0){
 		return "NO_JAMS_EXIST";
 	}
 

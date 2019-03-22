@@ -1,13 +1,13 @@
 <?php
 
-function GetNextJamDateAndTime(&$jams){
+function GetNextJamDateAndTime(&$jamData){
 	AddActionLog("GetNextJamDateAndTime");
 	StartTimer("GetNextJamDateAndTime");
 
 	$nextJamStartTime = null;
 
 	$now = time();
-	foreach($jams as $i => $jamModel){
+	foreach($jamData->JamModels as $i => $jamModel){
 		$nextJamTime = strtotime($jamModel->StartTime . " UTC");
 
 		if($nextJamTime > $now){
@@ -33,35 +33,35 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$configData, &$users, &$gameData, &$jam, &$jams, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
+function RenderJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
 	$render = Array();
 
-	$render["jam_id"] = $jam->Id;
-	$render["username"] = $jam->Username;
-	$render["jam_number"] = $jam->JamNumber;
-	$render["theme"] = $jam->Theme;
-	$render["start_time"] = $jam->StartTime;
+	$render["jam_id"] = $jamModel->Id;
+	$render["username"] = $jamModel->Username;
+	$render["jam_number"] = $jamModel->JamNumber;
+	$render["theme"] = $jamModel->Theme;
+	$render["start_time"] = $jamModel->StartTime;
 
-	if($jam->Deleted == 1){
+	if($jamModel->Deleted == 1){
 		$render["jam_deleted"] = 1;
 	}
 
-	$render["theme_visible"] = $jam->Theme; //Theme is visible to admins
-	$render["jam_number_ordinal"] = ordinal(intval($jam->JamNumber));
-	$render["date"] = date("d M Y", strtotime($jam->StartTime));
-	$render["time"] = date("H:i", strtotime($jam->StartTime));
+	$render["theme_visible"] = $jamModel->Theme; //Theme is visible to admins
+	$render["jam_number_ordinal"] = ordinal(intval($jamModel->JamNumber));
+	$render["date"] = date("d M Y", strtotime($jamModel->StartTime));
+	$render["time"] = date("H:i", strtotime($jamModel->StartTime));
 
 	//Jam Colors
 	$render["colors"] = Array();
-	foreach($jam->Colors as $num => $color){
+	foreach($jamModel->Colors as $num => $color){
 		$render["colors"][] = Array("number" => $num, "color" => "#".$color, "color_hex" => $color);
 	}
-	$render["colors_input_string"] = implode("-", $jam->Colors);
+	$render["colors_input_string"] = implode("-", $jamModel->Colors);
 
-	$render["minutes_to_jam"] = floor((strtotime($jam->StartTime ." UTC") - time()) / 60);
+	$render["minutes_to_jam"] = floor((strtotime($jamModel->StartTime ." UTC") - time()) / 60);
 
 	//Games in jam
 	$render["entries"] = Array();
@@ -69,7 +69,7 @@ function RenderJam(&$configData, &$users, &$gameData, &$jam, &$jams, &$satisfact
 	foreach($gameData->GameModels as $j => $gameModel){
 		if($gameModel->JamId == $render["jam_id"]){
 			if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-				$render["entries"][] = RenderGame($users, $gameModel, $jams, $renderDepth & ~RENDER_DEPTH_JAMS);
+				$render["entries"][] = RenderGame($users, $gameModel, $jamData, $renderDepth & ~RENDER_DEPTH_JAMS);
 			}
 
 			if(!$gameModel->Deleted){
@@ -145,13 +145,13 @@ function RenderJam(&$configData, &$users, &$gameData, &$jam, &$jams, &$satisfact
 	return $render;
 }
 
-function RenderSubmitJam(&$configData, &$users, &$gameData, &$jam, &$jams, &$satisfaction, &$loggedInUser, $renderDepth){
+function RenderSubmitJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$satisfaction, &$loggedInUser, $renderDepth){
 	AddActionLog("RenderSubmitJam");
 
-	return RenderJam($configData, $users, $gameData, $jam, $jams, $satisfaction, $loggedInUser, 0, $renderDepth);
+	return RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, 0, $renderDepth);
 }
 
-function RenderJams(&$configData, &$users, &$gameData, &$jams, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll){
+function RenderJams(&$configData, &$users, &$gameData, &$jamData, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -168,14 +168,14 @@ function RenderJams(&$configData, &$users, &$gameData, &$jams, &$satisfaction, &
 	$allJamsLoaded = true;
 	$render["current_jam"] = $currentJam["NUMBER"] !== 0;
 
-	foreach($jams as $i => $jam){
-		if($jam->Deleted != 1){
+	foreach($jamData->JamModels as $i => $jamModel){
+		if($jamModel->Deleted != 1){
 			$nonDeletedJamCounter += 1;
 		}
 		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 		{
 			if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
-				$jamRender = RenderJam($configData, $users, $gameData, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$jamRender = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 
 				$now = time();
 				$datetime = strtotime($jamRender["start_time"] . " UTC");
@@ -192,8 +192,8 @@ function RenderJams(&$configData, &$users, &$gameData, &$jams, &$satisfaction, &
 	
 				$render["LIST"][] = $jamRender;
 			}
-			if($currentJam["ID"] == $jam->Id){
-				$render["current_jam"] = RenderJam($configData, $users, $gameData, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+			if($currentJam["ID"] == $jamModel->Id){
+				$render["current_jam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 			}
 		}else{
 			$allJamsLoaded = false;
@@ -211,7 +211,7 @@ function RenderJams(&$configData, &$users, &$gameData, &$jams, &$satisfaction, &
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule(&$configData, &$jams, &$themes, $nextScheduledJamTime, $nextSuggestedJamTime){
+function CheckNextJamSchedule(&$configData, &$jamData, &$themes, $nextScheduledJamTime, $nextSuggestedJamTime){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule"); 
 
@@ -499,14 +499,14 @@ function GetJamsOfUserFormatted($username){
 
 // Returns a jam given its number.
 // The dictionary of jams must have been previously loaded.
-function GetJamByNumber(&$jams, $jamNumber) {
+function GetJamByNumber(&$jamData, $jamNumber) {
 	AddActionLog("GetJamByNumber");
 	StartTimer("GetJamByNumber");
 
-	foreach ($jams as $jam) {
-		if ($jam->JamNumber == $jamNumber && $jam->Deleted != 1) {
+	foreach ($jamData->JamModels as $jamModel) {
+		if ($jamModel->JamNumber == $jamNumber && $jamModel->Deleted != 1) {
 			StopTimer("GetJamByNumber");
-			return $jam;
+			return $jamModel;
 		}
 	}
 

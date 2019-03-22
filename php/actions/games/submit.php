@@ -6,7 +6,7 @@
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
 function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jams, $gameData, $configData;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jamData, $gameData, $configData;
 
 	$gameName = trim($gameName);
 	$gameURL = trim($gameURL);
@@ -61,12 +61,12 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		return "INVALID_JAM_NUMBER";
 	}
 
-	$jam = GetJamByNumber($jams->JamModels, $jam_number);
+	$jam = GetJamByNumber($jamData->JamModels, $jam_number);
 	if($jam == null || $jam->JamNumber == 0){
 		return "NO_JAM_TO_SUBMIT_TO";
 	}
 
-	if(count($jams->JamModels) == 0){
+	if(count($jamData->JamModels) == 0){
 		return "NO_JAM_TO_SUBMIT_TO";
 	}
 

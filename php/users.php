@@ -4,7 +4,7 @@ $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
                             
-function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$jams, &$adminVoteData, $renderDepth){
+function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -48,9 +48,9 @@ function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$j
         }
 
 	    StartTimer("RenderUser - foreach games - Foreach Jams");
-        foreach($jams as $k => $jam){
-            if($jam->Id == $gameModel->JamId){
-                $jamModel = $jam;
+        foreach($jamData->JamModels as $k => $jamModel){
+            if($jamModel->Id == $gameModel->JamId){
+                $jamModelForGame = $jamModel;
                 break;
             }
         }
@@ -76,7 +76,7 @@ function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$j
             $render["last_jam_number"] = $gameModel->JamNumber;
         }
 
-        $isJamRecent = intval($jamModel->JamNumber) > (intval($currentJam["NUMBER"]) - intval($configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value));
+        $isJamRecent = intval($jamModelForGame->JamNumber) > (intval($currentJam["NUMBER"]) - intval($configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value));
         if($isJamRecent){
             $render["recent_participation"] += 100.0 / $configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value;
         }
@@ -85,7 +85,7 @@ function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$j
 
         StartTimer("RenderUser - foreach games - RenderGame");
         if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-            $render["entries"][] = RenderGame($users, $gameModel, $jams, $renderDepth & ~RENDER_DEPTH_USERS);
+            $render["entries"][] = RenderGame($users, $gameModel, $jamData, $renderDepth & ~RENDER_DEPTH_USERS);
         }
 	    StopTimer("RenderUser - foreach games - RenderGame");
 
@@ -272,7 +272,7 @@ function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$j
     return $render;
 }
 
-function RenderUsers(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$adminVoteData, $renderDepth){
+function RenderUsers(&$configData, &$cookieData, &$users, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
@@ -280,7 +280,7 @@ function RenderUsers(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$
 
     $authorCount = 0;
     $gamesByUsername = $gameData->GroupGamesByUsername();
-    $jamsByUsername = GroupJamsByUsername($jams, $gamesByUsername);
+    $jamsByUsername = $jamData->GroupJamsByUsername($gamesByUsername);
 
     foreach($users as $i => $user){
         $username = $user->Username;
@@ -291,12 +291,13 @@ function RenderUsers(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$
         }
         $userJams = Array();
         if(isset($jamsByUsername[$username])){
+            //Optimisation disabled due to change of RenderUser(..) parameter from $jams (array of JamModels) to $jamData (JamData class), value of $userJam is array or JamModels, should be JamData and should replace $jamData parameter in call to RenderUser(..) below.
             $userJams = $jamsByUsername[$username];
         }
         $userAsArray = Array($user);
         
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-            $userRender = RenderUser($configData, $cookieData, $user, $users, $gameData, $userJams, $adminVoteData, $renderDepth);
+            $userRender = RenderUser($configData, $cookieData, $user, $users, $gameData, $jamData, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
@@ -330,27 +331,10 @@ function RenderUsers(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$
 	return $render;
 }
 
-function RenderLoggedInUser(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
+function RenderLoggedInUser(&$configData, &$cookieData, &$users, &$gameData, &$jamData, &$adminVoteData, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($configData, $cookieData, $loggedInUser, $users, $gameData, $jams, $adminVoteData, $renderDepth);
-}
-
-function GroupJamsByUsername(&$jams, &$gamesByUsername)
-{
-	AddActionLog("GroupJamsByUsername");
-    StartTimer("GroupJamsByUsername");
-
-    $jamsByUsername = Array();
-    foreach($gamesByUsername as $username => $gameModels){
-        $jamsByUsername[$username] = Array();
-        foreach($gameModels as $i => $gameModel){
-            $jamsByUsername[$username][$gameModel->JamId] = $jams[$gameModel->JamId];
-        }
-    }
-
-	StopTimer("GroupJamsByUsername");
-    return $jamsByUsername;
+    return RenderUser($configData, $cookieData, $loggedInUser, $users, $gameData, $jamData, $adminVoteData, $renderDepth);
 }
 
 ?>

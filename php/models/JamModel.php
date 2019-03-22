@@ -22,7 +22,7 @@ class JamData{
         AddActionLog("LoadJams");
         StartTimer("LoadJams");
 
-        $jams = Array();
+        $jamModels = Array();
 
         $sql = "SELECT jam_id, jam_username, jam_jam_number, jam_theme, jam_start_datetime, jam_colors, jam_deleted
         FROM jam ORDER BY jam_jam_number DESC";
@@ -30,22 +30,39 @@ class JamData{
         $sql = "";
 
         while($info = mysqli_fetch_array($data)){
-            $jam = new JamModel();
+            $jamModel = new JamModel();
             $jamID = intval($info["jam_id"]);
 
-            $jam->Id = $jamID;
-            $jam->Username = $info["jam_username"];
-            $jam->JamNumber = intval($info["jam_jam_number"]);
-            $jam->Theme = $info["jam_theme"];
-            $jam->StartTime = $info["jam_start_datetime"];
-            $jam->Colors = ParseJamColors($info["jam_colors"]);
-            $jam->Deleted = $info["jam_deleted"];
+            $jamModel->Id = $jamID;
+            $jamModel->Username = $info["jam_username"];
+            $jamModel->JamNumber = intval($info["jam_jam_number"]);
+            $jamModel->Theme = $info["jam_theme"];
+            $jamModel->StartTime = $info["jam_start_datetime"];
+            $jamModel->Colors = ParseJamColors($info["jam_colors"]);
+            $jamModel->Deleted = $info["jam_deleted"];
 
-            $jams[$jamID] = $jam;
+            $jamModels[$jamID] = $jamModel;
         }
 
         StopTimer("LoadJams");
-        return $jams;
+        return $jamModels;
+    }
+
+    function GroupJamsByUsername(&$gamesByUsername)
+    {
+        AddActionLog("GroupJamsByUsername");
+        StartTimer("GroupJamsByUsername");
+    
+        $jamsByUsername = Array();
+        foreach($gamesByUsername as $username => $gameModels){
+            $jamsByUsername[$username] = Array();
+            foreach($gameModels as $i => $gameModel){
+                $jamsByUsername[$username][$gameModel->JamId] = $this->JamModels[$gameModel->JamId];
+            }
+        }
+    
+        StopTimer("GroupJamsByUsername");
+        return $jamsByUsername;
     }
 }
 

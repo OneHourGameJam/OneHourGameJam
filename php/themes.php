@@ -1,6 +1,6 @@
 <?php
 
-function RenderThemes(&$configData, &$jams, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
+function RenderThemes(&$configData, &$jamData, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -94,7 +94,7 @@ function RenderThemes(&$configData, &$jams, &$themes, &$userThemeVotes, &$themes
 		
 		//Mark theme as old
 		$theme["is_old"] = intval($theme["days_ago"]) >= intval($configData->ConfigModels["THEME_DAYS_MARK_AS_OLD"]->Value);
-		$theme["is_recent"] = IsRecentTheme($jams, $configData, $themeText);
+		$theme["is_recent"] = IsRecentTheme($jamData, $configData, $themeText);
 
 		//Compute JavaScript formatted lists for themes pie chart
 		if($themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifference"] > 0){
@@ -214,18 +214,20 @@ function RenderThemes(&$configData, &$jams, &$themes, &$userThemeVotes, &$themes
 	return $render;
 }
 
-function IsRecentTheme(&$jams, &$configData, $theme) {
+function IsRecentTheme(&$jamData, &$configData, $theme) {
 	AddActionLog("IsRecentTheme");
 	StartTimer("IsRecentTheme");
 	$jamNumber = 1; // Number of non deleted jams traversed
-	foreach ($jams as $i => $jam) {
+	foreach ($jamData->JamModels as $i => $jamModel) {
 		$currentTime = new DateTime();
-		$startTime = new DateTime($jam->StartTime . " UTC");
-		if ($jam->Deleted == 0 && $startTime < $currentTime) {
-			if (strtolower($jam->Theme) == strtolower($theme))
+		$startTime = new DateTime($jamModel->StartTime . " UTC");
+		if ($jamModel->Deleted == 0 && $startTime < $currentTime) {
+			if (strtolower($jamModel->Theme) == strtolower($theme)){
 				return "THEME_RECENTLY_USED";
-			if (++$jamNumber > $configData->ConfigModels["JAM_THEMES_CONSIDERED_RECENT"]->Value)
+			}
+			if (++$jamNumber > $configData->ConfigModels["JAM_THEMES_CONSIDERED_RECENT"]->Value){
 				break;
+			}
 		}
 	}
 	StopTimer("IsRecentTheme");

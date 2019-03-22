@@ -24,7 +24,7 @@ function CanDeleteEntry($entryID){
 
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryID){
-	global $jams, $dbConn, $loggedInUser;
+	global $jamData, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -41,7 +41,7 @@ function DeleteEntry($entryID){
 		return "INVALID_JAM_ID";
 	}
 
-	if(count($jams->JamModels) == 0){
+	if(count($jamData->JamModels) == 0){
 		return "NO_JAMS_EXIST";
 	}
 
