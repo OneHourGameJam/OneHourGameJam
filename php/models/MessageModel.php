@@ -9,11 +9,11 @@ class MessageModel{
 class MessageData{
     public $MessageModels;
 
-    function __construct(&$actions) {
-        $this->MessageModels = $this->LoadMessages($actions);
+    function __construct(&$siteActionData) {
+        $this->MessageModels = $this->LoadMessages($siteActionData);
     }
 
-    function LoadMessages(&$actions){
+    function LoadMessages(&$siteActionData){
         global $_COOKIE;
         AddActionLog("LoadMessages");
         StartTimer("LoadMessages");
@@ -26,7 +26,7 @@ class MessageData{
             $messageActionResultAction = $_COOKIE["actionResultAction"];
         
             $actionFound = false;
-            foreach($actions as $i => $siteActionModel){
+            foreach($siteActionData->SiteActionModels as $i => $siteActionModel){
                 if($messageActionResultAction == $siteActionModel->PostRequest){
                     $actionFound = true;
                     if(isset($siteActionModel->ActionResult[$messageActionResult])){

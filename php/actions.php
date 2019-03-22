@@ -1,12 +1,12 @@
 <?php
 
-function PerformPendingSiteAction(&$configData, &$actions, &$loggedInUser){
+function PerformPendingSiteAction(&$configData, &$siteActionData, &$loggedInUser){
     global $_POST;
 	AddActionLog("PerformPendingSiteAction");
 	StartTimer("PerformPendingSiteAction");
 
     if(isset($_POST["action"])){
-        foreach($actions as $i => $siteActionModel){
+        foreach($siteActionData->SiteActionModels as $i => $siteActionModel){
             $actionPostRequest = $siteActionModel->PostRequest;
             $actionPhpFile = $siteActionModel->PhpFile;
             $actionRedirectAfterExecution = $siteActionModel->RedirectAfterExecution;

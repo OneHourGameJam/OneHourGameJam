@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $actions, $page, $dep;
+	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -39,17 +39,17 @@ function Init(){
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($configData);
 	CheckNextJamSchedule($configData, $jamData, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
 
-	$actions = new SiteActionData($configData);
+	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData();
 	$pollData = new PollData($loggedInUser);
     $satisfactionData = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($loggedInUser);
-	$messageData = new MessageData($actions->SiteActionModels);
+	$messageData = new MessageData($siteActionData);
 	
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Render");
 
-	PerformPendingSiteAction($configData, $actions->SiteActionModels, $loggedInUser);
+	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
  
 	if(FindDependency("RenderConfig", $dep) !== false){
 		$dictionary["CONFIG"] = RenderConfig($configData);
