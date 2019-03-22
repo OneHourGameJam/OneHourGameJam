@@ -22,14 +22,14 @@ $configPrettyPrintFunctions = Array(
 	"MAX_ASSET_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
 );
 
-function RenderConfig($config){
+function RenderConfig($configData){
 	global $configCategorySettings, $configPrettyPrintFunctions;
 	AddActionLog("RenderConfig");
 	StartTimer("RenderConfig");
 
 	$render = Array("LIST" => Array(), "VALUES" => Array(), "PRETTY_PRINT" => Array());
 
-	foreach($config as $i => $configModel){
+	foreach($configData->ConfigModels as $i => $configModel){
 		$addedToDictionary = $configModel->AddedToDictionary;
 
 		if(!$addedToDictionary){
@@ -108,11 +108,11 @@ function RenderConfig($config){
 }
 
 
-function RedirectToHttpsIfRequired($config){
+function RedirectToHttpsIfRequired($configData){
 	AddActionLog("RedirectToHttpsIfRequired");
 	StartTimer("RedirectToHttpsIfRequired");
 
-    if($config["REDIRECT_TO_HTTPS"]->Value){
+    if($configData->ConfigModels["REDIRECT_TO_HTTPS"]->Value){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https
             $url = "https://". $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];

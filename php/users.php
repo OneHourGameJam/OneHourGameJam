@@ -4,7 +4,7 @@ $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
                             
-function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
+function RenderUser(&$configData, &$cookies, &$user, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -76,9 +76,9 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
             $render["last_jam_number"] = $gameModel->JamNumber;
         }
 
-        $isJamRecent = intval($jamModel->JamNumber) > (intval($currentJam["NUMBER"]) - intval($config["JAMS_CONSIDERED_RECENT"]->Value));
+        $isJamRecent = intval($jamModel->JamNumber) > (intval($currentJam["NUMBER"]) - intval($configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value));
         if($isJamRecent){
-            $render["recent_participation"] += 100.0 / $config["JAMS_CONSIDERED_RECENT"]->Value;
+            $render["recent_participation"] += 100.0 / $configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value;
         }
 
 	    StopTimer("RenderUser - foreach games - entry count, first and last jam, recent");
@@ -101,10 +101,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
 
     //Find admin candidates
 	StartTimer("RenderUser - admin candidates");
-    if($render["recent_participation"] >= $config["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]->Value){
+    if($render["recent_participation"] >= $configData->ConfigModels["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]->Value){
         $render["admin_candidate_recent_participation_check_pass"] = 1;
     }
-    if($render["entry_count"] >= $config["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]->Value){
+    if($render["entry_count"] >= $configData->ConfigModels["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]->Value){
         $render["admin_candidate_total_participation_check_pass"] = 1;
     }
     if(	isset($render["admin_candidate_recent_participation_check_pass"]) &&
@@ -129,10 +129,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     //Find inactive admins (participation in jams)
     $jamsSinceLastParticipation = ($currentJam["NUMBER"] - $render["last_jam_number"]);
     $render["jams_since_last_participation"] = $jamsSinceLastParticipation;
-    if($render["last_jam_number"] < ($currentJam["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]->Value)){
+    if($render["last_jam_number"] < ($currentJam["NUMBER"] - $configData->ConfigModels["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]->Value)){
         $render["activity_jam_participation"] = "inactive";
         $render["activity_jam_participation_color"] = $inactiveColor;
-    }else if($render["last_jam_number"] >= ($currentJam["NUMBER"] - $config["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]->Value)){
+    }else if($render["last_jam_number"] >= ($currentJam["NUMBER"] - $configData->ConfigModels["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]->Value)){
         $render["activity_jam_participation"] = "highly active";
         $render["activity_jam_participation_color"] = $highlyAciveColor;
     }else{
@@ -141,10 +141,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     }
 
     //Find inactive admins (days since last login)
-    if($render["days_since_last_login"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]->Value){
+    if($render["days_since_last_login"] > $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]->Value){
         $render["activity_login"] = "inactive";
         $render["activity_login_color"] = $inactiveColor;
-    }else if($render["days_since_last_login"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]->Value){
+    }else if($render["days_since_last_login"] < $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]->Value){
         $render["activity_login"] = "highly active";
         $render["activity_login_color"] = $highlyAciveColor;
     }else{
@@ -153,10 +153,10 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     }
 
     //Find inactive admins (days since last login)
-    if($render["days_since_last_admin_action"] > $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]->Value){
+    if($render["days_since_last_admin_action"] > $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]->Value){
         $render["activity_administration"] = "inactive";
         $render["activity_administration_color"] = $inactiveColor;
-    }else if($render["days_since_last_admin_action"] < $config["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]->Value){
+    }else if($render["days_since_last_admin_action"] < $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]->Value){
         $render["activity_administration"] = "highly active";
         $render["activity_administration_color"] = $highlyAciveColor;
     }else{
@@ -272,7 +272,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     return $render;
 }
 
-function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
+function RenderUsers(&$configData, &$cookies, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
@@ -295,7 +295,7 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVoteD
         $userAsArray = Array($user);
         
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-            $userRender = RenderUser($config, $cookies, $user, $users, $userGames, $userJams, $adminVoteData, $renderDepth);
+            $userRender = RenderUser($configData, $cookies, $user, $users, $userGames, $userJams, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
@@ -329,10 +329,10 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVoteD
 	return $render;
 }
 
-function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
+function RenderLoggedInUser(&$configData, &$cookies, &$users, &$games, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVoteData, $renderDepth);
+    return RenderUser($configData, $cookies, $loggedInUser, $users, $games, $jams, $adminVoteData, $renderDepth);
 }
 
 function GroupGamesByUsername(&$games)

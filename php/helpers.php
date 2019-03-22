@@ -115,12 +115,12 @@ function bytesToString($bytes) {
 	return "less than 1 Byte. This is a bug.";
 }
 
-function GetSuggestedNextJamDateTime(&$config){
+function GetSuggestedNextJamDateTime(&$configData){
 	AddActionLog("GetSuggestedNextJamDateTime");
 	StartTimer("GetSuggestedNextJamDateTime");
 
     $jamDay = "monday";
-    switch($config["JAM_DAY"]->Value){
+    switch($configData->ConfigModels["JAM_DAY"]->Value){
         case 0:
             $jamDay = "sunday";
         break;
@@ -144,7 +144,7 @@ function GetSuggestedNextJamDateTime(&$config){
         break;
     }
 
-	$nextSuggestedJamTime = strtotime("$jamDay +" . intval($config["JAM_TIME"]->Value) . " hours UTC");
+	$nextSuggestedJamTime = strtotime("$jamDay +" . intval($configData->ConfigModels["JAM_TIME"]->Value) . " hours UTC");
 
 	StopTimer("GetSuggestedNextJamDateTime");
 	return $nextSuggestedJamTime;

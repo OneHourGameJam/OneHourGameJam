@@ -33,7 +33,7 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
+function RenderJam(&$configData, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
@@ -127,7 +127,7 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 
 		$render["satisfaction_average_score"] = $satisfactionAverage;
 		$render["satisfaction_submitted_scores"] = $satisfactionCount;
-		$render["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
+		$render["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $configData->ConfigModels["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
 		$render["score-5"] = $satisfaction[$arrayId]->Scores[-5];
 		$render["score-4"] = $satisfaction[$arrayId]->Scores[-4];
 		$render["score-3"] = $satisfaction[$arrayId]->Scores[-3];
@@ -145,25 +145,25 @@ function RenderJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$
 	return $render;
 }
 
-function RenderSubmitJam(&$config, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $renderDepth){
+function RenderSubmitJam(&$configData, &$users, &$games, &$jam, &$jams, &$satisfaction, &$loggedInUser, $renderDepth){
 	AddActionLog("RenderSubmitJam");
 
-	return RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0, $renderDepth);
+	return RenderJam($configData, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, 0, $renderDepth);
 }
 
-function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll){
+function RenderJams(&$configData, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
 	$render = Array("LIST" => Array());
-	$suggestedNextGameJamTime = GetSuggestedNextJamDateTime($config);
+	$suggestedNextGameJamTime = GetSuggestedNextJamDateTime($configData);
 	$render["next_jam_timer_code"] = gmdate("Y-m-d", $suggestedNextGameJamTime)."T".gmdate("H:i", $suggestedNextGameJamTime).":00Z";
 
     $nonDeletedJamCounter = 0;
 	$latestStartedJamFound = false;
 	$currentJam = GetCurrentJamNumberAndID();
 
-	$jamsToLoad = $config["JAMS_TO_LOAD"]->Value;
+	$jamsToLoad = $configData->ConfigModels["JAMS_TO_LOAD"]->Value;
 
 	$allJamsLoaded = true;
 	$render["current_jam"] = $currentJam["NUMBER"] !== 0;
@@ -175,7 +175,7 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 		{
 			if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
-				$jamRender = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$jamRender = RenderJam($configData, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 
 				$now = time();
 				$datetime = strtotime($jamRender["start_time"] . " UTC");
@@ -193,7 +193,7 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 				$render["LIST"][] = $jamRender;
 			}
 			if($currentJam["ID"] == $jam->Id){
-				$render["current_jam"] = RenderJam($config, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$render["current_jam"] = RenderJam($configData, $users, $games, $jam, $jams, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 			}
 		}else{
 			$allJamsLoaded = false;
@@ -211,20 +211,20 @@ function RenderJams(&$config, &$users, &$games, &$jams, &$satisfaction, &$logged
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime, $nextSuggestedJamTime){
+function CheckNextJamSchedule(&$configData, &$jams, &$themes, $nextScheduledJamTime, $nextSuggestedJamTime){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule"); 
 
 	//print "<br>CHECK JAM SCHEDULING";
 
-	if($config["JAM_AUTO_SCHEDULER_ENABLED"]->Value == 0){
+	if($configData->ConfigModels["JAM_AUTO_SCHEDULER_ENABLED"]->Value == 0){
 		//print "<br>AUTO SCHEDULER DISABLED";
 		StopTimer("CheckNextJamSchedule");
 		return;
 	}
 
 	//print "<br>AUTO SCHEDULER ENABLED";
-	$autoScheduleThreshold = $config["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]->Value * 60;
+	$autoScheduleThreshold = $configData->ConfigModels["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]->Value * 60;
 
 	$now = time();
 	$timeToNextScheduledJam = $nextScheduledJamTime - $now;
@@ -257,9 +257,9 @@ function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime,
 
 		$selectedTheme = "";
 
-		$selectedTheme = SelectRandomThemeByVoteDifference($themes, $config);
+		$selectedTheme = SelectRandomThemeByVoteDifference($themes, $configData);
 		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomThemeByPopularity($themes, $config);
+			$selectedTheme = SelectRandomThemeByPopularity($themes, $configData);
 		}
 		if($selectedTheme == ""){
 			$selectedTheme = SelectRandomTheme($themes);
@@ -282,11 +282,11 @@ function CheckNextJamSchedule(&$config, &$jams, &$themes, $nextScheduledJamTime,
 
 //Selects a random theme (or "" if none can be selected) by calculating the difference between positive and negative votes and
 //selecting a proportional random theme by this difference
-function SelectRandomThemeByVoteDifference(&$themes, &$config){
+function SelectRandomThemeByVoteDifference(&$themes, &$configData){
 	AddActionLog("SelectRandomThemeByVoteDifference");
 	StartTimer("SelectRandomThemeByVoteDifference");
 
-	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]->Value;
+	$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
 	$selectedTheme = "";
 
@@ -344,11 +344,11 @@ function SelectRandomThemeByVoteDifference(&$themes, &$config){
 }
 
 //Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
-function SelectRandomThemeByPopularity(&$themes, &$config){
+function SelectRandomThemeByPopularity(&$themes, &$configData){
 	AddActionLog("SelectRandomThemeByPopularity");
 	StartTimer("SelectRandomThemeByPopularity");
 
-	$minimumVotes = $config["THEME_MIN_VOTES_TO_SCORE"]->Value;
+	$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
 	$selectedTheme = "";
 

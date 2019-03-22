@@ -29,11 +29,11 @@ class SiteActionModel{
 class SiteActionData{
     public $SiteActionModels;
 
-    function __construct(&$config) {
-        $this->SiteActionModels = $this->LoadSiteActions($config);
+    function __construct(&$configData) {
+        $this->SiteActionModels = $this->LoadSiteActions($configData);
     }
 
-    function LoadSiteActions(&$config){
+    function LoadSiteActions(&$configData){
         AddActionLog("LoadSiteActions");
         StartTimer("LoadSiteActions");
         
@@ -45,8 +45,8 @@ class SiteActionData{
                 "?page=main",
                 Array(
                     "SUCCESS" => new SiteActionResultModel("?page=main", "success", "Logged in successfully"),
-                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=login", "warning", "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$config["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
-                    "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?page=login", "warning", "Incorrect username length. Must be between ".$config["MINIMUM_USERNAME_LENGTH"]->Value." and ".$config["MAXIMUM_USERNAME_LENGTH"]->Value." characters long."),
+                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=login", "warning", "Incorrect password length. Must be between ".$configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
+                    "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?page=login", "warning", "Incorrect username length. Must be between ".$configData->ConfigModels["MINIMUM_USERNAME_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_USERNAME_LENGTH"]->Value." characters long."),
                     "USERNAME_ALREADY_REGISTERED" => new SiteActionResultModel("?page=login", "error", "There is already a user with that username. Please log in or choose another."),
                     "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?page=login", "error", "The user does not exist."),
                     "INCORRECT_PASSWORD" => new SiteActionResultModel("?page=login", "warning", "Incorrect username/password combination."),
@@ -191,7 +191,7 @@ class SiteActionData{
                 Array(
                     "SUCCESS" => new SiteActionResultModel("?page=editusers", "success", "Password Updated."),
                     "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?page=editusers", "error", "User does not exist."),
-                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=editusers", "warning", "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$config["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
+                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=editusers", "warning", "Incorrect password length. Must be between ".$configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
                     "PASSWORDS_DONT_MATCH" => new SiteActionResultModel("?page=editusers", "warning", "Passwords do not match."),
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?page=main", "error", "Only admins can perform this action."),
                 )
@@ -203,7 +203,7 @@ class SiteActionData{
                 Array(
                     "SUCCESS" => new SiteActionResultModel("?page=usersettings", "success", "Password Updated."),
                     "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?page=usersettings", "error", "User does not exist."),
-                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=usersettings", "warning", "Incorrect password length. Must be between ".$config["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$config["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
+                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=usersettings", "warning", "Incorrect password length. Must be between ".$configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
                     "PASSWORDS_DONT_MATCH" => new SiteActionResultModel("?page=usersettings", "warning", "Passwords do not match."),
                     "INCORRECT_PASSWORD" => new SiteActionResultModel("?page=usersettings", "warning", "Old password is not correct."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
@@ -216,7 +216,7 @@ class SiteActionData{
                 Array(
                     "SUCCESS" => new SiteActionResultModel("?page=usersettings", "success", "User settings updated."),
                     "INVALID_EMAIL" => new SiteActionResultModel("?page=usersettings", "warning", "Email is not valid."),
-                    "INVALID_DISPLAY_NAME" => new SiteActionResultModel("?page=usersettings", "warning", "Incorrect display name length. Must be between ".$config["MINIMUM_DISPLAY_NAME_LENGTH"]->Value." and ".$config["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value." characters long."),
+                    "INVALID_DISPLAY_NAME" => new SiteActionResultModel("?page=usersettings", "warning", "Incorrect display name length. Must be between ".$configData->ConfigModels["MINIMUM_DISPLAY_NAME_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value." characters long."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
                 )
             ),
@@ -230,7 +230,7 @@ class SiteActionData{
                     "INVALID_THEME" => new SiteActionResultModel("?page=themes", "warning", "Theme is not valid."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
                     "THEME_RECENTLY_USED" => new SiteActionResultModel("?page=themes", "warning", "Theme has been used in a recent jam."),
-                    "TOO_MANY_THEMES" => new SiteActionResultModel("?page=themes", "warning", "You can only submit ".$config["THEMES_PER_USER"]->Value." themes. Please delete past themes to submit again.")
+                    "TOO_MANY_THEMES" => new SiteActionResultModel("?page=themes", "warning", "You can only submit ".$configData->ConfigModels["THEMES_PER_USER"]->Value." themes. Please delete past themes to submit again.")
                 )
             ),
             new SiteActionModel(

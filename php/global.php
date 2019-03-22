@@ -10,14 +10,14 @@ if(isset($_GET["page"])){
 $warnings = Array();
 $loggedInUser = "";
 $loginChecked = false;
-$config = Array();
+$configData;
 $dictionary = Array();
 $users = Array();
 $jams = Array();
 $authors = Array();
 $entries = Array();
 $themes = Array();
-$assetData = Array();
+$assetData;
 $polls = Array();
 $satisfaction = Array();
 $adminVoteData;

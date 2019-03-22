@@ -1,6 +1,6 @@
 <?php
 
-function InitStream(&$config){
+function InitStream(&$configData){
 	AddActionLog("InitStream");
 	StartTimer("InitStream");
 
@@ -13,7 +13,7 @@ function InitStream(&$config){
 		$timeDiff = time() - intval($data["time_last_updated"]);
 	}
 
-	if($timeDiff > intval($config["TWITCH_API_STREAM_UPDATE_FREQUENCY"]->Value)){
+	if($timeDiff > intval($configData->ConfigModels["TWITCH_API_STREAM_UPDATE_FREQUENCY"]->Value)){
 		//Enough time has passed for an update from the API, fetch it.
 
 		//First overwrite the currently saved time_last_updated, so that if there is a lot of load on the twitch API and reponses are slow, only one site user has to wait.
@@ -22,8 +22,8 @@ function InitStream(&$config){
 
 		//Fetch API response using CURL, because that was the easiest to copy-paste in :)
 		$channelsApi = 'https://api.twitch.tv/kraken/streams/';
-		$channelName = $config["STREAMER_TWITCH_NAME"]->Value;
-		$clientId = $config["TWITCH_CLIENT_ID"]->Value;
+		$channelName = $configData->ConfigModels["STREAMER_TWITCH_NAME"]->Value;
+		$clientId = $configData->ConfigModels["TWITCH_CLIENT_ID"]->Value;
 		$ch = curl_init();
 
 		curl_setopt_array($ch, array(
@@ -45,7 +45,7 @@ function InitStream(&$config){
 
 	if(isset($data) && isset($data["stream"]) && $data["stream"] != null && count($data["stream"]) > 0){
 		$render["IS_STREAM_ACTIVE"] = 1;
-		$render["STREAMER_CHANNEL"] = $config["STREAMER_TWITCH_NAME"]->Value;
+		$render["STREAMER_CHANNEL"] = $configData->ConfigModels["STREAMER_TWITCH_NAME"]->Value;
 	}
 
 	StopTimer("InitStream");

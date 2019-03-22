@@ -8,15 +8,15 @@ function GenerateSalt(){
 
 //Hashes the given password and salt the number of iterations. Also uses the
 //whole-site salt (called pepper), as defined in config.
-function HashPassword($password, $salt, $iterations, &$config){
+function HashPassword($password, $salt, $iterations, &$configData){
 	AddActionLog("HashPassword");
 	StartTimer("HashPassword");
 
-	$pepper = isset($config["PEPPER"]->Value) ? $config["PEPPER"]->Value : "";
+	$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "";
 	$pswrd = $pepper.$password.$salt;
 
 	//Check that we have sufficient iterations for password generation.
-	if(!ValidateHashingIterationNumber($iterations, $config)){
+	if(!ValidateHashingIterationNumber($iterations, $configData)){
 		StopTimer("HashPassword");
 		return;
 	}
@@ -50,7 +50,7 @@ function GetUsernameForUserId($userId, &$users){
 //returns that. This is to prevent re-hashing the provided sessionID multiple times.
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
-function IsLoggedIn(&$config, &$users){
+function IsLoggedIn(&$configData, &$users){
 	global $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
@@ -71,8 +71,8 @@ function IsLoggedIn(&$config, &$users){
 	}
 
 	$sessionID = "".$_COOKIE["sessionID"];
-	$pepper = isset($config["PEPPER"]) ? $config["PEPPER"]->Value : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $config["SESSION_PASSWORD_ITERATIONS"]->Value, $config);
+	$pepper = isset($configData->ConfigModels["PEPPER"]) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
+	$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
 
     $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
 
@@ -204,49 +204,49 @@ function GetSessionsOfUserFormatted($userId){
 	return ArrayToHTML(MySQLDataToArray($data));
 }
 
-function ValidatePassword($password, &$config){
+function ValidatePassword($password, &$configData){
 	AddActionLog("ValidatePassword");
 
 	//Check password length
-	if(strlen($password) < $config["MINIMUM_PASSWORD_LENGTH"]->Value){
+	if(strlen($password) < $configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value){
 		return false;
 	}
-	if(strlen($password) > $config["MAXIMUM_PASSWORD_LENGTH"]->Value){
+	if(strlen($password) > $configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value){
 		return false;
 	}
 
 	return true;
 }
 
-function GenerateUserHashIterations(&$config){
+function GenerateUserHashIterations(&$configData){
 	AddActionLog("GenerateUserHashIterations");
 
-	$minimumHashIterations = $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
-	$maximumHashIterations = $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
+	$minimumHashIterations = $configData->ConfigModels["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
+	$maximumHashIterations = $configData->ConfigModels["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
 
 	return intval(rand($minimumHashIterations, $maximumHashIterations));
 }
 
-function ValidateHashingIterationNumber($iterations, &$config){
+function ValidateHashingIterationNumber($iterations, &$configData){
 	AddActionLog("ValidateHashingIterationNumber");
 
-	if($iterations < $config["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
+	if($iterations < $configData->ConfigModels["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
 		return false;
 	}
-	if($iterations > $config["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
+	if($iterations > $configData->ConfigModels["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
 		return false;
 	}
 
 	return true;
 }
 
-function ValidateUsername($username, &$config){
+function ValidateUsername($username, &$configData){
 	AddActionLog("ValidateUsername");
 
-	if(strlen($username) < $config["MINIMUM_USERNAME_LENGTH"]->Value){
+	if(strlen($username) < $configData->ConfigModels["MINIMUM_USERNAME_LENGTH"]->Value){
 		return false;
 	}
-	if(strlen($username) > $config["MAXIMUM_USERNAME_LENGTH"]->Value){
+	if(strlen($username) > $configData->ConfigModels["MAXIMUM_USERNAME_LENGTH"]->Value){
 		return false;
 	}
 

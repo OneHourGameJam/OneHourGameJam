@@ -4,7 +4,7 @@ chdir("../../");
 include_once("php/site.php");
 
 //Number of minutes after jam to be considered active.
-$jamDurationMinutes = $config->ConfigModels["JAM_DURATION"]->Value;
+$jamDurationMinutes = $configData->ConfigModels["JAM_DURATION"]->Value;
 
 $sql = "
 	SELECT jam_jam_number, jam_theme, jam_start_datetime, UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(jam_start_datetime) - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff
@@ -48,7 +48,7 @@ if(count($return["upcoming_jams"]) == 0){
     //No jam scheduled yet, insert stub.
 
     $now = time();
-    $saturday = GetSuggestedNextJamDateTime($config->ConfigModels);
+    $saturday = GetSuggestedNextJamDateTime($configData->ConfigModels);
 
 	$interval = $saturday - $now;
 

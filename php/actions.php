@@ -1,6 +1,6 @@
 <?php
 
-function PerformPendingSiteAction(&$config, &$actions, &$loggedInUser){
+function PerformPendingSiteAction(&$configData, &$actions, &$loggedInUser){
     global $_POST;
 	AddActionLog("PerformPendingSiteAction");
 	StartTimer("PerformPendingSiteAction");

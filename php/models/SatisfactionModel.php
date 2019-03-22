@@ -11,11 +11,11 @@ class SatisfactionModel{
 class SatisfactionData{
     public $SatisfactionModels;
 
-    function __construct(&$config) {
-        $this->SatisfactionModels = $this->LoadSatisfaction($config);
+    function __construct(&$configData) {
+        $this->SatisfactionModels = $this->LoadSatisfaction($configData);
     }
 
-    function LoadSatisfaction(&$config){
+    function LoadSatisfaction(&$configData){
         global $dbConn;
         AddActionLog("LoadSatisfaction");
         StartTimer("LoadSatisfaction");
@@ -44,7 +44,7 @@ class SatisfactionData{
             $satisfactionModel->QuestionId = $questionId;
             $satisfactionModel->AverageScore = $averageScore;
             $satisfactionModel->SubmittedScores = $submittedScores;
-            $satisfactionModel->EnoughScoresToShowSatisfaction = $submittedScores >= $config["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
+            $satisfactionModel->EnoughScoresToShowSatisfaction = $submittedScores >= $configData->ConfigModels["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
             
             for($score = -5; $score <= 5; $score++){
                 $satisfactionModel->Scores[$score] = 0;

@@ -2,7 +2,7 @@
 
 //Changes data about the logged in user
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
-	global $loggedInUser, $dbConn, $config;
+	global $loggedInUser, $dbConn, $configData;
 
 	//Authorize user
 	if($loggedInUser === false){
@@ -10,7 +10,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	}
 
 	//Validate values
-	if(!$displayName || strlen($displayName) < $config->ConfigModels["MINIMUM_DISPLAY_NAME_LENGTH"]->Value || strlen($displayName) > $config->ConfigModels["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value){
+	if(!$displayName || strlen($displayName) < $configData->ConfigModels["MINIMUM_DISPLAY_NAME_LENGTH"]->Value || strlen($displayName) > $configData->ConfigModels["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value){
 		return "INVALID_DISPLAY_NAME";
 	}
 

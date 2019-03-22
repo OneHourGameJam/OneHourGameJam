@@ -2,7 +2,7 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $users, $dbConn, $config, $loggedInUser;
+	global $users, $dbConn, $configData, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -16,7 +16,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	}
 	$password = $newPassword1;
 
-	if(!ValidatePassword($password, $config->ConfigModels)){
+	if(!ValidatePassword($password, $configData->ConfigModels)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -27,8 +27,8 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 
 	//Generate new salt, number of iterations and hashed password.
 	$newUserSalt = GenerateSalt();
-	$newUserPasswordIterations = GenerateUserHashIterations($config->ConfigModels);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $config->ConfigModels);
+	$newUserPasswordIterations = GenerateUserHashIterations($configData->ConfigModels);
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData->ConfigModels);
 
 	$loggedInUserUsername = $loggedInUser->Username;
 	$users->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;

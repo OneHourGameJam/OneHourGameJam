@@ -4,16 +4,16 @@
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
-	global $users, $config;
+	global $users, $configData;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	if(!ValidateUsername($username, $config->ConfigModels)){
+	if(!ValidateUsername($username, $configData->ConfigModels)){
 		return "INVALID_USERNAME_LENGTH";
 	}
 
-	if(!ValidatePassword($password, $config->ConfigModels)){
+	if(!ValidatePassword($password, $configData->ConfigModels)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -29,22 +29,22 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $users, $dbConn, $ip, $userAgent, $config;
+	global $users, $dbConn, $ip, $userAgent, $configData;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	if(!ValidateUsername($username, $config->ConfigModels)){
+	if(!ValidateUsername($username, $configData->ConfigModels)){
 		return "INVALID_USERNAME_LENGTH";
 	}
 
-	if(!ValidatePassword($password, $config->ConfigModels)){
+	if(!ValidatePassword($password, $configData->ConfigModels)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	$userSalt = GenerateSalt();
-	$userPasswordIterations = GenerateUserHashIterations($config->ConfigModels);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $config->ConfigModels);
+	$userPasswordIterations = GenerateUserHashIterations($configData->ConfigModels);
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData->ConfigModels);
 	$admin = (count($users->UserModels) == 0) ? 1 : 0;
 
 	if(isset($users->UserModels[$username])){
@@ -96,16 +96,16 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
 function LogInUser($username, $password){
-	global $config, $users, $dbConn;
+	global $configData, $users, $dbConn;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	if(!ValidateUsername($username, $config->ConfigModels)){
+	if(!ValidateUsername($username, $configData->ConfigModels)){
 		return "INVALID_USERNAME_LENGTH";
 	}
 
-	if(!ValidatePassword($password, $config->ConfigModels)){
+	if(!ValidatePassword($password, $configData->ConfigModels)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -118,14 +118,14 @@ function LogInUser($username, $password){
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
 	$userPasswordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $config->ConfigModels);
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData->ConfigModels);
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
-		$pepper = isset($config->ConfigModels["PEPPER"]->Value) ? $config->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-		$sessionIDHash = HashPassword($sessionID, $pepper, $config->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $config->ConfigModels);
+		$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
+		$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData->ConfigModels);
 
-		$daysToKeepLoggedIn = $config->ConfigModels["DAYS_TO_KEEP_LOGGED_IN"]->Value;
+		$daysToKeepLoggedIn = $configData->ConfigModels["DAYS_TO_KEEP_LOGGED_IN"]->Value;
 		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
 		$_COOKIE["sessionID"] = $sessionID;
 
