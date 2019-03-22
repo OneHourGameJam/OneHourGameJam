@@ -30,7 +30,7 @@ class PollData{
         AddActionLog("LoadPolls");
         StartTimer("LoadPolls");
 
-        $polls = Array();
+        $pollModels = Array();
         
         $sql = "
             SELECT * FROM
@@ -53,31 +53,31 @@ class PollData{
             $optionText = $pollData["option_poll_text"];
             $optionVotes = intval($pollData["vote_num"]);
 
-            if(!isset($polls[$pollId])){
-                $poll = new PollModel();
+            if(!isset($pollModels[$pollId])){
+                $pollModel = new PollModel();
 
-                $poll->Id = $pollId;
-                $poll->Question = $pollQuestion;
-                $poll->PollType = $pollType;
-                $poll->DateStart = $pollDateStart;
-                $poll->DateEnd = $pollDateEnd;
-                $poll->IsActive = $pollIsActive;
-                $poll->Options = Array();
+                $pollModel->Id = $pollId;
+                $pollModel->Question = $pollQuestion;
+                $pollModel->PollType = $pollType;
+                $pollModel->DateStart = $pollDateStart;
+                $pollModel->DateEnd = $pollDateEnd;
+                $pollModel->IsActive = $pollIsActive;
+                $pollModel->Options = Array();
 
-                $polls[$pollId] = $poll;
+                $pollModels[$pollId] = $pollModel;
             }
 
-            $pollOption = new PollOptionModel();
+            $pollOptionModel = new PollOptionModel();
 
-            $pollOption->Id = $optionId;
-            $pollOption->Text = $optionText;
-            $pollOption->Votes = $optionVotes;
+            $pollOptionModel->Id = $optionId;
+            $pollOptionModel->Text = $optionText;
+            $pollOptionModel->Votes = $optionVotes;
 
-            $poll->Options[$optionId] = $pollOption;
+            $pollModels[$pollId]->Options[$optionId] = $pollOptionModel;
         }
 
         StopTimer("LoadPolls");
-        return $polls;
+        return $pollModels;
     }
 
     function LoadLoggedInUserPollVotes(&$loggedInUser){

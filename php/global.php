@@ -18,7 +18,7 @@ $authors = Array();
 $gameData;
 $themes = Array();
 $assetData;
-$polls = Array();
+$pollData;
 $satisfaction = Array();
 $adminVoteData;
 $adminLogData;

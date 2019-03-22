@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfaction, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $polls, $cookieData, $actions, $page, $dep;
+	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfaction, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $actions, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -41,7 +41,7 @@ function Init(){
 
 	$actions = new SiteActionData($configData);
 	$assetData = new AssetData();
-	$polls = new PollData($loggedInUser);
+	$pollData = new PollData($loggedInUser);
     $satisfaction = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($loggedInUser);
 	$messageData = new MessageData($actions->SiteActionModels);
@@ -87,7 +87,7 @@ function Init(){
 		$dictionary["assets"] = RenderAssets($assetData);
 	}
 	if(FindDependency("RenderPolls", $dep) !== false){
-		$dictionary["polls"] = RenderPolls($polls->PollModels, $polls->LoggedInUserPollVotes);
+		$dictionary["polls"] = RenderPolls($pollData);
 	}
 	if(FindDependency("RenderCookies", $dep) !== false){
 		$dictionary["cookies"] = RenderCookies($cookieData);

@@ -1,12 +1,12 @@
 <?php
 
-function RenderPolls(&$polls, &$loggedInUserPollVotes){
+function RenderPolls(&$pollData){
 	AddActionLog("RenderPolls");
 	StartTimer("RenderPolls");
 	
 	$render = Array();
 
-	foreach($polls as $pollID => $pollModel){
+	foreach($pollData->PollModels as $pollID => $pollModel){
 		$poll = Array();
 
 		$pollID = $pollModel->Id;
@@ -28,7 +28,7 @@ function RenderPolls(&$polls, &$loggedInUserPollVotes){
 			$option["TEXT"] = $optionModel->Text;
 			$option["VOTES"] = $optionModel->Votes;
 
-			if(isset($loggedInUserPollVotes[$pollID][$optionID]) && $loggedInUserPollVotes[$pollID][$optionID] == true){
+			if(isset($pollData->LoggedInUserPollVotes[$pollID][$optionID]) && $pollData->LoggedInUserPollVotes[$pollID][$optionID] == true){
 				$option["USER_VOTED"] = true;
 				$poll["USER_VOTED_IN_POLL"] = true;
 			}
