@@ -19,7 +19,7 @@ $gameData;
 $themes = Array();
 $assetData;
 $pollData;
-$satisfaction = Array();
+$satisfactionData;
 $adminVoteData;
 $adminLogData;
 $themesByVoteDifference = Array();

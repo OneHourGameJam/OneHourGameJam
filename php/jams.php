@@ -33,7 +33,7 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$satisfaction, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
+function RenderJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$satisfactionData, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
@@ -114,12 +114,12 @@ function RenderJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$s
 	}
 	
 	$render["satisfaction"] = "No Data";
-	if(isset($satisfaction["JAM_".$render["jam_number"]])){
+	if(isset($satisfactionData->SatisfactionModels["JAM_".$render["jam_number"]])){
 		$arrayId = "JAM_".$render["jam_number"];
 
 		$satisfactionSum = 0;
 		$satisfactionCount = 0;
-		foreach($satisfaction[$arrayId]->Scores as $score => $votes){
+		foreach($satisfactionData->SatisfactionModels[$arrayId]->Scores as $score => $votes){
 			$satisfactionSum += $score * $votes;
 			$satisfactionCount += $votes;
 		}
@@ -128,30 +128,30 @@ function RenderJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$s
 		$render["satisfaction_average_score"] = $satisfactionAverage;
 		$render["satisfaction_submitted_scores"] = $satisfactionCount;
 		$render["enough_scores_to_show_satisfaction"] = $satisfactionCount >= $configData->ConfigModels["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
-		$render["score-5"] = $satisfaction[$arrayId]->Scores[-5];
-		$render["score-4"] = $satisfaction[$arrayId]->Scores[-4];
-		$render["score-3"] = $satisfaction[$arrayId]->Scores[-3];
-		$render["score-2"] = $satisfaction[$arrayId]->Scores[-2];
-		$render["score-1"] = $satisfaction[$arrayId]->Scores[-1];
-		$render["score0"] = $satisfaction[$arrayId]->Scores[0];
-		$render["score1"] = $satisfaction[$arrayId]->Scores[1];
-		$render["score2"] = $satisfaction[$arrayId]->Scores[2];
-		$render["score3"] = $satisfaction[$arrayId]->Scores[3];
-		$render["score4"] = $satisfaction[$arrayId]->Scores[4];
-		$render["score5"] = $satisfaction[$arrayId]->Scores[5];
+		$render["score-5"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-5];
+		$render["score-4"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-4];
+		$render["score-3"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-3];
+		$render["score-2"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-2];
+		$render["score-1"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-1];
+		$render["score0"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[0];
+		$render["score1"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[1];
+		$render["score2"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[2];
+		$render["score3"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[3];
+		$render["score4"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[4];
+		$render["score5"] = $satisfactionData->SatisfactionModels[$arrayId]->Scores[5];
 	}
 
 	StopTimer("RenderJam");
 	return $render;
 }
 
-function RenderSubmitJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$satisfaction, &$loggedInUser, $renderDepth){
+function RenderSubmitJam(&$configData, &$users, &$gameData, &$jamModel, &$jamData, &$satisfactionData, &$loggedInUser, $renderDepth){
 	AddActionLog("RenderSubmitJam");
 
-	return RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, 0, $renderDepth);
+	return RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, $renderDepth);
 }
 
-function RenderJams(&$configData, &$users, &$gameData, &$jamData, &$satisfaction, &$loggedInUser, $renderDepth, $loadAll){
+function RenderJams(&$configData, &$users, &$gameData, &$jamData, &$satisfactionData, &$loggedInUser, $renderDepth, $loadAll){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -175,7 +175,7 @@ function RenderJams(&$configData, &$users, &$gameData, &$jamData, &$satisfaction
 		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 		{
 			if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
-				$jamRender = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$jamRender = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 
 				$now = time();
 				$datetime = strtotime($jamRender["start_time"] . " UTC");
@@ -193,7 +193,7 @@ function RenderJams(&$configData, &$users, &$gameData, &$jamData, &$satisfaction
 				$render["LIST"][] = $jamRender;
 			}
 			if($currentJam["ID"] == $jamModel->Id){
-				$render["current_jam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$render["current_jam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 			}
 		}else{
 			$allJamsLoaded = false;

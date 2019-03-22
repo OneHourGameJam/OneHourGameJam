@@ -25,7 +25,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData, &$satisfaction, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime){
+function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -54,7 +54,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                 $jamFound = false;
                 foreach($jamData->JamModels as $i => $jamModel){
                     if(intval($jamModel->Id) == $jamID){
-                        $render["editingjam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, 0, RENDER_DEPTH_JAMS);
+                        $render["editingjam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS);
                         $jamFound = true;
                         break;
                     }
@@ -105,7 +105,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                     continue;
                 }
 
-                $render["viewing_jam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
+                $render["viewing_jam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
                 $pass = TRUE;
                 break;
             }
@@ -138,7 +138,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                 die('jam not found');
             }
 
-            $render["submit_jam"] = RenderSubmitJam($configData, $users, $gameData, $jamModel, $jamData, $satisfaction, $loggedInUser, RENDER_DEPTH_JAMS);
+            $render["submit_jam"] = RenderSubmitJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
             $colorNumber = rand(0, count($jamModel->Colors) - 1);
             $render["user_entry_color"] = $jamModel->Colors[$colorNumber];
 

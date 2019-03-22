@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfaction, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $actions, $page, $dep;
+	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $actions, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -42,7 +42,7 @@ function Init(){
 	$actions = new SiteActionData($configData);
 	$assetData = new AssetData();
 	$pollData = new PollData($loggedInUser);
-    $satisfaction = new SatisfactionData($configData);
+    $satisfactionData = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($loggedInUser);
 	$messageData = new MessageData($actions->SiteActionModels);
 	
@@ -65,7 +65,7 @@ function Init(){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($configData, $users->UserModels, $gameData, $jamData, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = RenderJams($configData, $users->UserModels, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
@@ -74,7 +74,7 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($configData, $users->UserModels, $gameData, $jamData, $satisfaction->SatisfactionModels, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = RenderJams($configData, $users->UserModels, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dep) !== false){
 		$dependency = FindDependency("RenderGames", $dep);
@@ -104,7 +104,7 @@ function Init(){
 			$dictionary["stream"] = InitStream($configData);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $users->UserModels, $gameData, $jamData, $satisfaction->SatisfactionModels, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $users->UserModels, $gameData, $jamData, $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
