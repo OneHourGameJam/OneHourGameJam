@@ -1,16 +1,16 @@
 <?php
 
-function RenderGames(&$users, &$games, &$jams, $renderDepth){
+function RenderGames(&$users, &$gameData, &$jams, $renderDepth){
 	AddActionLog("RenderGames");
 	StartTimer("RenderGames");
 
 	$render = Array("LIST" => Array());
     $nonDeletedGamesCounter = 0;
-	foreach($games as $i => $game){
+	foreach($gameData->GameModels as $i => $gameModel){
 		if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-			$render["LIST"][] = RenderGame($users, $game, $jams, $renderDepth);
+			$render["LIST"][] = RenderGame($users, $gameModel, $jams, $renderDepth);
 		}
-        if($game->Deleted != 1){
+        if($gameModel->Deleted != 1){
             $nonDeletedGamesCounter += 1;
         }
     }

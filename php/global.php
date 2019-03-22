@@ -15,7 +15,7 @@ $dictionary = Array();
 $users = Array();
 $jams = Array();
 $authors = Array();
-$entries = Array();
+$gameData = Array();
 $themes = Array();
 $assetData;
 $polls = Array();

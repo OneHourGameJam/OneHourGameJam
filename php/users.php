@@ -4,7 +4,7 @@ $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
                             
-function RenderUser(&$configData, &$cookieData, &$user, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
+function RenderUser(&$configData, &$cookieData, &$user, &$users, &$gameData, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -38,7 +38,7 @@ function RenderUser(&$configData, &$cookieData, &$user, &$users, &$games, &$jams
     $render["entry_count"] = 0;
     $render["first_jam_number"] = 0;
     $render["last_jam_number"] = 0;
-    foreach($games as $j => $gameModel){
+    foreach($gameData->GameModels as $j => $gameModel){
         if($gameModel->Author != $username){
             continue;
         }
@@ -272,20 +272,21 @@ function RenderUser(&$configData, &$cookieData, &$user, &$users, &$games, &$jams
     return $render;
 }
 
-function RenderUsers(&$configData, &$cookieData, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
+function RenderUsers(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
     $render = Array("LIST" => Array());
 
     $authorCount = 0;
-    $gamesByUsername = GroupGamesByUsername($games);
+    $gamesByUsername = $gameData->GroupGamesByUsername();
     $jamsByUsername = GroupJamsByUsername($jams, $gamesByUsername);
 
     foreach($users as $i => $user){
         $username = $user->Username;
         $userGames = Array();
         if(isset($gamesByUsername[$username])){
+            //Optimisation disabled due to change of RenderUser(..) parameter from $games (array of GameModels) to $gameData (GameData class), value of $userGames is array or GameModels, should be GameData and should replace $gameData parameter in call to RenderUser(..) below.
             $userGames = $gamesByUsername[$username];
         }
         $userJams = Array();
@@ -295,7 +296,7 @@ function RenderUsers(&$configData, &$cookieData, &$users, &$games, &$jams, &$adm
         $userAsArray = Array($user);
         
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-            $userRender = RenderUser($configData, $cookieData, $user, $users, $userGames, $userJams, $adminVoteData, $renderDepth);
+            $userRender = RenderUser($configData, $cookieData, $user, $users, $gameData, $userJams, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
@@ -329,28 +330,10 @@ function RenderUsers(&$configData, &$cookieData, &$users, &$games, &$jams, &$adm
 	return $render;
 }
 
-function RenderLoggedInUser(&$configData, &$cookieData, &$users, &$games, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
+function RenderLoggedInUser(&$configData, &$cookieData, &$users, &$gameData, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($configData, $cookieData, $loggedInUser, $users, $games, $jams, $adminVoteData, $renderDepth);
-}
-
-function GroupGamesByUsername(&$games)
-{
-	AddActionLog("GroupGamesByUsername");
-    StartTimer("GroupGamesByUsername");
-    
-    $gamesByUsername = Array();
-    foreach($games as $i => $game) {
-        $username = $game->Author;
-        if (!isset($gamesByUsername[$username])){
-            $gamesByUsername[$username] = Array();
-        }
-        $gamesByUsername[$username][] = $game;
-    }
-
-	StopTimer("GroupGamesByUsername");
-    return $gamesByUsername;
+    return RenderUser($configData, $cookieData, $loggedInUser, $users, $gameData, $jams, $adminVoteData, $renderDepth);
 }
 
 function GroupJamsByUsername(&$jams, &$gamesByUsername)
@@ -359,10 +342,10 @@ function GroupJamsByUsername(&$jams, &$gamesByUsername)
     StartTimer("GroupJamsByUsername");
 
     $jamsByUsername = Array();
-    foreach($gamesByUsername as $username => $games){
+    foreach($gamesByUsername as $username => $gameModels){
         $jamsByUsername[$username] = Array();
-        foreach($games as $i => $game){
-            $jamsByUsername[$username][$game->JamId] = $jams[$game->JamId];
+        foreach($gameModels as $i => $gameModel){
+            $jamsByUsername[$username][$gameModel->JamId] = $jams[$gameModel->JamId];
         }
     }
 

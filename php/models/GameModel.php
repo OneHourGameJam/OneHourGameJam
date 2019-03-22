@@ -66,6 +66,24 @@ class GameData{
         StopTimer("LoadGames");
         return $gameModels;
     }
+
+    public function GroupGamesByUsername()
+    {
+        AddActionLog("GroupGamesByUsername");
+        StartTimer("GroupGamesByUsername");
+        
+        $gamesByUsername = Array();
+        foreach($this->GameModels as $i => $gameModel) {
+            $username = $gameModel->Author;
+            if (!isset($gamesByUsername[$username])){
+                $gamesByUsername[$username] = Array();
+            }
+            $gamesByUsername[$username][] = $gameModel;
+        }
+    
+        StopTimer("GroupGamesByUsername");
+        return $gamesByUsername;
+    }
 }
 
 ?>
