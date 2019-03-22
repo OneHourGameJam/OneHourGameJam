@@ -4,7 +4,7 @@
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
 function EditUser($username, $isAdmin){
-	global $users, $dbConn, $loggedInUser;
+	global $userData, $dbConn, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -21,7 +21,7 @@ function EditUser($username, $isAdmin){
 	}
 
 	//Check that the user exists
-	if(!isset($users->UserModels[$username])){
+	if(!isset($userData->UserModels[$username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 

@@ -30,14 +30,14 @@ function HashPassword($password, $salt, $iterations, &$configData){
 }
 
 //Returns the username of the user associated with the provided user id
-function GetUsernameForUserId($userId, &$users){
+function GetUsernameForUserId($userId, &$userData){
 	AddActionLog("GetUsernameForUserId");
 	StartTimer("GetUsernameForUserId");
 
-	foreach($users as $i => $user){
-		if($user->Id == $userId){
+	foreach($userData->UserModels as $i => $userModel){
+		if($userModel->Id == $userId){
 			StopTimer("GetUsernameForUserId");
-			return $user->Username;
+			return $userModel->Username;
 		}
 	}
 
@@ -50,7 +50,7 @@ function GetUsernameForUserId($userId, &$users){
 //returns that. This is to prevent re-hashing the provided sessionID multiple times.
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
-function IsLoggedIn(&$configData, &$users){
+function IsLoggedIn(&$configData, &$userData){
 	global $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
@@ -88,8 +88,8 @@ function IsLoggedIn(&$configData, &$users){
 		//Session ID does in fact exist
 		$userID = $session["session_user_id"];
 
-		$username = GetUsernameForUserId($userID, $users);
-		$loggedInUser = $users[$username];
+		$username = GetUsernameForUserId($userID, $userData);
+		$loggedInUser = $userData->UserModels[$username];
         $loginChecked = true;
 
 		$sql = "

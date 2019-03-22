@@ -12,7 +12,7 @@ $loggedInUser = "";
 $loginChecked = false;
 $configData;
 $dictionary = Array();
-$users = Array();
+$userData;
 $jamData;
 $authors = Array();
 $gameData;

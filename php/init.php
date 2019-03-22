@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $page, $dep;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -22,9 +22,9 @@ function Init(){
     RedirectToHttpsIfRequired($configData);
 
 	$adminLogData = new AdminLogData();
-	$users = new UserData();
+	$userData = new UserData();
 
-	$loggedInUser = IsLoggedIn($configData, $users->UserModels);
+	$loggedInUser = IsLoggedIn($configData, $userData);
 	
 	$page = ValidatePage($page, $loggedInUser);
 
@@ -59,13 +59,13 @@ function Init(){
 	}
 	if(FindDependency("RenderUsers", $dep) !== false){
 		$dependency = FindDependency("RenderUsers", $dep);
-		$dictionary["users"] = RenderUsers($configData, $cookieData, $users->UserModels, $gameData, $jamData, $adminVoteData, $dependency["RenderDepth"]);
+		$dictionary["users"] = RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $adminVoteData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAllJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($configData, $users->UserModels, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dep) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dep);
 		$dependency2 = FindDependency("RenderJams", $dep);
@@ -74,11 +74,11 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($configData, $users->UserModels, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dep) !== false){
 		$dependency = FindDependency("RenderGames", $dep);
-		$dictionary["entries"] = RenderGames($users->UserModels, $gameData, $jamData, $dependency["RenderDepth"]);
+		$dictionary["entries"] = RenderGames($userData, $gameData, $jamData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
 		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
@@ -104,12 +104,12 @@ function Init(){
 			$dictionary["stream"] = InitStream($configData);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $users->UserModels, $gameData, $jamData, $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
 			$dependency = FindDependency("RenderLoggedInUser", $dep);
-			$dictionary["user"] = RenderLoggedInUser($configData, $cookieData, $users->UserModels, $gameData, $jamData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	

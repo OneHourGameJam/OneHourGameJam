@@ -1,7 +1,7 @@
 <?php
 
 function AddAsset($assetID, $author, $title, $description, $type){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assetData, $users, $configData;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assetData, $userData, $configData;
 
 	$assetID = trim($assetID);
 	$author = trim($author);
@@ -18,7 +18,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	if(strlen($author) < 1){
 		return "AUTHOR_EMPTY";
 	}
-	if(!isset($users->UserModels[$author])){
+	if(!isset($userData->UserModels[$author])){
 		return "INVALID_AUTHOR";
 	}
 

@@ -2,7 +2,7 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $users, $dbConn, $configData, $loggedInUser;
+	global $userData, $dbConn, $configData, $loggedInUser;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -21,7 +21,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	}
 
 	//Check that the user exists
-	if(!isset($users->UserModels[$username])){
+	if(!isset($userData->UserModels[$username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
@@ -31,9 +31,9 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData);
 
 	$loggedInUserUsername = $loggedInUser->Username;
-	$users->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;
-	$users->UserModels[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
-	$users->UserModels[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
+	$userData->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;
+	$userData->UserModels[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
+	$userData->UserModels[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
 
 	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
 	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);

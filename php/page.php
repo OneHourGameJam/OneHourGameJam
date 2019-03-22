@@ -25,7 +25,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime){
+function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -42,10 +42,10 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
             if(IsAdmin($loggedInUser) !== false){
                 $editingUsername = $_GET["username"];
                 $editingUsername = trim(strtolower($editingUsername));
-                if(!isset($users[$editingUsername])){
+                if(!isset($userData->UserModels[$editingUsername])){
                     die("no user selected");
                 }
-                $render["editinguser"] = RenderUser($configData, $cookieData, $users[$editingUsername], $users, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_NONE);
+                $render["editinguser"] = RenderUser($configData, $cookieData, $userData->UserModels[$editingUsername], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_NONE);
             }
         break;
         case "editjam":
@@ -54,7 +54,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                 $jamFound = false;
                 foreach($jamData->JamModels as $i => $jamModel){
                     if(intval($jamModel->Id) == $jamID){
-                        $render["editingjam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS);
+                        $render["editingjam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS);
                         $jamFound = true;
                         break;
                     }
@@ -80,7 +80,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                 $render["editingentry"] = Array();
                 foreach($gameData->GameModels as $i => $gameModel){
                     if($gameModel->Id == $entryID){
-                        $render["editingentry"] = RenderGame($users, $gameModel, $jamData, RENDER_DEPTH_GAMES);
+                        $render["editingentry"] = RenderGame($userData, $gameModel, $jamData, RENDER_DEPTH_GAMES);
                         break;
                     }
                 }
@@ -105,7 +105,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                     continue;
                 }
 
-                $render["viewing_jam"] = RenderJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
+                $render["viewing_jam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
                 $pass = TRUE;
                 break;
             }
@@ -124,7 +124,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
 
             $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Id;
             $render["author_bio"] = LoadBio($viewingAuthor);
-            $render["viewing_author"] = RenderUser($configData, $cookieData, $users[$viewingAuthor], $users, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
+            $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthor], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":
@@ -138,7 +138,7 @@ function RenderPageSpecific($page, &$configData, &$users, &$gameData, &$jamData,
                 die('jam not found');
             }
 
-            $render["submit_jam"] = RenderSubmitJam($configData, $users, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
+            $render["submit_jam"] = RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
             $colorNumber = rand(0, count($jamModel->Colors) - 1);
             $render["user_entry_color"] = $jamModel->Colors[$colorNumber];
 

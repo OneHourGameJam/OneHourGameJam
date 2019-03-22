@@ -1,6 +1,6 @@
 <?php
 
-function RenderGames(&$users, &$gameData, &$jamData, $renderDepth){
+function RenderGames(&$userData, &$gameData, &$jamData, $renderDepth){
 	AddActionLog("RenderGames");
 	StartTimer("RenderGames");
 
@@ -8,7 +8,7 @@ function RenderGames(&$users, &$gameData, &$jamData, $renderDepth){
     $nonDeletedGamesCounter = 0;
 	foreach($gameData->GameModels as $i => $gameModel){
 		if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-			$render["LIST"][] = RenderGame($users, $gameModel, $jamData, $renderDepth);
+			$render["LIST"][] = RenderGame($userData, $gameModel, $jamData, $renderDepth);
 		}
         if($gameModel->Deleted != 1){
             $nonDeletedGamesCounter += 1;
@@ -20,7 +20,7 @@ function RenderGames(&$users, &$gameData, &$jamData, $renderDepth){
 	return $render;
 }
 
-function RenderGame(&$users, &$game, &$jamData, $renderDepth){
+function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
 	AddActionLog("RenderGame");
 	StartTimer("RenderGame");
 	
@@ -61,7 +61,7 @@ function RenderGame(&$users, &$game, &$jamData, $renderDepth){
 
 	//Mini RenderUser()
 	$author = $render["author"];
-	$userModel = $users[$author];
+	$userModel = $userData->UserModels[$author];
 	$author_display = $author;
 	if(isset($userModel->DisplayName)){
 		$author_display = $userModel->DisplayName;

@@ -4,7 +4,7 @@
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
 function LogInOrRegister($username, $password){
-	global $users, $configData;
+	global $userData, $configData;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -17,7 +17,7 @@ function LogInOrRegister($username, $password){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
-	if(isset($users->UserModels[$username])){
+	if(isset($userData->UserModels[$username])){
 		//User is registered already, log them in
 		return LogInUser($username, $password);
 	}else{
@@ -29,7 +29,7 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $users, $dbConn, $ip, $userAgent, $configData;
+	global $userData, $dbConn, $ip, $userAgent, $configData;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -45,9 +45,9 @@ function RegisterUser($username, $password){
 	$userSalt = GenerateSalt();
 	$userPasswordIterations = GenerateUserHashIterations($configData);
 	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData);
-	$admin = (count($users->UserModels) == 0) ? 1 : 0;
+	$admin = (count($userData->UserModels) == 0) ? 1 : 0;
 
-	if(isset($users->UserModels[$username])){
+	if(isset($userData->UserModels[$username])){
 		return "USERNAME_ALREADY_REGISTERED";
 	}else{
 		$usernameClean = mysqli_real_escape_string($dbConn, $username);
@@ -88,7 +88,7 @@ function RegisterUser($username, $password){
 		$sql = "";
 	}
 	
-	$users = new UserData();
+	$userData = new UserData();
 	return LogInUser($username, $password);
 }
 
@@ -96,7 +96,7 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
 function LogInUser($username, $password){
-	global $configData, $users, $dbConn;
+	global $configData, $userData, $dbConn;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -109,11 +109,11 @@ function LogInUser($username, $password){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
-	if(!isset($users->UserModels[$username])){
+	if(!isset($userData->UserModels[$username])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$user = $users->UserModels[$username];
+	$user = $userData->UserModels[$username];
 	$userID = $user->Id;
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
