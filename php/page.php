@@ -25,7 +25,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, &$assets, &$cookies, &$adminVotes, &$loggedInUserAdminVotes, &$nextSuggestedJamDateTime){
+function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, &$assets, &$cookies, &$adminVoteData, &$nextSuggestedJamDateTime){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -45,7 +45,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
                 if(!isset($users[$editingUsername])){
                     die("no user selected");
                 }
-                $render["editinguser"] = RenderUser($config, $cookies, $users[$editingUsername], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, RENDER_DEPTH_NONE);
+                $render["editinguser"] = RenderUser($config, $cookies, $users[$editingUsername], $users, $games, $jams, $adminVoteData, RENDER_DEPTH_NONE);
             }
         break;
         case "editjam":
@@ -124,7 +124,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
 
             $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Id;
             $render["author_bio"] = LoadBio($viewingAuthor);
-            $render["viewing_author"] = RenderUser($config, $cookies, $users[$viewingAuthor], $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, RENDER_DEPTH_USERS_GAMES);
+            $render["viewing_author"] = RenderUser($config, $cookies, $users[$viewingAuthor], $users, $games, $jams, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":

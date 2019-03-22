@@ -32,12 +32,12 @@ function AddToAdminLog($logType, $logContent, $logSubjectUsername, $logAdminUser
 	StopTimer("AddToAdminLog");
 }
 
-function RenderAdminLog(&$adminLog){
+function RenderAdminLog(&$adminLogData){
 	AddActionLog("RenderAdminLog");
 	StartTimer("RenderAdminLog");
 	$render = Array();
 
-	foreach($adminLog as $i => $adminLogModel){
+	foreach($adminLogData->AdminLogModels as $i => $adminLogModel){
 		$log = Array();
 		
 		$log["id"] = $adminLogModel->Id;

@@ -4,7 +4,7 @@ $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
                             
-function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, $renderDepth){
+function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -205,7 +205,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     $render["votes_neutral"] = 0;
     $render["votes_against"] = 0;
     $render["votes_vetos"] = 0;
-    foreach($adminVotes as $j => $adminVoteModel){
+    foreach($adminVoteData->AdminVoteModels as $j => $adminVoteModel){
         if($render["username"] == $adminVoteModel->SubjectUsername){
             switch($adminVoteModel->VoteType){
                 case "FOR":
@@ -231,7 +231,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     StopTimer("RenderUser - Admin Votes");
     
     StartTimer("RenderUser - Logged in users admin votes");
-    foreach($loggedInUserAdminVotes as $j => $adminVoteModel){
+    foreach($adminVoteData->LoggedInUserAdminVotes as $j => $adminVoteModel){
         if($render["username"] == $adminVoteModel["subject_username"]){
             $render["vote_type"] = $adminVoteModel["vote_type"];
 
@@ -272,7 +272,7 @@ function RenderUser(&$config, &$cookies, &$user, &$users, &$games, &$jams, &$adm
     return $render;
 }
 
-function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, $renderDepth){
+function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
@@ -295,7 +295,7 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
         $userAsArray = Array($user);
         
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-            $userRender = RenderUser($config, $cookies, $user, $users, $userGames, $userJams, $adminVotes, $loggedInUserAdminVotes, $renderDepth);
+            $userRender = RenderUser($config, $cookies, $user, $users, $userGames, $userJams, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
@@ -329,10 +329,10 @@ function RenderUsers(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes
 	return $render;
 }
 
-function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVotes, &$loggedInUserAdminVotes, &$loggedInUser, $renderDepth){
+function RenderLoggedInUser(&$config, &$cookies, &$users, &$games, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVotes, $loggedInUserAdminVotes, $renderDepth);
+    return RenderUser($config, $cookies, $loggedInUser, $users, $games, $jams, $adminVoteData, $renderDepth);
 }
 
 function GroupGamesByUsername(&$games)
