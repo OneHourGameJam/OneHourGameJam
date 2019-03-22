@@ -25,7 +25,7 @@ function AddTheme($newTheme, $isBot){
 		}
 	}
 
-	if(IsRecentTheme($jams->JamModels, $configData->ConfigModels, $newTheme)) {
+	if(IsRecentTheme($jams->JamModels, $configData, $newTheme)) {
 		return "THEME_RECENTLY_USED";
 	}
 

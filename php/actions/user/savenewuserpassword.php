@@ -16,7 +16,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	}
 	$password = $newPassword1;
 
-	if(!ValidatePassword($password, $configData->ConfigModels)){
+	if(!ValidatePassword($password, $configData)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -27,8 +27,8 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 
 	//Generate new salt, number of iterations and hashed password.
 	$newUserSalt = GenerateSalt();
-	$newUserPasswordIterations = GenerateUserHashIterations($configData->ConfigModels);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData->ConfigModels);
+	$newUserPasswordIterations = GenerateUserHashIterations($configData);
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData);
 
 	$loggedInUserUsername = $loggedInUser->Username;
 	$users->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;

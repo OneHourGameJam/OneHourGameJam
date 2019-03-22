@@ -9,11 +9,11 @@ function LogInOrRegister($username, $password){
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	if(!ValidateUsername($username, $configData->ConfigModels)){
+	if(!ValidateUsername($username, $configData)){
 		return "INVALID_USERNAME_LENGTH";
 	}
 
-	if(!ValidatePassword($password, $configData->ConfigModels)){
+	if(!ValidatePassword($password, $configData)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -34,17 +34,17 @@ function RegisterUser($username, $password){
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	if(!ValidateUsername($username, $configData->ConfigModels)){
+	if(!ValidateUsername($username, $configData)){
 		return "INVALID_USERNAME_LENGTH";
 	}
 
-	if(!ValidatePassword($password, $configData->ConfigModels)){
+	if(!ValidatePassword($password, $configData)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
 	$userSalt = GenerateSalt();
-	$userPasswordIterations = GenerateUserHashIterations($configData->ConfigModels);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData->ConfigModels);
+	$userPasswordIterations = GenerateUserHashIterations($configData);
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData);
 	$admin = (count($users->UserModels) == 0) ? 1 : 0;
 
 	if(isset($users->UserModels[$username])){
@@ -101,11 +101,11 @@ function LogInUser($username, $password){
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
 
-	if(!ValidateUsername($username, $configData->ConfigModels)){
+	if(!ValidateUsername($username, $configData)){
 		return "INVALID_USERNAME_LENGTH";
 	}
 
-	if(!ValidatePassword($password, $configData->ConfigModels)){
+	if(!ValidatePassword($password, $configData)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -118,12 +118,12 @@ function LogInUser($username, $password){
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
 	$userPasswordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData->ConfigModels);
+	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData);
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
 		$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-		$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData->ConfigModels);
+		$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
 
 		$daysToKeepLoggedIn = $configData->ConfigModels["DAYS_TO_KEEP_LOGGED_IN"]->Value;
 		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);

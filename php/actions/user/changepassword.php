@@ -16,7 +16,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	}
 	$password = $newPassword1;
 
-	if(!ValidatePassword($password, $configData->ConfigModels)){
+	if(!ValidatePassword($password, $configData)){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
@@ -30,15 +30,15 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
 	$userPasswordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $configData->ConfigModels);
+	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $configData);
 	if($correctPasswordHash != $passwordHash){
 		return "INCORRECT_PASSWORD";
 	}
 
 	//Generate new salt, number of iterations and hashed password.
 	$newUserSalt = GenerateSalt();
-	$newUserPasswordIterations = GenerateUserHashIterations($configData->ConfigModels);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData->ConfigModels);
+	$newUserPasswordIterations = GenerateUserHashIterations($configData);
+	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData);
 
 	$users->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;
 	$users->UserModels[$loggedInUserUsername]->PasswordHash = $newPasswordHash;

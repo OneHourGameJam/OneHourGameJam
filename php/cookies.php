@@ -47,17 +47,17 @@ function UpdateCookies(){
 	StopTimer("UpdateCookies");
 }
 
-function RenderCookies(&$cookies){
+function RenderCookies(&$cookieData){
 	AddActionLog("RenderCookies");
     StartTimer("RenderCookies");
     
     $render = Array();
 
-    $render["is_streamer"] = $cookies->IsStreamer;
-    $render["darkmode"] = $cookies->DarkMode;
+    $render["is_streamer"] = $cookieData->CookieModel->IsStreamer;
+    $render["darkmode"] = $cookieData->CookieModel->DarkMode;
 
-    if ($cookies->CookieNotice != -1)
-        $render["show_cookie_notice"] = !$cookies->CookieNotice;
+    if ($cookieData->CookieModel->CookieNotice != -1)
+        $render["show_cookie_notice"] = !$cookieData->CookieModel->CookieNotice;
     else if(isset($_GET["streaming"]) || isset($_GET["darkmode"]))
         $render["show_cookie_notice"] = 1;
     else

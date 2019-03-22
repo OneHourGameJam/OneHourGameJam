@@ -24,7 +24,7 @@ $adminVoteData;
 $adminLogData;
 $themesByVoteDifference = Array();
 $themesByPopularity = Array();
-$cookies = Array();
+$cookieData;
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];

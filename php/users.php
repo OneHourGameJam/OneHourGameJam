@@ -4,7 +4,7 @@ $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
                             
-function RenderUser(&$configData, &$cookies, &$user, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
+function RenderUser(&$configData, &$cookieData, &$user, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -119,7 +119,7 @@ function RenderUser(&$configData, &$cookies, &$user, &$users, &$games, &$jams, &
     $activeColor = "#F6FFEC";
     $highlyAciveColor = "#ECFFEC";
 
-    if($cookies->DarkMode == 1)
+    if($cookieData->CookieModel->DarkMode == 1)
     {
         $inactiveColor = "#4A3636";
         $activeColor = "#3E4A36";
@@ -272,7 +272,7 @@ function RenderUser(&$configData, &$cookies, &$user, &$users, &$games, &$jams, &
     return $render;
 }
 
-function RenderUsers(&$configData, &$cookies, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
+function RenderUsers(&$configData, &$cookieData, &$users, &$games, &$jams, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
@@ -295,7 +295,7 @@ function RenderUsers(&$configData, &$cookies, &$users, &$games, &$jams, &$adminV
         $userAsArray = Array($user);
         
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-            $userRender = RenderUser($configData, $cookies, $user, $users, $userGames, $userJams, $adminVoteData, $renderDepth);
+            $userRender = RenderUser($configData, $cookieData, $user, $users, $userGames, $userJams, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
@@ -329,10 +329,10 @@ function RenderUsers(&$configData, &$cookies, &$users, &$games, &$jams, &$adminV
 	return $render;
 }
 
-function RenderLoggedInUser(&$configData, &$cookies, &$users, &$games, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
+function RenderLoggedInUser(&$configData, &$cookieData, &$users, &$games, &$jams, &$adminVoteData, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($configData, $cookies, $loggedInUser, $users, $games, $jams, $adminVoteData, $renderDepth);
+    return RenderUser($configData, $cookieData, $loggedInUser, $users, $games, $jams, $adminVoteData, $renderDepth);
 }
 
 function GroupGamesByUsername(&$games)
