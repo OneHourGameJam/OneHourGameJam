@@ -16,11 +16,11 @@ class ConfigModel{
 class ConfigData{
     public $ConfigModels;
 
-    function __construct() {
-        $this->ConfigModels = $this->LoadConfig();
+    function __construct(&$adminLogData) {
+        $this->ConfigModels = $this->LoadConfig($adminLogData);
     }
 
-    function LoadConfig(){
+    function LoadConfig(&$adminLogData){
         global $dbConn;
         AddActionLog("LoadConfig");
         StartTimer("LoadConfig");
@@ -57,23 +57,23 @@ class ConfigData{
             $configModels[$key] = $configEntry;
         }
 
-        $configModels = $this->VerifyConfig($configModels);
+        $configModels = $this->VerifyConfig($configModels, $adminLogData);
 
         StopTimer("LoadConfig");
         return $configModels;
     }
 
-    function VerifyConfig($configModels) {
+    function VerifyConfig(&$configModels, &$adminLogData) {
         AddActionLog("VerifyConfig");
         StartTimer("VerifyConfig");
     
         if (!isset($configModels["PEPPER"]->Value) || strlen($configModels["PEPPER"]->Value) < 1) {
-            $configModels = $this->UpdateConfig($configModels, "PEPPER", GenerateSalt(), -1, "AUTOMATIC");
+            $configModels = $this->UpdateConfig($configModels, "PEPPER", GenerateSalt(), -1, "AUTOMATIC", $adminLogData);
         }
     
         if (!isset($configModels["SESSION_PASSWORD_ITERATIONS"]->Value) || strlen($configModels["SESSION_PASSWORD_ITERATIONS"]->Value) < 1) {
             $sessionPasswordIterations = GenerateUserHashIterations($configModels);
-            $configModels = $this->UpdateConfig($configModels, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1, "AUTOMATIC");
+            $configModels = $this->UpdateConfig($configModels, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1, "AUTOMATIC", $adminLogData);
         }
     
         StopTimer("VerifyConfig");
@@ -81,7 +81,7 @@ class ConfigData{
     }
 
     // Saves config to database, does not authorize to ensure VerifyConfig() continues to work
-    function UpdateConfig($configModels, $key, $value, $userID, $userUsername) {
+    function UpdateConfig(&$configModels, $key, $value, $userID, $userUsername, &$adminLogData) {
         global $dbConn;
         AddActionLog("UpdateConfig");
         StartTimer("UpdateConfig");
@@ -102,7 +102,7 @@ class ConfigData{
             mysqli_query($dbConn, $sql);
             $sql = "";
     
-            AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "", $userUsername);
+            $adminLogData->AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "", $userUsername);
         }
     
         StopTimer("UpdateConfig");

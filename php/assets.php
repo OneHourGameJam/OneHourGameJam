@@ -52,22 +52,4 @@ function RenderAsset(&$asset){
 	return $render;
 }
 
-function GetAssetsOfUserFormatted($author){
-	global $dbConn;
-	AddActionLog("GetAssetsOfUserFormatted");
-	StartTimer("GetAssetsOfUserFormatted");
-	
-	$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
-	$sql = "
-		SELECT *
-		FROM asset
-		WHERE asset_author = '$escapedAuthor';
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	StopTimer("GetAssetsOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data));
-}
-
 ?>

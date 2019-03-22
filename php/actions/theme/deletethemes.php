@@ -2,7 +2,7 @@
 
 //Removes an array of suggested themes
 function RemoveThemes($removedThemes){
-	global $dbConn, $ip, $userAgent, $loggedInUser;
+	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -42,7 +42,7 @@ function RemoveThemes($removedThemes){
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 	
-		AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
+		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
 	}
 	if($error){
 		return "FAILURE";

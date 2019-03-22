@@ -274,7 +274,7 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextSchedul
 		$jamNumber = intval($currentJam["NUMBER"] + 1);
 		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-		AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, Array("username" => "AUTOMATIC"));
+		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
 	}
 	
 	StopTimer("CheckNextJamSchedule");
@@ -432,69 +432,6 @@ function SelectRandomTheme(&$ThemeData){
 
 	StopTimer("SelectRandomTheme");
 	return $selectedTheme;
-}
-
-//Adds the jam with the provided data into the database
-function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors, $loggedInUser){
-	global $dbConn;
-	AddActionLog("AddJamToDatabase");
-	StartTimer("AddJamToDatabase");
-
-	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
-	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
-	$escapedJamNumber = mysqli_real_escape_string($dbConn, $jamNumber);
-	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
-	$escapedStartTime = mysqli_real_escape_string($dbConn, $startTime);
-	$escapedColors = mysqli_real_escape_string($dbConn, $colors);
-
-	$sql = "
-		INSERT INTO jam
-		(jam_id,
-		jam_datetime,
-		jam_ip,
-		jam_user_agent,
-		jam_username,
-		jam_jam_number,
-		jam_theme,
-		jam_start_datetime,
-		jam_colors,
-		jam_deleted)
-		VALUES
-		(null,
-		Now(),
-		'$escapedIP',
-		'$escapedUserAgent',
-		'$escapedUsername',
-		'$escapedJamNumber',
-		'$escapedTheme',
-		'$escapedStartTime',
-		'$escapedColors',
-		0);";
-
-	$data = mysqli_query($dbConn, $sql);
-    $sql = "";
-
-	StopTimer("AddJamToDatabase");
-    AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "", $loggedInUser->Username);
-}
-
-function GetJamsOfUserFormatted($username){
-	global $dbConn;
-	AddActionLog("GetJamsOfUserFormatted");
-	StartTimer("GetJamsOfUserFormatted");
-
-	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
-	$sql = "
-		SELECT *
-		FROM jam
-		WHERE jam_username = '$escapedUsername';
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	StopTimer("GetJamsOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data));
 }
 
 // Returns a jam given its number.

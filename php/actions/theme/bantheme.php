@@ -2,7 +2,7 @@
 
 //Marks a suggested theme as banned
 function BanTheme($bannedTheme){
-	global $dbConn, $ip, $userAgent, $loggedInUser;
+	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -36,7 +36,7 @@ function BanTheme($bannedTheme){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "", $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "", $loggedInUser->Username);
 
 	return "SUCCESS";
 }

@@ -3,7 +3,7 @@
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
 function EditJam($jamID, $theme, $date, $time, $colorsString){
-	global $jamData, $dbConn, $loggedInUser;
+	global $jamData, $dbConn, $loggedInUser, $adminLogData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -62,7 +62,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser->Username);
+	$adminLogData->AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser->Username);
 	
 	return "SUCCESS";
 }

@@ -61,7 +61,7 @@ function RenderCookies(&$cookieData){
     else if(isset($_GET["streaming"]) || isset($_GET["darkmode"]))
         $render["show_cookie_notice"] = 1;
     else
-            $render["show_cookie_notice"] = 0;
+        $render["show_cookie_notice"] = 0;
 
 	StopTimer("RenderCookies");
     return $render;

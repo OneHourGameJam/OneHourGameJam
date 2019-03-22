@@ -64,6 +64,69 @@ class JamData{
         StopTimer("GroupJamsByUsername");
         return $jamsByUsername;
     }
+
+    //Adds the jam with the provided data into the database
+    function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors, &$adminLogData){
+        global $dbConn;
+        AddActionLog("AddJamToDatabase");
+        StartTimer("AddJamToDatabase");
+    
+        $escapedIP = mysqli_real_escape_string($dbConn, $ip);
+        $escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
+        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedJamNumber = mysqli_real_escape_string($dbConn, $jamNumber);
+        $escapedTheme = mysqli_real_escape_string($dbConn, $theme);
+        $escapedStartTime = mysqli_real_escape_string($dbConn, $startTime);
+        $escapedColors = mysqli_real_escape_string($dbConn, $colors);
+    
+        $sql = "
+            INSERT INTO jam
+            (jam_id,
+            jam_datetime,
+            jam_ip,
+            jam_user_agent,
+            jam_username,
+            jam_jam_number,
+            jam_theme,
+            jam_start_datetime,
+            jam_colors,
+            jam_deleted)
+            VALUES
+            (null,
+            Now(),
+            '$escapedIP',
+            '$escapedUserAgent',
+            '$escapedUsername',
+            '$escapedJamNumber',
+            '$escapedTheme',
+            '$escapedStartTime',
+            '$escapedColors',
+            0);";
+    
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+    
+        StopTimer("AddJamToDatabase");
+        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "", $username);
+    }
+    
+    function GetJamsOfUserFormatted($username){
+        global $dbConn;
+        AddActionLog("GetJamsOfUserFormatted");
+        StartTimer("GetJamsOfUserFormatted");
+    
+        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $sql = "
+            SELECT *
+            FROM jam
+            WHERE jam_username = '$escapedUsername';
+        ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+    
+        StopTimer("GetJamsOfUserFormatted");
+        return ArrayToHTML(MySQLDataToArray($data));
+    }
 }
 
 ?>

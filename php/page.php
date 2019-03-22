@@ -25,7 +25,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime){
+function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$adminLogData){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -199,19 +199,19 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             }
         break;
         case "userdata":
-            $render["userdata_assets"] = GetAssetsOfUserFormatted($loggedInUser->Username);
-            $render["userdata_entries"] = GetEntriesOfUserFormatted($loggedInUser->Username);
-            $render["userdata_poll_votes"] = GetPollVotesOfUserFormatted($loggedInUser->Username);
-            $render["userdata_themes"] = GetThemesOfUserFormatted($loggedInUser->Username);
-            $render["userdata_theme_votes"] = GetThemeVotesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_assets"] = $assetData->GetAssetsOfUserFormatted($loggedInUser->Username);
+            $render["userdata_entries"] = $gameData->GetEntriesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_poll_votes"] = $pollData->GetPollVotesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_themes"] = $themeData->GetThemesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_theme_votes"] = $themeData->GetThemeVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_users"] = GetUsersOfUserFormatted($loggedInUser->Username);
-            $render["userdata_jams"] = GetJamsOfUserFormatted($loggedInUser->Username);
-            $render["userdata_satisfaction"] = GetSatisfactionVotesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_jams"] = $jamData->GetJamsOfUserFormatted($loggedInUser->Username);
+            $render["userdata_satisfaction"] = $satisfactionData->GetSatisfactionVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser->Id);
-            $render["userdata_adminlog_admin"] = GetAdminLogForAdminFormatted($loggedInUser->Username);
-            $render["userdata_adminlog_subject"] = GetAdminLogForSubjectFormatted($loggedInUser->Username);
-            $render["userdata_admin_vote_voter"] = GetAdminVotesCastByUserFormatted($loggedInUser->Username);
-            $render["userdata_admin_vote_subject"] = GetAdminVotesForSubjectUserFormatted($loggedInUser->Username);
+            $render["userdata_adminlog_admin"] = $adminLogData->GetAdminLogForAdminFormatted($loggedInUser->Username);
+            $render["userdata_adminlog_subject"] = $adminLogData->GetAdminLogForSubjectFormatted($loggedInUser->Username);
+            $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Username);
+            $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Username);
         break;
         case "newjam":
             $render["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);

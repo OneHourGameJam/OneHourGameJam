@@ -2,7 +2,7 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($username, $newPassword1, $newPassword2){
-	global $userData, $dbConn, $configData, $loggedInUser;
+	global $userData, $dbConn, $configData, $loggedInUser, $adminLogData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -51,7 +51,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username, $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username, $loggedInUser->Username);
 
 	return "SUCCESS";
 }

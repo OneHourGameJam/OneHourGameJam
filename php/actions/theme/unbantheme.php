@@ -2,7 +2,7 @@
 
 //Unmarks a suggested theme as banned (unbans it)
 function UnbanTheme($unbannedTheme){
-	global $dbConn, $ip, $userAgent, $loggedInUser;
+	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -36,7 +36,7 @@ function UnbanTheme($unbannedTheme){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "", $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "", $loggedInUser->Username);
 
 	return "SUCCESS";
 }

@@ -2,7 +2,7 @@
 
 //Returns true / false based on whether or not the specified entry can be deleted
 function CanDeleteEntry($entryID){
-	global $dbConn, $loggedInUser;
+	global $dbConn, $loggedInUser, $gameData, $adminLogData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -15,7 +15,7 @@ function CanDeleteEntry($entryID){
 		return FALSE;
 	}
 
-	if(!EntryExists($entryID)){
+	if(!$gameData->EntryExists($entryID)){
 		return FALSE;
 	}
 
@@ -51,7 +51,7 @@ function DeleteEntry($entryID){
 	$data = mysqli_query($dbConn, $sql);
     $sql = "";
 
-    AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser->Username);
 
 	return "SUCCESS";
 }

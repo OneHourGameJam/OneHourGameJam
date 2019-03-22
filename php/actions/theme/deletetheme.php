@@ -2,7 +2,7 @@
 
 //Removes a suggested theme
 function RemoveTheme($removedTheme, $pageId){
-	global $themeData, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themeData, $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -54,7 +54,7 @@ function RemoveTheme($removedTheme, $pageId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
 
 	// Can be triggered from both themes and managethemes, send user to correct location.
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";

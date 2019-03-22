@@ -84,6 +84,59 @@ class GameData{
         StopTimer("GroupGamesByUsername");
         return $gamesByUsername;
     }
+
+    //Returns true / false based on whether or not the specified entry exists (and has not been deleted)
+    function EntryExists($gameID){
+        global $dbConn;
+        AddActionLog("EntryExists");
+        StartTimer("EntryExists");
+    
+        //Validate values
+        $gameID = intval($gameID);
+        if($gameID <= 0){
+            StopTimer("EntryExists");
+            return FALSE;
+        }
+    
+        $escapedEntryID = mysqli_real_escape_string($dbConn, "$gameID");
+    
+        $sql = "
+            SELECT 1
+            FROM entry
+            WHERE entry_id = $escapedEntryID
+            AND entry_deleted = 0;
+            ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+    
+        if(mysqli_fetch_array($data)){
+            StopTimer("EntryExists");
+            return true;
+        }else{
+            StopTimer("EntryExists");
+            return false;
+        }
+        
+        StopTimer("EntryExists");
+    }
+    
+    function GetEntriesOfUserFormatted($author){
+        global $dbConn;
+        AddActionLog("GetEntriesOfUserFormatted");
+        StartTimer("GetEntriesOfUserFormatted");
+    
+        $escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+        $sql = "
+            SELECT *
+            FROM entry
+            WHERE entry_author = '$escapedAuthor';
+        ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+    
+        StopTimer("GetEntriesOfUserFormatted");
+        return ArrayToHTML(MySQLDataToArray($data));
+    }
 }
 
 ?>

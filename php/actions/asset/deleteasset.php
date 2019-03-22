@@ -1,7 +1,7 @@
 <?php
 
 function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assetData;
+	global $loggedInUser, $dbConn, $assetData, $adminLogData;
 	$assetID = trim($assetID);
 
 	//Authorize user
@@ -45,7 +45,7 @@ function DeleteAsset($assetID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser->Username);
+	$adminLogData->AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthor, $loggedInUser->Username);
 	
 	return "SUCCESS";
 }

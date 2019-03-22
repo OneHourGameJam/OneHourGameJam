@@ -46,8 +46,6 @@ include_once("php/themes.php");
 include_once("php/assets.php");
 include_once("php/polls.php");
 include_once("php/stream.php");
-include_once("php/adminvotes.php");
-include_once("php/satisfaction.php");;
 StopTimer("site.php - Include");
 
 //Initialization. This is where configuration is loaded

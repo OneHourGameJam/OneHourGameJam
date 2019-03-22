@@ -30,7 +30,7 @@ function JamExists($jamID){
 
 //Deletes an existing jam, identified by the jam number.
 function DeleteJam($jamID){
-	global $jamData, $dbConn, $loggedInUser;
+	global $jamData, $dbConn, $loggedInUser, $adminLogData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -57,7 +57,7 @@ function DeleteJam($jamID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser->Username);
+	$adminLogData->AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamID soft deleted", "", $loggedInUser->Username);
 	
 	return "SUCCESS";
 }

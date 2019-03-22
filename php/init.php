@@ -16,12 +16,12 @@ function Init(){
 	UpdateCookies();
 	$cookieData = new CookieData();
 
-	$configData = new ConfigData();
+	$adminLogData = new AdminLogData();
+	$configData = new ConfigData($adminLogData);
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($configData);
 
     RedirectToHttpsIfRequired($configData);
 
-	$adminLogData = new AdminLogData();
 	$userData = new UserData();
 
 	$loggedInUser = IsLoggedIn($configData, $userData);
@@ -104,7 +104,7 @@ function Init(){
 			$dictionary["stream"] = InitStream($configData);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){

@@ -246,7 +246,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 }
 
 function PerformAction(&$loggedInUser){
-	global $_POST;
+	global $_POST, $satisfactionData;
 	
 	if($loggedInUser !== false){
 		$gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
@@ -265,7 +265,7 @@ function PerformAction(&$loggedInUser){
 
 		$satisfaction = (isset($_POST["satisfaction"])) ? intval($_POST["satisfaction"]) : 0;
 		if($satisfaction != 0){
-			SubmitSatisfaction($loggedInUser, "JAM_$jamNumber", $satisfaction);
+			$satisfactionData->SubmitSatisfaction($loggedInUser, "JAM_$jamNumber", $satisfaction);
 		}
 
 		return SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber);
