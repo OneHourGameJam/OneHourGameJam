@@ -1,11 +1,11 @@
 <?php
 
-function RenderMessages(&$messages){
+function RenderMessages(&$messageData){
 	$render = Array();
 	AddActionLog("RenderMessages");
 	StartTimer("RenderMessages");
 
-	foreach($messages as $i => $messageModel){
+	foreach($messageData->MessageModels as $i => $messageModel){
 		$message = Array();
 		
 		$message["message_type"] = trim($messageModel->Type);

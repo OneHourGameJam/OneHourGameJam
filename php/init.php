@@ -44,7 +44,7 @@ function Init(){
 	$polls = new PollData($loggedInUser);
     $satisfaction = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($loggedInUser);
-	$messages = new MessageData($actions->SiteActionModels);
+	$messageData = new MessageData($actions->SiteActionModels);
 	
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Render");
@@ -93,7 +93,7 @@ function Init(){
 		$dictionary["cookies"] = RenderCookies($cookieData);
 	}
 	if(FindDependency("RenderMessages", $dep) !== false){
-		$dictionary["messages"] = RenderMessages($messages->MessageModels);
+		$dictionary["messages"] = RenderMessages($messageData);
 	}
 	if(FindDependency("RenderStream", $dep) !== false){
 		$now = Time();
