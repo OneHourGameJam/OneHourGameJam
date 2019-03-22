@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme, $isBot){
-	global $themes, $configData, $jamData, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themeData, $configData, $jamData, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	if($isBot){
 		$user = "bot";
@@ -19,7 +19,7 @@ function AddTheme($newTheme, $isBot){
 		return "INVALID_THEME";
 	}
 
-	foreach($themes->ThemeModels as $i => $theme){
+	foreach($themeData->ThemeModels as $i => $theme){
 		if(strtolower($theme->Theme) == strtolower($newTheme)){
 			return "THEME_ALREADY_SUGGESTED";
 		}
@@ -30,8 +30,8 @@ function AddTheme($newTheme, $isBot){
 	}
 
 	$themesByThisUser = 0;
-	foreach($themes->ThemeModels as $i => $theme) {
-		if ($theme->Author == $user->Username && !$theme->Banned) {
+	foreach($themeData->ThemeModels as $i => $themeModel) {
+		if ($themeModel->Author == $user->Username && !$themeModel->Banned) {
 			$themesByThisUser ++;
 		}
 	}

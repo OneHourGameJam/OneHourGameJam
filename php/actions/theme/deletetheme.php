@@ -2,7 +2,7 @@
 
 //Removes a suggested theme
 function RemoveTheme($removedTheme, $pageId){
-	global $themes, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themeData, $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -11,15 +11,15 @@ function RemoveTheme($removedTheme, $pageId){
 
 	//Check that the theme exists and get the user of the given theme
 	$themeAuthor = "";
-	foreach($themes->ThemeModels as $id => $theme) {
-		if ($theme->Deleted != 0){
+	foreach($themeData->ThemeModels as $id => $themeModel) {
+		if ($themeModel->Deleted != 0){
 			continue;
 		}
-		if ($theme->Banned != 0){
+		if ($themeModel->Banned != 0){
 			continue;
 		}
-		if ($theme->Theme == $removedTheme) {
-			$themeAuthor = $theme->Author;
+		if ($themeModel->Theme == $removedTheme) {
+			$themeAuthor = $themeModel->Author;
 		}
 	}
 

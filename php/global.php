@@ -16,7 +16,7 @@ $users = Array();
 $jamData;
 $authors = Array();
 $gameData;
-$themes = Array();
+$ThemeData;
 $assetData;
 $pollData;
 $satisfactionData;

@@ -1,6 +1,6 @@
 <?php
 
-function RenderThemes(&$configData, &$jamData, &$themes, &$userThemeVotes, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
+function RenderThemes(&$configData, &$jamData, &$themeData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -18,7 +18,7 @@ function RenderThemes(&$configData, &$jamData, &$themes, &$userThemeVotes, &$the
 
 	$themesUserHasNotVotedFor = 0;
 
-	foreach($themes as $i => $themeModel){
+	foreach($themeData->ThemeModels as $i => $themeModel){
 
 		$themeID = intval($themeModel->Id);
 		$themeText = $themeModel->Theme;
@@ -86,8 +86,8 @@ function RenderThemes(&$configData, &$jamData, &$themes, &$userThemeVotes, &$the
 		}
 
 		//User theme vote
-		if(isset($userThemeVotes[$themeID])){
-			$userThemeVoteKey = UserThemeVoteTypeToKey($userThemeVotes[$themeID]);
+		if(isset($themeData->LoggedInUserThemeVotes[$themeID])){
+			$userThemeVoteKey = UserThemeVoteTypeToKey($themeData->LoggedInUserThemeVotes[$themeID]);
 			$theme[$userThemeVoteKey] = 1;
 			$userCastAVoteForThisTheme = true;
 		}
@@ -282,7 +282,7 @@ function GetThemeVotesOfUserFormatted($username){
 	return ArrayToHTML(MySQLDataToArray($data));
 }
 
-function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$configData){
+function CalculateThemeSelectionProbabilityByVoteDifference(&$themeData, &$configData){
 	AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 	StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 
@@ -292,19 +292,19 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$configDa
 	$availableThemes = Array();
 
 	$totalVotesDifference = 0;
-	foreach($themes as $id => $theme){
+	foreach($themeData->ThemeModels as $id => $themeModels){
 		$themeOption = Array();
-		$themeID = $theme->Id;
+		$themeID = $themeModels->Id;
 		$result[$themeID]["ThemeSelectionProbabilityByVoteDifference"] = 0;
 		$result[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"] = "0%";
 
-		if($theme->Banned == 1){
+		if($themeModels->Banned == 1){
 			continue;
 		}
 
-		$votesFor = $theme->VotesFor;
-		$votesNeutral = $theme->VotesNeutral;
-		$votesAgainst = $theme->VotesAgainst;
+		$votesFor = $themeModels->VotesFor;
+		$votesNeutral = $themeModels->VotesNeutral;
+		$votesAgainst = $themeModels->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -320,7 +320,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$configDa
 			continue;
 		}
 
-		$themeOption["theme"] = $theme->Theme;
+		$themeOption["theme"] = $themeModels->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -342,7 +342,7 @@ function CalculateThemeSelectionProbabilityByVoteDifference(&$themes, &$configDa
 	return $result;
 }
 
-function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$configData){
+function CalculateThemeSelectionProbabilityByPopularity(&$themeData, &$configData){
 	AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 	StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 
@@ -353,19 +353,19 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$configData){
 	$availableThemes = Array();
 
 	$totalVotesDifference = 0;
-	foreach($themes as $id => $theme){
+	foreach($themeData->ThemeModels as $id => $themeModels){
 		$themeOption = Array();
-		$themeID = $theme->Id;
+		$themeID = $themeModels->Id;
 		$result[$themeID]["ThemeSelectionProbabilityByPopularity"] = 0;
 		$result[$themeID]["ThemeSelectionProbabilityByPopularityText"] = "0%";
 
-		if($theme->Banned == 1){
+		if($themeModels->Banned == 1){
 			continue;
 		}
 
-		$votesFor = $theme->VotesFor;
-		$votesNeutral = $theme->VotesNeutral;
-		$votesAgainst = $theme->VotesAgainst;
+		$votesFor = $themeModels->VotesFor;
+		$votesNeutral = $themeModels->VotesNeutral;
+		$votesAgainst = $themeModels->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -381,7 +381,7 @@ function CalculateThemeSelectionProbabilityByPopularity(&$themes, &$configData){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme->Theme;
+		$themeOption["theme"] = $themeModels->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;

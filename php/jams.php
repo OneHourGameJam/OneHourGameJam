@@ -211,7 +211,7 @@ function RenderJams(&$configData, &$users, &$gameData, &$jamData, &$satisfaction
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule(&$configData, &$jamData, &$themes, $nextScheduledJamTime, $nextSuggestedJamTime){
+function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule"); 
 
@@ -257,12 +257,12 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$themes, $nextScheduledJ
 
 		$selectedTheme = "";
 
-		$selectedTheme = SelectRandomThemeByVoteDifference($themes, $configData);
+		$selectedTheme = SelectRandomThemeByVoteDifference($ThemeData, $configData);
 		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomThemeByPopularity($themes, $configData);
+			$selectedTheme = SelectRandomThemeByPopularity($ThemeData, $configData);
 		}
 		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomTheme($themes);
+			$selectedTheme = SelectRandomTheme($ThemeData);
 		}
 		if($selectedTheme == ""){
 			$selectedTheme = "Any theme";
@@ -282,7 +282,7 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$themes, $nextScheduledJ
 
 //Selects a random theme (or "" if none can be selected) by calculating the difference between positive and negative votes and
 //selecting a proportional random theme by this difference
-function SelectRandomThemeByVoteDifference(&$themes, &$configData){
+function SelectRandomThemeByVoteDifference(&$ThemeData, &$configData){
 	AddActionLog("SelectRandomThemeByVoteDifference");
 	StartTimer("SelectRandomThemeByVoteDifference");
 
@@ -292,16 +292,16 @@ function SelectRandomThemeByVoteDifference(&$themes, &$configData){
 
 	$availableThemes = Array();
 	$totalVotesDifference = 0;
-	foreach($themes as $id => $theme){
+	foreach($ThemeData->ThemeModels as $id => $themeModel){
 		$themeOption = Array();
 
-		if($theme["banned"]){
+		if($themeModel->Banned){
 			continue;
 		}
 
-		$votesFor = $theme->VotesFor;
-		$votesNeutral = $theme->VotesNeutral;
-		$votesAgainst = $theme->VotesAgainst;
+		$votesFor = $themeModel->VotesFor;
+		$votesNeutral = $themeModel->VotesNeutral;
+		$votesAgainst = $themeModel->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -317,7 +317,7 @@ function SelectRandomThemeByVoteDifference(&$themes, &$configData){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme->Theme;
+		$themeOption["theme"] = $themeModel->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -344,7 +344,7 @@ function SelectRandomThemeByVoteDifference(&$themes, &$configData){
 }
 
 //Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
-function SelectRandomThemeByPopularity(&$themes, &$configData){
+function SelectRandomThemeByPopularity(&$ThemeData, &$configData){
 	AddActionLog("SelectRandomThemeByPopularity");
 	StartTimer("SelectRandomThemeByPopularity");
 
@@ -354,16 +354,16 @@ function SelectRandomThemeByPopularity(&$themes, &$configData){
 
 	$availableThemes = Array();
 	$totalPopularity = 0;
-	foreach($themes as $id => $theme){
+	foreach($ThemeData->ThemeModels as $id => $themeModel){
 		$themeOption = Array();
 
-		if($theme["banned"]){
+		if($themeModel->Banned){
 			continue;
 		}
 
-		$votesFor = $theme->VotesFor;
-		$votesNeutral = $theme->VotesNeutral;
-		$votesAgainst = $theme->VotesAgainst;
+		$votesFor = $themeModel->VotesFor;
+		$votesNeutral = $themeModel->VotesNeutral;
+		$votesAgainst = $themeModel->VotesAgainst;
 		$votesDifference = $votesFor - $votesAgainst;
 
 		$votesTotal = $votesFor + $votesNeutral + $votesAgainst;
@@ -379,7 +379,7 @@ function SelectRandomThemeByPopularity(&$themes, &$configData){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme->Theme;
+		$themeOption["theme"] = $themeModel->Theme;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -406,21 +406,21 @@ function SelectRandomThemeByPopularity(&$themes, &$configData){
 }
 
 //Selects a random theme with equal probability for all themes, not caring for number of votes
-function SelectRandomTheme(&$themes){
+function SelectRandomTheme(&$ThemeData){
 	AddActionLog("SelectRandomTheme");
 	StartTimer("SelectRandomTheme");
 
 	$selectedTheme = "";
 
 	$availableThemes = Array();
-	foreach($themes as $id => $theme){
+	foreach($ThemeData->ThemeModels as $id => $themeModel){
 		$themeOption = Array();
 
-		if($theme->Banned){
+		if($themeModel->Banned){
 			continue;
 		}
 
-		$themeOption["theme"] = $theme->Theme;
+		$themeOption["theme"] = $themeModel->Theme;
 
 		$availableThemes[] = $themeOption;
 	}

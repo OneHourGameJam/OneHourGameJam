@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $page, $dep;
+	global $dictionary, $configData, $adminLogData, $users, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -31,13 +31,13 @@ function Init(){
 	$jamData = new JamData();
 	$gameData = new GameData();
 
-	$themes = new ThemeData($loggedInUser);
-	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themes->ThemeModels, $configData);
-	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themes->ThemeModels, $configData);
+	$themeData = new ThemeData($loggedInUser);
+	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
+	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jamData);
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($configData);
-	CheckNextJamSchedule($configData, $jamData, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
+	CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamTime);
 
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData();
@@ -81,7 +81,7 @@ function Init(){
 		$dictionary["entries"] = RenderGames($users->UserModels, $gameData, $jamData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dep) !== false){
-		$dictionary["themes"] = RenderThemes($configData, $jamData, $themes->ThemeModels, $themes->LoggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
 		$dictionary["assets"] = RenderAssets($assetData);
