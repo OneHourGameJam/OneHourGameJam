@@ -1,10 +1,10 @@
 <?php
 
-function RenderAssets(&$assets){
+function RenderAssets(&$assetData){
 	AddActionLog("RenderAssets");
 	StartTimer("RenderAssets");
 	$render = Array();
-	foreach($assets as $id => $assetModel){
+	foreach($assetData->AssetModels as $id => $assetModel){
 		$asset = RenderAsset($assetModel);
 		$render[] = $asset;
 	}

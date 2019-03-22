@@ -25,7 +25,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, &$assets, &$cookies, &$adminVoteData, &$nextSuggestedJamDateTime){
+function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfaction, &$loggedInUser, &$assetData, &$cookies, &$adminVoteData, &$nextSuggestedJamDateTime){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -70,7 +70,7 @@ function RenderPageSpecific($page, &$config, &$users, &$games, &$jams, &$satisfa
             if(IsAdmin($loggedInUser) !== false){
                 if(isset($_GET["asset_id"])){
                     $assetID = intval($_GET["asset_id"]);
-                    $render["editingasset"] = ((isset($assets[$assetID])) ? RenderAsset($assets[$assetID]) : Array());
+                    $render["editingasset"] = ((isset($assetData->AssetModels[$assetID])) ? RenderAsset($assetData->AssetModels[$assetID]) : Array());
                 }
             }
         break;

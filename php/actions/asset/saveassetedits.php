@@ -1,7 +1,7 @@
 <?php
 
 function AddAsset($assetID, $author, $title, $description, $type){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assets, $users, $config;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assetData, $users, $config;
 
 	$assetID = trim($assetID);
 	$author = trim($author);
@@ -50,7 +50,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	}
 
 	$assetExists = false;
-	if(isset($assetID) && $assetID !== null && isset($assets->AssetModels[$assetID])){
+	if(isset($assetID) && $assetID !== null && isset($assetData->AssetModels[$assetID])){
 		$assetExists = true;
 	}
 
@@ -94,22 +94,22 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	if($assetExists){
 		//Update entry
 
-		$assets->AssetModels[$assetID]->Id = $assetID;
-		$assets->AssetModels[$assetID]->Author = $author;
-		$assets->AssetModels[$assetID]->Title = $title;
-		$assets->AssetModels[$assetID]->Description = $description;
-		$assets->AssetModels[$assetID]->Type = $type;
+		$assetData->AssetModels[$assetID]->Id = $assetID;
+		$assetData->AssetModels[$assetID]->Author = $author;
+		$assetData->AssetModels[$assetID]->Title = $title;
+		$assetData->AssetModels[$assetID]->Description = $description;
+		$assetData->AssetModels[$assetID]->Type = $type;
 		if($assetURL != ""){
 			//Uploaded new file
-			$assets->AssetModels[$assetID]->Content = $assetURL;
+			$assetData->AssetModels[$assetID]->Content = $assetURL;
         }
 
-		$escapedID = mysqli_real_escape_string($dbConn, $assets->AssetModels[$assetID]->Id);
-		$escapedAuthor = mysqli_real_escape_string($dbConn, $assets->AssetModels[$assetID]->Author);
-		$escapedTitle = mysqli_real_escape_string($dbConn, $assets->AssetModels[$assetID]->Title);
-		$escapedDescription = mysqli_real_escape_string($dbConn, $assets->AssetModels[$assetID]->Description);
-		$escapedType = mysqli_real_escape_string($dbConn, $assets->AssetModels[$assetID]->Type);
-		$escapedContent = mysqli_real_escape_string($dbConn, $assets->AssetModels[$assetID]->Content);
+		$escapedID = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Id);
+		$escapedAuthor = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Author);
+		$escapedTitle = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Title);
+		$escapedDescription = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Description);
+		$escapedType = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Type);
+		$escapedContent = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Content);
 
 		$sql = "
 			UPDATE asset

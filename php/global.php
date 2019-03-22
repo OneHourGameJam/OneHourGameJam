@@ -17,7 +17,7 @@ $jams = Array();
 $authors = Array();
 $entries = Array();
 $themes = Array();
-$assets = Array();
+$assetData = Array();
 $polls = Array();
 $satisfaction = Array();
 $adminVoteData;

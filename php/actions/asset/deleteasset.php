@@ -1,7 +1,7 @@
 <?php
 
 function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assets;
+	global $loggedInUser, $dbConn, $assetData;
 	$assetID = trim($assetID);
 
 	//Authorize user
@@ -10,7 +10,7 @@ function DeleteAsset($assetID){
 	}
 
 	$assetExists = false;
-	if(isset($assetID) && $assetID !== null && isset($assets->AssetModels[$assetID])){
+	if(isset($assetID) && $assetID !== null && isset($assetData->AssetModels[$assetID])){
 		$assetExists = true;
 	}
 

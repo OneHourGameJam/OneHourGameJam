@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $config, $adminLogData, $users, $jams, $games, $assets, $loggedInUser, $satisfaction, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $polls, $cookies, $actions, $page, $dep;
+	global $dictionary, $config, $adminLogData, $users, $jams, $games, $assetData, $loggedInUser, $satisfaction, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themes, $themesByVoteDifference, $themesByPopularity, $polls, $cookies, $actions, $page, $dep;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -40,7 +40,7 @@ function Init(){
 	CheckNextJamSchedule($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $nextScheduledJamTime, $nextSuggestedJamTime);
 
 	$actions = new SiteActionData($config->ConfigModels);
-	$assets = new AssetData();
+	$assetData = new AssetData();
 	$polls = new PollData($loggedInUser);
     $satisfaction = new SatisfactionData($config->ConfigModels);
     $adminVoteData = new AdminVoteData($loggedInUser);
@@ -84,7 +84,7 @@ function Init(){
 		$dictionary["themes"] = RenderThemes($config->ConfigModels, $jams->JamModels, $themes->ThemeModels, $themes->LoggedInUserThemeVotes, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
 	if(FindDependency("RenderAssets", $dep) !== false){
-		$dictionary["assets"] = RenderAssets($assets->AssetModels);
+		$dictionary["assets"] = RenderAssets($assetData);
 	}
 	if(FindDependency("RenderPolls", $dep) !== false){
 		$dictionary["polls"] = RenderPolls($polls->PollModels, $polls->LoggedInUserPollVotes);
@@ -104,7 +104,7 @@ function Init(){
 			$dictionary["stream"] = InitStream($config->ConfigModels);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assets->AssetModels, $cookies->CookieModel, $adminVoteData, $nextSuggestedJamDateTime);
+	$dictionary["page"] = RenderPageSpecific($page, $config->ConfigModels, $users->UserModels, $games->GameModels, $jams->JamModels, $satisfaction->SatisfactionModels, $loggedInUser, $assetData, $cookies->CookieModel, $adminVoteData, $nextSuggestedJamDateTime);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dep) !== false){
