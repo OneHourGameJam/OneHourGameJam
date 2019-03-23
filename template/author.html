@@ -34,9 +34,9 @@
 							{{#has_url}}<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}images/platforms/custom.png' class='entryPlayIcon' title='Other platform'></a>{{/has_url}}
 							{{#has_url_source}}<a href='{{url_source}}' class='btn entryButton' target='_blank'><img src='{{{page.template_path}}}images/platforms/source.png' class='entryPlayIcon' title='Source'></a>{{/has_url_source}}
 
-							{{#show_edit_link}}
+							{{#page.show_edit_link}}
 							<a href="?page=submit&amp;jam_number={{jam_number}}" class="btn btn-default">Edit entry</a>
-							{{/show_edit_link}}
+							{{/page.show_edit_link}}
 						</td>
 					</tr>
 					<tr>

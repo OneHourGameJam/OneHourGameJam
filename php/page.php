@@ -122,7 +122,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 die("invalid author name");
             }
 
-            $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Id;
+            $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Username;
             $render["author_bio"] = LoadBio($viewingAuthor);
             $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthor], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;

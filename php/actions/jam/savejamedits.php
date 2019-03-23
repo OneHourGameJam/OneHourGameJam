@@ -44,7 +44,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 		$datetime = strtotime($date." ".$time." UTC");
 	}
 
-	if(count($jams->JamModels) == 0){
+	if(count($jamData->JamModels) == 0){
 		return "NO_JAMS_EXIST";
 	}
 

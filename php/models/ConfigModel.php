@@ -17,10 +17,11 @@ class ConfigData{
     public $ConfigModels;
 
     function __construct(&$adminLogData) {
-        $this->ConfigModels = $this->LoadConfig($adminLogData);
+        $this->ConfigModels = $this->LoadConfig();
+        $this->VerifyConfig($adminLogData);
     }
 
-    function LoadConfig(&$adminLogData){
+    function LoadConfig(){
         global $dbConn;
         AddActionLog("LoadConfig");
         StartTimer("LoadConfig");
@@ -57,41 +58,38 @@ class ConfigData{
             $configModels[$key] = $configEntry;
         }
 
-        $configModels = $this->VerifyConfig($configModels, $adminLogData);
-
         StopTimer("LoadConfig");
         return $configModels;
     }
 
-    function VerifyConfig(&$configModels, &$adminLogData) {
+    function VerifyConfig(&$adminLogData) {
         AddActionLog("VerifyConfig");
         StartTimer("VerifyConfig");
     
-        if (!isset($configModels["PEPPER"]->Value) || strlen($configModels["PEPPER"]->Value) < 1) {
-            $configModels = $this->UpdateConfig($configModels, "PEPPER", GenerateSalt(), -1, "AUTOMATIC", $adminLogData);
+        if (!isset($this->ConfigModels["PEPPER"]->Value) || strlen($this->ConfigModels["PEPPER"]->Value) < 1) {
+            $this->UpdateConfig("PEPPER", GenerateSalt(), -1, "AUTOMATIC", $adminLogData);
         }
     
-        if (!isset($configModels["SESSION_PASSWORD_ITERATIONS"]->Value) || strlen($configModels["SESSION_PASSWORD_ITERATIONS"]->Value) < 1) {
-            $sessionPasswordIterations = GenerateUserHashIterations($configModels);
-            $configModels = $this->UpdateConfig($configModels, "SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1, "AUTOMATIC", $adminLogData);
+        if (!isset($this->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value) || strlen($this->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value) < 1) {
+            $sessionPasswordIterations = GenerateUserHashIterations($this);
+            $this->UpdateConfig("SESSION_PASSWORD_ITERATIONS", $sessionPasswordIterations, -1, "AUTOMATIC", $adminLogData);
         }
     
         StopTimer("VerifyConfig");
-        return $configModels;
     }
 
     // Saves config to database, does not authorize to ensure VerifyConfig() continues to work
-    function UpdateConfig(&$configModels, $key, $value, $userID, $userUsername, &$adminLogData) {
+    function UpdateConfig($key, $value, $userID, $userUsername, &$adminLogData) {
         global $dbConn;
         AddActionLog("UpdateConfig");
         StartTimer("UpdateConfig");
-    
-        if($configModels[$key]->Value != $value){
+
+        if($this->ConfigModels[$key]->Value != $value){
             $userIDClean = mysqli_real_escape_string($dbConn, $userID);
             $keyClean = mysqli_real_escape_string($dbConn, $key);
             $valueClean = mysqli_real_escape_string($dbConn, $value);
     
-            $configModels[$key]->Value = $value;
+            $this->ConfigModels[$key]->Value = $value;
             $sql = "
                 UPDATE config
                 SET config_value = '$valueClean',
@@ -106,7 +104,6 @@ class ConfigData{
         }
     
         StopTimer("UpdateConfig");
-        return $configModels;
     }
 }
 

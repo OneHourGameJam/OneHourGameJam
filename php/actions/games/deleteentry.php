@@ -24,7 +24,7 @@ function CanDeleteEntry($entryID){
 
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryID){
-	global $jamData, $dbConn, $loggedInUser;
+	global $jamData, $dbConn, $loggedInUser, $adminLogData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){

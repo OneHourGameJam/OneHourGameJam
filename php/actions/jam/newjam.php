@@ -5,7 +5,7 @@
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
 function CreateJam($theme, $date, $time, $colorsList){
-	global $ip, $userAgent, $loggedInUser, $jamData;
+	global $ip, $userAgent, $loggedInUser, $jamData, $adminLogData;
 
 	$currentJamData = GetCurrentJamNumberAndID();
 	$jamNumber = intval($currentJamData["NUMBER"] + 1);
@@ -60,7 +60,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
 
-	$jamData->AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $loggedInUser);
+	$jamData->AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
 
 	return "SUCCESS";
 }
