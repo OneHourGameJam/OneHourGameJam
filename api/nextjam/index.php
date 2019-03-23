@@ -48,7 +48,7 @@ if(count($return["upcoming_jams"]) == 0){
     //No jam scheduled yet, insert stub.
 
     $now = time();
-    $saturday = GetSuggestedNextJamDateTime($configData->ConfigModels);
+    $saturday = GetSuggestedNextJamDateTime($configData);
 
 	$interval = $saturday - $now;
 
