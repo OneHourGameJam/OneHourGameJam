@@ -48,23 +48,6 @@ class JamData{
         return $jamModels;
     }
 
-    function GroupJamsByUsername(&$gamesByUsername)
-    {
-        AddActionLog("GroupJamsByUsername");
-        StartTimer("GroupJamsByUsername");
-    
-        $jamsByUsername = Array();
-        foreach($gamesByUsername as $username => $gameModels){
-            $jamsByUsername[$username] = Array();
-            foreach($gameModels as $i => $gameModel){
-                $jamsByUsername[$username][$gameModel->JamId] = $this->JamModels[$gameModel->JamId];
-            }
-        }
-    
-        StopTimer("GroupJamsByUsername");
-        return $jamsByUsername;
-    }
-
     //Adds the jam with the provided data into the database
     function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $theme, $startTime, $colors, &$adminLogData){
         global $dbConn;

@@ -22,9 +22,11 @@ class GameModel{
 
 class GameData{
     public $GameModels;
+    public $GamesByUsername;
 
     function __construct() {
         $this->GameModels = $this->LoadGames();
+        $this->GamesByUsername = $this->GroupGamesByUsername();
     }
 
     function LoadGames(){

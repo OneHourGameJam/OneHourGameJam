@@ -1,26 +1,26 @@
 <?php
                             
-function RenderUser(&$configData, &$cookieData, &$user, &$userData, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
+function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
-    $render["id"] = $user->Id;
-    $render["username"] = $user->Username;
-    $render["display_name"] = $user->DisplayName;
-    $render["twitter"] = $user->Twitter;
-    $render["twitter_text_only"] = $user->TwitterTextOnly;
-    $render["email"] = $user->Email;
-    $render["salt"] = $user->Salt;
-    $render["password_hash"] = $user->PasswordHash;
-    $render["password_iterations"] = $user->PasswordIterations;
-    $render["admin"] = $user->Admin;
-    $render["user_preferences"] = $user->UserPreferences;
-    $render["preferences"] = $user->Preferences;
-    $render["days_since_last_login"] = $user->DaysSinceLastLogin;
-    $render["days_since_last_admin_action"] = $user->DaysSinceLastAdminAction;
-    if($user->IsSponsored){
+    $render["id"] = $userModel->Id;
+    $render["username"] = $userModel->Username;
+    $render["display_name"] = $userModel->DisplayName;
+    $render["twitter"] = $userModel->Twitter;
+    $render["twitter_text_only"] = $userModel->TwitterTextOnly;
+    $render["email"] = $userModel->Email;
+    $render["salt"] = $userModel->Salt;
+    $render["password_hash"] = $userModel->PasswordHash;
+    $render["password_iterations"] = $userModel->PasswordIterations;
+    $render["admin"] = $userModel->Admin;
+    $render["user_preferences"] = $userModel->UserPreferences;
+    $render["preferences"] = $userModel->Preferences;
+    $render["days_since_last_login"] = $userModel->DaysSinceLastLogin;
+    $render["days_since_last_admin_action"] = $userModel->DaysSinceLastAdminAction;
+    if($userModel->IsSponsored){
         $render["is_sponsored"] = 1;
-        $render["sponsored_by"] = $user->SponsoredBy;
+        $render["sponsored_by"] = $userModel->SponsoredBy;
     }
 
     $currentJam = GetCurrentJamNumberAndID();
@@ -34,7 +34,7 @@ function RenderUser(&$configData, &$cookieData, &$user, &$userData, &$gameData, 
     $render["entry_count"] = 0;
     $render["first_jam_number"] = 0;
     $render["last_jam_number"] = 0;
-    foreach($gameData->GameModels as $j => $gameModel){
+    foreach($gameData->GamesByUsername[$username] as $j => $gameModel){
         if($gameModel->Author != $username){
             continue;
         }
@@ -44,12 +44,7 @@ function RenderUser(&$configData, &$cookieData, &$user, &$userData, &$gameData, 
         }
 
 	    StartTimer("RenderUser - foreach games - Foreach Jams");
-        foreach($jamData->JamModels as $k => $jamModel){
-            if($jamModel->Id == $gameModel->JamId){
-                $jamModelForGame = $jamModel;
-                break;
-            }
-        }
+        $jamModelForGame = $jamData->JamModels[$gameModel->JamId];
 	    StopTimer("RenderUser - foreach games - Foreach Jams");
 
 	    StartTimer("RenderUser - foreach games - entry count, first and last jam, recent");
@@ -275,29 +270,16 @@ function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamDa
     $render = Array("LIST" => Array());
 
     $authorCount = 0;
-    $gamesByUsername = $gameData->GroupGamesByUsername();
-    $jamsByUsername = $jamData->GroupJamsByUsername($gamesByUsername);
 
     foreach($userData->UserModels as $i => $userModel){
         $username = $userModel->Username;
-        $userGames = Array();
-        if(isset($gamesByUsername[$username])){
-            //Optimisation disabled due to change of RenderUser(..) parameter from $games (array of GameModels) to $gameData (GameData class), value of $userGames is array or GameModels, should be GameData and should replace $gameData parameter in call to RenderUser(..) below.
-            $userGames = $gamesByUsername[$username];
-        }
-        $userJams = Array();
-        if(isset($jamsByUsername[$username])){
-            //Optimisation disabled due to change of RenderUser(..) parameter from $jams (array of JamModels) to $jamData (JamData class), value of $userJam is array or JamModels, should be JamData and should replace $jamData parameter in call to RenderUser(..) below.
-            $userJams = $jamsByUsername[$username];
-        }
-        $userAsArray = Array($userModel);
         
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
             $userRender = RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
-        if(count($userGames) > 0){
+        if(count($gameData->GamesByUsername[$username]) > 0){
             $authorCount += 1;
         }
     }
