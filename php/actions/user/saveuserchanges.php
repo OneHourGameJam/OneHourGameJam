@@ -43,7 +43,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 }
 
 function PerformAction(&$loggedInUser){
-	global $_POST;
+	global $_POST, $userPreferenceSettings;
 	
 	if($loggedInUser !== false){
 		$displayName = $_POST["displayname"];

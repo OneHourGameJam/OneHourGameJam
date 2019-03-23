@@ -1,5 +1,9 @@
 <?php
 
+$userPreferenceSettings = Array(
+	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
+);
+
 class UserModel
 {
     public $Id;
@@ -22,6 +26,7 @@ class UserModel
 
 class UserData{
     public $UserModels;
+    public $UserPreferences;
 
     function __construct() {
         $this->UserModels = $this->LoadUsers();
@@ -69,8 +74,6 @@ class UserData{
             $user->DaysSinceLastAdminAction = 1000000;
             $user->IsSponsored = 0;
             $user->SponsoredBy = "";
-    
-    
     
             foreach($userPreferenceSettings as $i => $preferenceSetting){
                 $preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);

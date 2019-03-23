@@ -1,8 +1,4 @@
 <?php
-
-$userPreferenceSettings = Array(
-	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
-);
                             
 function RenderUser(&$configData, &$cookieData, &$user, &$userData, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
