@@ -55,7 +55,8 @@ function Init(){
 		$dictionary["CONFIG"] = RenderConfig($configData);
 	}
 	if(FindDependency("RenderAdminLog", $dep) !== false){
-		$dictionary["adminlog"] = RenderAdminLog($adminLogData);
+		$renderAdminLog = new AdminLogPresenter($adminLogData);
+		$dictionary["adminlog"] = $renderAdminLog->AdminLogRender;
 	}
 	if(FindDependency("RenderUsers", $dep) !== false){
 		$dependency = FindDependency("RenderUsers", $dep);

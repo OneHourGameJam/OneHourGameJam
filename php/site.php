@@ -29,6 +29,9 @@ include_once("php/models/AssetModel.php");
 include_once("php/models/AdminVoteModel.php");
 include_once("php/models/AdminLogModel.php");
 
+//Presenters
+include_once("php/presenters/AdminLogPresenter.php");
+
 //Global functions
 include_once("php/sanitize.php");
 include_once("php/page.php");
@@ -38,7 +41,6 @@ include_once("php/messages.php");
 include_once("php/config.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
-include_once("php/adminlog.php");
 include_once("php/users.php");
 include_once("php/jams.php");
 include_once("php/games.php");

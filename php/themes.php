@@ -223,6 +223,7 @@ function IsRecentTheme(&$jamData, &$configData, $theme) {
 		$startTime = new DateTime($jamModel->StartTime . " UTC");
 		if ($jamModel->Deleted == 0 && $startTime < $currentTime) {
 			if (strtolower($jamModel->Theme) == strtolower($theme)){
+				StopTimer("IsRecentTheme");
 				return "THEME_RECENTLY_USED";
 			}
 			if (++$jamNumber > $configData->ConfigModels["JAM_THEMES_CONSIDERED_RECENT"]->Value){
