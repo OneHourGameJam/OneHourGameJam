@@ -69,7 +69,7 @@ class GameData{
         return $gameModels;
     }
 
-    public function GroupGamesByUsername()
+    private function GroupGamesByUsername()
     {
         AddActionLog("GroupGamesByUsername");
         StartTimer("GroupGamesByUsername");
@@ -85,6 +85,13 @@ class GameData{
     
         StopTimer("GroupGamesByUsername");
         return $gamesByUsername;
+    }
+
+    public function GetGamesMadeByUsername($username){
+        if(isset($this->GamesByUsername[$username])){
+            return $this->GamesByUsername[$username];
+        }
+        return Array();
     }
 
     //Returns true / false based on whether or not the specified entry exists (and has not been deleted)

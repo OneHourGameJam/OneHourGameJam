@@ -34,7 +34,7 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
     $render["entry_count"] = 0;
     $render["first_jam_number"] = 0;
     $render["last_jam_number"] = 0;
-    foreach($gameData->GamesByUsername[$username] as $j => $gameModel){
+    foreach($gameData->GetGamesMadeByUsername($username) as $j => $gameModel){
         if($gameModel->Author != $username){
             continue;
         }
