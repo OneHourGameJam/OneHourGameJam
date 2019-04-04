@@ -31,11 +31,7 @@ function RenderConfig($configData){
 
 	foreach($configData->ConfigModels as $i => $configModel){
 		$addedToDictionary = $configModel->AddedToDictionary;
-
-		if(!$addedToDictionary){
-			continue;
-		}
-
+		
 		$configKey = $configModel->Key;
 		$configValue = $configModel->Value;
 		$category = $configModel->Category;
@@ -45,12 +41,15 @@ function RenderConfig($configData){
 		//Raw value
 		$render["VALUES"][$configKey] = $configValue;
 
-		//Pretty Print
-		$configPrettyPrint = $configValue;
-		if(isset($configPrettyPrintFunctions[$configKey])){
-			$configPrettyPrint = $configPrettyPrintFunctions[$configKey]($configValue);
+		if(!$addedToDictionary){
+			//Pretty Print
+			$configPrettyPrint = $configValue;
+			if(isset($configPrettyPrintFunctions[$configKey])){
+				$configPrettyPrint = $configPrettyPrintFunctions[$configKey]($configValue);
+			}
+
+			$render["PRETTY_PRINT"][$configKey] = $configPrettyPrint;
 		}
-		$render["PRETTY_PRINT"][$configKey] = $configPrettyPrint;
 
 		$categoryIndex = count($render["LIST"]);
 		foreach($render["LIST"] as $index => $configDictionaryEntry){
