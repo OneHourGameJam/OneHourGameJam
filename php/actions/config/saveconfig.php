@@ -1,7 +1,7 @@
 <?php
 
 function SaveConfig($key, $newValue){
-	global $configData, $dictionary, $loggedInUser;
+	global $configData, $dictionary, $loggedInUser, $adminLogData;
 
 	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
@@ -21,7 +21,7 @@ function SaveConfig($key, $newValue){
 		return;
 	}
 
-	$configData->UpdateConfig($key, $newValue, $loggedInUser->Id, $loggedInUser->Username);
+	$configData->UpdateConfig($key, $newValue, $loggedInUser->Id, $loggedInUser->Username, $adminLogData);
 	return "SUCCESS";
 }
 
