@@ -211,7 +211,7 @@ function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$satisfact
 
 
 //Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime){
+function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime, &$adminLogData){
 	AddActionLog("CheckNextJamSchedule");
 	StartTimer("CheckNextJamSchedule"); 
 

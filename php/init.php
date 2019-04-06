@@ -37,7 +37,7 @@ function Init(){
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jamData);
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($configData);
-	CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamTime);
+	CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamTime, $adminLogData);
 
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData();
