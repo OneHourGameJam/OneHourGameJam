@@ -97,9 +97,9 @@ function PerformAction($loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-			$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
-			$voteType = $_POST["adminVoteType"];
-			return CastVoteForAdmin($voteSubjectUsername, $voteType);
+		$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
+		$voteType = $_POST["adminVoteType"];
+		return CastVoteForAdmin($voteSubjectUsername, $voteType);
 	}
 }
 

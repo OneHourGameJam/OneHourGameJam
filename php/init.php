@@ -6,11 +6,10 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $page, $dep;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $commonDependencies, $pageSettings, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
-	
 	StartTimer("Init - Load Data");
 
 	UpdateCookies();
@@ -27,6 +26,7 @@ function Init(){
 	$loggedInUser = IsLoggedIn($configData, $userData);
 	
 	$page = ValidatePage($page, $loggedInUser);
+	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
 	$jamData = new JamData();
 	$gameData = new GameData();
@@ -51,25 +51,25 @@ function Init(){
 
 	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
  
-	if(FindDependency("RenderConfig", $dep) !== false){
+	if(FindDependency("RenderConfig", $dependencies) !== false){
 		$dictionary["CONFIG"] = RenderConfig($configData);
 	}
-	if(FindDependency("RenderAdminLog", $dep) !== false){
+	if(FindDependency("RenderAdminLog", $dependencies) !== false){
 		$renderAdminLog = new AdminLogPresenter($adminLogData);
 		$dictionary["adminlog"] = $renderAdminLog->AdminLogRender;
 	}
-	if(FindDependency("RenderUsers", $dep) !== false){
-		$dependency = FindDependency("RenderUsers", $dep);
+	if(FindDependency("RenderUsers", $dependencies) !== false){
+		$dependency = FindDependency("RenderUsers", $dependencies);
 		$dictionary["users"] = RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $adminVoteData, $dependency["RenderDepth"]);
 	}
-	if(FindDependency("RenderAllJams", $dep) !== false){
-		$dependency1 = FindDependency("RenderAllJams", $dep);
-		$dependency2 = FindDependency("RenderJams", $dep);
+	if(FindDependency("RenderAllJams", $dependencies) !== false){
+		$dependency1 = FindDependency("RenderAllJams", $dependencies);
+		$dependency2 = FindDependency("RenderJams", $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, true);
-	}else if(FindDependency("RenderJams", $dep) !== false){
-		$dependency1 = FindDependency("RenderAllJams", $dep);
-		$dependency2 = FindDependency("RenderJams", $dep);
+	}else if(FindDependency("RenderJams", $dependencies) !== false){
+		$dependency1 = FindDependency("RenderAllJams", $dependencies);
+		$dependency2 = FindDependency("RenderJams", $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$loadAll = false;
 		if(isset($_GET["loadAll"])){
@@ -77,26 +77,26 @@ function Init(){
 		}
 		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
-	if(FindDependency("RenderGames", $dep) !== false){
-		$dependency = FindDependency("RenderGames", $dep);
+	if(FindDependency("RenderGames", $dependencies) !== false){
+		$dependency = FindDependency("RenderGames", $dependencies);
 		$dictionary["entries"] = RenderGames($userData, $gameData, $jamData, $dependency["RenderDepth"]);
 	}
-	if(FindDependency("RenderThemes", $dep) !== false){
+	if(FindDependency("RenderThemes", $dependencies) !== false){
 		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
 	}
-	if(FindDependency("RenderAssets", $dep) !== false){
+	if(FindDependency("RenderAssets", $dependencies) !== false){
 		$dictionary["assets"] = RenderAssets($assetData);
 	}
-	if(FindDependency("RenderPolls", $dep) !== false){
+	if(FindDependency("RenderPolls", $dependencies) !== false){
 		$dictionary["polls"] = RenderPolls($pollData);
 	}
-	if(FindDependency("RenderCookies", $dep) !== false){
+	if(FindDependency("RenderCookies", $dependencies) !== false){
 		$dictionary["cookies"] = RenderCookies($cookieData);
 	}
-	if(FindDependency("RenderMessages", $dep) !== false){
+	if(FindDependency("RenderMessages", $dependencies) !== false){
 		$dictionary["messages"] = RenderMessages($messageData);
 	}
-	if(FindDependency("RenderStream", $dep) !== false){
+	if(FindDependency("RenderStream", $dependencies) !== false){
 		$now = Time();
 		$jamTime = strtotime($dictionary["jams"]["current_jam"]["start_time"] . " UTC");
 		$dictionary["stream"] = Array();
@@ -108,8 +108,8 @@ function Init(){
 	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	
 	if($loggedInUser !== false){
-		if(FindDependency("RenderLoggedInUser", $dep) !== false){
-			$dependency = FindDependency("RenderLoggedInUser", $dep);
+		if(FindDependency("RenderLoggedInUser", $dependencies) !== false){
+			$dependency = FindDependency("RenderLoggedInUser", $dependencies);
 			$dictionary["user"] = RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}

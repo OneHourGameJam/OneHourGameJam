@@ -42,7 +42,7 @@ define("RENDER_DEPTH_JAMS_GAMES",   RENDER_DEPTH_JAMS + RENDER_DEPTH_GAMES);
 define("RENDER_DEPTH_USERS_GAMES",  RENDER_DEPTH_USERS + RENDER_DEPTH_GAMES);
 
 //These correspond to which data is necessary to perform the processing or rendering of each module
-$dependencies = Array(
+$rendererDependencies = Array(
     "IsLoggedIn" =>   Array(
         "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_USERS,
         "Dependencies" => Array()),
@@ -254,47 +254,56 @@ $pageSettings = Array(
     ), 
 );
 
-$dep = Array();
-foreach($commonDependencies as $i => $dependency){
-    foreach($dependency as $dependencyKey => $dependencyRenderDepth){
-        $depIndex = false;
-        foreach($dep as $j => $depEntry){
-            if($depEntry["Key"] == $dependencyKey){
-                $depIndex = $j;
-                break;
+function LoadDependencies($page, &$pageSettings, &$commonDependencies){
+    $dependencies = Array();
+
+    foreach($commonDependencies as $i => $dependency){
+        foreach($dependency as $dependencyKey => $dependencyRenderDepth){
+            $depIndex = false;
+            foreach($dependencies as $j => $depEntry){
+                if($depEntry["Key"] == $dependencyKey){
+                    $depIndex = $j;
+                    break;
+                }
+            }
+
+            if($depIndex !== false){
+                $dependencies[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+            }else{
+                $dependencies[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
             }
         }
-
-        if($depIndex !== false){
-            $dep[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
-        }else{
-            $dep[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
-        }
-    }
-}
-
-foreach($pageSettings[$page]["dependencies"] as $dependencyKey => $dependencyRenderDepth){
-    $depIndex = false;
-    foreach($dep as $j => $depEntry){
-        if($depEntry["Key"] == $dependencyKey){
-            $depIndex = $j;
-            break;
-        }
     }
 
-    if($depIndex !== false){
-        $dep[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+    if(isset($pageSettings[$page]) && isset($pageSettings[$page]["dependencies"])){
+        foreach($pageSettings[$page]["dependencies"] as $dependencyKey => $dependencyRenderDepth){
+            $depIndex = false;
+            foreach($dependencies as $j => $depEntry){
+                if($depEntry["Key"] == $dependencyKey){
+                    $depIndex = $j;
+                    break;
+                }
+            }
+
+            if($depIndex !== false){
+                $dependencies[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+            }else{
+                $dependencies[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
+            }
+        }
     }else{
-        $dep[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
+        trigger_error("Unknown page: $page", E_USER_WARNING);
     }
+
+    return $dependencies;
 }
 
 StopTimer("Dependencies");
 
-function FindDependency($dependencyKey, &$dep){
+function FindDependency($dependencyKey, &$dependencies){
 	AddActionLog("FindDependency");
 	StartTimer("FindDependency");
-    foreach($dep as $j => $depEntry){
+    foreach($dependencies as $j => $depEntry){
         if($depEntry["Key"] == $dependencyKey){
             StopTimer("FindDependency");
             return $depEntry;
