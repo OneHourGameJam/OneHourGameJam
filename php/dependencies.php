@@ -251,6 +251,12 @@ $pageSettings = Array(
         "authorization_level" => "ADMIN",
         "template_file" => "adminlog.html",
         "dependencies" => Array("RenderAdminLog" => RENDER_DEPTH_NONE),
+    ),
+    "polls" => Array(
+        "page_title" => "Poll Results",
+        "authorization_level" => "ADMIN",
+        "template_file" => "polls.html",
+        "dependencies" => Array("RenderPolls" => RENDER_DEPTH_NONE),
     ), 
 );
 

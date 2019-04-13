@@ -1,0 +1,20 @@
+{{#user}}
+    {{#polls.LIST}}
+        <div class='panel {{#IS_ACTIVE}}panel-info{{/IS_ACTIVE}}{{^IS_ACTIVE}}panel-success{{/IS_ACTIVE}}'>
+            <div class='panel-heading'>
+                {{#IS_ACTIVE}}ACTIVE POLL - {{/IS_ACTIVE}}
+                {{^IS_ACTIVE}}POLL CONCLUDED - {{/IS_ACTIVE}}
+                {{{QUESTION}}} ({{TOTAL_VOTES}} votes; {{{USERS_VOTED_IN_POLL}}} users)<br />
+                {{DATE_STARTED}} - {{DATE_ENDED}}
+            </div>
+            <div class='panel-body'>
+                <ul>
+                    {{#OPTIONS}}
+                        <li>{{TEXT}} - {{VOTES}} votes ({{{PERCENTAGE_OF_ALL_VOTES_DISPLAY}}} of votes; {{{PERCENTAGE_OF_USERS_VOTES_DISPLAY}}} of voters)</li>
+                    {{/OPTIONS}}
+                </ul>
+            </div>
+        </div>
+    {{/polls.LIST}}
+{{/user}}
+

@@ -7,7 +7,8 @@ class PollModel{
 	public $DateStart;
 	public $DateEnd;
 	public $IsActive;
-	public $Options;
+    public $Options;
+    public $UsersVotedInPoll;
 }
 
 class PollOptionModel{
@@ -32,6 +33,31 @@ class PollData{
 
         $pollModels = Array();
         
+        $sql = "
+            SELECT p.poll_id, o.option_id, COUNT(1)
+            FROM poll p, poll_option o, poll_vote v
+            WHERE poll_deleted = 0
+              AND v.vote_deleted = 0
+              AND p.poll_id = o.option_poll_id 
+              AND o.option_id = v.vote_option_id
+            GROUP BY o.option_id
+        ";
+
+        $sql = "
+            SELECT voters_in_poll.poll_id, COUNT(1) AS users_voted_in_poll
+            FROM 
+            (
+                SELECT p.poll_id, v.vote_username
+                FROM poll p, poll_option o, poll_vote v
+                WHERE poll_deleted = 0
+                  AND v.vote_deleted = 0
+                  AND p.poll_id = o.option_poll_id 
+                  AND o.option_id = v.vote_option_id
+                GROUP BY v.vote_username, p.poll_id
+            ) voters_in_poll
+            GROUP BY voters_in_poll.poll_id
+        ";
+
         $sql = "
             SELECT * FROM
             (SELECT *, NOW() BETWEEN p.poll_start_datetime AND p.poll_end_datetime AS is_active FROM poll p, poll_option o WHERE p.poll_deleted = 0 and p.poll_id = o.option_poll_id) a
@@ -74,6 +100,28 @@ class PollData{
             $pollOptionModel->Votes = $optionVotes;
 
             $pollModels[$pollId]->Options[$optionId] = $pollOptionModel;
+        }
+
+        $sql = "
+            SELECT voters_in_poll.poll_id, COUNT(1) AS users_voted_in_poll
+            FROM 
+            (
+                SELECT p.poll_id, v.vote_username
+                FROM poll p, poll_option o, poll_vote v
+                WHERE poll_deleted = 0
+                  AND v.vote_deleted = 0
+                  AND p.poll_id = o.option_poll_id 
+                  AND o.option_id = v.vote_option_id
+                GROUP BY v.vote_username, p.poll_id
+            ) voters_in_poll
+            GROUP BY voters_in_poll.poll_id
+        ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+        while($pollData = mysqli_fetch_array($data)){
+            $pollId = intval($pollData["poll_id"]);
+            $usersVotedInPoll = intval($pollData["users_voted_in_poll"]);
+            $pollModels[$pollId]->UsersVotedInPoll = $usersVotedInPoll;
         }
 
         StopTimer("LoadPolls");

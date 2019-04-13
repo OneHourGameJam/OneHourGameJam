@@ -11,12 +11,16 @@ function RenderPolls(&$pollData){
 
 		$pollID = $pollModel->Id;
 		$totalVotes = 0;
+		$usersVotedInPoll = $pollModel->UsersVotedInPoll;
 
 		$poll["QUESTION"] = $pollModel->Question;
 		$poll["POLL_ID"] = $pollID;
 		$poll["USER_VOTED_IN_POLL"] = false;
 		$poll["OPTIONS"] = Array();
 		$poll["IS_ACTIVE"] = $pollModel->IsActive;
+		$poll["USERS_VOTED_IN_POLL"] = $usersVotedInPoll;
+		$poll["DATE_STARTED"] = $pollModel->DateStart;
+		$poll["DATE_ENDED"] = $pollModel->DateEnd;
 		
 		foreach($pollModel->Options as $optionID => $optionModel){
 			$option = Array();
@@ -38,14 +42,21 @@ function RenderPolls(&$pollData){
 			$poll["OPTIONS"][] = $option;
 		}
 
-		$poll["TOTAL_Votes"] = $totalVotes;
+		$poll["TOTAL_VOTES"] = $totalVotes;
 
 		//Compute percentages
 		if($totalVotes > 0){
 			foreach($poll["OPTIONS"] as $i => $pollOptionModel){
 				$optionPercentage = $pollOptionModel["VOTES"] / $totalVotes;
-				$poll["OPTIONS"][$i]["PERCENTAGE"] = $optionPercentage;
-				$poll["OPTIONS"][$i]["PERCENTAGE_DISPLAY"] = (intval($optionPercentage * 100)) . "%";
+				$poll["OPTIONS"][$i]["PERCENTAGE_OF_ALL_VOTES"] = $optionPercentage;
+				$poll["OPTIONS"][$i]["PERCENTAGE_OF_ALL_VOTES_DISPLAY"] = (intval($optionPercentage * 100)) . "%";
+			}
+		}
+		if($usersVotedInPoll > 0){
+			foreach($poll["OPTIONS"] as $i => $pollOptionModel){
+				$optionPercentage = $pollOptionModel["VOTES"] / $usersVotedInPoll;
+				$poll["OPTIONS"][$i]["PERCENTAGE_OF_USERS_VOTES"] = $optionPercentage;
+				$poll["OPTIONS"][$i]["PERCENTAGE_OF_USERS_VOTES_DISPLAY"] = (intval($optionPercentage * 100)) . "%";
 			}
 		}
 			
