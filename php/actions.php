@@ -6,6 +6,11 @@ function PerformPendingSiteAction(&$configData, &$siteActionData, &$loggedInUser
 	StartTimer("PerformPendingSiteAction");
 
     if(isset($_POST["action"])){
+
+        if (!confirmCSRF()) {
+            die("Potential CSRF Detected. If this is in error, please contact the site admin.<br>If you are a developer, add {{> csrf_token}} to the form you just submitted!");
+        }
+
         foreach($siteActionData->SiteActionModels as $i => $siteActionModel){
             $actionPostRequest = $siteActionModel->PostRequest;
             $actionPhpFile = $siteActionModel->PhpFile;

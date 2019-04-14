@@ -17,7 +17,8 @@ $mustache->setPartials(Array(
 	"poll" => file_get_contents($templateBasePath."poll.html"),
 	"notification" => file_get_contents($templateBasePath."notification.html"),
 	"cookie_notice" => file_get_contents($templateBasePath."cookienotice.html"),
-	"page" => file_get_contents($pageTemplateFile)
+	"page" => file_get_contents($pageTemplateFile),
+	"csrf_token" => file_get_contents($templateBasePath."csrf-token.html")
 ));
 
 print $mustache->render(file_get_contents($templateBasePath."index.html"), $dictionary);

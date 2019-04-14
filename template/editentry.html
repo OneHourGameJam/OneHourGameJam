@@ -2,6 +2,7 @@
 	<h3>Edit entry</h3>
 </p>
 <form method='post'>
+	{{> csrf_token}}
 	{{#page.editingentry}}
 		<div class="form-group">
 			<label for="entryID">Entry ID</label>

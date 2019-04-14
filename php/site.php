@@ -9,8 +9,11 @@ include_once("plugins/plugins.php");
 
 StartTimer("site.php");
 StartTimer("site.php - Include");
+
 //Global variable definition
 session_start();
+
+include_once("php/anti-csrf.php");
 include_once("php/global.php");
 include_once("php/dependencies.php");
 

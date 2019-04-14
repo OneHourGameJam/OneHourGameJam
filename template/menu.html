@@ -3,7 +3,9 @@
     {{#user}}
       <h3 class="panel-title">Hello {{user.display_name}}</h3>
       <form method='post'>
-        <button type="submit" name='action' value='logout' class="btn btn-default">Log out</button>
+				{{> csrf_token}}
+				<button type="submit" name='action' value='logout' class="btn btn-default">Log out</button>
+				{{> csrf_token}}
       </form>
     {{/user}}
     {{^user}}

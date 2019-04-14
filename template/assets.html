@@ -6,6 +6,7 @@
 </p>
 {{#user.is_admin}}
 	<form action='?page=editasset' method='POST'>
+		{{> csrf_token}}
 		<input type='hidden' name='action' value='editasset'>
 		<input type='submit' name='action' value='New' class="btn btn-default">
 	</form>
