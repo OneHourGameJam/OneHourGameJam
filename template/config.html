@@ -2,6 +2,7 @@
 	<h3>Edit configuration</h3>
 </p>
 <form method='post'>
+	{{> csrf_token}}
 	{{#CONFIG.LIST}}
 		<div class='panel panel-info'>
 			<div class='panel-heading'>
@@ -35,5 +36,6 @@
 	<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>
 </form>
 <form method='post'>
+	{{> csrf_token}}
 	<button type="submit" name='action' value='downloaddb' class="btn btn-default">Download Database</button>
 </form>

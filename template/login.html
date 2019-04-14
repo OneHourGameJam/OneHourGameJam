@@ -2,6 +2,7 @@
 	<h3>Log in or register</h3>
 </p>
 <form method='post'>
+	{{> csrf_token}}
 	<div class="form-group">
 		<label for="username">Username</label>
 		<input type="text" class="form-control" id="username" name='un' placeholder="Username" minlength='{{{CONFIG.VALUES.MINIMUM_USERNAME_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_USERNAME_LENGTH}}}'>
@@ -10,5 +11,6 @@
 		<label for="password">Password</label>
 		<input type="password" class="form-control" id="password" name='pw' placeholder="Password" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}'>
 	</div>
+	{{> csrf_token}}
 	<button type="submit" name='action' value='login' class="btn btn-default">Log in / register</button>
 </form>

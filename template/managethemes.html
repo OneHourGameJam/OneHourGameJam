@@ -82,7 +82,7 @@
 	<tr>
 		
 		<th class='themeTableCell themeTableCellCentered'>Select</th>
-		<form id="delete-themes" method='POST'></form>
+		<form id="delete-themes" method='POST'>{{> csrf_token}}</form>
 		{{^cookies.is_streamer}}
 			<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
 		{{/cookies.is_streamer}}
@@ -207,6 +207,7 @@
 				</td>
 				<td class='themeTableCell'>
 					<form method='POST' style='display: inline-block;'>
+						{{> csrf_token}}
 						<div class="btn-group">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 								Action
@@ -249,7 +250,7 @@
 	<tr>
 
 		<th class='themeTableCell themeTableCellCentered'>Select</th>
-		<form id="delete-themes" method='POST'></form>
+		<form id="delete-themes" method='POST'>{{> csrf_token}}</form>
 		{{^cookies.is_streamer}}
 		<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
 		{{/cookies.is_streamer}}
@@ -379,6 +380,7 @@
 		</td>
 		<td class='themeTableCell'>
 			<form method='POST' style='display: inline-block;'>
+				{{> csrf_token}}
 				<div class="btn-group">
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 						Action
@@ -432,6 +434,7 @@
 		<td class='themeTableCell themeTableCellCentered'>{{days_ago}}</td>
 		<td class='themeTableCell'>
 			<form method='POST' style='display: inline-block;'>
+				{{> csrf_token}}
 				<div class="btn-group">
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 						Action

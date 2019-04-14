@@ -2,6 +2,7 @@
 	<h3>Create a new jam</h3>
 </p>
 <form method='post'>
+	{{> csrf_token}}
 	<div class="form-group">
 		<label for="theme">Jam theme</label> (Top themes:{{#themes.top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/themes.top_themes}})
 		<input type="text" class="form-control" id="theme" name='theme' placeholder="Jam theme" required>
