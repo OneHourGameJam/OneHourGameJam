@@ -51,6 +51,7 @@ function Init(){
 
 	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
 
+	loadCSRFToken();
 	$dictionary["csrf_token"] = $_SESSION["csrf_token"];
  
 	if(FindDependency("RenderConfig", $dependencies) !== false){
