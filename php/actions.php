@@ -7,7 +7,7 @@ function PerformPendingSiteAction(&$configData, &$siteActionData, &$loggedInUser
 
     if(isset($_POST["action"])){
 
-        if (!confirmCSRF()) {
+        if (!checkCSRFToken()) {
             die("Potential CSRF Detected. If you made this request from the website, please contact the site admin.
                 <br>
                 If you are a developer, add {{> csrf_token}} to the form you just submitted!");
