@@ -2,6 +2,7 @@
 	<h3>Edit jam</h3>
 </p>
 <form method='post'>
+	{{> csrf_token}}
 	{{#page.editingjam}}
 		<input type="hidden" name="jamID" value="{{{jam_id}}}">
 		<div class="form-group">

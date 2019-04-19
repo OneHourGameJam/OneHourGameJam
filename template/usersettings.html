@@ -5,6 +5,7 @@
 	<b>Login username:</b> {{user.username}} (cannot be changed)
 </p>
 <form method='post'>
+	{{> csrf_token}}
 	<p style='margin-top: 50px;'>
 		<div class="form-group">
 			<label for="displayname">Display Name <span style='font-weight: normal'>(Required)</span></label>
@@ -34,6 +35,7 @@
 	</p>
 </form>
 <form method='post'>
+	{{> csrf_token}}
 	<p style='margin-top: 50px;'>
 		<div class="form-group">
 			<label for="passwordold">Current Password</label>

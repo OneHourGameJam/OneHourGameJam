@@ -96,6 +96,7 @@
                     <td style='text-align: right;'>
                         {{#vote_type_sponsor}}
                         <form method='POST' id='adminvote_{{username_alphanumeric}}_1' style='display: inline;'>
+                            {{> csrf_token}}
                             <input type='hidden' name='action' value='adminvote'>
                             <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                             <input type='hidden' name='adminVoteType' value='SPONSOR'>
@@ -103,24 +104,28 @@
                         </form>
                         {{/vote_type_sponsor}}
                         <form method='POST' id='adminvote_{{username_alphanumeric}}_2' style='display: inline;'>
+                            {{> csrf_token}}
                             <input type='hidden' name='action' value='adminvote'>
                             <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                             <input type='hidden' name='adminVoteType' value='FOR'>
                             <button type="button" class="btn btn-default {{#vote_type_for}}btn-success{{/vote_type_for}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_2");'><img src='{{{page.template_path}}}images/like.png'></button>
                         </form>
                         <form method='POST' id='adminvote_{{username_alphanumeric}}_3' style='display: inline;'>
+                            {{> csrf_token}}
                             <input type='hidden' name='action' value='adminvote'>
                             <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                             <input type='hidden' name='adminVoteType' value='NEUTRAL'>
                             <button type="button" class="btn btn-default {{#vote_type_neutral}}btn-warning{{/vote_type_neutral}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_3");'><img src='{{{page.template_path}}}images/no_preference.png'></button>
                         </form>
                         <form method='POST' id='adminvote_{{username_alphanumeric}}_4' style='display: inline;'>
+                            {{> csrf_token}}
                             <input type='hidden' name='action' value='adminvote'>
                             <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                             <input type='hidden' name='adminVoteType' value='AGAINST'>
                             <button type="button" class="btn btn-default {{#vote_type_against}}btn-danger{{/vote_type_against}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_4");'><img src='{{{page.template_path}}}images/dislike.png'></button>
                         </form>
                         <form method='POST' id='adminvote_{{username_alphanumeric}}_5' style='display: inline;'>
+                            {{> csrf_token}}
                             <input type='hidden' name='action' value='adminvote'>
                             <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                             <input type='hidden' name='adminVoteType' value='VETO'>
@@ -157,6 +162,7 @@
                 <td>{{#is_admin_candidate}}Yes{{/is_admin_candidate}}</td>
                 <td>
                     <form method='POST' id='adminvote_{{username_alphanumeric}}_1' style='display: inline;'>
+                        {{> csrf_token}}
                         <input type='hidden' name='action' value='adminvote'>
                         <input type='hidden' name='adminVoteSubjectUsername' value='{{{username}}}'>
                         <input type='hidden' name='adminVoteType' value='SPONSOR'>

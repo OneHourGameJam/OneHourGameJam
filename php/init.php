@@ -50,6 +50,9 @@ function Init(){
 	StartTimer("Init - Render");
 
 	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
+
+	loadCSRFToken();
+	$dictionary["csrf_token"] = $_SESSION["csrf_token"];
  
 	if(FindDependency("RenderConfig", $dependencies) !== false){
 		$dictionary["CONFIG"] = RenderConfig($configData);
