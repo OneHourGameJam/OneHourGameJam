@@ -1,20 +1,122 @@
-{{#user}}
-    {{#polls.LIST}}
-        <div class='panel {{#IS_ACTIVE}}panel-info{{/IS_ACTIVE}}{{^IS_ACTIVE}}panel-success{{/IS_ACTIVE}}'>
-            <div class='panel-heading'>
-                {{#IS_ACTIVE}}ACTIVE POLL - {{/IS_ACTIVE}}
-                {{^IS_ACTIVE}}POLL CONCLUDED - {{/IS_ACTIVE}}
-                {{{QUESTION}}} ({{TOTAL_VOTES}} votes; {{{USERS_VOTED_IN_POLL}}} users)<br />
-                {{DATE_STARTED}} - {{DATE_ENDED}}
-            </div>
-            <div class='panel-body'>
-                <ul>
+{{#polls.LIST}}
+    <div class='panel {{#IS_ACTIVE}}panel-info{{/IS_ACTIVE}}{{^IS_ACTIVE}}panel-success{{/IS_ACTIVE}}'>
+        <div class='panel-heading'>
+            {{#IS_ACTIVE}}ACTIVE POLL - {{/IS_ACTIVE}}
+            {{^IS_ACTIVE}}POLL CONCLUDED - {{/IS_ACTIVE}}
+            {{{QUESTION}}} ({{TOTAL_VOTES}} votes; {{{USERS_VOTED_IN_POLL}}} users)<br />
+            {{DATE_STARTED}} - {{DATE_ENDED}}
+        </div>
+        <div class='panel-body'>
+            <div class='col-md-4' style='padding-bottom: 50px;'>
+                <table style='width: 100%'>
+                    <thead>
+                        <th>Option</th>
+                        <th>Votes</th>
+                        <th>% of votes</th>
+                        <th>% of voters</th>
+                    </thead>
                     {{#OPTIONS}}
-                        <li>{{TEXT}} - {{VOTES}} votes ({{{PERCENTAGE_OF_ALL_VOTES_DISPLAY}}} of votes; {{{PERCENTAGE_OF_USERS_VOTES_DISPLAY}}} of voters)</li>
+                        <tr>
+                            <td>{{TEXT}}</td>
+                            <td>{{VOTES}}</td>
+                            <td>{{PERCENTAGE_OF_ALL_VOTES_DISPLAY}}</td>
+                            <td>{{PERCENTAGE_OF_USERS_VOTES_DISPLAY}}</td>
+                        </tr>
                     {{/OPTIONS}}
-                </ul>
+                </table>
+            </div>
+            <div class='col-md-4 alignCenter' style='padding-bottom: 50px;'>
+                <div class="chart-container" style="position: relative; height:30vh; width:100%">
+                    <canvas id="entriesChart-votes-{{{POLL_ID}}}"></canvas>
+                </div>
+                <script type='text/javascript'>
+                    var entriesChartCtx = $("#entriesChart-votes-{{{POLL_ID}}}");
+                    var entriesChart = new Chart(entriesChartCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: [{{{js_formatted_options_list}}}],
+                            datasets: [{
+                                label: '# of Votes',
+                                data: [{{{js_formatted_votes_list}}}],
+                                backgroundColor: [
+                                    {{{js_formatted_fill_color_list}}}
+                                ],
+                                borderColor: [
+                                    {{{js_formatted_border_color_list}}}
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: {
+                                duration: 0
+                            },
+                            tooltips: {
+                                mode: 'index'
+                            },
+                            title: {
+                                display: true,
+                                text: "Votes"
+                            },
+                            legend: {
+                                position: "top"
+                            }
+                        },
+                    });
+                </script>
+            </div>
+            <div class='col-md-4 alignCenter' style='padding-bottom: 50px;'>
+                <div class="chart-container" style="position: relative; height:30vh; width:100%">
+                    <canvas id="entriesChart-users-{{{POLL_ID}}}"></canvas>
+                </div>
+                <script type='text/javascript'>
+                    var entriesChartCtx = $("#entriesChart-users-{{{POLL_ID}}}");
+                    var entriesChart = new Chart(entriesChartCtx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: [{{{js_formatted_options_list}}}],
+                            datasets: [{
+                                label: '% of Voters',
+                                data: [{{{js_formatted_user_votes_percentage_list}}}],
+                                backgroundColor: [
+                                    {{{js_formatted_fill_color_list}}}
+                                ],
+                                borderColor: [
+                                    {{{js_formatted_border_color_list}}}
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: {
+                                duration: 0
+                            },
+                            tooltips: {
+                                mode: 'index'
+                            },
+                            title: {
+                                display: true,
+                                text: "% of Voters"
+                            },
+                            legend: {
+                                position: "top"
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                        max: 1
+                                    }
+                                }]
+                            }
+                        },
+                    });
+                </script>
             </div>
         </div>
-    {{/polls.LIST}}
-{{/user}}
-
+    </div>
+{{/polls.LIST}}
