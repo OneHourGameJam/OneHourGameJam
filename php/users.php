@@ -279,7 +279,7 @@ function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamDa
             $render["LIST"][] = $userRender;
         }
 
-        if(count($gameData->GamesByUsername[$username]) > 0){
+        if(isset($gameData->GamesByUsername[$username]) && count($gameData->GamesByUsername[$username]) > 0){
             $authorCount += 1;
         }
     }
