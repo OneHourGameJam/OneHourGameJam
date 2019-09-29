@@ -31,6 +31,7 @@ include_once("php/models/ConfigModel.php");
 include_once("php/models/AssetModel.php");
 include_once("php/models/AdminVoteModel.php");
 include_once("php/models/AdminLogModel.php");
+include_once("php/models/ThemeIdeasModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");

@@ -21,6 +21,7 @@ $mustache->setPartials(Array(
 	"csrf_token" => file_get_contents($templateBasePath."csrf-token.html")
 ));
 
+
 print $mustache->render(file_get_contents($templateBasePath."index.html"), $dictionary);
 ?>
 

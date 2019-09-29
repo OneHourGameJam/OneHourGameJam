@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $commonDependencies, $pageSettings, $page;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeasData, $commonDependencies, $pageSettings, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -45,6 +45,7 @@ function Init(){
     $satisfactionData = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($loggedInUser);
 	$messageData = new MessageData($siteActionData);
+	$themeIdeasData = new ThemeIdeasData($loggedInUser);
 	
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Render");
@@ -85,7 +86,8 @@ function Init(){
 		$dictionary["entries"] = RenderGames($userData, $gameData, $jamData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dependencies) !== false){
-		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themesByVoteDifference, $themesByPopularity, $loggedInUser);
+		$dependency = FindDependency("RenderThemes", $dependencies);
+		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAssets", $dependencies) !== false){
 		$dictionary["assets"] = RenderAssets($assetData);
@@ -108,7 +110,7 @@ function Init(){
 			$dictionary["stream"] = InitStream($configData);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeasData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dependencies) !== false){

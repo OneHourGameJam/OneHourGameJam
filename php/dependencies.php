@@ -38,6 +38,7 @@ define("RENDER_DEPTH_NONE",         0);
 define("RENDER_DEPTH_USERS",        pow(2, 0));
 define("RENDER_DEPTH_JAMS",         pow(2, 1));
 define("RENDER_DEPTH_GAMES",        pow(2, 2));
+define("RENDER_DEPTH_THEME_IDEAS",  pow(2, 3));
 define("RENDER_DEPTH_JAMS_GAMES",   RENDER_DEPTH_JAMS + RENDER_DEPTH_GAMES);
 define("RENDER_DEPTH_USERS_GAMES",  RENDER_DEPTH_USERS + RENDER_DEPTH_GAMES);
 
@@ -155,7 +156,7 @@ $pageSettings = Array(
         "authorization_level" => "ADMIN",
         "template_file" => "config.html",
         "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
-    ),  
+    ),
     "editcontent" => Array(
         "page_title" => "Manage Content",
         "authorization_level" => "ADMIN",
@@ -185,12 +186,12 @@ $pageSettings = Array(
         "authorization_level" => "ADMIN",
         "template_file" => "edituser.html",
         "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
-    ),  
+    ),
     "themes" => Array(
         "page_title" => "Theme Voting",
         "authorization_level" => "USER",
         "template_file" => "themes.html",
-        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE),
+        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_THEME_IDEAS),
     ),
     "managethemes" => Array(
         "page_title" => "Manage Themes",
@@ -203,7 +204,7 @@ $pageSettings = Array(
         "authorization_level" => "USER",
         "template_file" => "usersettings.html",
         "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE),
-    ),  
+    ), 
     "entries" => Array(
         "page_title" => "Entries",
         "authorization_level" => "NONE",
@@ -245,7 +246,7 @@ $pageSettings = Array(
         "authorization_level" => "USER",
         "template_file" => "userdata.html",
         "dependencies" => Array(  ),
-    ), 
+    ),
     "adminlog" => Array(
         "page_title" => "Admin Log",
         "authorization_level" => "ADMIN",

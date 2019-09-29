@@ -16,6 +16,29 @@
 				$("#"+btn_id+"-"+vote).addClass("btn-success");
 			}
 		});
+    }
+    
+	function SubmitThemeIdeas(themeID, ideasTextInputId){
+        var ideasUrlEncoded = encodeURI($("#"+ideasTextInputId).val());
+		$("#"+ideasTextInputId).removeClass("btn-danger");
+		$("#"+ideasTextInputId).removeClass("btn-success");
+		$("#"+ideasTextInputId).addClass("btn-warning");
+		$.get("api/submitideas?themeID="+themeID+"&ideas="+ideasUrlEncoded, function(data){
+			var d = jQuery.parseJSON(data)
+
+            $("#"+ideasTextInputId).removeClass("btn-danger");
+		    $("#"+ideasTextInputId).removeClass("btn-success");
+            $("#"+ideasTextInputId).removeClass("btn-warning");
+            console.log("TRY");
+			if(d.SUCCESS){
+                console.log("SUCCESS");
+				$("#"+ideasTextInputId).addClass("btn-success");
+			}
+			if(d.ERROR){
+                console.log("ERROR");
+				$("#"+ideasTextInputId).addClass("btn-danger");
+			}
+		});
 	}
 </script>
 
@@ -59,7 +82,7 @@
     Here you can manage your suggested themes and see their selection probability. Keep in mind that because of the number of themes, the probability for any individual theme will still tend to be low.
 </p>
 {{#themes.has_own_themes}}
-    <table>
+    <table style='width: 100%;'>
         <tr>
             <th colspan='3' class='themeTableCell themeTableCellCentered'>
                 Vote
@@ -67,11 +90,14 @@
             <th class='themeTableCell themeTableCellCentered'>
                 Theme
             </th>
-            {{#CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
-            <th class='themeTableCell themeTableCellCentered'>
-                Likelihood
+            {{#CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
+                <th class='themeTableCell themeTableCellCentered'>
+                    Likelihood
+                </th>
+            {{/CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
+            <th class='themeTableCell themeTableCellCentered' style='width: 100%;'>
+                Ideas (only visible to you)
             </th>
-            {{/CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
         </tr>
         {{#themes.suggested_themes}}
         {{#theme_visible}}
@@ -111,13 +137,16 @@
             <td class='themeTableCell'>
                 {{{theme}}}
             </td>
-            {{#CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
-            <td class='themeTableCell themeTableCellCentered'>
-                {{^cookies.is_streamer}}
-                    {{{UserThemeSelectionProbabilityByVoteDifferenceText}}}
-                {{/cookies.is_streamer}}
-            </td>
-            {{/CONFIG.PRETTY_PRINT.DISPLAY_THEME_PROBABILITY}}
+            {{#CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
+                <td class='themeTableCell themeTableCellCentered'>
+                    {{^cookies.is_streamer}}
+                        {{{UserThemeSelectionProbabilityByVoteDifferenceText}}}
+                    {{/cookies.is_streamer}}
+                </td>
+            {{/CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
+            <th class='themeTableCell themeTableCellCentered'>
+                <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some game ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
+            </th>
             <td class='themeTableCell'>
                 {{^cookies.is_streamer}}
                 <form method='POST' style='display: inline-block;' onsubmit="return confirm('Are you sure you want to delete your theme {{theme}}?');">
@@ -143,13 +172,16 @@
 <h4>Other Themes</h4>
 
 {{#themes.has_other_themes}}
-    <table>
+    <table style='width: 100%;'>
         <tr>
             <th colspan='3' class='themeTableCell themeTableCellCentered'>
                 Vote
             </th>
             <th class='themeTableCell themeTableCellCentered'>
                 Theme
+            </th>
+            <th class='themeTableCell themeTableCellCentered' style='width: 100%;'>
+                Ideas (only visible to you)
             </th>
         </tr>
         {{#themes.suggested_themes}}
@@ -190,6 +222,9 @@
             <td class='themeTableCell'>
                 {{{theme}}}
             </td>
+            <th class='themeTableCell themeTableCellCentered'>
+                <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some game ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
+            </th>
         </tr>
         {{/banned}}
         {{/is_own_theme}}

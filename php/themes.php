@@ -1,6 +1,6 @@
 <?php
 
-function RenderThemes(&$configData, &$jamData, &$themeData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser){
+function RenderThemes(&$configData, &$jamData, &$themeData, &$themeIdeasData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -156,6 +156,14 @@ function RenderThemes(&$configData, &$jamData, &$themeData, &$themesByVoteDiffer
 			}
 			//Apathy color: blue to red
 			$theme["apathy_color"] = "#".str_pad(dechex(0xBB + round(0x44 * $votesApathy)), 2, "0", STR_PAD_LEFT)."DD".str_pad(dechex(0xBB + round(0x44 * (1 - $votesApathy))), 2, "0", STR_PAD_LEFT);
+		}
+
+		if(($renderDepth & RENDER_DEPTH_THEME_IDEAS) > 0){
+			foreach($themeIdeasData->ThemeIdeas as $i => $themeIdeas){
+				if($themeIdeas->ThemeId == $themeID){
+					$theme["ideas"] = $themeIdeas->Ideas;
+				}
+			}
 		}
 		
 		$render["suggested_themes"][] = $theme;
