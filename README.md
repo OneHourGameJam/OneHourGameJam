@@ -7,6 +7,7 @@ Source code required to run your very own One hour game jam event.
 * Common Tasks
 * Migrating to a new server
 * Contributing
+* Overview of site structure, order of operations
 
 # Requirements
 Requires a web server with PHP 5.6 or later and MySQL or MariaDB. Older versions work on PHP 5.4.
