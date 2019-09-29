@@ -126,21 +126,21 @@ If you need help, please join us on Discord, the URL to which can be found on ht
 # Overview of site structure, order of operations
 
 - The entry point for every page load (except the API) is through index.php. From there it passes through stages:
-  - Site code aggregation (Giving access to all php files which are needed)
-    - php/site.php (includes all other required php files)
-    - php/global.php (defintes globally accessible variables)
-    - php/dependencies.php (definies which pages exist, a user's required authorization level to access them (guest, user, admin), and which text rendering needs to happen for that page (so we don't render all jams when viewing themes)
-  - Data retrieval (Data is copied from the database into PHP arrays)
-    - php/init.php (retrieves almost all data from the database and puts it into "Data" objects (For example `$userData = new UserData();`, irrespective of if it's needed by the page to be rendered of not)
-    - php/models.php -> Each Data object contains a list of Models. Each model corresponds to an entry. For example the `UserData` data object contains a list called `$UserModels` of `UserModel` objects, where each `UserModel` corresponds to a site user.
-  - Site Actions
-    - php/actions.php -> If there is a pending site action (login, game submission, etc.) then we perform it at this stage.
-    - php/actions/... -> The associated actions.php file is loaded and the action is performed (Site actions are configured in php/models/SiteActionModel.php)
-    - After the action is performed, the page is redirected to the action's result's redirect URL, as configured in SiteActionModel.php. This page load stops here, and after the redirect happens, the process begins again from the top, this time without a pending site action.
-  - Text Rendering
-    - php/init.php -> php/dependencies.php (Dependencies are retrieved from the list `$pageSettings`. These determine which bits of the rendered dictionary will be rendered, and to what level of detail (`Render Depth`). For example the main page needs each jam to also render the games in that jam, so the "main" page defines `"RenderJams" => RENDER_DEPTH_JAMS_GAMES,`, but the jams list page doesn't need games rendered, so it defines `"RenderAllJams" => RENDER_DEPTH_JAMS` which means that the games within each jam will not be rendered. The difference between `RenderJams` and `RenderAllJams` is not important for this example)
-    - php/presenter or RenderXYZ() functions -> All the required text rendering for a page happens next. Data objects, Models and render depth information is supplied as requires. The goal is to move all RenderXYZ() functions (like `RenderUsers(..)`) to Presenters, like `AdminLogPresenter`
-    - php/page.php RenderPageSpecific(..) -> Some pages have something special about them, this is handled in a catch-all `RenderPageSpecific(..)` method.
-  - Templates
-    - index.php -> All rendered text can now be found in `$dictionary`. Some general purpose templates (called partials) are loaded along with the page template to be rendered. The fully rendered page is then printed.
-    - template/... -> These mustache + html template files contain the structure and design of the page. See Mustache documentation for more detail on the {{XYZ}} tags, but they correspond to the structure of the contents of `$dictionary`, which was rendered into by the Text Rendering step.
+  - **Site code aggregation** (Giving access to all php files which are needed)
+    - php/site.php *includes all other required php files*
+    - php/global.php *defintes globally accessible variables*
+    - php/dependencies.php *definies which pages exist, a user's required authorization level to access them (guest, user, admin), and which text rendering needs to happen for that page (so we don't render all jams when viewing themes*
+  - **Data retrieval** (Data is copied from the database into PHP arrays)
+    - php/init.php *retrieves almost all data from the database and puts it into "Data" objects (For example `$userData = new UserData();`, irrespective of if it's needed by the page to be rendered of not*
+    - php/models.php *Each Data object contains a list of Models. Each model corresponds to an entry. For example the `UserData` data object contains a list called `$UserModels` of `UserModel` objects, where each `UserModel` corresponds to a site user.*
+  - **Site Actions**
+    - php/actions.php *If there is a pending site action (login, game submission, etc.) then we perform it at this stage.*
+    - php/actions/... *The associated actions.php file is loaded and the action is performed (Site actions are configured in php/models/SiteActionModel.php)*
+    - *After the action is performed, the page is redirected to the action's result's redirect URL, as configured in SiteActionModel.php. This page load stops here, and after the redirect happens, the process begins again from the top, this time without a pending site action.*
+  - **Text Rendering**
+    - php/init.php -> php/dependencies.php *Dependencies are retrieved from the list `$pageSettings`. These determine which bits of the rendered dictionary will be rendered, and to what level of detail (`Render Depth`). For example the main page needs each jam to also render the games in that jam, so the "main" page defines `"RenderJams" => RENDER_DEPTH_JAMS_GAMES,`, but the jams list page doesn't need games rendered, so it defines `"RenderAllJams" => RENDER_DEPTH_JAMS` which means that the games within each jam will not be rendered. The difference between `RenderJams` and `RenderAllJams` is not important for this example*
+    - php/presenter or RenderXYZ() functions *All the required text rendering for a page happens next. Data objects, Models and render depth information is supplied as requires. The goal is to move all RenderXYZ() functions (like `RenderUsers(..)`) to Presenters, like `AdminLogPresenter`*
+    - php/page.php RenderPageSpecific(..) *Some pages have something special about them, this is handled in a catch-all `RenderPageSpecific(..)` method.*
+  - **Templates**
+    - index.php *All rendered text can now be found in `$dictionary`. Some general purpose templates (called partials) are loaded along with the page template to be rendered. The fully rendered page is then printed.*
+    - template/... *These mustache + html template files contain the structure and design of the page. See Mustache documentation for more detail on the {{XYZ}} tags, but they correspond to the structure of the contents of `$dictionary`, which was rendered into by the Text Rendering step.*
