@@ -121,6 +121,12 @@ $pageSettings = Array(
         "template_file" => "login.html",
         "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),
+    "forgotpassword" => Array(
+        "page_title" => "Forgot Your Password?",
+        "authorization_level" => "NONE",
+        "template_file" => "forgotpassword.html",
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+    ),
     "submit" => Array(
         "page_title" => "Submit Game",
         "authorization_level" => "USER",
