@@ -2,6 +2,8 @@
 
 include_once("config/dbconfig.php");
 
+$dbVersion = 10;
+
 //Database connection
 $dbConn = mysqli_connect($dbAddress, $dbUsername, $dbPassword, $dbDatabaseName);
 if(!$dbConn ){
@@ -71,6 +73,95 @@ function GetDataForTable($tabName){
 
 	StopTimer("GetDataForTable");
 	return $tabData;
+}
+
+function MigrateDatabase() {
+	global $dbConn, $ip, $userAgent, $dbVersion;
+	$migrationsDir = "SQL/migrations/";
+
+
+	StartTimer("MigrateDatabase");
+
+	// Check our current database version
+	$sql = "SELECT config_value FROM config WHERE config_key = 'DATABASE_VERSION';";
+	$data = mysqli_query($dbConn, $sql);
+	
+	$config_result = mysqli_fetch_array($data);
+
+	if ($config_result == NULL) {
+		die("Unable to determine the database version. Please add the config value DATABASE_VERSION before running");
+	}
+
+	$currentDatabaseVersion = intval($config_result[0], 10);
+
+	// Check and see if we need to migrate.
+	if ($dbVersion < $currentDatabaseVersion) {
+		die('Database version is out of date with code version');
+	} elseif ($dbVersion == $currentDatabaseVersion) {
+		EndTimer("MigrateDatabase");
+		return;
+	}
+	
+	// Calculate what migrations exist
+	$migrations = array();
+	
+	$migrationDirFiles = scandir($migrationsDir);
+	foreach ($migrationDirFiles as $i => $migrationFile) {
+		// Get the version ID from the filename. Files need to be formatted <versionID>_<randomName>.sql
+		preg_match('/(\d+)_.*\.sql$/', $migrationFile, $matches);
+		if (isset($matches[1])) {
+			$migrationID = intval($matches[1], 10);
+			$migrations[$migrationID] = $migrationFile;
+		}
+	}
+
+	// Go through all of the needed migrations and run them
+	for($i = $currentDatabaseVersion+1; $i <= $maxMigrationID; $i++) {
+
+		// Make sure that migration ID actually exists. This is so we can have version 10, 11, 14, (notice the missing 13?)
+		if (isset($migrations[$i])) {
+			$migrationScript = $migrations[$i];
+
+			// Update our adminlog so we can see what happened before the migration
+			$escapedIP = mysqli_real_escape_string($dbConn, $ip);
+			$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
+			$escapedLog = mysqli_real_escape_string($dbConn, "Running $migrationScript to bring DATABASE_VERSION up to $i");
+			$sql = "
+				INSERT INTO admin_log
+				(log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content)
+				VALUES
+				(
+					null,
+					Now(),
+					'$escapedIP',
+					'$escapedUserAgent',
+					'AUTOMATIC',
+					'',
+					'DB_MIGRATION',
+					'$escapedLog'
+				);";
+		
+			mysqli_query($dbConn, $sql) or die("Migration failed to log to admin log, please notify site admin");;
+			$sql = "";
+
+			// Run the script
+			$sql = file_get_contents("$migrationsDir/$migrationScript");
+			mysqli_multi_query($dbConn, $sql) or die("Migration failed to run migration script, please notify site admin");
+			$sql = "";
+
+			// Update our config DATABASE_VALUE
+			$sql = "
+				UPDATE config
+				SET config_value = '$i',
+				config_lastedited = Now(),
+				config_lasteditedby = '-1'
+				WHERE config_key = 'DATABASE_VERSION';
+			";
+			mysqli_query($dbConn, $sql) or die("Migration failed to update DATABASE_VERSION, please notify site admin");
+			$sql = "";
+		}
+	}
+	EndTimer("MigrateDatabase");
 }
 
 function GetJSONDataForTable($tabName){
