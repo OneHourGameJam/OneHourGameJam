@@ -2,6 +2,7 @@
 
 include_once("config/dbconfig.php");
 
+// This should match the latest migration ID that should be applied
 $dbVersion = 10;
 
 //Database connection
@@ -98,7 +99,7 @@ function MigrateDatabase() {
 	if ($dbVersion < $currentDatabaseVersion) {
 		die('Database version is out of date with code version');
 	} elseif ($dbVersion == $currentDatabaseVersion) {
-		EndTimer("MigrateDatabase");
+		StopTimer("MigrateDatabase");
 		return;
 	}
 	
@@ -116,7 +117,7 @@ function MigrateDatabase() {
 	}
 
 	// Go through all of the needed migrations and run them
-	for($i = $currentDatabaseVersion+1; $i <= $maxMigrationID; $i++) {
+	for($i = $currentDatabaseVersion+1; $i <= $dbVersion; $i++) {
 
 		// Make sure that migration ID actually exists. This is so we can have version 10, 11, 14, (notice the missing 13?)
 		if (isset($migrations[$i])) {
@@ -161,7 +162,7 @@ function MigrateDatabase() {
 			$sql = "";
 		}
 	}
-	EndTimer("MigrateDatabase");
+	StopTimer("MigrateDatabase");
 }
 
 function GetJSONDataForTable($tabName){
