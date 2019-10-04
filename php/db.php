@@ -78,7 +78,7 @@ function GetDataForTable($tabName){
 
 function MigrateDatabase() {
 	global $dbConn, $ip, $userAgent, $dbVersion;
-	$migrationsDir = "SQL/migrations/";
+	$migrationsDir = "SQL/versions/";
 
 
 	StartTimer("MigrateDatabase");

@@ -52,7 +52,7 @@ If you prefer to follow a video tutorial, please watch the following:
 * Click the `+` in the left column to create a database. Name it `onehourgamejam` or something and choose `utf8mb4_bin` as the character set
 * Select the database in the list on the left
 * Click the `SQL` tab
-* Open the file `SQL/1hgj.sql` and copy its contents into the field in the SQL tab in phpmyadmin, Click Go
+* Open the file `SQL/versions/09_1hgj.sql` and copy its contents into the field in the SQL tab in phpmyadmin, Click Go
 * Rename the file `config/dbconfig_example.php` to `config/dbconfig.php`
 * Open the file and set the content to: (If you used a different database name in step 4.2, replace "onehourgamejam" with that)
 ```
