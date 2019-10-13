@@ -1,5 +1,4 @@
 <?php
-$templateBasePath = "template/";
 
 function ValidatePage($page, &$loggedInUser){
     global $pageSettings;
