@@ -88,7 +88,7 @@ function RunSetupAction() {
 	
 	$result = file_put_contents($dbConfigPath, $configData);
 	if ($result == FALSE) {
-		return "Unable to write config file. Please manually fill it out (database has been initialized)";
+		return "Unable to write config file. Please manually fill it out (database has been initialized). It can be located at $dbConfigPath";
 	}
 	
 	return "";
