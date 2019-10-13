@@ -109,7 +109,7 @@ function MigrateDatabase() {
 	$migrationDirFiles = scandir($migrationsDir);
 	foreach ($migrationDirFiles as $i => $migrationFile) {
 		// Get the version ID from the filename. Files need to be formatted <versionID>_<randomName>.sql
-		preg_match('/(\d+)_.*\.sql$/', $migrationFile, $matches);
+		preg_match('/^(\d+)_.*\.sql$/', $migrationFile, $matches);
 		if (isset($matches[1])) {
 			$migrationID = intval($matches[1], 10);
 			$migrations[$migrationID] = $migrationFile;
