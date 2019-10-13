@@ -3,6 +3,8 @@
 include_once("php/global.php");
 include_once("php/install_page.php");
 
+$templateBasePath = "template/";
+
 $dictionary = array();
 
 $dictionary['page'] = array(

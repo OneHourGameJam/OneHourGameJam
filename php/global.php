@@ -7,9 +7,6 @@ if(isset($_GET["page"])){
 	$page = strtolower(trim($_GET["page"]));
 }
 
-
-$templateBasePath = "template/";
-
 $warnings = Array();
 $loggedInUser = "";
 $loginChecked = false;
