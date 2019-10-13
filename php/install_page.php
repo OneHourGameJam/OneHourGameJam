@@ -7,7 +7,7 @@ function RunInstallPage(&$dictionary) {
 
 	// Safety check, make sure that this is a fresh installation
 	if (file_exists($dbConfigPath)) {
-		$dictionary['error_message'] = "Database has been configured already! Please delete the dbconfig.php file to start the installation process.";
+		$dictionary['error_message'] = "Database has been configured already! Please delete the $dbConfigPath file to start the installation process.";
 		$dictionary['template_file'] = 'install_fail.html';
 		return;
 	}
