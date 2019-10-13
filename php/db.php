@@ -147,8 +147,16 @@ function MigrateDatabase() {
 
 			// Run the script
 			$sql = file_get_contents("$migrationsDir/$migrationScript");
-			mysqli_multi_query($dbConn, $sql) or die("Migration failed to run migration script, please notify site admin");
-			$sql = "";
+			if(mysqli_multi_query($dbConn, $sql)) {
+				do {
+					mysqli_next_result($dbConn);
+				}
+				while(mysqli_more_results($dbConn));
+			}
+		
+			if(mysqli_errno($dbConn)) {
+				die("Migration failed to run migration script $i, please notify site admin.");
+			}
 
 			// Update our config DATABASE_VALUE
 			$sql = "
