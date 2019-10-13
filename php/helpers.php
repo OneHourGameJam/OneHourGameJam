@@ -270,7 +270,12 @@ function ArrayToHTML($array){
 	foreach($array as $id => $row){
 		$str .= "<tr style='border: solid 1px'><td>$id</td>";
 		foreach($columnNames as $columnName) {
-			$value = $row[$columnName];
+			$value = "";
+			
+			if (isset($row[$columnName])) {
+				$value = $row[$columnName];
+			}
+
 			$str .= "<td style='border: solid 1px'>";
 			$str .= "$value";
 			$str .= "</td>";
