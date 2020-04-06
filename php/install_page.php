@@ -1,6 +1,13 @@
 <?php
 
 $dbConfigPath = "config/dbconfig.php";
+$baseDatabaseSqlFile = "SQL/1hgj.sql";
+
+function IsDatabaseConfigFilePresent(){
+	global $dbConfigPath;
+
+	return file_exists($dbConfigPath);
+}
 
 function RunInstallPage(&$dictionary) {
 	global $dbConfigPath;
@@ -35,12 +42,18 @@ function RunInstallPage(&$dictionary) {
 
 // Runs the setup and returns any errors encountered
 function RunSetupAction() {
-	global $dbConfigPath;
+	global $dbConfigPath, $baseDatabaseSqlFile;
+
+	if(!isset($_POST["dbHost"]) || !isset($_POST["dbUsername"]) || !isset($_POST["dbPassword"]) || !isset($_POST["dbName"])){
+		die("Some setup parameters were not set up correctly");
+	}
 
 	$dbHost = $_POST["dbHost"];
 	$dbUser = $_POST["dbUsername"];
 	$dbPassword = $_POST["dbPassword"];
 	$dbName = $_POST["dbName"];
+	
+	$initialiseDatabase = isset($_POST["initialiseDatabase"]);
 
 	// Check connection
 	$conn = @mysqli_connect($dbHost, $dbUser, $dbPassword);
@@ -55,17 +68,32 @@ function RunSetupAction() {
 	if (@mysqli_query($conn, $sql) == FALSE) {
 		return "Unable to create/verify database: " . mysqli_error($conn);
 	}
+	$sql = "";
+
 	if (mysqli_select_db($conn, $dbName) == FALSE) {
 		return "Unable to select database: " . mysqli_error($conn);
 	}
-
+	
 	// Run the installation script
-	$sql = file_get_contents("SQL/1hgj.sql");
-	if(mysqli_multi_query($conn, $sql)) {
-		do {
-			mysqli_next_result($conn);
+	if($initialiseDatabase){
+
+		$sql = "SELECT COUNT(DISTINCT table_name) AS 'tables_in_database' FROM information_schema.columns WHERE table_schema = '$escapedDBName'";
+		$data = mysqli_query($conn, $sql);
+		$sql = "";
+	
+		$databaseInfo = mysqli_fetch_array($data);
+		if(!isset($databaseInfo["tables_in_database"]) || $databaseInfo["tables_in_database"] > 0){
+			die("The provided information points to a database which is not empty, but initialisation is desired. This would delete all data currently stored in the database. Please first drop all tables from this database, point to a new location, or if the database is an existing one hour game jam database, untick 'Initialise database' on the <a href='install.php'>install page</a>.");
 		}
-		while(mysqli_more_results($conn));
+
+		$sql = file_get_contents($baseDatabaseSqlFile);
+		if(mysqli_multi_query($conn, $sql)) {
+			do {
+				mysqli_next_result($conn);
+			}
+			while(mysqli_more_results($conn));
+		}
+		$sql = "";
 	}
 
 	if(mysqli_errno($conn)) {

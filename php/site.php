@@ -2,6 +2,11 @@
 //This file is the site's entry point, called directly from the main index.php
 //All other files in the /php dirrectory are included from here.
 
+include_once("php/install_page.php");
+if(!IsDatabaseConfigFilePresent()){
+    die("The site database has not yet been configured. Please set it up using the <a href='install.php'>install page</a>");
+}
+
 include_once("php/helpers.php");
 
 //Fetch plugins
