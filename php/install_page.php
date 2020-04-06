@@ -1,7 +1,7 @@
 <?php
 
 $dbConfigPath = "config/dbconfig.php";
-$baseDatabaseSqlFile = "SQL/1hgj.sql";
+$baseDatabaseSqlFile = "SQL/versions/09_1hgj.sql";
 
 function IsDatabaseConfigFilePresent(){
 	global $dbConfigPath;
