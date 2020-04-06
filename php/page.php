@@ -1,4 +1,5 @@
 <?php
+
 $templateBasePath = "template/";
 
 function ValidatePage($page, &$loggedInUser){

@@ -1,0 +1,27 @@
+<h1>Installation</h1>
+<p>It has been detected that your database isn't setup yet. To start the installation of OneHourGameJam software please input your database config information</p>
+<form method='post'>
+	<div class="form-group">
+		<label for="dbHost">MySQL Host</label>
+		<input type="text" class="form-control" id="dbHost" name='dbHost' placeholder="localhost">
+	</div>
+	<div class="form-group">
+		<label for="dbUsername">MySQL Username</label>
+		<input type="text" class="form-control" id="dbUsername" name='dbUsername' placeholder="Username">
+	</div>
+	<div class="form-group">
+		<label for="dbPassword">MySQL Password</label>
+		<input type="password" class="form-control" id="dbPassword" name='dbPassword' placeholder="Password">
+	</div>
+	<div class="form-group">
+		<label for="dbName">Database Name</label>
+		<input type="text" class="form-control" id="dbName" name='dbName' placeholder="Database Name">
+	</div>
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" value="checked" id="initialiseDatabase" name="initialiseDatabase" checked>
+		<label class="form-check-label" for="initialiseDatabase">
+			Initialise database (Uncheck if pointing to an existing database)
+		</label>
+	</div>
+	<button type="submit" name='action' value='setup' class="btn btn-default">Setup Database</button>
+</form>
