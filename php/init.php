@@ -10,6 +10,8 @@ function Init(){
 	AddActionLog("Init");
 	StartTimer("Init");
 
+	MigrateDatabase();
+
 	StartTimer("Init - Load Data");
 
 	UpdateCookies();

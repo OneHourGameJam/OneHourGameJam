@@ -1,0 +1,1 @@
+Files in this folder are here for reference and anyone running an older version of the 1hgj server. You will need to manually run these migration scripts to bring your 1hgj database version up to 9 before you can operate as normal.

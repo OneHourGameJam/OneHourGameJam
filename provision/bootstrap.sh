@@ -31,7 +31,7 @@ service apache2 restart
 
 
 # Init our database
-mysql -u root --password=root scotchbox < $WWW_ROOT/SQL/1hgj.sql
+mysql -u root --password=root scotchbox < $WWW_ROOT/SQL/versions/09_1hgj.sql
 
 #ignore mysql errors
 true

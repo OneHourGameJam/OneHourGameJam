@@ -1,5 +1,3 @@
-UPDATE config SET config_value = '10' WHERE (config_key = 'DATABASE_VERSION');
-
 CREATE TABLE `theme_ideas` (
   `idea_id` int(11) NOT NULL AUTO_INCREMENT,
   `idea_datetime` datetime DEFAULT NULL,
