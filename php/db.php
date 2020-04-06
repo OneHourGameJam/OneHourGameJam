@@ -78,10 +78,11 @@ function GetDataForTable($tabName){
 
 function MigrateDatabase() {
 	global $dbConn, $ip, $userAgent, $dbVersion;
-	$migrationsDir = "SQL/versions/";
-
-
+	AddActionLog("MigrateDatabase");
 	StartTimer("MigrateDatabase");
+
+	$migrationsDir = "SQL/versions/";	//end dir with a /
+
 
 	// Check our current database version
 	$sql = "SELECT config_value FROM config WHERE config_key = 'DATABASE_VERSION';";
@@ -98,39 +99,61 @@ function MigrateDatabase() {
 
 	// Check and see if we need to migrate.
 	if ($dbVersion < $currentDatabaseVersion) {
-		die('Database version is newer than code version. Please update the side code.');
+		die("Database version is newer than code version. Please update the site code to a version which corresponds to database version $dbVersion.");
 	} elseif ($dbVersion == $currentDatabaseVersion) {
 		StopTimer("MigrateDatabase");
 		return;
 	}
 	
-	// Calculate what migrations exist. $migrations is a map of Id => File pairs.
-	$migrations = array();
+	// Check what migrations exist. $migrationFileNames is a map of Id => File pairs.
+	// Each migration must have a file formatted as 08_Description.sql - this corresponds to the migration from database version 7 -> 8
+	$migrationFileNames = array();
 	
 	$migrationDirFiles = scandir($migrationsDir);
 	foreach ($migrationDirFiles as $migrationFile) {
+		if($migrationFile == "." || $migrationFile == ".."){
+			continue;
+		}
+
+		if(!is_file($migrationsDir.$migrationFile)){
+			continue;
+		}
+
+		if(strtolower(pathinfo($migrationsDir.$migrationFile, PATHINFO_EXTENSION)) != "sql"){
+			continue;
+		}
+
 		// Get the version ID from the filename. Files need to be formatted <versionID>_<randomName>.sql
 		preg_match('/^(\d+)_.*\.sql$/', $migrationFile, $matches);
 
 		// If the version ID is extracted from the file name, add it to the map of migrations
 		if (isset($matches[1])) {
-			$migrationID = intval($matches[1], 10);
-			$migrations[$migrationID] = $migrationFile;
+			$migrationId = intval($matches[1], 10);
+			if(isset($migrationFileNames[$migrationId])){
+				die("A duplicate migration script exists for database to version $migrationId - Aborting migration");
+			}
+			$migrationFileNames[$migrationId] = $migrationFile;
 		}
 	}
 
+	$lastUpdateDatabaseVersion = $currentDatabaseVersion;
+
 	// Go through all of the needed migrations and run them. Note that we can skip version IDs and this will work just fine.
 	// We also only run the migrations that are needed to resolve the delta, nothing after the target versino and nothing before.
-	for($newDatabaseVersion = $currentDatabaseVersion+1; $newDatabaseVersion <= $dbVersion; $newDatabaseVersion++) {
+	for($newDatabaseVersion = $currentDatabaseVersion + 1; $newDatabaseVersion <= $dbVersion; $newDatabaseVersion++) {
 
 		// Make sure that migration ID actually exists. This is so we can have version 10, 11, 14, (notice the missing 13?)
-		if (isset($migrations[$newDatabaseVersion])) {
-			$migrationScript = $migrations[$newDatabaseVersion];
+		if (!isset($migrationFileNames[$newDatabaseVersion])){
+			die("Missing migration script to database version $newDatabaseVersion");
+		}
+
+		if (isset($migrationFileNames[$newDatabaseVersion])) {
+			$newDatabaseVersionMigrationFile = $migrationFileNames[$newDatabaseVersion];
 
 			// Update our adminlog so we can see what happened before the migration
 			$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 			$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-			$escapedLog = mysqli_real_escape_string($dbConn, "Running $migrationScript to bring DATABASE_VERSION up to $newDatabaseVersion");
+			$escapedLog = mysqli_real_escape_string($dbConn, "Running $newDatabaseVersionMigrationFile to bring DATABASE_VERSION up to $newDatabaseVersion");
 			$sql = "
 				INSERT INTO admin_log
 				(log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content)
@@ -150,7 +173,7 @@ function MigrateDatabase() {
 			$sql = "";
 
 			// Run the script
-			$sql = file_get_contents("$migrationsDir/$migrationScript");
+			$sql = file_get_contents($migrationsDir.$newDatabaseVersionMigrationFile);
 			if(mysqli_multi_query($dbConn, $sql)) {
 				do {
 					mysqli_next_result($dbConn);
@@ -169,13 +192,19 @@ function MigrateDatabase() {
 				UPDATE config
 				SET config_value = '$escapedNewDatabaseVersion',
 				config_lastedited = Now(),
-				config_lasteditedby = '-1'
+				config_lasteditedby = 'AUTOMATIC_DATABASE_UPGRADE'
 				WHERE config_key = 'DATABASE_VERSION';
 			";
 			mysqli_query($dbConn, $sql) or die("Migration failed to update DATABASE_VERSION, please notify site admin");
 			$sql = "";
+
+			$lastUpdateDatabaseVersion = $newDatabaseVersion;
 		}
 	}
+
+	$currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; 
+	die("Database successfully updated to version $lastUpdateDatabaseVersion. <a href='$currentUrl'>Continue</a>");
+
 	StopTimer("MigrateDatabase");
 }
 
