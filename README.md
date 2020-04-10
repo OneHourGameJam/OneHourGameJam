@@ -11,7 +11,7 @@ Source code required to run your very own One hour game jam event.
 * Glossary of development terms
 
 # Requirements
-Requires a web server with PHP 5.6 or later and MySQL or MariaDB. Older versions work on PHP 5.4.
+Requires a web server with PHP 5.6 or later and MySQL or MariaDB.
 
 # Installing
 You can either install with vagrant or you can manually install (if you want to install on a production server)
@@ -47,37 +47,31 @@ If you prefer to follow a video tutorial, please watch the following:
 
 * Check out this repository to `C://XAMPP/htdocs/onehourgamejam` (Windows) or `/Applications/XAMPP/htdocs/onehourgamejam` (Mac)
 
-### 4: Set up Database
+### 4: Install website
 
-* Go to http://localhost/phpmyadmin
-* Click the `+` in the left column to create a database. Name it `onehourgamejam` or something and choose `utf8mb4_bin` as the character set
-* Select the database in the list on the left
-* Click the `SQL` tab
-* Open the file `SQL/versions/09_1hgj.sql` and copy its contents into the field in the SQL tab in phpmyadmin, Click Go
-* Rename the file `config/dbconfig_example.php` to `config/dbconfig.php`
-* Open the file and set the content to: (If you used a different database name in step 4.2, replace "onehourgamejam" with that)
-```
-$dbAddress = "localhost";
-$dbUsername = "root";
-$dbPassword = "";
-$dbDatabaseName = "onehourgamejam";
-```
+* Go to https://localhost/onehourgamejam/ - this should point you to the install page
+* Enter the following data into the form:
+  * Host: localhost
+  * Username: Root
+  * leave Password blank
+  * Database Name: onehourgamejam
+  * tick "Initialise database"
+* Press "Setup Database"
+* Go to http://localhost/onehourgamejam (A message confirming the database upgrade may appear)
 
 ### 5: Open the site
 
 * Go to http://localhost/onehourgamejam
-
-## First startup
-
-Open the page in your browser and register a user. This first user will be a site administrator.
+* Create your first user (The first user created will be an administrator)
+  * Press "Log in / register" in the menu
+  * Enter a username and password
+  * Press the "Log in / register" button
 
 ## Subsequent startups
 
-You only need to do steps `2: Start Web Server` and `### 5: Open the site`
+* Only the server must be started: See **2: Start Server**
 
 # Common tasks
-
-This project is in-development, so some administrative tasks do not yet have a pretty interface. It was much more important to add the functionality quickly and then add interfaces as needed. Interfaces for these tasks will be made soon<TM>, for now, follow the guide below.
 
 ## Registering
 
@@ -125,7 +119,9 @@ If you don't know how to code, that's okay. You can still offer a lot of value b
 
 If you need help, please join us on Discord, the URL to which can be found on https://onehourgamejam.com/
 
-# Overview of site structure, order of operations
+# In-depth overview of site structure, order of operations
+
+This section aims to describe how the site functions from a high level, intended for developers who wish to contribute to the site's development.
 
 - The entry point for every page load (except the API) is through index.php. From there it passes through stages:
   - **Site code aggregation** (Giving access to all php files which are needed)
