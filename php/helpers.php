@@ -16,7 +16,7 @@ function StartTimer($timerName){
 	global $actionTimers;
 
 	if(!isset($actionTimers[$timerName])){
-		$actionTimers[$timerName] = Array("totalTime" => 0, "timerRunning" => false, "lastTimestamp" => 0);
+		$actionTimers[$timerName] = Array("totalTime" => 0, "timerRunning" => false, "lastTimestamp" => 0, "timeInSeconds" => "", "calls" => "-");
 	}
 
 	if($actionTimers[$timerName]["timerRunning"]){
@@ -253,12 +253,15 @@ function ArrayToHTML($array){
 
 	$str = "<table style='border: solid 1px'>";
 
+	$columnNames = array();
+
 	foreach($array as $id => $row){
 		$str .= "<tr style='border: solid 2px'><td>#</td>";
 		foreach($row as $key => $value){
 			$str .= "<th style='border: solid 2px'>";
 			$str .= "$key";
 			$str .= "</th>";
+			array_push($columnNames, $key);
 		}
 		$str .= "</tr>";
 		break;
@@ -266,7 +269,13 @@ function ArrayToHTML($array){
 
 	foreach($array as $id => $row){
 		$str .= "<tr style='border: solid 1px'><td>$id</td>";
-		foreach($row as $key => $value){
+		foreach($columnNames as $columnName) {
+			$value = "";
+			
+			if (isset($row[$columnName])) {
+				$value = $row[$columnName];
+			}
+
 			$str .= "<td style='border: solid 1px'>";
 			$str .= "$value";
 			$str .= "</td>";
