@@ -59,7 +59,7 @@ class ThemeData{
 
             $theme = new ThemeModel();
             $theme->Id = $themeID;
-            $theme->Theme = htmlspecialchars($themeData["theme_text"], ENT_QUOTES);
+            $theme->Theme = $themeData["theme_text"];
             $theme->Author = $themeData["theme_author"];
             $theme->Banned = $themeData["theme_banned"];
             $theme->Deleted = $themeData["theme_deleted"];
@@ -74,6 +74,24 @@ class ThemeData{
 
         StopTimer("LoadThemes");
         return $themeModels;
+    }
+
+    function SoftDeleteThemeInDatabase($themeId){
+        global $dbConn;
+        AddActionLog("LoadThemes");
+        StartTimer("LoadThemes");
+
+        $cleanThemeId = mysqli_real_escape_string($dbConn, $themeId);
+
+        $sql = "
+            UPDATE theme
+            SET theme_deleted = 1
+            WHERE theme_id = $cleanThemeId;
+        ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+        
+        StopTimer("LoadThemes");
     }
 
     function LoadUserThemeVotes(&$loggedInUser){

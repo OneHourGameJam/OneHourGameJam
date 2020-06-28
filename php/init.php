@@ -50,6 +50,11 @@ function Init(){
 	$themeIdeasData = new ThemeIdeasData($loggedInUser);
 	
 	StopTimer("Init - Load Data");
+	StartTimer("Init - Process");
+
+	ProcessJamStates($jamData, $themeData, $configData, $adminLogData);
+
+	StopTimer("Init - Process");
 	StartTimer("Init - Render");
 
 	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);

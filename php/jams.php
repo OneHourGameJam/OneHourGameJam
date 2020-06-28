@@ -19,6 +19,47 @@ function GetNextJamDateAndTime(&$jamData){
 	return $nextJamStartTime;
 }
 
+function ProcessJamStates(&$jamData, &$themeData, &$configData, &$adminLogData){
+	AddActionLog("ProcessJamStates");
+	StartTimer("ProcessJamStates");
+
+	foreach($jamData->JamModels as $i => $jamModel){
+		if($jamModel->Deleted == 1){
+			if($jamModel->State != "DELETED"){
+				$jamData->UpdateJamStateInDatabase($jamModel->Id, "DELETED");
+			}
+			continue;
+		}
+		
+		//Hide theme of not-yet-started jams
+		$now = new DateTime("UTC");
+		$jamStartTime = new DateTime($jamModel->StartTime . " UTC");
+		$jamDurationInMinutes = intval($configData->ConfigModels["JAM_DURATION"]->Value);
+		$jamEndTime = clone $jamStartTime;
+		$jamEndTime->add(new DateInterval("PT".$jamDurationInMinutes."M"));
+
+		if($now > $jamEndTime){
+			//Past Jam (jam's over)
+			if($jamModel->State != "COMPLETED"){
+				$jamData->UpdateJamStateInDatabase($jamModel->Id, "COMPLETED");
+			}
+		}else if($now > $jamStartTime){
+			//Present Jam (started, hasn't finished yet)
+			if($jamModel->State != "ACTIVE"){
+				$jamData->UpdateJamStateInDatabase($jamModel->Id, "ACTIVE");
+				PruneThemes($themeData, $jamData, $configData, $adminLogData);
+			}
+		}else{
+			//Future Jam (not yet started)
+			if($jamModel->State != "SCHEDULED"){
+				$jamData->UpdateJamStateInDatabase($jamModel->Id, "SCHEDULED");
+			}
+		}
+	}
+	
+	StopTimer("ProcessJamStates");
+}
+
 function ParseJamColors($colorString){
 	AddActionLog("ParseJamColors");
 	StartTimer("ParseJamColors");
@@ -42,8 +83,10 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 	$render["jam_id"] = $jamModel->Id;
 	$render["username"] = $jamModel->Username;
 	$render["jam_number"] = $jamModel->JamNumber;
+	$render["theme_id"] = $jamModel->ThemeId;
 	$render["theme"] = $jamModel->Theme;
 	$render["start_time"] = $jamModel->StartTime;
+	$render["state"] = $jamModel->State;
 
 	if($jamModel->Deleted == 1){
 		$render["jam_deleted"] = 1;
@@ -255,17 +298,21 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextSchedul
 			return;
 		}
 
+		$selectedThemeId = -1;
 		$selectedTheme = "";
 
-		$selectedTheme = SelectRandomThemeByVoteDifference($ThemeData, $configData);
-		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomThemeByPopularity($ThemeData, $configData);
+		$selectedThemeId = SelectRandomThemeByVoteDifference($ThemeData, $configData);
+		if($selectedThemeId == -1){
+			$selectedThemeId = SelectRandomThemeByPopularity($ThemeData, $configData);
 		}
-		if($selectedTheme == ""){
-			$selectedTheme = SelectRandomTheme($ThemeData);
+		if($selectedThemeId == -1){
+			$selectedThemeId = SelectRandomTheme($ThemeData);
 		}
-		if($selectedTheme == ""){
+		if($selectedThemeId == -1){
+			//Failed to find a theme
 			$selectedTheme = "Any theme";
+		}else{
+			$selectedTheme = $ThemeData->ThemeModels[$selectedThemeId]->Theme;
 		}
 
 		//print "<br>A THEME WAS SELECTED";
@@ -274,7 +321,7 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextSchedul
 		$jamNumber = intval($currentJam["NUMBER"] + 1);
 		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
+		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedThemeId, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
 	}
 	
 	StopTimer("CheckNextJamSchedule");
@@ -288,7 +335,7 @@ function SelectRandomThemeByVoteDifference(&$ThemeData, &$configData){
 
 	$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
-	$selectedTheme = "";
+	$selectedThemeId = -1;
 
 	$availableThemes = Array();
 	$totalVotesDifference = 0;
@@ -317,7 +364,7 @@ function SelectRandomThemeByVoteDifference(&$ThemeData, &$configData){
 			continue;
 		}
 
-		$themeOption["theme"] = $themeModel->Theme;
+		$themeOption["theme_id"] = $themeModel->Id;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -333,14 +380,14 @@ function SelectRandomThemeByVoteDifference(&$ThemeData, &$configData){
 		foreach($availableThemes as $i => $availableTheme){
 			$runningVoteNumber -= $availableTheme["votes_difference"];
 			if($runningVoteNumber <= 0){
-				$selectedTheme = $availableTheme["theme"];
+				$selectedThemeId = $availableTheme["theme_id"];
 				break;
 			}
 		}
 	}
 
 	StopTimer("SelectRandomThemeByVoteDifference");
-	return $selectedTheme;
+	return $selectedThemeId;
 }
 
 //Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
@@ -350,7 +397,7 @@ function SelectRandomThemeByPopularity(&$ThemeData, &$configData){
 
 	$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
 
-	$selectedTheme = "";
+	$selectedThemeId = -1;
 
 	$availableThemes = Array();
 	$totalPopularity = 0;
@@ -379,7 +426,7 @@ function SelectRandomThemeByPopularity(&$ThemeData, &$configData){
 			continue;
 		}
 
-		$themeOption["theme"] = $themeModel->Theme;
+		$themeOption["theme_id"] = $themeModel->Id;
 		$themeOption["votes_for"] = $votesFor;
 		$themeOption["votes_difference"] = $votesDifference;
 		$themeOption["popularity"] = $votesPopularity;
@@ -395,14 +442,14 @@ function SelectRandomThemeByPopularity(&$ThemeData, &$configData){
 		foreach($availableThemes as $i => $availableTheme){
 			$runningPopularity -= $availableTheme["popularity"];
 			if($runningPopularity <= 0){
-				$selectedTheme = $availableTheme["theme"];
+				$selectedThemeId = $availableTheme["theme_id"];
 				break;
 			}
 		}
 	}
 
 	StopTimer("SelectRandomThemeByPopularity");
-	return $selectedTheme;
+	return $selectedThemeId;
 }
 
 //Selects a random theme with equal probability for all themes, not caring for number of votes
@@ -410,7 +457,7 @@ function SelectRandomTheme(&$ThemeData){
 	AddActionLog("SelectRandomTheme");
 	StartTimer("SelectRandomTheme");
 
-	$selectedTheme = "";
+	$selectedThemeId = -1;
 
 	$availableThemes = Array();
 	foreach($ThemeData->ThemeModels as $id => $themeModel){
@@ -420,18 +467,18 @@ function SelectRandomTheme(&$ThemeData){
 			continue;
 		}
 
-		$themeOption["theme"] = $themeModel->Theme;
+		$themeOption["theme_id"] = $themeModel->Id;
 
 		$availableThemes[] = $themeOption;
 	}
 
 	if(count($availableThemes) > 0){
 		$selectedIndex = rand(0, count($availableThemes));
-		$selectedTheme = $availableThemes[$selectedIndex]["theme"];
+		$selectedThemeId = $availableThemes[$selectedIndex]["theme_id"];
 	}
 
 	StopTimer("SelectRandomTheme");
-	return $selectedTheme;
+	return $selectedThemeId;
 }
 
 // Returns a jam given its number.

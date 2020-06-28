@@ -44,7 +44,7 @@ function InitStream(&$configData){
 		file_put_contents("cache/twitch_stream.json", json_encode($data));
 	}
 
-	if(isset($data) && count($data["data"]) > 0){
+	if(isset($data) && isset($data["data"]) && count($data["data"]) > 0){
 		if(isset($data["data"][0]["type"]) && $data["data"][0]["type"] == "live"){
 			$render["IS_STREAM_ACTIVE"] = 1;
 			$render["STREAMER_CHANNEL"] = $configData->ConfigModels["STREAMER_TWITCH_NAME"]->Value;

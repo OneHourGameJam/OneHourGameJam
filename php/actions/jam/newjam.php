@@ -60,7 +60,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
 
-	$jamData->AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
+	$jamData->AddJamToDatabase($ip, $userAgent, $username, $newJam["jam_number"], -2, $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
 
 	return "SUCCESS";
 }
