@@ -1,8 +1,8 @@
 <?php
 
 //Removes an array of suggested themes
-function RemoveThemes($removedThemes){
-	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
+function RemoveThemes($deletedThemeIds){
+	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData, $themeData;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -19,31 +19,42 @@ function RemoveThemes($removedThemes){
 
 	$error = false;
 
-	foreach($removedThemes as $removedTheme){
-		$removedTheme = trim($removedTheme);
-		if($removedTheme == ""){
+	foreach($deletedThemeIds as $deletedThemeId){
+		$themeFound = false;
+		$removedTheme = "";
+		foreach($themeData->ThemeModels as $id => $themeModel) {
+			if ($themeModel->Deleted != 0){
+				continue;
+			}
+			if ($themeModel->Id == $deletedThemeId) {
+				$removedTheme = $themeModel->Theme;
+				$themeFound = true;
+			}
+		}
+
+		if(!$themeFound){
 			$error = true;
 			continue;
 		}
 
-		$clean_removedTheme = mysqli_real_escape_string($dbConn, $removedTheme);
+		$cleanThemeId = mysqli_real_escape_string($dbConn, $deletedThemeId);
 
 		//Check that theme actually exists
-		$sql = "SELECT theme_id FROM theme WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
+		$sql = "SELECT theme_id FROM theme WHERE theme_deleted != 1 AND theme_id = '$cleanThemeId'";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
-	
+
 		if(mysqli_num_rows($data) == 0){
-			$error = true;
-			continue;
+			return "THEME_DOES_NOT_EXIST";
 		}
-	
-		$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
+
+		$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_id = '$cleanThemeId'";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
-	
+
 		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
 	}
+
 	if($error){
 		return "FAILURE";
 	}
@@ -58,10 +69,14 @@ function PerformAction(&$loggedInUser){
 		if (!isset($_POST['selected-themes'])) {
 			return "NO_THEMES_SELECTED";
 		}
-		$deletedThemes = $_POST['selected-themes'];
-		if(!empty($deletedThemes)){
-			return RemoveThemes($deletedThemes);
+
+		$deletedThemeIds = $_POST['selected-themes'];
+		
+		if(empty($deletedThemeIds)){
+			return "NO_THEMES_SELECTED";
 		}
+		
+		return RemoveThemes($deletedThemeIds);
 	}
 	else{
 		return "FAILURE";

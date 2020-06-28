@@ -132,7 +132,7 @@
 			{{^cookies.is_streamer}}
 				<tr>
 				<td class='themeTableCell themeTableCellCentered'>
-					<input type="checkbox" name="selected-themes[]" value="{{{theme}}}" form="delete-themes">
+					<input type="checkbox" name="selected-themes[]" value="{{{theme_id}}}" form="delete-themes">
 				</td>
 				<td class='themeTableCell themeTableCellCentered'>
 					{{#is_old}}
@@ -220,7 +220,7 @@
 								</li>
 							</ul>
 						</div>
-						<input type='hidden' name='theme' value='{{{theme}}}'>
+						<input type='hidden' name='theme_id' value='{{{theme_id}}}'>
 						<input type='hidden' name='pageid' value='managethemes'>
 					</form>
 				</td>
@@ -300,7 +300,7 @@
 	{{^cookies.is_streamer}}
 	<tr>
 		<td class='themeTableCell themeTableCellCentered'>
-			<input type="checkbox" name="selected-themes[]" value="{{{theme}}}" form="delete-themes">
+			<input type="checkbox" name="selected-themes[]" value="{{{theme_id}}}" form="delete-themes">
 		</td>
 		<td class='themeTableCell themeTableCellCentered'>
 			{{#is_old}}
@@ -394,7 +394,7 @@
 						</li>
 					</ul>
 				</div>
-				<input type='hidden' name='theme' value='{{{theme}}}'>
+				<input type='hidden' name='theme_id' value='{{{theme_id}}}'>
 				<input type='hidden' name='pageid' value='managethemes'>
 			</form>
 		</td>
@@ -424,7 +424,7 @@
 	{{^cookies.is_streamer}}
 	<tr>
 		<td class='themeTableCell themeTableCellCentered'>
-			<input	 type="checkbox" name="selected-themes[]" value="{{{theme}}}" form="delete-themes">
+			<input	 type="checkbox" name="selected-themes[]" value="{{{theme_id}}}" form="delete-themes">
 		</td>
 		<td class='themeTableCell themeTableCellCentered'>
 			<img src='{{{page.template_path}}}images/ban.png' title='Banned'>
@@ -446,7 +446,7 @@
 						</li>
 					</ul>
 				</div>
-				<input type='hidden' name='theme' value='{{{theme}}}'>
+				<input type='hidden' name='theme_id' value='{{{theme_id}}}'>
 				<input type='hidden' name='pageid' value='managethemes'>
 			</form>
 		</td>

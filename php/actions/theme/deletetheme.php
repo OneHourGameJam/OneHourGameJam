@@ -1,7 +1,7 @@
 <?php
 
 //Removes a suggested theme
-function RemoveTheme($removedTheme, $pageId){
+function RemoveTheme($themeId, $pageId){
 	global $themeData, $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
 
 	//Authorize user (logged in)
@@ -11,19 +11,20 @@ function RemoveTheme($removedTheme, $pageId){
 
 	//Check that the theme exists and get the user of the given theme
 	$themeAuthor = "";
+	$themeFound = false;
+	$removedTheme = "";
 	foreach($themeData->ThemeModels as $id => $themeModel) {
 		if ($themeModel->Deleted != 0){
 			continue;
 		}
-		if ($themeModel->Banned != 0){
-			continue;
-		}
-		if ($themeModel->Theme == $removedTheme) {
+		if ($themeModel->Id == $themeId) {
 			$themeAuthor = $themeModel->Author;
+			$removedTheme = $themeModel->Theme;
+			$themeFound = true;
 		}
 	}
 
-	if($themeAuthor == ""){
+	if(!$themeFound){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
@@ -32,17 +33,12 @@ function RemoveTheme($removedTheme, $pageId){
 		return "NOT_AUTHORIZED";
 	}
 
-	$removedTheme = trim($removedTheme);
-	if($removedTheme == ""){
-		return "INVALID_THEME";
-	}
-
-	$clean_removedTheme = mysqli_real_escape_string($dbConn, $removedTheme);
-	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
-	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
+	$cleanThemeId = mysqli_real_escape_string($dbConn, $themeId);
+	$cleanIp = mysqli_real_escape_string($dbConn, $ip);
+	$cleanUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
 
 	//Check that theme actually exists
-	$sql = "SELECT theme_id FROM theme WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
+	$sql = "SELECT theme_id FROM theme WHERE theme_deleted != 1 AND theme_id = '$cleanThemeId'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
@@ -50,7 +46,7 @@ function RemoveTheme($removedTheme, $pageId){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
-	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_text = '$clean_removedTheme'";
+	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_id = '$cleanThemeId'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
@@ -63,9 +59,9 @@ function RemoveTheme($removedTheme, $pageId){
 function PerformAction(&$loggedInUser){
 	global $_POST;
 
-	$deletedTheme = $_POST["theme"];
+	$deleteThemeId = $_POST["theme_id"];
 	$pageId = $_POST["pageid"];
-	return RemoveTheme($deletedTheme, $pageId);
+	return RemoveTheme($deleteThemeId, $pageId);
 	
 }
 

@@ -1,8 +1,8 @@
 <?php
 
 //Marks a suggested theme as banned
-function BanTheme($bannedTheme){
-	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
+function BanTheme($bannedThemeId){
+	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData, $themeData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -14,17 +14,28 @@ function BanTheme($bannedTheme){
 		return "NOT_AUTHORIZED";
 	}
 
-	$bannedTheme = trim($bannedTheme);
-	if($bannedTheme == ""){
-		return "INVALID_THEME";
+	$themeFound = false;
+	$bennedTheme = "";
+	foreach($themeData->ThemeModels as $id => $themeModel) {
+		if ($themeModel->Deleted != 0){
+			continue;
+		}
+		if ($themeModel->Id == $bannedThemeId) {
+			$bennedTheme = $themeModel->Theme;
+			$themeFound = true;
+		}
 	}
 
-	$clean_bannedTheme = mysqli_real_escape_string($dbConn, $bannedTheme);
+	if(!$themeFound){
+		return "THEME_DOES_NOT_EXIST";
+	}
+
+	$clean_bannedThemeId = mysqli_real_escape_string($dbConn, $bannedThemeId);
 	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
 	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
 
 	//Check that theme actually exists
-	$sql = "SELECT theme_id FROM theme WHERE theme_banned != 1 AND theme_text = '$clean_bannedTheme'";
+	$sql = "SELECT theme_id FROM theme WHERE theme_banned != 1 AND theme_id = '$clean_bannedThemeId'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
@@ -32,7 +43,7 @@ function BanTheme($bannedTheme){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
-	$sql = "UPDATE theme SET theme_banned = 1 WHERE theme_banned != 1 AND theme_text = '$clean_bannedTheme'";
+	$sql = "UPDATE theme SET theme_banned = 1 WHERE theme_banned != 1 AND theme_id = '$clean_bannedThemeId'";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
@@ -45,8 +56,8 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$bannedTheme = $_POST["theme"];
-		return BanTheme($bannedTheme);
+		$bannedThemeId = $_POST["theme_id"];
+		return BanTheme($bannedThemeId);
 	}
 }
 
