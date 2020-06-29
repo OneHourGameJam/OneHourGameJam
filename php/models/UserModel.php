@@ -46,10 +46,10 @@ class UserData{
                 FROM
                     user u LEFT JOIN
                     (
-                        SELECT log_admin_username, max(log_datetime) AS log_max_datetime
+                        SELECT log_admin_user_id, max(log_datetime) AS log_max_datetime
                         FROM admin_log
-                        GROUP BY log_admin_username
-                    ) al ON u.user_username = al.log_admin_username";
+                        GROUP BY log_admin_user_id
+                    ) al ON u.user_id = al.log_admin_user_id";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
     

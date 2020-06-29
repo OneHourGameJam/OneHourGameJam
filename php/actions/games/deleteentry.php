@@ -1,7 +1,7 @@
 <?php
 
 //Returns true / false based on whether or not the specified entry can be deleted
-function CanDeleteEntry($entryID){
+function CanDeleteEntry($entryId){
 	global $dbConn, $loggedInUser, $gameData, $adminLogData;
 
 	//Authorize user (is admin)
@@ -10,12 +10,12 @@ function CanDeleteEntry($entryID){
 	}
 
 	//Validate values
-	$entryID = intval($entryID);
-	if($entryID <= 0){
+	$entryId = intval($entryId);
+	if($entryId <= 0){
 		return FALSE;
 	}
 
-	if(!$gameData->EntryExists($entryID)){
+	if(!$gameData->EntryExists($entryId)){
 		return FALSE;
 	}
 
@@ -23,35 +23,38 @@ function CanDeleteEntry($entryID){
 }
 
 //Deletes an existing entry, identified by the entryID.
-function DeleteEntry($entryID){
-	global $jamData, $dbConn, $loggedInUser, $adminLogData;
+function DeleteEntry($entryId){
+	global $jamData, $dbConn, $loggedInUser, $adminLogData, $gameData, $userData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
 	}
 
-	if(!CanDeleteEntry($entryID)){
+	if(!CanDeleteEntry($entryId)){
 		return "CANNOT_DELETE_ENTRY";
-	}
-
-	//Validate values
-	$entryID = intval($entryID);
-	if($entryID <= 0){
-		return "INVALID_JAM_ID";
 	}
 
 	if(count($jamData->JamModels) == 0){
 		return "NO_JAMS_EXIST";
 	}
+	
+	$deletedEntryAuthor = $gameData->GameModels[$entryId]->Author;
 
-	$escapedEntryID = mysqli_real_escape_string($dbConn, "$entryID");
+	$escapedEntryId = mysqli_real_escape_string($dbConn, "$entryId");
 
-	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryID";
+	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryId";
 	$data = mysqli_query($dbConn, $sql);
-    $sql = "";
+	$sql = "";
+	
+	$deletedEntryAuthorId = "NULL";
+	foreach($userData->UserModels as $i => $userModel){
+		if($userModel->Username == $deletedEntryAuthor){
+			$deletedEntryAuthorId = $userModel->Id;
+		}
+	}
 
-    $adminLogData->AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryID soft deleted", "", $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryId soft deleted", $deletedEntryAuthorId, $loggedInUser->Id, "");
 
 	return "SUCCESS";
 }
@@ -60,9 +63,9 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$entryID = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
-		if($entryID != ""){
-			return DeleteEntry(intval($entryID));
+		$entryId = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
+		if($entryId != ""){
+			return DeleteEntry(intval($entryId));
 		}
 	}
 }

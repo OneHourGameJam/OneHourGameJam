@@ -5,8 +5,9 @@ class AdminLogModel{
 	public $DateTime;
 	public $Ip;
 	public $UserAgent;
-	public $AdminUsername;
-	public $SubjectUsername;
+	public $AdminUsernameOverride;
+	public $AdminUserId;
+	public $SubjectUserId;
 	public $LogType;
 	public $LogContent;
 }
@@ -25,7 +26,7 @@ class AdminLogData{
 
         $adminLogModels = Array();
 
-        $sql = "select log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content from admin_log order by log_id desc";
+        $sql = "select log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content from admin_log order by log_id desc";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
 
@@ -36,8 +37,9 @@ class AdminLogData{
             $adminLogModel->DateTime = $info["log_datetime"];
             $adminLogModel->Ip = $info["log_ip"];
             $adminLogModel->UserAgent = $info["log_user_agent"];
-            $adminLogModel->AdminUsername = $info["log_admin_username"];
-            $adminLogModel->SubjectUsername = $info["log_subject_username"];
+            $adminLogModel->AdminUsernameOverride = $info["log_admin_username_override"];
+            $adminLogModel->AdminUserId = $info["log_admin_user_id"];
+            $adminLogModel->SubjectUserId = $info["log_subject_user_id"];
             $adminLogModel->LogType = $info["log_type"];
             $adminLogModel->LogContent = $info["log_content"];
 
@@ -48,29 +50,31 @@ class AdminLogData{
         return $adminLogModels;
     }
 
-    function AddToAdminLog($logType, $logContent, $logSubjectUsername, $logAdminUsername){
+    function AddToAdminLog($logType, $logContent, $logSubjectUserId, $logAdminUserId, $logAdminUsernameOverride){
         global $dbConn, $ip, $userAgent;
         AddActionLog("AddToAdminLog");
         StartTimer("AddToAdminLog");
     
         $escapedIP = mysqli_real_escape_string($dbConn, $ip);
         $escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-        $escapedAdminUsername = mysqli_real_escape_string($dbConn, $logAdminUsername);
-        $escapedSubjectUsername = mysqli_real_escape_string($dbConn, $logSubjectUsername);
+        $escapedAdminUsernameOverride = mysqli_real_escape_string($dbConn, $logAdminUsernameOverride);
+        $escapedAdminUserId = mysqli_real_escape_string($dbConn, $logAdminUserId);
+        $escapedSubjectUserId = mysqli_real_escape_string($dbConn, $logSubjectUserId);
         $escapedLogType = mysqli_real_escape_string($dbConn, $logType);
         $escapedLogContent = mysqli_real_escape_string($dbConn, $logContent);
     
         $sql = "
             INSERT INTO admin_log
-            (log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content)
+            (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content)
             VALUES
             (
                 null,
                 Now(),
                 '$escapedIP',
                 '$escapedUserAgent',
-                '$escapedAdminUsername',
-                '$escapedSubjectUsername',
+                '$escapedAdminUsernameOverride',
+                $escapedAdminUserId,
+                $escapedSubjectUserId,
                 '$escapedLogType',
                 '$escapedLogContent'
             );";
@@ -80,16 +84,16 @@ class AdminLogData{
         StopTimer("AddToAdminLog");
     }
     
-    function GetAdminLogForAdminFormatted($username){
+    function GetAdminLogForAdminFormatted($adminUserId){
         global $dbConn;
         AddActionLog("GetAdminLogForAdminFormatted");
         StartTimer("GetAdminLogForAdminFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedAdminUserId = mysqli_real_escape_string($dbConn, $adminUserId);
         $sql = "
             SELECT *
             FROM admin_log
-            WHERE log_admin_username = '$escapedUsername';
+            WHERE log_admin_user_id = '$escapedAdminUserId';
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -98,16 +102,16 @@ class AdminLogData{
         return ArrayToHTML(MySQLDataToArray($data));
     }
     
-    function GetAdminLogForSubjectFormatted($username){
+    function GetAdminLogForSubjectFormatted($subjectUserId){
         global $dbConn;
         AddActionLog("GetAdminLogForSubjectFormatted");
         StartTimer("GetAdminLogForSubjectFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedSubjectUserId = mysqli_real_escape_string($dbConn, $subjectUserId);
         $sql = "
-            SELECT log_id, log_datetime, log_admin_username, log_subject_username, log_type, log_content
+            SELECT log_id, log_datetime, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content
             FROM admin_log
-            WHERE log_subject_username = '$escapedUsername';
+            WHERE log_subject_user_id = '$escapedSubjectUserId';
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

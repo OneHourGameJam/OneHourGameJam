@@ -146,6 +146,10 @@ function GetSuggestedNextJamDateTime(&$configData){
 
 	$nextSuggestedJamTime = strtotime("$jamDay +" . intval($configData->ConfigModels["JAM_TIME"]->Value) . " hours UTC");
 
+	if($nextSuggestedJamTime > strtotime("+7 DAYS")){
+		$nextSuggestedJamTime -= 7 * 24 * 60 * 60;
+	}
+
 	StopTimer("GetSuggestedNextJamDateTime");
 	return $nextSuggestedJamTime;
 }

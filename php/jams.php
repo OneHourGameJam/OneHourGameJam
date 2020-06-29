@@ -321,7 +321,7 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextSchedul
 		$jamNumber = intval($currentJam["NUMBER"] + 1);
 		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", "AUTOMATIC", $jamNumber, $selectedThemeId, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
+		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, "AUTOMATIC", $jamNumber, $selectedThemeId, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
 	}
 	
 	StopTimer("CheckNextJamSchedule");

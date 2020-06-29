@@ -446,7 +446,7 @@ function PruneThemes(&$themeData, &$jamData, &$configData, &$adminLogData){
 		$themeData->SoftDeleteThemeInDatabase($theme["id"]);
 		$removedTheme = $theme["theme"];
 		$deletionReason = $theme["delete_reason"];
-		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted. Reason: $deletionReason", "", "AUTOMATIC PRUNING");
+		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted. Reason: $deletionReason", "NULL", "NULL", "AUTOMATIC PRUNING");
 	}
 }
 

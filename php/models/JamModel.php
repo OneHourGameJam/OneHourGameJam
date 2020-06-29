@@ -53,7 +53,7 @@ class JamData{
     }
 
     //Adds the jam with the provided data into the database
-    function AddJamToDatabase($ip, $userAgent, $username, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, &$adminLogData){
+    function AddJamToDatabase($ip, $userAgent, $userId, $username, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, &$adminLogData){
         global $dbConn;
         AddActionLog("AddJamToDatabase");
         StartTimer("AddJamToDatabase");
@@ -97,9 +97,9 @@ class JamData{
     
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
-    
+
         StopTimer("AddJamToDatabase");
-        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "", $username);
+        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "NULL", ($userId > 0) ? $userId : "NULL", ($userId > 0) ? "" : $username);
     }
 
     function UpdateJamStateInDatabase($jamId, $newJamState){

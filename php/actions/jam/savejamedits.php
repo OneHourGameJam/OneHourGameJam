@@ -62,7 +62,7 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$adminLogData->AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "", $loggedInUser->Username);
+	$adminLogData->AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "NULL", $loggedInUser->Id, "");
 	
 	return "SUCCESS";
 }

@@ -20,8 +20,9 @@
             <tr>
                 <td>{{id}}</td>
                 <td>{{datetime}}</td>
-                <td>{{admin_username}}</td>
-                <td>{{subject_username}}</td>
+                <td>{{#admin_username_override}}{{admin_username_override}}{{/admin_username_override}}
+                    {{#admin_username}}User: {{admin_username}} ({{admin_user_id}}){{/admin_username}}</td>
+                <td>{{#subject_username}}User: {{subject_username}} ({{subject_user_id}}){{/subject_username}}</td>
                 <td>{{log_type}}</td>
                 <td>{{log_content}}</td>
             </tr>

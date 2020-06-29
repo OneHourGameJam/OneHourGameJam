@@ -51,7 +51,7 @@ function EditUserPassword($username, $newPassword1, $newPassword2){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    $adminLogData->AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $username, $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $userData->UserModels[$username]->Id, $loggedInUser->Id, "");
 
 	return "SUCCESS";
 }

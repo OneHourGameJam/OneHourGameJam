@@ -50,7 +50,7 @@ function RemoveTheme($themeId, $pageId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "", $loggedInUser->Username);
+    $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "NULL", $loggedInUser->Id, "");
 
 	// Can be triggered from both themes and managethemes, send user to correct location.
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";

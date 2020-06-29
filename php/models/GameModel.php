@@ -62,7 +62,7 @@ class GameData{
             $game->Color = $info["entry_color"];
             $game->Deleted = $info["entry_deleted"];
 
-            $gameModels[] = $game;
+            $gameModels[$game->Id] = $game;
         }
 
         StopTimer("LoadGames");

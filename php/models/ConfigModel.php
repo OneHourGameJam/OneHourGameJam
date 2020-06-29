@@ -79,7 +79,7 @@ class ConfigData{
     }
 
     // Saves config to database, does not authorize to ensure VerifyConfig() continues to work
-    function UpdateConfig($key, $value, $userID, $userUsername, &$adminLogData) {
+    function UpdateConfig($key, $value, $userID, $userUsernameOverride, &$adminLogData) {
         global $dbConn;
         AddActionLog("UpdateConfig");
         StartTimer("UpdateConfig");
@@ -100,7 +100,7 @@ class ConfigData{
             mysqli_query($dbConn, $sql);
             $sql = "";
     
-            $adminLogData->AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "", $userUsername);
+            $adminLogData->AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "NULL", ($userID > 0) ? $userID : "NULL", ($userID > 0) ? "" : $userUsernameOverride);
         }
     
         StopTimer("UpdateConfig");
