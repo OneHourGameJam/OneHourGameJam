@@ -21,7 +21,7 @@ class UserModel
     public $DaysSinceLastLogin;
     public $DaysSinceLastAdminAction;
     public $IsSponsored;
-    public $SponsoredBy;
+    public $SponsoredByUserId;
 }
 
 class UserData{
@@ -102,11 +102,11 @@ class UserData{
     
         //Get list of sponsored users to be administration candidates, ensuring the voter is still an admin and the candidate hasn't become an admin since the vote was cast
         $sql = "
-            SELECT v.vote_voter_username, v.vote_subject_username
+            SELECT v.vote_voter_user_id, v.vote_subject_user_id
             FROM admin_vote v, user u1, user u2
-            WHERE v.vote_voter_username = u1.user_username
+            WHERE v.vote_voter_user_id = u1.user_id
             AND u1.user_role = 1
-            AND v.vote_subject_username = u2.user_username
+            AND v.vote_subject_user_id = u2.user_id
             AND u2.user_role = 0
             AND v.vote_type = 'SPONSOR'
         ";
@@ -114,11 +114,15 @@ class UserData{
         $sql = "";
     
         while($info = mysqli_fetch_array($data)){
-            $voteVoterUsername = $info["vote_voter_username"];
-            $voteSubjectUsername = $info["vote_subject_username"];
+            $voteVoterUserId = $info["vote_voter_user_id"];
+            $voteSubjectUserId = $info["vote_subject_user_id"];
     
-            $userModels[$voteSubjectUsername]->IsSponsored = 1;
-            $userModels[$voteSubjectUsername]->SponsoredBy = $voteVoterUsername;
+            foreach($userModels as $i => $userModel){
+                if($userModel->Id == $voteSubjectUserId){
+                    $userModels[$i]->IsSponsored = 1;
+                    $userModels[$i]->SponsoredByUserId = $voteVoterUserId;
+                }
+            }
         }
     
         StopTimer("LoadUsers");

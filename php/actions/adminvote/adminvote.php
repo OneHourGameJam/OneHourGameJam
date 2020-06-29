@@ -1,6 +1,6 @@
 <?php
 
-function CastVoteForAdmin($subjectUsername, $voteType){
+function CastVoteForAdmin($subjectUserId, $voteType){
 	global $dbConn, $ip, $userAgent, $loggedInUser;
 
 	//Authorize user (logged in)
@@ -15,9 +15,31 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 
 	$escapedIP = mysqli_real_escape_string($dbConn, $ip);
 	$escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
-	$escapedSubjectUsername = mysqli_real_escape_string($dbConn, $subjectUsername);
+	$escapedVoterId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
+	$escapedSubjectId = mysqli_real_escape_string($dbConn, $subjectUserId);
 	$escapedVoteType = mysqli_real_escape_string($dbConn, $voteType);
+
+	//Delete an admin's existing vote for the same user, if this exists
+	$sql = "
+		SELECT vote_id
+		FROM admin_vote
+		WHERE vote_voter_user_id = $escapedVoterId
+			AND vote_subject_user_id = $escapedSubjectId;
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+
+	if($info = mysqli_fetch_array($data)){
+		$voteID = $info["vote_id"];
+		$escapedVoteID = mysqli_real_escape_string($dbConn, $voteID);
+
+		$sql = "
+			DELETE FROM admin_vote
+			WHERE vote_id = $escapedVoteID
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+	}
 
 	switch($voteType){
 		case "FOR":
@@ -30,8 +52,8 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 			$sql = "
 				SELECT vote_id
 				FROM admin_vote
-				WHERE vote_voter_username = '$escapedVoterUsername'
-				  AND vote_type = '$escapedVoteType'
+				WHERE vote_voter_user_id = $escapedVoterId
+				  AND vote_type = $escapedVoteType
 			";
 			$data = mysqli_query($dbConn, $sql);
 			$sql = "";
@@ -55,51 +77,38 @@ function CastVoteForAdmin($subjectUsername, $voteType){
 	$sql = "
 		SELECT vote_id
 		FROM admin_vote
-		WHERE vote_voter_username = '$escapedVoterUsername'
-		  AND vote_subject_username = '$escapedSubjectUsername'
+		WHERE vote_voter_user_id = $escapedVoterId
+		  AND vote_subject_user_id = $escapedSubjectId
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	if($info = mysqli_fetch_array($data)){
-		//A vote already exists, update it
-		$sql = "
-			UPDATE admin_vote
-			SET vote_type = '$escapedVoteType'
-			WHERE vote_voter_username = '$escapedVoterUsername'
-			  AND vote_subject_username = '$escapedSubjectUsername'
-		";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-		return "SUCESS_UPDATE";
-	}else{
-		//New vote for admin
-		$sql = "
-			INSERT INTO admin_vote
-			(vote_id, vote_datetime, vote_ip, vote_user_agent, vote_voter_username, vote_subject_username, vote_type)
-			VALUES
-			(null,
-			Now(),
-			'$escapedIP',
-			'$escapedUserAgent',
-			'$escapedVoterUsername',
-			'$escapedSubjectUsername',
-			'$escapedVoteType');
-		";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-		
-		return "SUCESS_INSERT";
-	}
+	//Cast Vote
+	$sql = "
+		INSERT INTO admin_vote
+		(vote_id, vote_datetime, vote_ip, vote_user_agent, vote_voter_user_id, vote_subject_user_id, vote_type)
+		VALUES
+		(null,
+		Now(),
+		'$escapedIP',
+		'$escapedUserAgent',
+		$escapedVoterId,
+		$escapedSubjectId,
+		'$escapedVoteType');
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	
+	return "SUCESS_INSERT";
 }
 
 function PerformAction($loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$voteSubjectUsername = $_POST["adminVoteSubjectUsername"];
+		$voteSubjectUserId = $_POST["adminVoteSubjectUserId"];
 		$voteType = $_POST["adminVoteType"];
-		return CastVoteForAdmin($voteSubjectUsername, $voteType);
+		return CastVoteForAdmin($voteSubjectUserId, $voteType);
 	}
 }
 

@@ -26,6 +26,7 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
     $currentJam = GetCurrentJamNumberAndID();
 
     $username = $render["username"];
+    $usernameId = $render["id"];
     $render["username_alphanumeric"] = preg_replace("/[^a-zA-Z0-9]+/", "", $username);
     $render["recent_participation"] = 0;
 
@@ -197,7 +198,7 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
     $render["votes_against"] = 0;
     $render["votes_vetos"] = 0;
     foreach($adminVoteData->AdminVoteModels as $j => $adminVoteModel){
-        if($render["username"] == $adminVoteModel->SubjectUsername){
+        if($render["id"] == $adminVoteModel->SubjectUserId){
             switch($adminVoteModel->VoteType){
                 case "FOR":
                     $render["votes_for"] += 1;
@@ -223,7 +224,7 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
     
     StartTimer("RenderUser - Logged in users admin votes");
     foreach($adminVoteData->LoggedInUserAdminVotes as $j => $adminVoteModel){
-        if($render["username"] == $adminVoteModel["subject_username"]){
+        if($render["id"] == $adminVoteModel["subject_user_id"]){
             $render["vote_type"] = $adminVoteModel["vote_type"];
 
             switch($adminVoteModel["vote_type"]){

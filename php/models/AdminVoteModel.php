@@ -1,7 +1,7 @@
 <?php
 
 class AdminVoteModel{
-	public $SubjectUsername;
+	public $SubjectUserId;
 	public $VoteType;
 }
 
@@ -22,9 +22,9 @@ class AdminVoteData{
         $adminVoteModels = Array();
 
         $sql = "
-            SELECT v.vote_subject_username, v.vote_type
+            SELECT v.vote_subject_user_id, v.vote_type
             FROM admin_vote v, user u
-            WHERE v.vote_voter_username = u.user_username
+            WHERE v.vote_voter_user_id = u.user_id
             AND u.user_role = 1
         ";
         $data = mysqli_query($dbConn, $sql);
@@ -33,7 +33,7 @@ class AdminVoteData{
         while($info = mysqli_fetch_array($data)){
             $adminVote = new AdminVoteModel();
 
-            $adminVote->SubjectUsername = $info["vote_subject_username"];
+            $adminVote->SubjectUserId = $info["vote_subject_user_id"];
             $adminVote->VoteType = $info["vote_type"];
 
             $adminVoteModels[] = $adminVote;
@@ -54,12 +54,12 @@ class AdminVoteData{
             return $loggedInUserAdminVotes;
         }
 
-        $escapedVoterUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+        $escapedVoterId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 
         $sql = "
-            SELECT vote_subject_username, vote_type
+            SELECT vote_subject_user_id, vote_type
             FROM admin_vote
-            WHERE vote_voter_username = '$escapedVoterUsername';
+            WHERE vote_voter_user_id = '$escapedVoterId';
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -67,7 +67,7 @@ class AdminVoteData{
         while($info = mysqli_fetch_array($data)){
             $adminVoteData = Array();
 
-            $adminVoteData["subject_username"] = $info["vote_subject_username"];
+            $adminVoteData["subject_user_id"] = $info["vote_subject_user_id"];
             $adminVoteData["vote_type"] = $info["vote_type"];
 
             $loggedInUserAdminVotes[] = $adminVoteData;
@@ -77,16 +77,16 @@ class AdminVoteData{
         return $loggedInUserAdminVotes;
     }
 
-    function GetAdminVotesCastByUserFormatted($username){
+    function GetAdminVotesCastByUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetAdminVotesCastByUserFormatted");
         StartTimer("GetAdminVotesCastByUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT *
             FROM admin_vote
-            WHERE vote_voter_username = '$escapedUsername';
+            WHERE vote_voter_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -95,16 +95,16 @@ class AdminVoteData{
         return ArrayToHTML(MySQLDataToArray($data));
     }
     
-    function GetAdminVotesForSubjectUserFormatted($username){
+    function GetAdminVotesForSubjectUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetAdminVotesForSubjectUserFormatted");
         StartTimer("GetAdminVotesForSubjectUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
-            SELECT vote_id, vote_datetime, 'redacted' AS vote_voter_username, vote_subject_username, 'redacted' AS vote_type
+            SELECT vote_id, vote_datetime, 'redacted' AS vote_voter_user_id, vote_subject_user_id, 'redacted' AS vote_type
             FROM admin_vote
-            WHERE vote_subject_username = '$escapedUsername';
+            WHERE vote_subject_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

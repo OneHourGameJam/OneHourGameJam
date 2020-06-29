@@ -212,8 +212,8 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser->Id);
             $render["userdata_adminlog_admin"] = $adminLogData->GetAdminLogForAdminFormatted($loggedInUser->Username);
             $render["userdata_adminlog_subject"] = $adminLogData->GetAdminLogForSubjectFormatted($loggedInUser->Username);
-            $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Username);
-            $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Username);
+            $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Id);
+            $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Id);
         break;
         case "newjam":
             $render["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);
