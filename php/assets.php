@@ -1,11 +1,11 @@
 <?php
 
-function RenderAssets(&$assetData){
+function RenderAssets(&$assetData, &$userData){
 	AddActionLog("RenderAssets");
 	StartTimer("RenderAssets");
 	$render = Array();
 	foreach($assetData->AssetModels as $id => $assetModel){
-		$asset = RenderAsset($assetModel);
+		$asset = RenderAsset($assetModel, $userData);
 		$render[] = $asset;
 	}
 
@@ -13,19 +13,25 @@ function RenderAssets(&$assetData){
 	return $render;
 }
 
-function RenderAsset(&$asset){
+function RenderAsset(&$asset, &$userData){
 	AddActionLog("RenderAsset");
 	StartTimer("RenderAsset");
 	$type = $asset->Type;
 
 	$render = Array();
 	$render["id"] = $asset->Id;
-	$render["author"] = $asset->Author;
-	$render["author_display_name"] = $asset->AuthorDisplayName;
+	$render["author_user_id"] = $asset->AuthorUserId;
 	$render["title"] = $asset->Title;
 	$render["description"] = $asset->Description;
 	$render["type"] = $type;
 	$render["content"] = $asset->Content;
+
+	foreach($userData->UserModels as $i => $userModel){
+		if($userModel->Id == $asset->AuthorUserId){
+			$render["author_username"] = $userModel->Username;
+			$render["author_display_name"] = $userModel->DisplayName;
+		}
+	}
 
 	switch($type){
 		case "AUDIO":

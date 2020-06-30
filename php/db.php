@@ -3,7 +3,7 @@
 include_once("config/dbconfig.php");
 
 // This should match the latest migration ID that should be applied
-$dbVersion = 14;
+$dbVersion = 15;
 
 //Database connection
 $dbConn = mysqli_connect($dbAddress, $dbUsername, $dbPassword, $dbDatabaseName);
@@ -156,7 +156,7 @@ function MigrateDatabase() {
 			$escapedLog = mysqli_real_escape_string($dbConn, "Running $newDatabaseVersionMigrationFile to bring DATABASE_VERSION up to $newDatabaseVersion");
 			$sql = "
 				INSERT INTO admin_log
-				(log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_subject_username, log_type, log_content)
+				(log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content)
 				VALUES
 				(
 					null,
@@ -164,11 +164,11 @@ function MigrateDatabase() {
 					'$escapedIP',
 					'$escapedUserAgent',
 					'AUTOMATIC',
-					'',
+					NULL,
+					NULL,
 					'DB_MIGRATION',
 					'$escapedLog'
 				);";
-		
 			mysqli_query($dbConn, $sql) or die("Migration failed to log to admin log, please notify site admin");
 			$sql = "";
 

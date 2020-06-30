@@ -97,7 +97,7 @@ function Init(){
 		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAssets", $dependencies) !== false){
-		$dictionary["assets"] = RenderAssets($assetData);
+		$dictionary["assets"] = RenderAssets($assetData, $userData);
 	}
 	if(FindDependency("RenderPolls", $dependencies) !== false){
 		$dictionary["polls"] = RenderPolls($pollData);

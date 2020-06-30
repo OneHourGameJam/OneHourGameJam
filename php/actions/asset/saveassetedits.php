@@ -54,11 +54,13 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$assetExists = true;
 	}
 
+	$authorUserId = $userData->UserModels[$author]->Id;
+
 	$ext = pathinfo($_FILES["assetfile"]["name"], PATHINFO_EXTENSION);
 	$fileNumber = -1;
-	mkdir("assets/$author");
+	mkdir("assets/$authorUserId");
 	for($i = 1; $i <= 100; $i++){
-		if(!file_exists("assets/$author/$i.$ext")){
+		if(!file_exists("assets/$authorUserId/$i.$ext")){
 			$fileNumber = $i;
 			break;
 		}
@@ -69,7 +71,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 
 	//Upload asset
 	$assetURL = "";
-	$asset_folder = "assets/$author";
+	$asset_folder = "assets/$authorUserId";
 	$asset_name = "$fileNumber.$ext";
 	if(isset($_FILES["assetfile"]) && $_FILES["assetfile"] != null && $_FILES["assetfile"]["size"] != 0){
 		$target_file = $asset_folder ."/". $asset_name;
@@ -92,29 +94,17 @@ function AddAsset($assetID, $author, $title, $description, $type){
 
 	//Create or update entry
 	if($assetExists){
-		//Update entry
-
-		$assetData->AssetModels[$assetID]->Id = $assetID;
-		$assetData->AssetModels[$assetID]->Author = $author;
-		$assetData->AssetModels[$assetID]->Title = $title;
-		$assetData->AssetModels[$assetID]->Description = $description;
-		$assetData->AssetModels[$assetID]->Type = $type;
-		if($assetURL != ""){
-			//Uploaded new file
-			$assetData->AssetModels[$assetID]->Content = $assetURL;
-        }
-
-		$escapedID = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Id);
-		$escapedAuthor = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Author);
-		$escapedTitle = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Title);
-		$escapedDescription = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Description);
-		$escapedType = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Type);
-		$escapedContent = mysqli_real_escape_string($dbConn, $assetData->AssetModels[$assetID]->Content);
+		$escapedID = mysqli_real_escape_string($dbConn, $assetID);
+		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $authorUserId);
+		$escapedTitle = mysqli_real_escape_string($dbConn, $title);
+		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
+		$escapedType = mysqli_real_escape_string($dbConn, $type);
+		$escapedContent = mysqli_real_escape_string($dbConn, ($assetUrl != "") ? $assetURL : ($assetData->AssetModels[$assetID]->Content));
 
 		$sql = "
 			UPDATE asset
 			SET
-				asset_author = '$escapedAuthor',
+				asset_author_user_id = $escapedAuthorUserId,
 				asset_title = '$escapedTitle',
 				asset_description = '$escapedDescription',
 				asset_type = '$escapedType',
@@ -124,11 +114,11 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$data = mysqli_query($dbConn, $sql);
         $sql = "";
 
-		$adminLogData->AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UserModels[$author]->Id, $loggedInUser->Id, "");
+		$adminLogData->AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $authorUserId, $loggedInUser->Id, "");
 		
 		return "SUCCESS_UPDATED";
 	}else{
-		$escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $authorUserId);
 		$escapedTitle = mysqli_real_escape_string($dbConn, $title);
 		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 		$escapedType = mysqli_real_escape_string($dbConn, $type);
@@ -140,7 +130,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 			asset_datetime,
 			asset_ip,
 			asset_user_agent,
-			asset_author,
+			asset_author_user_id,
 			asset_title,
 			asset_description,
 			asset_type,
@@ -151,7 +141,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 			Now(),
 			'$ip',
 			'$userAgent',
-			'$escapedAuthor',
+			$escapedAuthorUserId,
 			'$escapedTitle',
 			'$escapedDescription',
 			'$escapedType',
@@ -162,7 +152,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 		
-		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author: '$author', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UserModels[$author]->Id, $loggedInUser->Id, "");
+		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UserModels[$author]->Id, $loggedInUser->Id, "");
 		
 		return "SUCCESS_INSERTED";
 	}

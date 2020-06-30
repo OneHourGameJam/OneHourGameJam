@@ -1,7 +1,7 @@
 <?php
 
 function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assetData, $adminLogData, $userData;
+	global $loggedInUser, $dbConn, $assetData, $adminLogData;
 	$assetID = trim($assetID);
 
 	//Authorize user
@@ -21,7 +21,7 @@ function DeleteAsset($assetID){
 	$escapedID = mysqli_real_escape_string($dbConn, $assetID);
 
 	$sql = "
-        SELECT asset_id, asset_author, asset_title
+        SELECT asset_id, asset_author_user_id, asset_title
         FROM asset a
         WHERE asset_deleted != 1
           AND asset_id = $escapedID;
@@ -29,10 +29,10 @@ function DeleteAsset($assetID){
     $data = mysqli_query($dbConn, $sql);
     $sql = "";
 
-    $assetAuthor = "";
+    $assetAuthorUserId = "";
     $assetTitle = "";
 	if($info = mysqli_fetch_array($data)){
-        $assetAuthor = $info["asset_author"];
+        $assetAuthorUserId = $info["asset_author_user_id"];
         $assetTitle = $info["asset_title"];
     }
 
@@ -45,14 +45,7 @@ function DeleteAsset($assetID){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-	$assetAuthorId = "NULL";
-	foreach($userData->UserModels as $i => $userModel){
-		if($userModel->Username == $assetAuthor){
-			$assetAuthorId = $userModel->Id;
-		}
-	}
-
-	$adminLogData->AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author: $assetAuthor) soft deleted", $assetAuthorId, $loggedInUser->Id, "");
+	$adminLogData->AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author ID: $assetAuthorUserId) soft deleted", $assetAuthorUserId, $loggedInUser->Id, "");
 	
 	return "SUCCESS";
 }

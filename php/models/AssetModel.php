@@ -2,8 +2,7 @@
 
 class AssetModel{
 	public $Id;
-	public $Author;
-	public $AuthorDisplayName;
+	public $AuthorUserId;
 	public $Title;
 	public $Description;
 	public $Type;
@@ -25,18 +24,16 @@ class AssetData{
         $assetModels = Array();
 
         $sql = "
-            SELECT a.asset_id, a.asset_author, a.asset_title, a.asset_description, a.asset_type, a.asset_content, u.user_display_name
-            FROM asset a, user u
+            SELECT asset_id, asset_author_user_id, asset_title, asset_description, asset_type, asset_content
+            FROM asset
             WHERE asset_deleted != 1
-            AND a.asset_author = u.user_username
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
 
         while($asset = mysqli_fetch_array($data)){
             $id = $asset["asset_id"];
-            $author = $asset["asset_author"];
-            $author_display_name = $asset["user_display_name"];
+            $authorUserId = $asset["asset_author_user_id"];
             $title = $asset["asset_title"];
             $description = $asset["asset_description"];
             $type = $asset["asset_type"];
@@ -44,8 +41,7 @@ class AssetData{
 
             $asset = new AssetModel();
             $asset->Id = $id;
-            $asset->Author = $author;
-            $asset->AuthorDisplayName = $author_display_name;
+            $asset->AuthorUserId = $authorUserId;
             $asset->Title = $title;
             $asset->Description = $description;
             $asset->Type = $type;
@@ -58,16 +54,16 @@ class AssetData{
         return $assetModels;
     }
 
-    function GetAssetsOfUserFormatted($author){
+    function GetAssetsOfUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetAssetsOfUserFormatted");
         StartTimer("GetAssetsOfUserFormatted");
         
-        $escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT *
             FROM asset
-            WHERE asset_author = '$escapedAuthor';
+            WHERE asset_author_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

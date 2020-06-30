@@ -71,7 +71,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             if(IsAdmin($loggedInUser) !== false){
                 if(isset($_GET["asset_id"])){
                     $assetID = intval($_GET["asset_id"]);
-                    $render["editingasset"] = ((isset($assetData->AssetModels[$assetID])) ? RenderAsset($assetData->AssetModels[$assetID]) : Array());
+                    $render["editingasset"] = ((isset($assetData->AssetModels[$assetID])) ? RenderAsset($assetData->AssetModels[$assetID], $userData) : Array());
                 }
             }
         break;
@@ -200,7 +200,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             }
         break;
         case "userdata":
-            $render["userdata_assets"] = $assetData->GetAssetsOfUserFormatted($loggedInUser->Username);
+            $render["userdata_assets"] = $assetData->GetAssetsOfUserFormatted($loggedInUser->Id);
             $render["userdata_entries"] = $gameData->GetEntriesOfUserFormatted($loggedInUser->Username);
             $render["userdata_poll_votes"] = $pollData->GetPollVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_themes"] = $themeData->GetThemesOfUserFormatted($loggedInUser->Username);
