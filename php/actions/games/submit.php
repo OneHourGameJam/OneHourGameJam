@@ -119,7 +119,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			continue;
 		}
 
-		if($gameModel->Author != $loggedInUser->Username){
+		if($gameModel->AuthorUserId != $loggedInUser->Id){
 			continue;
 		}
 
@@ -142,7 +142,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		$escapedGameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 		$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
-		$escapedAuthorName = mysqli_real_escape_string($dbConn, $gameModel->Author);
+		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $gameModel->AuthorUserId);
 		$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
 		$escaped_color = mysqli_real_escape_string($dbConn, $color);
 
@@ -162,7 +162,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			entry_description = '$escapedDescription',
 			entry_color = '$escaped_color'
 		WHERE
-			entry_author = '$escapedAuthorName'
+			entry_author_user_id = $escapedAuthorUserId
 		AND entry_jam_number = $escaped_jamNumber
 		AND entry_deleted = 0;
 
@@ -185,7 +185,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam->JamNumber);
 	$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
 	$escaped_description = mysqli_real_escape_string($dbConn, $description);
-	$escaped_aurhor = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+	$escaped_author_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 	$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
 	$escaped_gameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
 	$escaped_gameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
@@ -207,7 +207,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		entry_jam_number,
 		entry_title,
 		entry_description,
-		entry_author,
+		entry_author_user_id,
 		entry_url,
 		entry_url_web,
 		entry_url_windows,
@@ -227,7 +227,7 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		$escaped_jamNumber,
 		'$escaped_gameName',
 		'$escaped_description',
-		'$escaped_aurhor',
+		$escaped_author_user_id,
 		'$escaped_gameURL',
 		'$escaped_gameURLWeb',
 		'$escaped_gameURLWin',

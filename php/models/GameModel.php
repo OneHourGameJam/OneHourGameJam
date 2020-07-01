@@ -6,7 +6,7 @@ class GameModel{
 	public $JamNumber;
 	public $Title;
 	public $Description;
-	public $Author;
+	public $AuthorUserId;
 	public $Url;
 	public $UrlWeb;
 	public $UrlWindows;
@@ -22,11 +22,11 @@ class GameModel{
 
 class GameData{
     public $GameModels;
-    public $GamesByUsername;
+    public $GamesByUserId;
 
     function __construct() {
         $this->GameModels = $this->LoadGames();
-        $this->GamesByUsername = $this->GroupGamesByUsername();
+        $this->GamesByUserId = $this->GroupGamesByUserId();
     }
 
     function LoadGames(){
@@ -36,7 +36,7 @@ class GameData{
 
         $gameModels = Array();
 
-        $sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author, entry_url, entry_url_web, entry_url_windows, entry_url_linux, entry_url_mac, entry_url, entry_url_android, entry_url_ios, entry_url_source, entry_screenshot_url, entry_color, entry_deleted
+        $sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author_user_id, entry_url, entry_url_web, entry_url_windows, entry_url_linux, entry_url_mac, entry_url, entry_url_android, entry_url_ios, entry_url_source, entry_screenshot_url, entry_color, entry_deleted
         FROM entry ORDER BY entry_id DESC";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -49,7 +49,7 @@ class GameData{
             $game->JamNumber = intval($info["entry_jam_number"]);
             $game->Title = $info["entry_title"];
             $game->Description = $info["entry_description"];
-            $game->Author = $info["entry_author"];
+            $game->AuthorUserId = $info["entry_author_user_id"];
             $game->Url = $info["entry_url"];
             $game->UrlWeb = $info["entry_url_web"];
             $game->UrlWindows = $info["entry_url_windows"];
@@ -69,27 +69,27 @@ class GameData{
         return $gameModels;
     }
 
-    private function GroupGamesByUsername()
+    private function GroupGamesByUserId()
     {
-        AddActionLog("GroupGamesByUsername");
-        StartTimer("GroupGamesByUsername");
+        AddActionLog("GroupGamesByUserId");
+        StartTimer("GroupGamesByUserId");
         
-        $gamesByUsername = Array();
+        $GamesByUserId = Array();
         foreach($this->GameModels as $i => $gameModel) {
-            $username = $gameModel->Author;
-            if (!isset($gamesByUsername[$username])){
-                $gamesByUsername[$username] = Array();
+            $userId = $gameModel->AuthorUserId;
+            if (!isset($GamesByUserId[$userId])){
+                $GamesByUserId[$userId] = Array();
             }
-            $gamesByUsername[$username][] = $gameModel;
+            $GamesByUserId[$userId][] = $gameModel;
         }
     
-        StopTimer("GroupGamesByUsername");
-        return $gamesByUsername;
+        StopTimer("GroupGamesByUserId");
+        return $GamesByUserId;
     }
 
-    public function GetGamesMadeByUsername($username){
-        if(isset($this->GamesByUsername[$username])){
-            return $this->GamesByUsername[$username];
+    public function GetGamesMadeByUserId($userId){
+        if(isset($this->GamesByUserId[$userId])){
+            return $this->GamesByUserId[$userId];
         }
         return Array();
     }
@@ -129,16 +129,16 @@ class GameData{
         StopTimer("EntryExists");
     }
     
-    function GetEntriesOfUserFormatted($author){
+    function GetEntriesOfUserFormatted($authorUserId){
         global $dbConn;
         AddActionLog("GetEntriesOfUserFormatted");
         StartTimer("GetEntriesOfUserFormatted");
     
-        $escapedAuthor = mysqli_real_escape_string($dbConn, $author);
+        $escapedAuthorUserId = mysqli_real_escape_string($dbConn, $authorUserId);
         $sql = "
             SELECT *
             FROM entry
-            WHERE entry_author = '$escapedAuthor';
+            WHERE entry_author_user_id = '$escapedAuthorUserId';
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

@@ -33,7 +33,7 @@ function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
 	$render["jam_number"] = intval($game->JamNumber);
 	$render["title"] = $title;
 	$render["description"] = $game->Description;
-	$render["author"] = $game->Author;
+	$render["author_user_id"] = $game->AuthorUserId;
 	$render["url"] = str_replace("'", "\\'", $game->Url);
 	$render["url_web"] = str_replace("'", "\\'", $game->UrlWeb);
 	$render["url_windows"] = str_replace("'", "\\'", $game->UrlWindows);
@@ -60,17 +60,18 @@ function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
 	$render["jam_theme"] = $jamModel->Theme;
 
 	//Mini RenderUser()
-	$author = $render["author"];
-	$author_display = $author;
-	if(isset($userData->UserModels[$author])){
-		$userModel = $userData->UserModels[$author];
-		if(isset($userModel->DisplayName)){
-			$author_display = $userModel->DisplayName;
+	$authorUserId = $game->AuthorUserId;
+	$authorUsername = "";
+	$authorDisplayName = "";
+	foreach($userData->UserModels as $i => $userModel){
+		if($userModel->Id == $authorUserId){
+			$authorUsername = $userModel->Username;
+			$authorDisplayName = $userModel->DisplayName;
 		}
 	}
-	$render["author_display"] = $author_display;
-	$render["author"] = $author;
-	$render["author_url_encoded"] = urlencode($author);
+	$render["author_username"] = $authorUsername;
+	$render["author_username_url_encoded"] = urlencode($authorUsername);
+	$render["author_display_name"] = $authorDisplayName;
 
 	$render["has_url"] = ($game->Url != "") ? 1 : 0;
 	$render["has_url_web"] = ($game->UrlWeb != "") ? 1 : 0;

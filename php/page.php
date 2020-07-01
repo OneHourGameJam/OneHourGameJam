@@ -144,7 +144,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["user_entry_color"] = $jamModel->Colors[$colorNumber];
 
             foreach($gameData->GameModels as $i => $gameModel){
-                if($gameModel->Author != $loggedInUser->Username){
+                if($gameModel->AuthorUserId != $loggedInUser->Id){
                     continue;
                 }
 
@@ -201,7 +201,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
         break;
         case "userdata":
             $render["userdata_assets"] = $assetData->GetAssetsOfUserFormatted($loggedInUser->Id);
-            $render["userdata_entries"] = $gameData->GetEntriesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_entries"] = $gameData->GetEntriesOfUserFormatted($loggedInUser->Id);
             $render["userdata_poll_votes"] = $pollData->GetPollVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_themes"] = $themeData->GetThemesOfUserFormatted($loggedInUser->Username);
             $render["userdata_theme_votes"] = $themeData->GetThemeVotesOfUserFormatted($loggedInUser->Username);

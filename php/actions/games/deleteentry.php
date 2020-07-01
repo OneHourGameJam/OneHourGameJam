@@ -39,20 +39,13 @@ function DeleteEntry($entryId){
 		return "NO_JAMS_EXIST";
 	}
 	
-	$deletedEntryAuthor = $gameData->GameModels[$entryId]->Author;
+	$deletedEntryAuthorId = $gameData->GameModels[$entryId]->AuthorUserId;
 
 	$escapedEntryId = mysqli_real_escape_string($dbConn, "$entryId");
 
 	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryId";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
-	
-	$deletedEntryAuthorId = "NULL";
-	foreach($userData->UserModels as $i => $userModel){
-		if($userModel->Username == $deletedEntryAuthor){
-			$deletedEntryAuthorId = $userModel->Id;
-		}
-	}
 
     $adminLogData->AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryId soft deleted", $deletedEntryAuthorId, $loggedInUser->Id, "");
 

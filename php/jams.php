@@ -118,7 +118,7 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 			if(!$gameModel->Deleted){
 				//Has logged in user participated in this jam?
 				if($loggedInUser !== false){
-					if($loggedInUser->Username == $gameModel->Author){
+					if($loggedInUser->Id == $gameModel->AuthorUserId){
 						$render["user_participated_in_jam"] = 1;
 					}
 				}
