@@ -6,7 +6,7 @@
 	<div class='panel panel-info jamContener'>
 		<div class='panel-heading {{#jam_deleted}}jamDeleted{{/jam_deleted}}{{^jam_deleted}}jamNotDeleted{{/jam_deleted}}'>
 			<span style='font-size: 16px;'>
-				<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{username}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
+				<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} entries, scheduled by {{scheduler_display_name}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
 				<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
 			</span>
 		</div>

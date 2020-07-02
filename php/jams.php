@@ -81,12 +81,27 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 	$render = Array();
 
 	$render["jam_id"] = $jamModel->Id;
-	$render["username"] = $jamModel->Username;
+	$render["scheduler_user_id"] = $jamModel->SchedulerUserId;
 	$render["jam_number"] = $jamModel->JamNumber;
 	$render["theme_id"] = $jamModel->ThemeId;
 	$render["theme"] = $jamModel->Theme;
 	$render["start_time"] = $jamModel->StartTime;
 	$render["state"] = $jamModel->State;
+
+	if($jamModel->SchedulerUserId == -1){
+		$render["scheduler_username"] = "AUTOMATIC";
+		$render["scheduler_display_name"] = "AUTOMATIC";
+	} else if($jamModel->SchedulerUserId == -2){
+		$render["scheduler_username"] = "LEGACY";
+		$render["scheduler_display_name"] = "LEGACY";
+	} else {
+		foreach($userData->UserModels as $i => $userModel){
+			if($userModel->Id == $jamModel->SchedulerUserId){
+				$render["scheduler_username"] = $userModel->Username;
+				$render["scheduler_display_name"] = $userModel->DisplayName;
+			}
+		}
+	}
 
 	if($jamModel->Deleted == 1){
 		$render["jam_deleted"] = 1;
@@ -321,7 +336,7 @@ function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextSchedul
 		$jamNumber = intval($currentJam["NUMBER"] + 1);
 		//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, "AUTOMATIC", $jamNumber, $selectedThemeId, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
+		$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
 	}
 	
 	StopTimer("CheckNextJamSchedule");

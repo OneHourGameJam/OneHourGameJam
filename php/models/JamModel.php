@@ -2,7 +2,7 @@
 
 class JamModel{
 	public $Id;
-	public $Username;
+	public $SchedulerUserId;
 	public $JamNumber;
 	public $ThemeId;
 	public $Theme;
@@ -26,7 +26,7 @@ class JamData{
 
         $jamModels = Array();
 
-        $sql = "SELECT jam_id, jam_username, jam_jam_number, jam_selected_theme_id, jam_theme, jam_start_datetime, jam_state, jam_colors, jam_deleted
+        $sql = "SELECT jam_id, jam_user_id, jam_jam_number, jam_selected_theme_id, jam_theme, jam_start_datetime, jam_state, jam_colors, jam_deleted
         FROM jam ORDER BY jam_jam_number DESC";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -36,7 +36,7 @@ class JamData{
             $jamID = intval($info["jam_id"]);
 
             $jamModel->Id = $jamID;
-            $jamModel->Username = $info["jam_username"];
+            $jamModel->SchedulerUserId = $info["jam_user_id"];
             $jamModel->JamNumber = intval($info["jam_jam_number"]);
             $jamModel->ThemeId = intval($info["jam_selected_theme_id"]);
             $jamModel->Theme = $info["jam_theme"];
@@ -53,14 +53,14 @@ class JamData{
     }
 
     //Adds the jam with the provided data into the database
-    function AddJamToDatabase($ip, $userAgent, $userId, $username, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, &$adminLogData){
+    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, &$adminLogData){
         global $dbConn;
         AddActionLog("AddJamToDatabase");
         StartTimer("AddJamToDatabase");
     
         $escapedIP = mysqli_real_escape_string($dbConn, $ip);
         $escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $escapedJamNumber = mysqli_real_escape_string($dbConn, $jamNumber);
         $escapedSelectedThemeId = mysqli_real_escape_string($dbConn, $selectedThemeId);
         $escapedTheme = mysqli_real_escape_string($dbConn, $theme);
@@ -73,7 +73,7 @@ class JamData{
             jam_datetime,
             jam_ip,
             jam_user_agent,
-            jam_username,
+            jam_user_id,
             jam_jam_number,
             jam_selected_theme_id,
             jam_theme,
@@ -86,7 +86,7 @@ class JamData{
             Now(),
             '$escapedIP',
             '$escapedUserAgent',
-            '$escapedUsername',
+            $escapedUserId,
             '$escapedJamNumber',
             $escapedSelectedThemeId,
             '$escapedTheme',
@@ -99,7 +99,7 @@ class JamData{
         $sql = "";
 
         StopTimer("AddJamToDatabase");
-        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "NULL", ($userId > 0) ? $userId : "NULL", ($userId > 0) ? "" : $username);
+        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "NULL", ($userId > 0) ? $userId : "NULL", ($userId > 0) ? "" : "AUTOMATIC");
     }
 
     function UpdateJamStateInDatabase($jamId, $newJamState){
@@ -120,16 +120,16 @@ class JamData{
         StopTimer("ChangeJamStateInDatabase");
     }
     
-    function GetJamsOfUserFormatted($username){
+    function GetJamsOfUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetJamsOfUserFormatted");
         StartTimer("GetJamsOfUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT *
             FROM jam
-            WHERE jam_username = '$escapedUsername';
+            WHERE jam_user_id = '$escapedUserId';
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

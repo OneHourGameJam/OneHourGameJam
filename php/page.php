@@ -207,7 +207,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_theme_votes"] = $themeData->GetThemeVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_theme_ideas"] = $themeIdeasData->GetThemeIdeasOfUserFormatted($loggedInUser->Id);
             $render["userdata_users"] = GetUsersOfUserFormatted($loggedInUser->Username);
-            $render["userdata_jams"] = $jamData->GetJamsOfUserFormatted($loggedInUser->Username);
+            $render["userdata_jams"] = $jamData->GetJamsOfUserFormatted($loggedInUser->Id);
             $render["userdata_satisfaction"] = $satisfactionData->GetSatisfactionVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_sessions"] = GetSessionsOfUserFormatted($loggedInUser->Id);
             $render["userdata_adminlog_admin"] = $adminLogData->GetAdminLogForAdminFormatted($loggedInUser->Id);

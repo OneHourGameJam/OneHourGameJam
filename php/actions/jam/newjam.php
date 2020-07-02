@@ -12,7 +12,6 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);
-	$username = trim($loggedInUser->Username);
 	foreach($colorsList as $i => $color){
 		$clr = trim($color);
 		if(!preg_match('/^[0-9A-Fa-f]{6}/', $clr)){
@@ -60,7 +59,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 	$newJam["start_time"] = gmdate("c", $datetime);
 	$newJam["entries"] = Array();
 
-	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $loggedInUser->Username, $newJam["jam_number"], -2, $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
+	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $newJam["jam_number"], -2, $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
 
 	return "SUCCESS";
 }
