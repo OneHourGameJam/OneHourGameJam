@@ -47,13 +47,13 @@ class PollData{
             SELECT voters_in_poll.poll_id, COUNT(1) AS users_voted_in_poll
             FROM 
             (
-                SELECT p.poll_id, v.vote_username
+                SELECT p.poll_id, v.vote_user_id
                 FROM poll p, poll_option o, poll_vote v
                 WHERE poll_deleted = 0
                   AND v.vote_deleted = 0
                   AND p.poll_id = o.option_poll_id 
                   AND o.option_id = v.vote_option_id
-                GROUP BY v.vote_username, p.poll_id
+                GROUP BY v.vote_user_id, p.poll_id
             ) voters_in_poll
             GROUP BY voters_in_poll.poll_id
         ";
@@ -106,13 +106,13 @@ class PollData{
             SELECT voters_in_poll.poll_id, COUNT(1) AS users_voted_in_poll
             FROM 
             (
-                SELECT p.poll_id, v.vote_username
+                SELECT p.poll_id, v.vote_user_id
                 FROM poll p, poll_option o, poll_vote v
                 WHERE poll_deleted = 0
                   AND v.vote_deleted = 0
                   AND p.poll_id = o.option_poll_id 
                   AND o.option_id = v.vote_option_id
-                GROUP BY v.vote_username, p.poll_id
+                GROUP BY v.vote_user_id, p.poll_id
             ) voters_in_poll
             GROUP BY voters_in_poll.poll_id
         ";
@@ -137,14 +137,14 @@ class PollData{
         
         //Get data about logged in user's votes
         if($loggedInUser !== false){
-            $escapedUsername = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+            $escapedUserId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
     
             $sql = "
                 SELECT o.option_poll_id, o.option_id
                 FROM poll_vote v, poll_option o
                 WHERE v.vote_option_id = o.option_id
                   AND v.vote_deleted != 1
-                  AND v.vote_username = '".$escapedUsername."'
+                  AND v.vote_user_id = ".$escapedUserId."
             ";
             $data = mysqli_query($dbConn, $sql);
             $sql = "";
@@ -161,18 +161,18 @@ class PollData{
         return $loggedInUserPollVotes;
     }
 
-    function GetPollVotesOfUserFormatted($username){
+    function GetPollVotesOfUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetPollVotesOfUserFormatted");
         StartTimer("GetPollVotesOfUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT poll.poll_question, poll_option.option_poll_text, poll_vote.*
             FROM poll_vote, poll_option, poll
             WHERE poll_vote.vote_option_id = poll_option.option_id
               AND poll_option.option_poll_id = poll.poll_id
-              AND poll_vote.vote_username = '$escapedUsername';
+              AND poll_vote.vote_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

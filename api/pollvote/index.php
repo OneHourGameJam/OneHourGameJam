@@ -9,7 +9,7 @@ if($loggedInUser == false){
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);
 $clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+$clean_userId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 
 if(!isset($_GET["pollID"])){
 	print json_encode(Array("ERROR" => "poll ID not set"));
@@ -35,7 +35,7 @@ if(mysqli_num_rows($data) == 0){
 }
 
 //Check if there is already a vote by this user for this poll/option combination
-$sql = "SELECT vote_id, vote_deleted FROM poll_vote WHERE vote_option_id = $optionID and vote_username = '$clean_username'";
+$sql = "SELECT vote_id, vote_deleted FROM poll_vote WHERE vote_option_id = $optionID and vote_user_id = $clean_userId";
 $data = mysqli_query($dbConn, $sql);
 $sql = "";
 
@@ -56,9 +56,9 @@ if($pollVote = mysqli_fetch_array($data)){
 	//Insert new poll vote
 	$sql = "
 	INSERT INTO poll_vote
-	(vote_id, vote_option_id, vote_username, vote_deleted)
+	(vote_id, vote_option_id, vote_user_id, vote_deleted)
 	VALUES
-	(null, $optionID, '$clean_username', 0);";
+	(null, $optionID, $clean_userId, 0);";
 
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
