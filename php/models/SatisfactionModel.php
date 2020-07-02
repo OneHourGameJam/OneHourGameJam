@@ -91,12 +91,10 @@ class SatisfactionData{
             return;
         }
     
-        $username = trim($loggedInUser->Username);
-    
         $escapedSatisfactionQuestionId = mysqli_real_escape_string($dbConn, $satisfactionQuestionId);
         $escapedIP = mysqli_real_escape_string($dbConn, $ip);
         $escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
         $escapedScore = mysqli_real_escape_string($dbConn, $score);
     
         $sql = "
@@ -106,7 +104,7 @@ class SatisfactionData{
             satisfaction_ip,
             satisfaction_user_agent,
             satisfaction_question_id,
-            satisfaction_username,
+            satisfaction_user_id,
             satisfaction_score)
             VALUES
             (null,
@@ -114,7 +112,7 @@ class SatisfactionData{
             '$escapedIP',
             '$escapedUserAgent',
             '$escapedSatisfactionQuestionId',
-            '$escapedUsername',
+            $escapedUserId,
             '$escapedScore');";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -122,16 +120,16 @@ class SatisfactionData{
         StopTimer("SubmitSatisfaction");
     }
     
-    function GetSatisfactionVotesOfUserFormatted($username){
+    function GetSatisfactionVotesOfUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetSatisfactionVotesOfUserFormatted");
         StartTimer("GetSatisfactionVotesOfUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT *
             FROM satisfaction
-            WHERE satisfaction_username = '$escapedUsername';
+            WHERE satisfaction_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
