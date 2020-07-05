@@ -3,7 +3,7 @@
 include_once("config/dbconfig.php");
 
 // This should match the latest migration ID that should be applied
-$dbVersion = 20;
+$dbVersion = 21;
 
 //Database connection
 $dbConn = mysqli_connect($dbAddress, $dbUsername, $dbPassword, $dbDatabaseName);

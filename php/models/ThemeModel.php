@@ -105,13 +105,13 @@ class ThemeData{
             return $userThemeVotes;
         }
     
-        $clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+        $clean_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
     
         //Update themes with what the user voted for
         $sql = "
             SELECT themevote_theme_id, themevote_type
             FROM themevote
-            WHERE themevote_username = '$clean_username';
+            WHERE themevote_user_id = $clean_user_id;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -137,7 +137,7 @@ class ThemeData{
         $sql = "
             SELECT *
             FROM theme
-            WHERE theme_author_user_id = '$escapedUserId';
+            WHERE theme_author_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -146,17 +146,17 @@ class ThemeData{
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
-    function GetThemeVotesOfUserFormatted($username){
+    function GetThemeVotesOfUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetThemeVotesOfUserFormatted");
         StartTimer("GetThemeVotesOfUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT theme.theme_text, themevote.*, IF(themevote.themevote_type = 1, '-1', IF(themevote.themevote_type = 2, '0', '+1'))
             FROM themevote, theme
             WHERE theme.theme_id = themevote.themevote_theme_id
-              AND themevote_username = '$escapedUsername';
+              AND themevote_user_id = $escapedUserId;
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

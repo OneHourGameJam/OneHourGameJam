@@ -9,7 +9,7 @@ if($loggedInUser == false){
 
 $clean_ip = mysqli_real_escape_string($dbConn, $ip);
 $clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-$clean_username = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+$clean_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 
 if(!isset($_GET["themeID"])){
 	print json_encode(Array("ERROR" => "Theme ID not set"));
@@ -36,7 +36,7 @@ if(mysqli_num_rows($data) == 0){
 }
 
 //Check if there is already a vote by this user for this theme
-$sql = "SELECT themevote_id FROM themevote WHERE themevote_theme_id = $voteThemeID AND themevote_username = '$clean_username'";
+$sql = "SELECT themevote_id FROM themevote WHERE themevote_theme_id = $voteThemeID AND themevote_user_id = $clean_user_id";
 $data = mysqli_query($dbConn, $sql);
 $sql = "";
 
@@ -51,9 +51,9 @@ if($themeVote = mysqli_fetch_array($data)){
 	//Insert new themevote
 	$sql = "
 	INSERT INTO themevote
-		(themevote_datetime, themevote_ip, themevote_user_agent, themevote_theme_id, themevote_username, themevote_type)
+		(themevote_datetime, themevote_ip, themevote_user_agent, themevote_theme_id, themevote_user_id, themevote_type)
 		VALUES
-		(Now(), '$clean_ip', '$clean_userAgent', $voteThemeID, '$clean_username', $vote);";
+		(Now(), '$clean_ip', '$clean_userAgent', $voteThemeID, $clean_user_id, $vote);";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	print json_encode(Array("SUCCESS" => "Vote cast."));
