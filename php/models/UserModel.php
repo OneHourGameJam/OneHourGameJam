@@ -128,6 +128,42 @@ class UserData{
         StopTimer("LoadUsers");
         return $userModels;
     }
+
+    function GetUsersOfUserFormatted($userId){
+        global $dbConn;
+        AddActionLog("GetUsersOfUserFormatted");
+        StartTimer("GetUsersOfUserFormatted");
+    
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
+        $sql = "
+            SELECT *
+            FROM user
+            WHERE user_id = $escapedUserId;
+        ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+    
+        StopTimer("GetUsersOfUserFormatted");
+        return ArrayToHTML(MySQLDataToArray($data));
+    }
+    
+    function GetSessionsOfUserFormatted($userId){
+        global $dbConn;
+        AddActionLog("GetSessionsOfUserFormatted");
+        StartTimer("GetSessionsOfUserFormatted");
+    
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
+        $sql = "
+            SELECT *
+            FROM session
+            WHERE session_user_id = $escapedUserId;
+        ";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+    
+        StopTimer("GetSessionsOfUserFormatted");
+        return ArrayToHTML(MySQLDataToArray($data));
+    }
 }
 
 ?>

@@ -168,42 +168,6 @@ function LoadBio($username) {
 	return $bio;
 }
 
-function GetUsersOfUserFormatted($username){
-	global $dbConn;
-	AddActionLog("GetUsersOfUserFormatted");
-	StartTimer("GetUsersOfUserFormatted");
-
-	$escapedUsername = mysqli_real_escape_string($dbConn, $username);
-	$sql = "
-		SELECT *
-		FROM user
-		WHERE user_username = '$escapedUsername';
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	StopTimer("GetUsersOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data));
-}
-
-function GetSessionsOfUserFormatted($userId){
-	global $dbConn;
-	AddActionLog("GetSessionsOfUserFormatted");
-	StartTimer("GetSessionsOfUserFormatted");
-
-	$escapedID = mysqli_real_escape_string($dbConn, $userId);
-	$sql = "
-		SELECT *
-		FROM session
-		WHERE session_user_id = '$escapedID';
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	StopTimer("GetSessionsOfUserFormatted");
-	return ArrayToHTML(MySQLDataToArray($data));
-}
-
 function ValidatePassword($password, &$configData){
 	AddActionLog("ValidatePassword");
 
