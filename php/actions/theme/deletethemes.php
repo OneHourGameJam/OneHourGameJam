@@ -20,6 +20,7 @@ function RemoveThemes($deletedThemeIds){
 	$error = false;
 
 	foreach($deletedThemeIds as $deletedThemeId){
+		$themeAuthorUserId = -1;
 		$themeFound = false;
 		$removedTheme = "";
 		foreach($themeData->ThemeModels as $id => $themeModel) {
@@ -27,6 +28,7 @@ function RemoveThemes($deletedThemeIds){
 				continue;
 			}
 			if ($themeModel->Id == $deletedThemeId) {
+				$themeAuthorUserId = $themeModel->AuthorUserId;
 				$removedTheme = $themeModel->Theme;
 				$themeFound = true;
 			}
@@ -52,7 +54,7 @@ function RemoveThemes($deletedThemeIds){
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
 
-		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "NULL", $loggedInUser->Id, "");
+		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", $themeAuthorUserId, $loggedInUser->Id, "");
 	}
 
 	if($error){

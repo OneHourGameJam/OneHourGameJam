@@ -3,7 +3,7 @@
 class ThemeModel{
 	public $Id;
 	public $Theme;
-	public $Author;
+	public $AuthorUserId;
 	public $Banned;
 	public $Deleted;
 	public $VotesAgainst;
@@ -31,7 +31,7 @@ class ThemeData{
 
         //Fill list of themes - will return same theme row multiple times (once for each valid themevote_type)
         $sql = "
-            SELECT theme_id, theme_text, theme_author, theme_banned, themevote_type, count(themevote_id) AS themevote_count, DATEDIFF(Now(), theme_datetime) as theme_daysago, theme_deleted
+            SELECT theme_id, theme_text, theme_author_user_id, theme_banned, themevote_type, count(themevote_id) AS themevote_count, DATEDIFF(Now(), theme_datetime) as theme_daysago, theme_deleted
             FROM (theme LEFT JOIN themevote ON (themevote.themevote_theme_id = theme.theme_id))
             WHERE theme_deleted != 1
             GROUP BY theme_id, themevote_type
@@ -60,7 +60,7 @@ class ThemeData{
             $theme = new ThemeModel();
             $theme->Id = $themeID;
             $theme->Theme = $themeData["theme_text"];
-            $theme->Author = $themeData["theme_author"];
+            $theme->AuthorUserId = $themeData["theme_author_user_id"];
             $theme->Banned = $themeData["theme_banned"];
             $theme->Deleted = $themeData["theme_deleted"];
             $theme->VotesAgainst = $themeVotesAgainst;
@@ -128,16 +128,16 @@ class ThemeData{
         return $userThemeVotes;
     }
 
-    function GetThemesOfUserFormatted($username){
+    function GetThemesOfUserFormatted($userId){
         global $dbConn;
         AddActionLog("GetThemesOfUserFormatted");
         StartTimer("GetThemesOfUserFormatted");
     
-        $escapedUsername = mysqli_real_escape_string($dbConn, $username);
+        $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
             SELECT *
             FROM theme
-            WHERE theme_author = '$escapedUsername';
+            WHERE theme_author_user_id = '$escapedUserId';
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

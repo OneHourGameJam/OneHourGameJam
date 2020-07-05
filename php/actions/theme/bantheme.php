@@ -14,14 +14,16 @@ function BanTheme($bannedThemeId){
 		return "NOT_AUTHORIZED";
 	}
 
+	$themeAuthorUserId = -1;
 	$themeFound = false;
-	$bennedTheme = "";
+	$bannedTheme = "";
 	foreach($themeData->ThemeModels as $id => $themeModel) {
 		if ($themeModel->Deleted != 0){
 			continue;
 		}
 		if ($themeModel->Id == $bannedThemeId) {
-			$bennedTheme = $themeModel->Theme;
+			$themeAuthorUserId = $themeModel->AuthorUserId;
+			$bannedTheme = $themeModel->Theme;
 			$themeFound = true;
 		}
 	}
@@ -47,7 +49,7 @@ function BanTheme($bannedThemeId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    $adminLogData->AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", "NULL", $loggedInUser->Id, "");
+    $adminLogData->AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", $themeAuthorUserId, $loggedInUser->Id, "");
 
 	return "SUCCESS";
 }

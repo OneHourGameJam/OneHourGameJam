@@ -203,7 +203,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_assets"] = $assetData->GetAssetsOfUserFormatted($loggedInUser->Id);
             $render["userdata_entries"] = $gameData->GetEntriesOfUserFormatted($loggedInUser->Id);
             $render["userdata_poll_votes"] = $pollData->GetPollVotesOfUserFormatted($loggedInUser->Id);
-            $render["userdata_themes"] = $themeData->GetThemesOfUserFormatted($loggedInUser->Username);
+            $render["userdata_themes"] = $themeData->GetThemesOfUserFormatted($loggedInUser->Id);
             $render["userdata_theme_votes"] = $themeData->GetThemeVotesOfUserFormatted($loggedInUser->Username);
             $render["userdata_theme_ideas"] = $themeIdeasData->GetThemeIdeasOfUserFormatted($loggedInUser->Id);
             $render["userdata_users"] = GetUsersOfUserFormatted($loggedInUser->Username);

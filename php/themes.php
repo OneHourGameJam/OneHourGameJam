@@ -1,6 +1,6 @@
 <?php
 
-function RenderThemes(&$configData, &$jamData, &$themeData, &$themeIdeasData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
+function RenderThemes(&$configData, &$jamData, &$userData, &$themeData, &$themeIdeasData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
 	AddActionLog("RenderThemes");
 	StartTimer("RenderThemes");
 	
@@ -46,7 +46,7 @@ function RenderThemes(&$configData, &$jamData, &$themeData, &$themeIdeasData, &$
 		$theme["apathy_color"] = "#ffffff";
 		$theme["popularity_color"] = "#ffffff";
 		$theme["banned"] = $banned;
-		$theme["author"] = $themeModel->Author;
+		$theme["author_user_id"] = $themeModel->AuthorUserId;
 		$theme["theme_id"] = $themeID;
 		$theme["ThemeSelectionProbabilityByVoteDifferenceText"] = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
 		if($votesTotal < $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value){
@@ -61,13 +61,20 @@ function RenderThemes(&$configData, &$jamData, &$themeData, &$themeIdeasData, &$
 		$theme["ThemeSelectionProbabilityByPopularityText"] = $themesByPopularity[$themeID]["ThemeSelectionProbabilityByPopularityText"];
 		$theme["days_ago"] = $themeModel->DaysAgo;
 		if($loggedInUser !== false){
-			$theme["is_own_theme"] = $themeModel->Author == $loggedInUser->Username;
+			$theme["is_own_theme"] = $themeModel->AuthorUserId == $loggedInUser->Id;
 			if($banned == 0){
 				if ($theme["is_own_theme"]) {
 					$render["has_own_themes"] = true;
 				}else{
 					$render["has_other_themes"] = true;
 				}
+			}
+		}
+
+		foreach($userData->UserModels as $i => $userModel){
+			if($userModel->Id == $themeModel->AuthorUserId){
+				$theme["author_username"] = $userModel->Username;
+				$theme["author_display_name"] = $userModel->DisplayName;
 			}
 		}
 		

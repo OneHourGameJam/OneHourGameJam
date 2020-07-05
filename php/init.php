@@ -94,7 +94,7 @@ function Init(){
 	}
 	if(FindDependency("RenderThemes", $dependencies) !== false){
 		$dependency = FindDependency("RenderThemes", $dependencies);
-		$dictionary["themes"] = RenderThemes($configData, $jamData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
+		$dictionary["themes"] = RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAssets", $dependencies) !== false){
 		$dictionary["assets"] = RenderAssets($assetData, $userData);

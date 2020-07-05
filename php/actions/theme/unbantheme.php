@@ -14,6 +14,7 @@ function UnbanTheme($unbannedThemeId){
 		return "NOT_AUTHORIZED";
 	}
 
+	$themeAuthorUserId = -1;
 	$themeFound = false;
 	$unbannedTheme = "";
 	foreach($themeData->ThemeModels as $id => $themeModel) {
@@ -21,6 +22,7 @@ function UnbanTheme($unbannedThemeId){
 			continue;
 		}
 		if ($themeModel->Id == $unbannedThemeId) {
+			$themeAuthorUserId = $themeModel->AuthorUserId;
 			$unbannedTheme = $themeModel->Theme;
 			$themeFound = true;
 		}
@@ -47,7 +49,7 @@ function UnbanTheme($unbannedThemeId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    $adminLogData->AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", "NULL", $loggedInUser->Id, "");
+    $adminLogData->AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", $themeAuthorUserId, $loggedInUser->Id, "");
 
 	return "SUCCESS";
 }

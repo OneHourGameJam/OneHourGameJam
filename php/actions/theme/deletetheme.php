@@ -10,7 +10,7 @@ function RemoveTheme($themeId, $pageId){
 	}
 
 	//Check that the theme exists and get the user of the given theme
-	$themeAuthor = "";
+	$themeAuthorUserId = -1;
 	$themeFound = false;
 	$removedTheme = "";
 	foreach($themeData->ThemeModels as $id => $themeModel) {
@@ -18,7 +18,7 @@ function RemoveTheme($themeId, $pageId){
 			continue;
 		}
 		if ($themeModel->Id == $themeId) {
-			$themeAuthor = $themeModel->Author;
+			$themeAuthorUserId = $themeModel->AuthorUserId;
 			$removedTheme = $themeModel->Theme;
 			$themeFound = true;
 		}
@@ -29,7 +29,7 @@ function RemoveTheme($themeId, $pageId){
 	}
 
 	//Authorize user (is admin or suggested this theme originally)
-	if(!isAdmin($loggedInUser) && $themeAuthor != $loggedInUser->Username){
+	if(!isAdmin($loggedInUser) && $themeAuthorUserId != $loggedInUser->Id){
 		return "NOT_AUTHORIZED";
 	}
 
@@ -50,7 +50,7 @@ function RemoveTheme($themeId, $pageId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
-    $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", "NULL", $loggedInUser->Id, "");
+    $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", $themeAuthorUserId, $loggedInUser->Id, "");
 
 	// Can be triggered from both themes and managethemes, send user to correct location.
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";

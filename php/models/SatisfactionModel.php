@@ -90,7 +90,7 @@ class SatisfactionData{
             StopTimer("SubmitSatisfaction");
             return;
         }
-    
+
         $escapedSatisfactionQuestionId = mysqli_real_escape_string($dbConn, $satisfactionQuestionId);
         $escapedIP = mysqli_real_escape_string($dbConn, $ip);
         $escapedUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
