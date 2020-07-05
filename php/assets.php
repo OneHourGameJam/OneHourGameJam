@@ -26,12 +26,8 @@ function RenderAsset(&$asset, &$userData){
 	$render["type"] = $type;
 	$render["content"] = $asset->Content;
 
-	foreach($userData->UserModels as $i => $userModel){
-		if($userModel->Id == $asset->AuthorUserId){
-			$render["author_username"] = $userModel->Username;
-			$render["author_display_name"] = $userModel->DisplayName;
-		}
-	}
+	$render["author_username"] = $userData->UserModels[$asset->AuthorUserId]->Username;
+	$render["author_display_name"] = $userData->UserModels[$asset->AuthorUserId]->DisplayName;
 
 	switch($type){
 		case "AUDIO":

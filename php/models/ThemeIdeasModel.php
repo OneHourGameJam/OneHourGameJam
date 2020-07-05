@@ -60,11 +60,10 @@ class ThemeIdeasData{
     
         $escapedUserId = mysqli_real_escape_string($dbConn, $userId);
         $sql = "
-            SELECT i.idea_id, i.idea_datetime, i.idea_ip, i.idea_user_agent, i.idea_theme_id, t.theme_text, i.idea_user_id, u.user_username, i.idea_ideas
-            FROM theme_ideas i, theme t, user u
+            SELECT i.idea_id, i.idea_datetime, i.idea_ip, i.idea_user_agent, i.idea_theme_id, t.theme_text, i.idea_user_id, i.idea_ideas
+            FROM theme_ideas i, theme t
             WHERE i.idea_user_id = $escapedUserId
               AND i.idea_theme_id = t.theme_id
-              AND i.idea_user_id = u.user_id
         ";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";

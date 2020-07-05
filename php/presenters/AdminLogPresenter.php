@@ -18,13 +18,12 @@ class AdminLogPresenter{
 			$adminUsername = "";
 			$subjectUsername = "";
 
-			foreach($userData->UserModels as $i => $userModel){
-				if($userModel->Id == $adminLogModel->AdminUserId){
-					$adminUsername = $userModel->Username;
-				}
-				if($userModel->Id == $adminLogModel->SubjectUserId){
-					$subjectUsername = $userModel->Username;
-				}
+			if(isset($userData->UserModels[$adminLogModel->AdminUserId])){
+				$adminUsername = $userData->UserModels[$adminLogModel->AdminUserId]->Username;
+			}
+
+			if(isset($userData->UserModels[$adminLogModel->SubjectUserId])){
+				$subjectUsername = $userData->UserModels[$adminLogModel->SubjectUserId]->Username;
 			}
 
 			$log["id"] = $adminLogModel->Id;

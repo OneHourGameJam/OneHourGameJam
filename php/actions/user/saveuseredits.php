@@ -3,7 +3,7 @@
 //Edits an existing user, identified by the username.
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
-function EditUser($username, $isAdmin){
+function EditUser($userId, $isAdmin){
 	global $userData, $dbConn, $loggedInUser, $adminLogData;
 
 	//Authorize user (is admin)
@@ -21,22 +21,23 @@ function EditUser($username, $isAdmin){
 	}
 
 	//Check that the user exists
-	if(!isset($userData->UserModels[$username])){
+	if(!isset($userData->UserModels[$userId])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$usernameClean = mysqli_real_escape_string($dbConn, $username);
+	$cleanUserId = mysqli_real_escape_string($dbConn, $userId);
 
 	$sql = "
 		UPDATE user
 		SET
 		user_role = $isAdmin
-		WHERE user_username = '$usernameClean';
+		WHERE user_id = $cleanUserId;
 	";
 	mysqli_query($dbConn, $sql) ;
 	$sql = "";
 	
-    $adminLogData->AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $userData->UserModels[$username]->Id, $loggedInUser->Id, "");
+	$username = $userData->UserModels[$userId]->Username;
+    $adminLogData->AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $userId, $loggedInUser->Id, "");
 
 	return "SUCCESS";
 }
@@ -45,13 +46,13 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$username = $_POST["username"];
+		$userId = $_POST["user_id"];
 		$isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
 		if($isAdmin != 0 && $isAdmin != 1){
 			die("invalid isadmin value");
 		}
 
-		return EditUser($username, $isAdmin);
+		return EditUser($userId, $isAdmin);
 	}
 }
 

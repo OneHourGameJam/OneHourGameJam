@@ -5,6 +5,7 @@
 <form method='post'>
 	{{> csrf_token}}
 	{{#page.editinguser}}
+		<input type="hidden" class="form-control" id="user_id" name='user_id' placeholder="User Id" value="{{{id}}}" readonly required>
 		<p>
 			<div class="form-group">
 				<label for="username">Username</label>

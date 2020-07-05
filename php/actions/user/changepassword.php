@@ -21,12 +21,12 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	}
 
 	//Check that the user exists
-	if(!isset($userData->UserModels[$loggedInUser->Username])){
+	if(!isset($userData->UserModels[$loggedInUser->Id])){
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$loggedInUserUsername = $loggedInUser->Username;
-	$user = $userData->UserModels[$loggedInUserUsername];
+	$loggedInUserId = $loggedInUser->Id;
+	$user = $userData->UserModels[$loggedInUserId];
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
 	$userPasswordIterations = intval($user->PasswordIterations);
@@ -40,22 +40,22 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$newUserPasswordIterations = GenerateUserHashIterations($configData);
 	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData);
 
-	$userData->UserModels[$loggedInUserUsername]->Salt = $newUserSalt;
-	$userData->UserModels[$loggedInUserUsername]->PasswordHash = $newPasswordHash;
-	$userData->UserModels[$loggedInUserUsername]->PasswordIterations = $newUserPasswordIterations;
+	$userData->UserModels[$loggedInUserId]->Salt = $newUserSalt;
+	$userData->UserModels[$loggedInUserId]->PasswordHash = $newPasswordHash;
+	$userData->UserModels[$loggedInUserId]->PasswordIterations = $newUserPasswordIterations;
 
-	$newUserSaltClean = mysqli_real_escape_string($dbConn, $newUserSalt);
-	$newPasswordHashClean = mysqli_real_escape_string($dbConn, $newPasswordHash);
-	$newUserPasswordIterationsClean = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
-	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+	$cleanNewUserSalt = mysqli_real_escape_string($dbConn, $newUserSalt);
+	$cleanNewPasswordHash = mysqli_real_escape_string($dbConn, $newPasswordHash);
+	$cleanNewUserPasswordIterations = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
+	$cleanUserId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 
 	$sql = "
 		UPDATE user
 		SET
-		user_password_salt = '$newUserSaltClean',
-		user_password_iterations = '$newUserPasswordIterationsClean',
-		user_password_hash = '$newPasswordHashClean'
-		WHERE user_username = '$usernameClean';
+		user_password_salt = '$cleanNewUserSalt',
+		user_password_iterations = '$cleanNewUserPasswordIterations',
+		user_password_hash = '$cleanNewPasswordHash'
+		WHERE user_id = $cleanUserId;
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

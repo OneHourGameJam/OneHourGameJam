@@ -95,12 +95,8 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 		$render["scheduler_username"] = "LEGACY";
 		$render["scheduler_display_name"] = "LEGACY";
 	} else {
-		foreach($userData->UserModels as $i => $userModel){
-			if($userModel->Id == $jamModel->SchedulerUserId){
-				$render["scheduler_username"] = $userModel->Username;
-				$render["scheduler_display_name"] = $userModel->DisplayName;
-			}
-		}
+		$render["scheduler_username"] = $userData->UserModels[$jamModel->SchedulerUserId]->Username;
+		$render["scheduler_display_name"] = $userData->UserModels[$jamModel->SchedulerUserId]->DisplayName;
 	}
 
 	if($jamModel->Deleted == 1){

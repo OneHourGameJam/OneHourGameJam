@@ -19,22 +19,22 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 		return "INVALID_EMAIL";
 	}
 	
-	$displayNameClean = mysqli_real_escape_string($dbConn, $displayName);
-	$twitterHandleClean = mysqli_real_escape_string($dbConn, $twitterHandle);
-	$emailAddressClean = mysqli_real_escape_string($dbConn, $emailAddress);
-	$bioClean = mysqli_real_escape_string($dbConn, CleanHtml($bio));
-	$preferencesClean = mysqli_real_escape_string($dbConn, $preferences);
-	$usernameClean = mysqli_real_escape_string($dbConn, $loggedInUser->Username);
+	$cleanDisplayName = mysqli_real_escape_string($dbConn, $displayName);
+	$cleanTwitterHandle = mysqli_real_escape_string($dbConn, $twitterHandle);
+	$cleanEmailAddress = mysqli_real_escape_string($dbConn, $emailAddress);
+	$cleanBio = mysqli_real_escape_string($dbConn, CleanHtml($bio));
+	$cleanPreferences = mysqli_real_escape_string($dbConn, $preferences);
+	$cleanUserId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 
 	$sql = "
 		UPDATE user
 		SET
-		user_display_name = '$displayNameClean',
-		user_twitter = '$twitterHandleClean',
-		user_email = '$emailAddressClean',
-		user_bio = '$bioClean',
-		user_preferences = $preferencesClean
-		WHERE user_username = '$usernameClean';
+		user_display_name = '$cleanDisplayName',
+		user_twitter = '$cleanTwitterHandle',
+		user_email = '$cleanEmailAddress',
+		user_bio = '$cleanBio',
+		user_preferences = $cleanPreferences
+		WHERE user_id = $cleanUserId;
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

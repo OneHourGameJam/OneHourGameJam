@@ -26,10 +26,11 @@ class UserModel
 
 class UserData{
     public $UserModels;
-    public $UserPreferences;
+    public $UsernameToId;
 
     function __construct() {
         $this->UserModels = $this->LoadUsers();
+        $this->UsernameToId = $this->GenerateUsernameToId();
     }
 
     function LoadUsers(){
@@ -55,11 +56,10 @@ class UserData{
     
         while($info = mysqli_fetch_array($data)){
             $currentUser = Array();
-            $username = $info["user_username"];
             
             $user = new UserModel();
             $user->Id = $info["user_id"];
-            $user->Username = $username;
+            $user->Username = $info["user_username"];
             $user->DisplayName = $info["user_display_name"];
             $user->Twitter = $info["user_twitter"];
             $user->TwitterTextOnly = str_replace("@", "", $info["user_twitter"]);
@@ -95,7 +95,7 @@ class UserData{
             $user->DaysSinceLastLogin = intval($info["days_since_last_login"]);
             $user->DaysSinceLastAdminAction = intval($info["days_since_last_admin_action"]);
     
-            $userModels[$username] = $user;
+            $userModels[$user->Id] = $user;
         }
     
         ksort($userModels);
@@ -127,6 +127,34 @@ class UserData{
     
         StopTimer("LoadUsers");
         return $userModels;
+    }
+
+    function GenerateUsernameToId(){
+        $usernamesToIds = Array();
+
+        foreach($this->UserModels as $i => $userModel){
+            $usernamesToIds[$userModel->Username] = $userModel->Id;
+        }
+
+        return $usernamesToIds;
+    }
+
+    function LoadBio($userId) {
+        global $dbConn;
+        AddActionLog("LoadBio");
+        StartTimer("LoadBio");
+    
+        $clean_user_id = mysqli_real_escape_string($dbConn, $userId);
+
+        $sql = "SELECT user_bio FROM user WHERE user_id = $clean_user_id";
+        $data = mysqli_query($dbConn, $sql);
+        $sql = "";
+
+        $info = mysqli_fetch_array($data);
+        $bio = $info["user_bio"];
+    
+        StopTimer("LoadBio");
+        return $bio;
     }
 
     function GetUsersOfUserFormatted($userId){

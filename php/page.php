@@ -41,12 +41,11 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
     switch($page){
         case "edituser":
             if(IsAdmin($loggedInUser) !== false){
-                $editingUsername = $_GET["username"];
-                $editingUsername = trim(strtolower($editingUsername));
-                if(!isset($userData->UserModels[$editingUsername])){
+                $editingUserId = $_GET["user_id"];
+                if(!isset($userData->UserModels[$editingUserId])){
                     die("no user selected");
                 }
-                $render["editinguser"] = RenderUser($configData, $cookieData, $userData->UserModels[$editingUsername], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_NONE);
+                $render["editinguser"] = RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_NONE);
             }
         break;
         case "editjam":
@@ -123,9 +122,11 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 die("invalid author name");
             }
 
+            $viewingAuthorId = $userData->UsernameToId[$viewingAuthor];
+
             $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Username;
-            $render["author_bio"] = LoadBio($viewingAuthor);
-            $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthor], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
+            $render["author_bio"] = $userData->LoadBio($viewingAuthorId);
+            $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":
@@ -220,7 +221,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["next_jam_suggested_time"] = gmdate("H:i", $nextSuggestedJamDateTime);
         break;
         case "usersettings":
-            $render["user_bio"] = LoadBio($loggedInUser->Username);
+            $render["user_bio"] = $userData->LoadBio($loggedInUser->Id);
         break;
     }
 

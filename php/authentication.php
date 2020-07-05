@@ -29,21 +29,6 @@ function HashPassword($password, $salt, $iterations, &$configData){
 	return $pswrd;
 }
 
-//Returns the username of the user associated with the provided user id
-function GetUsernameForUserId($userId, &$userData){
-	AddActionLog("GetUsernameForUserId");
-	StartTimer("GetUsernameForUserId");
-
-	foreach($userData->UserModels as $i => $userModel){
-		if($userModel->Id == $userId){
-			StopTimer("GetUsernameForUserId");
-			return $userModel->Username;
-		}
-	}
-
-	StopTimer("GetUsernameForUserId");
-}
-
 //Checks whether the current user, identified by the sessionID in their cookies, is
 //logged in. This function only actually performs the check the first time it is called.
 //after then it caches the result in the global $loggedInUser variable and simply
@@ -86,10 +71,9 @@ function IsLoggedIn(&$configData, &$userData){
 
 	if($session = mysqli_fetch_array($data)){
 		//Session ID does in fact exist
-		$userID = $session["session_user_id"];
+		$userId = $session["session_user_id"];
 
-		$username = GetUsernameForUserId($userID, $userData);
-		$loggedInUser = $userData->UserModels[$username];
+		$loggedInUser = $userData->UserModels[$userId];
         $loginChecked = true;
 
 		$sql = "
@@ -100,7 +84,7 @@ function IsLoggedIn(&$configData, &$userData){
 		$data = mysqli_query($dbConn, $sql);
         $sql = "";
 
-        $cleanUserId = mysqli_real_escape_string($dbConn, $userID);
+        $cleanUserId = mysqli_real_escape_string($dbConn, $userId);
         $cleanIp = mysqli_real_escape_string($dbConn, $ip);
         $cleanUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
 
@@ -147,25 +131,6 @@ function IsAdmin($user){
 	}
 
 	StopTimer("IsAdmin");
-}
-
-// Fetchs the user bio in the database, and sets it under the "bio" key.
-function LoadBio($username) {
-	global $dbConn;
-	AddActionLog("LoadBio");
-	StartTimer("LoadBio");
-
-	if ($username != "") {
-		$clean_username = mysqli_real_escape_string($dbConn, $username);
-		$sql = "SELECT user_bio FROM user WHERE user_username = '$clean_username'";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-		$info = mysqli_fetch_array($data);
-		$bio = $info["user_bio"];
-	}
-
-	StopTimer("LoadBio");
-	return $bio;
 }
 
 function ValidatePassword($password, &$configData){

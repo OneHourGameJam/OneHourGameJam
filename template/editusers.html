@@ -55,7 +55,7 @@
                         <img src='{{{page.template_path}}}images/star.png' style='width: 24px;' title='Admin Actions Status: User is highly active - Has performed at least one admin action in the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD}} days'>
                     {{/activity_administration_highly_active}}
                 </td>
-                <td><a href='?page=edituser&username={{username}}'>edit</a></td>
+                <td><a href='?page=edituser&user_id={{id}}'>edit</a></td>
             </tr>
         {{/is_admin}}
     {{/users.LIST}}
@@ -132,7 +132,7 @@
                             <button type="button" class="btn btn-default {{#vote_type_veto}}btn-danger{{/vote_type_veto}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_5");'><img src='{{{page.template_path}}}images/veto.png'></button>
                         </form>
                     </td>
-                    <td><a href='?page=edituser&username={{username}}'>edit</a></td>
+                    <td><a href='?page=edituser&user_id={{id}}'>edit</a></td>
                 </tr>
             {{/is_admin}}
         {{/is_admin_candidate}}
@@ -169,7 +169,7 @@
                         <button type="button" class="btn btn-default {{#vote_type_sponsor}}btn-success{{/vote_type_sponsor}}" onclick='CastAdminVote("adminvote_{{username_alphanumeric}}_1");' title='Sponsor for administrator role - User will be added to Admin Candidates list, where other administrators can vote. You can only nominate one user for admin at a time.'><img src='{{{page.template_path}}}images/sponsor.png' style='width: 24px; height: 24px;'></button>
                     </form>
                 </td>
-                <td><a href='?page=edituser&username={{username}}'>edit</a></td>
+                <td><a href='?page=edituser&user_id={{id}}'>edit</a></td>
             </tr>
         {{/is_admin}}
     {{/users.LIST}}

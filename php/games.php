@@ -61,14 +61,8 @@ function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
 
 	//Mini RenderUser()
 	$authorUserId = $game->AuthorUserId;
-	$authorUsername = "";
-	$authorDisplayName = "";
-	foreach($userData->UserModels as $i => $userModel){
-		if($userModel->Id == $authorUserId){
-			$authorUsername = $userModel->Username;
-			$authorDisplayName = $userModel->DisplayName;
-		}
-	}
+	$authorUsername = $userData->UserModels[$authorUserId]->Username;
+	$authorDisplayName = $userData->UserModels[$authorUserId]->DisplayName;
 	$render["author_username"] = $authorUsername;
 	$render["author_username_url_encoded"] = urlencode($authorUsername);
 	$render["author_display_name"] = $authorDisplayName;

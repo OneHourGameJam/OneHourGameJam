@@ -25,9 +25,8 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
 
     $currentJam = GetCurrentJamNumberAndID();
 
-    $username = $render["username"];
-    $usernameId = $render["id"];
-    $render["username_alphanumeric"] = preg_replace("/[^a-zA-Z0-9]+/", "", $username);
+    $userId = $userModel->Id;
+    $render["username_alphanumeric"] = preg_replace("/[^a-zA-Z0-9]+/", "", $userModel->Username);
     $render["recent_participation"] = 0;
 
     //Determine if this user is an author and their participation
@@ -35,8 +34,8 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
     $render["entry_count"] = 0;
     $render["first_jam_number"] = 0;
     $render["last_jam_number"] = 0;
-    foreach($gameData->GetGamesMadeByUserId($usernameId) as $j => $gameModel){
-        if($gameModel->AuthorUserId != $usernameId){
+    foreach($gameData->GetGamesMadeByUserId($userId) as $j => $gameModel){
+        if($gameModel->AuthorUserId != $userId){
             continue;
         }
 
@@ -273,8 +272,6 @@ function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamDa
     $authorCount = 0;
 
     foreach($userData->UserModels as $i => $userModel){
-        $username = $userModel->Username;
-        
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
             $userRender = RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;

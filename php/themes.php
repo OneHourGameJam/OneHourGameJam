@@ -71,12 +71,8 @@ function RenderThemes(&$configData, &$jamData, &$userData, &$themeData, &$themeI
 			}
 		}
 
-		foreach($userData->UserModels as $i => $userModel){
-			if($userModel->Id == $themeModel->AuthorUserId){
-				$theme["author_username"] = $userModel->Username;
-				$theme["author_display_name"] = $userModel->DisplayName;
-			}
-		}
+		$theme["author_username"] = $userData->UserModels[$themeModel->AuthorUserId]->Username;
+		$theme["author_display_name"] = $userData->UserModels[$themeModel->AuthorUserId]->DisplayName;
 		
 		//Generate theme vote button ID
 		$themeBtnID = preg_replace("/[^A-Za-z0-9]/", '', $themeText);

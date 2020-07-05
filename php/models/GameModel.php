@@ -44,7 +44,7 @@ class GameData{
         while($info = mysqli_fetch_array($data)){
             $game = new GameModel();
 
-            $game->Id = $info["entry_id"];
+            $game->Id = intval($info["entry_id"]);
             $game->JamId = intval($info["entry_jam_id"]);
             $game->JamNumber = intval($info["entry_jam_number"]);
             $game->Title = $info["entry_title"];
