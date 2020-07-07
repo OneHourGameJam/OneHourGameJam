@@ -1,6 +1,6 @@
 <?php
 
-function RenderGames(&$userData, &$gameData, &$jamData, $renderDepth){
+function RenderGames(&$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, $renderDepth){
 	AddActionLog("RenderGames");
 	StartTimer("RenderGames");
 
@@ -8,7 +8,7 @@ function RenderGames(&$userData, &$gameData, &$jamData, $renderDepth){
     $nonDeletedGamesCounter = 0;
 	foreach($gameData->GameModels as $i => $gameModel){
 		if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-			$render["LIST"][] = RenderGame($userData, $gameModel, $jamData, $renderDepth);
+			$render["LIST"][] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth);
 		}
         if($gameModel->Deleted != 1){
             $nonDeletedGamesCounter += 1;
@@ -20,7 +20,7 @@ function RenderGames(&$userData, &$gameData, &$jamData, $renderDepth){
 	return $render;
 }
 
-function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
+function RenderGame(&$userData, &$game, &$jamData, &$platformData, &$platformGameData, $renderDepth){
 	AddActionLog("RenderGame");
 	StartTimer("RenderGame");
 	
@@ -34,17 +34,39 @@ function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
 	$render["title"] = $title;
 	$render["description"] = $game->Description;
 	$render["author_user_id"] = $game->AuthorUserId;
-	$render["url"] = str_replace("'", "\\'", $game->Url);
-	$render["url_web"] = str_replace("'", "\\'", $game->UrlWeb);
-	$render["url_windows"] = str_replace("'", "\\'", $game->UrlWindows);
-	$render["url_mac"] = str_replace("'", "\\'", $game->UrlMac);
-	$render["url_linux"] = str_replace("'", "\\'", $game->UrlLinux);
-	$render["url_ios"] = str_replace("'", "\\'", $game->UrliOs);
-	$render["url_android"] = str_replace("'", "\\'", $game->UrlAndroid);
-	$render["url_source"] = str_replace("'", "\\'", $game->UrlSource);
 	$render["screenshot_url"] = str_replace("'", "\\'", $game->UrlScreenshot);
 	$render["entry_deleted"] = $game->Deleted;
 	$render["title_url_encoded"] = urlencode($title);
+
+	$platforms = Array();
+	
+	foreach($platformData->PlatformModels as $i => $platformModel){
+		if($platformModel->Deleted != 0){
+			continue;
+		}
+		
+		$platformRender = Array();
+		
+		$platformRender["platform_id"] = $platformModel->Id;
+		$platformRender["platform_name"] = $platformModel->Name;
+		$platformRender["platform_icon_url"] = $platformModel->IconUrl;
+		
+		$platforms[$platformModel->Id] = $platformRender;
+	}
+	
+	foreach($platformGameData->GameIdToPlatformGameIds[$game->Id] as $i => $platformGameId){
+		$platformGameModel = $platformGameData->PlatformGameModels[$platformGameId];
+		$platformId = $platformGameModel->PlatformId;
+		$url = $platformGameModel->Url;
+		
+		$platforms[$platformId]["url"] = $url;
+		$platforms[$platformId]["platform_game_id"] = $platformGameModel->Id;
+		$platforms[$platformId]["platform_name"] = $platformData->PlatformModels[$platformId]->Name;
+	}
+	
+	foreach($platforms as $i => $platform){
+		$render["platforms"][] = $platform;
+	}
 
 	//Entry color
 	$render["color"] = "#".$game->Color;
@@ -66,15 +88,6 @@ function RenderGame(&$userData, &$game, &$jamData, $renderDepth){
 	$render["author_username"] = $authorUsername;
 	$render["author_username_url_encoded"] = urlencode($authorUsername);
 	$render["author_display_name"] = $authorDisplayName;
-
-	$render["has_url"] = ($game->Url != "") ? 1 : 0;
-	$render["has_url_web"] = ($game->UrlWeb != "") ? 1 : 0;
-	$render["has_url_windows"] = ($game->UrlWindows != "") ? 1 : 0;
-	$render["has_url_mac"] = ($game->UrlMac != "") ? 1 : 0;
-	$render["has_url_linux"] = ($game->UrlLinux != "") ? 1 : 0;
-	$render["has_url_ios"] = ($game->UrliOs != "") ? 1 : 0;
-	$render["has_url_android"] = ($game->UrlAndroid != "") ? 1 : 0;
-	$render["has_url_source"] = ($game->UrlSource != "") ? 1 : 0;
 
 	if($render["screenshot_url"] != "logo.png" &&
 	   $render["screenshot_url"] != ""){

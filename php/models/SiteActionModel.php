@@ -78,6 +78,7 @@ class SiteActionData{
                     "SCREENSHOT_TOO_BIG" => new SiteActionResultModel("?page=submit", "warning", "The uploaded screenshot is too big."),
                     "SCREENSHOT_WRONG_FILE_TYPE" => new SiteActionResultModel("?page=submit", "warning", "Screenshot is not of a valid file type."),
                     "CANNOT_SUBMIT_TO_PAST_JAM" => new SiteActionResultModel("?page=submit", "error", "Cannot submit to a past jam, please contact administrators."),
+                    "ENTRY_NOT_ADDED" => new SiteActionResultModel("?page=submit", "error", "An internal error stopped the entry from being added, please contact an administrator."),
                 )
             ),
             new SiteActionModel(

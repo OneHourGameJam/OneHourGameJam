@@ -26,7 +26,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeasData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$adminLogData){
+function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeasData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$adminLogData){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -45,7 +45,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 if(!isset($userData->UserModels[$editingUserId])){
                     die("no user selected");
                 }
-                $render["editinguser"] = RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_NONE);
+                $render["editinguser"] = RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_NONE);
             }
         break;
         case "editjam":
@@ -54,7 +54,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $jamFound = false;
                 foreach($jamData->JamModels as $i => $jamModel){
                     if(intval($jamModel->Id) == $jamID){
-                        $render["editingjam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS);
+                        $render["editingjam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS);
                         $jamFound = true;
                         break;
                     }
@@ -80,7 +80,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $render["editingentry"] = Array();
                 foreach($gameData->GameModels as $i => $gameModel){
                     if($gameModel->Id == $entryID){
-                        $render["editingentry"] = RenderGame($userData, $gameModel, $jamData, RENDER_DEPTH_GAMES);
+                        $render["editingentry"] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, RENDER_DEPTH_GAMES);
                         break;
                     }
                 }
@@ -105,7 +105,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                     continue;
                 }
 
-                $render["viewing_jam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
+                $render["viewing_jam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
                 $pass = TRUE;
                 break;
             }
@@ -126,7 +126,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
             $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Username;
             $render["author_bio"] = $userData->LoadBio($viewingAuthorId);
-            $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
+            $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":
@@ -140,9 +140,24 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 die('jam not found');
             }
 
-            $render["submit_jam"] = RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
+            $render["submit_jam"] = RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
             $colorNumber = rand(0, count($jamModel->Colors) - 1);
             $render["user_entry_color"] = $jamModel->Colors[$colorNumber];
+
+            $platforms = Array();
+            foreach($platformData->PlatformModels as $i => $platformModel){
+                if($platformModel->Deleted != 0){
+                    continue;
+                }
+        
+                $platformRender = Array();
+        
+                $platformRender["platform_id"] = $platformModel->Id;
+                $platformRender["platform_name"] = $platformModel->Name;
+                $platformRender["platform_icon_url"] = $platformModel->IconUrl;
+        
+                $platforms[$platformModel->Id] = $platformRender;
+            }
 
             foreach($gameData->GameModels as $i => $gameModel){
                 if($gameModel->AuthorUserId != $loggedInUser->Id){
@@ -173,27 +188,21 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 if($gameModel->UrlScreenshot != "logo.png"){
                     $render["user_entry_screenshot"] = $gameModel->UrlScreenshot;
                 }
-                $render["user_entry_url"] = $gameModel->Url;
-                $render["user_entry_url_web"] = $gameModel->UrlWeb;
-                $render["user_entry_url_windows"] = $gameModel->UrlWindows;
-                $render["user_entry_url_mac"] = $gameModel->UrlMac;
-                $render["user_entry_url_linux"] = $gameModel->UrlLinux;
-                $render["user_entry_url_ios"] = $gameModel->UrliOs;
-                $render["user_entry_url_android"] = $gameModel->UrlAndroid;
-                $render["user_entry_url_source"] = $gameModel->UrlSource;
+            
+                foreach($platformGameData->GameIdToPlatformGameIds[$gameModel->Id] as $i => $platformGameId){
+                    $platformGameModel = $platformGameData->PlatformGameModels[$platformGameId];
+                    $platformId = $platformGameModel->PlatformId;
+                    $url = $platformGameModel->Url;
+                    
+                    $platforms[$platformId]["platform_entry_url"] = $url;
+                }
+                
                 $render["user_entry_desc"] = $gameModel->Description;
-                //$dictionary["user_entry_color"] = $gameModel["color"];
-                //$dictionary["user_entry_color_number"] = $gameModel["color_number"];
-
-                $render["user_has_url"] = ($gameModel->Url) ? 1 : 0;
-                $render["user_has_url_web"] = ($gameModel->UrlWeb) ? 1 : 0;
-                $render["user_has_url_windows"] = ($gameModel->UrlWindows) ? 1 : 0;
-                $render["user_has_url_mac"] = ($gameModel->UrlMac) ? 1 : 0;
-                $render["user_has_url_linux"] = ($gameModel->UrlLinux) ? 1 : 0;
-                $render["user_has_url_ios"] = ($gameModel->UrliOs) ? 1 : 0;
-                $render["user_has_url_android"] = ($gameModel->UrlAndroid) ? 1 : 0;
-                $render["user_has_url_source"] = ($gameModel->UrlSource) ? 1 : 0;
                 break;
+            }
+
+            foreach($platforms as $i => $platform){
+                $render["platforms"][] = $platform;
             }
 
             if (!isset($render["user_submitted_to_this_jam"]) && $jamNumber != $currentJam["NUMBER"]) {
@@ -222,6 +231,26 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
         break;
         case "usersettings":
             $render["user_bio"] = $userData->LoadBio($loggedInUser->Id);
+        break;
+        case "entries":
+            $platforms = Array();
+            foreach($platformData->PlatformModels as $i => $platformModel){
+                if($platformModel->Deleted != 0){
+                    continue;
+                }
+                
+                $platformRender = Array();
+                
+                $platformRender["platform_id"] = $platformModel->Id;
+                $platformRender["platform_name"] = $platformModel->Name;
+                $platformRender["platform_icon_url"] = $platformModel->IconUrl;
+                
+                $platforms[$platformModel->Id] = $platformRender;
+            }
+            
+            foreach($platforms as $i => $platform){
+                $render["platforms"][] = $platform;
+            }
         break;
     }
 

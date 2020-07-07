@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeasData, $commonDependencies, $pageSettings, $page;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeasData, $commonDependencies, $pageSettings, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -32,6 +32,8 @@ function Init(){
 
 	$jamData = new JamData();
 	$gameData = new GameData();
+	$platformData = new PlatformData();
+	$platformGameData = new PlatformGameData();
 
 	$themeData = new ThemeData($loggedInUser);
 	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
@@ -71,13 +73,13 @@ function Init(){
 	}
 	if(FindDependency("RenderUsers", $dependencies) !== false){
 		$dependency = FindDependency("RenderUsers", $dependencies);
-		$dictionary["users"] = RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $adminVoteData, $dependency["RenderDepth"]);
+		$dictionary["users"] = RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAllJams", $dependencies) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dependencies);
 		$dependency2 = FindDependency("RenderJams", $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dependencies) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dependencies);
 		$dependency2 = FindDependency("RenderJams", $dependencies);
@@ -86,11 +88,11 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dependencies) !== false){
 		$dependency = FindDependency("RenderGames", $dependencies);
-		$dictionary["entries"] = RenderGames($userData, $gameData, $jamData, $dependency["RenderDepth"]);
+		$dictionary["entries"] = RenderGames($userData, $gameData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dependencies) !== false){
 		$dependency = FindDependency("RenderThemes", $dependencies);
@@ -117,12 +119,12 @@ function Init(){
 			$dictionary["stream"] = InitStream($configData);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeasData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeasData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dependencies) !== false){
 			$dependency = FindDependency("RenderLoggedInUser", $dependencies);
-			$dictionary["user"] = RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	

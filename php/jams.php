@@ -74,7 +74,7 @@ function ParseJamColors($colorString){
 	return $jamColors;
 }
 
-function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$satisfactionData, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
+function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
 	AddActionLog("RenderJam");
 	StartTimer("RenderJam");
 
@@ -123,7 +123,7 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 	foreach($gameData->GameModels as $j => $gameModel){
 		if($gameModel->JamId == $render["jam_id"]){
 			if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-				$render["entries"][] = RenderGame($userData, $gameModel, $jamData, $renderDepth & ~RENDER_DEPTH_JAMS);
+				$render["entries"][] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_JAMS);
 			}
 
 			if(!$gameModel->Deleted){
@@ -199,13 +199,13 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 	return $render;
 }
 
-function RenderSubmitJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$satisfactionData, &$loggedInUser, $renderDepth){
+function RenderSubmitJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth){
 	AddActionLog("RenderSubmitJam");
 
-	return RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, 0, $renderDepth);
+	return RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, $renderDepth);
 }
 
-function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$satisfactionData, &$loggedInUser, $renderDepth, $loadAll){
+function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth, $loadAll){
 	AddActionLog("RenderJams");
 	StartTimer("RenderJams");
 
@@ -229,7 +229,7 @@ function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$satisfact
 		if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 		{
 			if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
-				$jamRender = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$jamRender = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 
 				$now = time();
 				$datetime = strtotime($jamRender["start_time"] . " UTC");
@@ -247,7 +247,7 @@ function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$satisfact
 				$render["LIST"][] = $jamRender;
 			}
 			if($currentJam["ID"] == $jamModel->Id){
-				$render["current_jam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+				$render["current_jam"] = RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 			}
 		}else{
 			$allJamsLoaded = false;

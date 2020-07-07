@@ -1,6 +1,6 @@
 <?php
                             
-function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
+function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUser");
     StartTimer("RenderUser");
     
@@ -76,7 +76,7 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
 
         StartTimer("RenderUser - foreach games - RenderGame");
         if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-            $render["entries"][] = RenderGame($userData, $gameModel, $jamData, $renderDepth & ~RENDER_DEPTH_USERS);
+            $render["entries"][] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_USERS);
         }
 	    StopTimer("RenderUser - foreach games - RenderGame");
 
@@ -263,7 +263,7 @@ function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameD
     return $render;
 }
 
-function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$adminVoteData, $renderDepth){
+function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, $renderDepth){
 	AddActionLog("RenderUsers");
     StartTimer("RenderUsers");
     
@@ -273,7 +273,7 @@ function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamDa
 
     foreach($userData->UserModels as $i => $userModel){
 		if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-            $userRender = RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $adminVoteData, $renderDepth);
+            $userRender = RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $renderDepth);
             $render["LIST"][] = $userRender;
         }
 
@@ -307,10 +307,10 @@ function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamDa
 	return $render;
 }
 
-function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$adminVoteData, &$loggedInUser, $renderDepth){
+function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
     AddActionLog("RenderLoggedInUser");
     
-    return RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $adminVoteData, $renderDepth);
+    return RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $renderDepth);
 }
 
 ?>

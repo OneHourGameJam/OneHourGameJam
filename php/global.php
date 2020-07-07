@@ -16,6 +16,8 @@ $userData;
 $jamData;
 $authors = Array();
 $gameData;
+$platformData;
+$platformGameData;
 $ThemeData;
 $assetData;
 $pollData;

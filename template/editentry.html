@@ -21,37 +21,26 @@
 			<input type="text" class="form-control" id="title" name='title' placeholder="Entry title" value="{{{title}}}" readonly required>
 		</div>
 		<div class="form-group">
-			<label for="url">Game URL (Web)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Web)" value="{{{url_web}}}" readonly>
-		</div>
-		<div class="form-group">
-			<label for="url">Game URL (Windows)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Windows)" value="{{{url_windows}}}" readonly>
-		</div>
-		<div class="form-group">
-			<label for="url">Game URL (Mac)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Mac)" value="{{{url_mac}}}" readonly>
-		</div>
-		<div class="form-group">
-			<label for="url">Game URL (Linux)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Linux)" value="{{{url_linux}}}" readonly>
-		</div>
-		<div class="form-group">
-			<label for="url">Game URL (Android)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Android)" value="{{{url_android}}}" readonly>
-		</div>
-		<div class="form-group">
-			<label for="url">Game URL (Other Platform)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Other Platform)" value="{{{url}}}" readonly>
-		</div>
-		<div class="form-group">
-			<label for="url">Game URL (Source)</label>
-			<input type="text" class="form-control" id="url" name='url' placeholder="Game URL (Source)" value="{{{url_source}}}" readonly>
+			<label for="description">Description</label>
+			<input type="text" class="form-control" id="description" name='description' placeholder="Entry description" value="{{{description}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="screenshot_url">Screenshot URL</label>
 			<input type="text" class="form-control" id="screenshot_url" name='screenshot_url' placeholder="Screenshot URL" value="{{{screenshot_url}}}" readonly required>
 		</div>
+		<h4>Platforms</h4>
+		{{#platforms}}
+			<div class="row">
+				<div class="form-group col-md-2">
+					<label for="platform_game_id_{{platform_id}}">Platform Game ID</label>
+					<input type="text" class="form-control" id="platform_game_id_{{platform_id}}" name='platform_game_id_{{platform_id}}' placeholder="Platform Game Id" value="{{{platform_game_id}}}" readonly>
+				</div>
+				<div class="form-group col-md-10">
+					<label for="url_{{platform_id}}">{{platform_name}}</label>
+					<input type="text" class="form-control" id="url_{{platform_id}}" name='url_{{platform_id}}' placeholder="Game URL ({{platform_name}})" value="{{{url}}}" readonly>
+				</div>
+			</div>
+		{{/platforms}}
 	{{/page.editingentry}}
 	<button type="submit" name='action' value='deleteentry' class="btn btn-default">Delete Entry</button>
 </form>

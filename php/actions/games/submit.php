@@ -5,18 +5,10 @@
 //$gameURL must be a valid URL, $screenshotURL can either be blank or a valid URL.
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
-function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber){
+function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $description, $jamColorNumber){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jamData, $gameData, $configData;
 
 	$gameName = trim($gameName);
-	$gameURL = trim($gameURL);
-	$gameURLWeb = trim($gameURLWeb);
-	$gameURLWin = trim($gameURLWin);
-	$gameURLMac = trim($gameURLMac);
-	$gameURLLinux = trim($gameURLLinux);
-	$gameURLiOS = trim($gameURLiOS);
-	$gameURLAndroid = trim($gameURLAndroid);
-	$gameURLSource = trim($gameURLSource);
 	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
 	$jamColorNumber = intval(trim($jamColorNumber));
@@ -31,23 +23,16 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		return "MISSING_GAME_NAME";
 	}
 
-	$urlValid = FALSE;
-	//Validate that at least one of the provided game URLs is valid
-	$gameURL = SanitizeURL($gameURL);
-	$gameURLWeb = SanitizeURL($gameURLWeb);
-	$gameURLWin = SanitizeURL($gameURLWin);
-	$gameURLMac = SanitizeURL($gameURLMac);
-	$gameURLLinux = SanitizeURL($gameURLLinux);
-	$gameURLiOS = SanitizeURL($gameURLiOS);
-	$gameURLAndroid = SanitizeURL($gameURLAndroid);
-	$gameURLSource = SanitizeURL($gameURLSource);
-
-	if($gameURL || $gameURLWeb || $gameURLWin || $gameURLMac || $gameURLLinux || $gameURLiOS || $gameURLAndroid){
-		$urlValid = TRUE;
+	$aPlatformGameUrlIsNotBlank = false;
+	foreach($platforms as $i => $platform){
+		$platforms[$i]["url"] = trim(SanitizeURL(trim($platform["url"])));
+		if($platforms[$i]["url"] != ""){
+			$aPlatformGameUrlIsNotBlank = true;
+		}
 	}
 
 	//Did at least one url pass validation?
-	if($urlValid == FALSE){
+	if(!$aPlatformGameUrlIsNotBlank){
 		return "INVALID_GAME_URL";
 	}
 
@@ -132,14 +117,6 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		}
 
 		$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
-		$escapedGameURL = mysqli_real_escape_string($dbConn, $gameURL);
-		$escapedGameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
-		$escapedGameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
-		$escapedGameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
-		$escapedGameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
-		$escapedGameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
-		$escapedGameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
-		$escapedGameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 		$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $gameModel->AuthorUserId);
@@ -150,14 +127,6 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		UPDATE entry
 		SET
 			entry_title = '$escapedGameName',
-			entry_url = '$escapedGameURL',
-			entry_url_web = '$escapedGameURLWeb',
-			entry_url_windows = '$escapedGameURLWin',
-			entry_url_mac = '$escapedGameURLMac',
-			entry_url_linux = '$escapedGameURLLinux',
-			entry_url_ios = '$escapedGameURLiOS',
-			entry_url_android = '$escapedGameURLAndroid',
-			entry_url_source = '$escapedGameURLSource',
 			entry_screenshot_url = '$escapedScreenshotURL',
 			entry_description = '$escapedDescription',
 			entry_color = '$escaped_color'
@@ -165,10 +134,17 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 			entry_author_user_id = $escapedAuthorUserId
 		AND entry_jam_number = $escaped_jamNumber
 		AND entry_deleted = 0;
-
 		";
 		$data = mysqli_query($dbConn, $sql);
 		$sql = "";
+
+		foreach($platforms as $i => $platform){
+			if($platform["url"] != ""){
+				SubmitPlatformGame($gameModel->Id, $platform["platform_id"], $platform["url"]);
+			}else{
+				DeletePlatformGame($gameModel->Id, $platform["platform_id"]);
+			}
+		}
 
 		return "SUCCESS_ENTRY_UPDATED";
 	}
@@ -186,14 +162,6 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 	$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
 	$escaped_description = mysqli_real_escape_string($dbConn, $description);
 	$escaped_author_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
-	$escaped_gameURL = mysqli_real_escape_string($dbConn, $gameURL);
-	$escaped_gameURLWeb = mysqli_real_escape_string($dbConn, $gameURLWeb);
-	$escaped_gameURLWin = mysqli_real_escape_string($dbConn, $gameURLWin);
-	$escaped_gameURLMac = mysqli_real_escape_string($dbConn, $gameURLMac);
-	$escaped_gameURLLinux = mysqli_real_escape_string($dbConn, $gameURLLinux);
-	$escaped_gameURLiOS = mysqli_real_escape_string($dbConn, $gameURLiOS);
-	$escaped_gameURLAndroid = mysqli_real_escape_string($dbConn, $gameURLAndroid);
-	$escaped_gameURLSource = mysqli_real_escape_string($dbConn, $gameURLSource);
 	$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
 	$escaped_color = mysqli_real_escape_string($dbConn, $color);
 
@@ -208,14 +176,6 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		entry_title,
 		entry_description,
 		entry_author_user_id,
-		entry_url,
-		entry_url_web,
-		entry_url_windows,
-		entry_url_mac,
-		entry_url_linux,
-		entry_url_ios,
-		entry_url_android,
-		entry_url_source,
 		entry_screenshot_url,
 		entry_color)
 		VALUES
@@ -228,47 +188,108 @@ function SubmitEntry($jam_number, $gameName, $gameURL, $gameURLWeb, $gameURLWin,
 		'$escaped_gameName',
 		'$escaped_description',
 		$escaped_author_user_id,
-		'$escaped_gameURL',
-		'$escaped_gameURLWeb',
-		'$escaped_gameURLWin',
-		'$escaped_gameURLMac',
-		'$escaped_gameURLLinux',
-		'$escaped_gameURLiOS',
-		'$escaped_gameURLAndroid',
-		'$escaped_gameURLSource',
 		'$escaped_ssURL',
 		'$escaped_color');
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 
+	$sql = "
+		SELECT entry_id
+		FROM entry
+		WHERE entry_jam_id = $escaped_jamId
+		  AND entry_author_user_id = $escaped_author_user_id
+		  AND entry_deleted = 0
+	";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+
+	if($info = mysqli_fetch_array($data)){
+		$gameId = $info["entry_id"];
+
+		foreach($platforms as $i => $platform){
+			if($platform["url"] != ""){
+				SubmitPlatformGame($gameId, $platform["platform_id"], $platform["url"]);
+			}else{
+				DeletePlatformGame($gameId, $platform["platform_id"]);
+			}
+		}
+	}else{
+		return "ENTRY_NOT_ADDED";
+	}
+	
+
 	return "SUCCESS_ENTRY_ADDED";
 }
 
+function SubmitPlatformGame($entryId, $platformId, $url){
+	global $dbConn;
+
+	$escapedEntryId = mysqli_real_escape_string($dbConn, $entryId);
+	$escapedPlatformId = mysqli_real_escape_string($dbConn, $platformId);
+	$escapedUrl = mysqli_real_escape_string($dbConn, $url);
+
+	$sql = "SELECT platformentry_id FROM platform_entry WHERE platformentry_entry_id = $escapedEntryId AND platformentry_platform_id = $escapedPlatformId;";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+
+	if($info = mysqli_fetch_array($data)){
+		$platformEntryId = intval($info["platformentry_id"]);
+
+		$sql = "UPDATE platform_entry SET platformentry_url = '$escapedUrl' WHERE platformentry_id = $platformEntryId;";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+		print "<br><b>PlatformEntry -> UPDATE ID $platformEntryId</b>";
+	}else{
+		$sql = "
+			INSERT INTO platform_entry
+			(platformentry_id, platformentry_entry_id, platformentry_platform_id, platformentry_url)
+			VALUES
+			(null, $escapedEntryId, $escapedPlatformId, '$escapedUrl');
+		";
+		$data = mysqli_query($dbConn, $sql);
+		$sql = "";
+		print "<br><b>PlatformEntry -> INSERT</b>";
+	}
+}
+
+function DeletePlatformGame($entryId, $platformId){
+	global $dbConn;
+
+	$escapedEntryId = mysqli_real_escape_string($dbConn, $entryId);
+	$escapedPlatformId = mysqli_real_escape_string($dbConn, $platformId);
+
+	$sql = "DELETE FROM platform_entry WHERE platformentry_entry_id = $escapedEntryId AND platformentry_platform_id = $escapedPlatformId;";
+	$data = mysqli_query($dbConn, $sql);
+	$sql = "";
+	print "<br><b>PlatformEntry -> DELETE</b>";
+}
+
 function PerformAction(&$loggedInUser){
-	global $_POST, $satisfactionData;
+	global $_POST, $satisfactionData, $platformData;
 	
 	if($loggedInUser !== false){
 		$gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
-		$gameURL = (isset($_POST["gameurl"])) ? $_POST["gameurl"] : "";
-		$gameURLWeb = (isset($_POST["gameurlweb"])) ? $_POST["gameurlweb"] : "";
-		$gameURLWin = (isset($_POST["gameurlwin"])) ? $_POST["gameurlwin"] : "";
-		$gameURLMac = (isset($_POST["gameurlmac"])) ? $_POST["gameurlmac"] : "";
-		$gameURLLinux = (isset($_POST["gameurllinux"])) ? $_POST["gameurllinux"] : "";
-		$gameURLiOS = (isset($_POST["gameurlios"])) ? $_POST["gameurlios"] : "";
-		$gameURLAndroid = (isset($_POST["gameurlandroid"])) ? $_POST["gameurlandroid"] : "";
-		$gameURLSource = (isset($_POST["gameurlsource"])) ? $_POST["gameurlsource"] : "";
 		$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
 		$description = (isset($_POST["description"])) ? $_POST["description"] : "";
 		$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
 		$jamColorNumber = (isset($_POST["colorNumber"])) ? intval($_POST["colorNumber"]) : 0;
+
+		$platforms = Array();
+		foreach($platformData->PlatformModels as $i => $platformModel){
+			$platform = Array();
+			$platform["platform_id"] = $platformModel->Id;
+			$platform["url"] = (isset($_POST["gameurl".$platformModel->Id])) ? $_POST["gameurl".$platformModel->Id] : "";
+
+			$platforms[] = $platform;
+		}
 
 		$satisfaction = (isset($_POST["satisfaction"])) ? intval($_POST["satisfaction"]) : 0;
 		if($satisfaction != 0){
 			$satisfactionData->SubmitSatisfaction($loggedInUser, "JAM_$jamNumber", $satisfaction);
 		}
 
-		return SubmitEntry($jamNumber, $gameName, $gameURL, $gameURLWeb, $gameURLWin, $gameURLMac, $gameURLLinux, $gameURLiOS, $gameURLAndroid, $gameURLSource, $screenshotURL, $description, $jamColorNumber);
+		return SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $description, $jamColorNumber);
 	}
 }
 

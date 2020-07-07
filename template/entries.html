@@ -13,13 +13,10 @@
 			<th style='max-width: 100px;'>Author</th>
 			<th style='max-width: 50px;'>Jam</th>
 			<th style='max-width: 100px;'>Theme</th>
-			<th>Web</th>
-			<th>Win</th>
-			<th>Mac</th>
-			<th>Linux</th>
-			<th>Android</th>
-			<th>Other</th>
-			<th>Source</th>
+			
+			{{#page.platforms}}
+				<th>{{platform_name}}</th>
+			{{/page.platforms}}
 		</tr>
 		{{#entries.LIST}}
 			{{^entry_deleted}}
@@ -28,13 +25,14 @@
 					<td><a href='?page=author&author={{author_username}}'>{{author_display_name}}</a></td>
 					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_number}}</a></td>
 					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_theme}}</a></td>
-					<td>{{#has_url_web}}<a href='{{url_web}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/web.png' style='width: 16px;' title='Web'></a>{{/has_url_web}}</td>
-					<td>{{#has_url_windows}}<a href='{{url_windows}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/windows.png' style='width: 16px;' title='Windows'></a>{{/has_url_windows}}</td>
-					<td>{{#has_url_mac}}<a href='{{url_mac}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/mac.png' style='width: 16px;' title='Mac'></a>{{/has_url_mac}}</td>
-					<td>{{#has_url_linux}}<a href='{{url_linux}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/linux.png' style='width: 16px;' title='Linux'></a>{{/has_url_linux}}</td>
-					<td>{{#has_url_android}}<a href='{{url_android}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/android.png' style='width: 16px;' title='Android'></a>{{/has_url_android}}</td>
-					<td>{{#has_url}}<a href='{{url}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/custom.png' style='width: 16px;' title='Other platform'></a>{{/has_url}}</td>
-					<td>{{#has_url_source}}<a href='{{url_source}}' target='_blank'><img src='{{{page.template_path}}}images/platforms/source.png' style='width: 16px;' title='Source'></a>{{/has_url_source}}</td>
+					
+					{{#platforms}}
+						<td>
+							{{#url}}
+								<a href='{{url}}' target='_blank'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' style='width: 16px;' title='{{platform_name}}'></a>
+							{{/url}}
+						</td>
+					{{/platforms}}
 				</tr>
 			{{/entry_deleted}}
 		{{/entries.LIST}}
