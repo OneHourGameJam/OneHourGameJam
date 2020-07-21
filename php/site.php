@@ -40,6 +40,9 @@ include_once("php/models/AdminVoteModel.php");
 include_once("php/models/AdminLogModel.php");
 include_once("php/models/ThemeIdeasModel.php");
 
+//ViewModels
+include_once("php/viewmodels/AdminLogsViewModel.php");
+
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
 

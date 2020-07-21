@@ -10,11 +10,9 @@ class AdminLogPresenter{
 	function RenderAdminLog(&$adminLogData, &$userData){
 		AddActionLog("RenderAdminLog");
 		StartTimer("RenderAdminLog");
-		$render = Array();
+		$adminLogsViewModel = new AdminLogsViewModel();
 
 		foreach($adminLogData->AdminLogModels as $i => $adminLogModel){
-			$log = Array();
-			
 			$adminUsername = "";
 			$subjectUsername = "";
 
@@ -26,23 +24,25 @@ class AdminLogPresenter{
 				$subjectUsername = $userData->UserModels[$adminLogModel->SubjectUserId]->Username;
 			}
 
-			$log["id"] = $adminLogModel->Id;
-			$log["datetime"] = $adminLogModel->DateTime;
-			$log["ip"] = $adminLogModel->Ip;
-			$log["user_agent"] = $adminLogModel->UserAgent;
-			$log["admin_username_override"] = $adminLogModel->AdminUsernameOverride;
-			$log["admin_username"] = $adminUsername;
-			$log["subject_username"] = $subjectUsername;
-			$log["admin_user_id"] = $adminLogModel->AdminUserId;
-			$log["subject_user_id"] = $adminLogModel->SubjectUserId;
-			$log["log_type"] = $adminLogModel->LogType;
-			$log["log_content"] = $adminLogModel->LogContent;
+			$adminLogViewModel = new AdminLogViewModel();
 
-			$render[] = $log;
+			$adminLogViewModel->id = $adminLogModel->Id;
+			$adminLogViewModel->datetime = $adminLogModel->DateTime;
+			$adminLogViewModel->ip = $adminLogModel->Ip;
+			$adminLogViewModel->user_agent = $adminLogModel->UserAgent;
+			$adminLogViewModel->admin_username_override = $adminLogModel->AdminUsernameOverride;
+			$adminLogViewModel->admin_username = $adminUsername;
+			$adminLogViewModel->subject_username = $subjectUsername;
+			$adminLogViewModel->admin_user_id = $adminLogModel->AdminUserId;
+			$adminLogViewModel->subject_user_id = $adminLogModel->SubjectUserId;
+			$adminLogViewModel->log_type = $adminLogModel->LogType;
+			$adminLogViewModel->log_content = $adminLogModel->LogContent;
+
+			$adminLogsViewModel->logs[] = $adminLogViewModel;
 		}
 
 		StopTimer("RenderAdminLog");
-		return $render;
+		return $adminLogsViewModel;
 	}
 }
 

@@ -16,7 +16,7 @@
             <th>Log Type</th>
             <th>Log Content</th>
         </tr>
-        {{#adminlog}}
+        {{#adminlog.logs}}
             <tr>
                 <td>{{id}}</td>
                 <td>{{datetime}}</td>
@@ -26,6 +26,6 @@
                 <td>{{log_type}}</td>
                 <td>{{log_content}}</td>
             </tr>
-        {{/adminlog}}
+        {{/adminlog.logs}}
     </table>
 </div>
