@@ -46,7 +46,7 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 		return "INVALID_JAM_NUMBER";
 	}
 
-	$jam = GetJamByNumber($jamData, $jam_number);
+	$jam = $jamData->GetJamByNumber($jam_number);
 	if($jam == null || $jam->JamNumber == 0){
 		return "NO_JAM_TO_SUBMIT_TO";
 	}

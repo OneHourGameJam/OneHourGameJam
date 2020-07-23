@@ -135,7 +135,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 die("no jam to submit to");
             }
             $jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $currentJam["NUMBER"];
-            $jamModel = GetJamByNumber($jamData, $jamNumber);
+            $jamModel = $jamData->GetJamByNumber($jamNumber);
             if (!$jamModel) {
                 die('jam not found');
             }

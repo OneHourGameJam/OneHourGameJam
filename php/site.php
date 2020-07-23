@@ -63,6 +63,7 @@ include_once("php/presenters/JamPresenter.php");
 //Controllers
 include_once("php/controllers/ThemeController.php");
 include_once("php/controllers/CookieController.php");
+include_once("php/controllers/JamController.php");
 
 //Global functions
 include_once("php/sanitize.php");
@@ -71,7 +72,6 @@ include_once("php/actions.php");
 include_once("php/messages.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
-include_once("php/jams.php");
 include_once("php/polls.php");
 include_once("php/stream.php");
 StopTimer("site.php - Include");

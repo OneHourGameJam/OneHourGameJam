@@ -42,7 +42,7 @@ class JamData{
             $jamModel->Theme = $info["jam_theme"];
             $jamModel->StartTime = $info["jam_start_datetime"];
             $jamModel->State = $info["jam_state"];
-            $jamModel->Colors = ParseJamColors($info["jam_colors"]);
+            $jamModel->Colors = $this->ParseJamColors($info["jam_colors"]);
             $jamModel->Deleted = $info["jam_deleted"];
 
             $jamModels[$jamID] = $jamModel;
@@ -119,6 +119,43 @@ class JamData{
 
         StopTimer("ChangeJamStateInDatabase");
     }
+
+    function GetNextJamDateAndTime(){
+        AddActionLog("GetNextJamDateAndTime");
+        StartTimer("GetNextJamDateAndTime");
+
+        $nextJamStartTime = null;
+
+        $now = time();
+        foreach($this->JamModels as $i => $jamModel){
+            $nextJamTime = strtotime($jamModel->StartTime . " UTC");
+
+            if($nextJamTime > $now){
+                $nextJamStartTime = $nextJamTime;
+            }
+        }
+
+        StopTimer("GetNextJamDateAndTime");
+        return $nextJamStartTime;
+    }
+
+    // Returns a jam given its number.
+    // The dictionary of jams must have been previously loaded.
+    function GetJamByNumber($jamNumber) {
+        AddActionLog("GetJamByNumber");
+        StartTimer("GetJamByNumber");
+    
+        foreach ($this->JamModels as $jamModel) {
+            if ($jamModel->JamNumber == $jamNumber && $jamModel->Deleted != 1) {
+                StopTimer("GetJamByNumber");
+                return $jamModel;
+            }
+        }
+    
+        StopTimer("GetJamByNumber");
+        return null;
+    }
+    
     
     function GetJamsOfUserFormatted($userId){
         global $dbConn;
@@ -136,6 +173,20 @@ class JamData{
     
         StopTimer("GetJamsOfUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
+    }
+
+    function ParseJamColors($colorString){
+        AddActionLog("ParseJamColors");
+        StartTimer("ParseJamColors");
+    
+        $jamColors = explode("|", $colorString);
+        if(count($jamColors) == 0){
+            StopTimer("ParseJamColors");
+            return Array("FFFFFF");
+        }
+    
+        StopTimer("ParseJamColors");
+        return $jamColors;
     }
 }
 

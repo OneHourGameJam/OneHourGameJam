@@ -36,12 +36,9 @@ function Init(){
 	$platformGameData = new PlatformGameData();
 
 	$themeData = new ThemeData($loggedInUser);
-	$themesByVoteDifference = ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
-	$themesByPopularity = ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
 
-	$nextScheduledJamTime = GetNextJamDateAndTime($jamData);
-	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($configData);
-	CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamTime, $adminLogData);
+	$nextScheduledJamTime = $jamData->GetNextJamDateAndTime();
+	JamController::CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime, $adminLogData);
 
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData();
@@ -54,12 +51,14 @@ function Init(){
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Process");
 
-	ProcessJamStates($jamData, $themeData, $configData, $adminLogData);
+	$themesByVoteDifference = ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
+	$themesByPopularity = ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
+	JamController::ProcessJamStates($jamData, $themeData, $configData, $adminLogData);
+
+	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
 
 	StopTimer("Init - Process");
 	StartTimer("Init - Render");
-
-	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
 
 	loadCSRFToken();
 	$dictionary["csrf_token"] = $_SESSION["csrf_token"];
