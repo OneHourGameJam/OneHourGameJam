@@ -14,7 +14,7 @@ function Init(){
 
 	StartTimer("Init - Load Data");
 
-	UpdateCookies();
+	CookieController::UpdateCookies();
 	$cookieData = new CookieData();
 
 	$adminLogData = new AdminLogData();
@@ -105,7 +105,7 @@ function Init(){
 		$dictionary["polls"] = RenderPolls($pollData);
 	}
 	if(FindDependency("RenderCookies", $dependencies) !== false){
-		$dictionary["cookies"] = RenderCookies($cookieData);
+		$dictionary["cookies"] = CookiePresenter::RenderCookies($cookieData);
 	}
 	if(FindDependency("RenderMessages", $dependencies) !== false){
 		$dictionary["messages"] = RenderMessages($messageData);
