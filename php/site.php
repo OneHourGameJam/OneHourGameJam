@@ -57,7 +57,6 @@ include_once("php/messages.php");
 include_once("php/config.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
-include_once("php/users.php");
 include_once("php/jams.php");
 include_once("php/games.php");
 include_once("php/themes.php");
