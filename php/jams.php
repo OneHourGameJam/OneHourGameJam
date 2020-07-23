@@ -47,7 +47,7 @@ function ProcessJamStates(&$jamData, &$themeData, &$configData, &$adminLogData){
 			//Present Jam (started, hasn't finished yet)
 			if($jamModel->State != "ACTIVE"){
 				$jamData->UpdateJamStateInDatabase($jamModel->Id, "ACTIVE");
-				PruneThemes($themeData, $jamData, $configData, $adminLogData);
+				ThemeController::PruneThemes($themeData, $jamData, $configData, $adminLogData);
 			}
 		}else{
 			//Future Jam (not yet started)

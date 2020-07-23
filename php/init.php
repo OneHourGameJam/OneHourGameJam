@@ -36,8 +36,8 @@ function Init(){
 	$platformGameData = new PlatformGameData();
 
 	$themeData = new ThemeData($loggedInUser);
-	$themesByVoteDifference = CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
-	$themesByPopularity = CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
+	$themesByVoteDifference = ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
+	$themesByPopularity = ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
 
 	$nextScheduledJamTime = GetNextJamDateAndTime($jamData);
 	$nextSuggestedJamTime = GetSuggestedNextJamDateTime($configData);
@@ -96,10 +96,10 @@ function Init(){
 	}
 	if(FindDependency("RenderThemes", $dependencies) !== false){
 		$dependency = FindDependency("RenderThemes", $dependencies);
-		$dictionary["themes"] = RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
+		$dictionary["themes"] = ThemePresenter::RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAssets", $dependencies) !== false){
-		$dictionary["assets"] = RenderAssets($assetData, $userData);
+		$dictionary["assets"] = AssetPresenter::RenderAssets($assetData, $userData);
 	}
 	if(FindDependency("RenderPolls", $dependencies) !== false){
 		$dictionary["polls"] = RenderPolls($pollData);

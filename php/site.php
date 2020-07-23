@@ -41,12 +41,19 @@ include_once("php/models/AdminLogModel.php");
 include_once("php/models/ThemeIdeasModel.php");
 
 //ViewModels
-include_once("php/viewmodels/AdminLogsViewModel.php");
-include_once("php/viewmodels/UsersViewModel.php");
+include_once("php/viewmodels/AdminLogViewModel.php");
+include_once("php/viewmodels/UserViewModel.php");
+include_once("php/viewmodels/ThemeViewModel.php");
+include_once("php/viewmodels/AssetViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
 include_once("php/presenters/UserPresenter.php");
+include_once("php/presenters/ThemePresenter.php");
+include_once("php/presenters/AssetPresenter.php");
+
+//Controllers
+include_once("php/controllers/ThemeController.php");
 
 //Global functions
 include_once("php/sanitize.php");
@@ -59,8 +66,6 @@ include_once("php/db.php");
 include_once("php/authentication.php");
 include_once("php/jams.php");
 include_once("php/games.php");
-include_once("php/themes.php");
-include_once("php/assets.php");
 include_once("php/polls.php");
 include_once("php/stream.php");
 StopTimer("site.php - Include");

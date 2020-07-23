@@ -20,7 +20,7 @@ function AddTheme($newTheme){
 		}
 	}
 
-	if(IsRecentTheme($jamData, $configData, $newTheme)) {
+	if(ThemePresenter::IsRecentTheme($jamData, $configData, $newTheme)) {
 		return "THEME_RECENTLY_USED";
 	}
 

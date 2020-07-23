@@ -12,7 +12,7 @@
 	</form>
 {{/user.is_admin}}
 
-{{#assets}}
+{{#assets.LIST}}
 	<p>
 		<h4>{{title}}</h4>
 		{{#user.is_admin}}
@@ -58,4 +58,4 @@
 			{{content}}
 		</p>
 	{{/is_other}}
-{{/assets}}
+{{/assets.LIST}}

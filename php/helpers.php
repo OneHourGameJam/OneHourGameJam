@@ -57,25 +57,6 @@ function EndsWith($haystack, $needle) {
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
 }
 
-//Numeric comparator for arrays based on property
-function CmpArrayByPropertyPopularityNum($a, $b)
-{
-	AddActionLog("CmpArrayByPropertyPopularityNum");
-
-	if(isset($a["banned"]) && $a["banned"] == 1){
-		return 1;
-	}
-	return CmpArrayByProperty($a, $b, "popularity_num");
-}
-
-//Numeric comparator for arrays based on property
-function CmpArrayByProperty($a, $b, $property)
-{
-	AddActionLog("CmpArrayByProperty");
-
-	return $a[$property] < $b[$property];
-}
-
 //Returns ordinal version of provided number, so 1 -> 1st; 3 -> 3rd, etc.
 function ordinal($number) {
 	AddActionLog("ordinal");
