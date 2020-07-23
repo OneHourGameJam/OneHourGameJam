@@ -45,12 +45,14 @@ include_once("php/viewmodels/AdminLogViewModel.php");
 include_once("php/viewmodels/UserViewModel.php");
 include_once("php/viewmodels/ThemeViewModel.php");
 include_once("php/viewmodels/AssetViewModel.php");
+include_once("php/viewmodels/ConfigurationViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
 include_once("php/presenters/UserPresenter.php");
 include_once("php/presenters/ThemePresenter.php");
 include_once("php/presenters/AssetPresenter.php");
+include_once("php/presenters/ConfigurationPresenter.php");
 
 //Controllers
 include_once("php/controllers/ThemeController.php");
@@ -61,7 +63,6 @@ include_once("php/page.php");
 include_once("php/actions.php");
 include_once("php/cookies.php");
 include_once("php/messages.php");
-include_once("php/config.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
 include_once("php/jams.php");

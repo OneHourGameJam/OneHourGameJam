@@ -65,7 +65,7 @@ function Init(){
 	$dictionary["csrf_token"] = $_SESSION["csrf_token"];
  
 	if(FindDependency("RenderConfig", $dependencies) !== false){
-		$dictionary["CONFIG"] = RenderConfig($configData);
+		$dictionary["CONFIG"] = ConfigurationPresenter::RenderConfig($configData);
 	}
 	if(FindDependency("RenderAdminLog", $dependencies) !== false){
 		$renderAdminLog = new AdminLogPresenter($adminLogData, $userData);

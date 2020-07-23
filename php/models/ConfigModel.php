@@ -9,8 +9,13 @@ class ConfigModel{
 	public $Editable;
 	public $Required;
 	public $Type;
-	public $Options;
+	public $Options = Array();
 	public $AddedToDictionary;
+}
+
+class SettingEnumOptionModel{
+    public $Text;
+    public $Value;
 }
 
 class ConfigData{
@@ -52,8 +57,15 @@ class ConfigData{
             $configEntry->Editable = $editable;
             $configEntry->Required = $required;
             $configEntry->Type = $type;
-            $configEntry->Options = $options;
             $configEntry->AddedToDictionary = $addedToDictionary;
+
+            $configEntry->Options = Array();
+            foreach($options as $i => $option){
+                $settingEnumOptionModel = new SettingEnumOptionModel();
+                $settingEnumOptionModel->Text = $option["TEXT"];
+                $settingEnumOptionModel->Value = $option["VALUE"];
+                $configEntry->Options[] = $settingEnumOptionModel;
+            }
 
             $configModels[$key] = $configEntry;
         }

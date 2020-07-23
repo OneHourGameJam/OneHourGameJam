@@ -182,4 +182,20 @@ function ValidateUsername($username, &$configData){
 	return true;
 }
 
+function RedirectToHttpsIfRequired($configData){
+	AddActionLog("RedirectToHttpsIfRequired");
+	StartTimer("RedirectToHttpsIfRequired");
+
+    if($configData->ConfigModels["REDIRECT_TO_HTTPS"]->Value){
+        if(!isset($_SERVER['HTTPS'])){
+        	//Redirect to https
+            $url = "https://". $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: $url");
+            die();
+        }
+    }
+	StopTimer("RedirectToHttpsIfRequired");
+}
+
 ?>
