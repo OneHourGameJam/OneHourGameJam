@@ -79,7 +79,7 @@ function Init(){
 		$dependency1 = FindDependency("RenderAllJams", $dependencies);
 		$dependency2 = FindDependency("RenderJams", $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency("RenderJams", $dependencies) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dependencies);
 		$dependency2 = FindDependency("RenderJams", $dependencies);
@@ -88,7 +88,7 @@ function Init(){
 		if(isset($_GET["loadAll"])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency("RenderGames", $dependencies) !== false){
 		$dependency = FindDependency("RenderGames", $dependencies);
@@ -112,7 +112,7 @@ function Init(){
 	}
 	if(FindDependency("RenderStream", $dependencies) !== false){
 		$now = Time();
-		$jamTime = strtotime($dictionary["jams"]["current_jam"]["start_time"] . " UTC");
+		$jamTime = strtotime($dictionary["jams"]->current_jam->start_time . " UTC");
 		$dictionary["stream"] = Array();
 
 		if($jamTime + 3600 <= $now && $now <= $jamTime + 7 * 3600)

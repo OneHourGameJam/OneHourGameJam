@@ -48,6 +48,7 @@ include_once("php/viewmodels/AssetViewModel.php");
 include_once("php/viewmodels/ConfigurationViewModel.php");
 include_once("php/viewmodels/CookieViewModel.php");
 include_once("php/viewmodels/GameViewModel.php");
+include_once("php/viewmodels/JamViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
@@ -57,6 +58,7 @@ include_once("php/presenters/AssetPresenter.php");
 include_once("php/presenters/ConfigurationPresenter.php");
 include_once("php/presenters/CookiePresenter.php");
 include_once("php/presenters/GamePresenter.php");
+include_once("php/presenters/JamPresenter.php");
 
 //Controllers
 include_once("php/controllers/ThemeController.php");
