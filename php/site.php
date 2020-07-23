@@ -42,9 +42,11 @@ include_once("php/models/ThemeIdeasModel.php");
 
 //ViewModels
 include_once("php/viewmodels/AdminLogsViewModel.php");
+include_once("php/viewmodels/UsersViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
+include_once("php/presenters/UserPresenter.php");
 
 //Global functions
 include_once("php/sanitize.php");

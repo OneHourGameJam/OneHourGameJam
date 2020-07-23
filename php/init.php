@@ -73,7 +73,7 @@ function Init(){
 	}
 	if(FindDependency("RenderUsers", $dependencies) !== false){
 		$dependency = FindDependency("RenderUsers", $dependencies);
-		$dictionary["users"] = RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
+		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAllJams", $dependencies) !== false){
 		$dependency1 = FindDependency("RenderAllJams", $dependencies);
@@ -124,7 +124,7 @@ function Init(){
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dependencies) !== false){
 			$dependency = FindDependency("RenderLoggedInUser", $dependencies);
-			$dictionary["user"] = RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 	

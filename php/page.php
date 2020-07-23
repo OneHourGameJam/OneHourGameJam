@@ -45,7 +45,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 if(!isset($userData->UserModels[$editingUserId])){
                     die("no user selected");
                 }
-                $render["editinguser"] = RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_NONE);
+                $render["editinguser"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_NONE);
             }
         break;
         case "editjam":
@@ -126,7 +126,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
             $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Username;
             $render["author_bio"] = $userData->LoadBio($viewingAuthorId);
-            $render["viewing_author"] = RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
+            $render["viewing_author"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":
