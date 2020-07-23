@@ -123,7 +123,7 @@ function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, 
 	foreach($gameData->GameModels as $j => $gameModel){
 		if($gameModel->JamId == $render["jam_id"]){
 			if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-				$render["entries"][] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_JAMS);
+				$render["entries"][] = GamePresenter::RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_JAMS);
 			}
 
 			if(!$gameModel->Deleted){

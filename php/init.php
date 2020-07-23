@@ -92,7 +92,7 @@ function Init(){
 	}
 	if(FindDependency("RenderGames", $dependencies) !== false){
 		$dependency = FindDependency("RenderGames", $dependencies);
-		$dictionary["entries"] = RenderGames($userData, $gameData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
+		$dictionary["entries"] = GamePresenter::RenderGames($userData, $gameData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderThemes", $dependencies) !== false){
 		$dependency = FindDependency("RenderThemes", $dependencies);

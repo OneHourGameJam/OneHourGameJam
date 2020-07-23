@@ -79,7 +79,7 @@ class UserPresenter{
 	
 			StartTimer("RenderUser - foreach games - RenderGame");
 			if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-				$userViewModel->entries[] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_USERS);
+				$userViewModel->entries[] = GamePresenter::RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_USERS);
 			}
 			StopTimer("RenderUser - foreach games - RenderGame");
 	

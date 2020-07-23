@@ -47,6 +47,7 @@ include_once("php/viewmodels/ThemeViewModel.php");
 include_once("php/viewmodels/AssetViewModel.php");
 include_once("php/viewmodels/ConfigurationViewModel.php");
 include_once("php/viewmodels/CookieViewModel.php");
+include_once("php/viewmodels/GameViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
@@ -55,6 +56,7 @@ include_once("php/presenters/ThemePresenter.php");
 include_once("php/presenters/AssetPresenter.php");
 include_once("php/presenters/ConfigurationPresenter.php");
 include_once("php/presenters/CookiePresenter.php");
+include_once("php/presenters/GamePresenter.php");
 
 //Controllers
 include_once("php/controllers/ThemeController.php");
@@ -68,7 +70,6 @@ include_once("php/messages.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
 include_once("php/jams.php");
-include_once("php/games.php");
 include_once("php/polls.php");
 include_once("php/stream.php");
 StopTimer("site.php - Include");

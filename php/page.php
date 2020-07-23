@@ -80,7 +80,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $render["editingentry"] = Array();
                 foreach($gameData->GameModels as $i => $gameModel){
                     if($gameModel->Id == $entryID){
-                        $render["editingentry"] = RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, RENDER_DEPTH_GAMES);
+                        $render["editingentry"] = GamePresenter::RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, RENDER_DEPTH_GAMES);
                         break;
                     }
                 }
