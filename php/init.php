@@ -101,7 +101,7 @@ function Init(){
 		$dictionary["assets"] = AssetPresenter::RenderAssets($assetData, $userData);
 	}
 	if(FindDependency("RenderPolls", $dependencies) !== false){
-		$dictionary["polls"] = RenderPolls($pollData);
+		$dictionary["polls"] = PollPresenter::RenderPolls($pollData);
 	}
 	if(FindDependency("RenderCookies", $dependencies) !== false){
 		$dictionary["cookies"] = CookiePresenter::RenderCookies($cookieData);
