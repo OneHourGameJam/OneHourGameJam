@@ -56,6 +56,7 @@ function Init(){
 	JamController::ProcessJamStates($jamData, $themeData, $configData, $adminLogData);
 
 	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
+	$streamData = StreamController::InitStream($configData);
 
 	StopTimer("Init - Process");
 	StartTimer("Init - Render");
@@ -107,15 +108,10 @@ function Init(){
 		$dictionary["cookies"] = CookiePresenter::RenderCookies($cookieData);
 	}
 	if(FindDependency("RenderMessages", $dependencies) !== false){
-		$dictionary["messages"] = RenderMessages($messageData);
+		$dictionary["messages"] = MessagePresenter::RenderMessages($messageData);
 	}
 	if(FindDependency("RenderStream", $dependencies) !== false){
-		$now = Time();
-		$jamTime = strtotime($dictionary["jams"]->current_jam->start_time . " UTC");
-		$dictionary["stream"] = Array();
-
-		if($jamTime + 3600 <= $now && $now <= $jamTime + 7 * 3600)
-			$dictionary["stream"] = InitStream($configData);
+		$dictionary["stream"] = StreamPresenter::RenderStream($streamData, $configData);
 	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeasData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);

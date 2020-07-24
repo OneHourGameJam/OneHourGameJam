@@ -50,6 +50,8 @@ include_once("php/viewmodels/CookieViewModel.php");
 include_once("php/viewmodels/GameViewModel.php");
 include_once("php/viewmodels/JamViewModel.php");
 include_once("php/viewmodels/PollViewModel.php");
+include_once("php/viewmodels/StreamViewModel.php");
+include_once("php/viewmodels/MessageViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
@@ -61,20 +63,21 @@ include_once("php/presenters/CookiePresenter.php");
 include_once("php/presenters/GamePresenter.php");
 include_once("php/presenters/JamPresenter.php");
 include_once("php/presenters/PollPresenter.php");
+include_once("php/presenters/StreamPresenter.php");
+include_once("php/presenters/MessagePresenter.php");
 
 //Controllers
 include_once("php/controllers/ThemeController.php");
 include_once("php/controllers/CookieController.php");
 include_once("php/controllers/JamController.php");
+include_once("php/controllers/StreamController.php");
 
 //Global functions
 include_once("php/sanitize.php");
 include_once("php/page.php");
 include_once("php/actions.php");
-include_once("php/messages.php");
 include_once("php/db.php");
 include_once("php/authentication.php");
-include_once("php/stream.php");
 StopTimer("site.php - Include");
 
 //Initialization. This is where configuration is loaded
