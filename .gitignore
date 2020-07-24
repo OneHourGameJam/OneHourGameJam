@@ -8,3 +8,4 @@ plugins/migratedata/*.json
 config/dbconfig.php
 .vagrant/
 .DS_Store
+error_log
