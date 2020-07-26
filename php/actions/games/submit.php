@@ -159,8 +159,10 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 
 	$currentJamData = GetCurrentJamNumberAndID();
 
-	if ($jam_number != $currentJamData["NUMBER"]) {
-		return "CANNOT_SUBMIT_TO_PAST_JAM";
+	if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value == 0){
+		if ($jam_number != $currentJamData["NUMBER"]) {
+			return "CANNOT_SUBMIT_TO_PAST_JAM";
+		}
 	}
 
 	$escaped_ip = mysqli_real_escape_string($dbConn, $ip);

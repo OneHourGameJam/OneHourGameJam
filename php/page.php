@@ -200,8 +200,10 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $render["platforms"][] = $platform;
             }
 
-            if (!isset($render["user_submitted_to_this_jam"]) && $jamNumber != $currentJam["NUMBER"]) {
-                die('Cannot make a new submission to a past jam');
+            if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value == 0){
+                if (!isset($render["user_submitted_to_this_jam"]) && $jamNumber != $currentJam["NUMBER"]) {
+                    die('Cannot make a new submission to a past jam');
+                }
             }
         break;
         case "userdata":

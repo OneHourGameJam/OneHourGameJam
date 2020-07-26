@@ -81,28 +81,26 @@
 				{{/entries}}
 
 				{{#user}}
-					{{#is_latest_started_jam}}
-						{{^user_participated_in_jam}}
-							<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
-								<div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px;'>
-									<div style="display:table; height: 100%; width: 100%;">
-										<div style="display:table-cell;vertical-align:middle;">
-											<div style="margin-left:auto;margin-right:auto;">
-												<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
-													<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
-													<a href='?page=submit'>
-														<div class="btn btn-success">
-															Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
-														</div>
-													</a>
-												</div>
+					{{#can_user_submit_to_jam}}
+						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
+							<div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px;'>
+								<div style="display:table; height: 100%; width: 100%;">
+									<div style="display:table-cell;vertical-align:middle;">
+										<div style="margin-left:auto;margin-right:auto;">
+											<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
+												<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
+												<a href='?page=submit&jam_number={{jam_number}}'>
+													<div class="btn btn-success">
+														Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
+													</div>
+												</a>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						{{/user_participated_in_jam}}
-					{{/is_latest_started_jam}}
+						</div>
+					{{/can_user_submit_to_jam}}
 				{{/user}}
 			</div>
 		</div>

@@ -153,10 +153,15 @@ class JamPresenter{
 			if($jamModel->Deleted != 1){
 				$nonDeletedJamCounter += 1;
 			}
+
 			if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 			{
 				if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
 					$jamViewModel = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+					
+					if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value){
+						$jamViewModel->can_user_submit_to_jam = !$jamViewModel->user_participated_in_jam;
+					}
 
 					$now = time();
 					$datetime = strtotime($jamViewModel->start_time . " UTC");
@@ -166,6 +171,7 @@ class JamPresenter{
 						if(!isset($jamViewModel->jam_deleted)){
 							if($latestStartedJamFound == false){
 								$jamViewModel->is_latest_started_jam = 1;
+								$jamViewModel->can_user_submit_to_jam = !$jamViewModel->user_participated_in_jam;
 								$latestStartedJamFound = true;
 							}
 						}
