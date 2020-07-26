@@ -47,12 +47,12 @@
 
 				{{#entries}}
 					{{^entry_deleted}}
-						<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none;'>
+				<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; color: {{color_text}}'>
 							<div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
 								<div style="display:table; height: 100%; width: 100%;">
 									<div style="display:table-cell;vertical-align:bottom;">
 										<div style="margin-left:auto;margin-right:auto;">
-											<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
+											<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
 												<!-- Why is centering things such a collossal pain in CSS :s -->
 												<b><span class='entryTitle' style='word-wrap:break-word;'>{{title}}</span></b><br />
 												by <span class='entryAuthor'>{{author_display_name}}</span>
@@ -66,7 +66,7 @@
 									<b>Play</b><br />
 									{{#platforms}}
 										{{#url}}
-											<a href='#' class='btn entryButton' style='background-color: {{color}}' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entryPlayIcon' title='{{platform_name}}'></a>
+											<a href='#' class='btn entryButton' style='background-color: {{color_background}}' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entryPlayIcon' title='{{platform_name}}'></a>
 										{{/url}}
 									{{/platforms}}
 								</div>
@@ -74,7 +74,7 @@
 									<b>Description</b><br />
 									{{description}}
 								</div>
-								<button type="button" class="btn entryButton" style='background-color: {{color}}' onclick='document.location.href = "?page=author&amp;author={{author_username}}";'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}'s profile</button>
+								<button type="button" class="btn entryButton" style='background-color: {{color_background}}' onclick='document.location.href = "?page=author&amp;author={{author_username}}";'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}'s profile</button>
 							</div>
 						</div>
 					{{/entry_deleted}}
@@ -88,7 +88,7 @@
 									<div style="display:table; height: 100%; width: 100%;">
 										<div style="display:table-cell;vertical-align:middle;">
 											<div style="margin-left:auto;margin-right:auto;">
-												<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
+												<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
 													<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
 													<a href='?page=submit'>
 														<div class="btn btn-success">

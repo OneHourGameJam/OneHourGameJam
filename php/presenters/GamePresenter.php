@@ -69,10 +69,11 @@ class GamePresenter{
 		}
 	
 		//Entry color
-		$color = $gameModel->Color;
-		$color256_red = hexdec(substr($color, 0, 2));
-		$color256_green = hexdec(substr($color, 2, 2));
-		$color256_blue = hexdec(substr($color, 4, 2));
+		$backgroundColor = $gameModel->BackgroundColor;
+		$textColor = $gameModel->TextColor;
+		$color256_red = hexdec(substr($backgroundColor, 0, 2));
+		$color256_green = hexdec(substr($backgroundColor, 2, 2));
+		$color256_blue = hexdec(substr($backgroundColor, 4, 2));
 		$lighter_color256_red = ($color256_red + 0xFF) / 2;
 		$lighter_color256_green = ($color256_green + 0xFF) / 2;
 		$lighter_color256_blue =($color256_blue + 0xFF) / 2;
@@ -82,12 +83,13 @@ class GamePresenter{
 		$border_color256_blue =($color256_blue + 0xDD) / 2;
 		$border_color = str_pad(dechex($border_color256_red), 2, "0", STR_PAD_LEFT) . str_pad(dechex($border_color256_green), 2, "0", STR_PAD_LEFT) . str_pad(dechex($border_color256_blue), 2, "0", STR_PAD_LEFT);
 		
-		$gameViewModel->color = "#".$color;
-		$gameViewModel->color256_red = $color256_red;
-		$gameViewModel->color256_green = $color256_green;
-		$gameViewModel->color256_blue = $color256_blue;
+		$gameViewModel->color_background = "#".$backgroundColor;
+		$gameViewModel->color256_background_red = $color256_red;
+		$gameViewModel->color256_background_green = $color256_green;
+		$gameViewModel->color256_background_blue = $color256_blue;
 		$gameViewModel->color_lighter = "#".$lighter_color;
 		$gameViewModel->color_border = "#".$border_color;
+		$gameViewModel->color_text = "#".$textColor;
 	
 		//Mini RenderJam()
 		$jamModel = $jamData->JamModels[$jamId];

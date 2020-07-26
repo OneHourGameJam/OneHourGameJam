@@ -144,8 +144,8 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
             $render["submit_jam"] = JamPresenter::RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
             $colorNumber = rand(0, count($jamModel->Colors) - 1);
-            $render["user_entry_color_number"] = $colorNumber;
-            $render["user_entry_color"] = $jamModel->Colors[$colorNumber];
+            $render["user_entry_background_color"] = $jamModel->Colors[$colorNumber];
+            $render["user_entry_text_color"] = "#000000";
 
             $platforms = Array();
             foreach($platformData->PlatformModels as $i => $platformModel){
@@ -175,16 +175,8 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                     continue;
                 }
 
-                //Determine entry color number
-                foreach($jamModel->Colors as $colorIndex => $color){
-                    if($color == $gameModel->Color){
-                        $colorNumber = $colorIndex;
-                        break;
-                    }
-                }
-
-                $render["user_entry_color_number"] = $colorNumber;
-                $render["user_entry_color"] = $jamModel->Colors[$colorNumber];
+                $render["user_entry_background_color"] = $gameModel->BackgroundColor;
+                $render["user_entry_text_color"] = $gameModel->TextColor;
 
                 $render["user_submitted_to_this_jam"] = true;
                 $render["user_entry_name"] = $gameModel->Title;

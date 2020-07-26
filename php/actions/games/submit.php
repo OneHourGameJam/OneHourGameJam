@@ -5,13 +5,14 @@
 //$gameURL must be a valid URL, $screenshotURL can either be blank or a valid URL.
 //If blank, a default image is used instead. description must be non-blank.
 //Function also authorizes the user (must be logged in)
-function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $description, $jamColorNumber){
+function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $description, $colorBackground, $colorText){
 	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jamData, $gameData, $configData;
 
 	$gameName = trim($gameName);
 	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
-	$jamColorNumber = intval(trim($jamColorNumber));
+	$colorBackground = trim($colorBackground);
+	$colorText = trim($colorText);
 
 	//Authorize user
 	if($loggedInUser === false){
@@ -56,11 +57,16 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 	}
 
 	//Validate color
-	if($jamColorNumber < 0 || count($jam->Colors) <= $jamColorNumber){
+	if(!preg_match("/^#([A-Fa-f0-9]{6})$/", $colorBackground)){
 		return "INVALID_COLOR";
 	}
-	$color = $jam->Colors[$jamColorNumber];
+	if(!preg_match("/^#([A-Fa-f0-9]{6})$/", $colorText)){
+		return "INVALID_COLOR";
+	}
 
+	$colorBackgroundWithoutHash = substr($colorBackground, 1, 6);
+	$colorTextWithoutHash = substr($colorText, 1, 6);
+	
 	//Upload screenshot
 	$jam_folder = "data/jams/jam_$jam_number";
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
@@ -121,7 +127,8 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
 		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $gameModel->AuthorUserId);
 		$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
-		$escaped_color = mysqli_real_escape_string($dbConn, $color);
+		$escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($dbConn, $colorBackgroundWithoutHash);
+		$escaped_colorTextWithoutHash = mysqli_real_escape_string($dbConn, $colorTextWithoutHash);
 
 		$sql = "
 		UPDATE entry
@@ -129,7 +136,8 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 			entry_title = '$escapedGameName',
 			entry_screenshot_url = '$escapedScreenshotURL',
 			entry_description = '$escapedDescription',
-			entry_color = '$escaped_color'
+			entry_background_color = '$escaped_colorBackgroundWithoutHash',
+			entry_text_color = '$escaped_colorTextWithoutHash'
 		WHERE
 			entry_author_user_id = $escapedAuthorUserId
 		AND entry_jam_number = $escaped_jamNumber
@@ -163,7 +171,8 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 	$escaped_description = mysqli_real_escape_string($dbConn, $description);
 	$escaped_author_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 	$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
-	$escaped_color = mysqli_real_escape_string($dbConn, $color);
+	$escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($dbConn, $colorBackgroundWithoutHash);
+	$escaped_colorTextWithoutHash = mysqli_real_escape_string($dbConn, $colorTextWithoutHash);
 
 	$sql = "
 		INSERT INTO entry
@@ -177,7 +186,8 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 		entry_description,
 		entry_author_user_id,
 		entry_screenshot_url,
-		entry_color)
+		entry_background_color,
+		entry_text_color)
 		VALUES
 		(null,
 		Now(),
@@ -189,7 +199,8 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 		'$escaped_description',
 		$escaped_author_user_id,
 		'$escaped_ssURL',
-		'$escaped_color');
+		'$escaped_colorBackgroundWithoutHash',
+		'$escaped_colorTextWithoutHash');
 	";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
@@ -273,7 +284,8 @@ function PerformAction(&$loggedInUser){
 		$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
 		$description = (isset($_POST["description"])) ? $_POST["description"] : "";
 		$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
-		$jamColorNumber = (isset($_POST["colorNumber"])) ? intval($_POST["colorNumber"]) : 0;
+		$colorBackground = (isset($_POST["backgroundColor"])) ? $_POST["backgroundColor"] : "";
+		$colorText = (isset($_POST["textColor"])) ? $_POST["textColor"] : "";
 
 		$platforms = Array();
 		foreach($platformData->PlatformModels as $i => $platformModel){
@@ -289,7 +301,7 @@ function PerformAction(&$loggedInUser){
 			$satisfactionData->SubmitSatisfaction($loggedInUser, "JAM_$jamNumber", $satisfaction);
 		}
 
-		return SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $description, $jamColorNumber);
+		return SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $description, $colorBackground, $colorText);
 	}
 }
 

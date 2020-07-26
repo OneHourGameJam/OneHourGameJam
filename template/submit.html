@@ -85,16 +85,38 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				<div class="form-group">
-					<label for="gamename">{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} color</label>
-					<input type='hidden' id="colorNumber" name="colorNumber" value='{{page.user_entry_color_number}}'>
-					<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: #{{page.user_entry_color}}; vertical-align: middle;'></div>
-					<div class="btn-group" data-toggle="buttons">
-						{{#page.submit_jam.colors}}
-							<label class="btn btn-default" style='background-color: {{color}}' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorNumber').val('{{number}}')">
-								<input type="radio" name="options" id="option2" autocomplete="off"> {{color}}
-							</label>
-						{{/page.submit_jam.colors}}
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="colorPresets">Preset</label>
+							<div class="btn-group" data-toggle="buttons">
+								{{#page.submit_jam.colors}}
+									<label class="btn btn-default" style='background-color: {{color}}; color: black;' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorPreview').css('color', '#000000'); $('#backgroundColor').val('{{color}}'); $('#textColor').val('#000000')">
+										<input type="radio" name="options" id="option2" autocomplete="off"> {{color}}
+									</label>
+								{{/page.submit_jam.colors}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="backgroundColor">Background Colour</label>
+							<input type="color" class="form-control" id="backgroundColor" name='backgroundColor' placeholder="Colour" value="#{{page.user_entry_background_color}}" oninput="$('#colorPreview').css('background-color', this.value);" required>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="textColor">Text Colour</label>
+							<input type="color" class="form-control" id="textColor" name='textColor' placeholder="Colour" value="#{{page.user_entry_text_color}}" oninput="$('#colorPreview').css('color', this.value);" required>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div id='colorPreview' style='width: 190px; margin-left: auto; margin-right: auto; background-color: #{{page.user_entry_background_color}}; border-radius: 5px; text-align: center; color: #{{page.user_entry_text_color}}'>
+							<b><span class='entryTitle' style='word-wrap:break-word;'>Preview</span></b><br />
+							by <span class='entryAuthor'>Preview</span>
+						</div>
 					</div>
 				</div>
 			</div>

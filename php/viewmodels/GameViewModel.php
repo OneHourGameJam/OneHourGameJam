@@ -17,12 +17,13 @@ class GameViewModel{
     public $screenshot_url;
     public $entry_deleted;
     public $title_url_encoded;
-    public $color;
-    public $color256_red;
-    public $color256_green;
-    public $color256_blue;
+    public $color_background;
+    public $color256_background_red;
+    public $color256_background_green;
+    public $color256_background_blue;
     public $color_lighter;
-    public $color_non_white;
+    public $color_border;
+    public $color_text;
     public $jam_theme;
     public $author_username;
     public $author_username_url_encoded;

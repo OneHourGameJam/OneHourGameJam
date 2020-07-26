@@ -8,7 +8,8 @@ class GameModel{
 	public $Description;
 	public $AuthorUserId;
 	public $UrlScreenshot;
-	public $Color;
+	public $BackgroundColor;
+	public $TextColor;
 	public $Deleted;
 }
 
@@ -28,7 +29,7 @@ class GameData{
 
         $gameModels = Array();
 
-        $sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author_user_id, entry_screenshot_url, entry_color, entry_deleted
+        $sql = "SELECT entry_id, entry_jam_id, entry_jam_number, entry_title, entry_description, entry_author_user_id, entry_screenshot_url, entry_background_color, entry_text_color, entry_deleted
         FROM entry ORDER BY entry_id DESC";
         $data = mysqli_query($dbConn, $sql);
         $sql = "";
@@ -43,7 +44,8 @@ class GameData{
             $game->Description = $info["entry_description"];
             $game->AuthorUserId = $info["entry_author_user_id"];
             $game->UrlScreenshot = $info["entry_screenshot_url"];
-            $game->Color = $info["entry_color"];
+            $game->BackgroundColor = $info["entry_background_color"];
+            $game->TextColor = $info["entry_text_color"];
             $game->Deleted = $info["entry_deleted"];
 
             $gameModels[$game->Id] = $game;
