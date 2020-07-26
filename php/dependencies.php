@@ -21,6 +21,7 @@ define("DEPENDENCY_ASSETS",         pow(2, 13));
 define("DEPENDENCY_POLLS",          pow(2, 14));
 define("DEPENDENCY_LOGGED_IN_USER_POLL_VOTES",  pow(2, 15));
 define("DEPENDENCY_MESSAGES",       pow(2, 16));
+define("DEPENDENCY_PLATFORMS",       pow(2, 17));
 
 //define("DEPENDENCY_", pow(2, 17));
 //define("DEPENDENCY_", pow(2, 18));
@@ -97,6 +98,9 @@ $rendererDependencies = Array(
     "RenderStream" => Array(
         "BaseDependencies" => DEPENDENCY_NONE, 
         "Dependencies" => Array()),
+    "RenderPlatforms" => Array(
+        "BaseDependencies" => DEPENDENCY_PLATFORMS, 
+        "Dependencies" => Array())
 );
 
 $commonDependencies = Array(
@@ -264,6 +268,12 @@ $pageSettings = Array(
         "authorization_level" => "ADMIN",
         "template_file" => "polls.html",
         "dependencies" => Array("RenderPolls" => RENDER_DEPTH_NONE),
+    ), 
+    "editplatforms" => Array(
+        "page_title" => "Manage Platforms",
+        "authorization_level" => "ADMIN",
+        "template_file" => "editplatforms.html",
+        "dependencies" => Array("RenderPlatforms" => RENDER_DEPTH_NONE),
     ), 
 );
 

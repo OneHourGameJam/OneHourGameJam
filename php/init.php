@@ -113,6 +113,9 @@ function Init(){
 	if(FindDependency("RenderStream", $dependencies) !== false){
 		$dictionary["stream"] = StreamPresenter::RenderStream($streamData, $configData);
 	}
+	if(FindDependency("RenderPlatforms", $dependencies) !== false){
+		$dictionary["platforms"] = PlatformPresenter::RenderPlatforms($platformData);
+	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeasData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	

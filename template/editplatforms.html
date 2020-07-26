@@ -1,0 +1,51 @@
+<h3>Edit Platforms</h3>
+
+<h4>Platforms</h4>
+<p>For more information on the Login, {{CONFIG.VALUES.JAM_PHRASE_PLURAL}} and Admin activity indicators, hover your mouse over an indicator image.</p>
+<table class="table sortable">
+    <tr>
+        <th style='width: 40px;'>Icon</th>
+        <th>Name</th>
+        <th>New Icon</th>
+        <th>Save</th>
+    </tr>
+    {{#platforms.LIST}}
+        <form method='post' enctype="multipart/form-data">
+            <input type='hidden' name='platformid' value='{{id}}'>
+            {{> csrf_token}}
+            <tr>
+                <td><b><img src='{{{page.template_path}}}{{{icon_url}}}' style='max-width:40px; max-height: 40px;'></b></td>
+                <td><b>
+                    {{^deleted}}<input type="text" class="form-control" id="platformname" name='platformname' placeholder="Platform Name" value="{{name}}" required>{{/deleted}}
+                    {{#deleted}}{{name}} (Deleted){{/deleted}}
+                </b></td>
+                <td>{{^deleted}}<input type="file" class="form-control" id="platformFile" name='platformFile' placeholder="Icon file" value="">{{/deleted}}</td>
+                <td>
+                    {{^deleted}}
+                        <button type="submit" name='action' value='editplatform' class="btn btn-default">Save</button>
+                        <button type="submit" name='action' value='deleteplatform' class="btn btn-default">Delete</button>
+                    {{/deleted}}
+                    {{#deleted}}
+                        <button type="submit" name='action' value='undeleteplatform' class="btn btn-default">Restore</button>
+                    {{/deleted}}
+                </td>
+            </tr>
+        </form>
+    {{/platforms.LIST}}
+</table>
+
+<h4>Add Platform</h4>
+
+<form method='post' enctype="multipart/form-data">
+	{{> csrf_token}}
+    <div class="form-group">
+        <label for="platformname">Name</label>
+        <input type="text" class="form-control" id="platformname" name='platformname' placeholder="Platform Name" value="" required>
+    </div>
+    <div class="form-group">
+        <label for="platformFile">Platform Icon</label>
+        <br />Square icons work best. Png (up to 20kB)
+        <input type="file" class="form-control" id="platformFile" name='platformFile' placeholder="Icon file" value="">
+    </div>
+    <button type="submit" name='action' value='newplatform' class="btn btn-default">Add Platform</button>
+</form>

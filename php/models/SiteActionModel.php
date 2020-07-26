@@ -303,6 +303,60 @@ class SiteActionData{
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?page=main", "error", "Only admins can perform this action."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
                 )
+            ),
+            new SiteActionModel(
+                "newplatform",
+                "php/actions/platform/newplatform.php",
+                "?page=editplatforms",
+                Array(
+                    "SUCCESS_PLATFORM_ADDED" => new SiteActionResultModel("?page=editplatforms", "success", "Platform added."),
+                    "ICON_FAILED_TO_UPLOAD" => new SiteActionResultModel("?page=editplatforms", "error", "Icon failed to uplaod."),
+                    "ICON_WRONG_FILE_TYPE" => new SiteActionResultModel("?page=editplatforms", "warning", "Icon file type incorrect: Must be a png."),
+                    "ICON_TOO_BIG" => new SiteActionResultModel("?page=editplatforms", "warning", "Uploaded image is too big (max 20kB)."),
+                    "ICON_NOT_AN_IMAGE" => new SiteActionResultModel("?page=editplatforms", "warning", "Uploaded icon is not an image."),
+                    "DUPLICATE_PLATFORM_NAME" => new SiteActionResultModel("?page=editplatforms", "warning", "Platform already exists."),
+                    "MISSING_PLATFORM_NAME" => new SiteActionResultModel("?page=editplatforms", "warning", "Platform name must not be blank."),
+                    "NOT_AUTHORIZED" => new SiteActionResultModel("?page=main", "error", "Only admins can perform this action."),
+                    "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
+                )
+            ),
+            new SiteActionModel(
+                "editplatform",
+                "php/actions/platform/editplatform.php",
+                "?page=editplatforms",
+                Array(
+                    "SUCCESS_PLATFORM_EDITED" => new SiteActionResultModel("?page=editplatforms", "success", "Platform edited."),
+                    "ICON_WRONG_FILE_TYPE" => new SiteActionResultModel("?page=editplatforms", "warning", "Icon file type incorrect: Must be a png."),
+                    "ICON_TOO_BIG" => new SiteActionResultModel("?page=editplatforms", "warning", "Uploaded image is too big (max 20kB)."),
+                    "ICON_NOT_AN_IMAGE" => new SiteActionResultModel("?page=editplatforms", "warning", "Uploaded icon is not an image."),
+                    "UNKNOWN_PLATFORM" => new SiteActionResultModel("?page=editplatforms", "warning", "Unknown platform."),
+                    "DUPLICATE_PLATFORM_NAME" => new SiteActionResultModel("?page=editplatforms", "warning", "Another platform with that name already exists."),
+                    "MISSING_PLATFORM_NAME" => new SiteActionResultModel("?page=editplatforms", "warning", "Platform name must not be blank."),
+                    "NOT_AUTHORIZED" => new SiteActionResultModel("?page=main", "error", "Only admins can perform this action."),
+                    "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
+                )
+            ),
+            new SiteActionModel(
+                "deleteplatform",
+                "php/actions/platform/deleteplatform.php",
+                "?page=editplatforms",
+                Array(
+                    "SUCCESS_PLATFORM_SOFT_DELETED" => new SiteActionResultModel("?page=editplatforms", "success", "Platform soft deleted."),
+                    "UNKNOWN_PLATFORM" => new SiteActionResultModel("?page=editplatforms", "warning", "Unknown platform."),
+                    "NOT_AUTHORIZED" => new SiteActionResultModel("?page=main", "error", "Only admins can perform this action."),
+                    "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
+                )
+            ),
+            new SiteActionModel(
+                "undeleteplatform",
+                "php/actions/platform/undeleteplatform.php",
+                "?page=editplatforms",
+                Array(
+                    "SUCCESS_PLATFORM_RESTORED" => new SiteActionResultModel("?page=editplatforms", "success", "Platform restored."),
+                    "UNKNOWN_PLATFORM" => new SiteActionResultModel("?page=editplatforms", "warning", "Unknown platform."),
+                    "NOT_AUTHORIZED" => new SiteActionResultModel("?page=main", "error", "Only admins can perform this action."),
+                    "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
+                )
             )
         );
 

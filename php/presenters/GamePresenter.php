@@ -58,6 +58,10 @@ class GamePresenter{
 		foreach($platformGameData->GameIdToPlatformGameIds[$gameModel->Id] as $i => $platformGameId){
 			$platformGameModel = $platformGameData->PlatformGameModels[$platformGameId];
 			$platformId = $platformGameModel->PlatformId;
+			if($platformData->PlatformModels[$platformId]->Deleted){
+				continue;
+			}
+
 			$url = $platformGameModel->Url;
 			
 			$platforms[$platformId]->url = $url;

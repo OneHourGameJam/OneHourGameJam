@@ -52,6 +52,7 @@ include_once("php/viewmodels/JamViewModel.php");
 include_once("php/viewmodels/PollViewModel.php");
 include_once("php/viewmodels/StreamViewModel.php");
 include_once("php/viewmodels/MessageViewModel.php");
+include_once("php/viewmodels/PlatformViewModel.php");
 
 //Presenters
 include_once("php/presenters/AdminLogPresenter.php");
@@ -65,6 +66,7 @@ include_once("php/presenters/JamPresenter.php");
 include_once("php/presenters/PollPresenter.php");
 include_once("php/presenters/StreamPresenter.php");
 include_once("php/presenters/MessagePresenter.php");
+include_once("php/presenters/PlatformPresenter.php");
 
 //Controllers
 include_once("php/controllers/ThemeController.php");
