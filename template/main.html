@@ -89,7 +89,7 @@
 										<div style="display:table-cell;vertical-align:middle;">
 											<div style="margin-left:auto;margin-right:auto;">
 												<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
-													<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the jam here:</p>
+													<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
 													<a href='?page=submit'>
 														<div class="btn btn-success">
 															Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
@@ -112,7 +112,7 @@
 {{^jams.all_jams_loaded}}
 <div class="row">
 	<div class="col-md-10 alignCenter" style="padding-bottom: 10px; padding-top: 5px;">
-		<a class="btn btn-default" href="?page=main&loadAll">Load all jams</a>
+		<a class="btn btn-default" href="?page=main&loadAll">Load all {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a>
 	</div>
 </div>
 {{/jams.all_jams_loaded}}

@@ -4,7 +4,7 @@
 <form method='post' enctype="multipart/form-data">
 		{{> csrf_token}}
 		<div class="form-group">
-			<label for="jam_number">Asset ID (leave blank to add new asset)</label>
+			<label for="asset_id">Asset ID (leave blank to add new asset)</label>
 			<input type="text" class="form-control" id="asset_id" name='asset_id' placeholder="Asset ID" value="{{{page.editingasset.id}}}" readonly required>
 		</div>
 		<div class="form-group">

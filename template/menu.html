@@ -72,7 +72,7 @@
 			<li class="mainmenu-separator">Browse</li>
 			<li><a href='?page=entries'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
 			<li><a href='?page=authors'>Developers</a></li>
-			<li><a href='?page=jams'>Jams</a></li>
+			<li><a href='?page=jams'>{{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a></li>
 
 			{{#user}}
 				<li class="mainmenu-separator">User</li>
@@ -102,7 +102,7 @@
 			{{#user.admin}}
 				{{^cookies.is_streamer}}
 					<li class="mainmenu-separator">Administration</li>
-					<li><a href='?page=newjam'>Schedule jam</a></li>
+					<li><a href='?page=newjam'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</a></li>
 					<li><a href='?page=config'>Configuration</a></li>
 					<li><a href='?page=managethemes'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></li>
 					<li><a href='?page=editcontent'>Manage content</a></li>

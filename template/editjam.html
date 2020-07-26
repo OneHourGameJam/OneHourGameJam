@@ -1,13 +1,13 @@
 <p>
-	<h3>Edit jam</h3>
+	<h3>Edit {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</h3>
 </p>
 <form method='post'>
 	{{> csrf_token}}
 	{{#page.editingjam}}
 		<input type="hidden" name="jamID" value="{{{jam_id}}}">
 		<div class="form-group">
-			<label for="jam_number">Jam number</label>
-			<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="Jam number" value="{{{jam_number}}}" readonly required>
+			<label for="jam_number">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number</label>
+			<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number" value="{{{jam_number}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="theme">{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</label>
@@ -22,11 +22,11 @@
 			<input type="time" class="form-control" id="time" name='time' placeholder="Time" value="{{{time}}}" required>
 		</div>
 		<div class="form-group">
-			<label for="jamcolors">Jam colours (Users can choose between these to customize their {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}'s appearance on the site)</label>
-			<input type="text" class="form-control" id="jamcolors" name='jamcolors' value='{{colors_input_string}}' placeholder="" required>
+			<label for="jamcolors">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours (Users can choose between these to customize their {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}'s appearance on the site)</label>
+			<input type="text" class="form-control" id="jamcolors" name='jamcolors' value='{{colors_input_string}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours, formatted with hex codes (without #), delimitered with a dash (-). Example: ff0000-00ff00-0000ff-ffcc00-ccff00" required>
 		</div>
 
-		<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save Jam</button>
-		<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete Jam</button>
+		<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
+		<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
 	{{/page.editingjam}}
 </form>

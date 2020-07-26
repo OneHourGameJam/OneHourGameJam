@@ -7,7 +7,7 @@
 {{/cookies.is_streamer}}
 
 {{^cookies.is_streamer}}
-			<p>Use this page to manage {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions, decide which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to pick for a manually scheduled jam, and view probablity of certain {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} being automatically selected for the next jam.</p>
+			<p>Use this page to manage {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions, decide which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to pick for a manually scheduled {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, and view probablity of certain {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} being automatically selected for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}.</p>
 			</p>
 
 	<div class='panel panel-info'>
@@ -51,17 +51,17 @@
 {{/cookies.is_streamer}}
 
 <h4>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} to Keep</h4>
-<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be kept for the next jam.</p>
-<p>This list can be used to select the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} for the next jam, but the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will be automatically selected if none is
+<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be kept for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}.</p>
+<p>This list can be used to select the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, but the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will be automatically selected if none is
 	chosen.</p>
 <ul>
 	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is one of the top
 		voted {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} marked as "Top" can be set on the <a href='?		page=config'>Configuration
-			page</a> (default is top 5). These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} appear as suggestions on the <a href='?page=newjam'>Schedule Jam
+			page</a> (default is top 5). These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} appear as suggestions on the <a href='?page=newjam'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}
 			page</a>.</li>
 	<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not one of the
-		top {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, but is popular enough to be kept in voting for the next jam. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} to keep between
-		jams can be set on the <a href='?page=config'>Configuration page</a> (default is top 20)</li>
+		top {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, but is popular enough to be kept in voting for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} to keep between
+		{{CONFIG.VALUES.JAM_PHRASE_PLURAL}} can be set on the <a href='?page=config'>Configuration page</a> (default is top 20)</li>
 	<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} has not
 		yet received enough votes to get a popularity rating. The minimum
 		number of votes for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}'s popularity to appear can be set on the <a href='?page=config'>Configuration
@@ -152,11 +152,11 @@
 								{{^top_theme}}
 									{{#keep_theme}}
 										<!-- Keep checkmark -->
-										<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next jam'>
+										<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}'>
 									{{/keep_theme}}
 									{{^keep_theme}}
 										<!-- Unpopular theme half-star -->
-										<img src='{{{page.template_path}}}images/unpopular.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} not within the top number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} that are kept between jams.'>
+										<img src='{{{page.template_path}}}images/unpopular.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} not within the top number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} that are kept between {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}.'>
 									{{/keep_theme}}
 								{{/top_theme}}
 							{{/has_enough_votes}}
@@ -232,15 +232,15 @@
 
 <a id="markedfordeletion"></a>
 <h4>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} Marked for Deletion</h4>
-<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be deleted <strong>during or after the <em>next</em> jam.</strong> An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept if it is very popular!</p>
+<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be deleted <strong>during or after the <em>next</em> {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}.</strong> An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept if it is very popular!</p>
 <p>Deleting a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will remove it from {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} voting, but it can still be suggested again. Ban a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} using the "Actions" panel next to it to prevent it from being suggested again. Deleting a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will reset its voting information.</p>
 <ul>
 	<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was suggested a
 		long time ago and its popularity likely no longer reflects the opinion of current participants. Should be
-		deleted after the next jam. <strong>An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept for a short time if it is very popular!</strong> The threshold for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to be marked as old can be set on the <a
+		deleted after the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}. <strong>An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept for a short time if it is very popular!</strong> The threshold for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to be marked as old can be set on the <a
 			href='?page=config'>Configuration page</a> (default is 90 days).</li>
 	<li><img src='{{{page.template_path}}}images/reused.png' style='width: 16px;'> <b>RECENT</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was used in a
-		recent jam. It shouldn't be used again until a number of jams defined on the <a
+		recent {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}. It shouldn't be used again until a number of {{CONFIG.VALUES.JAM_PHRASE_PLURAL}} defined on the <a
 			href='?page=config'>Configuration
 			page</a>.</li>
 	<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not
@@ -322,12 +322,12 @@
 			{{^top_theme}}
 			{{#keep_theme}}
 			<!-- Keep checkmark -->
-			<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next jam'>
+			<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}'>
 			{{/keep_theme}}
 			{{^keep_theme}}
 			<!-- Unpopular theme half-star -->
 			<img src='{{{page.template_path}}}images/unpopular.png'
-				title='Theme not within the top number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} that are kept between jams.'>
+				title='Theme not within the top number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} that are kept between {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}.'>
 			{{/keep_theme}}
 			{{/top_theme}}
 			{{/has_enough_votes}}

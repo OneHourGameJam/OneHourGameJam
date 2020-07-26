@@ -42,11 +42,11 @@
 	}
 </script>
 
-<h3>Jam {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions</h3>
+<h3>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} Suggestions</h3>
 <h4>Suggest a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</h4>
 
 <p>
-    Each jam has a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}, these are selected based on your suggestions. Once submitted, other users will cast their votes. You can suggest up to {{CONFIG.PRETTY_PRINT.THEMES_PER_USER}} {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} and can delete your suggested {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.
+    Each {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} has a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}, these are selected based on your suggestions. Once submitted, other users will cast their votes. You can suggest up to {{CONFIG.PRETTY_PRINT.THEMES_PER_USER}} {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} and can delete your suggested {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.
 </p>
 <form method='post'>
     {{> csrf_token}}
@@ -60,10 +60,10 @@
 <h4>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} Voting</h4>
 
 <p>
-	Here you can vote on the {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} you would like to appear in jams. 
+	Here you can vote on the {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} you would like to appear in {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}. 
 </p>
 <p>
-	{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} suggested above will appear in this list. Once a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} receives enough votes, it becomes considered for a jam, depending on its popularity. {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}. Old {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} that gets removed due to unpopularity or age can be suggested again at any point.
+	{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} suggested above will appear in this list. Once a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} receives enough votes, it becomes considered for a {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, depending on its popularity. {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} which don't perform as well as others regularly get removed, the threshold for removal however depends on the popularity of the other suggested {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}. Old {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} are also removed to make way for new ones, irrespective of their popularity as the votes for them likely no longer represent the opinion of currently active participants. Any {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} that gets removed due to unpopularity or age can be suggested again at any point.
 </p>
 
 <h4>Your {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h4>

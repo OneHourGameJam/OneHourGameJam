@@ -6,8 +6,8 @@
 	<div class='panel panel-info jamContener'>
 		<div class='panel-heading {{#jam_deleted}}jamDeleted{{/jam_deleted}}{{^jam_deleted}}jamNotDeleted{{/jam_deleted}}'>
 			<span style='font-size: 16px;'>
-				<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} jam</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}, scheduled by {{scheduler_display_name}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), Jam ID: {{jam_id}})
-				<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit jam</button></a>
+				<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}, scheduled by {{scheduler_display_name}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} ID: {{jam_id}})
+				<a href='?page=editjam&jam_id={{jam_id}}'><button type="submit" name='action' value='editjam' class="btn btn-default">Edit {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button></a>
 			</span>
 		</div>
 
