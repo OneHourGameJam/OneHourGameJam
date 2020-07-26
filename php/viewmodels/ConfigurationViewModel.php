@@ -4,6 +4,9 @@ class ConfigurationViewModel{
     public $LIST = Array();
     public $VALUES = Array();
     public $PRETTY_PRINT = Array();
+
+    public $has_custom_brand_logo;
+    public $has_custom_main_logo;
 }
 
 class SettingGroupViewModel{

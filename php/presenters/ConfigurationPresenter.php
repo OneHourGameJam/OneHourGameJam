@@ -108,6 +108,13 @@ class ConfigurationPresenter{
 			$configurationViewModel->LIST[$categoryIndex]->ENTRIES[] = $settingViewModel;
 		}
 
+		if($configurationViewModel->VALUES["OVERRIDE_BRAND_LOGO"] != ""){
+			$configurationViewModel->has_custom_brand_logo = 1;
+		}
+		if($configurationViewModel->VALUES["OVERRIDE_MAIN_LOGO"] != ""){
+			$configurationViewModel->has_custom_main_logo = 1;
+		}
+
 		StopTimer("RenderConfig");
 		return $configurationViewModel;
 	}
