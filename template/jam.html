@@ -7,7 +7,7 @@
 			</h3>
 			{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}: {{theme}}<br />
 			{{#jam_started}}
-				<span>Started: {{date}} at {{time}} ({{entries_count}} entries)</span>
+				<span>Started: {{date}} at {{time}} ({{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}})</span>
 			{{/jam_started}}
 			{{^jam_started}}
 				<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in <span id='time_display_{{jam_number_ordinal}}'>{{time_left}}</span>)</span></span>

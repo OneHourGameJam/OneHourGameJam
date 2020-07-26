@@ -50,8 +50,8 @@
 				{{#jams.current_jam}}
 					{{^cookies.is_streamer}}
 						<li><b><a href='?page=submit'>
-							{{^user_participated_in_jam}}Submit game{{/user_participated_in_jam}}
-							{{#user_participated_in_jam}}Edit game{{/user_participated_in_jam}}
+							{{^user_participated_in_jam}}Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}{{/user_participated_in_jam}}
+							{{#user_participated_in_jam}}Edit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}{{/user_participated_in_jam}}
 						</a></b></li>
 					{{/cookies.is_streamer}}
 				{{/jams.current_jam}}
@@ -70,7 +70,7 @@
 			{{/user}}
 
 			<li class="mainmenu-separator">Browse</li>
-			<li><a href='?page=entries'>Games</a></li>
+			<li><a href='?page=entries'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
 			<li><a href='?page=authors'>Developers</a></li>
 			<li><a href='?page=jams'>Jams</a></li>
 

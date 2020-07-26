@@ -1,5 +1,5 @@
 <p>
-	<h3>Submit your entry</h3>
+	<h3>Submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</h3>
 </p>
 
 <div class="panel panel-info">
@@ -15,13 +15,13 @@
 		<div class="panel panel-info">
 			<div class='panel-heading'>
 				<h3 class='panel-title' style='font-size: 16px;'>
-					Game Info
+					{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} Info
 				</h3>
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label for="gamename">Game title</label>
-					<input type="text" class="form-control" id="gamename" name='gamename' placeholder="Game name" value="{{page.user_entry_name}}" required>
+					<label for="gamename">{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} title</label>
+					<input type="text" class="form-control" id="gamename" name='gamename' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} name" value="{{page.user_entry_name}}" required>
 				</div>
 
 				<div class="form-group">
@@ -30,8 +30,8 @@
 					<input type="file" class="form-control" id="screenshotfile" name='screenshotfile' placeholder="Screenshot file" value="{{page.user_entry_screenshot}}">
 				</div>
 				<div class="form-group">
-					<label for="description">Brief game description</label>
-					<textarea class="form-control" id="description" name='description' placeholder="Game description">{{page.user_entry_desc}}</textarea>
+					<label for="description">Brief {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description</label>
+					<textarea class="form-control" id="description" name='description' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description">{{page.user_entry_desc}}</textarea>
 				</div>
 			</div>
 		</div>
@@ -39,7 +39,7 @@
 		<div class="panel panel-info">
 			<div class='panel-heading'>
 				<h3 class='panel-title' style='font-size: 16px;'>
-					Link to game
+					Link to {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
 				</h3>
 			</div>
 			<div class="panel-body">
@@ -53,18 +53,18 @@
 					<div class="panel-body">
 						<div class="tab-content">
 							<div id="platformInfo" class="tab-pane fade in active">
-								<p>You need to host the game files yourself. If you don't have a website, you might want to consider hosting files on a service like Dropbox or Google Drive, or as a release if you're using Github.</p>
+								<p>You need to host the {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} files yourself. If you don't have a website, you might want to consider hosting files on a service like Dropbox or Google Drive, or as a release if you're using Github.</p>
 
 								<p>Add<b> at least one build.</b> You can add source code too, however a build is required.</p>
 
 								<p>To remove a platform, leave the URL for that platform blank and submit.</p>
 
-								<p>If your game supports <b>multiple platforms</b>, insert the URL in fields for all supported platforms.</p>
+								<p>If your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} supports <b>multiple platforms</b>, insert the URL in fields for all supported platforms.</p>
 							</div>
 							{{#page.platforms}}
 								<div id="platform{{platform_id}}" class="tab-pane fade">
 									<p>
-										Add the URL to where the player can play your game for the {{platform_name}} platform.
+										Add the URL to where the player can play your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} for the {{platform_name}} platform.
 									</p>
 									<p>
 										<label for="gameurl{{platform_id}}">URL to {{platform_name}} build</label>
@@ -86,7 +86,7 @@
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label for="gamename">Game color</label>
+					<label for="gamename">{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} color</label>
 					<input type='hidden' id="colorNumber" name="colorNumber" value='{{page.user_entry_color_number}}'>
 					<div id="colorPreview" style='display: inline-block; width: 50px; height: 50px; background-color: #{{page.user_entry_color}}; vertical-align: middle;'></div>
 					<div class="btn-group" data-toggle="buttons">

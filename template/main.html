@@ -20,7 +20,7 @@
 				</h3>
 				{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}: {{theme}}<br />
 				{{#jam_started}}
-					<span>Started: {{date}} at {{time}} ({{entries_count}} entries)</span>
+					<span>Started: {{date}} at {{time}} ({{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}})</span>
 				{{/jam_started}}
 				{{^jam_started}}
 					<span>Starts on: {{date}} at {{time}} <span style='color: red'>(in <span id='time_display_{{jam_number_ordinal}}'>{{time_left}}</span>)</span></span>
@@ -89,10 +89,10 @@
 										<div style="display:table-cell;vertical-align:middle;">
 											<div style="margin-left:auto;margin-right:auto;">
 												<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_red}}, {{color256_green}}, {{color256_blue}}, 0.9); border-radius: 5px;'>
-													<p style='padding-bottom: 3px;'>Once ready, submit your game to the jam here:</p>
+													<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the jam here:</p>
 													<a href='?page=submit'>
 														<div class="btn btn-success">
-															Submit game
+															Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
 														</div>
 													</a>
 												</div>

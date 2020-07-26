@@ -125,7 +125,7 @@
                     </td>
                 {{/CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
                 <th class='themeTableCell themeTableCellCentered'>
-                    <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some game ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
+                    <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
                 </th>
                 <td class='themeTableCell'>
                     <form method='POST' style='display: inline-block;' onsubmit="return confirm('Are you sure you want to delete your {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} {{theme}}?');">
@@ -206,7 +206,7 @@
                                     {{{theme}}}
                                 </td>
                                 <th class='themeTableCell themeTableCellCentered'>
-                                    <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some game ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
+                                    <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
                                 </th>
                             </tr>
                         {{/is_own_theme}}

@@ -9,7 +9,7 @@
 	</div>
 	<div class='panel-body table-responsive'>
 		{{^page.viewing_author.entries}}
-			This user did not submit any games.
+			This user did not submit any {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}.
 		{{/page.viewing_author.entries}}
 		<table class='table fullWidth'>
 			{{#page.viewing_author.entries}}
@@ -22,7 +22,7 @@
 						{{/has_screenshot}}
 						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
 							<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
-							for <a href='?page=jam&jam={{jam_number}}'>1 Hour Game Jam {{jam_number}} ({{jam_theme}})</a>
+							for <a href='?page=jam&jam={{jam_number}}'>{{CONFIG.VALUES.JAMNAME}} {{jam_number}} ({{jam_theme}})</a>
 						</div>
 						<td class='authorPageEntry alignRight'>
 							{{#platforms}}
@@ -31,7 +31,7 @@
 								{{/url}}
 							{{/platforms}}
 							{{#page.show_edit_link}}
-								<a href="?page=submit&amp;jam_number={{jam_number}}" class="btn btn-default">Edit entry</a>
+								<a href="?page=submit&amp;jam_number={{jam_number}}" class="btn btn-default">Edit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</a>
 							{{/page.show_edit_link}}
 						</td>
 					</tr>
