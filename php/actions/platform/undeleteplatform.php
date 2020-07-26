@@ -40,7 +40,7 @@ function UndeletePlatform($platformId){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
-    $adminLogData->AddToAdminLog("PLATFORM_SOFT_DELETED", "Platform $platformId soft deleted", "NULL", $loggedInUser->Id, "");
+    $adminLogData->AddToAdminLog("PLATFORM_RESTORED", "Platform $platformId restored", "NULL", $loggedInUser->Id, "");
 
 	return "SUCCESS_PLATFORM_RESTORED";
 }

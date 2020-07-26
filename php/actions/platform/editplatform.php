@@ -80,7 +80,7 @@ function EditPlatform($platformId, $platformName){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
-    $adminLogData->AddToAdminLog("PLATFORM_EDITED", "Platform $platformId edited", "NULL", $loggedInUser->Id, "");
+    $adminLogData->AddToAdminLog("PLATFORM_EDITED", "Platform $platformId edited (name: $platformName, icon url: $iconUrl)", "NULL", $loggedInUser->Id, "");
 
 	return "SUCCESS_PLATFORM_EDITED";
 }

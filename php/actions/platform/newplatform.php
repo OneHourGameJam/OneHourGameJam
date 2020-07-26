@@ -72,7 +72,7 @@ function NewPlatform($platformName){
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";
 	
-    $adminLogData->AddToAdminLog("PLATFORM_ADDED", "Platform $platformName added", "NULL", $loggedInUser->Id, "");
+    $adminLogData->AddToAdminLog("PLATFORM_ADDED", "Platform $platformName added (name: $platformName, icon url: $iconUrl)", "NULL", $loggedInUser->Id, "");
 
 	return "SUCCESS_PLATFORM_ADDED";
 }
