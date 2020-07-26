@@ -1,13 +1,13 @@
-<h3>Manage Themes</h3>
+<h3>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h3>
 
 {{#cookies.is_streamer}}
 <p class='bold'>
-	Please disable streamer mode to manage themes.
+	Please disable streamer mode to manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.
 </p>
 {{/cookies.is_streamer}}
 
 {{^cookies.is_streamer}}
-			<p>Use this page to manage theme suggestions, decide which theme to pick for a manually scheduled jam, and view probablity of certain themes being automatically selected for the next jam.</p>
+			<p>Use this page to manage {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions, decide which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to pick for a manually scheduled jam, and view probablity of certain {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} being automatically selected for the next jam.</p>
 			</p>
 
 	<div class='panel panel-info'>
@@ -41,7 +41,7 @@
 					},
 					title: {
 						display: true,
-						text: "Theme Selection Probability"
+						text: "{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} Selection Probability"
 					}
 				},
 			});
@@ -50,33 +50,33 @@
 	</div>
 {{/cookies.is_streamer}}
 
-<h4>Themes to Keep</h4>
-<p>These themes should be kept for the next jam.</p>
-<p>This list can be used to select the theme for the next jam, but the theme will be automatically selected if none is
+<h4>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} to Keep</h4>
+<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be kept for the next jam.</p>
+<p>This list can be used to select the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} for the next jam, but the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will be automatically selected if none is
 	chosen.</p>
 <ul>
-	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - Theme is one of the top
-		voted themes. The number of themes marked as "Top" can be set on the <a href='?		page=config'>Configuration
-			page</a> (default is top 5). These themes appear as suggestions on the <a href='?page=newjam'>Schedule Jam
+	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is one of the top
+		voted {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} marked as "Top" can be set on the <a href='?		page=config'>Configuration
+			page</a> (default is top 5). These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} appear as suggestions on the <a href='?page=newjam'>Schedule Jam
 			page</a>.</li>
-	<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - Theme is not one of the
-		top themes, but is popular enough to be kept in voting for the next jam. The number of themes to keep between
+	<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not one of the
+		top {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, but is popular enough to be kept in voting for the next jam. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} to keep between
 		jams can be set on the <a href='?page=config'>Configuration page</a> (default is top 20)</li>
-	<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - Theme has not
+	<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} has not
 		yet received enough votes to get a popularity rating. The minimum
-		number of votes for a theme's popularity to appear can be set on the <a href='?page=config'>Configuration
+		number of votes for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}'s popularity to appear can be set on the <a href='?page=config'>Configuration
 			page</a> (default is top 10).</li>
 </ul>
-<p>The following metrics are used to judge opinion of a theme. In the formulas below, the words UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number of +1 votes, -1 votes and 0 votes respectively:</p>
+<p>The following metrics are used to judge opinion of a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}. In the formulas below, the words UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number of +1 votes, -1 votes and 0 votes respectively:</p>
 <ul>
 	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>POPULARITY</b> Meant to
-		represnet how popular a theme is among the people who have an opinion about it. Note that voting 0 has no
+		represnet how popular a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is among the people who have an opinion about it. Note that voting 0 has no
 		effect on popularity. The higher the number, the better. The formula is UPVOTE / (UPVOTE + DOWNVOTE)</li>
 	<li><img src='{{{page.template_path}}}images/apathy.png' style='width: 16px;'> <b>APATHY</b> Meant to represent
-		how opinionated people are about this theme. A theme with one +1 vote and lots of 0 votes is likely a worse
+		how opinionated people are about this {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}. A {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} with one +1 vote and lots of 0 votes is likely a worse
 		choice than one with 9 +1 votes and 3 -1 votes, after all. The lower the number, the better. While
-		popularity will likely govern most decisions on which theme to select, apathy can be a good way to decide
-		between two themes with similar popularity scores. The formula is NEUTRALVOTE / (UPVOTE + DOWNVOTE + NEUTRALVOTE)</li>
+		popularity will likely govern most decisions on which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to select, apathy can be a good way to decide
+		between two {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} with similar popularity scores. The formula is NEUTRALVOTE / (UPVOTE + DOWNVOTE + NEUTRALVOTE)</li>
 </ul>
 <table>
 	<tr>
@@ -88,7 +88,7 @@
 		{{/cookies.is_streamer}}
 		
 		<th class='themeTableCell themeTableCellCentered'>
-			Theme
+			{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}
 		</th>
 		
 		{{^cookies.is_streamer}}
@@ -137,26 +137,26 @@
 				<td class='themeTableCell themeTableCellCentered'>
 					{{#is_old}}
 						<!-- Old theme hourglass -->
-						<img src='{{{page.template_path}}}images/clock.png' title='Theme is old, votes likely don&quot;t reflect real opinions anymore.' >
+						<img src='{{{page.template_path}}}images/clock.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is old, votes likely don&quot;t reflect real opinions anymore.' >
 					{{/is_old}}
 					{{^is_old}}
 						{{#is_recent}}
-							<img src='{{{page.template_path}}}images/reused.png' title='Theme has been used recently, it shouldn&quot;t be used for a while.'>
+							<img src='{{{page.template_path}}}images/reused.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} has been used recently, it shouldn&quot;t be used for a while.'>
 						{{/is_recent}}
 						{{^is_recent}}
 							{{#has_enough_votes}}
 								{{#top_theme}}
 									<!-- Top theme star -->
-									<img src='{{{page.template_path}}}images/star.png' title='Top theme'>
+									<img src='{{{page.template_path}}}images/star.png' title='Top {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}'>
 								{{/top_theme}}
 								{{^top_theme}}
 									{{#keep_theme}}
 										<!-- Keep checkmark -->
-										<img src='{{{page.template_path}}}images/tick.png' title='Theme wil be kept in voting for the next jam'>
+										<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next jam'>
 									{{/keep_theme}}
 									{{^keep_theme}}
 										<!-- Unpopular theme half-star -->
-										<img src='{{{page.template_path}}}images/unpopular.png' title='Theme not within the top number of themes that are kept between jams.'>
+										<img src='{{{page.template_path}}}images/unpopular.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} not within the top number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} that are kept between jams.'>
 									{{/keep_theme}}
 								{{/top_theme}}
 							{{/has_enough_votes}}
@@ -231,20 +231,20 @@
 </table>
 
 <a id="markedfordeletion"></a>
-<h4>Themes Marked for Deletion</h4>
-<p>These themes should be deleted <strong>during or after the <em>next</em> jam.</strong> An old theme may be kept if it is very popular!</p>
-<p>Deleting a theme will remove it from theme voting, but it can still be suggested again. Ban a theme using the "Actions" panel next to it to prevent it from being suggested again. Deleting a theme will reset its voting information.</p>
+<h4>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} Marked for Deletion</h4>
+<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be deleted <strong>during or after the <em>next</em> jam.</strong> An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept if it is very popular!</p>
+<p>Deleting a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will remove it from {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} voting, but it can still be suggested again. Ban a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} using the "Actions" panel next to it to prevent it from being suggested again. Deleting a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will reset its voting information.</p>
 <ul>
-	<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - Theme was suggested a
+	<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was suggested a
 		long time ago and its popularity likely no longer reflects the opinion of current participants. Should be
-		deleted after the next jam. <strong>An old theme may be kept for a short time if it is very popular!</strong> The threshold for a theme to be marked as old can be set on the <a
+		deleted after the next jam. <strong>An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept for a short time if it is very popular!</strong> The threshold for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to be marked as old can be set on the <a
 			href='?page=config'>Configuration page</a> (default is 90 days).</li>
-	<li><img src='{{{page.template_path}}}images/reused.png' style='width: 16px;'> <b>RECENT</b> - Theme was used in a
+	<li><img src='{{{page.template_path}}}images/reused.png' style='width: 16px;'> <b>RECENT</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was used in a
 		recent jam. It shouldn't be used again until a number of jams defined on the <a
 			href='?page=config'>Configuration
 			page</a>.</li>
-	<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - Theme is not
-		within the top rated themes.</li>
+	<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not
+		within the top rated {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.</li>
 </ul>
 <table>
 	<tr>
@@ -256,7 +256,7 @@
 		{{/cookies.is_streamer}}
 
 		<th class='themeTableCell themeTableCellCentered'>
-			Theme
+			{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}
 		</th>
 
 		{{^cookies.is_streamer}}
@@ -306,34 +306,34 @@
 			{{#is_old}}
 			<!-- Old theme hourglass -->
 			<img src='{{{page.template_path}}}images/clock.png'
-				title='Theme is old, votes likely don&quot;t reflect real opinions anymore.'>
+				title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is old, votes likely don&quot;t reflect real opinions anymore.'>
 			{{/is_old}}
 			{{^is_old}}
 			{{#is_recent}}
 			<img src='{{{page.template_path}}}images/reused.png'
-				title='Theme has been used recently, it shouldn&quot;t be used for a while.'>
+				title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} has been used recently, it shouldn&quot;t be used for a while.'>
 			{{/is_recent}}
 			{{^is_recent}}
 			{{#has_enough_votes}}
 			{{#top_theme}}
 			<!-- Top theme star -->
-			<img src='{{{page.template_path}}}images/star.png' title='Top theme'>
+			<img src='{{{page.template_path}}}images/star.png' title='Top {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}'>
 			{{/top_theme}}
 			{{^top_theme}}
 			{{#keep_theme}}
 			<!-- Keep checkmark -->
-			<img src='{{{page.template_path}}}images/tick.png' title='Theme wil be kept in voting for the next jam'>
+			<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next jam'>
 			{{/keep_theme}}
 			{{^keep_theme}}
 			<!-- Unpopular theme half-star -->
 			<img src='{{{page.template_path}}}images/unpopular.png'
-				title='Theme not within the top number of themes that are kept between jams.'>
+				title='Theme not within the top number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} that are kept between jams.'>
 			{{/keep_theme}}
 			{{/top_theme}}
 			{{/has_enough_votes}}
 			{{^has_enough_votes}}
 			<!-- Not enough votes ballot box -->
-			<img src='{{{page.template_path}}}images/votes.png' title='Theme does not yet have enough votes.'>
+			<img src='{{{page.template_path}}}images/votes.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} does not yet have enough votes.'>
 			{{/has_enough_votes}}
 			{{/is_recent}}
 
@@ -404,17 +404,17 @@
 	{{/themes.suggested_themes}}
 </table>
 
-<h4>Banned Themes</h4>
+<h4>Banned {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h4>
 
-<p>These themes cannot be suggested again until they are deleted or unbanned. </p>
+<p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} cannot be suggested again until they are deleted or unbanned. </p>
 
-<p>Unbanning theme returns them to the voting as if they were never banned (delete them if you just want to allow them to be suggested again). <strong>Do not delete these themes unless you want them unbanned!</strong> To add a theme to this list use the "Action" menu next to each theme.</p>
+<p>Unbanning {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} returns them to the voting as if they were never banned (delete them if you just want to allow them to be suggested again). <strong>Do not delete these {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} unless you want them unbanned!</strong> To add a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to this list use the "Action" menu next to each {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}.</p>
 
 <table>
 	<tr>
 		<th class='themeTableCell themeTableCellCentered'>Select</th>
 		<th class='themeTableCell themeTableCellCentered'>Status</th>
-		<th class='themeTableCell themeTableCellCentered'>Theme</th>
+		<th class='themeTableCell themeTableCellCentered'>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
 		<th class='themeTableCell themeTableCellCentered'>Author</th>
 		<th class='themeTableCell themeTableCellCentered'>Days Old</th>
 		<th class='themeTableCell themeTableCellCentered'>Admin Actions</th>

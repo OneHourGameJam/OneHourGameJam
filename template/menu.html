@@ -18,7 +18,7 @@
 				{{#user.admin}}
 					{{#themes.themes_must_be_pruned}}
 						<div class="panel-body notification notification-major">
-							<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>Themes must be pruned.</a>
+							<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} must be pruned.</a>
 						</div>
 					{{/themes.themes_must_be_pruned}}
 					{{#users.missing_admin_candidate_votes}}
@@ -32,7 +32,8 @@
 					{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
 						<div class="panel-body notification notification-minor">
 							<a href='?page=themes'>{{{themes.themes_user_has_not_voted_for}}}
-								theme{{#themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}}
+								{{^themes.themes_user_has_not_voted_for_plural}}{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}{{/themes.themes_user_has_not_voted_for_plural}}
+								{{#themes.themes_user_has_not_voted_for_plural}}{{CONFIG.VALUES.THEME_PHRASE_PLURAL}}{{/themes.themes_user_has_not_voted_for_plural}}
 								need{{^themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} your vote</a>
 						</div>
 					{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
@@ -54,7 +55,7 @@
 						</a></b></li>
 					{{/cookies.is_streamer}}
 				{{/jams.current_jam}}
-				<li><b><a href='?page=themes'>Theme voting</a></b></li>
+				<li><b><a href='?page=themes'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></b></li>
 			{{/user}}
 			{{^user}}
 				<li><a href='?page=login'>Log in / register</a></li>
@@ -103,7 +104,7 @@
 					<li class="mainmenu-separator">Administration</li>
 					<li><a href='?page=newjam'>Schedule jam</a></li>
 					<li><a href='?page=config'>Configuration</a></li>
-					<li><a href='?page=managethemes'>Manage themes</a></li>
+					<li><a href='?page=managethemes'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></li>
 					<li><a href='?page=editcontent'>Manage content</a></li>
 					<li><a href='?page=editusers'>Manage users</a></li>
 					<li><a href='?page=polls'>Poll Results</a></li>

@@ -43,7 +43,7 @@ if(IsAdmin($loggedInUser) !== false){
 		}
 	}
 	
-	print ArrayToHTML($actionTimers);
+	//print ArrayToHTML($actionTimers);
 }
 
 ?>

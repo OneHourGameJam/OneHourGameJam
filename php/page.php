@@ -125,7 +125,9 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $viewingAuthorId = $userData->UsernameToId[$viewingAuthor];
 
             $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Username;
-            $render["author_bio"] = $userData->LoadBio($viewingAuthorId);
+            if($viewingAuthorId != null){
+                $render["author_bio"] = $userData->LoadBio($viewingAuthorId);
+            }
             $render["viewing_author"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;

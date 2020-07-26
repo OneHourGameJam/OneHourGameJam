@@ -4,15 +4,15 @@
 <form method='post'>
 	{{> csrf_token}}
 	<div class="form-group">
-		<label for="theme">Jam theme</label> (Top themes:{{#themes.top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/themes.top_themes}})
-		<input type="text" class="form-control" id="theme" name='theme' placeholder="Jam theme" required>
+		<label for="theme">Jam {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</label> (Top {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}:{{#themes.top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/themes.top_themes}})
+		<input type="text" class="form-control" id="theme" name='theme' placeholder="Jam {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}" required>
 	</div>
 	<div class="form-group">
 		<label for="date">Jam date</label>
 		<input type="date" class="form-control" id="date" name='date' placeholder="" value='{{page.next_jam_suggested_date}}' required>
 	</div>
 	<div class="form-group">
-		<label for="time">Jam start time (in UTC - Jam theme will only become visible once this date and time passes)</label>
+		<label for="time">Jam start time (in UTC - Jam {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will only become visible once this date and time passes)</label>
 		<input type="time" class="form-control" id="time" name='time' value='{{page.next_jam_suggested_time}}' placeholder="" required>
 	</div>
 	<div class="form-group">

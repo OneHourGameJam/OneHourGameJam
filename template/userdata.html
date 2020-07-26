@@ -2,7 +2,7 @@
 	<h3>User Data</h3>
 </p>
 <p>
-	This page shows the data we have about the currently logged in user. In most cases the data is directly from the database, in some cases some additional data is added to clarify what various IDs mean, for eaxmple for poll votes, the question and option are also included, for theme votes the selected option is translated from the internal representation of 1, 2 and 3 to -1, 0 and +1 respectively.
+	This page shows the data we have about the currently logged in user. In most cases the data is directly from the database, in some cases some additional data is added to clarify what various IDs mean, for eaxmple for poll votes, the question and option are also included, for {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} votes the selected option is translated from the internal representation of 1, 2 and 3 to -1, 0 and +1 respectively.
 </p>
 <p>
 	<h4>Users</h4>
@@ -11,13 +11,13 @@
 	<h4>Entries</h4>
 	{{{page.userdata_entries}}}
 
-	<h4>Themes</h4>
+	<h4>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h4>
 	{{{page.userdata_themes}}}
 
-	<h4>Theme Votes</h4>
+	<h4>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} Votes</h4>
 	{{{page.userdata_theme_votes}}}
 
-	<h4>Theme Ideas</h4>
+	<h4>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} Ideas</h4>
 	{{{page.userdata_theme_ideas}}}
 
 	<h4>Assets</h4>

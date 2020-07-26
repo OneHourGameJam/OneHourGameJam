@@ -27,20 +27,20 @@
 			<li>Last login IP address</li>
 		</ul>
 
-		<li>For each suggested theme, the following user data is stored:</li>
+		<li>For each suggested {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}, the following user data is stored:</li>
 		<ul>
 			<li>Submission date and time</li>
 			<li>IP Address and User Agent of user who suggested it</li>
 			<li>Username of user who suggested it</li>
-			<li>Theme text (user entered)</li>
+			<li>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} text (user entered)</li>
 		</ul>
 
-		<li>For each suggested theme vote, the following user data is stored:</li>
+		<li>For each suggested {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} vote, the following user data is stored:</li>
 		<ul>
 			<li>Date and time when vote was cast</li>
 			<li>IP Address and User Agent of user who cast the vote</li>
 			<li>Username of user who cast the vote</li>
-			<li>Theme which was voted on</li>
+			<li>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} which was voted on</li>
 			<li>Cast vote (-1, 0, +1)</li>
 		</ul>
 
@@ -78,7 +78,7 @@
 			<li>Hashed session ID</li>
 		</ul>
 
-		<li>For each administrative action (scheduling jams, changing user roles, deleting themes, etc.), the following user data is stored:</li>
+		<li>For each administrative action (scheduling jams, changing user roles, deleting {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, etc.), the following user data is stored:</li>
 		<ul>
 			<li>Date and time when the log was created</li>
 			<li>IP Address and User Agent of administrator who triggered the event</li>
@@ -121,10 +121,10 @@
 			Usernames, password validation information, session IDs and the user's role are stored to authenticate and authorize users.
 		</li>
 		<li>
-			Email addresses, Twitter handles, Bio, Theme text, Cast vote, Entry title, Entry description, Entry URLs, Entry image, Entry color, Voted for option and any other user-entered fields are considered voluntarily entered. Removing these fields (e.g. submitting them as blank) will (unless otherwise stated upon submission) remove them from public visibility, the old versions may however remain in logs or administrator-only tools. See "How can you control your data" for more details.
+			Email addresses, Twitter handles, Bio, {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} text, Cast vote, Entry title, Entry description, Entry URLs, Entry image, Entry color, Voted for option and any other user-entered fields are considered voluntarily entered. Removing these fields (e.g. submitting them as blank) will (unless otherwise stated upon submission) remove them from public visibility, the old versions may however remain in logs or administrator-only tools. See "How can you control your data" for more details.
 		</li>
 		<li>
-			For theme votes, poll votes and satisfaction votes, the cast votes are directly tied to the user who cast them. This is done to ensure each user can only cast one vote and to indicate to the user what they voted for. In the case of theme votes, it is so we can color the currently-voted-for option. This is also done to mittigate cases of vote abuse or to check what different groups of users voted for - for example select only what recent participants voted for. This does mean that there is enough data available to check what each user individually has voted for (themes, polls and satisfaction).
+			For {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} votes, poll votes and satisfaction votes, the cast votes are directly tied to the user who cast them. This is done to ensure each user can only cast one vote and to indicate to the user what they voted for. In the case of {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} votes, it is so we can color the currently-voted-for option. This is also done to mittigate cases of vote abuse or to check what different groups of users voted for - for example select only what recent participants voted for. This does mean that there is enough data available to check what each user individually has voted for ({{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, polls and satisfaction).
 		</li>
 		<li>
 			The data in the administration log is stored to identify abuse, determine administrator activity and to reverse accidental or malicious changes.

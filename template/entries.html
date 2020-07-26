@@ -4,7 +4,7 @@
 	</div>
 </div>
 
-<input type="text" class="form-control" id='entrysearch' placeholder="Search by title, author, jam number or theme..." style='margin-bottom: 10px;' onkeyup="FilterEntryTable()">
+<input type="text" class="form-control" id='entrysearch' placeholder="Search by title, author, jam number or {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}..." style='margin-bottom: 10px;' onkeyup="FilterEntryTable()">
 <div class='panel-body table-responsive jamContent'>
 	Click on a column header to sort.
 	<table class="table sortable" id="entrytable">
@@ -12,7 +12,7 @@
 			<th style='max-width: 150px;'>Title</th>
 			<th style='max-width: 100px;'>Author</th>
 			<th style='max-width: 50px;'>Jam</th>
-			<th style='max-width: 100px;'>Theme</th>
+			<th style='max-width: 100px;'>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
 			
 			{{#page.platforms}}
 				<th>{{platform_name}}</th>

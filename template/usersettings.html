@@ -28,7 +28,7 @@
 		<label>Preferences</label>
 		<div class="form-check">
 			<input type="checkbox" class="form-check-input" id="DISABLE_THEMES_NOTIFICATION" name="DISABLE_THEMES_NOTIFICATION" {{#user.preferences.DISABLE_THEMES_NOTIFICATION}}checked{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}>
-			<label class="form-check-label" for="DISABLE_THEMES_NOTIFICATION">Disable Themes Notification</label>
+			<label class="form-check-label" for="DISABLE_THEMES_NOTIFICATION">Disable {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} Notification</label>
 		</div>
 
 		<button type="submit" name='action' value='saveuserchanges' class="btn btn-default">Save Changes</button>
