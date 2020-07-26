@@ -13,9 +13,12 @@ function AddTheme($newTheme){
 	if($newTheme == ""){
 		return "INVALID_THEME";
 	}
-
+	
 	foreach($themeData->ThemeModels as $i => $theme){
 		if(strtolower($theme->Theme) == strtolower($newTheme)){
+			if($theme->Banned){
+				return "THEME_BANNED";
+			}
 			return "THEME_ALREADY_SUGGESTED";
 		}
 	}

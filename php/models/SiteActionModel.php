@@ -231,7 +231,8 @@ class SiteActionData{
                     "INVALID_THEME" => new SiteActionResultModel("?page=themes", "warning", "Theme is not valid."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?page=login", "warning", "Not logged in."),
                     "THEME_RECENTLY_USED" => new SiteActionResultModel("?page=themes", "warning", "Theme has been used in a recent jam."),
-                    "TOO_MANY_THEMES" => new SiteActionResultModel("?page=themes", "warning", "You can only submit ".$configData->ConfigModels["THEMES_PER_USER"]->Value." themes. Please delete past themes to submit again.")
+                    "TOO_MANY_THEMES" => new SiteActionResultModel("?page=themes", "warning", "You can only submit ".$configData->ConfigModels["THEMES_PER_USER"]->Value." themes. Please delete past themes to submit again."),
+                    "THEME_BANNED" => new SiteActionResultModel("?page=themes", "warning", "This theme's been banned.")
                 )
             ),
             new SiteActionModel(
