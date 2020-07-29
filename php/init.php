@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeasData, $commonDependencies, $pageSettings, $page;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeasData, $commonDependencies, $pageSettings, $page, $dbConn;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -17,7 +17,7 @@ function Init(){
 	CookieController::UpdateCookies();
 	$cookieData = new CookieData();
 
-	$adminLogData = new AdminLogData();
+	$adminLogData = new AdminLogData($dbConn);
 	$configData = new ConfigData($adminLogData);
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($configData);
 
