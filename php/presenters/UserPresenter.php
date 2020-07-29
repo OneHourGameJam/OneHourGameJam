@@ -226,10 +226,10 @@ class UserPresenter{
 		
 		StartTimer("RenderUser - Logged in users admin votes");
 		foreach($adminVoteData->LoggedInUserAdminVotes as $j => $adminVoteModel){
-			if($userViewModel->id == $adminVoteModel["subject_user_id"]){
-				$userViewModel->vote_type = $adminVoteModel["vote_type"];
+			if($userViewModel->id == $adminVoteModel->SubjectUserId){
+				$userViewModel->vote_type = $adminVoteModel->VoteType;
 	
-				switch($adminVoteModel["vote_type"]){
+				switch($adminVoteModel->VoteType){
 					case "FOR":
 						$userViewModel->vote_type_for = 1;
 						break;

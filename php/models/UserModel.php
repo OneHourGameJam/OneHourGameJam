@@ -1,5 +1,9 @@
 <?php
 
+define("DB_TABLE_USER", "user");
+define("DB_COLUMN_USER_ID", "user_id");
+define("DB_COLUMN_USER_ROLE", "user_role");
+
 $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );

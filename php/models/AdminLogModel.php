@@ -66,7 +66,7 @@ class AdminLogData{
 
 //////////////////////// END MODEL CONSTRUCTOR
     
-//////////////////////// DATABASE ACTIONS (insert, update)
+//////////////////////// DATABASE ACTIONS (select, insert, update)
 
     function AddToAdminLog($logType, $logContent, $logSubjectUserId, $logAdminUserId, $logAdminUsernameOverride){
         global $ip, $userAgent;

@@ -44,7 +44,7 @@ function Init(){
 	$assetData = new AssetData();
 	$pollData = new PollData($loggedInUser);
     $satisfactionData = new SatisfactionData($configData);
-    $adminVoteData = new AdminVoteData($loggedInUser);
+    $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
 	$themeIdeasData = new ThemeIdeasData($loggedInUser);
 	
