@@ -18,7 +18,7 @@ function Init(){
 	$cookieData = new CookieData();
 
 	$adminLogData = new AdminLogData($dbConn);
-	$configData = new ConfigData($adminLogData);
+	$configData = new ConfigData($dbConn, $adminLogData);
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($configData);
 
     RedirectToHttpsIfRequired($configData);
