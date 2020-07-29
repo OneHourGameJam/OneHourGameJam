@@ -41,7 +41,7 @@ function Init(){
 	JamController::CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime, $adminLogData);
 
 	$siteActionData = new SiteActionData($configData);
-	$assetData = new AssetData();
+	$assetData = new AssetData($dbConn);
 	$pollData = new PollData($loggedInUser);
     $satisfactionData = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);

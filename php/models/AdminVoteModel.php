@@ -109,7 +109,6 @@ class AdminVoteData{
         AddActionLog("AdminVoteData_SelectCurrentlyActiveVotes");
         StartTimer("AdminVoteData_SelectCurrentlyActiveVotes");
 
-        $escapedVoterId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
         $sql = "
             SELECT v.".DB_COLUMN_ADMIN_VOTE_SUBJECT_USER_ID.", v.".DB_COLUMN_ADMIN_VOTE_TYPE."
             FROM ".DB_TABLE_ADMIN_VOTE." v, ".DB_TABLE_USER." u
