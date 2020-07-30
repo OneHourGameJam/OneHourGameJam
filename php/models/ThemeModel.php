@@ -1,4 +1,9 @@
 <?php
+    
+define("DB_TABLE_THEME", "theme");
+
+define("DB_COLUMN_THEME_ID",    "theme_id");
+define("DB_COLUMN_THEME_TEXT",  "theme_text");
 
 class ThemeModel{
 	public $Id;

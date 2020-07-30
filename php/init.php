@@ -46,7 +46,7 @@ function Init(){
     $satisfactionData = new SatisfactionData($dbConn, $configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
-	$themeIdeasData = new ThemeIdeasData($loggedInUser);
+	$themeIdeasData = new ThemeIdeasData($dbConn, $loggedInUser);
 	
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Process");
