@@ -35,7 +35,7 @@ function Init(){
 	$platformData = new PlatformData();
 	$platformGameData = new PlatformGameData($dbConn);
 
-	$themeData = new ThemeData($loggedInUser);
+	$themeData = new ThemeData($dbConn, $loggedInUser);
 
 	$nextScheduledJamTime = $jamData->GetNextJamDateAndTime();
 	JamController::CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime, $adminLogData);
