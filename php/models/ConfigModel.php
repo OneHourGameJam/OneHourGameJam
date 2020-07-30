@@ -237,7 +237,6 @@ class ConfigData{
 //////////////////////// PUBLIC DATA EXPORT
 
     function GetAllPublicData(){
-        global $configData;
         AddActionLog("ConfigData_GetAllPublicData");
         StartTimer("ConfigData_GetAllPublicData");
         
@@ -257,7 +256,7 @@ class ConfigData{
                 case CONFIG_IRC_CHAT_IN_BROWSER: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
                 case CONFIG_DISCORD_INVITE_URL: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
                 case CONFIG_PEPPER: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = GenerateSalt(); break;
-                case CONFIG_SESSION_PASSWORD_ITERATIONS: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = GenerateUserHashIterations($configData); break;
+                case CONFIG_SESSION_PASSWORD_ITERATIONS: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = GenerateUserHashIterations($this); break;
                 case CONFIG_STREAMER_TWITCH_NAME: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
                 case CONFIG_TWITCH_CLIENT_ID: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
             }

@@ -31,7 +31,7 @@ function Init(){
 	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
 	$jamData = new JamData();
-	$gameData = new GameData();
+	$gameData = new GameData($dbConn);
 	$platformData = new PlatformData();
 	$platformGameData = new PlatformGameData();
 
