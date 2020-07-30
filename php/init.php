@@ -42,7 +42,7 @@ function Init(){
 
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData($dbConn);
-	$pollData = new PollData($loggedInUser);
+	$pollData = new PollData($dbConn, $loggedInUser);
     $satisfactionData = new SatisfactionData($configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
 	$messageData = new MessageData($siteActionData);

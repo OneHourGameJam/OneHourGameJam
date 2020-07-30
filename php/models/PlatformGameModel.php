@@ -1,10 +1,10 @@
 <?php
 
-define("DB_TABLE_PLATFORM_ENTRY", "platform_entry");
-define("DB_COLUMN_PLATFORM_ENTRY_ID",           "platformentry_id");
-define("DB_COLUMN_PLATFORM_ENTRY_ENTRY_ID",     "platformentry_entry_id");
-define("DB_COLUMN_PLATFORM_ENTRY_PLATFORM_ID",  "platformentry_platform_id");
-define("DB_COLUMN_PLATFORM_ENTRY_URL",          "platformentry_url");
+define("DB_TABLE_PLATFORMENTRY", "platform_entry");
+define("DB_COLUMN_PLATFORMENTRY_ID",            "platformentry_id");
+define("DB_COLUMN_PLATFORMENTRY_ENTRY_ID",      "platformentry_entry_id");
+define("DB_COLUMN_PLATFORMENTRY_PLATFORM_ID",   "platformentry_platform_id");
+define("DB_COLUMN_PLATFORMENTRY_URL",           "platformentry_url");
 
 class PlatformGameModel{
 	public $Id;
@@ -18,7 +18,7 @@ class PlatformGameData{
     public $GameIdToPlatformGameIds;
 
     private $dbConnection;
-    private $publicColumns = Array(DB_COLUMN_PLATFORM_ENTRY_ID, DB_COLUMN_PLATFORM_ENTRY_ENTRY_ID, DB_COLUMN_PLATFORM_ENTRY_PLATFORM_ID, DB_COLUMN_PLATFORM_ENTRY_URL);
+    private $publicColumns = Array(DB_COLUMN_PLATFORMENTRY_ID, DB_COLUMN_PLATFORMENTRY_ENTRY_ID, DB_COLUMN_PLATFORMENTRY_PLATFORM_ID, DB_COLUMN_PLATFORMENTRY_URL);
     private $privateColumns = Array();
 
     function __construct(&$dbConn) {
@@ -39,10 +39,10 @@ class PlatformGameData{
         while($info = mysqli_fetch_array($data)){
             $platformGame = new PlatformGameModel();
 
-            $platformGame->Id = intval($info[DB_COLUMN_PLATFORM_ENTRY_ID]);
-            $platformGame->GameId = intval($info[DB_COLUMN_PLATFORM_ENTRY_ENTRY_ID]);
-            $platformGame->PlatformId = intval($info[DB_COLUMN_PLATFORM_ENTRY_PLATFORM_ID]);
-            $platformGame->Url = $info[DB_COLUMN_PLATFORM_ENTRY_URL];
+            $platformGame->Id = intval($info[DB_COLUMN_PLATFORMENTRY_ID]);
+            $platformGame->GameId = intval($info[DB_COLUMN_PLATFORMENTRY_ENTRY_ID]);
+            $platformGame->PlatformId = intval($info[DB_COLUMN_PLATFORMENTRY_PLATFORM_ID]);
+            $platformGame->Url = $info[DB_COLUMN_PLATFORMENTRY_URL];
 
             $platformGameModels[$platformGame->Id] = $platformGame;
         }
@@ -81,8 +81,8 @@ class PlatformGameData{
         StartTimer("PlatformGameData_SelectAll");
 
         $sql = "
-            SELECT ".DB_COLUMN_PLATFORM_ENTRY_ID.", ".DB_COLUMN_PLATFORM_ENTRY_ENTRY_ID.", ".DB_COLUMN_PLATFORM_ENTRY_PLATFORM_ID.", ".DB_COLUMN_PLATFORM_ENTRY_URL." 
-            FROM ".DB_TABLE_PLATFORM_ENTRY.";";
+            SELECT ".DB_COLUMN_PLATFORMENTRY_ID.", ".DB_COLUMN_PLATFORMENTRY_ENTRY_ID.", ".DB_COLUMN_PLATFORMENTRY_PLATFORM_ID.", ".DB_COLUMN_PLATFORMENTRY_URL." 
+            FROM ".DB_TABLE_PLATFORMENTRY.";";
         
         StopTimer("PlatformGameData_SelectAll");
         return mysqli_query($this->dbConnection, $sql);
@@ -112,7 +112,7 @@ class PlatformGameData{
 
         $sql = "
             SELECT ".implode(",", $this->publicColumns)."
-            FROM ".DB_TABLE_PLATFORM_ENTRY.";
+            FROM ".DB_TABLE_PLATFORMENTRY.";
         ";
 
         StopTimer("PlatformGameData_SelectPublicData");
