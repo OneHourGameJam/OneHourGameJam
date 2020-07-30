@@ -30,7 +30,7 @@ function Init(){
 	$page = ValidatePage($page, $loggedInUser);
 	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
-	$jamData = new JamData();
+	$jamData = new JamData($dbConn);
 	$gameData = new GameData($dbConn);
 	$platformData = new PlatformData();
 	$platformGameData = new PlatformGameData();
