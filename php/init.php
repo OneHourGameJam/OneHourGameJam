@@ -32,7 +32,7 @@ function Init(){
 
 	$jamData = new JamData($dbConn);
 	$gameData = new GameData($dbConn);
-	$platformData = new PlatformData();
+	$platformData = new PlatformData($dbConn);
 	$platformGameData = new PlatformGameData($dbConn);
 
 	$themeData = new ThemeData($dbConn, $loggedInUser);
