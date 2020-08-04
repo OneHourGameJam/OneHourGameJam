@@ -23,6 +23,7 @@ function Init(){
 	$pollDbInterface = new PollDbInterface($dbConn);
 	$pollOptionDbInterface = new PollOptionDbInterface($dbConn);
 	$pollVoteDbInterface = new PollVoteDbInterface($dbConn);
+	$platformDbInterface = new PlatformDbInterface($dbConn);
 
 	StopTimer("Init - Database Interfaces");
 
@@ -46,7 +47,7 @@ function Init(){
 
 	$jamData = new JamData($dbConn);
 	$gameData = new GameData($dbConn);
-	$platformData = new PlatformData($dbConn);
+	$platformData = new PlatformData($platformDbInterface);
 	$platformGameData = new PlatformGameData($dbConn);
 
 	$themeData = new ThemeData($themeDbInterface, $themeVoteDbInterface, $loggedInUser);
