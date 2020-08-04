@@ -1,14 +1,5 @@
 <?php
 
-define("DB_TABLE_ADMINVOTE", "admin_vote");
-define("DB_COLUMN_ADMINVOTE_ID", "vote_id");
-define("DB_COLUMN_ADMINVOTE_DATETIME", "vote_datetime");
-define("DB_COLUMN_ADMINVOTE_IP", "vote_ip");
-define("DB_COLUMN_ADMINVOTE_USER_AGENT", "vote_user_agent");
-define("DB_COLUMN_ADMINVOTE_VOTER_USER_ID", "vote_voter_user_id");
-define("DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID", "vote_subject_user_id");
-define("DB_COLUMN_ADMINVOTE_TYPE", "vote_type");
-
 class AdminVoteModel{
 	public $SubjectUserId;
 	public $VoteType;
@@ -17,13 +8,11 @@ class AdminVoteModel{
 class AdminVoteData{
     public $AdminVoteModels;
     public $LoggedInUserAdminVotes;
-    
-    private $dbConnection;
-    private $publicColumns = Array(DB_COLUMN_ADMINVOTE_ID, DB_COLUMN_ADMINVOTE_VOTER_USER_ID, DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID);
-    private $privateColumns = Array(DB_COLUMN_ADMINVOTE_DATETIME, DB_COLUMN_ADMINVOTE_IP, DB_COLUMN_ADMINVOTE_USER_AGENT, DB_COLUMN_ADMINVOTE_TYPE);
 
-    function __construct(&$dbConn, &$loggedInUser) {
-        $this->dbConnection = $dbConn;
+    private $adminVoteDbInterface;
+
+    function __construct(&$adminVoteDbInterface, &$loggedInUser) {
+        $this->adminVoteDbInterface = $adminVoteDbInterface;
         $this->AdminVoteModels = $this->LoadAdminVotes();
         $this->LoggedInUserAdminVotes = $this->LoadLoggedInUsersAdminVotes($loggedInUser);
     }
@@ -35,7 +24,7 @@ class AdminVoteData{
         StartTimer("LoadAdminVotes");
 
 
-        $data = $this->SelectCurrentlyActiveVotes();
+        $data = $this->adminVoteDbInterface->SelectCurrentlyActiveVotes();
 
         $adminVoteModels = Array();
         while($info = mysqli_fetch_array($data)){
@@ -62,7 +51,7 @@ class AdminVoteData{
             return $loggedInUserAdminVotes;
         }
 
-        $data = $this->SelectVotesByUser($loggedInUser->Id);
+        $data = $this->adminVoteDbInterface->SelectVotesByUser($loggedInUser->Id);
 
         while($info = mysqli_fetch_array($data)){
             $adminVoteData = new AdminVoteModel();
@@ -85,7 +74,7 @@ class AdminVoteData{
         AddActionLog("GetAdminVotesCastByUserFormatted");
         StartTimer("GetAdminVotesCastByUserFormatted");
     
-        $data = $this->SelectWhereVoterUserId($userId);
+        $data = $this->adminVoteDbInterface->SelectWhereVoterUserId($userId);
 
         StopTimer("GetAdminVotesCastByUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
@@ -95,75 +84,13 @@ class AdminVoteData{
         AddActionLog("GetAdminVotesForSubjectUserFormatted");
         StartTimer("GetAdminVotesForSubjectUserFormatted");
     
-        $data = $this->SelectWhereSubjectUserId($userId);
+        $data = $this->adminVoteDbInterface->SelectWhereSubjectUserId($userId);
     
         StopTimer("GetAdminVotesForSubjectUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
 //////////////////////// END DATABASE ACTIONS
-    
-//////////////////////// FUCNTION SQL
-
-    private function SelectCurrentlyActiveVotes(){
-        AddActionLog("AdminVoteData_SelectCurrentlyActiveVotes");
-        StartTimer("AdminVoteData_SelectCurrentlyActiveVotes");
-
-        $sql = "
-            SELECT v.".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID.", v.".DB_COLUMN_ADMINVOTE_TYPE."
-            FROM ".DB_TABLE_ADMINVOTE." v, ".DB_TABLE_USER." u
-            WHERE v.".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = u.".DB_COLUMN_USER_ID."
-            AND u.".DB_COLUMN_USER_ROLE." = 1
-        ";
-
-        StopTimer("AdminVoteData_SelectCurrentlyActiveVotes");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectVotesByUser($voterUserId){
-        AddActionLog("AdminVoteData_SelectVotesByUser");
-        StartTimer("AdminVoteData_SelectVotesByUser");
-
-        $escapedVoterId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
-        $sql = "
-            SELECT ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID.", ".DB_COLUMN_ADMINVOTE_TYPE."
-            FROM ".DB_TABLE_ADMINVOTE."
-            WHERE ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = '$escapedVoterId';
-        ";
-
-        StopTimer("AdminVoteData_SelectVotesByUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectWhereVoterUserId($voterUserId){
-        AddActionLog("AdminVoteData_SelectWhereAdminUserId");
-        StartTimer("AdminVoteData_SelectWhereAdminUserId");
-
-        $escapedVoterUserId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
-        $sql = "
-            SELECT *
-            FROM ".DB_TABLE_ADMINVOTE."
-            WHERE ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = '$escapedVoterUserId';";
-
-        StopTimer("AdminVoteData_SelectWhereAdminUserId");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectWhereSubjectUserId($subjectUserId){
-        AddActionLog("AdminVoteData_SelectWhereSubjectUserId");
-        StartTimer("AdminVoteData_SelectWhereSubjectUserId");
-
-        $escapedSubjectUserId = mysqli_real_escape_string($this->dbConnection, $subjectUserId);
-        $sql = "
-            SELECT ".DB_COLUMN_ADMINVOTE_ID.", ".DB_COLUMN_ADMINVOTE_DATETIME.", 'redacted' AS ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID.", ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID.", 'redacted' AS ".DB_COLUMN_ADMINVOTE_TYPE."
-            FROM ".DB_TABLE_ADMINVOTE."
-            WHERE ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID." = '$escapedSubjectUserId';";
-            
-        StopTimer("AdminVoteData_SelectWhereSubjectUserId");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-//////////////////////// END FUCNTION SQL
 
 //////////////////////// PUBLIC DATA EXPORT
 
@@ -171,7 +98,7 @@ class AdminVoteData{
         AddActionLog("AdminVoteData_GetAllPublicData");
         StartTimer("AdminVoteData_GetAllPublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectPublicData());
+        $dataFromDatabase = MySQLDataToArray($this->adminVoteDbInterface->SelectPublicData());
 
         $voteTypesToSelectFrom = array("FOR", "NEUTRAL", "AGAINST");
 
@@ -184,19 +111,6 @@ class AdminVoteData{
 
         StopTimer("AdminVoteData_GetAllPublicData");
         return $dataFromDatabase;
-    }
-
-    private function SelectPublicData(){
-        AddActionLog("AdminVoteData_SelectPublicData");
-        StartTimer("AdminVoteData_SelectPublicData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumns)."
-            FROM ".DB_TABLE_ADMINVOTE.";
-        ";
-
-        StopTimer("AdminVoteData_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
     }
 
 //////////////////////// END PUBLIC DATA EXPORT

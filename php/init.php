@@ -29,6 +29,7 @@ function Init(){
 	$gameDbInterface = new GameDbInterface($dbConn);
 	$configDbInterface = new ConfigDbInterface($dbConn);
 	$assetDbInterface = new AssetDbInterface($dbConn);
+	$adminVoteDbInterface = new AdminVoteDbInterface($dbConn);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -64,7 +65,7 @@ function Init(){
 	$assetData = new AssetData($assetDbInterface);
 	$pollData = new PollData($pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $loggedInUser);
     $satisfactionData = new SatisfactionData($satisfactionDbInterface, $configData);
-    $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
+    $adminVoteData = new AdminVoteData($adminVoteDbInterface, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
 	$themeIdeaData = new ThemeIdeaData($themeIdeaDbInterface, $loggedInUser);
 	
