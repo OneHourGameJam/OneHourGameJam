@@ -164,6 +164,21 @@ class GameDbInterface{
         StopTimer("GameDbInterface_Update");
     }
 
+    public function SoftDelete($entryId){
+        AddActionLog("GameDbInterface_SoftDelete");
+        StartTimer("GameDbInterface_SoftDelete");
+
+		$escapedEntryId = mysqli_real_escape_string($this->dbConnection, $entryId);
+
+        $sql = "
+            UPDATE entry 
+            SET entry_deleted = 1 
+            WHERE entry_id = $escapedEntryId";
+		mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("GameDbInterface_SoftDelete");
+    }
+
     public function SelectPublicData(){
         AddActionLog("GameDbInterface_SelectPublicData");
         StartTimer("GameDbInterface_SelectPublicData");

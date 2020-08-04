@@ -86,12 +86,12 @@ class GameData{
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
     //Returns true / false based on whether or not the specified entry exists (and has not been deleted)
-    function EntryExists($entryId){
+    public function EntryExists($entryId){
         AddActionLog("EntryExists");
         StartTimer("EntryExists");
     
         //Validate values
-        if($gameID <= 0){
+        if($entryId <= 0){
             StopTimer("EntryExists");
             return FALSE;
         }

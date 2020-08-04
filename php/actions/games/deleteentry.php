@@ -2,7 +2,7 @@
 
 //Returns true / false based on whether or not the specified entry can be deleted
 function CanDeleteEntry($entryId){
-	global $dbConn, $loggedInUser, $gameData, $adminLogData;
+	global $loggedInUser, $gameData, $adminLogData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -24,7 +24,7 @@ function CanDeleteEntry($entryId){
 
 //Deletes an existing entry, identified by the entryID.
 function DeleteEntry($entryId){
-	global $jamData, $dbConn, $loggedInUser, $adminLogData, $gameData, $userData;
+	global $jamData, $loggedInUser, $adminLogData, $gameData, $userData, $gameDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -41,11 +41,7 @@ function DeleteEntry($entryId){
 	
 	$deletedEntryAuthorId = $gameData->GameModels[$entryId]->AuthorUserId;
 
-	$escapedEntryId = mysqli_real_escape_string($dbConn, "$entryId");
-
-	$sql = "UPDATE entry SET entry_deleted = 1 WHERE entry_id = $escapedEntryId";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$gameDbInterface->SoftDelete($entryId);
 
     $adminLogData->AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryId soft deleted", $deletedEntryAuthorId, $loggedInUser->Id, "");
 
