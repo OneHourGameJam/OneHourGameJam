@@ -28,6 +28,7 @@ include_once("php/databaseinterfaces/SessionDbInterface.php");
 include_once("php/databaseinterfaces/ThemeDbInterface.php");
 include_once("php/databaseinterfaces/ThemeVoteDbInterface.php");
 include_once("php/databaseinterfaces/ThemeIdeaDbInterface.php");
+include_once("php/databaseinterfaces/SatisfactionDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");
