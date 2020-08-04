@@ -1,7 +1,7 @@
 <?php
 
 class ThemePresenter{
-	public static function RenderThemes(&$configData, &$jamData, &$userData, &$themeData, &$themeIdeasData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
+	public static function RenderThemes(&$configData, &$jamData, &$userData, &$themeData, &$themeIdeaData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
 		AddActionLog("RenderThemes");
 		StartTimer("RenderThemes");
 		
@@ -163,9 +163,9 @@ class ThemePresenter{
 			}
 
 			if(($renderDepth & RENDER_DEPTH_THEME_IDEAS) > 0){
-				foreach($themeIdeasData->ThemeIdeas as $i => $themeIdeas){
-					if($themeIdeas->ThemeId == $themeID){
-						$themeViewModel->ideas = $themeIdeas->Ideas;
+				foreach($themeIdeaData->ThemeIdeas as $i => $themeIdea){
+					if($themeIdea->ThemeId == $themeID){
+						$themeViewModel->ideas = $themeIdea->Ideas;
 					}
 				}
 			}

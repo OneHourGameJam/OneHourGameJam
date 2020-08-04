@@ -1,31 +1,5 @@
 <?php
 
-define("DB_TABLE_USER", "user");
-define("DB_TABLE_SESSION", "session");
-
-define("DB_COLUMN_USER_ID",                     "user_id");
-define("DB_COLUMN_USER_USERNAME",               "user_username");
-define("DB_COLUMN_USER_DATETIME",               "user_datetime");
-define("DB_COLUMN_USER_IP",                     "user_register_ip");
-define("DB_COLUMN_USER_USER_AGENT",             "user_register_user_agent");
-define("DB_COLUMN_USER_DISPLAY_NAME",           "user_display_name");
-define("DB_COLUMN_USER_SALT",                   "user_password_salt");
-define("DB_COLUMN_USER_PASSWORD_HASH",          "user_password_hash");
-define("DB_COLUMN_USER_PASSWORD_ITERATIONS",    "user_password_iterations");
-define("DB_COLUMN_USER_LAST_LOGIN_DATETIME",    "user_last_login_datetime");
-define("DB_COLUMN_USER_LAST_IP",                "user_last_ip");
-define("DB_COLUMN_USER_LAST_USER_AGENT",        "user_last_user_agent");
-define("DB_COLUMN_USER_EMAIL",                  "user_email");
-define("DB_COLUMN_USER_TWITTER",                "user_twitter");
-define("DB_COLUMN_USER_BIO",                    "user_bio");
-define("DB_COLUMN_USER_ROLE",                   "user_role");
-define("DB_COLUMN_USER_PREFERENCES",            "user_preferences");
-
-define("DB_COLUMN_SESSION_ID",                  "session_id");
-define("DB_COLUMN_SESSION_USER_ID",             "session_user_id");
-define("DB_COLUMN_SESSION_DATETIME_STARTED",    "session_datetime_started");
-define("DB_COLUMN_SESSION_DATETIME_LAST_USED",  "session_datetime_last_used");
-
 $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => "DISABLE_THEMES_NOTIFICATION", "BIT_FLAG_EXPONENT" => 0)
 );
@@ -54,14 +28,12 @@ class UserData{
     public $UserModels;
     public $UsernameToId;
 
-    private $dbConnection;
-    private $publicColumnsUser = Array(DB_COLUMN_USER_ID, DB_COLUMN_USER_USERNAME, DB_COLUMN_USER_DISPLAY_NAME, DB_COLUMN_USER_TWITTER, DB_COLUMN_USER_BIO);
-    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES);
-    private $publicColumnsSession = Array(DB_COLUMN_SESSION_USER_ID);
-    private $privateColumnsSession = Array(DB_COLUMN_SESSION_ID, DB_COLUMN_SESSION_DATETIME_STARTED, DB_COLUMN_SESSION_DATETIME_LAST_USED);
+    private $userDbInterface;
+    private $sessionDbInterface;
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$userDbInterface, &$sessionDbInterface) {
+        $this->userDbInterface = $userDbInterface;
+        $this->sessionDbInterface = $sessionDbInterface;
         $this->UserModels = $this->LoadUsers();
         $this->UsernameToId = $this->GenerateUsernameToId();
     }
@@ -73,7 +45,7 @@ class UserData{
         AddActionLog("LoadUsers");
         StartTimer("LoadUsers");
     
-        $data = $this->SelectAll();
+        $data = $this->userDbInterface->SelectAll();
     
         $userModels = Array();
         while($info = mysqli_fetch_array($data)){
@@ -122,7 +94,7 @@ class UserData{
     
         ksort($userModels);
     
-        $data = $this->SelectAdminCandidates();
+        $data = $this->userDbInterface->SelectAdminCandidates();
     
         while($info = mysqli_fetch_array($data)){
             $voteVoterUserId = $info[DB_COLUMN_ADMINVOTE_VOTER_USER_ID];
@@ -158,7 +130,7 @@ class UserData{
         AddActionLog("LoadBio");
         StartTimer("LoadBio");
     
-        $data = $this->SelectBioOfUser($userId);
+        $data = $this->userDbInterface->SelectBioOfUser($userId);
 
         $info = mysqli_fetch_array($data);
         $bio = $info[DB_COLUMN_USER_BIO];
@@ -171,7 +143,7 @@ class UserData{
         AddActionLog("GetUsersOfUserFormatted");
         StartTimer("GetUsersOfUserFormatted");
     
-        $data = $this->SelectUsersOfUser($userId);
+        $data = $this->userDbInterface->SelectUsersOfUser($userId);
     
         StopTimer("GetUsersOfUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
@@ -181,100 +153,13 @@ class UserData{
         AddActionLog("GetSessionsOfUserFormatted");
         StartTimer("GetSessionsOfUserFormatted");
     
-        $data = $this->SelectSessionsOfUser($userId);
+        $data = $this->sessionDbInterface->SelectSessionsOfUser($userId);
     
         StopTimer("GetSessionsOfUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
 //////////////////////// END DATABASE ACTIONS
-    
-//////////////////////// FUCNTION SQL
-
-    private function SelectAll(){
-        AddActionLog("UserModel_SelectAll");
-        StartTimer("UserModel_SelectAll");
-    
-        $sql = "SELECT ".DB_COLUMN_USER_ID.", ".DB_COLUMN_USER_USERNAME.", ".DB_COLUMN_USER_DISPLAY_NAME.", ".DB_COLUMN_USER_TWITTER.", ".DB_COLUMN_USER_EMAIL.",
-                       ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.",
-                       DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_LOGIN_DATETIME.") AS days_since_last_login,
-                       DATEDIFF(Now(), log_max_datetime) AS days_since_last_admin_action
-                FROM
-                    ".DB_TABLE_USER." u LEFT JOIN
-                    (
-                        SELECT ".DB_COLUMN_ADMIN_LOG_ADMIN_USER_ID.", max(".DB_COLUMN_ADMIN_LOG_DATETIME.") AS log_max_datetime
-                        FROM ".DB_TABLE_ADMIN_LOG."
-                        GROUP BY ".DB_COLUMN_ADMIN_LOG_ADMIN_USER_ID."
-                    ) al ON u.".DB_COLUMN_USER_ID." = al.".DB_COLUMN_ADMIN_LOG_ADMIN_USER_ID."";
-        
-        StopTimer("UserModel_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectAdminCandidates(){
-        AddActionLog("UserModel_SelectAdminCandidates");
-        StartTimer("UserModel_SelectAdminCandidates");
-
-        //Get list of sponsored users to be administration candidates, ensuring the voter is still an admin and the candidate hasn't become an admin since the vote was cast
-        $sql = "
-            SELECT v.".DB_COLUMN_ADMINVOTE_VOTER_USER_ID.", v.".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID."
-            FROM ".DB_TABLE_ADMINVOTE." v, ".DB_TABLE_USER." u1, ".DB_TABLE_USER." u2
-            WHERE v.".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = u1.".DB_COLUMN_USER_ID."
-            AND u1.".DB_COLUMN_USER_ROLE." = 1
-            AND v.".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID." = u2.".DB_COLUMN_USER_ID."
-            AND u2.".DB_COLUMN_USER_ROLE." = 0
-            AND v.".DB_COLUMN_ADMINVOTE_TYPE." = 'SPONSOR'
-        ";
-        
-        StopTimer("UserModel_SelectAdminCandidates");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectBioOfUser($userId){
-        AddActionLog("UserModel_SelectBioOfUser");
-        StartTimer("UserModel_SelectBioOfUser");
-    
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $sql = "
-            SELECT ".DB_COLUMN_USER_BIO." 
-            FROM ".DB_TABLE_USER." 
-            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId";
-        
-        StopTimer("UserModel_SelectBioOfUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectUsersOfUser($userId){
-        AddActionLog("UserModel_SelectUsersOfUser");
-        StartTimer("UserModel_SelectUsersOfUser");
-    
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $sql = "
-            SELECT *
-            FROM ".DB_TABLE_USER."
-            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
-        ";
-        
-        StopTimer("UserModel_SelectUsersOfUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectSessionsOfUser($userId){
-        AddActionLog("UserModel_SelectSessionsOfUser");
-        StartTimer("UserModel_SelectSessionsOfUser");
-
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $sql = "
-            SELECT *
-            FROM ".DB_TABLE_SESSION."
-            WHERE ".DB_COLUMN_SESSION_USER_ID." = $escapedUserId;
-        ";
-        
-        StopTimer("UserModel_SelectSessionsOfUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-//////////////////////// END FUCNTION SQL
 
 //////////////////////// PUBLIC DATA EXPORT
     function GenerateRandomString($length) {
@@ -292,7 +177,7 @@ class UserData{
         AddActionLog("UserData_GetAllPublicUserData");
         StartTimer("UserData_GetAllPublicUserData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectPublicUserData());
+        $dataFromDatabase = MySQLDataToArray($userDbInterface->SelectPublicData());
 
         foreach($dataFromDatabase as $i => $row){
             $password = $this->GenerateRandomString(30);
@@ -323,19 +208,6 @@ class UserData{
         return $dataFromDatabase;
     }
 
-    private function SelectPublicUserData(){
-        AddActionLog("UserData_SelectPublicUserData");
-        StartTimer("UserData_SelectPublicUserData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumnsUser)."
-            FROM ".DB_TABLE_USER.";
-        ";
-
-        StopTimer("UserData_SelectPublicUserData");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
     function GetAllPublicSessionData($sessionHashIterations, $pepper){
         global $configData;
         AddActionLog("UserData_GetAllPublicSessionData");
@@ -357,19 +229,6 @@ class UserData{
 
         StopTimer("UserData_GetAllPublicSessionData");
         return $dataFromDatabase;
-    }
-
-    private function SelectPublicSessionData(){
-        AddActionLog("UserData_SelectPublicSessionData");
-        StartTimer("UserData_SelectPublicSessionData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumnsSession)."
-            FROM ".DB_TABLE_SESSION.";
-        ";
-
-        StopTimer("UserData_SelectPublicSessionData");
-        return mysqli_query($this->dbConnection, $sql);
     }
 
 //////////////////////// END PUBLIC DATA EXPORT

@@ -34,7 +34,7 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $userData, $dbConn, $ip, $userAgent, $configData;
+	global $userData, $dbConn, $ip, $userAgent, $configData, $userDbInterface, $sessionDbInterface;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -98,7 +98,7 @@ function RegisterUser($username, $password){
 		$sql = "";
 	}
 	
-	$userData = new UserData();
+	$userData = new UserData($userDbInterface, $sessionDbInterface);
 	return LogInUser($username, $password);
 }
 

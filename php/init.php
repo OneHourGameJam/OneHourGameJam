@@ -6,11 +6,21 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeasData, $commonDependencies, $pageSettings, $page, $dbConn;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $page, $dbConn, $userDbInterface, $sessionDbInterface;
 	AddActionLog("Init");
 	StartTimer("Init");
 
 	MigrateDatabase();
+	
+	StartTimer("Init - Database Interfaces");
+
+	$userDbInterface = new UserDbInterface($dbConn);
+	$sessionDbInterface = new SessionDbInterface($dbConn);
+	$themeDbInterface = new ThemeDbInterface($dbConn);
+	$themeVoteDbInterface = new ThemeVoteDbInterface($dbConn);
+	$themeIdeaDbInterface = new ThemeIdeaDbInterface($dbConn);
+
+	StopTimer("Init - Database Interfaces");
 
 	StartTimer("Init - Load Data");
 
@@ -23,7 +33,7 @@ function Init(){
 
     RedirectToHttpsIfRequired($configData);
 
-	$userData = new UserData($dbConn);
+	$userData = new UserData($userDbInterface, $sessionDbInterface);
 
 	$loggedInUser = IsLoggedIn($configData, $userData);
 	
@@ -35,7 +45,7 @@ function Init(){
 	$platformData = new PlatformData($dbConn);
 	$platformGameData = new PlatformGameData($dbConn);
 
-	$themeData = new ThemeData($dbConn, $loggedInUser);
+	$themeData = new ThemeData($themeDbInterface, $themeVoteDbInterface, $loggedInUser);
 
 	$nextScheduledJamTime = $jamData->GetNextJamDateAndTime();
 	JamController::CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime, $adminLogData);
@@ -46,7 +56,7 @@ function Init(){
     $satisfactionData = new SatisfactionData($dbConn, $configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
-	$themeIdeasData = new ThemeIdeasData($dbConn, $loggedInUser);
+	$themeIdeaData = new ThemeIdeaData($themeIdeaDbInterface, $loggedInUser);
 	
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Process");
@@ -60,6 +70,8 @@ function Init(){
 
 	StopTimer("Init - Process");
 	StartTimer("Init - Render");
+
+	//print(ArrayToHTML($platformData->GetAllPublicData()));
 
 	loadCSRFToken();
 	$dictionary["csrf_token"] = $_SESSION["csrf_token"];
@@ -96,7 +108,7 @@ function Init(){
 	}
 	if(FindDependency("RenderThemes", $dependencies) !== false){
 		$dependency = FindDependency("RenderThemes", $dependencies);
-		$dictionary["themes"] = ThemePresenter::RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeasData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
+		$dictionary["themes"] = ThemePresenter::RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeaData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency("RenderAssets", $dependencies) !== false){
 		$dictionary["assets"] = AssetPresenter::RenderAssets($assetData, $userData);
@@ -117,7 +129,7 @@ function Init(){
 		$dictionary["platforms"] = PlatformPresenter::RenderPlatforms($platformData);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeasData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	
 	if($loggedInUser !== false){
 		if(FindDependency("RenderLoggedInUser", $dependencies) !== false){

@@ -26,7 +26,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeasData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$adminLogData){
+function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$adminLogData){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -212,7 +212,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_poll_votes"] = $pollData->GetPollVotesOfUserFormatted($loggedInUser->Id);
             $render["userdata_themes"] = $themeData->GetThemesOfUserFormatted($loggedInUser->Id);
             $render["userdata_theme_votes"] = $themeData->GetThemeVotesOfUserFormatted($loggedInUser->Id);
-            $render["userdata_theme_ideas"] = $themeIdeasData->GetThemeIdeasOfUserFormatted($loggedInUser->Id);
+            $render["userdata_theme_ideas"] = $themeIdeaData->GetThemeIdeasOfUserFormatted($loggedInUser->Id);
             $render["userdata_users"] = $userData->GetUsersOfUserFormatted($loggedInUser->Id);
             $render["userdata_jams"] = $jamData->GetJamsOfUserFormatted($loggedInUser->Id);
             $render["userdata_satisfaction"] = $satisfactionData->GetSatisfactionVotesOfUserFormatted($loggedInUser->Id);

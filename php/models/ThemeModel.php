@@ -1,24 +1,4 @@
 <?php
-    
-define("DB_TABLE_THEME", "theme");
-define("DB_TABLE_THEMEVOTE", "themevote");
-
-define("DB_COLUMN_THEME_ID",                "theme_id");
-define("DB_COLUMN_THEME_DATETIME",          "theme_datetime");
-define("DB_COLUMN_THEME_IP",                "theme_ip");
-define("DB_COLUMN_THEME_USER_AGENT",        "theme_user_agent");
-define("DB_COLUMN_THEME_TEXT",              "theme_text");
-define("DB_COLUMN_THEME_AUTHOR_USER_ID",    "theme_author_user_id");
-define("DB_COLUMN_THEME_BANNED",            "theme_banned");
-define("DB_COLUMN_THEME_DELETED",           "theme_deleted");
-
-define("DB_COLUMN_THEMEVOTE_ID",            "themevote_id");
-define("DB_COLUMN_THEMEVOTE_DATETIME",      "themevote_datetime");
-define("DB_COLUMN_THEMEVOTE_IP",            "themevote_ip");
-define("DB_COLUMN_THEMEVOTE_USER_AGENT",    "themevote_user_agent");
-define("DB_COLUMN_THEMEVOTE_THEME_ID",      "themevote_theme_id");
-define("DB_COLUMN_THEMEVOTE_USER_ID",       "themevote_user_id");
-define("DB_COLUMN_THEMEVOTE_TYPE",          "themevote_type");
 
 class ThemeModel{
 	public $Id;
@@ -37,14 +17,12 @@ class ThemeData{
     public $ThemeModels;
     public $LoggedInUserThemeVotes;
 
-    private $dbConnection;
-    private $publicColumnsTheme = Array(DB_COLUMN_THEME_ID, DB_COLUMN_THEME_TEXT, DB_COLUMN_THEME_AUTHOR_USER_ID, DB_COLUMN_THEME_BANNED, DB_COLUMN_THEME_DELETED);
-    private $privateColumnsTheme = Array(DB_COLUMN_THEME_DATETIME, DB_COLUMN_THEME_IP, DB_COLUMN_THEME_USER_AGENT);
-    private $publicColumnsThemeVote = Array(DB_COLUMN_THEMEVOTE_ID, DB_COLUMN_THEMEVOTE_THEME_ID, DB_COLUMN_THEMEVOTE_USER_ID);
-    private $privateColumnsThemeVote = Array(DB_COLUMN_THEMEVOTE_DATETIME, DB_COLUMN_THEMEVOTE_IP, DB_COLUMN_THEMEVOTE_USER_AGENT, DB_COLUMN_THEMEVOTE_TYPE);
+    private $themeDbInterface;
+    private $themeVoteDbInterface;
 
-    function __construct($dbConn, &$loggedInUser) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$themeDbInterface, &$themeVoteDbInterface, &$loggedInUser) {
+        $this->themeDbInterface = $themeDbInterface;
+        $this->themeVoteDbInterface = $themeVoteDbInterface;
         $this->ThemeModels = $this->LoadThemes();
         $this->LoggedInUserThemeVotes = $this->LoadUserThemeVotes($loggedInUser);
     }
@@ -55,7 +33,7 @@ class ThemeData{
         AddActionLog("LoadThemes");
         StartTimer("LoadThemes");
         
-        $data = $this->SelectAllWithResults();
+        $data = $this->themeDbInterface->SelectAllWithResults();
 
         $themeModels = Array();
         while($themeData = mysqli_fetch_array($data)){
@@ -104,7 +82,7 @@ class ThemeData{
             return $userThemeVotes;
         }
     
-        $data = $this->SelectThemeVotesByUser($loggedInUser->Id);
+        $data = $this->themeVoteDbInterface->SelectThemeVotesByUser($loggedInUser->Id);
     
         while($themeVote = mysqli_fetch_array($data)){
             $themeVoteData = Array();
@@ -126,7 +104,7 @@ class ThemeData{
         AddActionLog("LoadThemes");
         StartTimer("LoadThemes");
 
-        $data = $this->SoftDelete($themeId);
+        $data = $this->themeDbInterface->SoftDelete($themeId);
         
         StopTimer("LoadThemes");
     }
@@ -135,7 +113,7 @@ class ThemeData{
         AddActionLog("GetThemesOfUserFormatted");
         StartTimer("GetThemesOfUserFormatted");
 
-        $data = $this->SelectThemesByUser($userId);
+        $data = $this->themeDbInterface->SelectThemesByUser($userId);
     
         StopTimer("GetThemesOfUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
@@ -145,98 +123,13 @@ class ThemeData{
         AddActionLog("GetThemeVotesOfUserFormatted");
         StartTimer("GetThemeVotesOfUserFormatted");
     
-        $data = $this->SelectThemeVotesWithThemeByUser($userId);
+        $data = $this->themeVoteDbInterface->SelectThemeVotesWithThemeByUser($userId);
     
         StopTimer("GetThemeVotesOfUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
 //////////////////////// END DATABASE ACTIONS
-    
-//////////////////////// FUCNTION SQL
-
-    private function SelectAllWithResults(){
-        AddActionLog("ThemeData_SelectThemeVotesByUser");
-        StartTimer("ThemeData_SelectThemeVotesByUser");
-    
-        //Fill list of themes - will return same theme row multiple times (once for each valid themevote_type)
-        $sql = "
-            SELECT ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEME_TEXT.", ".DB_COLUMN_THEME_AUTHOR_USER_ID.", ".DB_COLUMN_THEME_BANNED.", ".DB_COLUMN_THEMEVOTE_TYPE.", count(".DB_COLUMN_THEMEVOTE_ID.") AS themevote_count, DATEDIFF(Now(), ".DB_COLUMN_THEME_DATETIME.") as theme_daysago, ".DB_COLUMN_THEME_DELETED."
-            FROM (
-                ".DB_TABLE_THEME." LEFT JOIN ".DB_TABLE_THEMEVOTE." 
-                ON (".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_THEME_ID." = ".DB_TABLE_THEME.".".DB_COLUMN_THEME_ID.")
-            )
-            WHERE ".DB_COLUMN_THEME_DELETED." != 1
-            GROUP BY ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEMEVOTE_TYPE."
-            ORDER BY ".DB_COLUMN_THEME_BANNED." ASC, ".DB_COLUMN_THEME_ID." ASC
-        ";
-        
-        StopTimer("ThemeData_SelectThemeVotesByUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectThemeVotesByUser($userId){
-        AddActionLog("ThemeData_SelectThemeVotesByUser");
-        StartTimer("ThemeData_SelectThemeVotesByUser");
-    
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $sql = "
-            SELECT ".DB_COLUMN_THEMEVOTE_THEME_ID.", ".DB_COLUMN_THEMEVOTE_TYPE."
-            FROM ".DB_TABLE_THEMEVOTE."
-            WHERE ".DB_COLUMN_THEMEVOTE_USER_ID." = $escapedUserId;
-        ";
-        
-        StopTimer("ThemeData_SelectThemeVotesByUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectThemesByUser($userId){
-        AddActionLog("ThemeData_SelectThemesByUser");
-        StartTimer("ThemeData_SelectThemesByUser");
-    
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $sql = "
-            SELECT *
-            FROM ".DB_TABLE_THEME."
-            WHERE ".DB_COLUMN_THEME_AUTHOR_USER_ID." = $escapedUserId;
-        ";
-        
-        StopTimer("ThemeData_SelectThemesByUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SelectThemeVotesWithThemeByUser($userId){
-        AddActionLog("ThemeData_SelectThemeVotesWithThemeByUser");
-        StartTimer("ThemeData_SelectThemeVotesWithThemeByUser");
-        
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $sql = "
-            SELECT ".DB_TABLE_THEME.".".DB_COLUMN_THEME_TEXT.", ".DB_TABLE_THEMEVOTE.".*, IF(".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_TYPE." = 1, '-1', IF(".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_TYPE." = 2, '0', '+1'))
-            FROM ".DB_TABLE_THEMEVOTE.", ".DB_TABLE_THEME."
-            WHERE ".DB_TABLE_THEME.".".DB_COLUMN_THEME_ID." = ".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_THEME_ID."
-              AND ".DB_COLUMN_THEMEVOTE_USER_ID." = $escapedUserId;
-        ";
-        
-        StopTimer("ThemeData_SelectThemeVotesWithThemeByUser");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function SoftDelete($themeId){
-        AddActionLog("ThemeData_SoftDelete");
-        StartTimer("ThemeData_SoftDelete");
-
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
-        $sql = "
-            UPDATE ".DB_TABLE_THEME."
-            SET ".DB_COLUMN_THEME_DELETED." = 1
-            WHERE ".DB_COLUMN_THEME_ID." = $escapedThemeId;
-        ";
-        
-        StopTimer("ThemeData_SoftDelete");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-//////////////////////// END FUCNTION SQL
 
 //////////////////////// PUBLIC DATA EXPORT
 
@@ -244,7 +137,7 @@ class ThemeData{
         AddActionLog("ThemesData_GetAllThemePublicData");
         StartTimer("ThemesData_GetAllThemePublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectThemePublicData());
+        $dataFromDatabase = MySQLDataToArray($this->themeDbInterface->SelectThemePublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEME_DATETIME] = gmdate("Y-m-d H:i:s", time());
             $dataFromDatabase[$i][DB_COLUMN_THEME_IP] = "MIGRATION";
@@ -255,24 +148,11 @@ class ThemeData{
         return $dataFromDatabase;
     }
 
-    private function SelectThemePublicData(){
-        AddActionLog("ThemesData_SelectThemePublicData");
-        StartTimer("ThemesData_SelectThemePublicData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumnsTheme)."
-            FROM ".DB_TABLE_THEME.";
-        ";
-
-        StopTimer("ThemesData_SelectThemePublicData");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
     function GetAllThemeVotePublicData(){
         AddActionLog("ThemesData_GetAllThemeVotePublicData");
         StartTimer("ThemesData_GetAllThemeVotePublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectThemeVotePublicData());
+        $dataFromDatabase = MySQLDataToArray($this->themeVoteDbInterface->SelectThemeVotePublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_DATETIME] = gmdate("Y-m-d H:i:s", time());
             $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_IP] = "MIGRATION";
@@ -282,19 +162,6 @@ class ThemeData{
 
         StopTimer("ThemesData_GetAllThemeVotePublicData");
         return $dataFromDatabase;
-    }
-
-    private function SelectThemeVotePublicData(){
-        AddActionLog("ThemesData_SelectThemeVotePublicData");
-        StartTimer("ThemesData_SelectThemeVotePublicData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumnsThemeVote)."
-            FROM ".DB_TABLE_THEMEVOTE.";
-        ";
-
-        StopTimer("ThemesData_SelectThemeVotePublicData");
-        return mysqli_query($this->dbConnection, $sql);
     }
 
 //////////////////////// END PUBLIC DATA EXPORT

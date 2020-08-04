@@ -28,7 +28,9 @@ $themesByVoteDifference = Array();
 $themesByPopularity = Array();
 $cookieData;
 $messageData;
-$themeIdeasData;
+$themeIdeaData;
+$userDbInterface;
+$sessionDbInterface;
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];

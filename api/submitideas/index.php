@@ -45,9 +45,9 @@ $sql = "SELECT idea_id FROM theme_ideas WHERE idea_theme_id = $themeID AND idea_
 $data = mysqli_query($dbConn, $sql);
 $sql = "";
 
-if($themeIdeas = mysqli_fetch_array($data)){
+if($themeIdea = mysqli_fetch_array($data)){
 	//Update themes ideas to user's new ideas
-	$ideasId = $themeIdeas["idea_id"];
+	$ideasId = $themeIdea["idea_id"];
 	$sql = "UPDATE theme_ideas SET idea_ideas = '$clean_ideas' WHERE idea_id = $ideasId";
 	$data = mysqli_query($dbConn, $sql);
 	$sql = "";

@@ -22,6 +22,13 @@ include_once("php/anti-csrf.php");
 include_once("php/global.php");
 include_once("php/dependencies.php");
 
+//Database Interface
+include_once("php/databaseinterfaces/UserDbInterface.php");
+include_once("php/databaseinterfaces/SessionDbInterface.php");
+include_once("php/databaseinterfaces/ThemeDbInterface.php");
+include_once("php/databaseinterfaces/ThemeVoteDbInterface.php");
+include_once("php/databaseinterfaces/ThemeIdeaDbInterface.php");
+
 //Models
 include_once("php/models/UserModel.php");
 include_once("php/models/ThemeModel.php");
@@ -38,7 +45,7 @@ include_once("php/models/ConfigModel.php");
 include_once("php/models/AssetModel.php");
 include_once("php/models/AdminVoteModel.php");
 include_once("php/models/AdminLogModel.php");
-include_once("php/models/ThemeIdeasModel.php");
+include_once("php/models/ThemeIdeaModel.php");
 
 //ViewModels
 include_once("php/viewmodels/AdminLogViewModel.php");
