@@ -24,21 +24,21 @@ class JamDbInterface{
     }
 
     public function SelectAll(){
-        AddActionLog("PlatformDbInterface_SelectAll");
-        StartTimer("PlatformDbInterface_SelectAll");
+        AddActionLog("JamDbInterface_SelectAll");
+        StartTimer("JamDbInterface_SelectAll");
 
         $sql = "
             SELECT ".DB_COLUMN_JAM_ID.", ".DB_COLUMN_JAM_USER_ID.", ".DB_COLUMN_JAM_NUMBER.", ".DB_COLUMN_JAM_SELECTED_THEME_ID.", ".DB_COLUMN_JAM_THEME.", ".DB_COLUMN_JAM_START_DATETIME.", ".DB_COLUMN_JAM_STATE.", ".DB_COLUMN_JAM_COLORS.", ".DB_COLUMN_JAM_DELETED."
             FROM ".DB_TABLE_JAM." 
             ORDER BY ".DB_COLUMN_JAM_NUMBER." DESC";
         
-        StopTimer("PlatformDbInterface_SelectAll");
+        StopTimer("JamDbInterface_SelectAll");
         return mysqli_query($this->dbConnection, $sql);
     }
 
     public function SelectJamsScheduledByUser($userId){
-        AddActionLog("PlatformDbInterface_SelectJamsScheduledByUser");
-        StartTimer("PlatformDbInterface_SelectJamsScheduledByUser");
+        AddActionLog("JamDbInterface_SelectJamsScheduledByUser");
+        StartTimer("JamDbInterface_SelectJamsScheduledByUser");
 
         $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
         $sql = "
@@ -47,13 +47,29 @@ class JamDbInterface{
             WHERE ".DB_COLUMN_JAM_USER_ID." = '$escapedUserId';
         ";
         
-        StopTimer("PlatformDbInterface_SelectJamsScheduledByUser");
+        StopTimer("JamDbInterface_SelectJamsScheduledByUser");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
+    public function SelectIfJamExists($jamId){
+        AddActionLog("JamDbInterface_SelectIfJamExists");
+        StartTimer("JamDbInterface_SelectIfJamExists");
+
+        $escapedJamId = mysqli_real_escape_string($this->dbConnection, $jamId);
+        $sql = "
+            SELECT 1
+            FROM jam
+            WHERE jam_id = $escapedJamId
+            AND jam_deleted = 0;
+            ";
+        
+        StopTimer("JamDbInterface_SelectIfJamExists");
         return mysqli_query($this->dbConnection, $sql);
     }
 
     public function Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors){
-        AddActionLog("PlatformDbInterface_Insert");
-        StartTimer("PlatformDbInterface_Insert");
+        AddActionLog("JamDbInterface_Insert");
+        StartTimer("JamDbInterface_Insert");
 
         $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
         $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
@@ -94,13 +110,12 @@ class JamDbInterface{
 
         mysqli_query($this->dbConnection, $sql);
 
-        StopTimer("PlatformDbInterface_Insert");
-        return;
+        StopTimer("JamDbInterface_Insert");
     }
 
     public function UpdateJamState($jamId, $jamState){
-        AddActionLog("PlatformDbInterface_UpdateJamState");
-        StartTimer("PlatformDbInterface_UpdateJamState");
+        AddActionLog("JamDbInterface_UpdateJamState");
+        StartTimer("JamDbInterface_UpdateJamState");
 
         $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
         $escapedJamState = mysqli_real_escape_string($this->dbConnection, $jamState);
@@ -109,21 +124,36 @@ class JamDbInterface{
             UPDATE ".DB_TABLE_JAM."
             SET ".DB_COLUMN_JAM_STATE." = '$escapedJamState'
             WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId";
+        mysqli_query($this->dbConnection, $sql);
         
-        StopTimer("PlatformDbInterface_UpdateJamState");
-        return mysqli_query($this->dbConnection, $sql);
+        StopTimer("JamDbInterface_UpdateJamState");
+    }
+
+    public function SoftDelete($jamId){
+        AddActionLog("JamDbInterface_SoftDelete");
+        StartTimer("JamDbInterface_SoftDelete");
+
+        $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
+
+        $sql = "
+            UPDATE jam 
+            SET jam_deleted = 1 
+            WHERE jam_id = $escapedJamId";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("JamDbInterface_SoftDelete");
     }
 
     public function SelectPublicData(){
-        AddActionLog("PlatformDbInterface_SelectPublicData");
-        StartTimer("PlatformDbInterface_SelectPublicData");
+        AddActionLog("JamDbInterface_SelectPublicData");
+        StartTimer("JamDbInterface_SelectPublicData");
 
         $sql = "
             SELECT ".implode(",", $this->publicColumns)."
             FROM ".DB_TABLE_JAM.";
         ";
 
-        StopTimer("PlatformDbInterface_SelectPublicData");
+        StopTimer("JamDbInterface_SelectPublicData");
         return mysqli_query($this->dbConnection, $sql);
     }
 }

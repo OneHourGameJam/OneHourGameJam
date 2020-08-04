@@ -86,6 +86,23 @@ class GameDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectEntriesInJam($jamId, $authorId){
+        AddActionLog("GameDbInterface_SelectEntriesForJam");
+        StartTimer("GameDbInterface_SelectEntriesForJam");
+        
+        $escapedJamID = mysqli_real_escape_string($this->dbConnection, $jamId);
+
+        $sql = "
+            SELECT *
+            FROM entry
+            WHERE entry_jam_id = $escapedJamID
+              AND entry_deleted = 0;
+        ";
+        
+        StopTimer("GameDbInterface_SelectEntriesForJam");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     public function Insert($ip, $userAgent, $jamId, $jamNumber, $gameName, $description, $userId, $screenshotURL, $colorBackgroundWithoutHash, $colorTextWithoutHash){
         AddActionLog("GameDbInterface_Insert");
         StartTimer("GameDbInterface_Insert");
