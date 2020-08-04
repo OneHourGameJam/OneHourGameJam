@@ -1,8 +1,8 @@
 <?php
 
-function DeleteAsset($assetID){
-	global $loggedInUser, $dbConn, $assetData, $adminLogData;
-	$assetID = trim($assetID);
+function DeleteAsset($assetId){
+	global $loggedInUser, $assetData, $adminLogData, $assetDbInterface;
+	$assetId = trim($assetId);
 
 	//Authorize user
 	if(IsAdmin($loggedInUser) === false){
@@ -10,7 +10,7 @@ function DeleteAsset($assetID){
 	}
 
 	$assetExists = false;
-	if(isset($assetID) && $assetID !== null && isset($assetData->AssetModels[$assetID])){
+	if(isset($assetId) && $assetId !== null && isset($assetData->AssetModels[$assetId])){
 		$assetExists = true;
 	}
 
@@ -18,16 +18,7 @@ function DeleteAsset($assetID){
 		return "ASSET_DOES_NOT_EXIST";
 	}
 
-	$escapedID = mysqli_real_escape_string($dbConn, $assetID);
-
-	$sql = "
-        SELECT asset_id, asset_author_user_id, asset_title
-        FROM asset a
-        WHERE asset_deleted != 1
-          AND asset_id = $escapedID;
-    ";
-    $data = mysqli_query($dbConn, $sql);
-    $sql = "";
+    $data = $assetDbInterface->SelectSingleAsset($assetId);
 
     $assetAuthorUserId = "";
     $assetTitle = "";
@@ -36,16 +27,9 @@ function DeleteAsset($assetID){
         $assetTitle = $info["asset_title"];
     }
 
-	$sql = "
-		UPDATE asset
-		SET
-			asset_deleted = 1
-		WHERE asset_id = $escapedID;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$assetDbInterface->SoftDelete($assetId);
 
-	$adminLogData->AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetID." (Title: $assetTitle; Author ID: $assetAuthorUserId) soft deleted", $assetAuthorUserId, $loggedInUser->Id, "");
+	$adminLogData->AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetId." (Title: $assetTitle; Author ID: $assetAuthorUserId) soft deleted", $assetAuthorUserId, $loggedInUser->Id, "");
 	
 	return "SUCCESS";
 }
@@ -55,8 +39,8 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$assetID = $_POST["asset_id"];
-		return DeleteAsset($assetID);
+		$assetId = $_POST["asset_id"];
+		return DeleteAsset($assetId);
 	}
 }
 

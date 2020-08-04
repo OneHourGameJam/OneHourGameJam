@@ -49,6 +49,21 @@ class AssetDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectSingleAsset($assetId){
+        AddActionLog("AssetDbInterface_SelectSingleAsset");
+        StartTimer("AssetDbInterface_SelectSingleAsset");
+
+        $escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
+        $sql = "
+            SELECT asset_id, asset_author_user_id, asset_title
+            FROM asset a
+            WHERE asset_deleted != 1
+              AND asset_id = $escapedAssetId;
+        ";
+        StopTimer("AssetDbInterface_SelectSingleAsset");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     public function Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL){
         AddActionLog("AssetDbInterface_Insert");
         StartTimer("AssetDbInterface_Insert");
@@ -88,6 +103,23 @@ class AssetDbInterface{
         mysqli_query($this->dbConnection, $sql);
 
         StopTimer("AssetDbInterface_Insert");
+    }
+
+    public function SoftDelete($assetId){
+        AddActionLog("AssetDbInterface_SoftDelete");
+        StartTimer("AssetDbInterface_SoftDelete");
+
+		$escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
+        
+        $sql = "
+            UPDATE asset
+            SET
+                asset_deleted = 1
+            WHERE asset_id = $escapedAssetId;
+        ";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("AssetDbInterface_SoftDelete");
     }
 
     public function SelectPublicData(){
