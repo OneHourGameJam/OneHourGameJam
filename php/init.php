@@ -26,6 +26,7 @@ function Init(){
 	$platformDbInterface = new PlatformDbInterface($dbConn);
 	$platformGameDbInterface = new PlatformGameDbInterface($dbConn);
 	$jamDbInterface = new JamDbInterface($dbConn);
+	$gameDbInterface = new GameDbInterface($dbConn);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -48,7 +49,7 @@ function Init(){
 	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
 	$jamData = new JamData($jamDbInterface);
-	$gameData = new GameData($dbConn);
+	$gameData = new GameData($gameDbInterface);
 	$platformData = new PlatformData($platformDbInterface);
 	$platformGameData = new PlatformGameData($platformGameDbInterface);
 
