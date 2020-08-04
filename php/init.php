@@ -28,6 +28,7 @@ function Init(){
 	$jamDbInterface = new JamDbInterface($dbConn);
 	$gameDbInterface = new GameDbInterface($dbConn);
 	$configDbInterface = new ConfigDbInterface($dbConn);
+	$assetDbInterface = new AssetDbInterface($dbConn);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -60,7 +61,7 @@ function Init(){
 	JamController::CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime, $adminLogData);
 
 	$siteActionData = new SiteActionData($configData);
-	$assetData = new AssetData($dbConn);
+	$assetData = new AssetData($assetDbInterface);
 	$pollData = new PollData($pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $loggedInUser);
     $satisfactionData = new SatisfactionData($satisfactionDbInterface, $configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
