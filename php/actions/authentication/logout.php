@@ -3,20 +3,14 @@
 //Logs out the current user by setting their sessionID cookie to blank and expiring it.
 //TODO: Clear session from on-server session data
 function LogOut(){
-	global $dbConn, $configData;
+	global $configData, $sessionDbInterface;
 
 	// Delete the session out of our DB
-	$sessionID = "".$_COOKIE["sessionID"];
+	$sessionId = "".$_COOKIE["sessionID"];
 	$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
+	$sessionIdHash = HashPassword($sessionId, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
 
-	$sql = "
-		DELETE FROM session
-		WHERE session_id = '$sessionIDHash';
-	";
-
-	mysqli_query($dbConn, $sql) ;
-	$sql = "";
+	$sessionDbInterface->Delete($sessionIdHash);
 
 	// Clear the cookie
 	setcookie("sessionID", "", time());

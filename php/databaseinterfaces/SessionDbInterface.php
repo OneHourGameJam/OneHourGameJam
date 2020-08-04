@@ -50,9 +50,24 @@ class SessionDbInterface{
 			Now(),
 			Now());
 		";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("SessionDbInterface_Insert");
+    }
+
+    public function Delete($sessionIdHash){
+        AddActionLog("SessionDbInterface_Insert");
+        StartTimer("SessionDbInterface_Insert");
+
+        $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+
+        $sql = "
+            DELETE FROM session
+            WHERE session_id = '$escapedSessionIdHash';
+        ";
+        mysqli_query($this->dbConnection, $sql);
         
         StopTimer("SessionDbInterface_Insert");
-        return mysqli_query($this->dbConnection, $sql);
     }
 
     private function SelectPublicData(){
