@@ -19,6 +19,7 @@ function Init(){
 	$themeDbInterface = new ThemeDbInterface($dbConn);
 	$themeVoteDbInterface = new ThemeVoteDbInterface($dbConn);
 	$themeIdeaDbInterface = new ThemeIdeaDbInterface($dbConn);
+	$satisfactionDbInterface = new SatisfactionDbInterface($dbConn);
 
 	StopTimer("Init - Database Interfaces");
 
@@ -53,7 +54,7 @@ function Init(){
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData($dbConn);
 	$pollData = new PollData($dbConn, $loggedInUser);
-    $satisfactionData = new SatisfactionData($dbConn, $configData);
+    $satisfactionData = new SatisfactionData($satisfactionDbInterface, $configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
 	$themeIdeaData = new ThemeIdeaData($themeIdeaDbInterface, $loggedInUser);
