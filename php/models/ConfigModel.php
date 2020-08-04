@@ -1,19 +1,5 @@
 <?php
 
-define("DB_TABLE_CONFIG", "config");
-define("DB_COLUMN_CONFIG_ID",                   "config_id");
-define("DB_COLUMN_CONFIG_LASTEDITED",           "config_lastedited");
-define("DB_COLUMN_CONFIG_LASTEDITEDBY",         "config_lasteditedby");
-define("DB_COLUMN_CONFIG_KEY",                  "config_key");
-define("DB_COLUMN_CONFIG_VALUE",                "config_value");
-define("DB_COLUMN_CONFIG_CATEGORY",             "config_category");
-define("DB_COLUMN_CONFIG_DESCRIPTION",          "config_description");
-define("DB_COLUMN_CONFIG_TYPE",                 "config_type");
-define("DB_COLUMN_CONFIG_OPTIONS",              "config_options");
-define("DB_COLUMN_CONFIG_EDITABLE",             "config_editable");
-define("DB_COLUMN_CONFIG_REQUIRED",             "config_required");
-define("DB_COLUMN_CONFIG_ADDED_TO_DICTIONARY",  "config_added_to_dictionary");
-
 define("CONFIG_DEFAULT_SATURATION", "DEFAULT_SATURATION");
 define("CONFIG_DEFAULT_NUMBER_OF_COLORS", "DEFAULT_NUMBER_OF_COLORS");
 define("CONFIG_DATABASE_VERSION", "DATABASE_VERSION");
@@ -107,13 +93,11 @@ class SettingEnumOptionModel{
 
 class ConfigData{
     public $ConfigModels;
-    
-    private $dbConnection;
-    private $publicColumns = Array(DB_COLUMN_CONFIG_ID, DB_COLUMN_CONFIG_KEY, DB_COLUMN_CONFIG_VALUE, DB_COLUMN_CONFIG_CATEGORY, DB_COLUMN_CONFIG_DESCRIPTION, DB_COLUMN_CONFIG_TYPE, DB_COLUMN_CONFIG_OPTIONS, DB_COLUMN_CONFIG_EDITABLE, DB_COLUMN_CONFIG_REQUIRED, DB_COLUMN_CONFIG_ADDED_TO_DICTIONARY);
-    private $privateColumns = Array(DB_COLUMN_CONFIG_LASTEDITED, DB_COLUMN_CONFIG_LASTEDITEDBY);
 
-    function __construct(&$dbConn, &$adminLogData) {
-        $this->dbConnection = $dbConn;
+    private $configDbInterface;
+
+    function __construct(&$configDbInterface, &$adminLogData) {
+        $this->configDbInterface = $configDbInterface;
         $this->ConfigModels = $this->LoadConfig();
         $this->VerifyConfig($adminLogData);
     }
@@ -124,7 +108,7 @@ class ConfigData{
         AddActionLog("LoadConfig");
         StartTimer("LoadConfig");
 
-        $data = $this->SelectAll();
+        $data = $this->configDbInterface->SelectAll();
 
         $configModels = Array();
         while($configData = mysqli_fetch_array($data)) {
@@ -184,7 +168,7 @@ class ConfigData{
         StartTimer("UpdateConfig");
 
         if($this->ConfigModels[$key]->Value != $value){
-            $this->Update($key, $value, $userId);
+            $this->configDbInterface->Update($key, $value, $userId);
             $this->ConfigModels[$key]->Value = $value;
     
             $adminLogData->AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "NULL", ($userID > 0) ? $userID : "NULL", ($userID > 0) ? "" : $userUsernameOverride);
@@ -194,45 +178,6 @@ class ConfigData{
     }
 
 //////////////////////// END DATABASE ACTIONS
-    
-//////////////////////// FUCNTION SQL
-
-    private function SelectAll(){
-        AddActionLog("ConfigData_SelectAll");
-        StartTimer("ConfigData_SelectAll");
-
-        $sql = "
-            SELECT * 
-            FROM ".DB_TABLE_CONFIG." 
-            ORDER BY ".DB_COLUMN_CONFIG_ID.";
-        ";
-        
-        StopTimer("ConfigData_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-    private function Update($key, $value, $userID){
-        AddActionLog("ConfigData_Update");
-        StartTimer("ConfigData_Update");
-
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userID);
-        $escapedKey = mysqli_real_escape_string($this->dbConnection, $key);
-        $escapedValue = mysqli_real_escape_string($this->dbConnection, $value);
-
-        $sql = "
-            UPDATE ".DB_TABLE_CONFIG."
-            SET 
-                ".DB_COLUMN_CONFIG_VALUE." = '$escapedValue',
-                ".DB_COLUMN_CONFIG_LASTEDITED." = Now(),
-                ".DB_COLUMN_CONFIG_LASTEDITEDBY." = '$escapedUserId'
-            WHERE ".DB_COLUMN_CONFIG_KEY." = '$escapedKey';
-        ";
-        mysqli_query($this->dbConnection, $sql);
-
-        StopTimer("ConfigData_Update");
-    }
-
-//////////////////////// END FUCNTION SQL
 
 //////////////////////// PUBLIC DATA EXPORT
 
@@ -240,7 +185,7 @@ class ConfigData{
         AddActionLog("ConfigData_GetAllPublicData");
         StartTimer("ConfigData_GetAllPublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectPublicData());
+        $dataFromDatabase = MySQLDataToArray($this->configDbInterface->SelectPublicData());
         
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_CONFIG_LASTEDITED] = gmdate("Y-m-d H:i:s", time());
@@ -264,19 +209,6 @@ class ConfigData{
 
         StopTimer("ConfigData_GetAllPublicData");
         return $dataFromDatabase;
-    }
-
-    private function SelectPublicData(){
-        AddActionLog("ConfigData_SelectPublicData");
-        StartTimer("ConfigData_SelectPublicData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumns)."
-            FROM ".DB_TABLE_CONFIG.";
-        ";
-
-        StopTimer("ConfigData_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
     }
 
 //////////////////////// END PUBLIC DATA EXPORT

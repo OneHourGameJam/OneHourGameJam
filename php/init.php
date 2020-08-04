@@ -27,6 +27,7 @@ function Init(){
 	$platformGameDbInterface = new PlatformGameDbInterface($dbConn);
 	$jamDbInterface = new JamDbInterface($dbConn);
 	$gameDbInterface = new GameDbInterface($dbConn);
+	$configDbInterface = new ConfigDbInterface($dbConn);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -36,7 +37,7 @@ function Init(){
 	$cookieData = new CookieData();
 
 	$adminLogData = new AdminLogData($dbConn);
-	$configData = new ConfigData($dbConn, $adminLogData);
+	$configData = new ConfigData($configDbInterface, $adminLogData);
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($configData);
 
     RedirectToHttpsIfRequired($configData);

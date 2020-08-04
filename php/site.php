@@ -36,6 +36,7 @@ include_once("php/databaseinterfaces/PlatformDbInterface.php");
 include_once("php/databaseinterfaces/PlatformGameDbInterface.php");
 include_once("php/databaseinterfaces/JamDbInterface.php");
 include_once("php/databaseinterfaces/GameDbInterface.php");
+include_once("php/databaseinterfaces/ConfigDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");
