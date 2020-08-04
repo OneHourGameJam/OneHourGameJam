@@ -10,10 +10,11 @@ class SatisfactionModel{
 
 class SatisfactionData{
     public $SatisfactionModels;
-    private $SatisfactionDbInterface;
+    
+    private $satisfactionDbInterface;
 
     function __construct(&$satisfactionDbInterface, &$configData) {
-        $this->SatisfactionDbInterface = $satisfactionDbInterface;
+        $this->satisfactionDbInterface = $satisfactionDbInterface;
         $this->SatisfactionModels = $this->LoadSatisfaction($configData);
     }
 
@@ -23,7 +24,7 @@ class SatisfactionData{
         AddActionLog("LoadSatisfaction");
         StartTimer("LoadSatisfaction");
     
-        $data = $this->SatisfactionDbInterface->SelectAllWithPercentageResultsAndCount();
+        $data = $this->satisfactionDbInterface->SelectAllWithPercentageResultsAndCount();
     
         $satisfactionModels = Array();
         while($satisfactionData = mysqli_fetch_array($data)){
@@ -45,7 +46,7 @@ class SatisfactionData{
             $satisfactionModels[$questionId] = $satisfactionModel;
         }
     
-        $data = $this->SatisfactionDbInterface->SelectAllWithAbsoluteResults();
+        $data = $this->satisfactionDbInterface->SelectAllWithAbsoluteResults();
     
         while($info = mysqli_fetch_array($data)){
             $questionId = $info[DB_COLUMN_SATISFACTION_QUESTION_ID];
@@ -77,7 +78,7 @@ class SatisfactionData{
             return;
         }
 
-        $data = $this->SatisfactionDbInterface->Insert($satisfactionQuestionId, $ip, $userAgent, $loggedInUser->Id, $score);
+        $data = $this->satisfactionDbInterface->Insert($satisfactionQuestionId, $ip, $userAgent, $loggedInUser->Id, $score);
     
         StopTimer("SubmitSatisfaction");
     }
@@ -86,7 +87,7 @@ class SatisfactionData{
         AddActionLog("GetSatisfactionVotesOfUserFormatted");
         StartTimer("GetSatisfactionVotesOfUserFormatted");
     
-        $data = $this->SatisfactionDbInterface->SelectSatisfactionVotesByUser($userId);
+        $data = $this->satisfactionDbInterface->SelectSatisfactionVotesByUser($userId);
     
         StopTimer("GetSatisfactionVotesOfUserFormatted");
         return ArrayToHTML(MySQLDataToArray($data));
@@ -100,7 +101,7 @@ class SatisfactionData{
         AddActionLog("SatisfactionData_GetAllPublicData");
         StartTimer("SatisfactionData_GetAllPublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SatisfactionDbInterface->SelectPublicData());
+        $dataFromDatabase = MySQLDataToArray($this->satisfactionDbInterface->SelectPublicData());
 
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_SATISFACTION_DATETIME] = gmdate("Y-m-d H:i:s", time());

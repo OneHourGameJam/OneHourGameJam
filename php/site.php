@@ -29,6 +29,9 @@ include_once("php/databaseinterfaces/ThemeDbInterface.php");
 include_once("php/databaseinterfaces/ThemeVoteDbInterface.php");
 include_once("php/databaseinterfaces/ThemeIdeaDbInterface.php");
 include_once("php/databaseinterfaces/SatisfactionDbInterface.php");
+include_once("php/databaseinterfaces/PollDbInterface.php");
+include_once("php/databaseinterfaces/PollOptionDbInterface.php");
+include_once("php/databaseinterfaces/PollVoteDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");

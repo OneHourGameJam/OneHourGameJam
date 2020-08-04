@@ -20,6 +20,9 @@ function Init(){
 	$themeVoteDbInterface = new ThemeVoteDbInterface($dbConn);
 	$themeIdeaDbInterface = new ThemeIdeaDbInterface($dbConn);
 	$satisfactionDbInterface = new SatisfactionDbInterface($dbConn);
+	$pollDbInterface = new PollDbInterface($dbConn);
+	$pollOptionDbInterface = new PollOptionDbInterface($dbConn);
+	$pollVoteDbInterface = new PollVoteDbInterface($dbConn);
 
 	StopTimer("Init - Database Interfaces");
 
@@ -53,7 +56,7 @@ function Init(){
 
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData($dbConn);
-	$pollData = new PollData($dbConn, $loggedInUser);
+	$pollData = new PollData($pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $loggedInUser);
     $satisfactionData = new SatisfactionData($satisfactionDbInterface, $configData);
     $adminVoteData = new AdminVoteData($dbConn, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
