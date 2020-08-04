@@ -1,10 +1,5 @@
 <?php
 
-define("DB_TABLE_PLATFORMENTRY", "platform_entry");
-define("DB_COLUMN_PLATFORMENTRY_ID",            "platformentry_id");
-define("DB_COLUMN_PLATFORMENTRY_ENTRY_ID",      "platformentry_entry_id");
-define("DB_COLUMN_PLATFORMENTRY_PLATFORM_ID",   "platformentry_platform_id");
-define("DB_COLUMN_PLATFORMENTRY_URL",           "platformentry_url");
 
 class PlatformGameModel{
 	public $Id;
@@ -17,12 +12,10 @@ class PlatformGameData{
     public $PlatformGameModels;
     public $GameIdToPlatformGameIds;
 
-    private $dbConnection;
-    private $publicColumns = Array(DB_COLUMN_PLATFORMENTRY_ID, DB_COLUMN_PLATFORMENTRY_ENTRY_ID, DB_COLUMN_PLATFORMENTRY_PLATFORM_ID, DB_COLUMN_PLATFORMENTRY_URL);
-    private $privateColumns = Array();
+    private $platformGameDbInterface;
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$platformGameDbInterface) {
+        $this->platformGameDbInterface = $platformGameDbInterface;
         $this->PlatformGameModels = $this->LoadPlatformEntries();
         $this->GameIdToPlatformGameIds = $this->GenerateGameIdToPlatformGameIds();
     }
@@ -33,7 +26,7 @@ class PlatformGameData{
         AddActionLog("LoadPlatformEntries");
         StartTimer("LoadPlatformEntries");
 
-        $data = $this->SelectAll();
+        $data = $this->platformGameDbInterface->SelectAll();
 
         $platformGameModels = Array();
         while($info = mysqli_fetch_array($data)){
@@ -73,22 +66,6 @@ class PlatformGameData{
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
 //////////////////////// END DATABASE ACTIONS
-    
-//////////////////////// FUCNTION SQL
-
-    private function SelectAll(){
-        AddActionLog("PlatformGameData_SelectAll");
-        StartTimer("PlatformGameData_SelectAll");
-
-        $sql = "
-            SELECT ".DB_COLUMN_PLATFORMENTRY_ID.", ".DB_COLUMN_PLATFORMENTRY_ENTRY_ID.", ".DB_COLUMN_PLATFORMENTRY_PLATFORM_ID.", ".DB_COLUMN_PLATFORMENTRY_URL." 
-            FROM ".DB_TABLE_PLATFORMENTRY.";";
-        
-        StopTimer("PlatformGameData_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
-    }
-
-//////////////////////// END FUCNTION SQL
 
 //////////////////////// PUBLIC DATA EXPORT
 
@@ -96,7 +73,7 @@ class PlatformGameData{
         AddActionLog("PlatformGameData_GetAllPublicData");
         StartTimer("PlatformGameData_GetAllPublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectPublicData());
+        $dataFromDatabase = MySQLDataToArray($this->platformGameDbInterface->SelectPublicData());
 
         foreach($dataFromDatabase as $i => $row){
             //private data overrides
@@ -104,19 +81,6 @@ class PlatformGameData{
 
         StopTimer("PlatformGameData_GetAllPublicData");
         return $dataFromDatabase;
-    }
-
-    private function SelectPublicData(){
-        AddActionLog("PlatformGameData_SelectPublicData");
-        StartTimer("PlatformGameData_SelectPublicData");
-
-        $sql = "
-            SELECT ".implode(",", $this->publicColumns)."
-            FROM ".DB_TABLE_PLATFORMENTRY.";
-        ";
-
-        StopTimer("PlatformGameData_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
     }
 
 //////////////////////// END PUBLIC DATA EXPORT

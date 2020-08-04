@@ -33,6 +33,7 @@ include_once("php/databaseinterfaces/PollDbInterface.php");
 include_once("php/databaseinterfaces/PollOptionDbInterface.php");
 include_once("php/databaseinterfaces/PollVoteDbInterface.php");
 include_once("php/databaseinterfaces/PlatformDbInterface.php");
+include_once("php/databaseinterfaces/PlatformGameDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");
