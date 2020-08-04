@@ -291,7 +291,7 @@ function LoadDependencies($page, &$pageSettings, &$commonDependencies){
             }
 
             if($depIndex !== false){
-                $dependencies[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+                $dependencies[$depIndex]["RenderDepth"] = intval($dependencyKey) | intval($dependencyRenderDepth);
             }else{
                 $dependencies[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
             }
@@ -309,7 +309,7 @@ function LoadDependencies($page, &$pageSettings, &$commonDependencies){
             }
 
             if($depIndex !== false){
-                $dependencies[$depIndex]["RenderDepth"] = $dependencyKey | $dependencyRenderDepth;
+                $dependencies[$depIndex]["RenderDepth"] = intval($dependencyKey) | intval($dependencyRenderDepth);
             }else{
                 $dependencies[] = Array("Key" => $dependencyKey, "RenderDepth" => $dependencyRenderDepth);
             }

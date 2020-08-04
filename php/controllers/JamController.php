@@ -43,7 +43,7 @@ class JamController{
 	}
 	
 	//Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-	function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime, &$adminLogData){
+	public static function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime, &$adminLogData){
 		AddActionLog("CheckNextJamSchedule");
 		StartTimer("CheckNextJamSchedule"); 
 
