@@ -39,6 +39,7 @@ include_once("php/databaseinterfaces/GameDbInterface.php");
 include_once("php/databaseinterfaces/ConfigDbInterface.php");
 include_once("php/databaseinterfaces/AssetDbInterface.php");
 include_once("php/databaseinterfaces/AdminVoteDbInterface.php");
+include_once("php/databaseinterfaces/AdminLogDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");

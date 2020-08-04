@@ -30,6 +30,7 @@ function Init(){
 	$configDbInterface = new ConfigDbInterface($dbConn);
 	$assetDbInterface = new AssetDbInterface($dbConn);
 	$adminVoteDbInterface = new AdminVoteDbInterface($dbConn);
+	$adminLogDbInterface = new AdminLogDbInterface($dbConn);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -38,7 +39,7 @@ function Init(){
 	CookieController::UpdateCookies();
 	$cookieData = new CookieData();
 
-	$adminLogData = new AdminLogData($dbConn);
+	$adminLogData = new AdminLogData($adminLogDbInterface);
 	$configData = new ConfigData($configDbInterface, $adminLogData);
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($configData);
 
