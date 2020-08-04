@@ -105,6 +105,32 @@ class AssetDbInterface{
         StopTimer("AssetDbInterface_Insert");
     }
 
+    public function Update($assetId, $authorUserId, $title, $description, $type, $content){
+        AddActionLog("AssetDbInterface_Update");
+        StartTimer("AssetDbInterface_Update");
+
+		$escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
+		$escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $authorUserId);
+		$escapedTitle = mysqli_real_escape_string($this->dbConnection, $title);
+		$escapedDescription = mysqli_real_escape_string($this->dbConnection, $description);
+		$escapedType = mysqli_real_escape_string($this->dbConnection, $type);
+		$escapedContent = mysqli_real_escape_string($this->dbConnection, $content);
+        
+		$sql = "
+            UPDATE asset
+            SET
+                asset_author_user_id = $escapedAuthorUserId,
+                asset_title = '$escapedTitle',
+                asset_description = '$escapedDescription',
+                asset_type = '$escapedType',
+                asset_content = '$escapedContent'
+            WHERE asset_id = $escapedAssetId;
+        ";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("AssetDbInterface_Update");
+    }
+
     public function SoftDelete($assetId){
         AddActionLog("AssetDbInterface_SoftDelete");
         StartTimer("AssetDbInterface_SoftDelete");

@@ -1,9 +1,9 @@
 <?php
 
-function AddAsset($assetID, $author, $title, $description, $type){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assetData, $userData, $configData, $adminLogData, $assetDbInterface;
+function AddAsset($assetId, $author, $title, $description, $type){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $assetData, $userData, $configData, $adminLogData, $assetDbInterface;
 
-	$assetID = trim($assetID);
+	$assetId = trim($assetId);
 	$author = trim($author);
 	$title = trim($title);
 	$description = trim($description);
@@ -50,7 +50,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	}
 
 	$assetExists = false;
-	if(isset($assetID) && $assetID !== null && isset($assetData->AssetModels[$assetID])){
+	if(isset($assetId) && $assetId !== null && isset($assetData->AssetModels[$assetId])){
 		$assetExists = true;
 	}
 
@@ -96,33 +96,16 @@ function AddAsset($assetID, $author, $title, $description, $type){
 
 	//Create or update entry
 	if($assetExists){
-		$escapedID = mysqli_real_escape_string($dbConn, $assetID);
-		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $authorUserId);
-		$escapedTitle = mysqli_real_escape_string($dbConn, $title);
-		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
-		$escapedType = mysqli_real_escape_string($dbConn, $type);
-		$escapedContent = mysqli_real_escape_string($dbConn, ($assetUrl != "") ? $assetURL : ($assetData->AssetModels[$assetID]->Content));
+		$content = ($assetUrl != "") ? $assetURL : ($assetData->AssetModels[$assetId]->Content);
+		$assetDbInterface->Update($assetId, $authorUserId, $title, $description, $type, $content);
 
-		$sql = "
-			UPDATE asset
-			SET
-				asset_author_user_id = $escapedAuthorUserId,
-				asset_title = '$escapedTitle',
-				asset_description = '$escapedDescription',
-				asset_type = '$escapedType',
-				asset_content = '$escapedContent'
-			WHERE asset_id = $escapedID;
-		";
-		$data = mysqli_query($dbConn, $sql);
-        $sql = "";
-
-		$adminLogData->AddToAdminLog("ASSET_UPDATE", "Asset ".$assetID." updated with values: Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $authorUserId, $loggedInUser->Id, "");
+		$adminLogData->AddToAdminLog("ASSET_UPDATE", "Asset ".$assetId." updated with values: Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $authorUserId, $loggedInUser->Id, "");
 		
 		return "SUCCESS_UPDATED";
 	}else{
 		$assetDbInterface->Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL);
 		
-		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UsernameToId[$author], $loggedInUser->Id, "");
+		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetId' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UsernameToId[$author], $loggedInUser->Id, "");
 		
 		return "SUCCESS_INSERTED";
 	}
@@ -132,13 +115,13 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$assetID = $_POST["asset_id"];
+		$assetId = $_POST["asset_id"];
 		$author = $_POST["author"];
 		$title = $_POST["title"];
 		$description = $_POST["description"];
 		$type = $_POST["type"];
 
-		return AddAsset($assetID, $author, $title, $description, $type);
+		return AddAsset($assetId, $author, $title, $description, $type);
 	}
 }
 
