@@ -34,6 +34,7 @@ include_once("php/databaseinterfaces/PollOptionDbInterface.php");
 include_once("php/databaseinterfaces/PollVoteDbInterface.php");
 include_once("php/databaseinterfaces/PlatformDbInterface.php");
 include_once("php/databaseinterfaces/PlatformGameDbInterface.php");
+include_once("php/databaseinterfaces/JamDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");

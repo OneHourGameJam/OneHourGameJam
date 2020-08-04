@@ -25,6 +25,7 @@ function Init(){
 	$pollVoteDbInterface = new PollVoteDbInterface($dbConn);
 	$platformDbInterface = new PlatformDbInterface($dbConn);
 	$platformGameDbInterface = new PlatformGameDbInterface($dbConn);
+	$jamDbInterface = new JamDbInterface($dbConn);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -46,7 +47,7 @@ function Init(){
 	$page = ValidatePage($page, $loggedInUser);
 	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
-	$jamData = new JamData($dbConn);
+	$jamData = new JamData($jamDbInterface);
 	$gameData = new GameData($dbConn);
 	$platformData = new PlatformData($platformDbInterface);
 	$platformGameData = new PlatformGameData($platformGameDbInterface);
