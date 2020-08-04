@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme){
-	global $themeData, $configData, $jamData, $dbConn, $ip, $userAgent, $loggedInUser;
+	global $themeData, $configData, $jamData, $dbConn, $ip, $userAgent, $loggedInUser, $themeDbInterface;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -37,18 +37,7 @@ function AddTheme($newTheme){
 		return "TOO_MANY_THEMES";
 	}
 
-	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
-	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$clean_newTheme = mysqli_real_escape_string($dbConn, $newTheme);
-	$clean_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
-
-	//Insert new theme
-	$sql = "
-		INSERT INTO theme
-		(theme_datetime, theme_ip, theme_user_agent, theme_text, theme_author_user_id)
-		VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', $clean_user_id);";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$themeDbInterface->Insert($ip, $userAgent, $newTheme, $loggedInUser->Id);
 
 	return "SUCCESS";
 }

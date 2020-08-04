@@ -1,7 +1,7 @@
 <?php
 
 function NewPlatform($platformName){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $platformData, $adminLogData;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
 
 	$platformName = trim($platformName);
 
@@ -54,23 +54,7 @@ function NewPlatform($platformName){
 		return "ICON_FAILED_TO_UPLOAD";
 	}
 
-	$escaped_platformName = mysqli_real_escape_string($dbConn, $platformName);
-	$escaped_iconUrl = mysqli_real_escape_string($dbConn, $iconUrl);
-
-	$sql = "
-		INSERT INTO platform
-		(platform_id,
-		platform_name,
-		platform_icon_url,
-		platform_deleted)
-		VALUES
-		(null,
-		'$escaped_platformName',
-		'$escaped_iconUrl',
-		0);
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$platformDbInterface->Insert($platformName, $iconUrl);
 	
     $adminLogData->AddToAdminLog("PLATFORM_ADDED", "Platform $platformName added (name: $platformName, icon url: $iconUrl)", "NULL", $loggedInUser->Id, "");
 

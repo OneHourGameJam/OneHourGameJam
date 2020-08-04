@@ -1,12 +1,7 @@
 <?php
 
-//Creates or updates a jam entry. $jam_number is a mandatory jam number to submit to.
-//All other parameters are strings: $gameName and $gameURL must be non-blank
-//$gameURL must be a valid URL, $screenshotURL can either be blank or a valid URL.
-//If blank, a default image is used instead. description must be non-blank.
-//Function also authorizes the user (must be logged in)
-function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $description, $colorBackground, $colorText){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $jamData, $gameData, $configData;
+function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $description, $colorBackground, $colorText){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $jamData, $gameData, $configData, $gameDbInterface;
 
 	$gameName = trim($gameName);
 	$screenshotURL = trim($screenshotURL);
@@ -43,11 +38,11 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 	}
 
 	//Check that a jam exists
-	if (!is_int($jam_number)) {
+	if (!is_int($jamNumber)) {
 		return "INVALID_JAM_NUMBER";
 	}
 
-	$jam = $jamData->GetJamByNumber($jam_number);
+	$jam = $jamData->GetJamByNumber($jamNumber);
 	if($jam == null || $jam->JamNumber == 0){
 		return "NO_JAM_TO_SUBMIT_TO";
 	}
@@ -68,7 +63,7 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 	$colorTextWithoutHash = substr($colorText, 1, 6);
 	
 	//Upload screenshot
-	$jam_folder = "data/jams/jam_$jam_number";
+	$jam_folder = "data/jams/jam_$jamNumber";
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
 		$imageFileType = strtolower(pathinfo($_FILES["screenshotfile"]["name"], PATHINFO_EXTENSION));
 		$target_file = $jam_folder . "/".$loggedInUser->Username."." . $imageFileType;
@@ -106,7 +101,7 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 			continue;
 		}
 
-		if($gameModel->JamNumber != $jam_number){
+		if($gameModel->JamNumber != $jamNumber){
 			continue;
 		}
 
@@ -122,29 +117,7 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 			}
 		}
 
-		$escapedGameName = mysqli_real_escape_string($dbConn, $gameName);
-		$escapedScreenshotURL = mysqli_real_escape_string($dbConn, $screenshotURL);
-		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
-		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $gameModel->AuthorUserId);
-		$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam_number);
-		$escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($dbConn, $colorBackgroundWithoutHash);
-		$escaped_colorTextWithoutHash = mysqli_real_escape_string($dbConn, $colorTextWithoutHash);
-
-		$sql = "
-		UPDATE entry
-		SET
-			entry_title = '$escapedGameName',
-			entry_screenshot_url = '$escapedScreenshotURL',
-			entry_description = '$escapedDescription',
-			entry_background_color = '$escaped_colorBackgroundWithoutHash',
-			entry_text_color = '$escaped_colorTextWithoutHash'
-		WHERE
-			entry_author_user_id = $escapedAuthorUserId
-		AND entry_jam_number = $escaped_jamNumber
-		AND entry_deleted = 0;
-		";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
+		$gameDbInterface->Update($jamNumber, $gameModel->AuthorUserId, $gameName, $screenshotURL, $description, $colorBackgroundWithoutHash, $colorTextWithoutHash);
 
 		foreach($platforms as $i => $platform){
 			if($platform["url"] != ""){
@@ -160,62 +133,14 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 	$currentJamData = GetCurrentJamNumberAndID();
 
 	if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value == 0){
-		if ($jam_number != $currentJamData["NUMBER"]) {
+		if ($jamNumber != $currentJamData["NUMBER"]) {
 			return "CANNOT_SUBMIT_TO_PAST_JAM";
 		}
 	}
 
-	$escaped_ip = mysqli_real_escape_string($dbConn, $ip);
-	$escaped_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-	$escaped_jamId = mysqli_real_escape_string($dbConn, $jam->Id);
-	$escaped_jamNumber = mysqli_real_escape_string($dbConn, $jam->JamNumber);
-	$escaped_gameName = mysqli_real_escape_string($dbConn, $gameName);
-	$escaped_description = mysqli_real_escape_string($dbConn, $description);
-	$escaped_author_user_id = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
-	$escaped_ssURL = mysqli_real_escape_string($dbConn, $screenshotURL);
-	$escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($dbConn, $colorBackgroundWithoutHash);
-	$escaped_colorTextWithoutHash = mysqli_real_escape_string($dbConn, $colorTextWithoutHash);
+	$gameDbInterface->Insert($ip, $userAgent, $jam->Id, $jam->JamNumber, $gameName, $description, $loggedInUser->Id, $screenshotURL, $colorBackgroundWithoutHash, $colorTextWithoutHash);
 
-	$sql = "
-		INSERT INTO entry
-		(entry_id,
-		entry_datetime,
-		entry_ip,
-		entry_user_agent,
-		entry_jam_id,
-		entry_jam_number,
-		entry_title,
-		entry_description,
-		entry_author_user_id,
-		entry_screenshot_url,
-		entry_background_color,
-		entry_text_color)
-		VALUES
-		(null,
-		Now(),
-		'$escaped_ip',
-		'$escaped_userAgent',
-		$escaped_jamId,
-		$escaped_jamNumber,
-		'$escaped_gameName',
-		'$escaped_description',
-		$escaped_author_user_id,
-		'$escaped_ssURL',
-		'$escaped_colorBackgroundWithoutHash',
-		'$escaped_colorTextWithoutHash');
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	$sql = "
-		SELECT entry_id
-		FROM entry
-		WHERE entry_jam_id = $escaped_jamId
-		  AND entry_author_user_id = $escaped_author_user_id
-		  AND entry_deleted = 0
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$data = $gameDbInterface->SelectSingleEntryId($jam->Id, $loggedInUser->Id);
 
 	if($info = mysqli_fetch_array($data)){
 		$gameId = $info["entry_id"];
@@ -236,46 +161,29 @@ function SubmitEntry($jam_number, $gameName, $platforms, $screenshotURL, $descri
 }
 
 function SubmitPlatformGame($entryId, $platformId, $url){
-	global $dbConn;
+	global $platformGameDbInterface;
 
-	$escapedEntryId = mysqli_real_escape_string($dbConn, $entryId);
-	$escapedPlatformId = mysqli_real_escape_string($dbConn, $platformId);
-	$escapedUrl = mysqli_real_escape_string($dbConn, $url);
-
-	$sql = "SELECT platformentry_id FROM platform_entry WHERE platformentry_entry_id = $escapedEntryId AND platformentry_platform_id = $escapedPlatformId;";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$data = $platformGameDbInterface->SelectSinglePlatformEntryId($entryId, $platformId);
 
 	if($info = mysqli_fetch_array($data)){
 		$platformEntryId = intval($info["platformentry_id"]);
 
-		$sql = "UPDATE platform_entry SET platformentry_url = '$escapedUrl' WHERE platformentry_id = $platformEntryId;";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-		print "<br><b>PlatformEntry -> UPDATE ID $platformEntryId</b>";
+		$platformGameDbInterface->UpdateUrl($platformEntryId, $url);
 	}else{
-		$sql = "
-			INSERT INTO platform_entry
-			(platformentry_id, platformentry_entry_id, platformentry_platform_id, platformentry_url)
-			VALUES
-			(null, $escapedEntryId, $escapedPlatformId, '$escapedUrl');
-		";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
-		print "<br><b>PlatformEntry -> INSERT</b>";
+		$platformGameDbInterface->Insert($entryId, $platformId, $url);
 	}
 }
 
 function DeletePlatformGame($entryId, $platformId){
-	global $dbConn;
+	global $platformGameDbInterface;
+	
+	$data = $platformGameDbInterface->SelectSinglePlatformEntryId($entryId, $platformId);
 
-	$escapedEntryId = mysqli_real_escape_string($dbConn, $entryId);
-	$escapedPlatformId = mysqli_real_escape_string($dbConn, $platformId);
+	if($info = mysqli_fetch_array($data)){
+		$platformEntryId = intval($info["platformentry_id"]);
 
-	$sql = "DELETE FROM platform_entry WHERE platformentry_entry_id = $escapedEntryId AND platformentry_platform_id = $escapedPlatformId;";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-	print "<br><b>PlatformEntry -> DELETE</b>";
+		$platformGameDbInterface->Delete($platformEntryId);
+	}
 }
 
 function PerformAction(&$loggedInUser){

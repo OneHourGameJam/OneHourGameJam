@@ -112,6 +112,55 @@ class UserDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function Insert($username, $ip, $userAgent, $salt, $passwordHash, $passwordIterations, $isAdmin){
+        AddActionLog("UserDbInterface_Insert");
+        StartTimer("UserDbInterface_Insert");
+
+        $escapedUsername = mysqli_real_escape_string($this->dbConnection, $username);
+        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
+        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+        $escapedSalt = mysqli_real_escape_string($this->dbConnection, $salt);
+        $escapedPasswordHash = mysqli_real_escape_string($this->dbConnection, $passwordHash);
+        $escapedPasswordIterations = mysqli_real_escape_string($this->dbConnection, $passwordIterations);
+        $escapedIsAdmin = mysqli_real_escape_string($this->dbConnection, $isAdmin);
+
+		$sql = "
+			INSERT INTO user
+			(user_id,
+			user_username,
+			user_datetime,
+			user_register_ip,
+			user_register_user_agent,
+			user_display_name,
+			user_password_salt,
+			user_password_hash,
+			user_password_iterations,
+			user_last_login_datetime,
+			user_last_ip,
+			user_last_user_agent,
+			user_email,
+			user_role)
+			VALUES
+			(null,
+			'$escapedUsername',
+			Now(),
+			'$escapedIp',
+			'$escapedUserAgent',
+			'$escapedUsername',
+			'$escapedSalt',
+			'$escapedPasswordHash',
+			$escapedPasswordIterations,
+			Now(),
+			'$escapedIp',
+			'$escapedUserAgent',
+			'',
+			$escapedIsAdmin);
+		";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("UserDbInterface_Insert");
+    }
+
     public function SelectPublicData(){
         AddActionLog("UserData_SelectPublicUserData");
         StartTimer("UserData_SelectPublicUserData");

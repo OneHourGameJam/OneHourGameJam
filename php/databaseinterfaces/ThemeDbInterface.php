@@ -55,6 +55,24 @@ class ThemeDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function Insert($ip, $userAgent, $newTheme, $userId){
+        AddActionLog("ThemeDbInterface_Insert");
+        StartTimer("ThemeDbInterface_Insert");
+
+        $clean_ip = mysqli_real_escape_string($this->dbConnection, $ip);
+        $clean_userAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+        $clean_newTheme = mysqli_real_escape_string($this->dbConnection, $newTheme);
+        $clean_user_id = mysqli_real_escape_string($this->dbConnection, $userId);
+    
+        $sql = "
+            INSERT INTO theme
+            (theme_datetime, theme_ip, theme_user_agent, theme_text, theme_author_user_id)
+            VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', $clean_user_id);";
+        $data = mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("ThemeDbInterface_Insert");
+    }
+
     public function SoftDelete($themeId){
         AddActionLog("ThemeDbInterface_SoftDelete");
         StartTimer("ThemeDbInterface_SoftDelete");
@@ -66,8 +84,9 @@ class ThemeDbInterface{
             WHERE ".DB_COLUMN_THEME_ID." = $escapedThemeId;
         ";
         
-        StopTimer("ThemeDbInterface_SoftDelete");
         return mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("ThemeDbInterface_SoftDelete");
     }
 
     public function SelectPublicData(){

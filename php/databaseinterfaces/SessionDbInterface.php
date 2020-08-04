@@ -31,6 +31,30 @@ class SessionDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function Insert($userId, $sessionIdHash){
+        AddActionLog("SessionDbInterface_Insert");
+        StartTimer("SessionDbInterface_Insert");
+
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+
+		$sql = "
+			INSERT INTO session
+			(session_id,
+			session_user_id,
+			session_datetime_started,
+			session_datetime_last_used)
+			VALUES
+			('$escapedSessionIdHash',
+			'$escapedUserId',
+			Now(),
+			Now());
+		";
+        
+        StopTimer("SessionDbInterface_Insert");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     private function SelectPublicData(){
         AddActionLog("SessionDbInterface_SelectPublicData");
         StartTimer("SessionDbInterface_SelectPublicData");

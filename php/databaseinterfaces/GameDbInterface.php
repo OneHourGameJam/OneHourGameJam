@@ -67,6 +67,103 @@ class GameDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectSingleEntryId($jamId, $authorId){
+        AddActionLog("GameDbInterface_SelectSingleEntryId");
+        StartTimer("GameDbInterface_SelectSingleEntryId");
+        
+        $escaped_jamId = mysqli_real_escape_string($this->dbConnection, $jamId);
+        $escaped_author_user_id = mysqli_real_escape_string($this->dbConnection, $authorId);
+
+        $sql = "
+            SELECT entry_id
+            FROM entry
+            WHERE entry_jam_id = $escaped_jamId
+              AND entry_author_user_id = $escaped_author_user_id
+              AND entry_deleted = 0
+        ";
+        
+        StopTimer("GameDbInterface_SelectSingleEntryId");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
+    public function Insert($ip, $userAgent, $jamId, $jamNumber, $gameName, $description, $userId, $screenshotURL, $colorBackgroundWithoutHash, $colorTextWithoutHash){
+        AddActionLog("GameDbInterface_Insert");
+        StartTimer("GameDbInterface_Insert");
+
+        $escaped_ip = mysqli_real_escape_string($this->dbConnection, $ip);
+        $escaped_userAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+        $escaped_jamId = mysqli_real_escape_string($this->dbConnection, $jamId);
+        $escaped_jamNumber = mysqli_real_escape_string($this->dbConnection, $jamNumber);
+        $escaped_gameName = mysqli_real_escape_string($this->dbConnection, $gameName);
+        $escaped_description = mysqli_real_escape_string($this->dbConnection, $description);
+        $escaped_author_user_id = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escaped_ssURL = mysqli_real_escape_string($this->dbConnection, $screenshotURL);
+        $escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorBackgroundWithoutHash);
+        $escaped_colorTextWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorTextWithoutHash);
+
+        $sql = "
+            INSERT INTO entry
+            (entry_id,
+            entry_datetime,
+            entry_ip,
+            entry_user_agent,
+            entry_jam_id,
+            entry_jam_number,
+            entry_title,
+            entry_description,
+            entry_author_user_id,
+            entry_screenshot_url,
+            entry_background_color,
+            entry_text_color)
+            VALUES
+            (null,
+            Now(),
+            '$escaped_ip',
+            '$escaped_userAgent',
+            $escaped_jamId,
+            $escaped_jamNumber,
+            '$escaped_gameName',
+            '$escaped_description',
+            $escaped_author_user_id,
+            '$escaped_ssURL',
+            '$escaped_colorBackgroundWithoutHash',
+            '$escaped_colorTextWithoutHash');
+        ";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("GameDbInterface_Insert");
+    }
+
+    public function Update($jamNumber, $userId, $gameName, $screenshotURL, $description, $colorBackgroundWithoutHash, $colorTextWithoutHash){
+        AddActionLog("GameDbInterface_Update");
+        StartTimer("GameDbInterface_Update");
+
+		$escapedGameName = mysqli_real_escape_string($this->dbConnection, $gameName);
+		$escapedScreenshotURL = mysqli_real_escape_string($this->dbConnection, $screenshotURL);
+		$escapedDescription = mysqli_real_escape_string($this->dbConnection, $description);
+		$escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+		$escaped_jamNumber = mysqli_real_escape_string($this->dbConnection, $jamNumber);
+		$escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorBackgroundWithoutHash);
+		$escaped_colorTextWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorTextWithoutHash);
+
+		$sql = "
+		UPDATE entry
+		SET
+			entry_title = '$escapedGameName',
+			entry_screenshot_url = '$escapedScreenshotURL',
+			entry_description = '$escapedDescription',
+			entry_background_color = '$escaped_colorBackgroundWithoutHash',
+			entry_text_color = '$escaped_colorTextWithoutHash'
+		WHERE
+			entry_author_user_id = $escapedAuthorUserId
+		AND entry_jam_number = $escaped_jamNumber
+		AND entry_deleted = 0;
+		";
+		mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("GameDbInterface_Update");
+    }
+
     public function SelectPublicData(){
         AddActionLog("GameDbInterface_SelectPublicData");
         StartTimer("GameDbInterface_SelectPublicData");

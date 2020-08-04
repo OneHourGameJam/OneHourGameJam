@@ -27,6 +27,30 @@ class PlatformDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function Insert($platformName, $iconUrl){
+        AddActionLog("PlatformDbInterface_Insert");
+        StartTimer("PlatformDbInterface_Insert");
+
+        $escaped_platformName = mysqli_real_escape_string($this->dbConnection, $platformName);
+        $escaped_iconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
+    
+        $sql = "
+            INSERT INTO platform
+            (platform_id,
+            platform_name,
+            platform_icon_url,
+            platform_deleted)
+            VALUES
+            (null,
+            '$escaped_platformName',
+            '$escaped_iconUrl',
+            0);
+        ";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformDbInterface_Insert");
+    }
+
     public function SelectPublicData(){
         AddActionLog("PlatformDbInterface_SelectPublicData");
         StartTimer("PlatformDbInterface_SelectPublicData");

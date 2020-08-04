@@ -27,6 +27,72 @@ class PlatformGameDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectSinglePlatformEntryId($entryId, $platformId){
+        AddActionLog("PlatformGameDbInterface_SelectSinglePlatformEntryId");
+        StartTimer("PlatformGameDbInterface_SelectSinglePlatformEntryId");
+
+        $escapedEntryId = mysqli_real_escape_string($this->dbConnection, $entryId);
+        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+    
+        $sql = "
+            SELECT platformentry_id 
+            FROM platform_entry 
+            WHERE platformentry_entry_id = $escapedEntryId 
+              AND platformentry_platform_id = $escapedPlatformId;";
+        
+        StopTimer("PlatformGameDbInterface_SelectSinglePlatformEntryId");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
+    public function Insert($entryId, $platformId, $url){
+        AddActionLog("PlatformGameDbInterface_Insert");
+        StartTimer("PlatformGameDbInterface_Insert");
+    
+        $escapedEntryId = mysqli_real_escape_string($this->dbConnection, $entryId);
+        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+        $escapedUrl = mysqli_real_escape_string($this->dbConnection, $url);
+
+        $sql = "
+            INSERT INTO platform_entry
+            (platformentry_id, platformentry_entry_id, platformentry_platform_id, platformentry_url)
+            VALUES
+            (null, $escapedEntryId, $escapedPlatformId, '$escapedUrl');
+        ";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformGameDbInterface_Insert");
+    }
+
+    public function UpdateUrl($platformEntryId, $url){
+        AddActionLog("PlatformGameDbInterface_UpdateUrl");
+        StartTimer("PlatformGameDbInterface_UpdateUrl");
+    
+        $escapedUrl = mysqli_real_escape_string($this->dbConnection, $url);
+        $escapedPlatformEntryId = mysqli_real_escape_string($this->dbConnection, $platformEntryId);
+
+		$sql = "
+            UPDATE platform_entry 
+            SET platformentry_url = '$escapedUrl' 
+            WHERE platformentry_id = $escapedPlatformEntryId;";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformGameDbInterface_UpdateUrl");
+    }
+
+    public function Delete($platformEntryId){
+        AddActionLog("PlatformGameDbInterface_Delete");
+        StartTimer("PlatformGameDbInterface_Delete");
+    
+        $escapedPlatformEntryId = mysqli_real_escape_string($this->dbConnection, $platformEntryId);
+
+        $sql = "
+            DELETE FROM platform_entry 
+            WHERE platformentry_id = $escapedPlatformEntryId;";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformGameDbInterface_Delete");
+    }
+
     public function SelectPublicData(){
         AddActionLog("PlatformGameDbInterface_SelectPublicData");
         StartTimer("PlatformGameDbInterface_SelectPublicData");

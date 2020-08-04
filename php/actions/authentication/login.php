@@ -34,7 +34,7 @@ function LogInOrRegister($username, $password){
 //Registers the given user. Funciton should be called through LogInOrRegister(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
-	global $userData, $dbConn, $ip, $userAgent, $configData, $userDbInterface, $sessionDbInterface;
+	global $userData, $ip, $userAgent, $configData, $userDbInterface, $sessionDbInterface;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -47,56 +47,16 @@ function RegisterUser($username, $password){
 		return "INVALID_PASSWORD_LENGTH";
 	}
 
-	$userSalt = GenerateSalt();
-	$userPasswordIterations = GenerateUserHashIterations($configData);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData);
-	$admin = (count($userData->UserModels) == 0) ? 1 : 0;
-
-	$userId = -1;
 	if(isset($userData->UsernameToId[$username])){
-		$userId = $userData->UsernameToId[$username];
-	}
-
-	if($userId != -1){
 		return "USERNAME_ALREADY_REGISTERED";
-	}else{
-		$usernameClean = mysqli_real_escape_string($dbConn, $username);
-
-		$sql = "
-			INSERT INTO user
-			(user_id,
-			user_username,
-			user_datetime,
-			user_register_ip,
-			user_register_user_agent,
-			user_display_name,
-			user_password_salt,
-			user_password_hash,
-			user_password_iterations,
-			user_last_login_datetime,
-			user_last_ip,
-			user_last_user_agent,
-			user_email,
-			user_role)
-			VALUES
-			(null,
-			'$usernameClean',
-			Now(),
-			'$ip',
-			'$userAgent',
-			'$usernameClean',
-			'$userSalt',
-			'$passwordHash',
-			$userPasswordIterations,
-			Now(),
-			'$ip',
-			'$userAgent',
-			'',
-			$admin);
-		";
-		mysqli_query($dbConn, $sql) ;
-		$sql = "";
 	}
+
+	$salt = GenerateSalt();
+	$passwordIterations = GenerateUserHashIterations($configData);
+	$passwordHash = HashPassword($password, $salt, $passwordIterations, $configData);
+	$isAdmin = (count($userData->UserModels) == 0) ? 1 : 0;
+
+	$userDbInterface->Insert($username, $ip, $userAgent, $salt, $passwordHash, $passwordIterations, $isAdmin);
 	
 	$userData = new UserData($userDbInterface, $sessionDbInterface);
 	return LogInUser($username, $password);
@@ -106,7 +66,7 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through LogInOrRegister(...)
 function LogInUser($username, $password){
-	global $configData, $userData, $dbConn;
+	global $configData, $userData, $sessionDbInterface;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -131,33 +91,19 @@ function LogInUser($username, $password){
 	$user = $userData->UserModels[$userId];
 	$correctPasswordHash = $user->PasswordHash;
 	$userSalt = $user->Salt;
-	$userPasswordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($password, $userSalt, $userPasswordIterations, $configData);
+	$passwordIterations = intval($user->PasswordIterations);
+	$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
 		$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-		$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
+		$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
 
 		$daysToKeepLoggedIn = $configData->ConfigModels["DAYS_TO_KEEP_LOGGED_IN"]->Value;
 		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
 		$_COOKIE["sessionID"] = $sessionID;
 
-		$sql = "
-			INSERT INTO session
-			(session_id,
-			session_user_id,
-			session_datetime_started,
-			session_datetime_last_used)
-			VALUES
-			('$sessionIDHash',
-			'$userId',
-			Now(),
-			Now());
-		";
-
-		mysqli_query($dbConn, $sql) ;
-		$sql = "";
+		$sessionDbInterface->Insert($userId, $sessionIdHash);
 	}else{
 		return "INCORRECT_PASSWORD";
 	}

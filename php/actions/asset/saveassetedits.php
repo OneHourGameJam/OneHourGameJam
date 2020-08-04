@@ -1,7 +1,7 @@
 <?php
 
 function AddAsset($assetID, $author, $title, $description, $type){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assetData, $userData, $configData, $adminLogData;
+	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $assetData, $userData, $configData, $adminLogData, $assetDbInterface;
 
 	$assetID = trim($assetID);
 	$author = trim($author);
@@ -18,7 +18,7 @@ function AddAsset($assetID, $author, $title, $description, $type){
 	if(strlen($author) < 1){
 		return "AUTHOR_EMPTY";
 	}
-	if(!isset($userData->UserModels[$author])){
+	if(!isset($userData->UsernameToId[$author])){
 		return "INVALID_AUTHOR";
 	}
 
@@ -54,11 +54,13 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		$assetExists = true;
 	}
 
-	$authorUserId = $userData->UserModels[$author]->Id;
+	$authorUserId = $userData->UsernameToId[$author];
 
 	$ext = pathinfo($_FILES["assetfile"]["name"], PATHINFO_EXTENSION);
 	$fileNumber = -1;
-	mkdir("assets/$authorUserId");
+	if(!file_exists("assets/$authorUserId")){
+		mkdir("assets/$authorUserId");
+	}
 	for($i = 1; $i <= 100; $i++){
 		if(!file_exists("assets/$authorUserId/$i.$ext")){
 			$fileNumber = $i;
@@ -118,41 +120,9 @@ function AddAsset($assetID, $author, $title, $description, $type){
 		
 		return "SUCCESS_UPDATED";
 	}else{
-		$escapedAuthorUserId = mysqli_real_escape_string($dbConn, $authorUserId);
-		$escapedTitle = mysqli_real_escape_string($dbConn, $title);
-		$escapedDescription = mysqli_real_escape_string($dbConn, $description);
-		$escapedType = mysqli_real_escape_string($dbConn, $type);
-		$escapedContent = mysqli_real_escape_string($dbConn, $assetURL);
-
-		$sql = "
-			INSERT INTO asset
-			(asset_id,
-			asset_datetime,
-			asset_ip,
-			asset_user_agent,
-			asset_author_user_id,
-			asset_title,
-			asset_description,
-			asset_type,
-			asset_content,
-			asset_deleted)
-			VALUES
-			(null,
-			Now(),
-			'$ip',
-			'$userAgent',
-			$escapedAuthorUserId,
-			'$escapedTitle',
-			'$escapedDescription',
-			'$escapedType',
-			'$escapedContent',
-			0);
-
-		";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
+		$assetDbInterface->Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL);
 		
-		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UserModels[$author]->Id, $loggedInUser->Id, "");
+		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetID' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UsernameToId[$author], $loggedInUser->Id, "");
 		
 		return "SUCCESS_INSERTED";
 	}

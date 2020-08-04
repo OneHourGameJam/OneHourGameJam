@@ -49,6 +49,47 @@ class AssetDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL){
+        AddActionLog("AssetDbInterface_Insert");
+        StartTimer("AssetDbInterface_Insert");
+
+		$escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
+		$escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+		$escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $authorUserId);
+		$escapedTitle = mysqli_real_escape_string($this->dbConnection, $title);
+		$escapedDescription = mysqli_real_escape_string($this->dbConnection, $description);
+		$escapedType = mysqli_real_escape_string($this->dbConnection, $type);
+		$escapedContent = mysqli_real_escape_string($this->dbConnection, $assetURL);
+        
+		$sql = "
+            INSERT INTO asset
+            (asset_id,
+            asset_datetime,
+            asset_ip,
+            asset_user_agent,
+            asset_author_user_id,
+            asset_title,
+            asset_description,
+            asset_type,
+            asset_content,
+            asset_deleted)
+            VALUES
+            (null,
+            Now(),
+            '$escapedIp',
+            '$escapedUserAgent',
+            $escapedAuthorUserId,
+            '$escapedTitle',
+            '$escapedDescription',
+            '$escapedType',
+            '$escapedContent',
+            0);
+        ";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("AssetDbInterface_Insert");
+    }
+
     public function SelectPublicData(){
         AddActionLog("AssetDbInterface_SelectPublicData");
         StartTimer("AssetDbInterface_SelectPublicData");
