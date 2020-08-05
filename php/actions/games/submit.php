@@ -130,7 +130,7 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $descrip
 		return "SUCCESS_ENTRY_UPDATED";
 	}
 
-	$currentJamData = GetCurrentJamNumberAndID();
+	$currentJamData = GetCurrentJamNumberAndId();
 
 	if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value == 0){
 		if ($jamNumber != $currentJamData["NUMBER"]) {

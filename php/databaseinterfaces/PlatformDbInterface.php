@@ -31,8 +31,8 @@ class PlatformDbInterface{
         AddActionLog("PlatformDbInterface_Insert");
         StartTimer("PlatformDbInterface_Insert");
 
-        $escaped_platformName = mysqli_real_escape_string($this->dbConnection, $platformName);
-        $escaped_iconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
+        $escapedPlatformName = mysqli_real_escape_string($this->dbConnection, $platformName);
+        $escapedIconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
     
         $sql = "
             INSERT INTO platform
@@ -42,13 +42,70 @@ class PlatformDbInterface{
             platform_deleted)
             VALUES
             (null,
-            '$escaped_platformName',
-            '$escaped_iconUrl',
+            '$escapedPlatformName',
+            '$escapedIconUrl',
             0);
         ";
         $data = mysqli_query($this->dbConnection, $sql);
         
         StopTimer("PlatformDbInterface_Insert");
+    }
+
+    public function Update($platformId, $platformName, $iconUrl){
+        AddActionLog("PlatformDbInterface_Update");
+        StartTimer("PlatformDbInterface_Update");
+
+        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+        $escapedPlatformName = mysqli_real_escape_string($this->dbConnection, $platformName);
+        $escapedIconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
+    
+        $sql = "
+            UPDATE platform
+            SET
+                platform_name = '$escapedPlatformName',
+                platform_icon_url = '$escapedIconUrl'
+            WHERE
+                platform_id = $escapedPlatformId;
+        ";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformDbInterface_Update");
+    }
+
+    public function SoftDelete($platformId){
+        AddActionLog("PlatformDbInterface_SoftDelete");
+        StartTimer("PlatformDbInterface_SoftDelete");
+
+        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+    
+        $sql = " 
+            UPDATE platform
+            SET
+                platform_deleted = 1
+            WHERE
+                platform_id = $escapedPlatformId;
+        ";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformDbInterface_SoftDelete");
+    }
+
+    public function RestoreSoftDeleted($platformId){
+        AddActionLog("PlatformDbInterface_RestoreSoftDeleted");
+        StartTimer("PlatformDbInterface_RestoreSoftDeleted");
+
+        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+    
+        $sql = "
+            UPDATE platform 
+            SET
+                platform_deleted = 0
+            WHERE
+                platform_id = $escapedPlatformId;
+        ";
+        $data = mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("PlatformDbInterface_RestoreSoftDeleted");
     }
 
     public function SelectPublicData(){

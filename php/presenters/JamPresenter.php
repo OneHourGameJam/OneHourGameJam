@@ -142,7 +142,7 @@ class JamPresenter{
 
 		$nonDeletedJamCounter = 0;
 		$latestStartedJamFound = false;
-		$currentJam = GetCurrentJamNumberAndID();
+		$currentJam = GetCurrentJamNumberAndId();
 
 		$jamsToLoad = $configData->ConfigModels["JAMS_TO_LOAD"]->Value;
 

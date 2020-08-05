@@ -136,28 +136,17 @@ function GetSuggestedNextJamDateTime(&$configData){
 }
 
 $currentJamNumberArchive = FALSE;
-function GetCurrentJamNumberAndID(){
-	global $currentJamNumberArchive, $dbConn;
-	AddActionLog("GetCurrentJamNumberAndID");
-	StartTimer("GetCurrentJamNumberAndID");
+function GetCurrentJamNumberAndId(){
+	global $currentJamNumberArchive, $jamDbInterface;
+	AddActionLog("GetCurrentJamNumberAndId");
+	StartTimer("GetCurrentJamNumberAndId");
 
 	if($currentJamNumberArchive !== FALSE){
-		StopTimer("GetCurrentJamNumberAndID");
+		StopTimer("GetCurrentJamNumberAndId");
 		return $currentJamNumberArchive;
 	}
 
-	$sql = "
-		SELECT j.jam_id, j.jam_jam_number
-		FROM (
-			SELECT MAX(jam_id) as max_jam_id
-			FROM jam
-			WHERE jam_start_datetime <= Now()
-			  AND jam_deleted = 0
-		) past_jams, jam j
-		WHERE past_jams.max_jam_id = j.jam_id
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$data = $jamDbInterface->SelectCurrentJamNumberAndId();
 
 	if($info = mysqli_fetch_array($data)){
 		$currentJamNumberArchive = Array("NUMBER" => intval($info["jam_jam_number"]), "ID" => intval($info["jam_id"]));
@@ -165,7 +154,7 @@ function GetCurrentJamNumberAndID(){
 		$currentJamNumberArchive = Array("NUMBER" => 0, "ID" => 0);
 	}
 
-	StopTimer("GetCurrentJamNumberAndID");
+	StopTimer("GetCurrentJamNumberAndId");
 	return $currentJamNumberArchive;
 }
 

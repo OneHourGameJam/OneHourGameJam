@@ -55,6 +55,21 @@ class ThemeDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectIfExists($themeId){
+        AddActionLog("ThemeDbInterface_SelectIfExists");
+        StartTimer("ThemeDbInterface_SelectIfExists");
+        
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $sql = "
+            SELECT theme_id 
+            FROM theme 
+            WHERE theme_banned != 1 
+              AND theme_id = '$escapedThemeId'";
+        
+        StopTimer("ThemeDbInterface_SelectIfExists");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     public function Insert($ip, $userAgent, $newTheme, $userId){
         AddActionLog("ThemeDbInterface_Insert");
         StartTimer("ThemeDbInterface_Insert");
@@ -71,6 +86,22 @@ class ThemeDbInterface{
         $data = mysqli_query($this->dbConnection, $sql);
 
         StopTimer("ThemeDbInterface_Insert");
+    }
+
+    public function Ban($themeId){
+        AddActionLog("ThemeDbInterface_Ban");
+        StartTimer("ThemeDbInterface_Ban");
+
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $sql = "
+            UPDATE theme 
+            SET theme_banned = 1 
+            WHERE theme_banned != 1 
+              AND theme_id = '$escapedThemeId'";
+        
+        return mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("ThemeDbInterface_Ban");
     }
 
     public function SoftDelete($themeId){

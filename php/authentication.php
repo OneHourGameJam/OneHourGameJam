@@ -36,7 +36,7 @@ function HashPassword($password, $salt, $iterations, &$configData){
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
 function IsLoggedIn(&$configData, &$userData){
-	global $loginChecked, $loggedInUser, $dbConn, $ip, $userAgent;
+	global $loginChecked, $loggedInUser, $ip, $userAgent, $sessionDbInterface, $userDbInterface;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
 
@@ -57,17 +57,9 @@ function IsLoggedIn(&$configData, &$userData){
 
 	$sessionID = "".$_COOKIE["sessionID"];
 	$pepper = isset($configData->ConfigModels["PEPPER"]) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-	$sessionIDHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
+	$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
 
-    $cleanSessionIdHash = mysqli_real_escape_string($dbConn, $sessionIDHash);
-
-	$sql = "
-		SELECT session_id, session_user_id
-		FROM session
-		WHERE session_id = '$cleanSessionIdHash';
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$data = $sessionDbInterface->SelectSingleSession($sessionIdHash);
 
 	if($session = mysqli_fetch_array($data)){
 		//Session ID does in fact exist
@@ -76,27 +68,9 @@ function IsLoggedIn(&$configData, &$userData){
 		$loggedInUser = $userData->UserModels[$userId];
         $loginChecked = true;
 
-		$sql = "
-			UPDATE session
-			SET session_datetime_last_used = Now()
-			WHERE session_id = '$cleanSessionIdHash'
-		";
-		$data = mysqli_query($dbConn, $sql);
-        $sql = "";
+		$data = $sessionDbInterface->UpdateLastUsedTime($sessionIdHash);
 
-        $cleanUserId = mysqli_real_escape_string($dbConn, $userId);
-        $cleanIp = mysqli_real_escape_string($dbConn, $ip);
-        $cleanUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-
-		$sql = "
-			UPDATE user
-            SET user_last_login_datetime = Now(),
-                user_last_ip = '$cleanIp',
-                user_last_user_agent = '$cleanUserAgent'
-			WHERE user_id = $cleanUserId
-        ";
-		$data = mysqli_query($dbConn, $sql);
-		$sql = "";
+		$data = $userDbInterface->UpdateLastUsedIpAndUserAgent($userId, $ip, $userAgent);
 
 		StopTimer("IsLoggedIn");
 		return $loggedInUser;

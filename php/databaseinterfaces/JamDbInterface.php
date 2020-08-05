@@ -51,6 +51,25 @@ class JamDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectCurrentJamNumberAndId(){
+        AddActionLog("JamDbInterface_SelectCurrentJamNumberAndId");
+        StartTimer("JamDbInterface_SelectCurrentJamNumberAndId");
+
+        $sql = "
+            SELECT j.jam_id, j.jam_jam_number
+            FROM (
+                SELECT MAX(jam_id) as max_jam_id
+                FROM jam
+                WHERE jam_start_datetime <= Now()
+                  AND jam_deleted = 0
+            ) past_jams, jam j
+            WHERE past_jams.max_jam_id = j.jam_id
+        ";
+        
+        StopTimer("JamDbInterface_SelectCurrentJamNumberAndId");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     public function SelectIfJamExists($jamId){
         AddActionLog("JamDbInterface_SelectIfJamExists");
         StartTimer("JamDbInterface_SelectIfJamExists");
@@ -111,6 +130,26 @@ class JamDbInterface{
         mysqli_query($this->dbConnection, $sql);
 
         StopTimer("JamDbInterface_Insert");
+    }
+
+    public function Update($jamId, $theme, $startTime, $color){
+        AddActionLog("JamDbInterface_Update");
+        StartTimer("JamDbInterface_Update");
+
+        $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
+        $escapedTheme = mysqli_real_escape_string($this->dbConnection, $theme);
+        $escapedStartTime = mysqli_real_escape_string($this->dbConnection, $startTime);
+        $escapedColors = mysqli_real_escape_string($this->dbConnection, $color);
+
+        $sql = "
+            UPDATE jam
+            SET jam_theme = '$escapedTheme',
+                jam_start_datetime = '$escapedStartTime',
+                jam_colors = '$escapedColors'
+            WHERE jam_id = $escapedJamId;";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("JamDbInterface_Update");
     }
 
     public function UpdateJamState($jamId, $jamState){

@@ -72,7 +72,7 @@ class JamData{
         AddActionLog("ChangeJamStateInDatabase");
         StartTimer("ChangeJamStateInDatabase");
 
-        $data = $this->UpdateJamState($jamId, $newJamState);
+        $data = $this->jamDbInterface->UpdateJamState($jamId, $newJamState);
 
         StopTimer("ChangeJamStateInDatabase");
     }
@@ -145,7 +145,7 @@ class JamData{
         AddActionLog("JamData_GetAllPublicData");
         StartTimer("JamData_GetAllPublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectPublicData());
+        $dataFromDatabase = MySQLDataToArray($this->jamDbInterface->SelectPublicData());
 
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_JAM_DATETIME] = gmdate("Y-m-d H:i:s", time());

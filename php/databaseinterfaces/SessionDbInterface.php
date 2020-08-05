@@ -16,6 +16,22 @@ class SessionDbInterface{
         $this->dbConnection = $dbConn;
     }
 
+    public function SelectSingleSession($sessionIdHash){
+        AddActionLog("SessionDbInterface_SelectSingleSession");
+        StartTimer("SessionDbInterface_SelectSingleSession");
+        
+        $cleanSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+
+        $sql = "
+            SELECT session_id, session_user_id
+            FROM session
+            WHERE session_id = '$cleanSessionIdHash';
+        ";
+        
+        StopTimer("SessionDbInterface_SelectSingleSession");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     public function SelectSessionsOfUser($userId){
         AddActionLog("SessionDbInterface_SelectSessionsOfUser");
         StartTimer("SessionDbInterface_SelectSessionsOfUser");
@@ -53,6 +69,22 @@ class SessionDbInterface{
         mysqli_query($this->dbConnection, $sql);
 
         StopTimer("SessionDbInterface_Insert");
+    }
+
+    public function UpdateLastUsedTime($sessionIdHash){
+        AddActionLog("SessionDbInterface_UpdateLastUsedTime");
+        StartTimer("SessionDbInterface_UpdateLastUsedTime");
+
+        $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+
+		$sql = "
+			UPDATE session
+			SET session_datetime_last_used = Now()
+			WHERE session_id = '$escapedSessionIdHash'
+		";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("SessionDbInterface_UpdateLastUsedTime");
     }
 
     public function Delete($sessionIdHash){

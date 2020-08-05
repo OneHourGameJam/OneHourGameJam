@@ -1,7 +1,7 @@
 <?php
 
 function UndeletePlatform($platformId){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $platformData, $adminLogData;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
 
 	$platformId = intval(trim($platformId));
 
@@ -28,17 +28,7 @@ function UndeletePlatform($platformId){
 		return "UNKNOWN_PLATFORM";
 	}
 
-	$escaped_platformId = mysqli_real_escape_string($dbConn, $platformId);
-
-	$sql = "
-		UPDATE platform
-		SET
-			platform_deleted = 0
-		WHERE
-			platform_id = $escaped_platformId;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$platformDbInterface->RestoreSoftDeleted($platformId);
 	
     $adminLogData->AddToAdminLog("PLATFORM_RESTORED", "Platform $platformId restored", "NULL", $loggedInUser->Id, "");
 

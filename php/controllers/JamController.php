@@ -106,7 +106,7 @@ class JamController{
 
 			//print "<br>A THEME WAS SELECTED";
 
-			$currentJam = GetCurrentJamNumberAndID();
+			$currentJam = GetCurrentJamNumberAndId();
 			$jamNumber = intval($currentJam["NUMBER"] + 1);
 			//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 

@@ -2,8 +2,8 @@
 
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
-function EditJam($jamID, $theme, $date, $time, $colorsString){
-	global $jamData, $dbConn, $loggedInUser, $adminLogData;
+function EditJam($jamId, $theme, $date, $time, $colorsString){
+	global $jamData, $loggedInUser, $adminLogData, $jamDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -26,8 +26,8 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 	$colors = implode("|", $colorSHexCodes);
 
 	//Validate values
-	$jamID = intval($jamID);
-	if(!isset($jamData->JamModels[$jamID])){
+	$jamId = intval($jamId);
+	if(!isset($jamData->JamModels[$jamId])){
 		return "INVALID_JAM_ID";
 	}
 
@@ -48,21 +48,9 @@ function EditJam($jamID, $theme, $date, $time, $colorsString){
 		return "NO_JAMS_EXIST";
 	}
 
-	$escapedTheme = mysqli_real_escape_string($dbConn, $theme);
-	$escapedStartTime = mysqli_real_escape_string($dbConn, "".gmdate("Y-m-d H:i", $datetime));
-	$escapedJamID = mysqli_real_escape_string($dbConn, $jamID);
-	$escapedColors = mysqli_real_escape_string($dbConn, "$colors");
+	$jamDbInterface->Update($jamId, $theme, gmdate("Y-m-d H:i", $datetime), $colors);
 
-	$sql = "
-		UPDATE jam
-		SET jam_theme = '$escapedTheme',
-		    jam_start_datetime = '$escapedStartTime',
-		    jam_colors = '$escapedColors'
-		WHERE jam_id = $escapedJamID";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
-
-	$adminLogData->AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamID, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "NULL", $loggedInUser->Id, "");
+	$adminLogData->AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "NULL", $loggedInUser->Id, "");
 	
 	return "SUCCESS";
 }
@@ -71,13 +59,13 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$jamID = intval($_POST["jamID"]);
+		$jamId = intval($_POST["jamID"]);
 		$theme = $_POST["theme"];
 		$date = $_POST["date"];
 		$time = $_POST["time"];
 		$jamcolors = $_POST["jamcolors"];
 
-		return EditJam($jamID, $theme, $date, $time, $jamcolors);
+		return EditJam($jamId, $theme, $date, $time, $jamcolors);
 	}
 }
 

@@ -7,7 +7,7 @@
 function CreateJam($theme, $date, $time, $colorsList){
 	global $ip, $userAgent, $loggedInUser, $jamData, $adminLogData;
 
-	$currentJamData = GetCurrentJamNumberAndID();
+	$currentJamData = GetCurrentJamNumberAndId();
 	$jamNumber = intval($currentJamData["NUMBER"] + 1);
 	$theme = trim($theme);
 	$date = trim($date);

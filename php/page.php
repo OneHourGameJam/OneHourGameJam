@@ -132,7 +132,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["page_title"] = $viewingAuthor;
         break;
         case "submit":
-            $currentJam = GetCurrentJamNumberAndID();
+            $currentJam = GetCurrentJamNumberAndId();
             if($currentJam["NUMBER"] == 0){
                 die("no jam to submit to");
             }

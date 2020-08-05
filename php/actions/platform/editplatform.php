@@ -1,7 +1,7 @@
 <?php
 
 function EditPlatform($platformId, $platformName){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $platformData, $adminLogData;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
 
 	$platformName = trim($platformName);
 	$platformId = intval(trim($platformId));
@@ -65,20 +65,7 @@ function EditPlatform($platformId, $platformName){
 		$iconUrl = $target_file;
 	}
 
-	$escaped_platformId = mysqli_real_escape_string($dbConn, $platformId);
-	$escaped_platformName = mysqli_real_escape_string($dbConn, $platformName);
-	$escaped_iconUrl = mysqli_real_escape_string($dbConn, $iconUrl);
-
-	$sql = "
-		UPDATE platform
-		SET
-			platform_name = '$escaped_platformName',
-			platform_icon_url = '$escaped_iconUrl'
-		WHERE
-			platform_id = $escaped_platformId;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$platformDbInterface->Update($platformId, $platformName, $iconUrl);
 	
     $adminLogData->AddToAdminLog("PLATFORM_EDITED", "Platform $platformId edited (name: $platformName, icon url: $iconUrl)", "NULL", $loggedInUser->Id, "");
 

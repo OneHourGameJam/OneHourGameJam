@@ -26,7 +26,7 @@ class UserPresenter{
 			$userViewModel->sponsored_by = $userModel->SponsoredBy;
 		}
 	
-		$currentJam = GetCurrentJamNumberAndID();
+		$currentJam = GetCurrentJamNumberAndId();
 	
 		$userId = $userModel->Id;
 		$userViewModel->username_alphanumeric = preg_replace("/[^a-zA-Z0-9]+/", "", $userModel->Username);

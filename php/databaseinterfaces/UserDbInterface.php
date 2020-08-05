@@ -161,6 +161,26 @@ class UserDbInterface{
         StopTimer("UserDbInterface_Insert");
     }
 
+    public function UpdateLastUsedIpAndUserAgent($userId, $ip, $userAgent){
+        AddActionLog("UserDbInterface_UpdateLastUsedIpAndUserAgent");
+        StartTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
+
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
+        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+
+		$sql = "
+			UPDATE user
+            SET user_last_login_datetime = Now(),
+                user_last_ip = '$escapedIp',
+                user_last_user_agent = '$escapedUserAgent'
+			WHERE user_id = $escapedUserId
+        ";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
+    }
+
     public function SelectPublicData(){
         AddActionLog("UserData_SelectPublicUserData");
         StartTimer("UserData_SelectPublicUserData");

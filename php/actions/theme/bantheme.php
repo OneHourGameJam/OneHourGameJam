@@ -2,7 +2,7 @@
 
 //Marks a suggested theme as banned
 function BanTheme($bannedThemeId){
-	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData, $themeData;
+	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData, $themeData, $themeDbInterface;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -32,22 +32,14 @@ function BanTheme($bannedThemeId){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
-	$clean_bannedThemeId = mysqli_real_escape_string($dbConn, $bannedThemeId);
-	$clean_ip = mysqli_real_escape_string($dbConn, $ip);
-	$clean_userAgent = mysqli_real_escape_string($dbConn, $userAgent);
-
-	//Check that theme actually exists
-	$sql = "SELECT theme_id FROM theme WHERE theme_banned != 1 AND theme_id = '$clean_bannedThemeId'";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	//Check that theme actually exists 
+	$data = $themeDbInterface->SelectIfExists($bannedThemeId);
 
 	if(mysqli_num_rows($data) == 0){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
-	$sql = "UPDATE theme SET theme_banned = 1 WHERE theme_banned != 1 AND theme_id = '$clean_bannedThemeId'";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$data = $themeDbInterface->Ban($bannedThemeId);
 
     $adminLogData->AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", $themeAuthorUserId, $loggedInUser->Id, "");
 

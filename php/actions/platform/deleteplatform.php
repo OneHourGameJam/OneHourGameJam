@@ -1,7 +1,7 @@
 <?php
 
 function DeletePlatform($platformId){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $platformData, $adminLogData;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
 
 	$platformId = intval(trim($platformId));
 
@@ -28,17 +28,7 @@ function DeletePlatform($platformId){
 		return "UNKNOWN_PLATFORM";
 	}
 
-	$escaped_platformId = mysqli_real_escape_string($dbConn, $platformId);
-
-	$sql = "
-		UPDATE platform
-		SET
-			platform_deleted = 1
-		WHERE
-			platform_id = $escaped_platformId;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$platformDbInterface->SoftDelete($platformId);
 	
     $adminLogData->AddToAdminLog("PLATFORM_SOFT_DELETED", "Platform $platformId soft deleted", "NULL", $loggedInUser->Id, "");
 

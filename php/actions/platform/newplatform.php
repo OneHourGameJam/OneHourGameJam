@@ -1,7 +1,7 @@
 <?php
 
 function NewPlatform($platformName){
-	global $loggedInUser, $_FILES, $dbConn, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
 
 	$platformName = trim($platformName);
 
