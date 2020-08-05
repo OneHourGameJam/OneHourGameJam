@@ -42,13 +42,21 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $descrip
 		return "INVALID_JAM_NUMBER";
 	}
 
+	if(count($jamData->JamModels) == 0){
+		return "NO_JAM_TO_SUBMIT_TO";
+	}
+
 	$jam = $jamData->GetJamByNumber($jamNumber);
 	if($jam == null || $jam->JamNumber == 0){
 		return "NO_JAM_TO_SUBMIT_TO";
 	}
 
-	if(count($jamData->JamModels) == 0){
+	if($jam->Deleted){
 		return "NO_JAM_TO_SUBMIT_TO";
+	}
+
+	if(strtotime($jam->StartTime . " UTC") > time()){
+		return "JAM_NOT_STARTED";
 	}
 
 	//Validate color

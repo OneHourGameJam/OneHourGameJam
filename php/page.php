@@ -139,7 +139,10 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $currentJam["NUMBER"];
             $jamModel = $jamData->GetJamByNumber($jamNumber);
             if (!$jamModel) {
-                die('jam not found');
+                die("jam not found");
+            }
+            if (strtotime($jamModel->StartTime . " UTC") > time()) {
+                die("jam not yet started");
             }
 
             $render["submit_jam"] = JamPresenter::RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);

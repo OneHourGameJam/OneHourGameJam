@@ -83,6 +83,7 @@ class SiteActionData{
                     "INVALID_DESCRIPTION" => new SiteActionResultModel("?page=submit", "warning", "Missing Description."),
                     "INVALID_JAM_NUMBER" => new SiteActionResultModel("?page=submit", "error", "Invalid Jam Number, please contact administrators."),
                     "NO_JAM_TO_SUBMIT_TO" => new SiteActionResultModel("?page=submit", "error", "There is no active jam to submit to, please contact administrators."),
+                    "JAM_NOT_STARTED" => new SiteActionResultModel("?page=main", "error", "That jam hasn't yet started."),
                     "INVALID_COLOR" => new SiteActionResultModel("?page=submit", "warning", "The selected color is not valid."),
                     "SCREENSHOT_NOT_AN_IMAGE" => new SiteActionResultModel("?page=submit", "warning", "The uploaded screenshot is not an image."),
                     "SCREENSHOT_TOO_BIG" => new SiteActionResultModel("?page=submit", "warning", "The uploaded screenshot is too big."),

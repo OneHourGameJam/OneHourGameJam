@@ -160,7 +160,7 @@ class JamPresenter{
 					$jamViewModel = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 					
 					if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value){
-						$jamViewModel->can_user_submit_to_jam = !$jamViewModel->user_participated_in_jam;
+						$jamViewModel->can_user_submit_to_jam = !$jamViewModel->user_participated_in_jam && $jamViewModel->jam_started;
 					}
 
 					$now = time();
