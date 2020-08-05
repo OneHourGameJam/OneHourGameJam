@@ -33,7 +33,7 @@ class ThemeDbInterface{
             )
             WHERE ".DB_COLUMN_THEME_DELETED." != 1
             GROUP BY ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEMEVOTE_TYPE."
-            ORDER BY ".DB_COLUMN_THEME_BANNED." ASC, ".DB_COLUMN_THEME_ID." ASC
+            ORDER BY ".DB_COLUMN_THEME_BANNED." ASC, ".DB_COLUMN_THEME_ID." ASC;
         ";
         
         StopTimer("ThemeDbInterface_SelectAllWithResults");
@@ -63,10 +63,25 @@ class ThemeDbInterface{
         $sql = "
             SELECT theme_id 
             FROM theme 
-            WHERE theme_banned != 1 
-              AND theme_id = '$escapedThemeId'";
+            WHERE theme_id = '$escapedThemeId';
+        ";
         
         StopTimer("ThemeDbInterface_SelectIfExists");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
+    public function SelectIfActive($themeId){
+        AddActionLog("ThemeDbInterface_SelectIfActive");
+        StartTimer("ThemeDbInterface_SelectIfActive");
+        
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $sql = "
+            SELECT theme_id 
+            FROM theme 
+            WHERE theme_deleted != 1 
+              AND theme_id = $escapedThemeId";
+        
+        StopTimer("ThemeDbInterface_SelectIfActive");
         return mysqli_query($this->dbConnection, $sql);
     }
 
@@ -82,9 +97,10 @@ class ThemeDbInterface{
         $sql = "
             INSERT INTO theme
             (theme_datetime, theme_ip, theme_user_agent, theme_text, theme_author_user_id)
-            VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', $clean_user_id);";
-        $data = mysqli_query($this->dbConnection, $sql);
-
+            VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', $clean_user_id);
+        ";
+        
+        mysqli_query($this->dbConnection, $sql);
         StopTimer("ThemeDbInterface_Insert");
     }
 
@@ -97,10 +113,26 @@ class ThemeDbInterface{
             UPDATE theme 
             SET theme_banned = 1 
             WHERE theme_banned != 1 
-              AND theme_id = '$escapedThemeId'";
+              AND theme_id = '$escapedThemeId';
+        ";
         
-        return mysqli_query($this->dbConnection, $sql);
+        mysqli_query($this->dbConnection, $sql);
+        StopTimer("ThemeDbInterface_Ban");
+    }
+
+    public function Unban($themeId){
+        AddActionLog("ThemeDbInterface_Ban");
+        StartTimer("ThemeDbInterface_Ban");
+
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $sql = "
+            UPDATE theme 
+            SET theme_banned = 0 
+            WHERE theme_banned != 0 
+              AND theme_id = '$escapedThemeId';
+        ";
         
+        mysqli_query($this->dbConnection, $sql);
         StopTimer("ThemeDbInterface_Ban");
     }
 
@@ -114,10 +146,9 @@ class ThemeDbInterface{
             SET ".DB_COLUMN_THEME_DELETED." = 1
             WHERE ".DB_COLUMN_THEME_ID." = $escapedThemeId;
         ";
-        
-        return mysqli_query($this->dbConnection, $sql);
-        
-        StopTimer("ThemeDbInterface_SoftDelete");
+
+        mysqli_query($this->dbConnection, $sql);
+        StopTimer("ThemeDbInterface_SoftDelete");        
     }
 
     public function SelectPublicData(){

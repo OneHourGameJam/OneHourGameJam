@@ -50,6 +50,56 @@ class ThemeVoteDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectSingle($themeId, $userId){
+        AddActionLog("ThemeVoteDbInterface_SelectSingle");
+        StartTimer("ThemeVoteDbInterface_SelectSingle");
+        
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $sql = "
+            SELECT themevote_id 
+            FROM themevote 
+            WHERE themevote_theme_id = $escapedThemeId 
+              AND themevote_user_id = $escapedUserId";
+        
+        StopTimer("ThemeVoteDbInterface_SelectSingle");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
+    public function Insert($ip, $userAgent, $themeId, $userId, $vote){
+        AddActionLog("ThemeVoteDbInterface_Insert");
+        StartTimer("ThemeVoteDbInterface_Insert");
+        
+        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
+        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedVote = mysqli_real_escape_string($this->dbConnection, $vote);
+        $sql = "
+            INSERT INTO themevote
+            (themevote_datetime, themevote_ip, themevote_user_agent, themevote_theme_id, themevote_user_id, themevote_type)
+            VALUES
+            (Now(), '$escapedIp', '$escapedUserAgent', $escapedThemeId, $escapedUserId, $escapedVote);";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("ThemeVoteDbInterface_Insert");
+    }
+
+    public function Update($themeVoteId, $vote){
+        AddActionLog("ThemeVoteDbInterface_Update");
+        StartTimer("ThemeVoteDbInterface_Update");
+        
+        $escapedThemeVoteId = mysqli_real_escape_string($this->dbConnection, $themeVoteId);
+        $escapedVote = mysqli_real_escape_string($this->dbConnection, $vote);
+        $sql = "
+            UPDATE themevote 
+            SET themevote_type = $escapedVote 
+            WHERE themevote_id = $escapedThemeVoteId";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("ThemeVoteDbInterface_Update");
+    }
+
     public function SelectPublicData(){
         AddActionLog("ThemeVoteDbInterface_SelectPublicData");
         StartTimer("ThemeVoteDbInterface_SelectPublicData");

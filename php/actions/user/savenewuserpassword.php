@@ -2,7 +2,7 @@
 
 //Edits an existing user's password, user is identified by the username.
 function EditUserPassword($userId, $newPassword1, $newPassword2){
-	global $userData, $dbConn, $configData, $loggedInUser, $adminLogData;
+	global $userData, $configData, $loggedInUser, $adminLogData, $userDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -34,21 +34,7 @@ function EditUserPassword($userId, $newPassword1, $newPassword2){
 	$userData->UserModels[$loggedInUser->Id]->PasswordHash = $newPasswordHash;
 	$userData->UserModels[$loggedInUser->Id]->PasswordIterations = $newUserPasswordIterations;
 
-	$cleanNewUserSalt = mysqli_real_escape_string($dbConn, $newUserSalt);
-	$cleanNewPasswordHash = mysqli_real_escape_string($dbConn, $newPasswordHash);
-	$cleanNewUserPasswordIterations = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
-	$cleanUserId = mysqli_real_escape_string($dbConn, $userId);
-
-	$sql = "
-		UPDATE user
-		SET
-		user_password_salt = '$cleanNewUserSalt',
-		user_password_iterations = '$cleanNewUserPasswordIterations',
-		user_password_hash = '$cleanNewPasswordHash'
-		WHERE user_id = $cleanUserId;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$userDbInterface->UpdatePassword($userId, $newUserSalt, $newPasswordHash, $newUserPasswordIterations);
 
 	$username = $userData->UserModels[$userId]->Username;
     $adminLogData->AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $userId, $loggedInUser->Id, "");

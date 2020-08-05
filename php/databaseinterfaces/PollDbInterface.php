@@ -97,6 +97,25 @@ class PollDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectIfPollAndPollOptionCombinationExists($pollId, $pollOptionId){
+        AddActionLog("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
+        StartTimer("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
+
+        $escapedPollId = mysqli_real_escape_string($this->dbConnection, $pollId);
+        $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
+        $sql = "
+            SELECT 1 
+            FROM poll p, poll_option o 
+            WHERE p.poll_deleted != 1 
+              AND NOW() BETWEEN p.poll_start_datetime AND p.poll_end_datetime 
+              AND p.poll_id = o.option_poll_id 
+              AND poll_id = $escapedPollId 
+              AND o.option_id = $escapedPollOptionId";
+        
+        StopTimer("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
     public function SelectPublicData(){
         AddActionLog("PollDbInterface_SelectPublicData");
         StartTimer("PollDbInterface_SelectPublicData");

@@ -220,7 +220,6 @@ function GetJSONDataForTable($tabName){
 }
 
 function GetJSONDataForAllTables(){
-	global $dbConn;
 	AddActionLog("GetJSONDataForAllTables");
 	StartTimer("GetJSONDataForAllTables");
 	

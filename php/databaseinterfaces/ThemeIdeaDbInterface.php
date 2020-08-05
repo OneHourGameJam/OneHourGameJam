@@ -50,6 +50,58 @@ class ThemeIdeaDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectSingle($themeId, $userId){
+        AddActionLog("ThemeIdeaDbInterface_SelectSingle");
+        StartTimer("ThemeIdeaDbInterface_SelectSingle");
+        
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $sql = "
+            SELECT idea_id 
+            FROM theme_ideas 
+            WHERE idea_theme_id = $escapedThemeId 
+              AND idea_user_id = $escapedUserId";
+        
+        StopTimer("ThemeIdeaDbInterface_SelectSingle");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+
+    public function Insert($ip, $userAgent, $themeId, $userId, $ideas){
+        AddActionLog("ThemeIdeaDbInterface_Insert");
+        StartTimer("ThemeIdeaDbInterface_Insert");
+        
+        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
+        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
+        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedIdeas = mysqli_real_escape_string($this->dbConnection, $ideas);
+
+        $sql = "
+            INSERT INTO theme_ideas
+            (idea_datetime, idea_ip, idea_user_agent, idea_theme_id, idea_user_id, idea_ideas)
+            VALUES
+            (Now(), '$escapedIp', '$escapedUserAgent', $escapedThemeId, $escapedUserId, '$escapedIdeas');";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("ThemeIdeaDbInterface_Insert");
+    }
+
+    public function Update($ideaId, $ideas){
+        AddActionLog("ThemeIdeaDbInterface_Update");
+        StartTimer("ThemeIdeaDbInterface_Update");
+        
+        $escapedIdeaId = mysqli_real_escape_string($this->dbConnection, $ideaId);
+        $escapedIdeas = mysqli_real_escape_string($this->dbConnection, $ideas);
+
+        $sql = "
+            UPDATE theme_ideas 
+            SET idea_ideas = '$escapedIdeas' 
+            WHERE idea_id = $escapedIdeaId";
+        mysqli_query($this->dbConnection, $sql);
+
+        StopTimer("ThemeIdeaDbInterface_Update");
+    }
+
     public function SelectPublicData(){
         AddActionLog("ThemeIdeaDbInterface_SelectPublicData");
         StartTimer("ThemeIdeaDbInterface_SelectPublicData");

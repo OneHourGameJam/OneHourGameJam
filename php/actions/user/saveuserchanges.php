@@ -2,7 +2,7 @@
 
 //Changes data about the logged in user
 function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
-	global $loggedInUser, $dbConn, $configData;
+	global $loggedInUser, $configData, $userDbInterface;
 
 	//Authorize user
 	if($loggedInUser === false){
@@ -18,26 +18,8 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
 		return "INVALID_EMAIL";
 	}
-	
-	$cleanDisplayName = mysqli_real_escape_string($dbConn, $displayName);
-	$cleanTwitterHandle = mysqli_real_escape_string($dbConn, $twitterHandle);
-	$cleanEmailAddress = mysqli_real_escape_string($dbConn, $emailAddress);
-	$cleanBio = mysqli_real_escape_string($dbConn, CleanHtml($bio));
-	$cleanPreferences = mysqli_real_escape_string($dbConn, $preferences);
-	$cleanUserId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
 
-	$sql = "
-		UPDATE user
-		SET
-		user_display_name = '$cleanDisplayName',
-		user_twitter = '$cleanTwitterHandle',
-		user_email = '$cleanEmailAddress',
-		user_bio = '$cleanBio',
-		user_preferences = $cleanPreferences
-		WHERE user_id = $cleanUserId;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$userDbInterface->Update($loggedInUser->Id, $displayName, $twitterHandle, $emailAddress, CleanHtml($bio), $preferences);
 
 	return "SUCCESS";
 }

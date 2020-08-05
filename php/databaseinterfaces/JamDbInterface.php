@@ -36,6 +36,21 @@ class JamDbInterface{
         return mysqli_query($this->dbConnection, $sql);
     }
 
+    public function SelectActive(){
+        AddActionLog("JamDbInterface_SelectActive");
+        StartTimer("JamDbInterface_SelectActive");
+
+        $sql = "
+            SELECT jam_jam_number, jam_theme, jam_start_datetime, UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(jam_start_datetime) - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff
+            FROM jam
+            WHERE jam_deleted = 0
+            ORDER BY jam_id;
+        ";
+        
+        StopTimer("JamDbInterface_SelectActive");
+        return mysqli_query($this->dbConnection, $sql);
+    }
+    
     public function SelectJamsScheduledByUser($userId){
         AddActionLog("JamDbInterface_SelectJamsScheduledByUser");
         StartTimer("JamDbInterface_SelectJamsScheduledByUser");

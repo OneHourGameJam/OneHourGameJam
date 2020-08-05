@@ -4,7 +4,7 @@
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
 function EditUser($userId, $isAdmin){
-	global $userData, $dbConn, $loggedInUser, $adminLogData;
+	global $userData, $loggedInUser, $adminLogData, $userDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -25,16 +25,7 @@ function EditUser($userId, $isAdmin){
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$cleanUserId = mysqli_real_escape_string($dbConn, $userId);
-
-	$sql = "
-		UPDATE user
-		SET
-		user_role = $isAdmin
-		WHERE user_id = $cleanUserId;
-	";
-	mysqli_query($dbConn, $sql) ;
-	$sql = "";
+	$userDbInterface->UpdateIsAdmin($userId, $isAdmin);
 	
 	$username = $userData->UserModels[$userId]->Username;
     $adminLogData->AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $userId, $loggedInUser->Id, "");

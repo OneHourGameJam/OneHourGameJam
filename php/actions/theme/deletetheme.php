@@ -2,7 +2,7 @@
 
 //Removes a suggested theme
 function RemoveTheme($themeId, $pageId){
-	global $themeData, $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData;
+	global $themeData, $ip, $userAgent, $loggedInUser, $adminLogData, $themeDbInterface;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -33,22 +33,14 @@ function RemoveTheme($themeId, $pageId){
 		return "NOT_AUTHORIZED";
 	}
 
-	$cleanThemeId = mysqli_real_escape_string($dbConn, $themeId);
-	$cleanIp = mysqli_real_escape_string($dbConn, $ip);
-	$cleanUserAgent = mysqli_real_escape_string($dbConn, $userAgent);
-
 	//Check that theme actually exists
-	$sql = "SELECT theme_id FROM theme WHERE theme_deleted != 1 AND theme_id = '$cleanThemeId'";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$data = $themeDbInterface->SelectIfExists($themeId);
 
 	if(mysqli_num_rows($data) == 0){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
-	$sql = "UPDATE theme SET theme_deleted = 1 WHERE theme_deleted != 1 AND theme_id = '$cleanThemeId'";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$themeDbInterface->SoftDelete($themeId);
 
     $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", $themeAuthorUserId, $loggedInUser->Id, "");
 

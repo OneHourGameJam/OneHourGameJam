@@ -6,14 +6,7 @@ include_once("php/site.php");
 //Number of minutes after jam to be considered active.
 $jamDurationMinutes = $configData->ConfigModels["JAM_DURATION"]->Value;
 
-$sql = "
-	SELECT jam_jam_number, jam_theme, jam_start_datetime, UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(jam_start_datetime) - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff
-	FROM jam
-	WHERE jam_deleted = 0
-	ORDER BY jam_id
-";
-$data = mysqli_query($dbConn, $sql) ;
-$sql = "";
+$data = $jamDbInterface->SelectActive();
 
 $maxJamNumber = 0;
 

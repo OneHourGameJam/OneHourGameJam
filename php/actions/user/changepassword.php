@@ -2,7 +2,7 @@
 
 //Changes the logged in user's password if the old one matches.
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
-	global $userData, $loggedInUser, $dbConn, $configData;
+	global $userData, $loggedInUser, $configData, $userDbInterface;
 
 	//Authorize user (is admin)
 	if($loggedInUser === false){
@@ -44,21 +44,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$userData->UserModels[$loggedInUserId]->PasswordHash = $newPasswordHash;
 	$userData->UserModels[$loggedInUserId]->PasswordIterations = $newUserPasswordIterations;
 
-	$cleanNewUserSalt = mysqli_real_escape_string($dbConn, $newUserSalt);
-	$cleanNewPasswordHash = mysqli_real_escape_string($dbConn, $newPasswordHash);
-	$cleanNewUserPasswordIterations = mysqli_real_escape_string($dbConn, $newUserPasswordIterations);
-	$cleanUserId = mysqli_real_escape_string($dbConn, $loggedInUser->Id);
-
-	$sql = "
-		UPDATE user
-		SET
-		user_password_salt = '$cleanNewUserSalt',
-		user_password_iterations = '$cleanNewUserPasswordIterations',
-		user_password_hash = '$cleanNewPasswordHash'
-		WHERE user_id = $cleanUserId;
-	";
-	$data = mysqli_query($dbConn, $sql);
-	$sql = "";
+	$userDbInterface->UpdatePassword($loggedInUser->Id, $newUserSalt, $newPasswordHash, $newUserPasswordIterations);
 	
 	return "SUCCESS";
 }

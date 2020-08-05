@@ -43,7 +43,7 @@ class SessionDbInterface{
             WHERE ".DB_COLUMN_SESSION_USER_ID." = $escapedUserId;
         ";
         
-        StopTimer("essionDbInterface_SelectSessionsOfUser");
+        StopTimer("SessionDbInterface_SelectSessionsOfUser");
         return mysqli_query($this->dbConnection, $sql);
     }
 

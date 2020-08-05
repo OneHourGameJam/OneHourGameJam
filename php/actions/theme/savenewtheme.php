@@ -2,7 +2,7 @@
 
 //Add a suggested theme
 function AddTheme($newTheme){
-	global $themeData, $configData, $jamData, $dbConn, $ip, $userAgent, $loggedInUser, $themeDbInterface;
+	global $themeData, $configData, $jamData, $ip, $userAgent, $loggedInUser, $themeDbInterface;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){

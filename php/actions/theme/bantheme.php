@@ -2,7 +2,7 @@
 
 //Marks a suggested theme as banned
 function BanTheme($bannedThemeId){
-	global $dbConn, $ip, $userAgent, $loggedInUser, $adminLogData, $themeData, $themeDbInterface;
+	global $ip, $userAgent, $loggedInUser, $adminLogData, $themeData, $themeDbInterface;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -39,7 +39,7 @@ function BanTheme($bannedThemeId){
 		return "THEME_DOES_NOT_EXIST";
 	}
 
-	$data = $themeDbInterface->Ban($bannedThemeId);
+	$themeDbInterface->Ban($bannedThemeId);
 
     $adminLogData->AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", $themeAuthorUserId, $loggedInUser->Id, "");
 

@@ -161,6 +161,32 @@ class UserDbInterface{
         StopTimer("UserDbInterface_Insert");
     }
 
+    public function Update($userId, $displayName, $twitterHandle, $emailAddress, $bio, $preferences){
+        AddActionLog("UserDbInterface_Update");
+        StartTimer("UserDbInterface_Update");
+
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedDisplayName = mysqli_real_escape_string($this->dbConnection, $displayName);
+        $escapedTwitterHandle = mysqli_real_escape_string($this->dbConnection, $twitterHandle);
+        $escapedEmailAddress = mysqli_real_escape_string($this->dbConnection, $emailAddress);
+        $escapedBio = mysqli_real_escape_string($this->dbConnection, $bio);
+        $escapedPreferences = mysqli_real_escape_string($this->dbConnection, $preferences);
+
+        $sql = "
+            UPDATE user
+            SET
+            user_display_name = '$escapedDisplayName',
+            user_twitter = '$escapedTwitterHandle',
+            user_email = '$escapedEmailAddress',
+            user_bio = '$escapedBio',
+            user_preferences = $escapedPreferences
+            WHERE user_id = $escapedUserId;
+        ";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("UserDbInterface_Update");
+    }
+
     public function UpdateLastUsedIpAndUserAgent($userId, $ip, $userAgent){
         AddActionLog("UserDbInterface_UpdateLastUsedIpAndUserAgent");
         StartTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
@@ -179,6 +205,46 @@ class UserDbInterface{
         mysqli_query($this->dbConnection, $sql);
         
         StopTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
+    }
+
+    public function UpdatePassword($userId, $userSalt, $passwordHash, $userPasswordIterations){
+        AddActionLog("UserDbInterface_UpdatePassword");
+        StartTimer("UserDbInterface_UpdatePassword");
+
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserSalt = mysqli_real_escape_string($this->dbConnection, $userSalt);
+        $escapedPasswordHash = mysqli_real_escape_string($this->dbConnection, $passwordHash);
+        $escapedUserPasswordIterations = mysqli_real_escape_string($this->dbConnection, $userPasswordIterations);
+
+        $sql = " 
+            UPDATE user
+            SET
+            user_password_salt = '$escapedUserSalt',
+            user_password_iterations = '$escapedUserPasswordIterations',
+            user_password_hash = '$escapedPasswordHash'
+            WHERE user_id = $escapedUserId;
+        ";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("UserDbInterface_UpdatePassword");
+    }
+
+    public function UpdateIsAdmin($userId, $isAdmin){
+        AddActionLog("UserDbInterface_UpdateIsAdmin");
+        StartTimer("UserDbInterface_UpdateIsAdmin");
+
+        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedIsAdmin = mysqli_real_escape_string($this->dbConnection, $isAdmin);
+
+        $sql = "
+            UPDATE user
+            SET
+            user_role = $escapedIsAdmin
+            WHERE user_id = $escapedUserId;
+        ";
+        mysqli_query($this->dbConnection, $sql);
+        
+        StopTimer("UserDbInterface_UpdateIsAdmin");
     }
 
     public function SelectPublicData(){

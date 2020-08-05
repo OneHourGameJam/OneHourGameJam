@@ -66,8 +66,8 @@ class AssetData{
 //////////////////////// PUBLIC DATA EXPORT
 
     function GetAllPublicData(){
-        global $dbConn;
-        
+        AddActionLog("AssetData_GetAllPublicData");
+        StartTimer("AssetData_GetAllPublicData");
         $dataFromDatabase = MySQLDataToArray($this->assetDbInterface->SelectPublicData());
         
         foreach($dataFromDatabase as $i => $row){
@@ -76,6 +76,7 @@ class AssetData{
             $dataFromDatabase[$i][DB_COLUMN_ASSET_USER_AGENT] = "MIGRATION";
         }
 
+        StopTimer("AssetData_GetAllPublicData");
         return $dataFromDatabase;
     }
 
