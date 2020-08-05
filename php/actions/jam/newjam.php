@@ -7,8 +7,15 @@
 function CreateJam($theme, $date, $time, $colorsList){
 	global $ip, $userAgent, $loggedInUser, $jamData, $adminLogData;
 
-	$currentJamData = GetCurrentJamNumberAndId();
-	$jamNumber = intval($currentJamData["NUMBER"] + 1);
+	$maxNonDeletedJamNumber = 0;
+	foreach($jamData->JamModels as $i => $jamModel){
+		if($jamModel->Deleted){
+			continue;
+		}
+		$maxNonDeletedJamNumber = max($maxNonDeletedJamNumber, $jamModel->JamNumber);
+	}
+
+	$jamNumber = $maxNonDeletedJamNumber + 1;
 	$theme = trim($theme);
 	$date = trim($date);
 	$time = trim($time);

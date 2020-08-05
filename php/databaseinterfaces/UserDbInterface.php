@@ -125,21 +125,21 @@ class UserDbInterface{
         $escapedIsAdmin = mysqli_real_escape_string($this->dbConnection, $isAdmin);
 
 		$sql = "
-			INSERT INTO user
-			(user_id,
-			user_username,
-			user_datetime,
-			user_register_ip,
-			user_register_user_agent,
-			user_display_name,
-			user_password_salt,
-			user_password_hash,
-			user_password_iterations,
-			user_last_login_datetime,
-			user_last_ip,
-			user_last_user_agent,
-			user_email,
-			user_role)
+			INSERT INTO ".DB_TABLE_USER."
+			(".DB_COLUMN_USER_ID.",
+			".DB_COLUMN_USER_USERNAME.",
+			".DB_COLUMN_USER_DATETIME.",
+			".DB_COLUMN_USER_IP.",
+			".DB_COLUMN_USER_USER_AGENT.",
+			".DB_COLUMN_USER_DISPLAY_NAME.",
+			".DB_COLUMN_USER_SALT.",
+			".DB_COLUMN_USER_PASSWORD_HASH.",
+			".DB_COLUMN_USER_PASSWORD_ITERATIONS.",
+			".DB_COLUMN_USER_LAST_LOGIN_DATETIME.",
+			".DB_COLUMN_USER_LAST_IP.",
+			".DB_COLUMN_USER_LAST_USER_AGENT.",
+			".DB_COLUMN_USER_EMAIL.",
+			".DB_COLUMN_USER_ROLE.")
 			VALUES
 			(null,
 			'$escapedUsername',
@@ -173,14 +173,14 @@ class UserDbInterface{
         $escapedPreferences = mysqli_real_escape_string($this->dbConnection, $preferences);
 
         $sql = "
-            UPDATE user
+            UPDATE ".DB_TABLE_USER."
             SET
-            user_display_name = '$escapedDisplayName',
-            user_twitter = '$escapedTwitterHandle',
-            user_email = '$escapedEmailAddress',
-            user_bio = '$escapedBio',
-            user_preferences = $escapedPreferences
-            WHERE user_id = $escapedUserId;
+            ".DB_COLUMN_USER_DISPLAY_NAME." = '$escapedDisplayName',
+            ".DB_COLUMN_USER_TWITTER." = '$escapedTwitterHandle',
+            ".DB_COLUMN_USER_EMAIL." = '$escapedEmailAddress',
+            ".DB_COLUMN_USER_BIO." = '$escapedBio',
+            ".DB_COLUMN_USER_PREFERENCES." = $escapedPreferences
+            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         mysqli_query($this->dbConnection, $sql);
         
@@ -196,11 +196,11 @@ class UserDbInterface{
         $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
 
 		$sql = "
-			UPDATE user
-            SET user_last_login_datetime = Now(),
-                user_last_ip = '$escapedIp',
-                user_last_user_agent = '$escapedUserAgent'
-			WHERE user_id = $escapedUserId
+			UPDATE ".DB_TABLE_USER."
+            SET ".DB_COLUMN_USER_LAST_LOGIN_DATETIME." = Now(),
+                ".DB_COLUMN_USER_LAST_IP." = '$escapedIp',
+                ".DB_COLUMN_USER_LAST_USER_AGENT." = '$escapedUserAgent'
+			WHERE ".DB_COLUMN_USER_ID." = $escapedUserId
         ";
         mysqli_query($this->dbConnection, $sql);
         
@@ -217,12 +217,12 @@ class UserDbInterface{
         $escapedUserPasswordIterations = mysqli_real_escape_string($this->dbConnection, $userPasswordIterations);
 
         $sql = " 
-            UPDATE user
+            UPDATE ".DB_TABLE_USER."
             SET
-            user_password_salt = '$escapedUserSalt',
-            user_password_iterations = '$escapedUserPasswordIterations',
-            user_password_hash = '$escapedPasswordHash'
-            WHERE user_id = $escapedUserId;
+            ".DB_COLUMN_USER_SALT." = '$escapedUserSalt',
+            ".DB_COLUMN_USER_PASSWORD_ITERATIONS." = '$escapedUserPasswordIterations',
+            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash'
+            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         mysqli_query($this->dbConnection, $sql);
         
@@ -237,10 +237,10 @@ class UserDbInterface{
         $escapedIsAdmin = mysqli_real_escape_string($this->dbConnection, $isAdmin);
 
         $sql = "
-            UPDATE user
+            UPDATE ".DB_TABLE_USER."
             SET
-            user_role = $escapedIsAdmin
-            WHERE user_id = $escapedUserId;
+            ".DB_COLUMN_USER_ROLE." = $escapedIsAdmin
+            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         mysqli_query($this->dbConnection, $sql);
         

@@ -57,10 +57,10 @@ class ThemeIdeaDbInterface{
         $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
         $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
         $sql = "
-            SELECT idea_id 
-            FROM theme_ideas 
-            WHERE idea_theme_id = $escapedThemeId 
-              AND idea_user_id = $escapedUserId";
+            SELECT ".DB_COLUMN_THEMEIDEA_ID." 
+            FROM ".DB_TABLE_THEMEIDEA." 
+            WHERE ".DB_COLUMN_THEMEIDEA_THEME_ID." = $escapedThemeId 
+              AND ".DB_COLUMN_THEMEIDEA_USER_ID." = $escapedUserId";
         
         StopTimer("ThemeIdeaDbInterface_SelectSingle");
         return mysqli_query($this->dbConnection, $sql);
@@ -77,8 +77,8 @@ class ThemeIdeaDbInterface{
         $escapedIdeas = mysqli_real_escape_string($this->dbConnection, $ideas);
 
         $sql = "
-            INSERT INTO theme_ideas
-            (idea_datetime, idea_ip, idea_user_agent, idea_theme_id, idea_user_id, idea_ideas)
+            INSERT INTO ".DB_TABLE_THEMEIDEA."
+            (".DB_COLUMN_THEMEIDEA_DATETIME.", ".DB_COLUMN_THEMEIDEA_IP.", ".DB_COLUMN_THEMEIDEA_USER_AGENT.", ".DB_COLUMN_THEMEIDEA_THEME_ID.", ".DB_COLUMN_THEMEIDEA_USER_ID.", ".DB_COLUMN_THEMEIDEA_IDEAS.")
             VALUES
             (Now(), '$escapedIp', '$escapedUserAgent', $escapedThemeId, $escapedUserId, '$escapedIdeas');";
         mysqli_query($this->dbConnection, $sql);
@@ -94,9 +94,9 @@ class ThemeIdeaDbInterface{
         $escapedIdeas = mysqli_real_escape_string($this->dbConnection, $ideas);
 
         $sql = "
-            UPDATE theme_ideas 
-            SET idea_ideas = '$escapedIdeas' 
-            WHERE idea_id = $escapedIdeaId";
+            UPDATE ".DB_TABLE_THEMEIDEA." 
+            SET ".DB_COLUMN_THEMEIDEA_IDEAS." = '$escapedIdeas' 
+            WHERE ".DB_COLUMN_THEMEIDEA_ID." = $escapedIdeaId";
         mysqli_query($this->dbConnection, $sql);
 
         StopTimer("ThemeIdeaDbInterface_Update");

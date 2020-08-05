@@ -22,10 +22,10 @@ class PollVoteDbInterface{
         $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
         $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
         $sql = "
-            SELECT vote_id, vote_deleted 
-            FROM poll_vote 
-            WHERE vote_option_id = $escapedPollOptionId 
-              AND vote_user_id = $escapedUserId";
+            SELECT ".DB_COLUMN_POLLVOTE_ID.", ".DB_COLUMN_POLLVOTE_DELETED." 
+            FROM ".DB_TABLE_POLLVOTE." 
+            WHERE ".DB_COLUMN_POLLVOTE_OPTION_ID." = $escapedPollOptionId 
+              AND ".DB_COLUMN_POLLVOTE_USER_ID." = $escapedUserId";
         
         StopTimer("PollVoteDbInterface_SelectUserVoteForOption");
         return mysqli_query($this->dbConnection, $sql);
@@ -39,8 +39,8 @@ class PollVoteDbInterface{
         $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
 
         $sql = "
-            INSERT INTO poll_vote
-            (vote_id, vote_option_id, vote_user_id, vote_deleted)
+            INSERT INTO ".DB_TABLE_POLLVOTE."
+            (".DB_COLUMN_POLLVOTE_ID.", ".DB_COLUMN_POLLVOTE_OPTION_ID.", ".DB_COLUMN_POLLVOTE_USER_ID.", ".DB_COLUMN_POLLVOTE_DELETED.")
             VALUES
             (null, $escapedPollOptionId, $escapedUserId, 0);";
         
@@ -57,9 +57,9 @@ class PollVoteDbInterface{
         $escapedIsDeleted = mysqli_real_escape_string($this->dbConnection, $isDeleted);
 
         $sql = "
-            UPDATE poll_vote 
-            SET vote_deleted = $escapedIsDeleted 
-            WHERE vote_id = $escapedPollVoteId";
+            UPDATE ".DB_TABLE_POLLVOTE." 
+            SET ".DB_COLUMN_POLLVOTE_DELETED." = $escapedIsDeleted 
+            WHERE ".DB_COLUMN_POLLVOTE_ID." = $escapedPollVoteId";
         
         mysqli_query($this->dbConnection, $sql);
 

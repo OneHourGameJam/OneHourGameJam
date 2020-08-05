@@ -35,11 +35,11 @@ class PlatformDbInterface{
         $escapedIconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
     
         $sql = "
-            INSERT INTO platform
-            (platform_id,
-            platform_name,
-            platform_icon_url,
-            platform_deleted)
+            INSERT INTO ".DB_TABLE_PLATFORM."
+            (".DB_COLUMN_PLATFORM_ID.",
+            ".DB_COLUMN_PLATFORM_NAME.",
+            ".DB_COLUMN_PLATFORM_ICON_URL.",
+            ".DB_COLUMN_PLATFORM_DELETED.")
             VALUES
             (null,
             '$escapedPlatformName',
@@ -60,12 +60,12 @@ class PlatformDbInterface{
         $escapedIconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
     
         $sql = "
-            UPDATE platform
+            UPDATE ".DB_TABLE_PLATFORM."
             SET
-                platform_name = '$escapedPlatformName',
-                platform_icon_url = '$escapedIconUrl'
+                ".DB_COLUMN_PLATFORM_NAME." = '$escapedPlatformName',
+                ".DB_COLUMN_PLATFORM_ICON_URL." = '$escapedIconUrl'
             WHERE
-                platform_id = $escapedPlatformId;
+                ".DB_COLUMN_PLATFORM_ID." = $escapedPlatformId;
         ";
         $data = mysqli_query($this->dbConnection, $sql);
         
@@ -79,11 +79,11 @@ class PlatformDbInterface{
         $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
     
         $sql = " 
-            UPDATE platform
+            UPDATE ".DB_TABLE_PLATFORM."
             SET
-                platform_deleted = 1
+                ".DB_COLUMN_PLATFORM_DELETED." = 1
             WHERE
-                platform_id = $escapedPlatformId;
+                ".DB_COLUMN_PLATFORM_ID." = $escapedPlatformId;
         ";
         $data = mysqli_query($this->dbConnection, $sql);
         
@@ -97,11 +97,11 @@ class PlatformDbInterface{
         $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
     
         $sql = "
-            UPDATE platform 
+            UPDATE ".DB_TABLE_PLATFORM." 
             SET
-                platform_deleted = 0
+                ".DB_COLUMN_PLATFORM_DELETED." = 0
             WHERE
-                platform_id = $escapedPlatformId;
+                ".DB_COLUMN_PLATFORM_ID." = $escapedPlatformId;
         ";
         $data = mysqli_query($this->dbConnection, $sql);
         

@@ -55,10 +55,10 @@ class AssetDbInterface{
 
         $escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
         $sql = "
-            SELECT asset_id, asset_author_user_id, asset_title
-            FROM asset a
-            WHERE asset_deleted != 1
-              AND asset_id = $escapedAssetId;
+            SELECT ".DB_COLUMN_ASSET_ID.", ".DB_COLUMN_ASSET_AUTHOR_USER_ID.", ".DB_COLUMN_ASSET_TITLE."
+            FROM ".DB_TABLE_ASSET." a
+            WHERE ".DB_COLUMN_ASSET_DELETED." != 1
+              AND ".DB_COLUMN_ASSET_ID." = $escapedAssetId;
         ";
         StopTimer("AssetDbInterface_SelectSingleAsset");
         return mysqli_query($this->dbConnection, $sql);
@@ -77,17 +77,17 @@ class AssetDbInterface{
 		$escapedContent = mysqli_real_escape_string($this->dbConnection, $assetURL);
         
 		$sql = "
-            INSERT INTO asset
-            (asset_id,
-            asset_datetime,
-            asset_ip,
-            asset_user_agent,
-            asset_author_user_id,
-            asset_title,
-            asset_description,
-            asset_type,
-            asset_content,
-            asset_deleted)
+            INSERT INTO ".DB_TABLE_ASSET."
+            (".DB_COLUMN_ASSET_ID.",
+            ".DB_COLUMN_ASSET_DATETIME.",
+            ".DB_COLUMN_ASSET_IP.",
+            ".DB_COLUMN_ASSET_USER_AGENT.",
+            ".DB_COLUMN_ASSET_AUTHOR_USER_ID.",
+            ".DB_COLUMN_ASSET_TITLE.",
+            ".DB_COLUMN_ASSET_DESCRIPTION.",
+            ".DB_COLUMN_ASSET_TYPE.",
+            ".DB_COLUMN_ASSET_CONTENT.",
+            ".DB_COLUMN_ASSET_DELETED.")
             VALUES
             (null,
             Now(),
@@ -117,14 +117,14 @@ class AssetDbInterface{
 		$escapedContent = mysqli_real_escape_string($this->dbConnection, $content);
         
 		$sql = "
-            UPDATE asset
+            UPDATE ".DB_TABLE_ASSET."
             SET
-                asset_author_user_id = $escapedAuthorUserId,
-                asset_title = '$escapedTitle',
-                asset_description = '$escapedDescription',
-                asset_type = '$escapedType',
-                asset_content = '$escapedContent'
-            WHERE asset_id = $escapedAssetId;
+                ".DB_COLUMN_ASSET_AUTHOR_USER_ID." = $escapedAuthorUserId,
+                ".DB_COLUMN_ASSET_TITLE." = '$escapedTitle',
+                ".DB_COLUMN_ASSET_DESCRIPTION." = '$escapedDescription',
+                ".DB_COLUMN_ASSET_TYPE." = '$escapedType',
+                ".DB_COLUMN_ASSET_CONTENT." = '$escapedContent'
+            WHERE ".DB_COLUMN_ASSET_ID." = $escapedAssetId;
         ";
         mysqli_query($this->dbConnection, $sql);
 
@@ -138,10 +138,10 @@ class AssetDbInterface{
 		$escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
         
         $sql = "
-            UPDATE asset
+            UPDATE ".DB_TABLE_ASSET."
             SET
-                asset_deleted = 1
-            WHERE asset_id = $escapedAssetId;
+                ".DB_COLUMN_ASSET_DELETED." = 1
+            WHERE ".DB_COLUMN_ASSET_ID." = $escapedAssetId;
         ";
         mysqli_query($this->dbConnection, $sql);
 

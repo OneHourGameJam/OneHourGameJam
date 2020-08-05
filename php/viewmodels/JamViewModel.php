@@ -51,6 +51,7 @@ class JamViewModel{
     public $score_plus_5;
     public $html_startdate;
     public $can_user_submit_to_jam;
+    public $timer_code;
 }
 
 class JamColorViewModel{

@@ -122,6 +122,8 @@ class JamPresenter{
 			$jamViewModel->score_plus_5 = $satisfactionData->SatisfactionModels[$arrayId]->Scores[5];
 		}
 
+		$jamViewModel->timer_code = gmdate("Y-m-d", strtotime($jamModel->StartTime))."T".gmdate("H:i", strtotime($jamModel->StartTime)).":00Z";
+
 		StopTimer("RenderJam");
 		return $jamViewModel;
 	}

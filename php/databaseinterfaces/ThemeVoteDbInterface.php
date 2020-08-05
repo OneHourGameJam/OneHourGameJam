@@ -57,10 +57,10 @@ class ThemeVoteDbInterface{
         $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
         $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
         $sql = "
-            SELECT themevote_id 
-            FROM themevote 
-            WHERE themevote_theme_id = $escapedThemeId 
-              AND themevote_user_id = $escapedUserId";
+            SELECT ".DB_COLUMN_THEMEVOTE_ID." 
+            FROM ".DB_TABLE_THEMEVOTE." 
+            WHERE ".DB_COLUMN_THEMEVOTE_THEME_ID." = $escapedThemeId 
+              AND ".DB_COLUMN_THEMEVOTE_USER_ID." = $escapedUserId";
         
         StopTimer("ThemeVoteDbInterface_SelectSingle");
         return mysqli_query($this->dbConnection, $sql);
@@ -76,8 +76,8 @@ class ThemeVoteDbInterface{
         $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
         $escapedVote = mysqli_real_escape_string($this->dbConnection, $vote);
         $sql = "
-            INSERT INTO themevote
-            (themevote_datetime, themevote_ip, themevote_user_agent, themevote_theme_id, themevote_user_id, themevote_type)
+            INSERT INTO ".DB_TABLE_THEMEVOTE."
+            (".DB_COLUMN_THEMEVOTE_DATETIME.", ".DB_COLUMN_THEMEVOTE_IP.", ".DB_COLUMN_THEMEVOTE_USER_AGENT.", ".DB_COLUMN_THEMEVOTE_THEME_ID.", ".DB_COLUMN_THEMEVOTE_USER_ID.", ".DB_COLUMN_THEMEVOTE_TYPE.")
             VALUES
             (Now(), '$escapedIp', '$escapedUserAgent', $escapedThemeId, $escapedUserId, $escapedVote);";
         mysqli_query($this->dbConnection, $sql);
@@ -92,9 +92,9 @@ class ThemeVoteDbInterface{
         $escapedThemeVoteId = mysqli_real_escape_string($this->dbConnection, $themeVoteId);
         $escapedVote = mysqli_real_escape_string($this->dbConnection, $vote);
         $sql = "
-            UPDATE themevote 
-            SET themevote_type = $escapedVote 
-            WHERE themevote_id = $escapedThemeVoteId";
+            UPDATE ".DB_TABLE_THEMEVOTE." 
+            SET ".DB_COLUMN_THEMEVOTE_TYPE." = $escapedVote 
+            WHERE ".DB_COLUMN_THEMEVOTE_ID." = $escapedThemeVoteId";
         mysqli_query($this->dbConnection, $sql);
         
         StopTimer("ThemeVoteDbInterface_Update");

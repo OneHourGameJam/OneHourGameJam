@@ -105,12 +105,12 @@ class PollDbInterface{
         $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
         $sql = "
             SELECT 1 
-            FROM poll p, poll_option o 
-            WHERE p.poll_deleted != 1 
-              AND NOW() BETWEEN p.poll_start_datetime AND p.poll_end_datetime 
-              AND p.poll_id = o.option_poll_id 
-              AND poll_id = $escapedPollId 
-              AND o.option_id = $escapedPollOptionId";
+            FROM ".DB_TABLE_POLL." p, ".DB_TABLE_POLLOPTION." o 
+            WHERE p.".DB_COLUMN_POLL_DELETED." != 1 
+              AND NOW() BETWEEN p.".DB_COLUMN_POLL_START_DATETIME." AND p.".DB_COLUMN_POLL_END_DATETIME." 
+              AND p.".DB_COLUMN_POLL_ID." = o.".DB_COLUMN_POLLOPTION_POLL_ID." 
+              AND ".DB_COLUMN_POLL_ID." = $escapedPollId 
+              AND o.".DB_COLUMN_POLLOPTION_ID." = $escapedPollOptionId";
         
         StopTimer("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
         return mysqli_query($this->dbConnection, $sql);

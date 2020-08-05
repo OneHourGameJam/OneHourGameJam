@@ -84,10 +84,10 @@ class AdminVoteDbInterface{
         $escapedSubjectUserId = mysqli_real_escape_string($this->dbConnection, $subjectUserId);
         
         $sql = "
-            SELECT vote_id
-            FROM admin_vote
-            WHERE vote_voter_user_id = $escapedVoterUserId
-              AND vote_subject_user_id = $escapedSubjectUserId;
+            SELECT ".DB_COLUMN_ADMINVOTE_ID."
+            FROM ".DB_TABLE_ADMINVOTE."
+            WHERE ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = $escapedVoterUserId
+              AND ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID." = $escapedSubjectUserId;
         ";
 
         StopTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterAndSubjectUserId");
@@ -102,10 +102,10 @@ class AdminVoteDbInterface{
         $escapedVoteType = mysqli_real_escape_string($this->dbConnection, $voteType);
         
 		$sql = "
-            SELECT vote_id
-            FROM admin_vote
-            WHERE vote_voter_user_id = $escapedVoterUserId
-              AND vote_type = '$escapedVoteType'
+            SELECT ".DB_COLUMN_ADMINVOTE_ID."
+            FROM ".DB_TABLE_ADMINVOTE."
+            WHERE ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = $escapedVoterUserId
+              AND ".DB_COLUMN_ADMINVOTE_TYPE." = '$escapedVoteType'
         ";
 
         StopTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterUserIdAndVoteType");
@@ -123,8 +123,8 @@ class AdminVoteDbInterface{
         $escapedVoteType = mysqli_real_escape_string($this->dbConnection, $voteType);
 
         $sql = "
-            INSERT INTO admin_vote
-            (vote_id, vote_datetime, vote_ip, vote_user_agent, vote_voter_user_id, vote_subject_user_id, vote_type)
+            INSERT INTO ".DB_TABLE_ADMINVOTE."
+            (".DB_COLUMN_ADMINVOTE_ID.", ".DB_COLUMN_ADMINVOTE_DATETIME.", ".DB_COLUMN_ADMINVOTE_IP.", ".DB_COLUMN_ADMINVOTE_USER_AGENT.", ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID.", ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID.", ".DB_COLUMN_ADMINVOTE_TYPE.")
             VALUES
             (null,
             Now(),
@@ -146,8 +146,8 @@ class AdminVoteDbInterface{
         $escapedVoteId = mysqli_real_escape_string($this->dbConnection, $voteId);
 
         $sql = "
-            DELETE FROM admin_vote
-            WHERE vote_id = $escapedVoteId
+            DELETE FROM ".DB_TABLE_ADMINVOTE."
+            WHERE ".DB_COLUMN_ADMINVOTE_ID." = $escapedVoteId
         ";
         mysqli_query($this->dbConnection, $sql);
             

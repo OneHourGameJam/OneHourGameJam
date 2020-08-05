@@ -35,10 +35,10 @@ class PlatformGameDbInterface{
         $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
     
         $sql = "
-            SELECT platformentry_id 
-            FROM platform_entry 
-            WHERE platformentry_entry_id = $escapedEntryId 
-              AND platformentry_platform_id = $escapedPlatformId;";
+            SELECT ".DB_COLUMN_PLATFORMENTRY_ID." 
+            FROM ".DB_TABLE_PLATFORMENTRY." 
+            WHERE ".DB_COLUMN_PLATFORMENTRY_ENTRY_ID." = $escapedEntryId 
+              AND ".DB_COLUMN_PLATFORMENTRY_PLATFORM_ID." = $escapedPlatformId;";
         
         StopTimer("PlatformGameDbInterface_SelectSinglePlatformEntryId");
         return mysqli_query($this->dbConnection, $sql);
@@ -53,8 +53,8 @@ class PlatformGameDbInterface{
         $escapedUrl = mysqli_real_escape_string($this->dbConnection, $url);
 
         $sql = "
-            INSERT INTO platform_entry
-            (platformentry_id, platformentry_entry_id, platformentry_platform_id, platformentry_url)
+            INSERT INTO ".DB_TABLE_PLATFORMENTRY."
+            (".DB_COLUMN_PLATFORMENTRY_ID.", ".DB_COLUMN_PLATFORMENTRY_ENTRY_ID.", ".DB_COLUMN_PLATFORMENTRY_PLATFORM_ID.", ".DB_COLUMN_PLATFORMENTRY_URL.")
             VALUES
             (null, $escapedEntryId, $escapedPlatformId, '$escapedUrl');
         ";
@@ -71,9 +71,9 @@ class PlatformGameDbInterface{
         $escapedPlatformEntryId = mysqli_real_escape_string($this->dbConnection, $platformEntryId);
 
 		$sql = "
-            UPDATE platform_entry 
-            SET platformentry_url = '$escapedUrl' 
-            WHERE platformentry_id = $escapedPlatformEntryId;";
+            UPDATE ".DB_TABLE_PLATFORMENTRY." 
+            SET ".DB_COLUMN_PLATFORMENTRY_URL." = '$escapedUrl' 
+            WHERE ".DB_COLUMN_PLATFORMENTRY_ID." = $escapedPlatformEntryId;";
         $data = mysqli_query($this->dbConnection, $sql);
         
         StopTimer("PlatformGameDbInterface_UpdateUrl");
@@ -86,8 +86,8 @@ class PlatformGameDbInterface{
         $escapedPlatformEntryId = mysqli_real_escape_string($this->dbConnection, $platformEntryId);
 
         $sql = "
-            DELETE FROM platform_entry 
-            WHERE platformentry_id = $escapedPlatformEntryId;";
+            DELETE FROM ".DB_TABLE_PLATFORMENTRY." 
+            WHERE ".DB_COLUMN_PLATFORMENTRY_ID." = $escapedPlatformEntryId;";
         $data = mysqli_query($this->dbConnection, $sql);
         
         StopTimer("PlatformGameDbInterface_Delete");

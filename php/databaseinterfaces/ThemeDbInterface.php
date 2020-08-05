@@ -61,9 +61,9 @@ class ThemeDbInterface{
         
         $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
         $sql = "
-            SELECT theme_id 
-            FROM theme 
-            WHERE theme_id = '$escapedThemeId';
+            SELECT ".DB_COLUMN_THEME_ID." 
+            FROM ".DB_TABLE_THEME." 
+            WHERE ".DB_COLUMN_THEME_ID." = '$escapedThemeId';
         ";
         
         StopTimer("ThemeDbInterface_SelectIfExists");
@@ -76,10 +76,10 @@ class ThemeDbInterface{
         
         $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
         $sql = "
-            SELECT theme_id 
-            FROM theme 
-            WHERE theme_deleted != 1 
-              AND theme_id = $escapedThemeId";
+            SELECT ".DB_COLUMN_THEME_ID." 
+            FROM ".DB_TABLE_THEME." 
+            WHERE ".DB_COLUMN_THEME_DELETED." != 1 
+              AND ".DB_COLUMN_THEME_ID." = $escapedThemeId";
         
         StopTimer("ThemeDbInterface_SelectIfActive");
         return mysqli_query($this->dbConnection, $sql);
@@ -95,8 +95,8 @@ class ThemeDbInterface{
         $clean_user_id = mysqli_real_escape_string($this->dbConnection, $userId);
     
         $sql = "
-            INSERT INTO theme
-            (theme_datetime, theme_ip, theme_user_agent, theme_text, theme_author_user_id)
+            INSERT INTO ".DB_TABLE_THEME."
+            (".DB_COLUMN_THEME_DATETIME.", ".DB_COLUMN_THEME_IP.", ".DB_COLUMN_THEME_USER_AGENT.", ".DB_COLUMN_THEME_TEXT.", ".DB_COLUMN_THEME_AUTHOR_USER_ID.")
             VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', $clean_user_id);
         ";
         
@@ -110,10 +110,10 @@ class ThemeDbInterface{
 
         $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
         $sql = "
-            UPDATE theme 
-            SET theme_banned = 1 
-            WHERE theme_banned != 1 
-              AND theme_id = '$escapedThemeId';
+            UPDATE ".DB_TABLE_THEME." 
+            SET ".DB_COLUMN_THEME_BANNED." = 1 
+            WHERE ".DB_COLUMN_THEME_BANNED." != 1 
+              AND ".DB_COLUMN_THEME_ID." = '$escapedThemeId';
         ";
         
         mysqli_query($this->dbConnection, $sql);
@@ -126,10 +126,10 @@ class ThemeDbInterface{
 
         $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
         $sql = "
-            UPDATE theme 
-            SET theme_banned = 0 
-            WHERE theme_banned != 0 
-              AND theme_id = '$escapedThemeId';
+            UPDATE ".DB_TABLE_THEME." 
+            SET ".DB_COLUMN_THEME_BANNED." = 0 
+            WHERE ".DB_COLUMN_THEME_BANNED." != 0 
+              AND ".DB_COLUMN_THEME_ID." = '$escapedThemeId';
         ";
         
         mysqli_query($this->dbConnection, $sql);

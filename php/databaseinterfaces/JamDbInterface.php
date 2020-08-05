@@ -41,10 +41,10 @@ class JamDbInterface{
         StartTimer("JamDbInterface_SelectActive");
 
         $sql = "
-            SELECT jam_jam_number, jam_theme, jam_start_datetime, UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(jam_start_datetime) - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff
-            FROM jam
-            WHERE jam_deleted = 0
-            ORDER BY jam_id;
+            SELECT ".DB_COLUMN_JAM_NUMBER.", ".DB_COLUMN_JAM_THEME.", ".DB_COLUMN_JAM_START_DATETIME.", UTC_TIMESTAMP() as jam_now, UNIX_TIMESTAMP(".DB_COLUMN_JAM_START_DATETIME.") - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS jam_timediff
+            FROM ".DB_TABLE_JAM."
+            WHERE ".DB_COLUMN_JAM_DELETED." = 0
+            ORDER BY ".DB_COLUMN_JAM_ID.";
         ";
         
         StopTimer("JamDbInterface_SelectActive");
@@ -71,14 +71,14 @@ class JamDbInterface{
         StartTimer("JamDbInterface_SelectCurrentJamNumberAndId");
 
         $sql = "
-            SELECT j.jam_id, j.jam_jam_number
+            SELECT j.".DB_COLUMN_JAM_ID.", j.".DB_COLUMN_JAM_NUMBER."
             FROM (
-                SELECT MAX(jam_id) as max_jam_id
-                FROM jam
-                WHERE jam_start_datetime <= Now()
-                  AND jam_deleted = 0
+                SELECT MAX(".DB_COLUMN_JAM_ID.") as max_jam_id
+                FROM ".DB_TABLE_JAM."
+                WHERE ".DB_COLUMN_JAM_START_DATETIME." <= Now()
+                  AND ".DB_COLUMN_JAM_DELETED." = 0
             ) past_jams, jam j
-            WHERE past_jams.max_jam_id = j.jam_id
+            WHERE past_jams.max_jam_id = j.".DB_COLUMN_JAM_ID."
         ";
         
         StopTimer("JamDbInterface_SelectCurrentJamNumberAndId");
@@ -92,9 +92,9 @@ class JamDbInterface{
         $escapedJamId = mysqli_real_escape_string($this->dbConnection, $jamId);
         $sql = "
             SELECT 1
-            FROM jam
-            WHERE jam_id = $escapedJamId
-            AND jam_deleted = 0;
+            FROM ".DB_TABLE_JAM."
+            WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId
+            AND ".DB_COLUMN_JAM_DELETED." = 0;
             ";
         
         StopTimer("JamDbInterface_SelectIfJamExists");
@@ -157,11 +157,11 @@ class JamDbInterface{
         $escapedColors = mysqli_real_escape_string($this->dbConnection, $color);
 
         $sql = "
-            UPDATE jam
-            SET jam_theme = '$escapedTheme',
-                jam_start_datetime = '$escapedStartTime',
-                jam_colors = '$escapedColors'
-            WHERE jam_id = $escapedJamId;";
+            UPDATE ".DB_TABLE_JAM."
+            SET ".DB_COLUMN_JAM_THEME." = '$escapedTheme',
+                ".DB_COLUMN_JAM_START_DATETIME." = '$escapedStartTime',
+                ".DB_COLUMN_JAM_COLORS." = '$escapedColors'
+            WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId;";
         mysqli_query($this->dbConnection, $sql);
         
         StopTimer("JamDbInterface_Update");
@@ -190,9 +190,9 @@ class JamDbInterface{
         $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
 
         $sql = "
-            UPDATE jam 
-            SET jam_deleted = 1 
-            WHERE jam_id = $escapedJamId";
+            UPDATE ".DB_TABLE_JAM." 
+            SET ".DB_COLUMN_JAM_DELETED." = 1 
+            WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId";
         mysqli_query($this->dbConnection, $sql);
         
         StopTimer("JamDbInterface_SoftDelete");

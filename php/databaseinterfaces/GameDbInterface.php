@@ -75,11 +75,11 @@ class GameDbInterface{
         $escaped_author_user_id = mysqli_real_escape_string($this->dbConnection, $authorId);
 
         $sql = "
-            SELECT entry_id
-            FROM entry
-            WHERE entry_jam_id = $escaped_jamId
-              AND entry_author_user_id = $escaped_author_user_id
-              AND entry_deleted = 0
+            SELECT ".DB_COLUMN_ENTRY_ID."
+            FROM ".DB_TABLE_ENTRY."
+            WHERE ".DB_COLUMN_ENTRY_JAM_ID." = $escaped_jamId
+              AND ".DB_COLUMN_ENTRY_AUTHOR_USER_ID." = $escaped_author_user_id
+              AND ".DB_COLUMN_ENTRY_DELETED." = 0
         ";
         
         StopTimer("GameDbInterface_SelectSingleEntryId");
@@ -94,9 +94,9 @@ class GameDbInterface{
 
         $sql = "
             SELECT *
-            FROM entry
-            WHERE entry_jam_id = $escapedJamID
-              AND entry_deleted = 0;
+            FROM ".DB_TABLE_ENTRY."
+            WHERE ".DB_COLUMN_ENTRY_JAM_ID." = $escapedJamID
+              AND ".DB_COLUMN_ENTRY_DELETED." = 0;
         ";
         
         StopTimer("GameDbInterface_SelectEntriesForJam");
@@ -119,19 +119,19 @@ class GameDbInterface{
         $escaped_colorTextWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorTextWithoutHash);
 
         $sql = "
-            INSERT INTO entry
-            (entry_id,
-            entry_datetime,
-            entry_ip,
-            entry_user_agent,
-            entry_jam_id,
-            entry_jam_number,
-            entry_title,
-            entry_description,
-            entry_author_user_id,
-            entry_screenshot_url,
-            entry_background_color,
-            entry_text_color)
+            INSERT INTO ".DB_TABLE_ENTRY."
+            (".DB_COLUMN_ENTRY_ID.",
+            ".DB_COLUMN_ENTRY_DATETIME.",
+            ".DB_COLUMN_ENTRY_IP.",
+            ".DB_COLUMN_ENTRY_USER_AGENT.",
+            ".DB_COLUMN_ENTRY_JAM_ID.",
+            ".DB_COLUMN_ENTRY_JAM_NUMBER.",
+            ".DB_COLUMN_ENTRY_TITLE.",
+            ".DB_COLUMN_ENTRY_DESCRIPTION.",
+            ".DB_COLUMN_ENTRY_AUTHOR_USER_ID.",
+            ".DB_COLUMN_ENTRY_SCREENSHOT_URL.",
+            ".DB_COLUMN_ENTRY_BACKGROUND_COLOR.",
+            ".DB_COLUMN_ENTRY_TEXT_COLOR.")
             VALUES
             (null,
             Now(),
@@ -164,17 +164,17 @@ class GameDbInterface{
 		$escaped_colorTextWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorTextWithoutHash);
 
 		$sql = "
-		UPDATE entry
+		UPDATE ".DB_TABLE_ENTRY."
 		SET
-			entry_title = '$escapedGameName',
-			entry_screenshot_url = '$escapedScreenshotURL',
-			entry_description = '$escapedDescription',
-			entry_background_color = '$escaped_colorBackgroundWithoutHash',
-			entry_text_color = '$escaped_colorTextWithoutHash'
+			".DB_COLUMN_ENTRY_TITLE." = '$escapedGameName',
+			".DB_COLUMN_ENTRY_SCREENSHOT_URL." = '$escapedScreenshotURL',
+			".DB_COLUMN_ENTRY_DESCRIPTION." = '$escapedDescription',
+			".DB_COLUMN_ENTRY_BACKGROUND_COLOR." = '$escaped_colorBackgroundWithoutHash',
+			".DB_COLUMN_ENTRY_TEXT_COLOR." = '$escaped_colorTextWithoutHash'
 		WHERE
-			entry_author_user_id = $escapedAuthorUserId
-		AND entry_jam_number = $escaped_jamNumber
-		AND entry_deleted = 0;
+			".DB_COLUMN_ENTRY_AUTHOR_USER_ID." = $escapedAuthorUserId
+		AND ".DB_COLUMN_ENTRY_JAM_NUMBER." = $escaped_jamNumber
+		AND ".DB_COLUMN_ENTRY_DELETED." = 0;
 		";
 		mysqli_query($this->dbConnection, $sql);
         
@@ -188,9 +188,9 @@ class GameDbInterface{
 		$escapedEntryId = mysqli_real_escape_string($this->dbConnection, $entryId);
 
         $sql = "
-            UPDATE entry 
-            SET entry_deleted = 1 
-            WHERE entry_id = $escapedEntryId";
+            UPDATE ".DB_TABLE_ENTRY." 
+            SET ".DB_COLUMN_ENTRY_DELETED." = 1 
+            WHERE ".DB_COLUMN_ENTRY_ID." = $escapedEntryId";
 		mysqli_query($this->dbConnection, $sql);
         
         StopTimer("GameDbInterface_SoftDelete");

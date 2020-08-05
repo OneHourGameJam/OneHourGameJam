@@ -23,9 +23,9 @@ class SessionDbInterface{
         $cleanSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
 
         $sql = "
-            SELECT session_id, session_user_id
-            FROM session
-            WHERE session_id = '$cleanSessionIdHash';
+            SELECT ".DB_COLUMN_SESSION_ID.", ".DB_COLUMN_SESSION_USER_ID."
+            FROM ".DB_TABLE_SESSION."
+            WHERE ".DB_COLUMN_SESSION_ID." = '$cleanSessionIdHash';
         ";
         
         StopTimer("SessionDbInterface_SelectSingleSession");
@@ -55,11 +55,11 @@ class SessionDbInterface{
         $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
 
 		$sql = "
-			INSERT INTO session
-			(session_id,
-			session_user_id,
-			session_datetime_started,
-			session_datetime_last_used)
+			INSERT INTO ".DB_TABLE_SESSION."
+			(".DB_COLUMN_SESSION_ID.",
+			".DB_COLUMN_SESSION_USER_ID.",
+			".DB_COLUMN_SESSION_DATETIME_STARTED.",
+			".DB_COLUMN_SESSION_DATETIME_LAST_USED.")
 			VALUES
 			('$escapedSessionIdHash',
 			'$escapedUserId',
@@ -78,9 +78,9 @@ class SessionDbInterface{
         $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
 
 		$sql = "
-			UPDATE session
-			SET session_datetime_last_used = Now()
-			WHERE session_id = '$escapedSessionIdHash'
+			UPDATE ".DB_TABLE_SESSION."
+			SET ".DB_COLUMN_SESSION_DATETIME_LAST_USED." = Now()
+			WHERE ".DB_COLUMN_SESSION_ID." = '$escapedSessionIdHash'
 		";
         mysqli_query($this->dbConnection, $sql);
 
@@ -94,8 +94,8 @@ class SessionDbInterface{
         $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
 
         $sql = "
-            DELETE FROM session
-            WHERE session_id = '$escapedSessionIdHash';
+            DELETE FROM ".DB_TABLE_SESSION."
+            WHERE ".DB_COLUMN_SESSION_ID." = '$escapedSessionIdHash';
         ";
         mysqli_query($this->dbConnection, $sql);
         
