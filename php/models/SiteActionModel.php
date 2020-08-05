@@ -47,9 +47,19 @@ class SiteActionData{
                     "SUCCESS" => new SiteActionResultModel("?page=main", "success", "Logged in successfully"),
                     "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=login", "warning", "Incorrect password length. Must be between ".$configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
                     "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?page=login", "warning", "Incorrect username length. Must be between ".$configData->ConfigModels["MINIMUM_USERNAME_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_USERNAME_LENGTH"]->Value." characters long."),
-                    "USERNAME_ALREADY_REGISTERED" => new SiteActionResultModel("?page=login", "error", "There is already a user with that username. Please log in or choose another."),
-                    "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?page=login", "error", "The user does not exist."),
+                    "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?page=login", "warning", "That username doesn't exist.<br>Do you want to <a href='?page=register'>create an account</a>?"),
                     "INCORRECT_PASSWORD" => new SiteActionResultModel("?page=login", "warning", "Incorrect username/password combination."),
+                )
+            ),
+            new SiteActionModel(
+                "register",
+                "php/actions/authentication/register.php",
+                "?page=main",
+                Array(
+                    "SUCCESS" => new SiteActionResultModel("?page=main", "success", "Logged in successfully"),
+                    "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?page=register", "warning", "Incorrect password length. Must be between ".$configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value." characters long."),
+                    "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?page=register", "warning", "Incorrect username length. Must be between ".$configData->ConfigModels["MINIMUM_USERNAME_LENGTH"]->Value." and ".$configData->ConfigModels["MAXIMUM_USERNAME_LENGTH"]->Value." characters long."),
+                    "USERNAME_ALREADY_REGISTERED" => new SiteActionResultModel("?page=register", "warning", "That username already exists.<br>Did you want to <a href='?page=login'>log in</a>?"),
                 )
             ),
             new SiteActionModel(

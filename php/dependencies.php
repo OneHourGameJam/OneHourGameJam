@@ -125,6 +125,12 @@ $pageSettings = Array(
         "template_file" => "login.html",
         "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
     ),
+    "register" => Array(
+        "page_title" => "Register",
+        "authorization_level" => "NONE",
+        "template_file" => "register.html",
+        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+    ),
     "forgotpassword" => Array(
         "page_title" => "Forgot Your Password?",
         "authorization_level" => "NONE",

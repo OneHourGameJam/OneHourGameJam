@@ -1,5 +1,5 @@
 <p>
-	<h3>Log in</h3>
+	<h3>Register an account</h3>
 </p>
 <form method='post'>
 	{{> csrf_token}}
@@ -12,11 +12,7 @@
 		<input type="password" class="form-control" id="password" name='pw' placeholder="Password" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}'>
 	</div>
 	{{> csrf_token}}
-	<div>
-		<button type="submit" name='action' value='login' class="btn btn-default">Log in</button>
-		<a style='float: right;' href='?page=register'>Don't have an account yet?</a>
-	</div>
-	<div>
-		<a style='float: right;' href='?page=forgotpassword'>Forgot password?</a>
-	</div>
+	<button type="submit" name='action' value='register' class="btn btn-default">Register</button>
+	<a style='float: right;' href='?page=login'>Already have an account?</a>
+
 </form>
