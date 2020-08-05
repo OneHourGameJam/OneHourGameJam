@@ -40,6 +40,7 @@
 								totalS -= m * (60);
 								var s = Math.floor(totalS);
 
+								let update_interval = 60000;
 								var timerString = "";
 								if (d > 0){
 									timerString = d+" day"+((d > 1) ? "s" : "")+((h > 0) ? (" "+h + " hour"+((h > 1) ? "s" : "")) : "");
@@ -47,14 +48,16 @@
 									timerString = h+" hour"+((h > 1) ? "s" : "")+((m > 0) ? (" "+m + " minute"+((m > 1) ? "s" : "")) : "");
 								}else if (d == 0 && h == 0 && m > 0){
 									timerString = m+" min"+((s > 0) ? (" "+s + " s") : "");
+									update_interval = 500;
 								}else if (d == 0 && h == 0 && m == 0 && s > 0){
 									timerString = s+" s";
+									update_interval = 500;
 								}else{
 									timerString = "Go! Go! Go!";
 								}
 
 								$("#countdownTimer").text(timerString);
-								setTimeout(UpdateTimer, 500);
+								setTimeout(UpdateTimer, update_interval);
 							}
 							var year = date.getFullYear();
 							var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

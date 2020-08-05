@@ -50,10 +50,10 @@
             }else if (d == 0 && h > 0){
                 timerString += h+" hour"+((h > 1) ? "s" : "")+((m > 0) ? (" "+m + " minute"+((m > 1) ? "s" : "")) : "");
             }else if (d == 0 && h == 0 && m > 0){
-                update_interval = 1000;
+                update_interval = 500;
                 timerString += m+" min"+((s > 0) ? (" "+s + " s") : "");
             }else if (d == 0 && h == 0 && m == 0 && s > 0){
-                update_interval = 900;
+                update_interval = 500;
                 timerString += s+" s";
             }else{
                 timerString = "Go! Go! Go!";

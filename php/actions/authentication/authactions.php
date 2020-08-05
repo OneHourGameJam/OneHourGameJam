@@ -37,7 +37,7 @@ function TryLogin($username, $password, $register){
     }
 }
 
-//Registers the given user. Funciton should be called through LogInOrRegister(...).
+//Registers the given user. Funciton should be called through TryLogin(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
 	global $userData, $ip, $userAgent, $configData, $userDbInterface, $sessionDbInterface;
@@ -70,7 +70,7 @@ function RegisterUser($username, $password){
 
 //Logs in the user with the provided credentials.
 //Sets the user's session cookie.
-//Should not be called directly, call through LogInOrRegister(...)
+//Should not be called directly, call through TryLogin(...)
 function LogInUser($username, $password){
 	global $configData, $userData, $sessionDbInterface;
 
