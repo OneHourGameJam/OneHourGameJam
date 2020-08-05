@@ -67,7 +67,7 @@ function CanDeleteJam($jamId){
 		return FALSE;
 	}
 
-	$data = $gameDbInterface->SelectEntriesInJam($jamId);
+	$data = $gameDbInterface->SelectEntriesInJam($jamId, $loggedInUser->Id);
 
 	if(mysqli_fetch_array($data)){
 		return false;
