@@ -32,7 +32,7 @@ class JamPresenter{
 
 		$jamViewModel->theme_visible = $jamModel->Theme; //Theme is visible to admins
 		$jamViewModel->jam_number_ordinal = ordinal(intval($jamModel->JamNumber));
-		$jamViewModel->date = date("d M Y", strtotime($jamModel->StartTime));
+		$jamViewModel->date = date("F jS Y", strtotime($jamModel->StartTime));
 		$jamViewModel->time = date("H:i", strtotime($jamModel->StartTime));
 
 		//Jam Colors

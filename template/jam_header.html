@@ -8,10 +8,10 @@
             <div class="col-xs-6">
                 <b>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}:</b> {{theme}}<br />
                 {{#jam_started}}
-                    <span>Started: {{date}} at {{time}} UTC</span>
+                    <span>{{date}}</span>
                 {{/jam_started}}
                 {{^jam_started}}
-                    <span>Starts on: {{date}} at {{time}} UTC</span>
+                    <i><span>{{date}}</span></i>
                 {{/jam_started}}
             </div>
             <div class="col-xs-3" style="float: right; text-align: right">
