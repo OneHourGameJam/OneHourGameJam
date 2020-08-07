@@ -176,9 +176,9 @@ function SubmitPlatformGame($entryId, $platformId, $url){
 	if($info = mysqli_fetch_array($data)){
 		$platformEntryId = intval($info["platformentry_id"]);
 
-		$platformGameDbInterface->UpdateUrl($platformEntryId, $url);
+		$platformGameDbInterface->UpdateUrl($platformEntryId, htmlspecialchars_decode($url, ENT_HTML5));
 	}else{
-		$platformGameDbInterface->Insert($entryId, $platformId, $url);
+		$platformGameDbInterface->Insert($entryId, $platformId, htmlspecialchars_decode($url, ENT_HTML5));
 	}
 }
 
