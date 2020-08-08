@@ -6,31 +6,36 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $page, $dbConn, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $adminLogDbInterface;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $page, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $adminLogDbInterface;
 	AddActionLog("Init");
 	StartTimer("Init");
 
-	MigrateDatabase();
+	StartTimer("Init - Database");
+
+	$database = new Database();
+	$database->MigrateDatabase();
+	
+	StopTimer("Init - Database");
 	
 	StartTimer("Init - Database Interfaces");
 
-	$userDbInterface = new UserDbInterface($dbConn);
-	$sessionDbInterface = new SessionDbInterface($dbConn);
-	$themeDbInterface = new ThemeDbInterface($dbConn);
-	$themeVoteDbInterface = new ThemeVoteDbInterface($dbConn);
-	$themeIdeaDbInterface = new ThemeIdeaDbInterface($dbConn);
-	$satisfactionDbInterface = new SatisfactionDbInterface($dbConn);
-	$pollDbInterface = new PollDbInterface($dbConn);
-	$pollOptionDbInterface = new PollOptionDbInterface($dbConn);
-	$pollVoteDbInterface = new PollVoteDbInterface($dbConn);
-	$platformDbInterface = new PlatformDbInterface($dbConn);
-	$platformGameDbInterface = new PlatformGameDbInterface($dbConn);
-	$jamDbInterface = new JamDbInterface($dbConn);
-	$gameDbInterface = new GameDbInterface($dbConn);
-	$configDbInterface = new ConfigDbInterface($dbConn);
-	$assetDbInterface = new AssetDbInterface($dbConn);
-	$adminVoteDbInterface = new AdminVoteDbInterface($dbConn);
-	$adminLogDbInterface = new AdminLogDbInterface($dbConn);
+	$userDbInterface = new UserDbInterface($database);
+	$sessionDbInterface = new SessionDbInterface($database);
+	$themeDbInterface = new ThemeDbInterface($database);
+	$themeVoteDbInterface = new ThemeVoteDbInterface($database);
+	$themeIdeaDbInterface = new ThemeIdeaDbInterface($database);
+	$satisfactionDbInterface = new SatisfactionDbInterface($database);
+	$pollDbInterface = new PollDbInterface($database);
+	$pollOptionDbInterface = new PollOptionDbInterface($database);
+	$pollVoteDbInterface = new PollVoteDbInterface($database);
+	$platformDbInterface = new PlatformDbInterface($database);
+	$platformGameDbInterface = new PlatformGameDbInterface($database);
+	$jamDbInterface = new JamDbInterface($database);
+	$gameDbInterface = new GameDbInterface($database);
+	$configDbInterface = new ConfigDbInterface($database);
+	$assetDbInterface = new AssetDbInterface($database);
+	$adminVoteDbInterface = new AdminVoteDbInterface($database);
+	$adminLogDbInterface = new AdminLogDbInterface($database);
 	
 	StopTimer("Init - Database Interfaces");
 

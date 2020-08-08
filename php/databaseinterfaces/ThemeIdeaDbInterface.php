@@ -11,19 +11,19 @@ define("DB_COLUMN_THEMEIDEA_USER_ID",      "idea_user_id");
 define("DB_COLUMN_THEMEIDEA_IDEAS",        "idea_ideas");
 
 class ThemeIdeaDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_THEMEIDEA_ID, DB_COLUMN_THEMEIDEA_THEME_ID, DB_COLUMN_THEMEIDEA_USER_ID);
     private $privateColumns = Array(DB_COLUMN_THEMEIDEA_DATETIME, DB_COLUMN_THEMEIDEA_IP, DB_COLUMN_THEMEIDEA_USER_AGENT, DB_COLUMN_THEMEIDEA_IDEAS);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectThemeIdeasByUser($userId){
         AddActionLog("ThemeIdeaDbInterface_SelectThemeIdeasByUser");
         StartTimer("ThemeIdeaDbInterface_SelectThemeIdeasByUser");
         
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT ".DB_COLUMN_THEMEIDEA_ID.", ".DB_COLUMN_THEMEIDEA_THEME_ID.", ".DB_COLUMN_THEMEIDEA_USER_ID.", ".DB_COLUMN_THEMEIDEA_IDEAS."
             FROM ".DB_TABLE_THEMEIDEA."
@@ -31,14 +31,14 @@ class ThemeIdeaDbInterface{
         ";
         
         StopTimer("ThemeIdeaDbInterface_SelectThemeIdeasByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectAllThemeIdeasByUserWithTheme($userId){
         AddActionLog("ThemeIdeaDbInterface_SelectAllThemeIdeasByUserWithTheme");
         StartTimer("ThemeIdeaDbInterface_SelectAllThemeIdeasByUserWithTheme");
         
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT i.".DB_COLUMN_THEMEIDEA_ID.", i.".DB_COLUMN_THEMEIDEA_DATETIME.", i.".DB_COLUMN_THEMEIDEA_IP.", i.".DB_COLUMN_THEMEIDEA_USER_AGENT.", i.".DB_COLUMN_THEMEIDEA_THEME_ID.", t.".DB_COLUMN_THEME_TEXT.", i.".DB_COLUMN_THEMEIDEA_USER_ID.", i.".DB_COLUMN_THEMEIDEA_IDEAS."
             FROM ".DB_TABLE_THEMEIDEA." i, ".DB_TABLE_THEME." t
@@ -47,15 +47,15 @@ class ThemeIdeaDbInterface{
         ";
         
         StopTimer("ThemeIdeaDbInterface_SelectAllThemeIdeasByUserWithTheme");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectSingle($themeId, $userId){
         AddActionLog("ThemeIdeaDbInterface_SelectSingle");
         StartTimer("ThemeIdeaDbInterface_SelectSingle");
         
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT ".DB_COLUMN_THEMEIDEA_ID." 
             FROM ".DB_TABLE_THEMEIDEA." 
@@ -63,25 +63,25 @@ class ThemeIdeaDbInterface{
               AND ".DB_COLUMN_THEMEIDEA_USER_ID." = $escapedUserId";
         
         StopTimer("ThemeIdeaDbInterface_SelectSingle");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($ip, $userAgent, $themeId, $userId, $ideas){
         AddActionLog("ThemeIdeaDbInterface_Insert");
         StartTimer("ThemeIdeaDbInterface_Insert");
         
-        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
-        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedIdeas = mysqli_real_escape_string($this->dbConnection, $ideas);
+        $escapedIp = $this->database->EscapeString($ip);
+        $escapedUserAgent = $this->database->EscapeString($userAgent);
+        $escapedThemeId = $this->database->EscapeString($themeId);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedIdeas = $this->database->EscapeString($ideas);
 
         $sql = "
             INSERT INTO ".DB_TABLE_THEMEIDEA."
             (".DB_COLUMN_THEMEIDEA_DATETIME.", ".DB_COLUMN_THEMEIDEA_IP.", ".DB_COLUMN_THEMEIDEA_USER_AGENT.", ".DB_COLUMN_THEMEIDEA_THEME_ID.", ".DB_COLUMN_THEMEIDEA_USER_ID.", ".DB_COLUMN_THEMEIDEA_IDEAS.")
             VALUES
             (Now(), '$escapedIp', '$escapedUserAgent', $escapedThemeId, $escapedUserId, '$escapedIdeas');";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("ThemeIdeaDbInterface_Insert");
     }
@@ -90,14 +90,14 @@ class ThemeIdeaDbInterface{
         AddActionLog("ThemeIdeaDbInterface_Update");
         StartTimer("ThemeIdeaDbInterface_Update");
         
-        $escapedIdeaId = mysqli_real_escape_string($this->dbConnection, $ideaId);
-        $escapedIdeas = mysqli_real_escape_string($this->dbConnection, $ideas);
+        $escapedIdeaId = $this->database->EscapeString($ideaId);
+        $escapedIdeas = $this->database->EscapeString($ideas);
 
         $sql = "
             UPDATE ".DB_TABLE_THEMEIDEA." 
             SET ".DB_COLUMN_THEMEIDEA_IDEAS." = '$escapedIdeas' 
             WHERE ".DB_COLUMN_THEMEIDEA_ID." = $escapedIdeaId";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("ThemeIdeaDbInterface_Update");
     }
@@ -112,7 +112,7 @@ class ThemeIdeaDbInterface{
         ";
 
         StopTimer("ThemeIdeaDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
 }

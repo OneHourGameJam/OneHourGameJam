@@ -12,12 +12,12 @@ define("DB_COLUMN_THEME_BANNED",            "theme_banned");
 define("DB_COLUMN_THEME_DELETED",           "theme_deleted");
 
 class ThemeDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_THEME_ID, DB_COLUMN_THEME_TEXT, DB_COLUMN_THEME_AUTHOR_USER_ID, DB_COLUMN_THEME_BANNED, DB_COLUMN_THEME_DELETED);
     private $privateColumns = Array(DB_COLUMN_THEME_DATETIME, DB_COLUMN_THEME_IP, DB_COLUMN_THEME_USER_AGENT);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAllWithResults(){
@@ -37,14 +37,14 @@ class ThemeDbInterface{
         ";
         
         StopTimer("ThemeDbInterface_SelectAllWithResults");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectThemesByUser($userId){
         AddActionLog("ThemeDbInterface_SelectThemesByUser");
         StartTimer("ThemeDbInterface_SelectThemesByUser");
     
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT *
             FROM ".DB_TABLE_THEME."
@@ -52,14 +52,14 @@ class ThemeDbInterface{
         ";
         
         StopTimer("ThemeDbInterface_SelectThemesByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectIfExists($themeId){
         AddActionLog("ThemeDbInterface_SelectIfExists");
         StartTimer("ThemeDbInterface_SelectIfExists");
         
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
         $sql = "
             SELECT ".DB_COLUMN_THEME_ID." 
             FROM ".DB_TABLE_THEME." 
@@ -67,14 +67,14 @@ class ThemeDbInterface{
         ";
         
         StopTimer("ThemeDbInterface_SelectIfExists");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectIfActive($themeId){
         AddActionLog("ThemeDbInterface_SelectIfActive");
         StartTimer("ThemeDbInterface_SelectIfActive");
         
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
         $sql = "
             SELECT ".DB_COLUMN_THEME_ID." 
             FROM ".DB_TABLE_THEME." 
@@ -82,17 +82,17 @@ class ThemeDbInterface{
               AND ".DB_COLUMN_THEME_ID." = $escapedThemeId";
         
         StopTimer("ThemeDbInterface_SelectIfActive");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($ip, $userAgent, $newTheme, $userId){
         AddActionLog("ThemeDbInterface_Insert");
         StartTimer("ThemeDbInterface_Insert");
 
-        $clean_ip = mysqli_real_escape_string($this->dbConnection, $ip);
-        $clean_userAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $clean_newTheme = mysqli_real_escape_string($this->dbConnection, $newTheme);
-        $clean_user_id = mysqli_real_escape_string($this->dbConnection, $userId);
+        $clean_ip = $this->database->EscapeString($ip);
+        $clean_userAgent = $this->database->EscapeString($userAgent);
+        $clean_newTheme = $this->database->EscapeString($newTheme);
+        $clean_user_id = $this->database->EscapeString($userId);
     
         $sql = "
             INSERT INTO ".DB_TABLE_THEME."
@@ -100,7 +100,7 @@ class ThemeDbInterface{
             VALUES (Now(), '$clean_ip', '$clean_userAgent', '$clean_newTheme', $clean_user_id);
         ";
         
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         StopTimer("ThemeDbInterface_Insert");
     }
 
@@ -108,7 +108,7 @@ class ThemeDbInterface{
         AddActionLog("ThemeDbInterface_Ban");
         StartTimer("ThemeDbInterface_Ban");
 
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
         $sql = "
             UPDATE ".DB_TABLE_THEME." 
             SET ".DB_COLUMN_THEME_BANNED." = 1 
@@ -116,7 +116,7 @@ class ThemeDbInterface{
               AND ".DB_COLUMN_THEME_ID." = '$escapedThemeId';
         ";
         
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         StopTimer("ThemeDbInterface_Ban");
     }
 
@@ -124,7 +124,7 @@ class ThemeDbInterface{
         AddActionLog("ThemeDbInterface_Ban");
         StartTimer("ThemeDbInterface_Ban");
 
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
         $sql = "
             UPDATE ".DB_TABLE_THEME." 
             SET ".DB_COLUMN_THEME_BANNED." = 0 
@@ -132,7 +132,7 @@ class ThemeDbInterface{
               AND ".DB_COLUMN_THEME_ID." = '$escapedThemeId';
         ";
         
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         StopTimer("ThemeDbInterface_Ban");
     }
 
@@ -140,14 +140,14 @@ class ThemeDbInterface{
         AddActionLog("ThemeDbInterface_SoftDelete");
         StartTimer("ThemeDbInterface_SoftDelete");
 
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
         $sql = "
             UPDATE ".DB_TABLE_THEME."
             SET ".DB_COLUMN_THEME_DELETED." = 1
             WHERE ".DB_COLUMN_THEME_ID." = $escapedThemeId;
         ";
 
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         StopTimer("ThemeDbInterface_SoftDelete");        
     }
 
@@ -161,7 +161,7 @@ class ThemeDbInterface{
         ";
 
         StopTimer("ThemeDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
 }

@@ -15,12 +15,12 @@ define("DB_COLUMN_JAM_COLORS",            "jam_colors");
 define("DB_COLUMN_JAM_DELETED",           "jam_deleted");
 
 class JamDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_JAM_ID, DB_COLUMN_JAM_USER_ID, DB_COLUMN_JAM_NUMBER, DB_COLUMN_JAM_SELECTED_THEME_ID, DB_COLUMN_JAM_THEME, DB_COLUMN_JAM_START_DATETIME, DB_COLUMN_JAM_STATE, DB_COLUMN_JAM_COLORS, DB_COLUMN_JAM_DELETED);
     private $privateColumns = Array(DB_COLUMN_JAM_DATETIME, DB_COLUMN_JAM_IP, DB_COLUMN_JAM_USER_AGENT);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAll(){
@@ -33,7 +33,7 @@ class JamDbInterface{
             ORDER BY ".DB_COLUMN_JAM_NUMBER." DESC";
         
         StopTimer("JamDbInterface_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function SelectActive(){
@@ -48,14 +48,14 @@ class JamDbInterface{
         ";
         
         StopTimer("JamDbInterface_SelectActive");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
     
     public function SelectJamsScheduledByUser($userId){
         AddActionLog("JamDbInterface_SelectJamsScheduledByUser");
         StartTimer("JamDbInterface_SelectJamsScheduledByUser");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT *
             FROM ".DB_TABLE_JAM."
@@ -63,7 +63,7 @@ class JamDbInterface{
         ";
         
         StopTimer("JamDbInterface_SelectJamsScheduledByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function SelectCurrentJamNumberAndId(){
@@ -82,14 +82,14 @@ class JamDbInterface{
         ";
         
         StopTimer("JamDbInterface_SelectCurrentJamNumberAndId");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function SelectIfJamExists($jamId){
         AddActionLog("JamDbInterface_SelectIfJamExists");
         StartTimer("JamDbInterface_SelectIfJamExists");
 
-        $escapedJamId = mysqli_real_escape_string($this->dbConnection, $jamId);
+        $escapedJamId = $this->database->EscapeString($jamId);
         $sql = "
             SELECT 1
             FROM ".DB_TABLE_JAM."
@@ -98,21 +98,21 @@ class JamDbInterface{
             ";
         
         StopTimer("JamDbInterface_SelectIfJamExists");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors){
         AddActionLog("JamDbInterface_Insert");
         StartTimer("JamDbInterface_Insert");
 
-        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
-        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedJamNumber = mysqli_real_escape_string($this->dbConnection, $jamNumber);
-        $escapedSelectedThemeId = mysqli_real_escape_string($this->dbConnection, $selectedThemeId);
-        $escapedTheme = mysqli_real_escape_string($this->dbConnection, $theme);
-        $escapedStartTime = mysqli_real_escape_string($this->dbConnection, $startTime);
-        $escapedColors = mysqli_real_escape_string($this->dbConnection, $colors);
+        $escapedIp = $this->database->EscapeString($ip);
+        $escapedUserAgent = $this->database->EscapeString($userAgent);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedJamNumber = $this->database->EscapeString($jamNumber);
+        $escapedSelectedThemeId = $this->database->EscapeString($selectedThemeId);
+        $escapedTheme = $this->database->EscapeString($theme);
+        $escapedStartTime = $this->database->EscapeString($startTime);
+        $escapedColors = $this->database->EscapeString($colors);
     
         $sql = "
             INSERT INTO ".DB_TABLE_JAM."
@@ -142,7 +142,7 @@ class JamDbInterface{
             '$escapedColors',
             0);";
 
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);
 
         StopTimer("JamDbInterface_Insert");
     }
@@ -151,10 +151,10 @@ class JamDbInterface{
         AddActionLog("JamDbInterface_Update");
         StartTimer("JamDbInterface_Update");
 
-        $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
-        $escapedTheme = mysqli_real_escape_string($this->dbConnection, $theme);
-        $escapedStartTime = mysqli_real_escape_string($this->dbConnection, $startTime);
-        $escapedColors = mysqli_real_escape_string($this->dbConnection, $color);
+        $escapedJamId = $this->database->EscapeString(intval($jamId));
+        $escapedTheme = $this->database->EscapeString($theme);
+        $escapedStartTime = $this->database->EscapeString($startTime);
+        $escapedColors = $this->database->EscapeString($color);
 
         $sql = "
             UPDATE ".DB_TABLE_JAM."
@@ -162,7 +162,7 @@ class JamDbInterface{
                 ".DB_COLUMN_JAM_START_DATETIME." = '$escapedStartTime',
                 ".DB_COLUMN_JAM_COLORS." = '$escapedColors'
             WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId;";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);
         
         StopTimer("JamDbInterface_Update");
     }
@@ -171,14 +171,14 @@ class JamDbInterface{
         AddActionLog("JamDbInterface_UpdateJamState");
         StartTimer("JamDbInterface_UpdateJamState");
 
-        $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
-        $escapedJamState = mysqli_real_escape_string($this->dbConnection, $jamState);
+        $escapedJamId = $this->database->EscapeString(intval($jamId));
+        $escapedJamState = $this->database->EscapeString($jamState);
 
         $sql = "
             UPDATE ".DB_TABLE_JAM."
             SET ".DB_COLUMN_JAM_STATE." = '$escapedJamState'
             WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);
         
         StopTimer("JamDbInterface_UpdateJamState");
     }
@@ -187,13 +187,13 @@ class JamDbInterface{
         AddActionLog("JamDbInterface_SoftDelete");
         StartTimer("JamDbInterface_SoftDelete");
 
-        $escapedJamId = mysqli_real_escape_string($this->dbConnection, intval($jamId));
+        $escapedJamId = $this->database->EscapeString(intval($jamId));
 
         $sql = "
             UPDATE ".DB_TABLE_JAM." 
             SET ".DB_COLUMN_JAM_DELETED." = 1 
             WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);
         
         StopTimer("JamDbInterface_SoftDelete");
     }
@@ -208,7 +208,7 @@ class JamDbInterface{
         ";
 
         StopTimer("JamDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 }
 

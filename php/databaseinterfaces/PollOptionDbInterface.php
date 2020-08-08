@@ -6,12 +6,12 @@ define("DB_COLUMN_POLLOPTION_POLL_ID",   "option_poll_id");
 define("DB_COLUMN_POLLOPTION_POLL_TEXT", "option_poll_text");
 
 class PollOptionDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_POLLOPTION_ID, DB_COLUMN_POLLOPTION_POLL_ID, DB_COLUMN_POLLOPTION_POLL_TEXT);
     private $privateColumns = Array();
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectPublicData(){
@@ -24,7 +24,7 @@ class PollOptionDbInterface{
         ";
 
         StopTimer("PollOptionDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 }
 

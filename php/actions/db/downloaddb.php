@@ -6,7 +6,7 @@ function PerformAction(&$loggedInUser){
     
     if(IsAdmin($loggedInUser) !== false){
         $adminLogData->AddToAdminLog("DOWNLOAD_DB", "Downloaded the Database", "NULL", $loggedInUser->Id, "");
-        print GetJSONDataForAllTables();
+        //print GetJSONDataForAllTables();
         die();
     }
 }

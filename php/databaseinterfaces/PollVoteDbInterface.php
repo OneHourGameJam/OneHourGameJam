@@ -7,20 +7,20 @@ define("DB_COLUMN_POLLVOTE_USER_ID",    "vote_user_id");
 define("DB_COLUMN_POLLVOTE_DELETED",    "vote_deleted");
 
 class PollVoteDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_POLLVOTE_ID, DB_COLUMN_POLLVOTE_USER_ID, DB_COLUMN_POLLVOTE_DELETED);
     private $privateColumns = Array(DB_COLUMN_POLLVOTE_OPTION_ID);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectUserVoteForOption($userId, $pollOptionId){
         AddActionLog("PollVoteDbInterface_SelectUserVoteForOption");
         StartTimer("PollVoteDbInterface_SelectUserVoteForOption");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedPollOptionId = $this->database->EscapeString($pollOptionId);
         $sql = "
             SELECT ".DB_COLUMN_POLLVOTE_ID.", ".DB_COLUMN_POLLVOTE_DELETED." 
             FROM ".DB_TABLE_POLLVOTE." 
@@ -28,15 +28,15 @@ class PollVoteDbInterface{
               AND ".DB_COLUMN_POLLVOTE_USER_ID." = $escapedUserId";
         
         StopTimer("PollVoteDbInterface_SelectUserVoteForOption");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($userId, $pollOptionId){
         AddActionLog("PollVoteDbInterface_Insert");
         StartTimer("PollVoteDbInterface_Insert");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedPollOptionId = $this->database->EscapeString($pollOptionId);
 
         $sql = "
             INSERT INTO ".DB_TABLE_POLLVOTE."
@@ -44,7 +44,7 @@ class PollVoteDbInterface{
             VALUES
             (null, $escapedPollOptionId, $escapedUserId, 0);";
         
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("PollVoteDbInterface_Insert");
     }
@@ -53,15 +53,15 @@ class PollVoteDbInterface{
         AddActionLog("PollVoteDbInterface_UpdateIsDeleted");
         StartTimer("PollVoteDbInterface_UpdateIsDeleted");
 
-        $escapedPollVoteId = mysqli_real_escape_string($this->dbConnection, $pollVoteId);
-        $escapedIsDeleted = mysqli_real_escape_string($this->dbConnection, $isDeleted);
+        $escapedPollVoteId = $this->database->EscapeString($pollVoteId);
+        $escapedIsDeleted = $this->database->EscapeString($isDeleted);
 
         $sql = "
             UPDATE ".DB_TABLE_POLLVOTE." 
             SET ".DB_COLUMN_POLLVOTE_DELETED." = $escapedIsDeleted 
             WHERE ".DB_COLUMN_POLLVOTE_ID." = $escapedPollVoteId";
         
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("PollVoteDbInterface_UpdateIsDeleted");
     }
@@ -76,7 +76,7 @@ class PollVoteDbInterface{
         ";
 
         StopTimer("PollVoteDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

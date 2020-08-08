@@ -10,12 +10,12 @@ define("DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID", "vote_subject_user_id");
 define("DB_COLUMN_ADMINVOTE_TYPE", "vote_type");
 
 class AdminVoteDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_ADMINVOTE_ID, DB_COLUMN_ADMINVOTE_VOTER_USER_ID, DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID);
     private $privateColumns = Array(DB_COLUMN_ADMINVOTE_DATETIME, DB_COLUMN_ADMINVOTE_IP, DB_COLUMN_ADMINVOTE_USER_AGENT, DB_COLUMN_ADMINVOTE_TYPE);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectCurrentlyActiveVotes(){
@@ -30,14 +30,14 @@ class AdminVoteDbInterface{
         ";
 
         StopTimer("AdminVoteDbInterface_SelectCurrentlyActiveVotes");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectVotesByUser($voterUserId){
         AddActionLog("AdminVoteDbInterface_SelectVotesByUser");
         StartTimer("AdminVoteDbInterface_SelectVotesByUser");
 
-        $escapedVoterId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
+        $escapedVoterId = $this->database->EscapeString($voterUserId);
         $sql = "
             SELECT ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID.", ".DB_COLUMN_ADMINVOTE_TYPE."
             FROM ".DB_TABLE_ADMINVOTE."
@@ -45,43 +45,43 @@ class AdminVoteDbInterface{
         ";
 
         StopTimer("AdminVoteDbInterface_SelectVotesByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectWhereVoterUserId($voterUserId){
         AddActionLog("AdminVoteDbInterface_SelectWhereVoterUserId");
         StartTimer("AdminVoteDbInterface_SelectWhereVoterUserId");
 
-        $escapedVoterUserId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
+        $escapedVoterUserId = $this->database->EscapeString($voterUserId);
         $sql = "
             SELECT *
             FROM ".DB_TABLE_ADMINVOTE."
             WHERE ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID." = '$escapedVoterUserId';";
 
         StopTimer("AdminVoteDbInterface_SelectWhereVoterUserId");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectWhereSubjectUserId($subjectUserId){
         AddActionLog("AdminVoteDbInterface_SelectWhereSubjectUserId");
         StartTimer("AdminVoteDbInterface_SelectWhereSubjectUserId");
 
-        $escapedSubjectUserId = mysqli_real_escape_string($this->dbConnection, $subjectUserId);
+        $escapedSubjectUserId = $this->database->EscapeString($subjectUserId);
         $sql = "
             SELECT ".DB_COLUMN_ADMINVOTE_ID.", ".DB_COLUMN_ADMINVOTE_DATETIME.", 'redacted' AS ".DB_COLUMN_ADMINVOTE_VOTER_USER_ID.", ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID.", 'redacted' AS ".DB_COLUMN_ADMINVOTE_TYPE."
             FROM ".DB_TABLE_ADMINVOTE."
             WHERE ".DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID." = '$escapedSubjectUserId';";
             
         StopTimer("AdminVoteDbInterface_SelectWhereSubjectUserId");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectSingleVoteIdByVoterAndSubjectUserId($voterUserId, $subjectUserId){
         AddActionLog("AdminVoteDbInterface_SelectSingleVoteIdByVoterAndSubjectUserId");
         StartTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterAndSubjectUserId");
 
-        $escapedVoterUserId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
-        $escapedSubjectUserId = mysqli_real_escape_string($this->dbConnection, $subjectUserId);
+        $escapedVoterUserId = $this->database->EscapeString($voterUserId);
+        $escapedSubjectUserId = $this->database->EscapeString($subjectUserId);
         
         $sql = "
             SELECT ".DB_COLUMN_ADMINVOTE_ID."
@@ -91,15 +91,15 @@ class AdminVoteDbInterface{
         ";
 
         StopTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterAndSubjectUserId");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectSingleVoteIdByVoterUserIdAndVoteType($voterUserId, $voteType){
         AddActionLog("AdminVoteDbInterface_SelectSingleVoteIdByVoterUserIdAndVoteType");
         StartTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterUserIdAndVoteType");
 
-        $escapedVoterUserId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
-        $escapedVoteType = mysqli_real_escape_string($this->dbConnection, $voteType);
+        $escapedVoterUserId = $this->database->EscapeString($voterUserId);
+        $escapedVoteType = $this->database->EscapeString($voteType);
         
 		$sql = "
             SELECT ".DB_COLUMN_ADMINVOTE_ID."
@@ -109,18 +109,18 @@ class AdminVoteDbInterface{
         ";
 
         StopTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterUserIdAndVoteType");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($ip, $userAgent, $voterUserId, $subjectUserId, $voteType){
         AddActionLog("AdminVoteDbInterface_Insert");
         StartTimer("AdminVoteDbInterface_Insert");
         
-        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
-        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $escapedVoterUserId = mysqli_real_escape_string($this->dbConnection, $voterUserId);
-        $escapedSubjectUserId = mysqli_real_escape_string($this->dbConnection, $subjectUserId);
-        $escapedVoteType = mysqli_real_escape_string($this->dbConnection, $voteType);
+        $escapedIp = $this->database->EscapeString($ip);
+        $escapedUserAgent = $this->database->EscapeString($userAgent);
+        $escapedVoterUserId = $this->database->EscapeString($voterUserId);
+        $escapedSubjectUserId = $this->database->EscapeString($subjectUserId);
+        $escapedVoteType = $this->database->EscapeString($voteType);
 
         $sql = "
             INSERT INTO ".DB_TABLE_ADMINVOTE."
@@ -134,7 +134,7 @@ class AdminVoteDbInterface{
             $escapedSubjectUserId,
             '$escapedVoteType');
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
             
         StopTimer("AdminVoteDbInterface_Insert");
     }
@@ -143,13 +143,13 @@ class AdminVoteDbInterface{
         AddActionLog("AdminVoteDbInterface_Delete");
         StartTimer("AdminVoteDbInterface_Delete");
         
-        $escapedVoteId = mysqli_real_escape_string($this->dbConnection, $voteId);
+        $escapedVoteId = $this->database->EscapeString($voteId);
 
         $sql = "
             DELETE FROM ".DB_TABLE_ADMINVOTE."
             WHERE ".DB_COLUMN_ADMINVOTE_ID." = $escapedVoteId
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
             
         StopTimer("AdminVoteDbInterface_Delete");
     }
@@ -164,7 +164,7 @@ class AdminVoteDbInterface{
         ";
 
         StopTimer("AdminVoteDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

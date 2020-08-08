@@ -10,12 +10,12 @@ define("DB_COLUMN_SATISFACTION_USER_ID",        "satisfaction_user_id");
 define("DB_COLUMN_SATISFACTION_SCORE",          "satisfaction_score");
 
 class SatisfactionDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_SATISFACTION_ID, DB_COLUMN_SATISFACTION_QUESTION_ID, DB_COLUMN_SATISFACTION_USER_ID);
     private $privateColumns = Array(DB_COLUMN_SATISFACTION_DATETIME, DB_COLUMN_SATISFACTION_IP, DB_COLUMN_SATISFACTION_USER_AGENT, DB_COLUMN_SATISFACTION_SCORE);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAllWithPercentageResultsAndCount(){
@@ -32,7 +32,7 @@ class SatisfactionDbInterface{
         ";
         
         StopTimer("SatisfactionDbInterface_SelectAllWithPercentageResultsAndCount");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectAllWithAbsoluteResults(){
@@ -49,18 +49,18 @@ class SatisfactionDbInterface{
         ";
         
         StopTimer("SatisfactionDbInterface_SelectAllWithAbsoluteResults");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($satisfactionQuestionId, $ip, $userAgent, $userId, $score){
         AddActionLog("SatisfactionDbInterface_Insert");
         StartTimer("SatisfactionDbInterface_Insert");
 
-        $escapedSatisfactionQuestionId = mysqli_real_escape_string($this->dbConnection, $satisfactionQuestionId);
-        $escapedIP = mysqli_real_escape_string($this->dbConnection, $ip);
-        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedScore = mysqli_real_escape_string($this->dbConnection, $score);
+        $escapedSatisfactionQuestionId = $this->database->EscapeString($satisfactionQuestionId);
+        $escapedIP = $this->database->EscapeString($ip);
+        $escapedUserAgent = $this->database->EscapeString($userAgent);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedScore = $this->database->EscapeString($score);
         $sql = "
             INSERT INTO ".DB_TABLE_SATISFACTION."
             (".DB_COLUMN_SATISFACTION_ID.",
@@ -79,7 +79,7 @@ class SatisfactionDbInterface{
             $escapedUserId,
             '$escapedScore');";
         
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         StopTimer("SatisfactionDbInterface_Insert");
     }
 
@@ -87,7 +87,7 @@ class SatisfactionDbInterface{
         AddActionLog("SatisfactionDbInterface_SelectSatisfactionVotesByUser");
         StartTimer("SatisfactionDbInterface_SelectSatisfactionVotesByUser");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT *
             FROM ".DB_TABLE_SATISFACTION."
@@ -95,7 +95,7 @@ class SatisfactionDbInterface{
         ";
         
         StopTimer("SatisfactionDbInterface_SelectSatisfactionVotesByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectPublicData(){
@@ -108,7 +108,7 @@ class SatisfactionDbInterface{
         ";
 
         StopTimer("SatisfactionDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

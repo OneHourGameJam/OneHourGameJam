@@ -8,19 +8,19 @@ define("DB_COLUMN_SESSION_DATETIME_STARTED",    "session_datetime_started");
 define("DB_COLUMN_SESSION_DATETIME_LAST_USED",  "session_datetime_last_used");
 
 class SessionDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_SESSION_USER_ID);
     private $privateColumns = Array(DB_COLUMN_SESSION_ID, DB_COLUMN_SESSION_DATETIME_STARTED, DB_COLUMN_SESSION_DATETIME_LAST_USED);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectSingleSession($sessionIdHash){
         AddActionLog("SessionDbInterface_SelectSingleSession");
         StartTimer("SessionDbInterface_SelectSingleSession");
         
-        $cleanSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+        $cleanSessionIdHash = $this->database->EscapeString($sessionIdHash);
 
         $sql = "
             SELECT ".DB_COLUMN_SESSION_ID.", ".DB_COLUMN_SESSION_USER_ID."
@@ -29,14 +29,14 @@ class SessionDbInterface{
         ";
         
         StopTimer("SessionDbInterface_SelectSingleSession");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectSessionsOfUser($userId){
         AddActionLog("SessionDbInterface_SelectSessionsOfUser");
         StartTimer("SessionDbInterface_SelectSessionsOfUser");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT *
             FROM ".DB_TABLE_SESSION."
@@ -44,15 +44,15 @@ class SessionDbInterface{
         ";
         
         StopTimer("SessionDbInterface_SelectSessionsOfUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($userId, $sessionIdHash){
         AddActionLog("SessionDbInterface_Insert");
         StartTimer("SessionDbInterface_Insert");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedSessionIdHash = $this->database->EscapeString($sessionIdHash);
 
 		$sql = "
 			INSERT INTO ".DB_TABLE_SESSION."
@@ -66,7 +66,7 @@ class SessionDbInterface{
 			Now(),
 			Now());
 		";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("SessionDbInterface_Insert");
     }
@@ -75,14 +75,14 @@ class SessionDbInterface{
         AddActionLog("SessionDbInterface_UpdateLastUsedTime");
         StartTimer("SessionDbInterface_UpdateLastUsedTime");
 
-        $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+        $escapedSessionIdHash = $this->database->EscapeString($sessionIdHash);
 
 		$sql = "
 			UPDATE ".DB_TABLE_SESSION."
 			SET ".DB_COLUMN_SESSION_DATETIME_LAST_USED." = Now()
 			WHERE ".DB_COLUMN_SESSION_ID." = '$escapedSessionIdHash'
 		";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("SessionDbInterface_UpdateLastUsedTime");
     }
@@ -91,13 +91,13 @@ class SessionDbInterface{
         AddActionLog("SessionDbInterface_Insert");
         StartTimer("SessionDbInterface_Insert");
 
-        $escapedSessionIdHash = mysqli_real_escape_string($this->dbConnection, $sessionIdHash);
+        $escapedSessionIdHash = $this->database->EscapeString($sessionIdHash);
 
         $sql = "
             DELETE FROM ".DB_TABLE_SESSION."
             WHERE ".DB_COLUMN_SESSION_ID." = '$escapedSessionIdHash';
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         
         StopTimer("SessionDbInterface_Insert");
     }
@@ -112,7 +112,7 @@ class SessionDbInterface{
         ";
 
         StopTimer("SessionDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

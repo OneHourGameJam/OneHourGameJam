@@ -11,19 +11,19 @@ define("DB_COLUMN_THEMEVOTE_USER_ID",       "themevote_user_id");
 define("DB_COLUMN_THEMEVOTE_TYPE",          "themevote_type");
 
 class ThemeVoteDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_THEMEVOTE_ID, DB_COLUMN_THEMEVOTE_THEME_ID, DB_COLUMN_THEMEVOTE_USER_ID);
     private $privateColumns = Array(DB_COLUMN_THEMEVOTE_DATETIME, DB_COLUMN_THEMEVOTE_IP, DB_COLUMN_THEMEVOTE_USER_AGENT, DB_COLUMN_THEMEVOTE_TYPE);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectThemeVotesByUser($userId){
         AddActionLog("ThemeVoteDbInterface_SelectThemeVotesByUser");
         StartTimer("ThemeVoteDbInterface_SelectThemeVotesByUser");
     
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT ".DB_COLUMN_THEMEVOTE_THEME_ID.", ".DB_COLUMN_THEMEVOTE_TYPE."
             FROM ".DB_TABLE_THEMEVOTE."
@@ -31,14 +31,14 @@ class ThemeVoteDbInterface{
         ";
         
         StopTimer("ThemeVoteDbInterface_SelectThemeVotesByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function SelectThemeVotesWithThemeByUser($userId){
         AddActionLog("ThemeVoteDbInterface_SelectThemeVotesWithThemeByUser");
         StartTimer("ThemeVoteDbInterface_SelectThemeVotesWithThemeByUser");
         
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT ".DB_TABLE_THEME.".".DB_COLUMN_THEME_TEXT.", ".DB_TABLE_THEMEVOTE.".*, IF(".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_TYPE." = 1, '-1', IF(".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_TYPE." = 2, '0', '+1'))
             FROM ".DB_TABLE_THEMEVOTE.", ".DB_TABLE_THEME."
@@ -47,15 +47,15 @@ class ThemeVoteDbInterface{
         ";
         
         StopTimer("ThemeVoteDbInterface_SelectThemeVotesWithThemeByUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function SelectSingle($themeId, $userId){
         AddActionLog("ThemeVoteDbInterface_SelectSingle");
         StartTimer("ThemeVoteDbInterface_SelectSingle");
         
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedThemeId = $this->database->EscapeString($themeId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT ".DB_COLUMN_THEMEVOTE_ID." 
             FROM ".DB_TABLE_THEMEVOTE." 
@@ -63,24 +63,24 @@ class ThemeVoteDbInterface{
               AND ".DB_COLUMN_THEMEVOTE_USER_ID." = $escapedUserId";
         
         StopTimer("ThemeVoteDbInterface_SelectSingle");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
     public function Insert($ip, $userAgent, $themeId, $userId, $vote){
         AddActionLog("ThemeVoteDbInterface_Insert");
         StartTimer("ThemeVoteDbInterface_Insert");
         
-        $escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
-        $escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $escapedThemeId = mysqli_real_escape_string($this->dbConnection, $themeId);
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escapedVote = mysqli_real_escape_string($this->dbConnection, $vote);
+        $escapedIp = $this->database->EscapeString($ip);
+        $escapedUserAgent = $this->database->EscapeString($userAgent);
+        $escapedThemeId = $this->database->EscapeString($themeId);
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedVote = $this->database->EscapeString($vote);
         $sql = "
             INSERT INTO ".DB_TABLE_THEMEVOTE."
             (".DB_COLUMN_THEMEVOTE_DATETIME.", ".DB_COLUMN_THEMEVOTE_IP.", ".DB_COLUMN_THEMEVOTE_USER_AGENT.", ".DB_COLUMN_THEMEVOTE_THEME_ID.", ".DB_COLUMN_THEMEVOTE_USER_ID.", ".DB_COLUMN_THEMEVOTE_TYPE.")
             VALUES
             (Now(), '$escapedIp', '$escapedUserAgent', $escapedThemeId, $escapedUserId, $escapedVote);";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);
         
         StopTimer("ThemeVoteDbInterface_Insert");
     }
@@ -89,13 +89,13 @@ class ThemeVoteDbInterface{
         AddActionLog("ThemeVoteDbInterface_Update");
         StartTimer("ThemeVoteDbInterface_Update");
         
-        $escapedThemeVoteId = mysqli_real_escape_string($this->dbConnection, $themeVoteId);
-        $escapedVote = mysqli_real_escape_string($this->dbConnection, $vote);
+        $escapedThemeVoteId = $this->database->EscapeString($themeVoteId);
+        $escapedVote = $this->database->EscapeString($vote);
         $sql = "
             UPDATE ".DB_TABLE_THEMEVOTE." 
             SET ".DB_COLUMN_THEMEVOTE_TYPE." = $escapedVote 
             WHERE ".DB_COLUMN_THEMEVOTE_ID." = $escapedThemeVoteId";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);
         
         StopTimer("ThemeVoteDbInterface_Update");
     }
@@ -110,7 +110,7 @@ class ThemeVoteDbInterface{
         ";
 
         StopTimer("ThemeVoteDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);
     }
 
 }

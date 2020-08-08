@@ -7,12 +7,12 @@ define("DB_COLUMN_PLATFORM_ICON_URL",   "platform_icon_url");
 define("DB_COLUMN_PLATFORM_DELETED",    "platform_deleted");
 
 class PlatformDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_PLATFORM_ID, DB_COLUMN_PLATFORM_NAME, DB_COLUMN_PLATFORM_ICON_URL, DB_COLUMN_PLATFORM_DELETED);
     private $privateColumns = Array();
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAll(){
@@ -24,15 +24,15 @@ class PlatformDbInterface{
             FROM ".DB_TABLE_PLATFORM.";";
         
         StopTimer("PlatformDbInterface_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($platformName, $iconUrl){
         AddActionLog("PlatformDbInterface_Insert");
         StartTimer("PlatformDbInterface_Insert");
 
-        $escapedPlatformName = mysqli_real_escape_string($this->dbConnection, $platformName);
-        $escapedIconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
+        $escapedPlatformName = $this->database->EscapeString($platformName);
+        $escapedIconUrl = $this->database->EscapeString($iconUrl);
     
         $sql = "
             INSERT INTO ".DB_TABLE_PLATFORM."
@@ -46,7 +46,7 @@ class PlatformDbInterface{
             '$escapedIconUrl',
             0);
         ";
-        $data = mysqli_query($this->dbConnection, $sql);
+        $data = $this->database->Execute($sql);;
         
         StopTimer("PlatformDbInterface_Insert");
     }
@@ -55,9 +55,9 @@ class PlatformDbInterface{
         AddActionLog("PlatformDbInterface_Update");
         StartTimer("PlatformDbInterface_Update");
 
-        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
-        $escapedPlatformName = mysqli_real_escape_string($this->dbConnection, $platformName);
-        $escapedIconUrl = mysqli_real_escape_string($this->dbConnection, $iconUrl);
+        $escapedPlatformId = $this->database->EscapeString($platformId);
+        $escapedPlatformName = $this->database->EscapeString($platformName);
+        $escapedIconUrl = $this->database->EscapeString($iconUrl);
     
         $sql = "
             UPDATE ".DB_TABLE_PLATFORM."
@@ -67,7 +67,7 @@ class PlatformDbInterface{
             WHERE
                 ".DB_COLUMN_PLATFORM_ID." = $escapedPlatformId;
         ";
-        $data = mysqli_query($this->dbConnection, $sql);
+        $data = $this->database->Execute($sql);;
         
         StopTimer("PlatformDbInterface_Update");
     }
@@ -76,7 +76,7 @@ class PlatformDbInterface{
         AddActionLog("PlatformDbInterface_SoftDelete");
         StartTimer("PlatformDbInterface_SoftDelete");
 
-        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+        $escapedPlatformId = $this->database->EscapeString($platformId);
     
         $sql = " 
             UPDATE ".DB_TABLE_PLATFORM."
@@ -85,7 +85,7 @@ class PlatformDbInterface{
             WHERE
                 ".DB_COLUMN_PLATFORM_ID." = $escapedPlatformId;
         ";
-        $data = mysqli_query($this->dbConnection, $sql);
+        $data = $this->database->Execute($sql);;
         
         StopTimer("PlatformDbInterface_SoftDelete");
     }
@@ -94,7 +94,7 @@ class PlatformDbInterface{
         AddActionLog("PlatformDbInterface_RestoreSoftDeleted");
         StartTimer("PlatformDbInterface_RestoreSoftDeleted");
 
-        $escapedPlatformId = mysqli_real_escape_string($this->dbConnection, $platformId);
+        $escapedPlatformId = $this->database->EscapeString($platformId);
     
         $sql = "
             UPDATE ".DB_TABLE_PLATFORM." 
@@ -103,7 +103,7 @@ class PlatformDbInterface{
             WHERE
                 ".DB_COLUMN_PLATFORM_ID." = $escapedPlatformId;
         ";
-        $data = mysqli_query($this->dbConnection, $sql);
+        $data = $this->database->Execute($sql);;
         
         StopTimer("PlatformDbInterface_RestoreSoftDeleted");
     }
@@ -118,7 +118,7 @@ class PlatformDbInterface{
         ";
 
         StopTimer("PlatformDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

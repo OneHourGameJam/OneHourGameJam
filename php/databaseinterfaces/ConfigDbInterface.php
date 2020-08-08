@@ -15,12 +15,12 @@ define("DB_COLUMN_CONFIG_REQUIRED",             "config_required");
 define("DB_COLUMN_CONFIG_ADDED_TO_DICTIONARY",  "config_added_to_dictionary");
 
 class ConfigDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_CONFIG_ID, DB_COLUMN_CONFIG_KEY, DB_COLUMN_CONFIG_VALUE, DB_COLUMN_CONFIG_CATEGORY, DB_COLUMN_CONFIG_DESCRIPTION, DB_COLUMN_CONFIG_TYPE, DB_COLUMN_CONFIG_OPTIONS, DB_COLUMN_CONFIG_EDITABLE, DB_COLUMN_CONFIG_REQUIRED, DB_COLUMN_CONFIG_ADDED_TO_DICTIONARY);
     private $privateColumns = Array(DB_COLUMN_CONFIG_LASTEDITED, DB_COLUMN_CONFIG_LASTEDITEDBY);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAll(){
@@ -34,16 +34,16 @@ class ConfigDbInterface{
         ";
         
         StopTimer("ConfigDbInterface_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Update($key, $value, $userID){
         AddActionLog("ConfigDbInterface_Update");
         StartTimer("ConfigDbInterface_Update");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userID);
-        $escapedKey = mysqli_real_escape_string($this->dbConnection, $key);
-        $escapedValue = mysqli_real_escape_string($this->dbConnection, $value);
+        $escapedUserId = $this->database->EscapeString($userID);
+        $escapedKey = $this->database->EscapeString($key);
+        $escapedValue = $this->database->EscapeString($value);
 
         $sql = "
             UPDATE ".DB_TABLE_CONFIG."
@@ -53,7 +53,7 @@ class ConfigDbInterface{
                 ".DB_COLUMN_CONFIG_LASTEDITEDBY." = '$escapedUserId'
             WHERE ".DB_COLUMN_CONFIG_KEY." = '$escapedKey';
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("ConfigDbInterface_Update");
     }
@@ -68,7 +68,7 @@ class ConfigDbInterface{
         ";
 
         StopTimer("ConfigDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

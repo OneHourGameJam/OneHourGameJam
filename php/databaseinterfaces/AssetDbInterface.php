@@ -13,12 +13,12 @@ define("DB_COLUMN_ASSET_CONTENT",           "asset_content");
 define("DB_COLUMN_ASSET_DELETED",           "asset_deleted");
 
 class AssetDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_ASSET_ID, DB_COLUMN_ASSET_AUTHOR_USER_ID, DB_COLUMN_ASSET_TITLE, DB_COLUMN_ASSET_DESCRIPTION, DB_COLUMN_ASSET_TYPE, DB_COLUMN_ASSET_CONTENT, DB_COLUMN_ASSET_DELETED);
     private $privateColumns = Array(DB_COLUMN_ASSET_DATETIME, DB_COLUMN_ASSET_IP, DB_COLUMN_ASSET_USER_AGENT);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectCurrentlyActiveAssets(){
@@ -32,28 +32,28 @@ class AssetDbInterface{
         ";
 
         StopTimer("AssetDbInterface_SelectCurrentlyActiveAssets");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectWhereAuthorUserId($authorUserId){
         AddActionLog("AssetDbInterface_SelectWhereAuthorUserId");
         StartTimer("AssetDbInterface_SelectWhereAuthorUserId");
 
-        $escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $authorUserId);
+        $escapedAuthorUserId = $this->database->EscapeString($authorUserId);
         $sql = "
             SELECT ".DB_COLUMN_ASSET_ID.", ".DB_COLUMN_ASSET_DATETIME.", ".DB_COLUMN_ASSET_AUTHOR_USER_ID.", ".DB_COLUMN_ASSET_TITLE.", ".DB_COLUMN_ASSET_DESCRIPTION.", ".DB_COLUMN_ASSET_TYPE.", ".DB_COLUMN_ASSET_CONTENT.", ".DB_COLUMN_ASSET_DELETED."
             FROM ".DB_TABLE_ASSET."
             WHERE ".DB_COLUMN_ASSET_AUTHOR_USER_ID." = '$escapedAuthorUserId';";
 
         StopTimer("AssetDbInterface_SelectWhereAuthorUserId");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectSingleAsset($assetId){
         AddActionLog("AssetDbInterface_SelectSingleAsset");
         StartTimer("AssetDbInterface_SelectSingleAsset");
 
-        $escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
+        $escapedAssetId = $this->database->EscapeString($assetId);
         $sql = "
             SELECT ".DB_COLUMN_ASSET_ID.", ".DB_COLUMN_ASSET_AUTHOR_USER_ID.", ".DB_COLUMN_ASSET_TITLE."
             FROM ".DB_TABLE_ASSET." a
@@ -61,20 +61,20 @@ class AssetDbInterface{
               AND ".DB_COLUMN_ASSET_ID." = $escapedAssetId;
         ";
         StopTimer("AssetDbInterface_SelectSingleAsset");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL){
         AddActionLog("AssetDbInterface_Insert");
         StartTimer("AssetDbInterface_Insert");
 
-		$escapedIp = mysqli_real_escape_string($this->dbConnection, $ip);
-		$escapedUserAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-		$escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $authorUserId);
-		$escapedTitle = mysqli_real_escape_string($this->dbConnection, $title);
-		$escapedDescription = mysqli_real_escape_string($this->dbConnection, $description);
-		$escapedType = mysqli_real_escape_string($this->dbConnection, $type);
-		$escapedContent = mysqli_real_escape_string($this->dbConnection, $assetURL);
+		$escapedIp = $this->database->EscapeString($ip);
+		$escapedUserAgent = $this->database->EscapeString($userAgent);
+		$escapedAuthorUserId = $this->database->EscapeString($authorUserId);
+		$escapedTitle = $this->database->EscapeString($title);
+		$escapedDescription = $this->database->EscapeString($description);
+		$escapedType = $this->database->EscapeString($type);
+		$escapedContent = $this->database->EscapeString($assetURL);
         
 		$sql = "
             INSERT INTO ".DB_TABLE_ASSET."
@@ -100,7 +100,7 @@ class AssetDbInterface{
             '$escapedContent',
             0);
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("AssetDbInterface_Insert");
     }
@@ -109,12 +109,12 @@ class AssetDbInterface{
         AddActionLog("AssetDbInterface_Update");
         StartTimer("AssetDbInterface_Update");
 
-		$escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
-		$escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $authorUserId);
-		$escapedTitle = mysqli_real_escape_string($this->dbConnection, $title);
-		$escapedDescription = mysqli_real_escape_string($this->dbConnection, $description);
-		$escapedType = mysqli_real_escape_string($this->dbConnection, $type);
-		$escapedContent = mysqli_real_escape_string($this->dbConnection, $content);
+		$escapedAssetId = $this->database->EscapeString($assetId);
+		$escapedAuthorUserId = $this->database->EscapeString($authorUserId);
+		$escapedTitle = $this->database->EscapeString($title);
+		$escapedDescription = $this->database->EscapeString($description);
+		$escapedType = $this->database->EscapeString($type);
+		$escapedContent = $this->database->EscapeString($content);
         
 		$sql = "
             UPDATE ".DB_TABLE_ASSET."
@@ -126,7 +126,7 @@ class AssetDbInterface{
                 ".DB_COLUMN_ASSET_CONTENT." = '$escapedContent'
             WHERE ".DB_COLUMN_ASSET_ID." = $escapedAssetId;
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("AssetDbInterface_Update");
     }
@@ -135,7 +135,7 @@ class AssetDbInterface{
         AddActionLog("AssetDbInterface_SoftDelete");
         StartTimer("AssetDbInterface_SoftDelete");
 
-		$escapedAssetId = mysqli_real_escape_string($this->dbConnection, $assetId);
+		$escapedAssetId = $this->database->EscapeString($assetId);
         
         $sql = "
             UPDATE ".DB_TABLE_ASSET."
@@ -143,7 +143,7 @@ class AssetDbInterface{
                 ".DB_COLUMN_ASSET_DELETED." = 1
             WHERE ".DB_COLUMN_ASSET_ID." = $escapedAssetId;
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
 
         StopTimer("AssetDbInterface_SoftDelete");
     }
@@ -158,7 +158,7 @@ class AssetDbInterface{
         ";
 
         StopTimer("AssetDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

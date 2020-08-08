@@ -16,12 +16,12 @@ define("DB_COLUMN_ENTRY_TEXT_COLOR",        "entry_text_color");
 define("DB_COLUMN_ENTRY_DELETED",           "entry_deleted");
 
 class GameDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_ENTRY_ID, DB_COLUMN_ENTRY_JAM_ID, DB_COLUMN_ENTRY_JAM_NUMBER, DB_COLUMN_ENTRY_TITLE, DB_COLUMN_ENTRY_DESCRIPTION, DB_COLUMN_ENTRY_AUTHOR_USER_ID, DB_COLUMN_ENTRY_SCREENSHOT_URL, DB_COLUMN_ENTRY_BACKGROUND_COLOR, DB_COLUMN_ENTRY_TEXT_COLOR, DB_COLUMN_ENTRY_DELETED);
     private $privateColumns = Array(DB_COLUMN_ENTRY_DATETIME, DB_COLUMN_ENTRY_IP, DB_COLUMN_ENTRY_USER_AGENT);
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAll(){
@@ -34,14 +34,14 @@ class GameDbInterface{
             ORDER BY ".DB_COLUMN_ENTRY_ID." DESC";
         
         StopTimer("GameDbInterface_SelectAll");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectIfExists($entryId){
         AddActionLog("GameDbInterface_SelectIfExists");
         StartTimer("GameDbInterface_SelectIfExists");
 
-        $escapedEntryID = mysqli_real_escape_string($this->dbConnection, intval($entryId));
+        $escapedEntryID = $this->database->EscapeString(intval($entryId));
         $sql = "
             SELECT 1
             FROM ".DB_TABLE_ENTRY."
@@ -49,14 +49,14 @@ class GameDbInterface{
               AND ".DB_COLUMN_ENTRY_DELETED." = 0;";
         
         StopTimer("GameDbInterface_SelectIfExists");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectEntriesForAuthor($authorUserId){
         AddActionLog("GameDbInterface_SelectEntriesForAuthor");
         StartTimer("GameDbInterface_SelectEntriesForAuthor");
     
-        $escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $authorUserId);
+        $escapedAuthorUserId = $this->database->EscapeString($authorUserId);
         $sql = "
             SELECT *
             FROM ".DB_TABLE_ENTRY."
@@ -64,15 +64,15 @@ class GameDbInterface{
         ";
         
         StopTimer("GameDbInterface_SelectEntriesForAuthor");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectSingleEntryId($jamId, $authorId){
         AddActionLog("GameDbInterface_SelectSingleEntryId");
         StartTimer("GameDbInterface_SelectSingleEntryId");
         
-        $escaped_jamId = mysqli_real_escape_string($this->dbConnection, $jamId);
-        $escaped_author_user_id = mysqli_real_escape_string($this->dbConnection, $authorId);
+        $escaped_jamId = $this->database->EscapeString($jamId);
+        $escaped_author_user_id = $this->database->EscapeString($authorId);
 
         $sql = "
             SELECT ".DB_COLUMN_ENTRY_ID."
@@ -83,14 +83,14 @@ class GameDbInterface{
         ";
         
         StopTimer("GameDbInterface_SelectSingleEntryId");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectEntriesInJam($jamId, $authorId){
         AddActionLog("GameDbInterface_SelectEntriesForJam");
         StartTimer("GameDbInterface_SelectEntriesForJam");
         
-        $escapedJamID = mysqli_real_escape_string($this->dbConnection, $jamId);
+        $escapedJamID = $this->database->EscapeString($jamId);
 
         $sql = "
             SELECT *
@@ -100,23 +100,23 @@ class GameDbInterface{
         ";
         
         StopTimer("GameDbInterface_SelectEntriesForJam");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($ip, $userAgent, $jamId, $jamNumber, $gameName, $description, $userId, $screenshotURL, $colorBackgroundWithoutHash, $colorTextWithoutHash){
         AddActionLog("GameDbInterface_Insert");
         StartTimer("GameDbInterface_Insert");
 
-        $escaped_ip = mysqli_real_escape_string($this->dbConnection, $ip);
-        $escaped_userAgent = mysqli_real_escape_string($this->dbConnection, $userAgent);
-        $escaped_jamId = mysqli_real_escape_string($this->dbConnection, $jamId);
-        $escaped_jamNumber = mysqli_real_escape_string($this->dbConnection, $jamNumber);
-        $escaped_gameName = mysqli_real_escape_string($this->dbConnection, $gameName);
-        $escaped_description = mysqli_real_escape_string($this->dbConnection, $description);
-        $escaped_author_user_id = mysqli_real_escape_string($this->dbConnection, $userId);
-        $escaped_ssURL = mysqli_real_escape_string($this->dbConnection, $screenshotURL);
-        $escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorBackgroundWithoutHash);
-        $escaped_colorTextWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorTextWithoutHash);
+        $escaped_ip = $this->database->EscapeString($ip);
+        $escaped_userAgent = $this->database->EscapeString($userAgent);
+        $escaped_jamId = $this->database->EscapeString($jamId);
+        $escaped_jamNumber = $this->database->EscapeString($jamNumber);
+        $escaped_gameName = $this->database->EscapeString($gameName);
+        $escaped_description = $this->database->EscapeString($description);
+        $escaped_author_user_id = $this->database->EscapeString($userId);
+        $escaped_ssURL = $this->database->EscapeString($screenshotURL);
+        $escaped_colorBackgroundWithoutHash = $this->database->EscapeString($colorBackgroundWithoutHash);
+        $escaped_colorTextWithoutHash = $this->database->EscapeString($colorTextWithoutHash);
 
         $sql = "
             INSERT INTO ".DB_TABLE_ENTRY."
@@ -146,7 +146,7 @@ class GameDbInterface{
             '$escaped_colorBackgroundWithoutHash',
             '$escaped_colorTextWithoutHash');
         ";
-        mysqli_query($this->dbConnection, $sql);
+        $this->database->Execute($sql);;
         
         StopTimer("GameDbInterface_Insert");
     }
@@ -155,13 +155,13 @@ class GameDbInterface{
         AddActionLog("GameDbInterface_Update");
         StartTimer("GameDbInterface_Update");
 
-		$escapedGameName = mysqli_real_escape_string($this->dbConnection, $gameName);
-		$escapedScreenshotURL = mysqli_real_escape_string($this->dbConnection, $screenshotURL);
-		$escapedDescription = mysqli_real_escape_string($this->dbConnection, $description);
-		$escapedAuthorUserId = mysqli_real_escape_string($this->dbConnection, $userId);
-		$escaped_jamNumber = mysqli_real_escape_string($this->dbConnection, $jamNumber);
-		$escaped_colorBackgroundWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorBackgroundWithoutHash);
-		$escaped_colorTextWithoutHash = mysqli_real_escape_string($this->dbConnection, $colorTextWithoutHash);
+		$escapedGameName = $this->database->EscapeString($gameName);
+		$escapedScreenshotURL = $this->database->EscapeString($screenshotURL);
+		$escapedDescription = $this->database->EscapeString($description);
+		$escapedAuthorUserId = $this->database->EscapeString($userId);
+		$escaped_jamNumber = $this->database->EscapeString($jamNumber);
+		$escaped_colorBackgroundWithoutHash = $this->database->EscapeString($colorBackgroundWithoutHash);
+		$escaped_colorTextWithoutHash = $this->database->EscapeString($colorTextWithoutHash);
 
 		$sql = "
 		UPDATE ".DB_TABLE_ENTRY."
@@ -176,7 +176,7 @@ class GameDbInterface{
 		AND ".DB_COLUMN_ENTRY_JAM_NUMBER." = $escaped_jamNumber
 		AND ".DB_COLUMN_ENTRY_DELETED." = 0;
 		";
-		mysqli_query($this->dbConnection, $sql);
+		$this->database->Execute($sql);;
         
         StopTimer("GameDbInterface_Update");
     }
@@ -185,13 +185,13 @@ class GameDbInterface{
         AddActionLog("GameDbInterface_SoftDelete");
         StartTimer("GameDbInterface_SoftDelete");
 
-		$escapedEntryId = mysqli_real_escape_string($this->dbConnection, $entryId);
+		$escapedEntryId = $this->database->EscapeString($entryId);
 
         $sql = "
             UPDATE ".DB_TABLE_ENTRY." 
             SET ".DB_COLUMN_ENTRY_DELETED." = 1 
             WHERE ".DB_COLUMN_ENTRY_ID." = $escapedEntryId";
-		mysqli_query($this->dbConnection, $sql);
+		$this->database->Execute($sql);;
         
         StopTimer("GameDbInterface_SoftDelete");
     }
@@ -206,7 +206,7 @@ class GameDbInterface{
         ";
 
         StopTimer("GameDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 

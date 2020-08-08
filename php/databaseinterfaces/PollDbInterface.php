@@ -9,12 +9,12 @@ define("DB_COLUMN_POLL_END_DATETIME",   "poll_end_datetime");
 define("DB_COLUMN_POLL_DELETED",        "poll_deleted");
 
 class PollDbInterface{
-    private $dbConnection;
+    private $database;
     private $publicColumns = Array(DB_COLUMN_POLL_ID, DB_COLUMN_POLL_QUESTION, DB_COLUMN_POLL_TYPE, DB_COLUMN_POLL_START_DATETIME, DB_COLUMN_POLL_END_DATETIME, DB_COLUMN_POLL_DELETED);
     private $privateColumns = Array();
 
-    function __construct(&$dbConn) {
-        $this->dbConnection = $dbConn;
+    function __construct(&$database) {
+        $this->database = $database;
     }
 
     public function SelectAllPollOptionsAndVotes(){
@@ -37,7 +37,7 @@ class PollDbInterface{
         ";
         
         StopTimer("PollDbInterface_SelectAllPollOptionsAndVotes");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectNumberOfUsersVotedInEachPoll(){
@@ -60,14 +60,14 @@ class PollDbInterface{
         ";
         
         StopTimer("PollDbInterface_SelectNumberOfUsersVotedInEachPoll");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectActivePollVotesOfUser($userId){
         AddActionLog("PollDbInterface_SelectActivePollVotesOfUser");
         StartTimer("PollDbInterface_SelectActivePollVotesOfUser");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT o.".DB_COLUMN_POLLOPTION_POLL_ID.", o.".DB_COLUMN_POLLOPTION_ID."
             FROM ".DB_TABLE_POLLVOTE." v, ".DB_TABLE_POLLOPTION." o
@@ -77,14 +77,14 @@ class PollDbInterface{
         ";
         
         StopTimer("PollDbInterface_SelectActivePollVotesOfUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectPollVotesOfUser($userId){
         AddActionLog("PollDbInterface_SelectPollVotesOfUser");
         StartTimer("PollDbInterface_SelectPollVotesOfUser");
 
-        $escapedUserId = mysqli_real_escape_string($this->dbConnection, $userId);
+        $escapedUserId = $this->database->EscapeString($userId);
         $sql = "
             SELECT p.".DB_COLUMN_POLL_QUESTION.", o.".DB_COLUMN_POLLOPTION_POLL_TEXT.", v.*
             FROM ".DB_TABLE_POLLVOTE." v, ".DB_TABLE_POLLOPTION." o, ".DB_TABLE_POLL." p
@@ -94,15 +94,15 @@ class PollDbInterface{
         ";
         
         StopTimer("PollDbInterface_SelectPollVotesOfUser");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectIfPollAndPollOptionCombinationExists($pollId, $pollOptionId){
         AddActionLog("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
         StartTimer("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
 
-        $escapedPollId = mysqli_real_escape_string($this->dbConnection, $pollId);
-        $escapedPollOptionId = mysqli_real_escape_string($this->dbConnection, $pollOptionId);
+        $escapedPollId = $this->database->EscapeString($pollId);
+        $escapedPollOptionId = $this->database->EscapeString($pollOptionId);
         $sql = "
             SELECT 1 
             FROM ".DB_TABLE_POLL." p, ".DB_TABLE_POLLOPTION." o 
@@ -113,7 +113,7 @@ class PollDbInterface{
               AND o.".DB_COLUMN_POLLOPTION_ID." = $escapedPollOptionId";
         
         StopTimer("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 
     public function SelectPublicData(){
@@ -126,7 +126,7 @@ class PollDbInterface{
         ";
 
         StopTimer("PollDbInterface_SelectPublicData");
-        return mysqli_query($this->dbConnection, $sql);
+        return $this->database->Execute($sql);;
     }
 }
 
