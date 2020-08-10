@@ -14,7 +14,7 @@ class StreamController{
 			$timeDiff = time() - intval($streamData["time_last_updated"]);
 		}
 
-		if($timeDiff > intval($configData->ConfigModels["TWITCH_API_STREAM_UPDATE_FREQUENCY"]->Value)){
+		if($timeDiff > intval($configData->ConfigModels[CONFIG_TWITCH_API_STREAM_UPDATE_FREQUENCY]->Value)){
 			//Enough time has passed for an update from the API, fetch it.
 
 			//First overwrite the currently saved time_last_updated, so that if there is a lot of load on the twitch API and reponses are slow, only one site user has to wait.
@@ -23,8 +23,8 @@ class StreamController{
 
 			//Fetch API response using CURL, because that was the easiest to copy-paste in :)
 			$channelsApi = 'https://api.twitch.tv/helix/streams?user_login=';
-			$channelName = $configData->ConfigModels["STREAMER_TWITCH_NAME"]->Value;
-			$clientId = $configData->ConfigModels["TWITCH_CLIENT_ID"]->Value;
+			$channelName = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
+			$clientId = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_ID]->Value;
 			$ch = curl_init();
 
 			curl_setopt_array($ch, array(

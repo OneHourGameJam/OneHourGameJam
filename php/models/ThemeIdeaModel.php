@@ -68,8 +68,8 @@ class ThemeIdeaData{
         $dataFromDatabase = MySQLDataToArray($this->themeIdeaDbInterface->SelectPublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEMEIDEA_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_THEMEIDEA_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_THEMEIDEA_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_THEMEIDEA_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_THEMEIDEA_USER_AGENT] = OVERRIDE_MIGRATION;
             $dataFromDatabase[$i][DB_COLUMN_THEMEIDEA_IDEAS] = "Idea";
         }
 

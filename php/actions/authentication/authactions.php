@@ -72,7 +72,7 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through TryLogin(...)
 function LogInUser($username, $password){
-	global $configData, $userData, $sessionDbInterface;
+	global $configData, $userData, $sessionDbInterface, $_COOKIE;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -102,12 +102,12 @@ function LogInUser($username, $password){
 	if($correctPasswordHash == $passwordHash){
 		//User password correct!
 		$sessionID = "".GenerateSalt();
-		$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-		$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
+		$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
+		$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
 
-		$daysToKeepLoggedIn = $configData->ConfigModels["DAYS_TO_KEEP_LOGGED_IN"]->Value;
-		setcookie("sessionID", $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
-		$_COOKIE["sessionID"] = $sessionID;
+		$daysToKeepLoggedIn = $configData->ConfigModels[CONFIG_DAYS_TO_KEEP_LOGGED_IN]->Value;
+		setcookie(COOKIE_SESSION_ID, $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
+		$_COOKIE[COOKIE_SESSION_ID] = $sessionID;
 
 		$sessionDbInterface->Insert($userId, $sessionIdHash);
 	}else{

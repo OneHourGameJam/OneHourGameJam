@@ -7,18 +7,18 @@ if($loggedInUser == false){
 	die();
 }
 
-if(!isset($_GET["pollID"])){
+if(!isset($_GET[FORM_POLLVOTE_POLL_ID])){
 	print json_encode(Array("ERROR" => "poll ID not set"));
 	die();
 }
 
-if(!isset($_GET["optionID"])){
+if(!isset($_GET[FORM_POLLVOTE_OPTION_ID])){
 	print json_encode(Array("ERROR" => "Option ID not set"));
 	die();
 }
 
-$pollId = intval(trim($_GET["pollID"]));
-$pollOptionId = intval(trim($_GET["optionID"]));
+$pollId = intval(trim($_GET[FORM_POLLVOTE_POLL_ID]));
+$pollOptionId = intval(trim($_GET[FORM_POLLVOTE_OPTION_ID]));
 
 //Check if the poll/option combination exists, that the poll wasn't deleted, that it's already started and that it hasn't expired
 $data = $pollDbInterface->SelectIfPollAndPollOptionCombinationExists($pollId, $pollOptionId);

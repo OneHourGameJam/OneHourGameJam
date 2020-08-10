@@ -53,9 +53,9 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if($loggedInUser !== false){
-		$passwordold = $_POST["passwordold"];
-		$password1 = $_POST["password1"];
-		$password2 = $_POST["password2"];
+		$passwordold = $_POST[FORM_CHANGEPASSWORD_OLD_PASSWORD];
+		$password1 = $_POST[FORM_CHANGEPASSWORD_PASSWORD_1];
+		$password2 = $_POST[FORM_CHANGEPASSWORD_PASSWORD_2];
 
 		return ChangePassword($passwordold, $password1, $password2);
 	}

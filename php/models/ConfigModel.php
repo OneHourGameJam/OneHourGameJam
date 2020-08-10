@@ -72,7 +72,6 @@ define("CONFIG_OVERRIDE_BRAND_LOGO", "OVERRIDE_BRAND_LOGO");
 define("CONFIG_OVERRIDE_MAIN_LOGO", "OVERRIDE_MAIN_LOGO");
 define("CONFIG_CAN_SUBMIT_TO_PAST_JAMS", "CAN_SUBMIT_TO_PAST_JAMS");
 
-
 class ConfigModel{
 	public $Key;
 	public $Value;
@@ -151,12 +150,12 @@ class ConfigData{
         StartTimer("VerifyConfig");
     
         if (!isset($this->ConfigModels[CONFIG_PEPPER]->Value) || strlen($this->ConfigModels[CONFIG_PEPPER]->Value) < 1) {
-            $this->UpdateConfig(CONFIG_PEPPER, GenerateSalt(), -1, "AUTOMATIC", $adminLogData);
+            $this->UpdateConfig(CONFIG_PEPPER, GenerateSalt(), OVERRIDE_AUTOMATIC_NUM, OVERRIDE_AUTOMATIC, $adminLogData);
         }
     
         if (!isset($this->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value) || strlen($this->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value) < 1) {
             $sessionPasswordIterations = GenerateUserHashIterations($this);
-            $this->UpdateConfig(CONFIG_SESSION_PASSWORD_ITERATIONS, $sessionPasswordIterations, -1, "AUTOMATIC", $adminLogData);
+            $this->UpdateConfig(CONFIG_SESSION_PASSWORD_ITERATIONS, $sessionPasswordIterations, OVERRIDE_AUTOMATIC_NUM, OVERRIDE_AUTOMATIC, $adminLogData);
         }
     
         StopTimer("VerifyConfig");
@@ -189,7 +188,7 @@ class ConfigData{
         
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_CONFIG_LASTEDITED] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_CONFIG_LASTEDITEDBY] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_CONFIG_LASTEDITEDBY] = OVERRIDE_MIGRATION;
         }
         
         foreach($dataFromDatabase as $i => $row){

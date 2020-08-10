@@ -50,11 +50,11 @@ class ThemePresenter{
 			$themeViewModel->author_user_id = $themeModel->AuthorUserId;
 			$themeViewModel->theme_id = $themeID;
 			$themeViewModel->ThemeSelectionProbabilityByVoteDifferenceText = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
-			if($votesTotal < $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value){
-				if($configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value == 1){
-					$themeViewModel->UserThemeSelectionProbabilityByVoteDifferenceText = "$votesTotal / ".$configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value ." Vote";
+			if($votesTotal < $configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value){
+				if($configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value == 1){
+					$themeViewModel->UserThemeSelectionProbabilityByVoteDifferenceText = "$votesTotal / ".$configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value ." Vote";
 				}else{
-					$themeViewModel->UserThemeSelectionProbabilityByVoteDifferenceText = "$votesTotal / ".$configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value ." Votes";
+					$themeViewModel->UserThemeSelectionProbabilityByVoteDifferenceText = "$votesTotal / ".$configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value ." Votes";
 				}
 			}else{
 				$themeViewModel->UserThemeSelectionProbabilityByVoteDifferenceText = $themesByVoteDifference[$themeID]["ThemeSelectionProbabilityByVoteDifferenceText"];
@@ -97,7 +97,7 @@ class ThemePresenter{
 			}
 			
 			//Mark theme as old
-			$themeViewModel->is_old = intval($themeViewModel->days_ago) >= intval($configData->ConfigModels["THEME_DAYS_MARK_AS_OLD"]->Value);
+			$themeViewModel->is_old = intval($themeViewModel->days_ago) >= intval($configData->ConfigModels[CONFIG_THEME_DAYS_MARK_AS_OLD]->Value);
 			$themeViewModel->is_recent = ThemePresenter::IsRecentTheme($jamData, $configData, $themeText);
 
 			//Compute JavaScript formatted lists for themes pie chart
@@ -132,7 +132,7 @@ class ThemePresenter{
 			}
 
 			//Calculate popularity and apathy
-			if($votesTotal >= intval($configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value)){
+			if($votesTotal >= intval($configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value)){
 				$themeViewModel->has_enough_votes = true;
 
 				$oppinionatedVotesTotal = $votesFor + $votesAgainst;
@@ -180,11 +180,11 @@ class ThemePresenter{
 			usort($themesViewModel->suggested_themes, "ThemePresenter::CmpArrayByPropertyPopularityNum");
 			$count = 0;
 			foreach($themesViewModel->suggested_themes as $i => $theme){
-				if($count < intval($configData->ConfigModels["THEME_NUMBER_TO_MARK_TOP"]->Value)){
+				if($count < intval($configData->ConfigModels[CONFIG_THEME_NUMBER_TO_MARK_TOP]->Value)){
 					$themesViewModel->suggested_themes[$i]->top_theme = 1;
 					$themesViewModel->top_themes[] = $theme;
 				}
-				if($count < intval($configData->ConfigModels["THEME_NUMBER_TO_MARK_KEEP"]->Value) || !$themeViewModel->has_enough_votes){
+				if($count < intval($configData->ConfigModels[CONFIG_THEME_NUMBER_TO_MARK_KEEP]->Value) || !$themeViewModel->has_enough_votes){
 					$themesViewModel->suggested_themes[$i]->keep_theme = 1;
 				}
 				$count++;
@@ -279,7 +279,7 @@ class ThemePresenter{
 					StopTimer("IsRecentTheme");
 					return "THEME_RECENTLY_USED";
 				}
-				if (++$jamNumber > $configData->ConfigModels["JAM_THEMES_CONSIDERED_RECENT"]->Value){
+				if (++$jamNumber > $configData->ConfigModels[CONFIG_JAM_THEMES_CONSIDERED_RECENT]->Value){
 					break;
 				}
 			}

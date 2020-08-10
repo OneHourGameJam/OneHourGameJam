@@ -59,11 +59,11 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$jamId = intval($_POST["jamID"]);
-		$theme = $_POST["theme"];
-		$date = $_POST["date"];
-		$time = $_POST["time"];
-		$jamcolors = $_POST["jamcolors"];
+		$jamId = intval($_POST[FORM_EDITJAM_JAM_ID]);
+		$theme = $_POST[FORM_EDITJAM_THEME];
+		$date = $_POST[FORM_EDITJAM_DATE];
+		$time = $_POST[FORM_EDITJAM_TIME];
+		$jamcolors = $_POST[FORM_EDITJAM_JAM_COLORS];
 
 		return EditJam($jamId, $theme, $date, $time, $jamcolors);
 	}

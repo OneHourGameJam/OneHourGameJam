@@ -8,34 +8,34 @@ class CookieController{
 		StartTimer("UpdateCookies");
 		
 		//Determine if the user is in dark mode
-		if(isset($_GET["darkmode"])){
-			if($_GET["darkmode"]){
-				setcookie("darkmode", 1, time() + (60 * 60 * 24 * 365));
-				$_COOKIE["darkmode"] = 1;
+		if(isset($_GET[GET_DARK_MODE])){
+			if($_GET[GET_DARK_MODE]){
+				setcookie(COOKIE_DARKMODE, 1, time() + (60 * 60 * 24 * 365));
+				$_COOKIE[COOKIE_DARKMODE] = 1;
 			}else{
-				setcookie("darkmode", null, -1);
-				unset($_COOKIE["darkmode"]);
+				setcookie(COOKIE_DARKMODE, null, -1);
+				unset($_COOKIE[COOKIE_DARKMODE]);
 			}
 		}
 	
 		//Update streaming cookie
-		if(isset($_GET["streaming"])){
-			if($_GET["streaming"] == 1){
-				setcookie("streaming", 1, time() + (60 * 60 * 3));	//Streamer mode lasts for 3 hours
-				$_COOKIE["streaming"] = 1;
+		if(isset($_GET[GET_STREAMING_MODE])){
+			if($_GET[GET_STREAMING_MODE] == 1){
+				setcookie(COOKIE_STREAMING, 1, time() + (60 * 60 * 3));	//Streamer mode lasts for 3 hours
+				$_COOKIE[COOKIE_STREAMING] = 1;
 			}else{
-				setcookie("streaming", null, -1);
-				unset($_COOKIE["streaming"]);
+				setcookie(COOKIE_STREAMING, null, -1);
+				unset($_COOKIE[COOKIE_STREAMING]);
 			}
 		}
 	
 		//Update cookie notification cookie
-		if(isset($_POST["cookienotice-accepted"])){
-			setcookie("cookienotice", 1, time() + (60 * 60 * 24 * 365));
+		if(isset($_POST[FORM_COOKIENOTICE_ACCEPT])){
+			setcookie(COOKIE_COOKIENOTICE, 1, time() + (60 * 60 * 24 * 365));
 			echo "<meta http-equiv='refresh' content='0'>";
 		}
-		if((isset($_GET["streaming"]) || isset($_GET["darkmode"])) && !isset($_COOKIE["cookienotice"])){
-			setcookie("cookienotice", 0, time() + (60 * 60 * 24 * 365));
+		if((isset($_GET[GET_STREAMING_MODE]) || isset($_GET[GET_DARK_MODE])) && !isset($_COOKIE[COOKIE_COOKIENOTICE])){
+			setcookie(COOKIE_COOKIENOTICE, 0, time() + (60 * 60 * 24 * 365));
 		}
 	
 		StopTimer("UpdateCookies");

@@ -2,7 +2,7 @@
 
 
 function PerformAction(&$loggedInUser){
-    global $_POST, $adminLogData;
+    global $adminLogData;
     
     if(IsAdmin($loggedInUser) !== false){
         $adminLogData->AddToAdminLog("DOWNLOAD_DB", "Downloaded the Database", "NULL", $loggedInUser->Id, "");

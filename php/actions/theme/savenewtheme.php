@@ -33,7 +33,7 @@ function AddTheme($newTheme){
 			$themesByThisUser++;
 		}
 	}
-	if ($themesByThisUser >= $configData->ConfigModels["THEMES_PER_USER"]->Value) {
+	if ($themesByThisUser >= $configData->ConfigModels[CONFIG_THEMES_PER_USER]->Value) {
 		return "TOO_MANY_THEMES";
 	}
 
@@ -46,7 +46,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if($loggedInUser !== false){
-		$newTheme = $_POST["theme"];
+		$newTheme = $_POST[FORM_NEWTHEME_THEME];
 		return AddTheme($newTheme);
 	}
 }

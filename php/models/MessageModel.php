@@ -1,5 +1,10 @@
 <?php
 
+define("MESSAGE_SUCCESS", "success");
+define("MESSAGE_WARNING", "warning");
+define("MESSAGE_ERROR", "error");
+define("MESSAGE_NONE", "none");
+
 class MessageModel{
     public $Type;
     public $Title;
@@ -21,9 +26,9 @@ class MessageData{
         $messageModels = Array();
 
         //Messages and warnings from cookies, clear them as soon as they are loaded
-        if(isset($_COOKIE["actionResult"]) && isset($_COOKIE["actionResultAction"])){
-            $messageActionResult = $_COOKIE["actionResult"];
-            $messageActionResultAction = $_COOKIE["actionResultAction"];
+        if(isset($_COOKIE[COOKIE_ACTION_RESULT]) && isset($_COOKIE[COOKIE_ACTION_RESULT_ACTION])){
+            $messageActionResult = $_COOKIE[COOKIE_ACTION_RESULT];
+            $messageActionResultAction = $_COOKIE[COOKIE_ACTION_RESULT_ACTION];
         
             $actionFound = false;
             foreach($siteActionData->SiteActionModels as $i => $siteActionModel){
@@ -36,16 +41,16 @@ class MessageData{
                         $messageText = $actionResultData->MessageText;
         
                         switch($messageType){
-                            case "success":
+                            case MESSAGE_SUCCESS:
                                 $messageTitle = "Success";
                                 break;
-                            case "warning":
+                            case MESSAGE_WARNING:
                                 $messageTitle = "Warning";
                                 break;
-                            case "error":
+                            case MESSAGE_ERROR:
                                 $messageTitle = "Error";
                                 break;
-                            case "none":
+                            case MESSAGE_NONE:
                                 break;
                             default:
                                 die("Unknown message type $messageType");
@@ -67,8 +72,8 @@ class MessageData{
                 die("Action $messageActionResultAction not found in actions list");
             }
         
-            setcookie("actionResult", "", 0);
-            setcookie("actionResultAction", "", 0);
+            setcookie(COOKIE_ACTION_RESULT, "", 0);
+            setcookie(COOKIE_ACTION_RESULT_ACTION, "", 0);
         }
 
         StopTimer("LoadMessages");

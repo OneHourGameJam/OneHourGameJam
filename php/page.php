@@ -9,17 +9,17 @@ function ValidatePage($page, &$loggedInUser){
 
     if(!isset($pageSettings[$page])){
         StopTimer("ValidatePage");
-        return "main";
+        return PAGE_MAIN;
     }
 
     if($pageSettings[$page]["authorization_level"] == "USER" && $loggedInUser === false){
         StopTimer("ValidatePage");
-        return "main";
+        return PAGE_MAIN;
     }
 
     if($pageSettings[$page]["authorization_level"] == "ADMIN" && !IsAdmin($loggedInUser)){
         StopTimer("ValidatePage");
-        return "main";
+        return PAGE_MAIN;
     }
 
 	StopTimer("ValidatePage");
@@ -39,18 +39,18 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
     //Special processing for specific pages
     switch($page){
-        case "edituser":
+        case PAGE_EDIT_USER:
             if(IsAdmin($loggedInUser) !== false){
-                $editingUserId = $_GET["user_id"];
+                $editingUserId = $_GET[GET_EDITUSER_USER_ID];
                 if(!isset($userData->UserModels[$editingUserId])){
                     die("no user selected");
                 }
                 $render["editinguser"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_NONE);
             }
         break;
-        case "editjam":
+        case PAGE_EDIT_JAM:
             if(IsAdmin($loggedInUser) !== false){
-                $jamID = intval($_GET["jam_id"]);
+                $jamID = intval($_GET[GET_EDITJAM_JAM_Id]);
                 $jamFound = false;
                 foreach($jamData->JamModels as $i => $jamModel){
                     if(intval($jamModel->Id) == $jamID){
@@ -66,17 +66,17 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $render["editingjam"]->html_startdate = $editingJamDate;
             }
         break;
-        case "editasset":
+        case PAGE_EDIT_ASSET:
             if(IsAdmin($loggedInUser) !== false){
-                if(isset($_GET["asset_id"])){
-                    $assetID = intval($_GET["asset_id"]);
+                if(isset($_GET[GET_EDITASSET_ASSET_ID])){
+                    $assetID = intval($_GET[GET_EDITASSET_ASSET_ID]);
                     $render["editingasset"] = ((isset($assetData->AssetModels[$assetID])) ? AssetPresenter::RenderAsset($assetData->AssetModels[$assetID], $userData) : Array());
                 }
             }
         break;
-        case "editentry":
+        case PAGE_EDIT_ENTRY:
             if(IsAdmin($loggedInUser) !== false){
-                $entryID = intval($_GET["entry_id"]);
+                $entryID = intval($_GET[GET_EDITENTRY_ENTRY_ID]);
                 $render["editingentry"] = Array();
                 foreach($gameData->GameModels as $i => $gameModel){
                     if($gameModel->Id == $entryID){
@@ -89,8 +89,8 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 }
             }
         break;
-        case "jam":
-            $viewingJamNumber = ((isset($_GET["jam"])) ? intval($_GET["jam"]) : 0);
+        case PAGE_JAM:
+            $viewingJamNumber = ((isset($_GET[GET_JAM_JAM_NUMBER])) ? intval($_GET[GET_JAM_JAM_NUMBER]) : 0);
             if($viewingJamNumber == 0){
                 die("invalid jam number");
             }
@@ -116,8 +116,8 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
             $render["page_title"] = "Jam #" . $viewingJamNumber . ": ".$render["viewing_jam"]->theme;
         break;
-        case "author":
-            $viewingAuthor = ((isset($_GET["author"])) ? ("".$_GET["author"]) : "");
+        case PAGE_AUTHOR:
+            $viewingAuthor = ((isset($_GET[GET_AUTHOR_USER_ID])) ? ("".$_GET[GET_AUTHOR_USER_ID]) : "");
             if($viewingAuthor == ""){
                 die("invalid author name");
             }
@@ -131,12 +131,12 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["viewing_author"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$viewingAuthorId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, RENDER_DEPTH_USERS_GAMES);
             $render["page_title"] = $viewingAuthor;
         break;
-        case "submit":
+        case PAGE_SUBMIT:
             $currentJam = GetCurrentJamNumberAndId();
             if($currentJam["NUMBER"] == 0){
                 die("no jam to submit to");
             }
-            $jamNumber = (isset($_GET["jam_number"])) ? intval($_GET["jam_number"]) : $currentJam["NUMBER"];
+            $jamNumber = (isset($_GET[GET_SUBMIT_JAM_NUMBER])) ? intval($_GET[GET_SUBMIT_JAM_NUMBER]) : $currentJam["NUMBER"];
             $jamModel = $jamData->GetJamByNumber($jamNumber);
             if (!$jamModel) {
                 die("jam not found");
@@ -203,13 +203,13 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $render["platforms"][] = $platform;
             }
 
-            if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value == 0){
+            if($configData->ConfigModels[CONFIG_CAN_SUBMIT_TO_PAST_JAMS]->Value == 0){
                 if (!isset($render["user_submitted_to_this_jam"]) && $jamNumber != $currentJam["NUMBER"]) {
                     die('Cannot make a new submission to a past jam');
                 }
             }
         break;
-        case "userdata":
+        case PAGE_USER_DATA:
             $render["userdata_assets"] = $assetData->GetAssetsOfUserFormatted($loggedInUser->Id);
             $render["userdata_entries"] = $gameData->GetEntriesOfUserFormatted($loggedInUser->Id);
             $render["userdata_poll_votes"] = $pollData->GetPollVotesOfUserFormatted($loggedInUser->Id);
@@ -225,14 +225,14 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Id);
         break;
-        case "newjam":
+        case PAGE_NEW_JAM:
             $render["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);
             $render["next_jam_suggested_time"] = gmdate("H:i", $nextSuggestedJamDateTime);
         break;
-        case "usersettings":
+        case PAGE_USER_SETTINGS:
             $render["user_bio"] = $userData->LoadBio($loggedInUser->Id);
         break;
-        case "entries":
+        case PAGE_ENTRIES:
             $platforms = Array();
             foreach($platformData->PlatformModels as $i => $platformModel){
                 if($platformModel->Deleted != 0){

@@ -4,7 +4,7 @@ chdir("../../");
 include_once("php/site.php");
 
 //Number of minutes after jam to be considered active.
-$jamDurationMinutes = $configData->ConfigModels["JAM_DURATION"]->Value;
+$jamDurationMinutes = $configData->ConfigModels[CONFIG_JAM_DURATION]->Value;
 
 $data = $jamDbInterface->SelectActive();
 

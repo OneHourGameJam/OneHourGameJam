@@ -78,7 +78,7 @@ function AddAsset($assetId, $author, $title, $description, $type){
 	if(isset($_FILES["assetfile"]) && $_FILES["assetfile"] != null && $_FILES["assetfile"]["size"] != 0){
 		$target_file = $asset_folder ."/". $asset_name;
 
-		if ($_FILES["assetfile"]["size"] > $configData->ConfigModels["MAX_ASSET_FILE_SIZE_IN_BYTES"]->Value) {
+		if ($_FILES["assetfile"]["size"] > $configData->ConfigModels[CONFIG_MAX_ASSET_FILE_SIZE_IN_BYTES]->Value) {
 			return "UNLOADED_ASSET_TOO_BIG";
 		}
 
@@ -115,11 +115,11 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$assetId = $_POST["asset_id"];
-		$author = $_POST["author"];
-		$title = $_POST["title"];
-		$description = $_POST["description"];
-		$type = $_POST["type"];
+		$assetId = $_POST[FORM_SAVEASSET_ASSET_ID];
+		$author = $_POST[FORM_SAVEASSET_AUTHOR];
+		$title = $_POST[FORM_SAVEASSET_TITLE];
+		$description = $_POST[FORM_SAVEASSET_DESCRIPTION];
+		$type = $_POST[FORM_SAVEASSET_TYPE];
 
 		return AddAsset($assetId, $author, $title, $description, $type);
 	}

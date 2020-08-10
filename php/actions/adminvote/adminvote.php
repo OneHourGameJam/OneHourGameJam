@@ -22,12 +22,12 @@ function CastVoteForAdmin($subjectUserId, $voteType){
 	}
 
 	switch($voteType){
-		case "FOR":
-		case "NEUTRAL":
-		case "AGAINST":
+		case ADMINVOTE_FOR:
+		case ADMINVOTE_NEUTRAL:
+		case ADMINVOTE_AGAINST:
 			break;
-		case "SPONSOR":
-		case "VETO":
+		case ADMINVOTE_SPONSOR:
+		case ADMINVOTE_VETO:
 			//Each admin can sponsor and veto only one candidate
 			$data = $adminVoteDbInterface->SelectSingleVoteIdByVoterUserIdAndVoteType($loggedInUser->Id, $voteType);
 
@@ -49,8 +49,8 @@ function PerformAction($loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$voteSubjectUserId = $_POST["adminVoteSubjectUserId"];
-		$voteType = $_POST["adminVoteType"];
+		$voteSubjectUserId = $_POST[FORM_ADMINVOTE_SUBJECT_USER_ID];
+		$voteType = $_POST[FORM_ADMINVOTE_VOTE_TYPE];
 		return CastVoteForAdmin($voteSubjectUserId, $voteType);
 	}
 }

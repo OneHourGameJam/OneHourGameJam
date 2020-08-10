@@ -4,8 +4,8 @@ include_once "authactions.php";
 function PerformAction(&$loggedInUser){
 	global $_POST;
 
-	$username = (isset($_POST["un"])) ? $_POST["un"] : "";
-	$password = (isset($_POST["pw"])) ? $_POST["pw"] : "";
+	$username = (isset($_POST[FORM_LOGIN_USERNAME])) ? $_POST[FORM_LOGIN_USERNAME] : "";
+	$password = (isset($_POST[FORM_LOGIN_PASSWORD])) ? $_POST[FORM_LOGIN_PASSWORD] : "";
 	$loginChecked = false;
 
 	$username = strtolower(trim($username));

@@ -65,7 +65,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
-		$platformName = (isset($_POST["platformname"])) ? $_POST["platformname"] : "";
+		$platformName = (isset($_POST[FORM_NEWPLATFORM_NAME])) ? $_POST[FORM_NEWPLATFORM_NAME] : "";
 
 		return NewPlatform($platformName);
 	}

@@ -1,5 +1,11 @@
 <?php
 
+define("OVERRIDE_MIGRATION", "MIGRATION");
+define("OVERRIDE_LEGACY_NUM", "-2");
+define("OVERRIDE_LEGACY", "LEGACY");
+define("OVERRIDE_AUTOMATIC_NUM", "-1");
+define("OVERRIDE_AUTOMATIC", "AUTOMATIC");
+
 //Generates a password salt
 function GenerateSalt(){
 	AddActionLog("GenerateSalt");
@@ -12,7 +18,7 @@ function HashPassword($password, $salt, $iterations, &$configData){
 	AddActionLog("HashPassword");
 	StartTimer("HashPassword");
 
-	$pepper = isset($configData->ConfigModels["PEPPER"]->Value) ? $configData->ConfigModels["PEPPER"]->Value : "";
+	$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "";
 	$pswrd = $pepper.$password.$salt;
 
 	//Check that we have sufficient iterations for password generation.
@@ -36,7 +42,7 @@ function HashPassword($password, $salt, $iterations, &$configData){
 //To force it to re-check, set the global variable $loginChecked to false.
 //Returns either the logged in user's username or FALSE if not logged in.
 function IsLoggedIn(&$configData, &$userData){
-	global $loginChecked, $loggedInUser, $ip, $userAgent, $sessionDbInterface, $userDbInterface;
+	global $loginChecked, $loggedInUser, $ip, $userAgent, $sessionDbInterface, $userDbInterface, $_COOKIE;
 	AddActionLog("IsLoggedIn");
 	StartTimer("IsLoggedIn");
 
@@ -47,7 +53,7 @@ function IsLoggedIn(&$configData, &$userData){
 
 	$loggedInUser = Array();
 
-	if(!isset($_COOKIE["sessionID"])){
+	if(!isset($_COOKIE[COOKIE_SESSION_ID])){
 		//No session cookie, therefore not logged in
 		$loggedInUser = false;
 		$loginChecked = true;
@@ -55,9 +61,9 @@ function IsLoggedIn(&$configData, &$userData){
 		return false;
 	}
 
-	$sessionID = "".$_COOKIE["sessionID"];
-	$pepper = isset($configData->ConfigModels["PEPPER"]) ? $configData->ConfigModels["PEPPER"]->Value : "BetterThanNothing";
-	$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels["SESSION_PASSWORD_ITERATIONS"]->Value, $configData);
+	$sessionID = "".$_COOKIE[COOKIE_SESSION_ID];
+	$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
+	$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
 
 	$data = $sessionDbInterface->SelectSingleSession($sessionIdHash);
 
@@ -111,10 +117,10 @@ function ValidatePassword($password, &$configData){
 	AddActionLog("ValidatePassword");
 
 	//Check password length
-	if(strlen($password) < $configData->ConfigModels["MINIMUM_PASSWORD_LENGTH"]->Value){
+	if(strlen($password) < $configData->ConfigModels[CONFIG_MINIMUM_PASSWORD_LENGTH]->Value){
 		return false;
 	}
-	if(strlen($password) > $configData->ConfigModels["MAXIMUM_PASSWORD_LENGTH"]->Value){
+	if(strlen($password) > $configData->ConfigModels[CONFIG_MAXIMUM_PASSWORD_LENGTH]->Value){
 		return false;
 	}
 
@@ -124,8 +130,8 @@ function ValidatePassword($password, &$configData){
 function GenerateUserHashIterations(&$configData){
 	AddActionLog("GenerateUserHashIterations");
 
-	$minimumHashIterations = $configData->ConfigModels["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
-	$maximumHashIterations = $configData->ConfigModels["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value;
+	$minimumHashIterations = $configData->ConfigModels[CONFIG_MINIMUM_PASSWORD_HASH_ITERATIONS]->Value;
+	$maximumHashIterations = $configData->ConfigModels[CONFIG_MAXIMUM_PASSWORD_HASH_ITERATIONS]->Value;
 
 	return intval(rand($minimumHashIterations, $maximumHashIterations));
 }
@@ -133,10 +139,10 @@ function GenerateUserHashIterations(&$configData){
 function ValidateHashingIterationNumber($iterations, &$configData){
 	AddActionLog("ValidateHashingIterationNumber");
 
-	if($iterations < $configData->ConfigModels["MINIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
+	if($iterations < $configData->ConfigModels[CONFIG_MINIMUM_PASSWORD_HASH_ITERATIONS]->Value){
 		return false;
 	}
-	if($iterations > $configData->ConfigModels["MAXIMUM_PASSWORD_HASH_ITERATIONS"]->Value){
+	if($iterations > $configData->ConfigModels[CONFIG_MAXIMUM_PASSWORD_HASH_ITERATIONS]->Value){
 		return false;
 	}
 
@@ -146,10 +152,10 @@ function ValidateHashingIterationNumber($iterations, &$configData){
 function ValidateUsername($username, &$configData){
 	AddActionLog("ValidateUsername");
 
-	if(strlen($username) < $configData->ConfigModels["MINIMUM_USERNAME_LENGTH"]->Value){
+	if(strlen($username) < $configData->ConfigModels[CONFIG_MINIMUM_USERNAME_LENGTH]->Value){
 		return false;
 	}
-	if(strlen($username) > $configData->ConfigModels["MAXIMUM_USERNAME_LENGTH"]->Value){
+	if(strlen($username) > $configData->ConfigModels[CONFIG_MAXIMUM_USERNAME_LENGTH]->Value){
 		return false;
 	}
 
@@ -160,7 +166,7 @@ function RedirectToHttpsIfRequired($configData){
 	AddActionLog("RedirectToHttpsIfRequired");
 	StartTimer("RedirectToHttpsIfRequired");
 
-    if($configData->ConfigModels["REDIRECT_TO_HTTPS"]->Value){
+    if($configData->ConfigModels[CONFIG_REDIRECT_TO_HTTPS]->Value){
         if(!isset($_SERVER['HTTPS'])){
         	//Redirect to https
             $url = "https://". $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];

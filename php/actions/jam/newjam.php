@@ -58,15 +58,7 @@ function CreateJam($theme, $date, $time, $colorsList){
 
 	$colors = implode("|", $colorsList);
 
-	$newJam = Array();
-	$newJam["jam_number"] = $jamNumber;
-	$newJam["theme"] = $theme;
-	$newJam["date"] = gmdate("d M Y", $datetime);
-	$newJam["time"] = gmdate("H:i", $datetime);
-	$newJam["start_time"] = gmdate("c", $datetime);
-	$newJam["entries"] = Array();
-
-	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $newJam["jam_number"], -2, $newJam["theme"], "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
+	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $jamNumber, -2, $theme, "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
 
 	return "SUCCESS";
 }
@@ -75,13 +67,13 @@ function PerformAction(&$loggedInUser){
 	global $_POST, $configData;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$theme = (isset($_POST["theme"])) ? $_POST["theme"] : "";
-		$date = (isset($_POST["date"])) ? $_POST["date"] : "";
-		$time = (isset($_POST["time"])) ? $_POST["time"] : "";
+		$theme = (isset($_POST[FORM_NEWJAM_THEME])) ? $_POST[FORM_NEWJAM_THEME] : "";
+		$date = (isset($_POST[FORM_NEWJAM_DATE])) ? $_POST[FORM_NEWJAM_DATE] : "";
+		$time = (isset($_POST[FORM_NEWJAM_TIME])) ? $_POST[FORM_NEWJAM_TIME] : "";
 		$jamColors = Array();
-		for($colorIndex = 0; $colorIndex < $configData->ConfigModels["MAX_COLORS_FOR_JAM"]->Value; $colorIndex++){
-			if(isset($_POST["jamcolor".$colorIndex])){
-				$jamColors[] = $_POST["jamcolor".$colorIndex];
+		for($colorIndex = 0; $colorIndex < $configData->ConfigModels[CONFIG_MAX_COLORS_FOR_JAM]->Value; $colorIndex++){
+			if(isset($_POST[FORM_NEWJAM_JAM_COLOR.$colorIndex])){
+				$jamColors[] = $_POST[FORM_NEWJAM_JAM_COLOR.$colorIndex];
 			}
 		}
 		if(count($jamColors) == 0){

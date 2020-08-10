@@ -15,12 +15,12 @@ class JamPresenter{
 		$jamViewModel->start_time = $jamModel->StartTime;
 		$jamViewModel->state = $jamModel->State;
 
-		if($jamModel->SchedulerUserId == -1){
-			$jamViewModel->scheduler_username = "AUTOMATIC";
-			$jamViewModel->scheduler_display_name = "AUTOMATIC";
-		} else if($jamModel->SchedulerUserId == -2){
-			$jamViewModel->scheduler_username = "LEGACY";
-			$jamViewModel->scheduler_display_name = "LEGACY";
+		if($jamModel->SchedulerUserId == OVERRIDE_AUTOMATIC_NUM){
+			$jamViewModel->scheduler_username = OVERRIDE_AUTOMATIC;
+			$jamViewModel->scheduler_display_name = OVERRIDE_AUTOMATIC;
+		} else if($jamModel->SchedulerUserId == OVERRIDE_LEGACY_NUM){
+			$jamViewModel->scheduler_username = OVERRIDE_LEGACY;
+			$jamViewModel->scheduler_display_name = OVERRIDE_LEGACY;
 		} else {
 			$jamViewModel->scheduler_username = $userData->UserModels[$jamModel->SchedulerUserId]->Username;
 			$jamViewModel->scheduler_display_name = $userData->UserModels[$jamModel->SchedulerUserId]->DisplayName;
@@ -108,7 +108,7 @@ class JamPresenter{
 
 			$jamViewModel->satisfaction_average_score = $satisfactionAverage;
 			$jamViewModel->satisfaction_submitted_scores = $satisfactionCount;
-			$jamViewModel->enough_scores_to_show_satisfaction = $satisfactionCount >= $configData->ConfigModels["SATISFACTION_RATINGS_TO_SHOW_SCORE"]->Value;
+			$jamViewModel->enough_scores_to_show_satisfaction = $satisfactionCount >= $configData->ConfigModels[CONFIG_SATISFACTION_RATINGS_TO_SHOW_SCORE]->Value;
 			$jamViewModel->score_minus_5 = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-5];
 			$jamViewModel->score_minus_4 = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-4];
 			$jamViewModel->score_minus_3 = $satisfactionData->SatisfactionModels[$arrayId]->Scores[-3];
@@ -146,7 +146,7 @@ class JamPresenter{
 		$latestStartedJamFound = false;
 		$currentJam = GetCurrentJamNumberAndId();
 
-		$jamsToLoad = $configData->ConfigModels["JAMS_TO_LOAD"]->Value;
+		$jamsToLoad = $configData->ConfigModels[CONFIG_JAMS_TO_LOAD]->Value;
 
 		$allJamsLoaded = true;
 		$jamsViewModel->current_jam = $currentJam["NUMBER"] !== 0;
@@ -161,7 +161,7 @@ class JamPresenter{
 				if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
 					$jamViewModel = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
 					
-					if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value){
+					if($configData->ConfigModels[CONFIG_CAN_SUBMIT_TO_PAST_JAMS]->Value){
 						$jamViewModel->can_user_submit_to_jam = !$jamViewModel->user_participated_in_jam && $jamViewModel->jam_started;
 					}
 

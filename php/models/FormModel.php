@@ -1,0 +1,86 @@
+<?php
+
+define("GET_PAGE", "page");
+define("GET_LOAD_ALL", "loadAll");
+define("GET_DARK_MODE", "darkmode");
+define("GET_STREAMING_MODE", "streaming");
+define("GET_EDITUSER_USER_ID", "user_id");
+define("GET_EDITJAM_JAM_Id", "jam_id");
+define("GET_EDITASSET_ASSET_ID", "asset_id");
+define("GET_EDITENTRY_ENTRY_ID", "entry_id");
+define("GET_JAM_JAM_NUMBER", "jam");
+define("GET_AUTHOR_USER_ID", "author");
+define("GET_SUBMIT_JAM_NUMBER", "jam_number");
+
+define("FORM_POST_ACTION", "action");
+define("FORM_CSRF_TOKEN", "csrf_token");
+define("FORM_INSTALL_DB_HOST", "dbHost");
+define("FORM_INSTALL_DB_USERNAME", "dbUsername");
+define("FORM_INSTALL_DB_PASSWORD", "dbPassword");
+define("FORM_INSTALL_DB_NAME", "dbName");
+define("FORM_INSTALL_INIT_DATABASE", "initialiseDatabase");
+define("FORM_ADMINVOTE_SUBJECT_USER_ID", "adminVoteSubjectUserId");
+define("FORM_ADMINVOTE_VOTE_TYPE", "adminVoteType");
+define("FORM_DELETEASSET_ASSET_ID", "asset_id");
+define("FORM_SAVEASSET_ASSET_ID", "asset_id");
+define("FORM_SAVEASSET_AUTHOR", "author");
+define("FORM_SAVEASSET_TITLE", "title");
+define("FORM_SAVEASSET_DESCRIPTION", "description");
+define("FORM_SAVEASSET_TYPE", "type");
+define("FORM_LOGIN_USERNAME", "un");
+define("FORM_LOGIN_PASSWORD", "pw");
+define("FORM_REGISTER_USERNAME", "un");
+define("FORM_REGISTER_PASSWORD", "pw");
+define("FORM_DELETEENTRY_ENTRY_ID", "entryID");
+define("FORM_SUBMIT_NAME", "gamename");
+define("FORM_SUBMIT_DESCRIPTION", "description");
+define("FORM_SUBMIT_JAM_NUMBER", "jam_number");
+define("FORM_SUBMIT_BACKGROUND_COLOR", "backgroundColor");
+define("FORM_SUBMIT_TEXT_COLOR", "textColor");
+define("FORM_SUBMIT_URL", "gameurl");
+define("FORM_SUBMIT_SATISFACTION", "satisfaction");
+define("FORM_DELETEJAM_JAM_ID", "jamID");
+define("FORM_NEWJAM_THEME", "theme");
+define("FORM_NEWJAM_DATE", "date");
+define("FORM_NEWJAM_TIME", "time");
+define("FORM_NEWJAM_JAM_COLOR", "jamcolor");
+define("FORM_EDITJAM_JAM_ID", "jamID");
+define("FORM_EDITJAM_THEME", "theme");
+define("FORM_EDITJAM_DATE", "date");
+define("FORM_EDITJAM_TIME", "time");
+define("FORM_EDITJAM_JAM_COLORS", "jamcolors");
+define("FORM_DELETEPLATFORM_PLATFORM_ID", "platformid");
+define("FORM_EDITPLATFORM_PLATFORM_ID", "platformid");
+define("FORM_EDITPLATFORM_NAME", "platformname");
+define("FORM_NEWPLATFORM_NAME", "platformname");
+define("FORM_UNDELETEPLATFORM_NAME", "platformid");
+define("FORM_BANTHEME_THEME_ID", "theme_id");
+define("FORM_DELETETHEME_THEME_ID", "theme_id");
+define("FORM_DELETETHEME_PAGE", "pageid");
+define("FORM_DELETETHEMES_THEME_ID", "selected-themes");
+define("FORM_NEWTHEME_THEME", "theme");
+define("FORM_UNBANTHEME_THEME_ID", "theme_id");
+define("FORM_CHANGEPASSWORD_OLD_PASSWORD", "passwordold");
+define("FORM_CHANGEPASSWORD_PASSWORD_1", "password1");
+define("FORM_CHANGEPASSWORD_PASSWORD_2", "password2");
+define("FORM_SAVENEWUSERPASSWORD_USER_ID", "user_id");
+define("FORM_SAVENEWUSERPASSWORD_PASSWORD_1", "password1");
+define("FORM_SAVENEWUSERPASSWORD_PASSWORD_2", "password2");
+define("FORM_SAVEUSERCHANGES_DISPLAY_NAME", "displayname");
+define("FORM_SAVEUSERCHANGES_TWITTER_HANDLE", "twitterhandle");
+define("FORM_SAVEUSERCHANGES_EMAIL_ADDRESS", "emailaddress");
+define("FORM_SAVEUSERCHANGES_BIO", "bio");
+define("FORM_EDITUSER_USER_ID", "user_id");
+define("FORM_EDITUSER_IS_ADMIN", "isadmin");
+define("FORM_COOKIENOTICE_ACCEPT", "cookienotice-accepted");
+
+define("FORM_POLLVOTE_POLL_ID", "pollID");
+define("FORM_POLLVOTE_OPTION_ID", "optionID");
+define("FORM_SUBMITIDEAS_THEME_ID", "themeID");
+define("FORM_SUBMITIDEAS_IDEAS", "ideas");
+define("FORM_THEMEVOTE_THEME_ID", "themeID");
+define("FORM_THEMEVOTE_VOTE", "vote");
+
+define("SESSION_CSRF_TOKEN", "csrf_token");
+
+?>

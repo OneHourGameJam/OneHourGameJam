@@ -70,9 +70,9 @@ class UserPresenter{
 				$userViewModel->last_jam_number = $gameModel->JamNumber;
 			}
 	
-			$isJamRecent = intval($jamModelForGame->JamNumber) > (intval($currentJam["NUMBER"]) - intval($configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value));
+			$isJamRecent = intval($jamModelForGame->JamNumber) > (intval($currentJam["NUMBER"]) - intval($configData->ConfigModels[CONFIG_JAMS_CONSIDERED_RECENT]->Value));
 			if($isJamRecent){
-				$userViewModel->recent_participation += 100.0 / $configData->ConfigModels["JAMS_CONSIDERED_RECENT"]->Value;
+				$userViewModel->recent_participation += 100.0 / $configData->ConfigModels[CONFIG_JAMS_CONSIDERED_RECENT]->Value;
 			}
 	
 			StopTimer("RenderUser - foreach games - entry count, first and last jam, recent");
@@ -95,10 +95,10 @@ class UserPresenter{
 	
 		//Find admin candidates
 		StartTimer("RenderUser - admin candidates");
-		if($userViewModel->recent_participation >= $configData->ConfigModels["ADMIN_SUGGESTION_RECENT_PARTICIPATION"]->Value){
+		if($userViewModel->recent_participation >= $configData->ConfigModels[CONFIG_ADMIN_SUGGESTION_RECENT_PARTICIPATION]->Value){
 			$userViewModel->admin_candidate_recent_participation_check_pass = 1;
 		}
-		if($userViewModel->entry_count >= $configData->ConfigModels["ADMIN_SUGGESTION_TOTAL_PARTICIPATION"]->Value){
+		if($userViewModel->entry_count >= $configData->ConfigModels[CONFIG_ADMIN_SUGGESTION_TOTAL_PARTICIPATION]->Value){
 			$userViewModel->admin_candidate_total_participation_check_pass = 1;
 		}
 		if(	isset($userViewModel->admin_candidate_recent_participation_check_pass) &&
@@ -123,10 +123,10 @@ class UserPresenter{
 		//Find inactive admins (participation in jams)
 		$jamsSinceLastParticipation = ($currentJam["NUMBER"] - $userViewModel->last_jam_number);
 		$userViewModel->jams_since_last_participation = $jamsSinceLastParticipation;
-		if($userViewModel->last_jam_number < ($currentJam["NUMBER"] - $configData->ConfigModels["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING"]->Value)){
+		if($userViewModel->last_jam_number < ($currentJam["NUMBER"] - $configData->ConfigModels[CONFIG_ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_WARNING]->Value)){
 			$userViewModel->activity_jam_participation = "inactive";
 			$userViewModel->activity_jam_participation_color = $inactiveColor;
-		}else if($userViewModel->last_jam_number >= ($currentJam["NUMBER"] - $configData->ConfigModels["ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD"]->Value)){
+		}else if($userViewModel->last_jam_number >= ($currentJam["NUMBER"] - $configData->ConfigModels[CONFIG_ADMIN_ACTIVITY_JAMS_SINCE_LAST_PARTICIPATION_GOOD]->Value)){
 			$userViewModel->activity_jam_participation = "highly active";
 			$userViewModel->activity_jam_participation_color = $highlyAciveColor;
 		}else{
@@ -135,10 +135,10 @@ class UserPresenter{
 		}
 	
 		//Find inactive admins (days since last login)
-		if($userViewModel->days_since_last_login > $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING"]->Value){
+		if($userViewModel->days_since_last_login > $configData->ConfigModels[CONFIG_ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING]->Value){
 			$userViewModel->activity_login = "inactive";
 			$userViewModel->activity_login_color = $inactiveColor;
-		}else if($userViewModel->days_since_last_login < $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD"]->Value){
+		}else if($userViewModel->days_since_last_login < $configData->ConfigModels[CONFIG_ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_GOOD]->Value){
 			$userViewModel->activity_login = "highly active";
 			$userViewModel->activity_login_color = $highlyAciveColor;
 		}else{
@@ -147,10 +147,10 @@ class UserPresenter{
 		}
 	
 		//Find inactive admins (days since last login)
-		if($userViewModel->days_since_last_admin_action > $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING"]->Value){
+		if($userViewModel->days_since_last_admin_action > $configData->ConfigModels[CONFIG_ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_WARNING]->Value){
 			$userViewModel->activity_administration = "inactive";
 			$userViewModel->activity_administration_color = $inactiveColor;
-		}else if($userViewModel->days_since_last_admin_action < $configData->ConfigModels["ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD"]->Value){
+		}else if($userViewModel->days_since_last_admin_action < $configData->ConfigModels[CONFIG_ADMIN_ACTIVITY_DAYS_SINCE_LAST_ADMIN_ACTION_GOOD]->Value){
 			$userViewModel->activity_administration = "highly active";
 			$userViewModel->activity_administration_color = $highlyAciveColor;
 		}else{
@@ -202,20 +202,20 @@ class UserPresenter{
 		foreach($adminVoteData->AdminVoteModels as $j => $adminVoteModel){
 			if($userViewModel->id == $adminVoteModel->SubjectUserId){
 				switch($adminVoteModel->VoteType){
-					case "FOR":
+					case ADMINVOTE_FOR:
 						$userViewModel->votes_for += 1;
 						break;
-					case "NEUTRAL":
+					case ADMINVOTE_NEUTRAL:
 						$userViewModel->votes_neutral += 1;
 						break;
-					case "AGAINST":
+					case ADMINVOTE_AGAINST:
 						$userViewModel->votes_against += 1;
 						break;
-					case "SPONSOR":
+					case ADMINVOTE_SPONSOR:
 						$userViewModel->votes_for += 1;
 						$userViewModel->is_sponsored = 1;
 						break;
-					case "VETO":
+					case ADMINVOTE_VETO:
 						$userViewModel->votes_vetos += 1;
 						$userViewModel->is_vetoed = 1;
 						break;
@@ -230,19 +230,19 @@ class UserPresenter{
 				$userViewModel->vote_type = $adminVoteModel->VoteType;
 	
 				switch($adminVoteModel->VoteType){
-					case "FOR":
+					case ADMINVOTE_FOR:
 						$userViewModel->vote_type_for = 1;
 						break;
-					case "NEUTRAL":
+					case ADMINVOTE_NEUTRAL:
 						$userViewModel->vote_type_neutral = 1;
 						break;
-					case "AGAINST":
+					case ADMINVOTE_AGAINST:
 						$userViewModel->vote_type_against = 1;
 						break;
-					case "SPONSOR":
+					case ADMINVOTE_SPONSOR:
 						$userViewModel->vote_type_sponsor = 1;
 						break;
-					case "VETO":
+					case ADMINVOTE_VETO:
 						$userViewModel->vote_type_veto = 1;
 						break;
 				}

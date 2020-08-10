@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $page, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $adminLogDbInterface;
+	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $adminLogDbInterface, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -54,6 +54,10 @@ function Init(){
 
 	$loggedInUser = IsLoggedIn($configData, $userData);
 	
+	$page = PAGE_MAIN;
+	if(isset($_GET[GET_PAGE])){
+		$page = strtolower(trim($_GET[GET_PAGE]));
+	}
 	$page = ValidatePage($page, $loggedInUser);
 	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
@@ -91,66 +95,66 @@ function Init(){
 	//print(ArrayToHTML($platformData->GetAllPublicData()));
 
 	loadCSRFToken();
-	$dictionary["csrf_token"] = $_SESSION["csrf_token"];
+	$dictionary["csrf_token"] = $_SESSION[SESSION_CSRF_TOKEN];
  
-	if(FindDependency("RenderConfig", $dependencies) !== false){
+	if(FindDependency(RENDER_CONFIG, $dependencies) !== false){
 		$dictionary["CONFIG"] = ConfigurationPresenter::RenderConfig($configData);
 	}
-	if(FindDependency("RenderAdminLog", $dependencies) !== false){
+	if(FindDependency(RENDER_ADMIN_LOG, $dependencies) !== false){
 		$renderAdminLog = new AdminLogPresenter($adminLogData, $userData);
 		$dictionary["adminlog"] = $renderAdminLog->AdminLogRender;
 	}
-	if(FindDependency("RenderUsers", $dependencies) !== false){
-		$dependency = FindDependency("RenderUsers", $dependencies);
+	if(FindDependency(RENDER_USERS, $dependencies) !== false){
+		$dependency = FindDependency(RENDER_USERS, $dependencies);
 		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
 	}
-	if(FindDependency("RenderAllJams", $dependencies) !== false){
-		$dependency1 = FindDependency("RenderAllJams", $dependencies);
-		$dependency2 = FindDependency("RenderJams", $dependencies);
+	if(FindDependency(RENDER_ALL_JAMS, $dependencies) !== false){
+		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
+		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
-	}else if(FindDependency("RenderJams", $dependencies) !== false){
-		$dependency1 = FindDependency("RenderAllJams", $dependencies);
-		$dependency2 = FindDependency("RenderJams", $dependencies);
+	}else if(FindDependency(RENDER_JAMS, $dependencies) !== false){
+		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
+		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$loadAll = false;
-		if(isset($_GET["loadAll"])){
+		if(isset($_GET[GET_LOAD_ALL])){
 			$loadAll = true;
 		}
 		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
-	if(FindDependency("RenderGames", $dependencies) !== false){
-		$dependency = FindDependency("RenderGames", $dependencies);
+	if(FindDependency(RENDER_GAMES, $dependencies) !== false){
+		$dependency = FindDependency(RENDER_GAMES, $dependencies);
 		$dictionary["entries"] = GamePresenter::RenderGames($userData, $gameData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
 	}
-	if(FindDependency("RenderThemes", $dependencies) !== false){
-		$dependency = FindDependency("RenderThemes", $dependencies);
+	if(FindDependency(RENDER_THEMES, $dependencies) !== false){
+		$dependency = FindDependency(RENDER_THEMES, $dependencies);
 		$dictionary["themes"] = ThemePresenter::RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeaData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
-	if(FindDependency("RenderAssets", $dependencies) !== false){
+	if(FindDependency(RENDER_ASSETS, $dependencies) !== false){
 		$dictionary["assets"] = AssetPresenter::RenderAssets($assetData, $userData);
 	}
-	if(FindDependency("RenderPolls", $dependencies) !== false){
+	if(FindDependency(RENDER_POLLS, $dependencies) !== false){
 		$dictionary["polls"] = PollPresenter::RenderPolls($pollData);
 	}
-	if(FindDependency("RenderCookies", $dependencies) !== false){
+	if(FindDependency(RENDER_COOKIES, $dependencies) !== false){
 		$dictionary["cookies"] = CookiePresenter::RenderCookies($cookieData);
 	}
-	if(FindDependency("RenderMessages", $dependencies) !== false){
+	if(FindDependency(RENDER_MESSAGES, $dependencies) !== false){
 		$dictionary["messages"] = MessagePresenter::RenderMessages($messageData);
 	}
-	if(FindDependency("RenderStream", $dependencies) !== false){
+	if(FindDependency(RENDER_STREAM, $dependencies) !== false){
 		$dictionary["stream"] = StreamPresenter::RenderStream($streamData, $configData);
 	}
-	if(FindDependency("RenderPlatforms", $dependencies) !== false){
+	if(FindDependency(RENDER_PLATFORMS, $dependencies) !== false){
 		$dictionary["platforms"] = PlatformPresenter::RenderPlatforms($platformData);
 	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	
 	if($loggedInUser !== false){
-		if(FindDependency("RenderLoggedInUser", $dependencies) !== false){
-			$dependency = FindDependency("RenderLoggedInUser", $dependencies);
+		if(FindDependency(RENDER_LOGGED_IN_USER, $dependencies) !== false){
+			$dependency = FindDependency(RENDER_LOGGED_IN_USER, $dependencies);
 			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}

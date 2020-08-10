@@ -6,7 +6,7 @@ class ThemeController{
 		AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 		StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 
-		$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
+		$minimumVotes = $configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value;
 
 		$result = Array();
 		$availableThemes = Array();
@@ -66,7 +66,7 @@ class ThemeController{
 		AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 		StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 
-		$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
+		$minimumVotes = $configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value;
 		$totalPopularity = 0;
 
 		$result = Array();
@@ -138,12 +138,12 @@ class ThemeController{
 
 			$votesTotal = $themeModel->VotesFor + $themeModel->VotesNeutral + $themeModel->VotesAgainst;
 
-			if($votesTotal < intval($configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value)){
+			if($votesTotal < intval($configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value)){
 				//not enough votes
 				continue;
 			}
 			
-			$theme["is_old"] = intval($themeModel->DaysAgo) >= intval($configData->ConfigModels["THEME_DAYS_MARK_AS_OLD"]->Value);
+			$theme["is_old"] = intval($themeModel->DaysAgo) >= intval($configData->ConfigModels[CONFIG_THEME_DAYS_MARK_AS_OLD]->Value);
 			$theme["is_recent"] = ThemePresenter::IsRecentTheme($jamData, $configData, $themeModel->Theme);
 			$theme["popularity"] = 0;
 			if($votesOpinionated > 0){
@@ -165,7 +165,7 @@ class ThemeController{
 		});
 
 		$themesToDelete = Array();
-		$themesToKeepRemaining = intval($configData->ConfigModels["THEME_NUMBER_TO_MARK_KEEP"]->Value);
+		$themesToKeepRemaining = intval($configData->ConfigModels[CONFIG_THEME_NUMBER_TO_MARK_KEEP]->Value);
 		foreach($themesWithEnoughVotes as $i => $theme){
 			if($theme["is_old"]){
 				$theme["delete_reason"] = "Old";

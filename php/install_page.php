@@ -20,8 +20,8 @@ function RunInstallPage(&$dictionary) {
 	}
 
 	// Check to see if this is a setup post request
-	if(isset($_POST["action"])) {
-		if ($_POST["action"] == "setup") {
+	if(isset($_POST[FORM_POST_ACTION])) {
+		if ($_POST[FORM_POST_ACTION] == "setup") {
 			// Run the database setup, and then set the template file based on if there was an error or not.
 			$errorMessage = RunSetupAction();
 			$dictionary['error_message'] = $errorMessage;
@@ -44,16 +44,16 @@ function RunInstallPage(&$dictionary) {
 function RunSetupAction() {
 	global $dbConfigPath, $baseDatabaseSqlFile;
 
-	if(!isset($_POST["dbHost"]) || !isset($_POST["dbUsername"]) || !isset($_POST["dbPassword"]) || !isset($_POST["dbName"])){
+	if(!isset($_POST[FORM_INSTALL_DB_HOST]) || !isset($_POST[FORM_INSTALL_DB_USERNAME]) || !isset($_POST[FORM_INSTALL_DB_PASSWORD]) || !isset($_POST[FORM_INSTALL_DB_NAME])){
 		die("Some setup parameters were not set up correctly");
 	}
 
-	$dbHost = $_POST["dbHost"];
-	$dbUser = $_POST["dbUsername"];
-	$dbPassword = $_POST["dbPassword"];
-	$dbName = $_POST["dbName"];
+	$dbHost = $_POST[FORM_INSTALL_DB_HOST];
+	$dbUser = $_POST[FORM_INSTALL_DB_USERNAME];
+	$dbPassword = $_POST[FORM_INSTALL_DB_PASSWORD];
+	$dbName = $_POST[FORM_INSTALL_DB_NAME];
 	
-	$initialiseDatabase = isset($_POST["initialiseDatabase"]);
+	$initialiseDatabase = isset($_POST[FORM_INSTALL_INIT_DATABASE]);
 
 	// Check connection
 	$conn = @mysqli_connect($dbHost, $dbUser, $dbPassword);

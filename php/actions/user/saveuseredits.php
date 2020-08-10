@@ -37,8 +37,8 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$userId = $_POST["user_id"];
-		$isAdmin = (isset($_POST["isadmin"])) ? intval($_POST["isadmin"]) : 0;
+		$userId = $_POST[FORM_EDITUSER_USER_ID];
+		$isAdmin = (isset($_POST[FORM_EDITUSER_IS_ADMIN])) ? intval($_POST[FORM_EDITUSER_IS_ADMIN]) : 0;
 		if($isAdmin != 0 && $isAdmin != 1){
 			die("invalid isadmin value");
 		}

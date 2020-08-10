@@ -76,8 +76,8 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
-		$platformId = (isset($_POST["platformid"])) ? $_POST["platformid"] : "";
-		$platformName = (isset($_POST["platformname"])) ? $_POST["platformname"] : "";
+		$platformId = (isset($_POST[FORM_EDITPLATFORM_PLATFORM_ID])) ? $_POST[FORM_EDITPLATFORM_PLATFORM_ID] : "";
+		$platformName = (isset($_POST[FORM_EDITPLATFORM_NAME])) ? $_POST[FORM_EDITPLATFORM_NAME] : "";
 
 		return EditPlatform($platformId, $platformName);
 	}

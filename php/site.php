@@ -58,6 +58,7 @@ include_once("php/models/AssetModel.php");
 include_once("php/models/AdminVoteModel.php");
 include_once("php/models/AdminLogModel.php");
 include_once("php/models/ThemeIdeaModel.php");
+include_once("php/models/FormModel.php");
 
 //ViewModels
 include_once("php/viewmodels/AdminLogViewModel.php");

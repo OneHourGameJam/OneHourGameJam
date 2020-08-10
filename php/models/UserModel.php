@@ -186,14 +186,14 @@ class UserData{
             $hashedPassword = HashPassword($password, $salt, $passwordHashIterations, $configData);
 
             $dataFromDatabase[$i][DB_COLUMN_USER_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_USER_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_USER_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_USER_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_USER_USER_AGENT] = OVERRIDE_MIGRATION;
             $dataFromDatabase[$i][DB_COLUMN_USER_SALT] = $salt;
             $dataFromDatabase[$i][DB_COLUMN_USER_PASSWORD_HASH] = $hashedPassword;
             $dataFromDatabase[$i][DB_COLUMN_USER_PASSWORD_ITERATIONS] = $passwordHashIterations;
             $dataFromDatabase[$i][DB_COLUMN_USER_LAST_LOGIN_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_USER_LAST_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_USER_LAST_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_USER_LAST_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_USER_LAST_USER_AGENT] = OVERRIDE_MIGRATION;
             $dataFromDatabase[$i][DB_COLUMN_USER_EMAIL] = "";
             $dataFromDatabase[$i][DB_COLUMN_USER_ROLE] = 0;
             $dataFromDatabase[$i][DB_COLUMN_USER_PREFERENCES] = rand(0, 1);

@@ -3,10 +3,6 @@
 
 //Global variables
 $page = "main";
-if(isset($_GET["page"])){
-	$page = strtolower(trim($_GET["page"]));
-}
-
 $warnings = Array();
 $loggedInUser = "";
 $loginChecked = false;

@@ -50,7 +50,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$bannedThemeId = $_POST["theme_id"];
+		$bannedThemeId = $_POST[FORM_BANTHEME_THEME_ID];
 		return BanTheme($bannedThemeId);
 	}
 }

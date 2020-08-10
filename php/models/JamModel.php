@@ -1,5 +1,10 @@
 <?php
 
+define("JAM_STATE_COMPLETED", "COMPLETED");
+define("JAM_STATE_ACTIVE", "ACTIVE");
+define("JAM_STATE_SCHEDULED", "SCHEDULED");
+define("JAM_STATE_DELETED", "DELETED");
+
 class JamModel{
 	public $Id;
 	public $SchedulerUserId;
@@ -65,7 +70,7 @@ class JamData{
         $this->jamDbInterface->Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors);
         
         StopTimer("AddJamToDatabase");
-        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "NULL", ($userId > 0) ? $userId : "NULL", ($userId > 0) ? "" : "AUTOMATIC");
+        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "NULL", ($userId > 0) ? $userId : "NULL", ($userId > 0) ? "" : OVERRIDE_AUTOMATIC);
     }
 
     function UpdateJamStateInDatabase($jamId, $newJamState){
@@ -149,8 +154,8 @@ class JamData{
 
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_JAM_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_JAM_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_JAM_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_JAM_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_JAM_USER_AGENT] = OVERRIDE_MIGRATION;
         }
 
         StopTimer("JamData_GetAllPublicData");

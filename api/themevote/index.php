@@ -7,18 +7,18 @@ if($loggedInUser == false){
 	die();
 }
 
-if(!isset($_GET["themeID"])){
+if(!isset($_GET[FORM_THEMEVOTE_THEME_ID])){
 	print json_encode(Array("ERROR" => "Theme ID not set"));
 	die();
 }
 
-if(!isset($_GET["vote"])){
+if(!isset($_GET[FORM_THEMEVOTE_VOTE])){
 	print json_encode(Array("ERROR" => "Vote type not set"));
 	die();
 }
 
-$themeId = intval(trim($_GET["themeID"]));
-$vote = intval($_GET["vote"]);
+$themeId = intval(trim($_GET[FORM_THEMEVOTE_THEME_ID]));
+$vote = intval($_GET[FORM_THEMEVOTE_VOTE]);
 
 
 //Check if the theme exists

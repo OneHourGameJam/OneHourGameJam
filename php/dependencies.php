@@ -43,243 +43,244 @@ define("RENDER_DEPTH_THEME_IDEAS",  pow(2, 3));
 define("RENDER_DEPTH_JAMS_GAMES",   RENDER_DEPTH_JAMS + RENDER_DEPTH_GAMES);
 define("RENDER_DEPTH_USERS_GAMES",  RENDER_DEPTH_USERS + RENDER_DEPTH_GAMES);
 
-//These correspond to which data is necessary to perform the processing or rendering of each module
-$rendererDependencies = Array(
-    "IsLoggedIn" =>   Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_USERS,
-        "Dependencies" => Array()),
-    "RenderConfig" =>   Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG, 
-        "Dependencies" => Array()),
-    "RenderAdminLog" => Array(
-        "BaseDependencies" => DEPENDENCY_ADMIN_LOG, 
-        "Dependencies" => Array()),
-    "RenderUsers" =>    Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_USERS | DEPENDENCY_GAMES | DEPENDENCY_JAMS | DEPENDENCY_ADMIN_VOTES | DEPENDENCY_LOGGED_IN_USER_ADMIN_VOTES, 
-        "Dependencies" => Array()),
-    "RenderJams" =>     Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_USERS | DEPENDENCY_GAMES | DEPENDENCY_JAMS | DEPENDENCY_SATISFACTION | DEPENDENCY_LOGGED_IN_USER, 
-        "Dependencies" => Array()),
-    "RenderAllJams" =>     Array(
-        "BaseDependencies" => 0, 
-        "Dependencies" => Array("RenderJams")),
-    "RenderGames" =>    Array(
-        "BaseDependencies" => DEPENDENCY_USERS | DEPENDENCY_GAMES | DEPENDENCY_JAMS, 
-        "Dependencies" => Array()),
-    "RenderThemes" =>   Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_THEMES | DEPENDENCY_LOGGED_IN_USER_THEME_VOTES | DEPENDENCY_THEMES_BY_VOTE_DIFFERENCE | DEPENDENCY_THEMES_BY_POPULARITY | DEPENDENCY_LOGGED_IN_USER, 
-        "Dependencies" => Array()),
-    "RenderAssets" =>   Array(
-        "BaseDependencies" => DEPENDENCY_ASSETS, 
-        "Dependencies" => Array()),
-    "RenderPolls" =>    Array(
-        "BaseDependencies" => DEPENDENCY_POLLS | DEPENDENCY_LOGGED_IN_USER_POLL_VOTES, 
-        "Dependencies" => Array()),
-    "RenderLoggedInUser" =>    Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_USERS | DEPENDENCY_GAMES | DEPENDENCY_JAMS | DEPENDENCY_ADMIN_VOTES | DEPENDENCY_LOGGED_IN_USER_ADMIN_VOTES | DEPENDENCY_LOGGED_IN_USER, 
-        "Dependencies" => Array()),
-    "CheckNextJamSchedule" =>  Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG | DEPENDENCY_JAMS | DEPENDENCY_THEMES, 
-        "Dependencies" => Array(
-            "GetNextJamDateAndTime", 
-            "GetSuggestedNextJamDateTime")),
-    "GetNextJamDateAndTime" => Array(
-        "BaseDependencies" => DEPENDENCY_JAMS, 
-        "Dependencies" => Array()),
-    "GetSuggestedNextJamDateTime" => Array(
-        "BaseDependencies" => DEPENDENCY_CONFIG, 
-        "Dependencies" => Array()),
-    "RenderMessages" => Array(
-        "BaseDependencies" => DEPENDENCY_MESSAGES, 
-        "Dependencies" => Array()),
-    "RenderCookies" => Array(
-        "BaseDependencies" => DEPENDENCY_COOKIES, 
-        "Dependencies" => Array()),
-    "RenderStream" => Array(
-        "BaseDependencies" => DEPENDENCY_NONE, 
-        "Dependencies" => Array()),
-    "RenderPlatforms" => Array(
-        "BaseDependencies" => DEPENDENCY_PLATFORMS, 
-        "Dependencies" => Array())
-);
+define("PAGE_MAIN", "main");
+define("PAGE_LOGIN", "login");
+define("PAGE_REGISTER", "register");
+define("PAGE_FORGOT_PASSWORD", "forgotpassword");
+define("PAGE_SUBMIT", "submit");
+define("PAGE_NEW_JAM", "newjam");
+define("PAGE_ASSETS", "assets");
+define("PAGE_EDIT_ASSET", "editasset");
+define("PAGE_RULES", "rules");
+define("PAGE_CONFIG", "config");
+define("PAGE_EDIT_CONTENT", "editcontent");
+define("PAGE_EDIT_JAM", "editjam");
+define("PAGE_EDIT_ENTRY", "editentry");
+define("PAGE_EDIT_USERS", "editusers");
+define("PAGE_EDIT_USER", "edituser");
+define("PAGE_THEMES", "themes");
+define("PAGE_MANAGE_THEMES", "managethemes");
+define("PAGE_USER_SETTINGS", "usersettings");
+define("PAGE_ENTRIES", "entries");
+define("PAGE_JAM", "jam");
+define("PAGE_JAMS", "jams");
+define("PAGE_AUTHOR", "author");
+define("PAGE_AUTHORS", "authors");
+define("PAGE_PRIVACY", "privacy");
+define("PAGE_USER_DATA", "userdata");
+define("PAGE_ADMIN_LOG", "adminlog");
+define("PAGE_POLLS", "polls");
+define("PAGE_EDIT_PLATFORMS", "editplatforms");
+
+define("RENDER_CONFIG", "RenderConfig");
+define("RENDER_ADMIN_LOG", "RenderAdminLog");
+define("RENDER_USERS", "RenderUsers");
+define("RENDER_ALL_JAMS", "RenderAllJams");
+define("RENDER_JAMS", "RenderJams");
+define("RENDER_GAMES", "RenderGames");
+define("RENDER_THEMES", "RenderThemes");
+define("RENDER_ASSETS", "RenderAssets");
+define("RENDER_POLLS", "RenderPolls");
+define("RENDER_COOKIES", "RenderCookies");
+define("RENDER_MESSAGES", "RenderMessages");
+define("RENDER_STREAM", "RenderStream");
+define("RENDER_PLATFORMS", "RenderPlatforms");
+define("RENDER_LOGGED_IN_USER", "RenderLoggedInUser");
+
+define("AUTHORIZATION_LEVEL_NONE", "NONE");
+define("AUTHORIZATION_LEVEL_USER", "USER");
+define("AUTHORIZATION_LEVEL_ADMIN", "ADMIN");
 
 $commonDependencies = Array(
-    "header" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderUsers" => RENDER_DEPTH_NONE, "RenderGames" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_NONE),
-    "message" => Array("RenderMessages" => RENDER_DEPTH_NONE),
-    "menu" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE, "RenderJams" => RENDER_DEPTH_NONE, "RenderUsers" => RENDER_DEPTH_USERS),
+    "header" => Array(
+        RENDER_CONFIG => RENDER_DEPTH_NONE, 
+        RENDER_USERS => RENDER_DEPTH_NONE, 
+        RENDER_GAMES => RENDER_DEPTH_NONE, 
+        RENDER_JAMS => RENDER_DEPTH_NONE),
+    "message" => Array(RENDER_MESSAGES => RENDER_DEPTH_NONE),
+    "menu" => Array(
+        RENDER_CONFIG => RENDER_DEPTH_NONE, 
+        RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, 
+        RENDER_COOKIES => RENDER_DEPTH_NONE, 
+        RENDER_THEMES => RENDER_DEPTH_NONE, 
+        RENDER_JAMS => RENDER_DEPTH_NONE, 
+        RENDER_USERS => RENDER_DEPTH_USERS),
     "footer" => Array(),
-    "poll" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderPolls" => RENDER_DEPTH_NONE),
-    "notification" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+    "poll" => Array(
+        RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, 
+        RENDER_POLLS => RENDER_DEPTH_NONE),
+    "notification" => Array(
+        RENDER_CONFIG => RENDER_DEPTH_NONE),
 );
 
 $pageSettings = Array(
-    "main" => Array(
+    PAGE_MAIN => Array(
         "page_title" => "Main Page",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "main.html",
-        "dependencies" => Array("RenderJams" => RENDER_DEPTH_JAMS_GAMES, "RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderStream" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_JAMS => RENDER_DEPTH_JAMS_GAMES, RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, RENDER_STREAM => RENDER_DEPTH_NONE),
     ), 
-    "login" => Array(
+    PAGE_LOGIN => Array(
         "page_title" => "Login",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "login.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    "register" => Array(
+    PAGE_REGISTER => Array(
         "page_title" => "Register",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "register.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    "forgotpassword" => Array(
+    PAGE_FORGOT_PASSWORD => Array(
         "page_title" => "Forgot Your Password?",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "forgotpassword.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    "submit" => Array(
+    PAGE_SUBMIT => Array(
         "page_title" => "Submit Game",
-        "authorization_level" => "USER",
+        "authorization_level" => AUTHORIZATION_LEVEL_USER,
         "template_file" => "submit.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),  
-    "newjam" => Array(
+    PAGE_NEW_JAM => Array(
         "page_title" => "Schedule New Jam",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "newjam.html",
-        "dependencies" => Array("RenderThemes" => RENDER_DEPTH_NONE, "RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_THEMES => RENDER_DEPTH_NONE, RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),  
-    "assets" => Array(
+    PAGE_ASSETS => Array(
         "page_title" => "Assets",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "assets.html",
-        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderAssets" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, RENDER_ASSETS => RENDER_DEPTH_NONE),
     ),  
-    "editasset" => Array(
+    PAGE_EDIT_ASSET => Array(
         "page_title" => "Edit Asset",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editasset.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    "rules" => Array(
+    PAGE_RULES => Array(
         "page_title" => "Rules",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "rules.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),  
-    "config" => Array(
+    PAGE_CONFIG => Array(
         "page_title" => "Configuration",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "config.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    "editcontent" => Array(
+    PAGE_EDIT_CONTENT => Array(
         "page_title" => "Manage Content",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editcontent.html",
-        "dependencies" => Array("RenderAllJams" => RENDER_DEPTH_JAMS_GAMES),
+        "dependencies" => Array(RENDER_ALL_JAMS => RENDER_DEPTH_JAMS_GAMES),
     ),  
-    "editjam" => Array(
+    PAGE_EDIT_JAM => Array(
         "page_title" => "Edit Jam",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editjam.html",
         "dependencies" => Array(),
     ),  
-    "editentry" => Array(
+    PAGE_EDIT_ENTRY => Array(
         "page_title" => "Edit Entry",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editentry.html",
         "dependencies" => Array(  ),
     ),  
-    "editusers" => Array(
+    PAGE_EDIT_USERS => Array(
         "page_title" => "Manage Users",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editusers.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderUsers" => RENDER_DEPTH_USERS),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE, RENDER_USERS => RENDER_DEPTH_USERS),
     ),  
-    "edituser" => Array(
+    PAGE_EDIT_USER => Array(
         "page_title" => "Edit User",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "edituser.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    "themes" => Array(
+    PAGE_THEMES => Array(
         "page_title" => "Theme Voting",
-        "authorization_level" => "USER",
+        "authorization_level" => AUTHORIZATION_LEVEL_USER,
         "template_file" => "themes.html",
-        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_THEME_IDEAS),
+        "dependencies" => Array(RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, RENDER_COOKIES => RENDER_DEPTH_NONE, RENDER_THEMES => RENDER_DEPTH_THEME_IDEAS),
     ),
-    "managethemes" => Array(
+    PAGE_MANAGE_THEMES => Array(
         "page_title" => "Manage Themes",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "managethemes.html",
-        "dependencies" => Array("RenderLoggedInUser" => RENDER_DEPTH_NONE, "RenderCookies" => RENDER_DEPTH_NONE, "RenderThemes" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, RENDER_COOKIES => RENDER_DEPTH_NONE, RENDER_THEMES => RENDER_DEPTH_NONE),
     ), 
-    "usersettings" => Array(
+    PAGE_USER_SETTINGS => Array(
         "page_title" => "User Settings",
-        "authorization_level" => "USER",
+        "authorization_level" => AUTHORIZATION_LEVEL_USER,
         "template_file" => "usersettings.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE, "RenderLoggedInUser" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE, RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE),
     ), 
-    "entries" => Array(
+    PAGE_ENTRIES => Array(
         "page_title" => "Entries",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "entries.html",
-        "dependencies" => Array("RenderGames" => RENDER_DEPTH_GAMES),
+        "dependencies" => Array(RENDER_GAMES => RENDER_DEPTH_GAMES),
     ),  
-    "jam" => Array(
+    PAGE_JAM => Array(
         "page_title" => "Jam",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "jam.html",
-        "dependencies" => Array("RenderConfig" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),  
-    "jams" => Array(
+    PAGE_JAMS => Array(
         "page_title" => "Jams",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "jams.html",
-        "dependencies" => Array("RenderAllJams" => RENDER_DEPTH_JAMS),
+        "dependencies" => Array(RENDER_ALL_JAMS => RENDER_DEPTH_JAMS),
     ),  
-    "author" => Array(
+    PAGE_AUTHOR => Array(
         "page_title" => "Author",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "author.html",
         "dependencies" => Array(  ),
     ),  
-    "authors" => Array(
+    PAGE_AUTHORS => Array(
         "page_title" => "Authors",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "authors.html",
-        "dependencies" => Array("RenderUsers" => RENDER_DEPTH_USERS),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_USERS),
     ),  
-    "privacy" => Array(
+    PAGE_PRIVACY => Array(
         "page_title" => "Privacy",
-        "authorization_level" => "NONE",
+        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "privacy.html",
         "dependencies" => Array(  ),
     ),  
-    "userdata" => Array(
+    PAGE_USER_DATA => Array(
         "page_title" => "User Data",
-        "authorization_level" => "USER",
+        "authorization_level" => AUTHORIZATION_LEVEL_USER,
         "template_file" => "userdata.html",
         "dependencies" => Array(  ),
     ),
-    "adminlog" => Array(
+    PAGE_ADMIN_LOG => Array(
         "page_title" => "Admin Log",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "adminlog.html",
-        "dependencies" => Array("RenderAdminLog" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_ADMIN_LOG => RENDER_DEPTH_NONE),
     ),
-    "polls" => Array(
+    PAGE_POLLS => Array(
         "page_title" => "Poll Results",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "polls.html",
-        "dependencies" => Array("RenderPolls" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_POLLS => RENDER_DEPTH_NONE),
     ), 
-    "editplatforms" => Array(
+    PAGE_EDIT_PLATFORMS => Array(
         "page_title" => "Manage Platforms",
-        "authorization_level" => "ADMIN",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editplatforms.html",
-        "dependencies" => Array("RenderPlatforms" => RENDER_DEPTH_NONE),
+        "dependencies" => Array(RENDER_PLATFORMS => RENDER_DEPTH_NONE),
     ), 
 );
 

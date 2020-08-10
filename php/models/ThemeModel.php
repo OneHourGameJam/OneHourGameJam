@@ -140,8 +140,8 @@ class ThemeData{
         $dataFromDatabase = MySQLDataToArray($this->themeDbInterface->SelectThemePublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEME_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_THEME_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_THEME_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_THEME_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_THEME_USER_AGENT] = OVERRIDE_MIGRATION;
         }
 
         StopTimer("ThemesData_GetAllThemePublicData");
@@ -155,8 +155,8 @@ class ThemeData{
         $dataFromDatabase = MySQLDataToArray($this->themeVoteDbInterface->SelectThemeVotePublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_USER_AGENT] = OVERRIDE_MIGRATION;
             $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_TYPE] = rand(1, 3);
         }
 

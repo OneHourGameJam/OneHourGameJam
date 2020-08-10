@@ -52,7 +52,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$entryId = (isset($_POST["entryID"])) ? $_POST["entryID"] : "";
+		$entryId = (isset($_POST[FORM_DELETEENTRY_ENTRY_ID])) ? $_POST[FORM_DELETEENTRY_ENTRY_ID] : "";
 		if($entryId != ""){
 			return DeleteEntry(intval($entryId));
 		}

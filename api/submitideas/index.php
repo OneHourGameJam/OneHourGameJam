@@ -7,12 +7,12 @@ if($loggedInUser == false){
 	die();
 }
 
-if(!isset($_GET["themeID"])){
+if(!isset($_GET[FORM_SUBMITIDEAS_THEME_ID])){
 	print json_encode(Array("ERROR" => "Theme ID not set"));
 	die();
 }
 
-$themeId = intval(trim($_GET["themeID"]));
+$themeId = intval(trim($_GET[FORM_SUBMITIDEAS_THEME_ID]));
 
 //Check if the theme exists
 $data = $themeDbInterface->SelectIfActive($themeId);
@@ -23,8 +23,8 @@ if(mysqli_num_rows($data) == 0){
 }
 
 $ideas = "";
-if(isset($_GET["ideas"])){
-	$ideas = $_GET["ideas"];
+if(isset($_GET[FORM_SUBMITIDEAS_IDEAS])){
+	$ideas = $_GET[FORM_SUBMITIDEAS_IDEAS];
 }
 
 if(strlen($ideas) > 240){

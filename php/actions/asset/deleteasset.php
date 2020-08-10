@@ -39,7 +39,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$assetId = $_POST["asset_id"];
+		$assetId = $_POST[FORM_DELETEASSET_ASSET_ID];
 		return DeleteAsset($assetId);
 	}
 }

@@ -51,8 +51,8 @@ function RemoveTheme($themeId, $pageId){
 function PerformAction(&$loggedInUser){
 	global $_POST;
 
-	$deleteThemeId = $_POST["theme_id"];
-	$pageId = $_POST["pageid"];
+	$deleteThemeId = $_POST[FORM_DELETETHEME_THEME_ID];
+	$pageId = $_POST[FORM_DELETETHEME_PAGE];
 	return RemoveTheme($deleteThemeId, $pageId);
 	
 }

@@ -39,7 +39,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
-		$platformId = (isset($_POST["platformid"])) ? $_POST["platformid"] : "";
+		$platformId = (isset($_POST[FORM_UNDELETEPLATFORM_NAME])) ? $_POST[FORM_UNDELETEPLATFORM_NAME] : "";
 
 		return UndeletePlatform($platformId);
 	}

@@ -7,8 +7,8 @@ class JamController{
 	
 		foreach($jamData->JamModels as $i => $jamModel){
 			if($jamModel->Deleted == 1){
-				if($jamModel->State != "DELETED"){
-					$jamData->UpdateJamStateInDatabase($jamModel->Id, "DELETED");
+				if($jamModel->State != JAM_STATE_DELETED){
+					$jamData->UpdateJamStateInDatabase($jamModel->Id, JAM_STATE_DELETED);
 				}
 				continue;
 			}
@@ -16,25 +16,25 @@ class JamController{
 			//Hide theme of not-yet-started jams
 			$now = new DateTime("UTC");
 			$jamStartTime = new DateTime($jamModel->StartTime . " UTC");
-			$jamDurationInMinutes = intval($configData->ConfigModels["JAM_DURATION"]->Value);
+			$jamDurationInMinutes = intval($configData->ConfigModels[CONFIG_JAM_DURATION]->Value);
 			$jamEndTime = clone $jamStartTime;
 			$jamEndTime->add(new DateInterval("PT".$jamDurationInMinutes."M"));
 	
 			if($now > $jamEndTime){
 				//Past Jam (jam's over)
-				if($jamModel->State != "COMPLETED"){
-					$jamData->UpdateJamStateInDatabase($jamModel->Id, "COMPLETED");
+				if($jamModel->State != JAM_STATE_COMPLETED){
+					$jamData->UpdateJamStateInDatabase($jamModel->Id, JAM_STATE_COMPLETED);
 				}
 			}else if($now > $jamStartTime){
 				//Present Jam (started, hasn't finished yet)
-				if($jamModel->State != "ACTIVE"){
-					$jamData->UpdateJamStateInDatabase($jamModel->Id, "ACTIVE");
+				if($jamModel->State != JAM_STATE_ACTIVE){
+					$jamData->UpdateJamStateInDatabase($jamModel->Id, JAM_STATE_ACTIVE);
 					ThemeController::PruneThemes($themeData, $jamData, $configData, $adminLogData);
 				}
 			}else{
 				//Future Jam (not yet started)
-				if($jamModel->State != "SCHEDULED"){
-					$jamData->UpdateJamStateInDatabase($jamModel->Id, "SCHEDULED");
+				if($jamModel->State != JAM_STATE_SCHEDULED){
+					$jamData->UpdateJamStateInDatabase($jamModel->Id, JAM_STATE_SCHEDULED);
 				}
 			}
 		}
@@ -49,14 +49,14 @@ class JamController{
 
 		//print "<br>CHECK JAM SCHEDULING";
 
-		if($configData->ConfigModels["JAM_AUTO_SCHEDULER_ENABLED"]->Value == 0){
+		if($configData->ConfigModels[CONFIG_JAM_AUTO_SCHEDULER_ENABLED]->Value == 0){
 			//print "<br>AUTO SCHEDULER DISABLED";
 			StopTimer("CheckNextJamSchedule");
 			return;
 		}
 
 		//print "<br>AUTO SCHEDULER ENABLED";
-		$autoScheduleThreshold = $configData->ConfigModels["JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM"]->Value * 60;
+		$autoScheduleThreshold = $configData->ConfigModels[CONFIG_JAM_AUTO_SCHEDULER_MINUTES_BEFORE_JAM]->Value * 60;
 
 		$now = time();
 		$timeToNextScheduledJam = $nextScheduledJamTime - $now;
@@ -122,7 +122,7 @@ class JamController{
 		AddActionLog("SelectRandomThemeByVoteDifference");
 		StartTimer("SelectRandomThemeByVoteDifference");
 
-		$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
+		$minimumVotes = $configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value;
 
 		$selectedThemeId = -1;
 
@@ -184,7 +184,7 @@ class JamController{
 		AddActionLog("SelectRandomThemeByPopularity");
 		StartTimer("SelectRandomThemeByPopularity");
 
-		$minimumVotes = $configData->ConfigModels["THEME_MIN_VOTES_TO_SCORE"]->Value;
+		$minimumVotes = $configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value;
 
 		$selectedThemeId = -1;
 

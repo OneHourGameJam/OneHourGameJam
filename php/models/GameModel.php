@@ -131,8 +131,8 @@ class GameData{
 
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_ENTRY_DATETIME] = gmdate("Y-m-d H:i:s", time());
-            $dataFromDatabase[$i][DB_COLUMN_ENTRY_IP] = "MIGRATION";
-            $dataFromDatabase[$i][DB_COLUMN_ENTRY_USER_AGENT] = "MIGRATION";
+            $dataFromDatabase[$i][DB_COLUMN_ENTRY_IP] = OVERRIDE_MIGRATION;
+            $dataFromDatabase[$i][DB_COLUMN_ENTRY_USER_AGENT] = OVERRIDE_MIGRATION;
         }
 
         StopTimer("GameData_GetAllPublicData");

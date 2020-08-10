@@ -18,8 +18,8 @@ $configCategorySettings = Array(
 );
 
 $configPrettyPrintFunctions = Array(
-	"MAX_SCREENSHOT_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
-	"MAX_ASSET_FILE_SIZE_IN_BYTES" => function($value){ return bytesToString($value); },
+	CONFIG_MAX_SCREENSHOT_FILE_SIZE_IN_BYTES => function($value){ return bytesToString($value); },
+	CONFIG_MAX_ASSET_FILE_SIZE_IN_BYTES => function($value){ return bytesToString($value); },
 );
 
 class ConfigurationPresenter{
@@ -108,10 +108,10 @@ class ConfigurationPresenter{
 			$configurationViewModel->LIST[$categoryIndex]->ENTRIES[] = $settingViewModel;
 		}
 
-		if($configurationViewModel->VALUES["OVERRIDE_BRAND_LOGO"] != ""){
+		if($configurationViewModel->VALUES[CONFIG_OVERRIDE_BRAND_LOGO] != ""){
 			$configurationViewModel->has_custom_brand_logo = 1;
 		}
-		if($configurationViewModel->VALUES["OVERRIDE_MAIN_LOGO"] != ""){
+		if($configurationViewModel->VALUES[CONFIG_OVERRIDE_MAIN_LOGO] != ""){
 			$configurationViewModel->has_custom_main_logo = 1;
 		}
 

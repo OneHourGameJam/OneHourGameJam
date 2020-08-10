@@ -10,7 +10,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	}
 
 	//Validate values
-	if(!$displayName || strlen($displayName) < $configData->ConfigModels["MINIMUM_DISPLAY_NAME_LENGTH"]->Value || strlen($displayName) > $configData->ConfigModels["MAXIMUM_DISPLAY_NAME_LENGTH"]->Value){
+	if(!$displayName || strlen($displayName) < $configData->ConfigModels[CONFIG_MINIMUM_DISPLAY_NAME_LENGTH]->Value || strlen($displayName) > $configData->ConfigModels[CONFIG_MAXIMUM_DISPLAY_NAME_LENGTH]->Value){
 		return "INVALID_DISPLAY_NAME";
 	}
 
@@ -28,10 +28,10 @@ function PerformAction(&$loggedInUser){
 	global $_POST, $userPreferenceSettings;
 	
 	if($loggedInUser !== false){
-		$displayName = $_POST["displayname"];
-		$twitterHandle = $_POST["twitterhandle"];
-		$emailAddress = $_POST["emailaddress"];
-		$bio = $_POST["bio"];
+		$displayName = $_POST[FORM_SAVEUSERCHANGES_DISPLAY_NAME];
+		$twitterHandle = $_POST[FORM_SAVEUSERCHANGES_TWITTER_HANDLE];
+		$emailAddress = $_POST[FORM_SAVEUSERCHANGES_EMAIL_ADDRESS];
+		$bio = $_POST[FORM_SAVEUSERCHANGES_BIO];
 
 		$preferenceValue = 0;
 		foreach($userPreferenceSettings as $i => $preferenceSetting){

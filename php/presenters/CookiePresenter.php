@@ -13,7 +13,7 @@ class CookiePresenter{
 	
 		if ($cookieData->CookieModel->CookieNotice != -1){
 			$cookieViewModel->show_cookie_notice = !$cookieData->CookieModel->CookieNotice;
-		} else if(isset($_GET["streaming"]) || isset($_GET["darkmode"])){
+		} else if(isset($_GET[COOKIE_STREAMING]) || isset($_GET[COOKIE_DARKMODE])){
 			$cookieViewModel->show_cookie_notice = 1;
 		} else{
 			$cookieViewModel->show_cookie_notice = 0;

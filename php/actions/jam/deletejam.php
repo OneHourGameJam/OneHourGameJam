@@ -80,7 +80,7 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
-		$jamId = (isset($_POST["jamID"])) ? $_POST["jamID"] : "";
+		$jamId = (isset($_POST[FORM_DELETEJAM_JAM_ID])) ? $_POST[FORM_DELETEJAM_JAM_ID] : "";
 		if($jamId != ""){
 			return DeleteJam(intval($jamId));
 		}

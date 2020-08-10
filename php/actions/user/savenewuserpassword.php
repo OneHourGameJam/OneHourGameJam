@@ -46,9 +46,9 @@ function PerformAction(&$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
-		$userId = $_POST["user_id"];
-		$password1 = $_POST["password1"];
-		$password2 = $_POST["password2"];
+		$userId = $_POST[FORM_SAVENEWUSERPASSWORD_USER_ID];
+		$password1 = $_POST[FORM_SAVENEWUSERPASSWORD_PASSWORD_1];
+		$password2 = $_POST[FORM_SAVENEWUSERPASSWORD_PASSWORD_2];
 
 		return EditUserPassword($userId, $password1, $password2);
 	}

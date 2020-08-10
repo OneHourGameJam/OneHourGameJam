@@ -1,10 +1,9 @@
 <?php
 
-function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $description, $colorBackground, $colorText){
+function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBackground, $colorText){
 	global $loggedInUser, $_FILES, $ip, $userAgent, $jamData, $gameData, $configData, $gameDbInterface;
 
 	$gameName = trim($gameName);
-	$screenshotURL = trim($screenshotURL);
 	$description = trim($description);
 	$colorBackground = trim($colorBackground);
 	$colorText = trim($colorText);
@@ -71,6 +70,7 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $descrip
 	$colorTextWithoutHash = substr($colorText, 1, 6);
 	
 	//Upload screenshot
+	$screenshotURL = "";
 	$jam_folder = "data/jams/jam_$jamNumber";
 	if(isset($_FILES["screenshotfile"]) && $_FILES["screenshotfile"] != null && $_FILES["screenshotfile"]["size"] != 0){
 		$imageFileType = strtolower(pathinfo($_FILES["screenshotfile"]["name"], PATHINFO_EXTENSION));
@@ -81,7 +81,7 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $descrip
 			return "SCREENSHOT_NOT_AN_IMAGE";
 		}
 
-		if($_FILES["screenshotfile"]["size"] > $configData->ConfigModels["MAX_SCREENSHOT_FILE_SIZE_IN_BYTES"]->Value) {
+		if($_FILES["screenshotfile"]["size"] > $configData->ConfigModels[CONFIG_MAX_SCREENSHOT_FILE_SIZE_IN_BYTES]->Value) {
 			return "SCREENSHOT_TOO_BIG";
 		}
 
@@ -140,7 +140,7 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $descrip
 
 	$currentJamData = GetCurrentJamNumberAndId();
 
-	if($configData->ConfigModels["CAN_SUBMIT_TO_PAST_JAMS"]->Value == 0){
+	if($configData->ConfigModels[CONFIG_CAN_SUBMIT_TO_PAST_JAMS]->Value == 0){
 		if ($jamNumber != $currentJamData["NUMBER"]) {
 			return "CANNOT_SUBMIT_TO_PAST_JAM";
 		}
@@ -198,28 +198,27 @@ function PerformAction(&$loggedInUser){
 	global $_POST, $satisfactionData, $platformData;
 	
 	if($loggedInUser !== false){
-		$gameName = (isset($_POST["gamename"])) ? $_POST["gamename"] : "";
-		$screenshotURL = (isset($_POST["screenshoturl"])) ? $_POST["screenshoturl"] : "";
-		$description = (isset($_POST["description"])) ? $_POST["description"] : "";
-		$jamNumber = (isset($_POST["jam_number"])) ? intval($_POST["jam_number"]) : -1;
-		$colorBackground = (isset($_POST["backgroundColor"])) ? $_POST["backgroundColor"] : "";
-		$colorText = (isset($_POST["textColor"])) ? $_POST["textColor"] : "";
+		$gameName = (isset($_POST[FORM_SUBMIT_NAME])) ? $_POST[FORM_SUBMIT_NAME] : "";
+		$description = (isset($_POST[FORM_SUBMIT_DESCRIPTION])) ? $_POST[FORM_SUBMIT_DESCRIPTION] : "";
+		$jamNumber = (isset($_POST[FORM_SUBMIT_JAM_NUMBER])) ? intval($_POST[FORM_SUBMIT_JAM_NUMBER]) : -1;
+		$colorBackground = (isset($_POST[FORM_SUBMIT_BACKGROUND_COLOR])) ? $_POST[FORM_SUBMIT_BACKGROUND_COLOR] : "";
+		$colorText = (isset($_POST[FORM_SUBMIT_TEXT_COLOR])) ? $_POST[FORM_SUBMIT_TEXT_COLOR] : "";
 
 		$platforms = Array();
 		foreach($platformData->PlatformModels as $i => $platformModel){
 			$platform = Array();
 			$platform["platform_id"] = $platformModel->Id;
-			$platform["url"] = (isset($_POST["gameurl".$platformModel->Id])) ? $_POST["gameurl".$platformModel->Id] : "";
+			$platform["url"] = (isset($_POST[FORM_SUBMIT_URL.$platformModel->Id])) ? $_POST[FORM_SUBMIT_URL.$platformModel->Id] : "";
 
 			$platforms[] = $platform;
 		}
 
-		$satisfaction = (isset($_POST["satisfaction"])) ? intval($_POST["satisfaction"]) : 0;
+		$satisfaction = (isset($_POST[FORM_SUBMIT_SATISFACTION])) ? intval($_POST[FORM_SUBMIT_SATISFACTION]) : 0;
 		if($satisfaction != 0){
 			$satisfactionData->SubmitSatisfaction($loggedInUser, "JAM_$jamNumber", $satisfaction);
 		}
 
-		return SubmitEntry($jamNumber, $gameName, $platforms, $screenshotURL, $description, $colorBackground, $colorText);
+		return SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBackground, $colorText);
 	}
 }
 
