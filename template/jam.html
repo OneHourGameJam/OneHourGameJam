@@ -14,7 +14,7 @@
 						{{/has_screenshot}}
 						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
 							<b><span class='entryTitle'>{{title}}</span></b><br />
-							by <a href='?page=author&author={{author_username}}'>{{author_display_name}}</a>
+							by <a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{author_username}}'>{{author_display_name}}</a>
 						</div>
 						<td class='authorPageEntry' style='text-align: right;'>
 							{{#platforms}}

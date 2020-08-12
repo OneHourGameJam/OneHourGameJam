@@ -52,8 +52,8 @@
     {{> csrf_token}}
 	<div class="form-group">
 		<label for="theme">{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</label>
-		<input type="text" class="form-control" id="theme" name='theme' placeholder="{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}" value="" required>
-		<button type="submit" name='action' value='savenewtheme' class="btn btn-default">Suggest {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</button>
+		<input type="text" class="form-control" id="theme" name='{{{forms.form.newtheme.theme}}}' placeholder="{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}" value="" required>
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.savenewtheme}}}' class="btn btn-default">Suggest {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</button>
 	</div>
 </form>
 
@@ -102,17 +102,17 @@
             {{^banned}}
             <tr>
                 <td class='themeTableCell'>
-                    <button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme'
+                    <button id="{{{theme_button_id}}}-3" type="button" name='{{{forms.form.action}}}' value='{{{forms.action.bantheme}}}'
                         class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}"
                         onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
                 </td>
                 <td class='themeTableCell'>
-                    <button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme'
+                    <button id="{{{theme_button_id}}}-2" type="button" name='{{{forms.form.action}}}' value='{{{forms.action.bantheme}}}'
                         class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}"
                         onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
                 </td>
                 <td class='themeTableCell'>
-                    <button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme'
+                    <button id="{{{theme_button_id}}}-1" type="button" name='{{{forms.form.action}}}' value='{{{forms.action.bantheme}}}'
                         class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}"
                         onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
                 </td>
@@ -125,14 +125,14 @@
                     </td>
                 {{/CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
                 <th class='themeTableCell themeTableCellCentered'>
-                    <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
+                    <input type="text" class="form-control" name="{{{forms.form.submitideas.ideas}}}" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
                 </th>
                 <td class='themeTableCell'>
                     <form method='POST' style='display: inline-block;' onsubmit="return confirm('Are you sure you want to delete your {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} {{theme}}?');">
                         {{> csrf_token}}
-                        <button type="submit" name='action' value='deletetheme' class="btn btn-default"><img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> &nbsp;Delete</button>
-                        <input type='hidden' name='theme_id' value='{{{theme_id}}}'>
-                        <input type='hidden' name='pageid' value='themes'>
+                        <button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.deletetheme}}}' class="btn btn-default"><img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> &nbsp;Delete</button>
+                        <input type='hidden' name='{{{forms.form.deletetheme.theme_id}}}' value='{{{theme_id}}}'>
+                        <input type='hidden' name='{{{forms.form.deletetheme.page}}}' value='{{{forms.pages.themes}}}'>
                     </form>
                 </td>
             </tr>
@@ -180,7 +180,7 @@
                                 {{{theme}}}
                             </td>
                             <th class='themeTableCell themeTableCellCentered'>
-                                <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Hidden in streamer mode" value='' maxlength="240" disabled>
+                                <input type="text" class="form-control" placeholder="Hidden in streamer mode" value='' maxlength="240" disabled>
                             </th>
                         </tr>
                     {{/cookies.is_streamer}}
@@ -188,17 +188,17 @@
                         {{^is_own_theme}}
                             <tr>
                                 <td class='themeTableCell'>
-                                    <button id="{{{theme_button_id}}}-3" type="button" name='action' value='bantheme'
+                                    <button id="{{{theme_button_id}}}-3" type="button" 
                                         class="btn btn-default {{#user_vote_for}}btn-success{{/user_vote_for}}"
                                         onclick='VoteTheme("{{{theme_id}}}", 3, "{{{theme_button_id}}}");'>+1</button>
                                 </td>
                                 <td class='themeTableCell'>
-                                    <button id="{{{theme_button_id}}}-2" type="button" name='action' value='bantheme'
+                                    <button id="{{{theme_button_id}}}-2" type="button"
                                         class="btn btn-default {{#user_vote_neutral}}btn-warning{{/user_vote_neutral}}"
                                         onclick='VoteTheme("{{{theme_id}}}", 2, "{{{theme_button_id}}}");'>0</button>
                                 </td>
                                 <td class='themeTableCell'>
-                                    <button id="{{{theme_button_id}}}-1" type="button" name='action' value='bantheme'
+                                    <button id="{{{theme_button_id}}}-1" type="button"
                                         class="btn btn-default {{#user_vote_against}}btn-danger{{/user_vote_against}}"
                                         onclick='VoteTheme("{{{theme_id}}}", 1, "{{{theme_button_id}}}");'>-1</button>
                                 </td>
@@ -206,7 +206,7 @@
                                     {{{theme}}}
                                 </td>
                                 <th class='themeTableCell themeTableCellCentered'>
-                                    <input type="text" class="form-control" name="ideas" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
+                                    <input type="text" class="form-control" name="{{{forms.form.submitideas.ideas}}}" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
                                 </th>
                             </tr>
                         {{/is_own_theme}}

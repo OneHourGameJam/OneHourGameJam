@@ -74,7 +74,7 @@ class SiteActionData{
                     "SUCCESS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_SUCCESS, "Logged in successfully"),
                     "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect password length. Must be between ".$configData->ConfigModels[CONFIG_MINIMUM_PASSWORD_LENGTH]->Value." and ".$configData->ConfigModels[CONFIG_MAXIMUM_PASSWORD_LENGTH]->Value." characters long."),
                     "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect username length. Must be between ".$configData->ConfigModels[CONFIG_MINIMUM_USERNAME_LENGTH]->Value." and ".$configData->ConfigModels[CONFIG_MAXIMUM_USERNAME_LENGTH]->Value." characters long."),
-                    "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "That username doesn't exist.<br>Do you want to <a href='?".GET_PAGE."=register'>create an account</a>?"),
+                    "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "That username doesn't exist.<br>Do you want to <a href='?".GET_PAGE."=".PAGE_REGISTER."'>create an account</a>?"),
                     "INCORRECT_PASSWORD" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect username/password combination."),
                 )
             ),
@@ -86,7 +86,7 @@ class SiteActionData{
                     "SUCCESS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_SUCCESS, "Logged in successfully"),
                     "INVALID_PASSWORD_LENGTH" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_REGISTER, MESSAGE_WARNING, "Incorrect password length. Must be between ".$configData->ConfigModels[CONFIG_MINIMUM_PASSWORD_LENGTH]->Value." and ".$configData->ConfigModels[CONFIG_MAXIMUM_PASSWORD_LENGTH]->Value." characters long."),
                     "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_REGISTER, MESSAGE_WARNING, "Incorrect username length. Must be between ".$configData->ConfigModels[CONFIG_MINIMUM_USERNAME_LENGTH]->Value." and ".$configData->ConfigModels[CONFIG_MAXIMUM_USERNAME_LENGTH]->Value." characters long."),
-                    "USERNAME_ALREADY_REGISTERED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_REGISTER, MESSAGE_WARNING, "That username already exists.<br>Did you want to <a href='?".GET_PAGE."=login'>log in</a>?"),
+                    "USERNAME_ALREADY_REGISTERED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_REGISTER, MESSAGE_WARNING, "That username already exists.<br>Did you want to <a href='?".GET_PAGE."=".PAGE_LOGIN."'>log in</a>?"),
                 )
             ),
             new SiteActionModel(

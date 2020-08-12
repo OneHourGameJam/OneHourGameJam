@@ -33,9 +33,9 @@
 			</div>
 		</div>
 	{{/CONFIG.LIST}}
-	<button type="submit" name='action' value='saveconfig' class="btn btn-default">Save settings</button>
+	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.saveconfig}}}' class="btn btn-default">Save settings</button>
 </form>
 <form method='post'>
 	{{> csrf_token}}
-	<button type="submit" name='action' value='downloaddb' class="btn btn-default">Download Database</button>
+	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.downloaddb}}}' class="btn btn-default">Download Database</button>
 </form>

@@ -60,7 +60,7 @@
 									<b>Description</b><br />
 									{{description}}
 								</div>
-								<button type="button" class="btn entryButton" style='background-color: {{color_background}}' onclick='document.location.href = "?page=author&amp;author={{author_username}}";'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}'s profile</button>
+								<button type="button" class="btn entryButton" style='background-color: {{color_background}}' onclick='document.location.href = "?{{{forms.get.page}}}=author&amp;author={{author_username}}";'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}'s profile</button>
 							</div>
 						</div>
 					{{/entry_deleted}}
@@ -75,7 +75,7 @@
 										<div style="margin-left:auto;margin-right:auto;">
 											<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
 												<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
-												<a href='?page=submit&jam_number={{jam_number}}'>
+												<a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{jam_number}}'>
 													<div class="btn btn-success">
 														Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
 													</div>
@@ -96,7 +96,7 @@
 {{^jams.all_jams_loaded}}
 <div class="row">
 	<div class="col-md-10 alignCenter" style="padding-bottom: 10px; padding-top: 5px;">
-		<a class="btn btn-default" href="?page=main&loadAll">Load all {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a>
+		<a class="btn btn-default" href="?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.load_all}}}">Load all {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a>
 	</div>
 </div>
 {{/jams.all_jams_loaded}}

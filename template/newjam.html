@@ -5,15 +5,15 @@
 	{{> csrf_token}}
 	<div class="form-group">
 		<label for="theme">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</label> (Top {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}:{{#themes.top_themes}} <a href='#' id="select_theme_{{theme_button_id}}" onclick='SelectThemeForJam("select_theme_{{theme_button_id}}"); return false;'>{{{theme}}}</a>;{{/themes.top_themes}})
-		<input type="text" class="form-control" id="theme" name='theme' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}" required>
+		<input type="text" class="form-control" id="theme" name='{{{forms.form.newjam.theme}}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}" required>
 	</div>
 	<div class="form-group">
 		<label for="date">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} date</label>
-		<input type="date" class="form-control" id="date" name='date' placeholder="" value='{{page.next_jam_suggested_date}}' required>
+		<input type="date" class="form-control" id="date" name='{{{forms.form.newjam.date}}}' placeholder="" value='{{page.next_jam_suggested_date}}' required>
 	</div>
 	<div class="form-group">
 		<label for="time">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} start time (in UTC - {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will only become visible once this date and time passes)</label>
-		<input type="time" class="form-control" id="time" name='time' value='{{page.next_jam_suggested_time}}' placeholder="" required>
+		<input type="time" class="form-control" id="time" name='{{{forms.form.newjam.time}}}' value='{{page.next_jam_suggested_time}}' placeholder="" required>
 	</div>
 	<div class="form-group">
 		<label for="jamcolors">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours (Users can choose between these to customize their {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}'s appearance on the site)</label><br>
@@ -47,7 +47,7 @@
 
 		</span>
 	</div>
-	<button type="submit" name='action' value='newjam' class="btn btn-default">New {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
+	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.newjam}}}' class="btn btn-default">New {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
 </form>
 <script type='text/javascript'>
 	function SelectThemeForJam(themeButtonID){
@@ -59,7 +59,7 @@
 		$("#ColorPreviews").empty();
 		var numberOfColors = parseInt($("#NumberOfColors").val());
 		for(var i = 0; i < numberOfColors; i++){
-			var tag = jQuery.parseHTML("<input type='text' class='form-control color-preview' id='jamcolor"+i+"' name='jamcolor"+i+"' value='' placeholder='Color Hex' onchange='PreviewJamColor(\"jamcolor"+i+"\");' style='background-color: #ffffff; color: black;' maxlength='6'>");
+			var tag = jQuery.parseHTML("<input type='text' class='form-control color-preview' id='jamcolor"+i+"' name='{{{forms.form.newjam.jam_color}}}"+i+"' value='' placeholder='Color Hex' onchange='PreviewJamColor(\"jamcolor"+i+"\");' style='background-color: #ffffff; color: black;' maxlength='6'>");
 			$("#ColorPreviews").append(tag);
 		}
 		UpdateAutoJamcolors();

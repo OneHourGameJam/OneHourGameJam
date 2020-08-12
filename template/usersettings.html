@@ -9,29 +9,29 @@
 	<p style='margin-top: 50px;'>
 		<div class="form-group">
 			<label for="displayname">Display Name <span style='font-weight: normal'>(Required)</span></label>
-			<input type="text" class="form-control" id="displayname" name='displayname' placeholder="Display name" value="{{user.display_name}}" minlength='{{{CONFIG.VALUES.MINIMUM_DISPLAY_NAME_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_DISPLAY_NAME_LENGTH}}}' required>
+			<input type="text" class="form-control" id="displayname" name='{{{forms.form.usersettings.display_name}}}' placeholder="Display name" value="{{user.display_name}}" minlength='{{{CONFIG.VALUES.MINIMUM_DISPLAY_NAME_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_DISPLAY_NAME_LENGTH}}}' required>
 		</div>
 		<div class="form-group">
 			<label for="twitterhandle">Twitter Handle <span style='font-weight: normal'>(NOT Required)</span></label>
-			<input type="text" class="form-control" id="twitterhandle" name='twitterhandle' placeholder="@Twitter Handle" value="{{user.twitter}}" pattern="^@[a-zA-Z0-9_]+$" maxlength="16">
+			<input type="text" class="form-control" id="twitterhandle" name='{{{forms.form.usersettings.twitter_handle}}}' placeholder="@Twitter Handle" value="{{user.twitter}}" pattern="^@[a-zA-Z0-9_]+$" maxlength="16">
 		</div>
 		<div class="form-group">
 			<label for="emailaddress">Email <span style='font-weight: normal'>(NOT Required)</span></label>
-			<input type="email" class="form-control" id="emailaddress" name='emailaddress' placeholder="Email Address" value="{{user.email}}">
+			<input type="email" class="form-control" id="emailaddress" name='{{{forms.form.usersettings.email_address}}}' placeholder="Email Address" value="{{user.email}}">
 		</div>
 
 		<div class="form-group">
 			<label for="emailaddress">Bio <span style='font-weight: normal'>(NOT Required)</span></label>
-			<div id="bio" name="bio" class="trumbowyg-editor">{{{ page.user_bio }}}</div>
+			<div id="bio" name="{{{forms.form.usersettings.bio}}}" class="trumbowyg-editor">{{{ page.user_bio }}}</div>
 		</div>
 
 		<label>Preferences</label>
 		<div class="form-check">
-			<input type="checkbox" class="form-check-input" id="DISABLE_THEMES_NOTIFICATION" name="DISABLE_THEMES_NOTIFICATION" {{#user.preferences.DISABLE_THEMES_NOTIFICATION}}checked{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}>
+			<input type="checkbox" class="form-check-input" id="DISABLE_THEMES_NOTIFICATION" name="{{{forms.preference.disable_themes_notification}}}" {{#user.preferences.DISABLE_THEMES_NOTIFICATION}}checked{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}>
 			<label class="form-check-label" for="DISABLE_THEMES_NOTIFICATION">Disable {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} Notification</label>
 		</div>
 
-		<button type="submit" name='action' value='saveuserchanges' class="btn btn-default">Save Changes</button>
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.saveuserchanges}}}' class="btn btn-default">Save Changes</button>
 	</p>
 </form>
 <form method='post'>
@@ -39,17 +39,17 @@
 	<p style='margin-top: 50px;'>
 		<div class="form-group">
 			<label for="passwordold">Current Password</label>
-			<input type="password" class="form-control" id="passwordold" name='passwordold' placeholder="Old Password" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
+			<input type="password" class="form-control" id="passwordold" name='{{{forms.form.changepassword.old_password}}}' placeholder="Old Password" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
 		</div>
 		<div class="form-group">
 			<label for="password1">New Password</label>
-			<input type="password" class="form-control" id="password1" name='password1' placeholder="New Password" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
+			<input type="password" class="form-control" id="password1" name='{{{forms.form.changepassword.password_1}}}' placeholder="New Password" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
 		</div>
 		<div class="form-group">
 			<label for="password2">Repeat Password</label>
-			<input type="password" class="form-control" id="password2" name='password2' placeholder="New Password (repeat)" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
+			<input type="password" class="form-control" id="password2" name='{{{forms.form.changepassword.password_2}}}' placeholder="New Password (repeat)" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
 		</div>
-		<button type="submit" name='action' value='changepassword' class="btn btn-default">Change password</button>
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.changepassword}}}' class="btn btn-default">Change password</button>
 	</p>
 </form>
 

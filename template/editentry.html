@@ -6,41 +6,41 @@
 	{{#page.editingentry}}
 		<div class="form-group">
 			<label for="entryID">{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ID</label>
-			<input type="text" class="form-control" id="entryID" name='entryID' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ID" value="{{{id}}}" readonly required>
+			<input type="text" class="form-control" id="entryID" name='{{{forms.form.editentry.entry_id}}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ID" value="{{{id}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="jam_number">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number</label>
-			<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number" value="{{{jam_number}}}" readonly required>
+			<input type="text" class="form-control" id="jam_number" name='{{{forms.form.editentry.jam_number}}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number" value="{{{jam_number}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="author_user_id">{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}} User Id</label>
-			<input type="text" class="form-control" id="author_user_id" name='author_user_id' placeholder="{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}} User Id" value="{{{author_user_id}}}" readonly required>
+			<input type="text" class="form-control" id="author_user_id" name='{{{forms.form.editentry.author_user_id}}}' placeholder="{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}} User Id" value="{{{author_user_id}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="title">Title</label>
-			<input type="text" class="form-control" id="title" name='title' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} title" value="{{{title}}}" readonly required>
+			<input type="text" class="form-control" id="title" name='{{{forms.form.editentry.title}}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} title" value="{{{title}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="description">Description</label>
-			<input type="text" class="form-control" id="description" name='description' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description" value="{{{description}}}" readonly required>
+			<input type="text" class="form-control" id="description" name='{{{forms.form.editentry.description}}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description" value="{{{description}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="screenshot_url">Screenshot URL</label>
-			<input type="text" class="form-control" id="screenshot_url" name='screenshot_url' placeholder="Screenshot URL" value="{{{screenshot_url}}}" readonly required>
+			<input type="text" class="form-control" id="screenshot_url" name='{{{forms.form.editentry.screenshot_url}}}' placeholder="Screenshot URL" value="{{{screenshot_url}}}" readonly required>
 		</div>
 		<h4>Platforms</h4>
 		{{#platforms}}
 			<div class="row">
 				<div class="form-group col-md-2">
 					<label for="platform_game_id_{{platform_id}}">Platform {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ID</label>
-					<input type="text" class="form-control" id="platform_game_id_{{platform_id}}" name='platform_game_id_{{platform_id}}' placeholder="Platform {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} Id" value="{{{platform_game_id}}}" readonly>
+					<input type="text" class="form-control" id="platform_game_id_{{platform_id}}" name='{{{forms.form.editentry.platform_game_id}}}{{platform_id}}' placeholder="Platform {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} Id" value="{{{platform_game_id}}}" readonly>
 				</div>
 				<div class="form-group col-md-10">
 					<label for="url_{{platform_id}}">{{platform_name}}</label>
-					<input type="text" class="form-control" id="url_{{platform_id}}" name='url_{{platform_id}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} URL ({{platform_name}})" value="{{{url}}}" readonly>
+					<input type="text" class="form-control" id="url_{{platform_id}}" name='{{{forms.form.editentry.url}}}{{platform_id}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} URL ({{platform_name}})" value="{{{url}}}" readonly>
 				</div>
 			</div>
 		{{/platforms}}
 	{{/page.editingentry}}
-	<button type="submit" name='action' value='deleteentry' class="btn btn-default">Delete {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</button>
+	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.deleteentry}}}' class="btn btn-default">Delete {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</button>
 </form>

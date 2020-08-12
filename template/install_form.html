@@ -3,25 +3,25 @@
 <form method='post'>
 	<div class="form-group">
 		<label for="dbHost">MySQL Host</label>
-		<input type="text" class="form-control" id="dbHost" name='dbHost' placeholder="localhost">
+		<input type="text" class="form-control" id="dbHost" name='{{{forms.form.install.db_host}}}' placeholder="localhost">
 	</div>
 	<div class="form-group">
 		<label for="dbUsername">MySQL Username</label>
-		<input type="text" class="form-control" id="dbUsername" name='dbUsername' placeholder="Username">
+		<input type="text" class="form-control" id="dbUsername" name='{{{forms.form.install.db_username}}}' placeholder="Username">
 	</div>
 	<div class="form-group">
 		<label for="dbPassword">MySQL Password</label>
-		<input type="password" class="form-control" id="dbPassword" name='dbPassword' placeholder="Password">
+		<input type="password" class="form-control" id="dbPassword" name='{{{forms.form.install.db_password}}}' placeholder="Password">
 	</div>
 	<div class="form-group">
 		<label for="dbName">Database Name</label>
-		<input type="text" class="form-control" id="dbName" name='dbName' placeholder="Database Name">
+		<input type="text" class="form-control" id="dbName" name='{{{forms.form.install.db_name}}}' placeholder="Database Name">
 	</div>
 	<div class="form-check">
-		<input class="form-check-input" type="checkbox" value="checked" id="initialiseDatabase" name="initialiseDatabase" checked>
+		<input class="form-check-input" type="checkbox" value="checked" id="initialiseDatabase" name="{{{forms.form.install.init_database}}}" checked>
 		<label class="form-check-label" for="initialiseDatabase">
 			Initialise database (Uncheck if pointing to an existing database)
 		</label>
 	</div>
-	<button type="submit" name='action' value='setup' class="btn btn-default">Setup Database</button>
+	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.setup_database}}}' class="btn btn-default">Setup Database</button>
 </form>

@@ -31,7 +31,7 @@ function PerformPendingSiteAction(&$configData, &$siteActionData, &$loggedInUser
                     die("Redirecting to <a href='$actionRedirectAfterExecution'>$actionRedirectAfterExecution</a>...");
                 }
 
-                die("Unknown action result $actionResult for action $actionPostRequest. Please report this error to administrators.  <a href='?".GET_PAGE."=main'>back to index</a>...");
+                die("Unknown action result $actionResult for action $actionPostRequest. Please report this error to administrators.  <a href='?".GET_PAGE."=".PAGE_MAIN."'>back to index</a>...");
             }
         }
     }

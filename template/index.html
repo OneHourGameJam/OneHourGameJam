@@ -43,7 +43,7 @@
         </div>
         {{#cookies.show_cookie_notice}}
             <div class="cookieNotice">
-                    <form method="POST"><button type="submit" name='cookienotice-accepted' class="btn btn-xs" style="float: right; background: transparent; border: none;">
+                    <form method="POST"><button type="submit" name='{{{forms.form.cookienotice.accept}}}' class="btn btn-xs" style="float: right; background: transparent; border: none;">
                         {{> csrf_token}}
                         <b>X</b>
                     </button></form>

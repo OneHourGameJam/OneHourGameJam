@@ -21,17 +21,17 @@
 			<div class="panel-body">
 				<div class="form-group">
 					<label for="gamename">{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} title</label>
-					<input type="text" class="form-control" id="gamename" name='gamename' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} name" value="{{page.user_entry_name}}" required>
+					<input type="text" class="form-control" id="gamename" name='{{{forms.form.submit.name}}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} name" value="{{page.user_entry_name}}" required>
 				</div>
 
 				<div class="form-group">
 					<label for="screenshotfile">Screenshot / Icon (Change)</label>
 					<br />Square icons work best. Supported formats: png, jpg, gif (up to {{CONFIG.PRETTY_PRINT.MAX_SCREENSHOT_FILE_SIZE_IN_BYTES}})
-					<input type="file" class="form-control" id="screenshotfile" name='screenshotfile' placeholder="Screenshot file" value="{{page.user_entry_screenshot}}">
+					<input type="file" class="form-control" id="screenshotfile" name='{{{forms.form.submit.screenshot}}}' placeholder="Screenshot file" value="{{page.user_entry_screenshot}}">
 				</div>
 				<div class="form-group">
 					<label for="description">Brief {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description</label>
-					<textarea class="form-control" id="description" name='description' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description">{{page.user_entry_desc}}</textarea>
+					<textarea class="form-control" id="description" name='{{{forms.form.submit.description}}}' placeholder="{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description">{{page.user_entry_desc}}</textarea>
 				</div>
 			</div>
 		</div>
@@ -68,7 +68,7 @@
 									</p>
 									<p>
 										<label for="gameurl{{platform_id}}">URL to {{platform_name}} build</label>
-										<input type="url" class="form-control" id="gameurl{{platform_id}}" name='gameurl{{platform_id}}' placeholder="http://game-url" value="{{platform_entry_url}}">
+										<input type="url" class="form-control" id="gameurl{{platform_id}}" name='{{{forms.form.submit.url}}}{{platform_id}}' placeholder="http://game-url" value="{{platform_entry_url}}">
 									</p>
 								</div>
 							{{/page.platforms}}
@@ -92,7 +92,7 @@
 							<div class="btn-group" data-toggle="buttons">
 								{{#page.submit_jam.colors}}
 									<label class="btn btn-default" style='background-color: {{color}}; color: black;' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorPreview').css('color', '#000000'); $('#backgroundColor').val('{{color}}'); $('#textColor').val('#000000')">
-										<input type="radio" name="options" id="option2" autocomplete="off"> {{color}}
+										<input type="radio" autocomplete="off"> {{color}}
 									</label>
 								{{/page.submit_jam.colors}}
 							</div>
@@ -103,13 +103,13 @@
 					<div class="col-md-3">
 						<div class="form-group">
 							<label for="backgroundColor">Background Colour</label>
-							<input type="color" class="form-control" id="backgroundColor" name='backgroundColor' placeholder="Colour" value="#{{page.user_entry_background_color}}" oninput="$('#colorPreview').css('background-color', this.value);" required>
+							<input type="color" class="form-control" id="backgroundColor" name='{{{forms.form.submit.background_color}}}' placeholder="Colour" value="#{{page.user_entry_background_color}}" oninput="$('#colorPreview').css('background-color', this.value);" required>
 						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
 							<label for="textColor">Text Colour</label>
-							<input type="color" class="form-control" id="textColor" name='textColor' placeholder="Colour" value="#{{page.user_entry_text_color}}" oninput="$('#colorPreview').css('color', this.value);" required>
+							<input type="color" class="form-control" id="textColor" name='{{{forms.form.submit.text_color}}}' placeholder="Colour" value="#{{page.user_entry_text_color}}" oninput="$('#colorPreview').css('color', this.value);" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -130,7 +130,7 @@
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<input type="hidden" id="satisfaction" name='satisfaction' value="0">
+					<input type="hidden" id="satisfaction" name='{{{forms.form.submit.satisfaction}}}' value="0">
 					<p>Please rate your experience: (Optional)
 					<div onclick='SetSatisfaction("no");' class="btn btn-default">No rating</div>
 					</p>
@@ -151,8 +151,8 @@
 		</div>
 		{{/page.user_submitted_to_this_jam}}
 
-		<input type="hidden" name="jam_number" value="{{page.submit_jam.jam_number}}" />
-		<button type="submit" name='action' value='submit' class="btn btn-default">Submit</button>
+		<input type="hidden" name="{{{forms.form.submit.jam_number}}}" value="{{page.submit_jam.jam_number}}" />
+			<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.submit}}}' class="btn btn-default">Submit</button>
 	</form>
 </div>
 

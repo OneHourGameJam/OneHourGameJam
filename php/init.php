@@ -149,6 +149,9 @@ function Init(){
 	if(FindDependency(RENDER_PLATFORMS, $dependencies) !== false){
 		$dictionary["platforms"] = PlatformPresenter::RenderPlatforms($platformData);
 	}
+	if(FindDependency(RENDER_FORMS, $dependencies) !== false){
+		$dictionary["forms"] = FormPresenter::RenderForms();
+	}
 	
 	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
 	

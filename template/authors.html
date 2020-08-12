@@ -18,7 +18,7 @@
 		{{#users.LIST}}
 			{{#is_author}}
 				<tr>
-					<td><b><a href='?page=author&author={{username}}'>{{display_name}}</a></b></td>
+					<td><b><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.user_id}}}={{username}}'>{{display_name}}</a></b></td>
 					<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
 					<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
 					<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>

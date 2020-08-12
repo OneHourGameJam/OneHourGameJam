@@ -17,7 +17,7 @@
 		{{#jams.LIST}}
 			{{^jam_deleted}}
 				<tr>
-					<td>{{#jam_number}}<a href='?page=jam&jam={{jam_number}}'>{{jam_number}}</a>{{/jam_number}}</td>
+					<td>{{#jam_number}}<a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_number}}</a>{{/jam_number}}</td>
 					<td>{{#theme}}{{theme}}{{/theme}}</td>
 					<td>{{#date}}{{date}} at {{time}}{{/date}}</td>
 					<td>{{entries_count}}</td>

@@ -86,6 +86,7 @@ define("RENDER_MESSAGES", "RenderMessages");
 define("RENDER_STREAM", "RenderStream");
 define("RENDER_PLATFORMS", "RenderPlatforms");
 define("RENDER_LOGGED_IN_USER", "RenderLoggedInUser");
+define("RENDER_FORMS", "RenderForms");
 
 define("AUTHORIZATION_LEVEL_NONE", "NONE");
 define("AUTHORIZATION_LEVEL_USER", "USER");
@@ -96,7 +97,8 @@ $commonDependencies = Array(
         RENDER_CONFIG => RENDER_DEPTH_NONE, 
         RENDER_USERS => RENDER_DEPTH_NONE, 
         RENDER_GAMES => RENDER_DEPTH_NONE, 
-        RENDER_JAMS => RENDER_DEPTH_NONE),
+        RENDER_JAMS => RENDER_DEPTH_NONE, 
+        RENDER_FORMS => RENDER_DEPTH_NONE),
     "message" => Array(RENDER_MESSAGES => RENDER_DEPTH_NONE),
     "menu" => Array(
         RENDER_CONFIG => RENDER_DEPTH_NONE, 

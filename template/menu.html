@@ -4,7 +4,7 @@
 		<h3 class="panel-title">Hello {{user.display_name}}</h3>
 		<form method='post'>
 			{{> csrf_token}}
-			<button type="submit" name='action' value='logout' class="btn btn-default">Log out</button>
+			<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.logout}}}' class="btn btn-default">Log out</button>
 		</form>
 		{{/user}}
 		{{^user}}
@@ -18,12 +18,12 @@
 				{{#user.admin}}
 					{{#themes.themes_must_be_pruned}}
 						<div class="panel-body notification notification-major">
-							<a href='?page=managethemes#markedfordeletion'><strong>Admins: </strong>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} must be pruned.</a>
+							<a href='?{{{forms.get.page}}}={{{forms.pages.managethemes}}}#markedfordeletion'><strong>Admins: </strong>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} must be pruned.</a>
 						</div>
 					{{/themes.themes_must_be_pruned}}
 					{{#users.missing_admin_candidate_votes}}
 						<div class="panel-body notification notification-major">
-							<a href='?page=editusers'><strong>Admin: </strong>{{{users.missing_admin_candidate_votes_number}}}
+							<a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'><strong>Admin: </strong>{{{users.missing_admin_candidate_votes_number}}}
 								admin candidate(s) need(s) your vote</a>
 						</div>
 					{{/users.missing_admin_candidate_votes}}
@@ -31,7 +31,7 @@
 				{{#themes.user_has_not_voted_for_all_themes}}
 					{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
 						<div class="panel-body notification notification-minor">
-							<a href='?page=themes'>{{{themes.themes_user_has_not_voted_for}}}
+							<a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>{{{themes.themes_user_has_not_voted_for}}}
 								{{^themes.themes_user_has_not_voted_for_plural}}{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}{{/themes.themes_user_has_not_voted_for_plural}}
 								{{#themes.themes_user_has_not_voted_for_plural}}{{CONFIG.VALUES.THEME_PHRASE_PLURAL}}{{/themes.themes_user_has_not_voted_for_plural}}
 								need{{^themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} your vote</a>
@@ -45,40 +45,40 @@
 
 	<div class="panel-body">
 		<ul id='mainmenu'>
-			<li><a href='?page=main'>Home</a></li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}'>Home</a></li>
 			{{#user}}
 				{{#jams.current_jam}}
 					{{^cookies.is_streamer}}
-						<li><b><a href='?page=submit'>
+						<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}'>
 							{{^user_participated_in_jam}}Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}{{/user_participated_in_jam}}
 							{{#user_participated_in_jam}}Edit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}{{/user_participated_in_jam}}
 						</a></b></li>
 					{{/cookies.is_streamer}}
 				{{/jams.current_jam}}
-				<li><b><a href='?page=themes'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></b></li>
+				<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></b></li>
 			{{/user}}
 			{{^user}}
-				<li><a href='?page=login'>Log in</a> or <a href='?page=register'>Register</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.login}}}'>Log in</a> or <a href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>Register</a></li>
 			{{/user}}
-				<li><a href='?page=rules'>How it works</a></li>
-				<li><a href='?page=assets'>Assets</a></li>
-				<li><a href='?page=privacy'>Privacy</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>How it works</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.assets}}}'>Assets</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.privacy}}}'>Privacy</a></li>
 			{{#user}}
 				{{^cookies.is_streamer}}
-					<li><a href='?page=userdata'>User Data</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>User Data</a></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 
 			<li class="mainmenu-separator">Browse</li>
-			<li><a href='?page=entries'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
-			<li><a href='?page=authors'>{{CONFIG.VALUES.DEVELOPER_PHRASE_PLURAL}}</a></li>
-			<li><a href='?page=jams'>{{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a></li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.entries}}}'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.authors}}}'>{{CONFIG.VALUES.DEVELOPER_PHRASE_PLURAL}}</a></li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.jams}}}'>{{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a></li>
 
 			{{#user}}
 				<li class="mainmenu-separator">User</li>
-				<li><a href='?page=author&author={{user.username}}'>Profile</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
 				{{^cookies.is_streamer}}
-					<li><a href='?page=usersettings'>User Settings</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User Settings</a></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 
@@ -86,35 +86,35 @@
 			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report bug</a></li>
 			{{#user}}
 				{{#cookies.is_streamer}}
-					<li><a href='?page=main&streaming=0'>Disable streamer Mode</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable streamer Mode</a></li>
 				{{/cookies.is_streamer}}
 				{{^cookies.is_streamer}}
-					<li><a href='?page=main&streaming=1'>Streamer Mode</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=1'>Streamer Mode</a></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 			{{#cookies.darkmode}}
-				<li><a href='?page=main&darkmode=0'>Enable Light Mode</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0'>Enable Light Mode</a></li>
 			{{/cookies.darkmode}}
 			{{^cookies.darkmode}}
-				<li><a href='?page=main&darkmode=1'>Enable Dark Mode</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=1'>Enable Dark Mode</a></li>
 			{{/cookies.darkmode}}
 			
 			{{#user.admin}}
 				{{^cookies.is_streamer}}
 					<li class="mainmenu-separator">Administration</li>
-					<li><a href='?page=newjam'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</a></li>
-					<li><a href='?page=config'>Configuration</a></li>
-					<li><a href='?page=managethemes'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></li>
-					<li><a href='?page=editcontent'>Manage content</a></li>
-					<li><a href='?page=editusers'>Manage users</a></li>
-					<li><a href='?page=editplatforms'>Manage platforms</a></li>
-					<li><a href='?page=polls'>Poll Results</a></li>
-					<li><a href='?page=adminlog'>Admin Log</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.newjam}}}'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.managethemes}}}'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editcontent}}}'>Manage content</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'>Manage users</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editplatforms}}}'>Manage platforms</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll Results</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.adminlog}}}'>Admin Log</a></li>
 				{{/cookies.is_streamer}}
 			{{/user.admin}}
 			
 			{{#cookies.is_streamer}}
-				<li class="mainmenu-separator">Some menu items are hidden in streamer mode (<a href='?page=main&streaming=0'>Disable Streamer Mode</a>)</li>
+				<li class="mainmenu-separator">Some menu items are hidden in streamer mode (<a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable Streamer Mode</a>)</li>
 			{{/cookies.is_streamer}}
 		</ul>
 		

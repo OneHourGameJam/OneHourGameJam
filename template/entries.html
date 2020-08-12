@@ -22,9 +22,9 @@
 			{{^entry_deleted}}
 			<tr>
 					<td><b>{{title}}</b></td>
-					<td><a href='?page=author&author={{author_username}}'>{{author_display_name}}</a></td>
-					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_number}}</a></td>
-					<td><a href='?page=jam&jam={{jam_number}}'>{{jam_theme}}</a></td>
+					<td><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{author_username}}'>{{author_display_name}}</a></td>
+					<td><a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_number}}</a></td>
+					<td><a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_theme}}</a></td>
 					
 					{{#platforms}}
 						<td>

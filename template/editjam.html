@@ -4,29 +4,29 @@
 <form method='post'>
 	{{> csrf_token}}
 	{{#page.editingjam}}
-		<input type="hidden" name="jamID" value="{{{jam_id}}}">
+		<input type="hidden" name="{{{forms.form.editjam.jam_id}}}" value="{{{jam_id}}}">
 		<div class="form-group">
 			<label for="jam_number">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number</label>
-			<input type="text" class="form-control" id="jam_number" name='jam_number' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number" value="{{{jam_number}}}" readonly required>
+			<input type="text" class="form-control" id="jam_number" name='{{{forms.form.editjam.number}}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} number" value="{{{jam_number}}}" readonly required>
 		</div>
 		<div class="form-group">
 			<label for="theme">{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</label>
-			<input type="text" class="form-control" id="theme" name='theme' placeholder="Theme" value="{{{theme_visible}}}" required>
+			<input type="text" class="form-control" id="theme" name='{{{forms.form.editjam.theme}}}' placeholder="Theme" value="{{{theme_visible}}}" required>
 		</div>
 		<div class="form-group">
 			<label for="date">Date</label>
-			<input type="date" class="form-control" id="date" name='date' placeholder="date" value="{{{html_startdate}}}" required>
+			<input type="date" class="form-control" id="date" name='{{{forms.form.editjam.date}}}' placeholder="date" value="{{{html_startdate}}}" required>
 		</div>
 		<div class="form-group">
 			<label for="time">Time</label>
-			<input type="time" class="form-control" id="time" name='time' placeholder="Time" value="{{{time}}}" required>
+			<input type="time" class="form-control" id="time" name='{{{forms.form.editjam.time}}}' placeholder="Time" value="{{{time}}}" required>
 		</div>
 		<div class="form-group">
 			<label for="jamcolors">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours (Users can choose between these to customize their {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}'s appearance on the site)</label>
-			<input type="text" class="form-control" id="jamcolors" name='jamcolors' value='{{colors_input_string}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours, formatted with hex codes (without #), delimitered with a dash (-). Example: ff0000-00ff00-0000ff-ffcc00-ccff00" required>
+			<input type="text" class="form-control" id="jamcolors" name='{{{forms.form.editjam.jam_color}}}' value='{{colors_input_string}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours, formatted with hex codes (without #), delimitered with a dash (-). Example: ff0000-00ff00-0000ff-ffcc00-ccff00" required>
 		</div>
 
-		<button type="submit" name='action' value='savejamedits' class="btn btn-default">Save {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
-		<button type="submit" name='action' value='deletejam' class="btn btn-default">Delete {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.savejamedits}}}' class="btn btn-default">Save {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.deletejam}}}' class="btn btn-default">Delete {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</button>
 	{{/page.editingjam}}
 </form>

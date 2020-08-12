@@ -9,7 +9,7 @@ define("GET_EDITJAM_JAM_Id", "jam_id");
 define("GET_EDITASSET_ASSET_ID", "asset_id");
 define("GET_EDITENTRY_ENTRY_ID", "entry_id");
 define("GET_JAM_JAM_NUMBER", "jam");
-define("GET_AUTHOR_USER_ID", "author");
+define("GET_AUTHOR_USERNAME", "author");
 define("GET_SUBMIT_JAM_NUMBER", "jam_number");
 
 define("FORM_POST_ACTION", "action");

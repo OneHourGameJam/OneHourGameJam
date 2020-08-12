@@ -117,7 +117,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["page_title"] = "Jam #" . $viewingJamNumber . ": ".$render["viewing_jam"]->theme;
         break;
         case PAGE_AUTHOR:
-            $viewingAuthor = ((isset($_GET[GET_AUTHOR_USER_ID])) ? ("".$_GET[GET_AUTHOR_USER_ID]) : "");
+            $viewingAuthor = ((isset($_GET[GET_AUTHOR_USERNAME])) ? ("".$_GET[GET_AUTHOR_USERNAME]) : "");
             if($viewingAuthor == ""){
                 die("invalid author name");
             }
