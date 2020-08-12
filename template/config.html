@@ -19,7 +19,7 @@
 							<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
 						{{/TYPE_NUMBER}}
 						{{#TYPE_TEXTAREA}}
-							<textarea class="form-control" id="{{KEY}}" name='{{KEY}}' style='height: 150px;' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE_HTML_ENCODED}}}</textarea>
+							<textarea class="form-control configTextarea" id="{{KEY}}" name='{{KEY}}' {{#DISABLED}}disabled{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE_HTML_ENCODED}}}</textarea>
 						{{/TYPE_TEXTAREA}}
 						{{#TYPE_ENUM}}
 							<select class="form-control" id="{{KEY}}" name='{{KEY}}' {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>

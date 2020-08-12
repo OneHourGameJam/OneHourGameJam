@@ -3,20 +3,20 @@
 		{{>jam_header}}
 	</div>
 	<div class='panel-body jamContent' id='entries{{jam_number}}'>
-		<table style='width: 100%' class='table'>
+		<table class='table jamTable'>
 			{{#entries}}
 				{{^entry_deleted}}
-					<tr style='height: 40px;'>
+					<tr class='jamTableRow'>
 						{{#has_screenshot}}
-							<td rowspan='2' class='alignCenter' style='width: 220px;'>
-								<img src='{{screenshot_url}}' class='small_screenshot' hidden_src='{{screenshot_url}}' style='max-width:100%; max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author_display_name}}' onerror='this.src="logo.png"'>
+							<td rowspan='2' class='alignCenter jamTableEntryScreenshot'>
+								<img src='{{screenshot_url}}' class='small_screenshot jamTableEntryScreenshotImage {{#has_description}}jamTableEntryScreenshotImageWithDescription{{/has_description}}{{^has_description}}jamTableEntryScreenshotImageWithoutDescription{{/has_description}}' hidden_src='{{screenshot_url}}' alt='{{title}} by {{author_display_name}}' onerror='this.src="logo.png"'>
 							</td>
 						{{/has_screenshot}}
 						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
 							<b><span class='entryTitle'>{{title}}</span></b><br />
 							by <a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{author_username}}'>{{author_display_name}}</a>
 						</div>
-						<td class='authorPageEntry' style='text-align: right;'>
+						<td class='authorPageEntry'>
 							{{#platforms}}
 								{{#url}}
 									<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entryPlayIcon' title='{{platform_name}}'></a>

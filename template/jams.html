@@ -4,11 +4,11 @@
 	</div>
 </div>
 
-<input type="text" class="form-control" id='jamsearch' placeholder="Search by Number, {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} or Date..." style='margin-bottom: 10px;' onkeyup="FilterJamsTable()">
+<input type="text" class="form-control searchInputField" id='jamsearch' placeholder="Search by Number, {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} or Date..." onkeyup="FilterJamsTable()">
 <div class='panel-body jamContent'>
 	Click on a column header to sort.
 	<table class="table sortable" id="jamtable">
-		<tr style='cursor: pointer;'>
+		<tr class='sortableHeader'>
 			<th>Number</th>
 			<th>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
 			<th>Date</th>

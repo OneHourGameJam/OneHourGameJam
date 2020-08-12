@@ -1,14 +1,14 @@
 {{#user}}
     {{#polls.ACTIVE_POLLS}}
-        <div class="row" style="font-size: 16px;">
+        <div class="row pollRow">
             <div class="col-md-12 alignCenter">
                 <div class="alert alert-info poll">
                     <b>Poll:</b> {{{QUESTION}}}
                     (<a href='#' onclick='$("#PollOptionsContainer_{{POLL_ID}}").slideToggle(); return false;'>Show / hide</a>)
-                    <div id='PollOptionsContainer_{{POLL_ID}}' style='{{#USER_VOTED_IN_POLL}}display: none; {{/USER_VOTED_IN_POLL}}'>
-                    <span style='font-size: 12px;'>Click any number of options. Options marked in green are your answer.</span><br />
+                    <div id='PollOptionsContainer_{{POLL_ID}}' class='{{#USER_VOTED_IN_POLL}}pollUserVoted{{/USER_VOTED_IN_POLL}}'>
+                    <span class='pollInstructionsText'>Click any number of options. Options marked in green are your answer.</span><br />
                     {{#OPTIONS}}
-                        <button id="{{{POLL_ID}}}-{{{OPTION_ID}}}" type="button" class="btn btn-default {{#USER_VOTED}}btn-success{{/USER_VOTED}}" onclick='VotePoll({{POLL_ID}}, {{OPTION_ID}});' style="margin-top: 5px;">{{TEXT}}</button>
+                        <button id="{{{POLL_ID}}}-{{{OPTION_ID}}}" type="button" class="btn btn-default {{#USER_VOTED}}btn-success{{/USER_VOTED}} pollOption" onclick='VotePoll({{POLL_ID}}, {{OPTION_ID}});'>{{TEXT}}</button>
                     {{/OPTIONS}}
                     </div>
                 </div>

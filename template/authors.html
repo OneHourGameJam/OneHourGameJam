@@ -4,11 +4,11 @@
 	</div>
 </div>
 
-<input type="text" class="form-control" id='js-authorsearch' placeholder="Search by username or twitter handle..." style='margin-bottom: 10px;' onkeyup="FilterAuthorTable()">
+<input type="text" class="form-control searchInputField" id='js-authorsearch' placeholder="Search by username or twitter handle..." onkeyup="FilterAuthorTable()">
 <div id='js-authortable' class='tablepanel-body table-responsive jamContent'>
 	Click on a column header to sort.
 	<table class="table sortable">
-		<tr style='cursor: pointer;'>
+		<tr class='sortableHeader'>
 			<th>Username</th>
 			<th>Twitter</th>
 			<th>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</th>
@@ -18,7 +18,7 @@
 		{{#users.LIST}}
 			{{#is_author}}
 				<tr>
-					<td><b><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.user_id}}}={{username}}'>{{display_name}}</a></b></td>
+					<td><b><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{username}}'>{{display_name}}</a></b></td>
 					<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
 					<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
 					<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>

@@ -19,7 +19,8 @@ $mustache->setPartials(Array(
 	"cookie_notice" => file_get_contents($templateBasePath."cookienotice.html"),
 	"page" => file_get_contents($pageTemplateFile),
 	"csrf_token" => file_get_contents($templateBasePath."csrf-token.html"),
-	"jam_header" => file_get_contents($templateBasePath."jam_header.html")
+	"jam_header" => file_get_contents($templateBasePath."jam_header.html"),
+	"css" => file_get_contents($templateBasePath."css/site.css")
 ));
 
 

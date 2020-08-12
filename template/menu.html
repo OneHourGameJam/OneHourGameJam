@@ -121,13 +121,13 @@
 		<div id="mainmenu-social">
 			{{#CONFIG.VALUES.TWITTER_ACCOUNT}}
 				<a href="https://twitter.com/{{CONFIG.VALUES.TWITTER_ACCOUNT}}" target='_blank'>
-					<div class='mediaButton twitterButton'><img src='{{{page.template_path}}}images/twitter.png' style='width: 20px;' /> Follow</div>
+					<div class='mediaButton twitterButton'><img src='{{{page.template_path}}}images/twitter.png' class="menuButton" /> Follow</div>
 				</a>
 			{{/CONFIG.VALUES.TWITTER_ACCOUNT}}
 
 			{{#CONFIG.VALUES.TWITCH_ACCOUNT}}
 				<a href="https://twitch.tv/{{CONFIG.VALUES.TWITCH_ACCOUNT}}" target='_blank'>
-					<div class='mediaButton twitchButton'><img src='{{{page.template_path}}}images/twitch.png' style='width: 20px;' /> Watch</div>
+					<div class='mediaButton twitchButton'><img src='{{{page.template_path}}}images/twitch.png' class="menuButton" /> Watch</div>
 				</a>
 			{{/CONFIG.VALUES.TWITCH_ACCOUNT}}
 
@@ -135,7 +135,7 @@
 				{{#CONFIG.VALUES.IRC_ADDRESS}}
 					{{#CONFIG.VALUES.IRC_CHANNEL}}
 						<a href="{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}" target='_blank'>
-							<div class='mediaButton ircButton'><img src='{{{page.template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
+							<div class='mediaButton ircButton'><img src='{{{page.template_path}}}images/irc.png' class="menuButton" /> IRC</div>
 						</a>
 					{{/CONFIG.VALUES.IRC_CHANNEL}}
 				{{/CONFIG.VALUES.IRC_ADDRESS}}
@@ -143,7 +143,7 @@
 
 			{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
 				<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" target='_blank'>
-					<div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>
+					<div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' class="menuButton" /> Discord</div>
 				</a>
 			{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
 		</div>

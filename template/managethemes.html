@@ -11,7 +11,7 @@
 			</p>
 
 	<div class='panel panel-info'>
-		<div class="chart-container" style="position: relative; max-height:500px; max-width:500px">
+		<div class="chart-container manageThemesPie">
 			<canvas id="entriesChart" width="200" height="200"></canvas>
 		</div>
 		<script type='text/javascript'>
@@ -55,24 +55,24 @@
 <p>This list can be used to select the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, but the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will be automatically selected if none is
 	chosen.</p>
 <ul>
-	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>TOP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is one of the top
+	<li><img src='{{{page.template_path}}}images/star.png' class='manageThemesLegendIcon'> <b>TOP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is one of the top
 		voted {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} marked as "Top" can be set on the <a href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration
 			page</a> (default is top 5). These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} appear as suggestions on the <a href='?{{{forms.get.page}}}={{{forms.pages.newjam}}}'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}
 			page</a>.</li>
-	<li><img src='{{{page.template_path}}}images/tick.png' style='width: 16px;'> <b>KEEP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not one of the
+	<li><img src='{{{page.template_path}}}images/tick.png' class='manageThemesLegendIcon'> <b>KEEP</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not one of the
 		top {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, but is popular enough to be kept in voting for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}. The number of {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} to keep between
 		{{CONFIG.VALUES.JAM_PHRASE_PLURAL}} can be set on the <a href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration page</a> (default is top 20)</li>
-	<li><img src='{{{page.template_path}}}images/votes.png' style='width: 16px;'> <b>TOO FEW VOTES</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} has not
+	<li><img src='{{{page.template_path}}}images/votes.png' class='manageThemesLegendIcon'> <b>TOO FEW VOTES</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} has not
 		yet received enough votes to get a popularity rating. The minimum
 		number of votes for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}'s popularity to appear can be set on the <a href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration
 			page</a> (default is top 10).</li>
 </ul>
 <p>The following metrics are used to judge opinion of a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}. In the formulas below, the words UPVOTE, DOWNVOTE, NEUTRALVOTE represent the number of +1 votes, -1 votes and 0 votes respectively:</p>
 <ul>
-	<li><img src='{{{page.template_path}}}images/star.png' style='width: 16px;'> <b>POPULARITY</b> Meant to
+	<li><img src='{{{page.template_path}}}images/star.png' class='manageThemesLegendIcon'> <b>POPULARITY</b> Meant to
 		represnet how popular a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is among the people who have an opinion about it. Note that voting 0 has no
 		effect on popularity. The higher the number, the better. The formula is UPVOTE / (UPVOTE + DOWNVOTE)</li>
-	<li><img src='{{{page.template_path}}}images/apathy.png' style='width: 16px;'> <b>APATHY</b> Meant to represent
+	<li><img src='{{{page.template_path}}}images/apathy.png' class='manageThemesLegendIcon'> <b>APATHY</b> Meant to represent
 		how opinionated people are about this {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}. A {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} with one +1 vote and lots of 0 votes is likely a worse
 		choice than one with 9 +1 votes and 3 -1 votes, after all. The lower the number, the better. While
 		popularity will likely govern most decisions on which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to select, apathy can be a good way to decide
@@ -84,7 +84,7 @@
 		<th class='themeTableCell themeTableCellCentered'>Select</th>
 		<form id="delete-themes" method='POST'>{{> csrf_token}}</form>
 		{{^cookies.is_streamer}}
-			<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
+			<th class='themeTableCell themeTableCellCentered manageThemesStatusColumn'>Status</th>
 		{{/cookies.is_streamer}}
 		
 		<th class='themeTableCell themeTableCellCentered'>
@@ -184,7 +184,7 @@
 				<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}}style='background-color: {{popularity_color}}'{{/has_enough_votes}}>
 					{{votes_popularity}}
 				</td>
-				<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}} style='background-color: {{apathy_color}}'{{/has_enough_votes}}>
+				<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}}style='background-color: {{apathy_color}}'{{/has_enough_votes}}>
 					{{votes_apathy}}
 				</td>
 				<td class='themeTableCell themeTableCellCentered'>
@@ -206,7 +206,7 @@
 					{{ThemeSelectionProbabilityByPopularityText}}
 				</td>
 				<td class='themeTableCell'>
-					<form method='POST' style='display: inline-block;'>
+					<form method='POST' class="manageThemesActionsColumn">
 						{{> csrf_token}}
 						<div class="btn-group">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -235,15 +235,15 @@
 <p>These {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} should be deleted <strong>during or after the <em>next</em> {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}.</strong> An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept if it is very popular!</p>
 <p>Deleting a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will remove it from {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} voting, but it can still be suggested again. Ban a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} using the "Actions" panel next to it to prevent it from being suggested again. Deleting a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} will reset its voting information.</p>
 <ul>
-	<li><img src='{{{page.template_path}}}images/clock.png' style='width: 16px;'> <b>OLD</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was suggested a
+	<li><img src='{{{page.template_path}}}images/clock.png' class='manageThemesLegendIcon'> <b>OLD</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was suggested a
 		long time ago and its popularity likely no longer reflects the opinion of current participants. Should be
 		deleted after the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}. <strong>An old {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} may be kept for a short time if it is very popular!</strong> The threshold for a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to be marked as old can be set on the <a
 			href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration page</a> (default is 90 days).</li>
-	<li><img src='{{{page.template_path}}}images/reused.png' style='width: 16px;'> <b>RECENT</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was used in a
+	<li><img src='{{{page.template_path}}}images/reused.png' class='manageThemesLegendIcon'> <b>RECENT</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} was used in a
 		recent {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}. It shouldn't be used again until a number of {{CONFIG.VALUES.JAM_PHRASE_PLURAL}} defined on the <a
 			href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration
 			page</a>.</li>
-	<li><img src='{{{page.template_path}}}images/unpopular.png' style='width: 16px;'> <b>UNPOPULAR</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not
+	<li><img src='{{{page.template_path}}}images/unpopular.png' class='manageThemesLegendIcon'> <b>UNPOPULAR</b> - {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is not
 		within the top rated {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.</li>
 </ul>
 <table>
@@ -252,7 +252,7 @@
 		<th class='themeTableCell themeTableCellCentered'>Select</th>
 		<form id="delete-themes" method='POST'>{{> csrf_token}}</form>
 		{{^cookies.is_streamer}}
-		<th class='themeTableCell themeTableCellCentered' style='min-width: 10px;'>Status</th>
+		<th class='themeTableCell themeTableCellCentered manageThemesStatusColumn'>Status</th>
 		{{/cookies.is_streamer}}
 
 		<th class='themeTableCell themeTableCellCentered'>
@@ -379,7 +379,7 @@
 			{{ThemeSelectionProbabilityByPopularityText}}
 		</td>
 		<td class='themeTableCell'>
-			<form method='POST' style='display: inline-block;'>
+			<form method='POST' class="manageThemesActionsColumn">
 				{{> csrf_token}}
 				<div class="btn-group">
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -433,7 +433,7 @@
 		<td class='themeTableCell themeTableCellCentered'>{{author_username}}</td>
 		<td class='themeTableCell themeTableCellCentered'>{{days_ago}}</td>
 		<td class='themeTableCell'>
-			<form method='POST' style='display: inline-block;'>
+			<form method='POST' class="manageThemesActionsColumn">
 				{{> csrf_token}}
 				<div class="btn-group">
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -456,9 +456,9 @@
 	{{/themes.suggested_themes}}
 </table>
 
-<div style="padding-top: 10px; padding-bottom: 10px;">
+<div class="manageThemesMultiActions">
 	<em>With selected: </em> 
-	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.deletethemes}}}' form="delete-themes" class="btn btn-default" style="border: none; background-color: transparent;">
+	<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.deletethemes}}}' form="delete-themes" class="btn btn-default manageThemesMultiActionsButton">
 		<img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> Delete
 	</button>
 </div>

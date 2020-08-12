@@ -1,28 +1,28 @@
 <div class="row">
-	<div class="col-md-12 alignCenter" style='margin-top: 10px;'>
+	<div class="col-md-12 alignCenter header">
 		<div class="panel panel-info">
 			<div class="panel-body">
-				<div class="col-md-3 hidden-xs hidden-sm alignCenter" style='margin-top: 10px;'>
-					<a href='.'><img src='{{#CONFIG.has_custom_brand_logo}}{{{CONFIG.VALUES.OVERRIDE_BRAND_LOGO}}}{{/CONFIG.has_custom_brand_logo}}{{^CONFIG.has_custom_brand_logo}}{{{page.template_path}}}/images/logos/logo_hourglass.svg{{/CONFIG.has_custom_brand_logo}}' alt='Logo' style='float: left; max-height: 100px; border: 0;' /></a>
+				<div class="col-md-3 hidden-xs hidden-sm alignCenter headerColumn">
+					<a href='.'><img src='{{#CONFIG.has_custom_brand_logo}}{{{CONFIG.VALUES.OVERRIDE_BRAND_LOGO}}}{{/CONFIG.has_custom_brand_logo}}{{^CONFIG.has_custom_brand_logo}}{{{page.template_path}}}/images/logos/logo_hourglass.svg{{/CONFIG.has_custom_brand_logo}}' alt='Logo' class='brandLogo' /></a>
 				</div>
-				<div class="col-md-6 alignCenter" style='margin-top: 10px;'>
-					<a href='.'><img src='{{#CONFIG.has_custom_main_logo}}{{{CONFIG.VALUES.OVERRIDE_MAIN_LOGO}}}{{/CONFIG.has_custom_main_logo}}{{^CONFIG.has_custom_main_logo}}{{{page.template_path}}}images/logos/logo_onehourgamejam.png{{/CONFIG.has_custom_main_logo}}' alt='Logo' style='max-width: 100%; width: 400px; border: 0;' /></a><br />
+				<div class="col-md-6 alignCenter headerColumn">
+					<a href='.'><img src='{{#CONFIG.has_custom_main_logo}}{{{CONFIG.VALUES.OVERRIDE_MAIN_LOGO}}}{{/CONFIG.has_custom_main_logo}}{{^CONFIG.has_custom_main_logo}}{{{page.template_path}}}images/logos/logo_onehourgamejam.png{{/CONFIG.has_custom_main_logo}}' alt='Logo' class='mainLogo' /></a><br />
 					{{{CONFIG.VALUES.JAMDESC}}}<br />
 					{{#CONFIG.VALUES.IRC_ADDRESS}}
 					{{#CONFIG.VALUES.IRC_CHANNEL}}
-						<a href="#" onclick='$("#ircInfo").slideToggle(); return false;' style='text-decoration: none;' target='_blank'>
-							<div class='mediaButton ircButton' style='display: inline-block;'><img src='{{{page.template_path}}}images/irc.png' style='width: 20px;' /> IRC</div>
+						<a href="#" onclick='$("#ircInfo").slideToggle(); return false;' class='ircButtonLink' target='_blank'>
+							<div class='mediaButton ircButton' class='ircButton'><img src='{{{page.template_path}}}images/irc.png' class='ircButtonImage' /> IRC</div>
 						</a>
 					{{/CONFIG.VALUES.IRC_CHANNEL}}
 					{{/CONFIG.VALUES.IRC_ADDRESS}}
 
 					{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
-						<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" style='text-decoration: none;' target='_blank'>
-							<div class='mediaButton discordButton' style='display: inline-block;'><img src='{{{page.template_path}}}images/discord.png' style='width: 20px;' /> Discord</div>
+						<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" class='discordButtonLink' target='_blank'>
+							<div class='mediaButton discordButton' class='discordButton'><img src='{{{page.template_path}}}images/discord.png' class='discordButtonImage' /> Discord</div>
 						</a>
 					{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
 				</div>
-				<div class="col-md-3 alignCenter" style='margin-top: 10px; color: #FF0066'>
+				<div class="col-md-3 alignCenter headerColumn headerTimer">
 					<p>
 						<b>Next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}:</b><br />
 						<script type='text/javascript'>
@@ -104,31 +104,21 @@
 						</script>
 					</p>
 					<p>
-						<span id='countdownTimer' style='font-size: 24px; font-weight: bold;'></span>
+						<span id='countdownTimer' class='headerTimerCountdown'></span>
 					</p>
 				</div>
 			</div>
-			{{#CONFIG.VALUES.IRC_ADDRESS}}
-			{{#CONFIG.VALUES.IRC_CHANNEL}}
-			<div class="panel-body" id="ircInfo" style='display: none;'>
-				Join us on IRC: Channel <a href="irc:{{{CONFIG.VALUES.IRC_ADDRESS}}}/{{{CONFIG.VALUES.IRC_CHANNEL}}}">#{{{CONFIG.VALUES.IRC_CHANNEL}}} on {{{CONFIG.VALUES.IRC_ADDRESS}}}</a>
-				{{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
-					or <a href='{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}'>chat from your browser</a>
-				{{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
-			</div>
-			{{/CONFIG.VALUES.IRC_CHANNEL}}
-			{{/CONFIG.VALUES.IRC_ADDRESS}}
 		</div>
 	</div>
 </div>
-<div class="row" style="font-size: 16px; font-weight: bold;">
-	<div class="col-md-offset-3 col-md-2 alignCenter" style='margin-bottom: 10px;'>
+<div class="row statsRow">
+	<div class="col-md-offset-3 col-md-2 alignCenter statsDisplay">
 		<a href='?{{{forms.get.page}}}={{{forms.pages.jams}}}'>{{jams.all_jams_count}} {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a>
 	</div>
-	<div class="col-md-2 alignCenter" style='margin-bottom: 10px;'>
+	<div class="col-md-2 alignCenter statsDisplay">
 		<a href='?{{{forms.get.page}}}={{{forms.pages.entries}}}'>{{entries.all_entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a>
 	</div>
-	<div class="col-md-2 alignCenter" style='margin-bottom: 10px;'>
+	<div class="col-md-2 alignCenter statsDisplay">
 		<a href='?{{{forms.get.page}}}={{{forms.pages.authors}}}'>{{users.all_authors_count}} {{CONFIG.VALUES.DEVELOPER_PHRASE_PLURAL}}</a>
 	</div>
 </div>

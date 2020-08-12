@@ -7,8 +7,8 @@
             {{DATE_STARTED}} - {{DATE_ENDED}}
         </div>
         <div class='panel-body'>
-            <div class='col-md-4' style='padding-bottom: 50px;'>
-                <table style='width: 100%'>
+            <div class='col-md-4 pollDisplayLegendContainer'>
+                <table class="pollDisplayLegend">
                     <thead>
                         <th>Option</th>
                         <th>Votes</th>
@@ -25,8 +25,8 @@
                     {{/OPTIONS}}
                 </table>
             </div>
-            <div class='col-md-4 alignCenter' style='padding-bottom: 50px;'>
-                <div class="chart-container" style="position: relative; height:30vh; width:100%">
+            <div class='col-md-4 alignCenter pollDisplayPieContainer'>
+                <div class="chart-container pollDisplayPie">
                     <canvas id="entriesChart-votes-{{{POLL_ID}}}"></canvas>
                 </div>
                 <script type='text/javascript'>
@@ -67,8 +67,8 @@
                     });
                 </script>
             </div>
-            <div class='col-md-4 alignCenter' style='padding-bottom: 50px;'>
-                <div class="chart-container" style="position: relative; height:30vh; width:100%">
+            <div class='col-md-4 alignCenter pollDisplayBarContainer'>
+                <div class="chart-container pollDisplayBar">
                     <canvas id="entriesChart-users-{{{POLL_ID}}}"></canvas>
                 </div>
                 <script type='text/javascript'>

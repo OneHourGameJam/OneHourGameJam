@@ -14,9 +14,9 @@
 	{{> csrf_token}}
 	<div>
 		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.login}}}' class="btn btn-default">Log in</button>
-		<a style='float: right;' href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>Don't have an account yet?</a>
+		<a class='loginLink' href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>Don't have an account yet?</a>
 	</div>
 	<div>
-		<a style='float: right;' href='?{{{forms.get.page}}}={{{forms.pages.forgotpassword}}}'>Forgot password?</a>
+		<a class='loginLink' href='?{{{forms.get.page}}}={{{forms.pages.forgotpassword}}}'>Forgot password?</a>
 	</div>
 </form>

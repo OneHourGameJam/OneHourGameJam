@@ -2,52 +2,52 @@
 	{{#stream.IS_STREAM_ACTIVE}}
 		<div class="wrapper">
 			<div class="main">
-				<iframe src="https://player.twitch.tv/?channel={{stream.STREAMER_CHANNEL}}" style='width: 100%; height: 100%;' allowfullscreen></iframe>
+				<iframe src="https://player.twitch.tv/?channel={{stream.STREAMER_CHANNEL}}" class='twitchFrame' allowfullscreen></iframe>
 			</div>
 		</div>
 	{{/stream.IS_STREAM_ACTIVE}}
 {{/cookies.is_streamer}}
 
-<input type="text" class="form-control" id='search' placeholder="Search for..." style='margin-bottom: 10px;'>
+<input type="text" class="form-control searchInputField" id='search' placeholder="Search for...">
 
 {{#jams.LIST}}
 	{{^jam_deleted}}
 		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
 			{{>jam_header}}
-			<div class='panel-body jamContent' style='{{^entries_visible}} display: none;{{/entries_visible}}' id='entries{{jam_number}}'>
+			<div class='panel-body jamContent {{^entries_visible}}entriesNotVisible{{/entries_visible}}' id='entries{{jam_number}}'>
 				{{#enough_scores_to_show_satisfaction}}
 					<div class='alignCenter fullWidth'>
-						<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_minus_5}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_minus_4}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_minus_3}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_red_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_minus_2}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_minus_1}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_0}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_yellow_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_plus_1}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_plus_2}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_plus_3}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_plus_4}}</div>
-						<div style='background: url({{{page.template_path}}}images/star_green_outline.png); background-size:16px 16px; height: 16px; width:16px; display: inline-block;'>{{score_plus_5}}</div>
+						<div class="satisfactionStar satisfactionStarRed">{{score_minus_5}}</div>
+						<div class="satisfactionStar satisfactionStarRed">{{score_minus_4}}</div>
+						<div class="satisfactionStar satisfactionStarRed">{{score_minus_3}}</div>
+						<div class="satisfactionStar satisfactionStarRed">{{score_minus_2}}</div>
+						<div class="satisfactionStar satisfactionStarYellow">{{score_minus_1}}</div>
+						<div class="satisfactionStar satisfactionStarYellow">{{score_0}}</div>
+						<div class="satisfactionStar satisfactionStarYellow">{{score_plus_1}}</div>
+						<div class="satisfactionStar satisfactionStarGreen">{{score_plus_2}}</div>
+						<div class="satisfactionStar satisfactionStarGreen">{{score_plus_3}}</div>
+						<div class="satisfactionStar satisfactionStarGreen">{{score_plus_4}}</div>
+						<div class="satisfactionStar satisfactionStarGreen">{{score_plus_5}}</div>
 					</div>
 				{{/enough_scores_to_show_satisfaction}}
 
 				{{#entries}}
 					{{^entry_deleted}}
-				<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; color: {{color_text}}'>
-							<div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px; background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
-								<div style="display:table; height: 100%; width: 100%;">
-									<div style="display:table-cell;vertical-align:bottom;">
-										<div style="margin-left:auto;margin-right:auto;">
-											<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
+						<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry entryTile' style='color: {{color_text}}'>
+							<div class='panel-body entryScreenshot screenshot alignCenter entryTileIcon' style='background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
+								<div class="entryTileTable">
+									<div class="entryTileCell">
+										<div class="entryTileCentering">
+											<div class="entryTileTitle" style='background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9);'>
 												<!-- Why is centering things such a collossal pain in CSS :s -->
-												<b><span class='entryTitle' style='word-wrap:break-word;'>{{title}}</span></b><br />
+												<b><span class='entryTileTitleText'>{{title}}</span></b><br />
 												by <span class='entryAuthor'>{{author_display_name}}</span>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class='panel-body entryScreenshot description hiddenFace alignCenter' style='height: 226px; overflow-y: auto; overflow-x: hidden; border: solid 1px {{color_border}}; background-color: {{color_lighter}}'>
+							<div class='panel-body entryScreenshot description hiddenFace alignCenter entryTileDescriptionPanel' style='border: solid 1px {{color_border}}; background-color: {{color_lighter}}'>
 								<div>
 									<b>Play</b><br />
 									{{#platforms}}
@@ -68,13 +68,13 @@
 
 				{{#user}}
 					{{#can_user_submit_to_jam}}
-						<div class='panel panel-default col-md-3 entry' style='padding-left: 0px; padding-right: 0px; height: 226px; cursor: pointer; border: none; '>
-							<div class='panel-body entryScreenshot screenshot alignCenter' style='height: 226px;'>
-								<div style="display:table; height: 100%; width: 100%;">
-									<div style="display:table-cell;vertical-align:middle;">
-										<div style="margin-left:auto;margin-right:auto;">
-											<div style='width: 190px; margin-left: auto; margin-right: auto; background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9); border-radius: 5px;'>
-												<p style='padding-bottom: 3px;'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
+						<div class='panel panel-default col-md-3 entry entryTileSubmit'>
+							<div class='panel-body entryScreenshot screenshot alignCenter entryTileIcon'>
+								<div class="entryTileTable">
+									<div class="entryTileCell">
+										<div class="entryTileCentering">
+											<div class='entryTileTitle'>
+												<p class='entryTileSubmitText'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
 												<a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{jam_number}}'>
 													<div class="btn btn-success">
 														Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
@@ -95,7 +95,7 @@
 
 {{^jams.all_jams_loaded}}
 <div class="row">
-	<div class="col-md-10 alignCenter" style="padding-bottom: 10px; padding-top: 5px;">
+	<div class="col-md-10 alignCenter loadAllJamsButtonContainer">
 		<a class="btn btn-default" href="?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.load_all}}}">Load all {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a>
 	</div>
 </div>

@@ -3,8 +3,8 @@
 <h4>Platforms</h4>
 <p>When users submit a {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to a {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, they can submit a link to one or more platforms. Platforms can be added, edited, deleted and restored on this page.</p>
 <table class="table sortable">
-    <tr>
-        <th style='width: 40px;'>Icon</th>
+    <tr class='sortableHeader'>
+        <th class='platformsIconColumn'>Icon</th>
         <th>Name</th>
         <th>New Icon</th>
         <th>Save</th>
@@ -14,7 +14,7 @@
             <input type='hidden' name='{{{forms.form.editplatform.platform_id}}}' value='{{id}}'>
             {{> csrf_token}}
             <tr>
-                <td><b><img src='{{{page.template_path}}}{{{icon_url}}}' style='max-width:40px; max-height: 40px;'></b></td>
+                <td><b><img src='{{{page.template_path}}}{{{icon_url}}}' class='platformsIconImage'></b></td>
                 <td><b>
                     {{^deleted}}<input type="text" class="form-control" id="platformname" name='{{{forms.form.editplatform.name}}}' placeholder="Platform Name" value="{{name}}" required>{{/deleted}}
                     {{#deleted}}{{name}} (Deleted){{/deleted}}

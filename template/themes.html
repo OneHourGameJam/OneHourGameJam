@@ -79,7 +79,7 @@
 {{/cookies.is_streamer}}
 {{^cookies.is_streamer}}
     {{#themes.has_own_themes}}
-        <table style='width: 100%;'>
+        <table class="themesTable">
             <tr>
                 <th colspan='3' class='themeTableCell themeTableCellCentered'>
                     Vote
@@ -92,7 +92,7 @@
                         Likelihood
                     </th>
                 {{/CONFIG.VALUES.DISPLAY_THEME_PROBABILITY}}
-                <th class='themeTableCell themeTableCellCentered' style='width: 100%;'>
+                <th class='themeTableCell themeTableCellCentered themesIdeasColumn'>
                     Ideas (only visible to you)
                 </th>
             </tr>
@@ -128,7 +128,7 @@
                     <input type="text" class="form-control" name="{{{forms.form.submitideas.ideas}}}" id="ideas-{{theme_id}}" placeholder="Enter some {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} ideas (optional)" value='{{ideas}}' onchange='SubmitThemeIdeas({{theme_id}}, "ideas-{{theme_id}}");' maxlength="240">
                 </th>
                 <td class='themeTableCell'>
-                    <form method='POST' style='display: inline-block;' onsubmit="return confirm('Are you sure you want to delete your {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} {{theme}}?');">
+                    <form method='POST' class="themesActionButtons" onsubmit="return confirm('Are you sure you want to delete your {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} {{theme}}?');">
                         {{> csrf_token}}
                         <button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.deletetheme}}}' class="btn btn-default"><img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> &nbsp;Delete</button>
                         <input type='hidden' name='{{{forms.form.deletetheme.theme_id}}}' value='{{{theme_id}}}'>
@@ -150,7 +150,7 @@
 <h4>Other {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h4>
 
 {{#themes.has_other_themes}}
-    <table style='width: 100%;'>
+    <table class='themesTable'>
         <tr>
             <th colspan='3' class='themeTableCell themeTableCellCentered'>
                 Vote
@@ -158,7 +158,7 @@
             <th class='themeTableCell themeTableCellCentered'>
                 {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}
             </th>
-            <th class='themeTableCell themeTableCellCentered' style='width: 100%;'>
+            <th class='themeTableCell themeTableCellCentered themesIdeasColumn'>
                 Ideas (only visible to you)
             </th>
         </tr>

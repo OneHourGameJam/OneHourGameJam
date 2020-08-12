@@ -14,10 +14,10 @@
 		<table class='table fullWidth'>
 			{{#page.viewing_author.entries}}
 				{{^entry_deleted}}
-					<tr style='height: 40px;'>
+					<tr class='authorEntry'>
 						{{#has_screenshot}}
-							<td rowspan='2' style='width: 220px;' class='alignCenter'>
-								<img src='{{screenshot_url}}' class='small_screenshot maxFullWidth' hidden_src='{{screenshot_url}}' style='max-height: {{#has_description}}200px{{/has_description}}{{^has_description}}100px{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
+							<td rowspan='2' class='alignCenter authorEntryImageContainer'>
+								<img src='{{screenshot_url}}' class='small_screenshot maxFullWidth' hidden_src='{{screenshot_url}}' class='{{#has_description}}authorEntryImageWithDescription{{/has_description}}{{^has_description}}authorEntryImageWithoutDescription{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
 							</td>
 						{{/has_screenshot}}
 						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>

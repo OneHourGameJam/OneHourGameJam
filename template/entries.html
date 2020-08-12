@@ -4,15 +4,15 @@
 	</div>
 </div>
 
-<input type="text" class="form-control" id='entrysearch' placeholder="Search by Title, {{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}, {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} Number or {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}..." style='margin-bottom: 10px;' onkeyup="FilterEntryTable()">
+<input type="text" class="form-control searchInputField" id='entrysearch' placeholder="Search by Title, {{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}, {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} Number or {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}..." onkeyup="FilterEntryTable()">
 <div class='panel-body table-responsive jamContent'>
 	Click on a column header to sort.
 	<table class="table sortable" id="entrytable">
-		<tr style='cursor: pointer;'>
-			<th style='max-width: 150px;'>Title</th>
-			<th style='max-width: 100px;'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}</th>
-			<th style='max-width: 100px;'>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
-			<th style='max-width: 100px;'>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
+		<tr class='sortableHeader'>
+			<th class='entriesColumnTitle'>Title</th>
+			<th class='entriesColumnDeveloper'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}</th>
+			<th class='entriesColumnJam'>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
+			<th class='entriesColumnTheme'>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
 			
 			{{#page.platforms}}
 				<th>{{platform_name}}</th>
@@ -29,7 +29,7 @@
 					{{#platforms}}
 						<td>
 							{{#url}}
-								<a href='{{url}}' target='_blank'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' style='width: 16px;' title='{{platform_name}}'></a>
+								<a href='{{url}}' target='_blank'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entriesPlatformIcon' title='{{platform_name}}'></a>
 							{{/url}}
 						</td>
 					{{/platforms}}

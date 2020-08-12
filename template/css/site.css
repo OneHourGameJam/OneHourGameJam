@@ -291,3 +291,513 @@ body{
 .cookieNotice>.btn-xs{
   color: white;
 }
+
+.sortableHeader{
+  cursor: pointer;
+}
+
+.assetImage{
+  max-width: 600px; 
+  max-height: 200px; 
+  border: 0;
+}
+
+.authorEntry{
+  height: 40px;
+}
+
+.authorEntryImageContainer{
+  width: 220px;
+}
+
+.authorEntryImageWithDescription{
+  max-height: 200px;
+}
+
+.authorEntryImageWithoutDescription{
+  max-height: 100px;
+}
+
+.searchInputField{
+  margin-bottom: 10px;
+}
+
+.configTextarea{
+  min-height: 150px;
+}
+
+.cookieHeader{
+  margin: -5px 0 5px 0;
+}
+
+.contentJamHeaderFont{
+  font-size: 16px;
+}
+
+.contentEntryHeader{
+  padding-left: 0px; 
+  padding-right: 0px;
+}
+
+.contentEntryDeletedHeader{
+  background-color: #FDF7F7;
+}
+
+.contentEntryContent{
+  text-align: center;
+}
+
+.satisfacitonContainer{
+  width: 100%; 
+  text-align: center;
+}
+
+.satisfactionStarGreen{
+  background: url({{{page.template_path}}}images/star_green_outline.png);
+  background-size: 16px 16px;
+}
+
+.satisfactionStarYellow{
+  background: url({{{page.template_path}}}images/star_yellow_outline.png);
+  background-size: 16px 16px;
+}
+
+.satisfactionStarRed{
+  background: url({{{page.template_path}}}images/star_red_outline.png);
+  background-size: 16px 16px;
+}
+
+.satisfactionStar{
+  height: 16px; 
+  width:16px; 
+  display: inline-block;
+}
+
+.platformsIconColumn{
+  width: 40px;
+}
+
+.platformsIconImage{
+  max-width:40px; 
+  max-height: 40px;
+}
+
+.editUserChangePassword{
+  margin-top: 50px;
+}
+
+.editUserAdminActivityIndicatorLoginContainer{
+  width: 30px; 
+  text-align: center; 
+}
+
+.editUserAdminActivityIndicatorJamParticipationContainer{
+  width: 30px; 
+  text-align: center; 
+}
+
+.editUserAdminActivityIndicatorAdminActionContainer{
+  width: 30px; 
+  text-align: center; 
+}
+
+.editUserAdminActivityImage{
+  width: 24px;
+}
+
+.editUserAdminCandidatesVoteColumn{
+  width: 400px; 
+  text-align: center;
+}
+
+.editUserAdminCandidatesSponsored{
+  color: green;
+}
+
+.editUserAdminCandidatesVetoed{
+  text-align: center; 
+  color: red; 
+  font-weight: bold;
+}
+
+.editUserAdminCandidatesVotesFor{
+  text-align: center;
+}
+
+.editUserAdminCandidatesVotesButtonsContainer{
+  text-align: right;
+}
+
+.editUserAdminCandidatesVotesForm{
+  display: inline;
+}
+
+.editUserAdminCandidatesVotesButtonImage{
+  width: 24px; 
+  height: 24px;
+}
+
+.entriesColumnTitle{
+  max-width: 150px;
+}
+
+.entriesColumnDeveloper{
+  max-width: 150px;
+}
+
+.entriesColumnJam{
+  max-width: 150px;
+}
+
+.entriesColumnTheme{
+  max-width: 150px;
+}
+
+.entriesPlatformIcon{
+  width: 16px;
+}
+
+.header{
+  margin-top: 10px;
+}
+
+.statsRow{
+  font-size: 16px; 
+  font-weight: bold;
+}
+
+.statsDisplay{
+  margin-bottom: 10px;
+}
+
+.headerColumn{
+  margin-top: 10px;
+}
+
+.headerTimer{
+  color: #FF0066;
+}
+
+.headerTimerCountdown{
+  font-size: 24px; 
+  font-weight: bold;
+}
+
+.brandLogo{
+  float: left; 
+  max-height: 100px; 
+  border: 0;
+}
+
+.mainLogo{
+  max-width: 100%; 
+  width: 400px; 
+  border: 0;
+}
+
+.ircButtonLink{
+  text-decoration: none;
+}
+
+.ircButton{
+  display: inline-block;
+}
+
+.ircButtonImage{
+  width: 20px;
+}
+
+.discordButtonLink{
+  text-decoration: none;
+}
+
+.discordButton{
+  display: inline-block;
+}
+
+.discordButtonImage{
+  width: 20px;
+}
+
+.footer{
+  padding-bottom: 50px;
+}
+
+.cookieNoticeForm{
+  float: right; 
+  background: transparent; 
+  border: none;
+}
+
+.jamHeaderContainer{
+  padding: 0; 
+  width: 100%; 
+  align-content: center;
+}
+
+.jamHeaderRow{
+  margin: 0;
+}
+
+.jamHeaderOrdinalContainer{
+  text-align: center;
+}
+
+.jamHeaderOrdinal{
+  font-size: 35px;
+}
+
+.jamHeaderTimer{
+  color: indianred; 
+  font-weight: bold;
+}
+
+.jamHeaderStatsContainer{
+  float: right; 
+  text-align: right;
+}
+
+.jamTable{
+  width: 100%;
+}
+
+.jamTableRow{
+  height: 40px;
+}
+
+.jamTableEntryScreenshot{
+  width: 220px;
+}
+
+.jamTableEntryScreenshotImage{
+  max-width:100%;
+}
+
+.jamTableEntryScreenshotImageWithDescription{
+  max-height:200px;
+}
+
+.jamTableEntryScreenshotImageWithoutDescription{
+  max-height:100px;
+}
+
+.loginLink{
+  float: right;
+}
+
+.registerLink{
+  float: right;
+}
+
+.twitchFrame{
+  width: 100%; 
+  height: 100%;
+}
+
+.entryTile{
+  padding-left: 0px; 
+  padding-right: 0px; 
+  height: 226px; 
+  cursor: pointer; 
+  border: none;
+}
+
+.entryTileIcon{
+  height: 226px; 
+}
+
+.entryTileTable{
+  display: table; 
+  height: 100%; 
+  width: 100%;
+}
+
+.entryTileCell{
+  display: table-cell;
+  vertical-align: bottom;
+}
+
+.entryTileCentering{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.entryTileTitle{
+  width: 190px; 
+  margin-left: auto; 
+  margin-right: auto;
+  border-radius: 5px;
+}
+
+.entryTileTitleText{
+  word-wrap:break-word;
+}
+
+.entryTileDescriptionPanel{
+  height: 226px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+}
+
+.entryTileSubmit{
+  padding-left: 0px; 
+  padding-right: 0px; 
+  height: 226px; 
+  cursor: pointer; 
+  border: none;
+}
+
+.entryTileSubmitText{
+  padding-bottom: 3px;
+}
+
+.loadAllJamsButtonContainer{
+  padding-bottom: 10px; 
+  padding-top: 5px;
+}
+
+.userSettingsForm{
+  margin-top: 50px;
+}
+
+.userSettingsInput{
+  font-weight: normal;
+}
+
+.themesTable{
+  width: 100%;
+}
+
+.themesIdeasColumn{
+  width: 100%;
+}
+
+.themesActionButtons{
+  display: inline-block;
+}
+
+.submitJamHeader{
+  font-size: 24px;
+}
+
+.submitEntryHeading{
+  font-size: 16px;
+}
+
+.submitPlatformIcon{
+  height: 16px; 
+  width: 16px;
+}
+
+.submitColorButton{
+  color: black;
+}
+
+.submitColorPreview{
+  width: 190px; 
+  margin-left: auto; 
+  margin-right: auto;
+  border-radius: 5px; 
+  text-align: center;
+}
+
+.pollDisplayLegendContainer{
+  padding-bottom: 50px;
+}
+
+.pollDisplayLegend{
+  width: 100%
+}
+
+.pollDisplayPieContainer{
+  padding-bottom: 50px;
+}
+
+.pollDisplayPie{
+  position: relative; 
+  height:30vh; 
+  width:100%
+}
+
+.pollDisplayBarContainer{
+  padding-bottom: 50px;
+}
+
+.pollDisplayBar{
+  position: relative; 
+  height:30vh; 
+  width:100%
+}
+
+.pollRow{
+  font-size: 16px;
+}
+
+.pollUserVoted{
+  display: none;
+}
+
+.pollInstructionsText{
+  font-size: 12px;
+}
+
+.pollOption{
+  margin-top: 5px;
+}
+
+.notificationRow{
+  font-size: 16px;
+}
+
+.notificationImageContainer{
+  height: 100px;
+}
+
+.notificationImage{
+  max-height: 80px;
+  float: left;
+}
+
+.messageTitle{
+  font-size: 24px;
+}
+
+.menuButton{
+  width: 20px;
+}
+
+.manageThemesPie{
+  position: relative; 
+  max-height:500px; 
+  max-width:500px;
+}
+
+.manageThemesLegendIcon{
+  width: 16px;
+}
+
+.manageThemesStatusColumn{
+  min-width: 10px;
+}
+
+.manageThemesActionsColumn{
+  display: inline-block;
+}
+
+.manageThemesMultiActions{
+  padding-top: 10px; 
+  padding-bottom: 10px;
+}
+
+.manageThemesMultiActionsButton{
+  border: none; 
+  background-color: transparent;
+}
+
+.entriesNotVisible{
+  display: none;
+}
+
+.installPageContainer{
+  margin-top: 10px;
+}

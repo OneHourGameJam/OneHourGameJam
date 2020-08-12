@@ -4,7 +4,7 @@
 
 <div class="panel panel-info">
 	<div class='panel-heading'>
-		<h3 class='panel-title' style='font-size: 24px;'>
+		<h3 class='panel-title submitJamHeader'>
 			{{page.submit_jam.jam_number_ordinal}} {{CONFIG.VALUES.JAMNAME}} ({{page.submit_jam.date}})
 		</h3>
 		{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}: {{page.submit_jam.theme}}
@@ -14,7 +14,7 @@
 		{{> csrf_token}}
 		<div class="panel panel-info">
 			<div class='panel-heading'>
-				<h3 class='panel-title' style='font-size: 16px;'>
+				<h3 class='panel-title submitEntryHeading'>
 					{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} Info
 				</h3>
 			</div>
@@ -38,7 +38,7 @@
 
 		<div class="panel panel-info">
 			<div class='panel-heading'>
-				<h3 class='panel-title' style='font-size: 16px;'>
+				<h3 class='panel-title submitEntryHeading'>
 					Link to {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
 				</h3>
 			</div>
@@ -46,7 +46,7 @@
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active"><a data-toggle="tab" href="#platformInfo">Info</a></li>
 					{{#page.platforms}}
-						<li role="presentation"><a data-toggle="tab" href="#platform{{platform_id}}">{{platform_name}} {{#platform_entry_url}}<img src='{{{page.template_path}}}images/check.png' style='height: 16px; width: 16px;'>{{/platform_entry_url}}</a></li>
+						<li role="presentation"><a data-toggle="tab" href="#platform{{platform_id}}">{{platform_name}} {{#platform_entry_url}}<img src='{{{page.template_path}}}images/check.png' class='submitPlatformIcon'>{{/platform_entry_url}}</a></li>
 					{{/page.platforms}}
 				</ul>
 				<div class="panel panel-default">
@@ -80,7 +80,7 @@
 
 		<div class="panel panel-info">
 			<div class='panel-heading'>
-				<h3 class='panel-title' style='font-size: 16px;'>
+				<h3 class='panel-title submitEntryHeading'>
 					Customize
 				</h3>
 			</div>
@@ -91,7 +91,7 @@
 							<label for="colorPresets">Preset</label>
 							<div class="btn-group" data-toggle="buttons">
 								{{#page.submit_jam.colors}}
-									<label class="btn btn-default" style='background-color: {{color}}; color: black;' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorPreview').css('color', '#000000'); $('#backgroundColor').val('{{color}}'); $('#textColor').val('#000000')">
+									<label class="btn btn-default submitColorButton" style='background-color: {{color}};' onclick="$('#colorPreview').css('background-color', '{{color}}'); $('#colorPreview').css('color', '#000000'); $('#backgroundColor').val('{{color}}'); $('#textColor').val('#000000')">
 										<input type="radio" autocomplete="off"> {{color}}
 									</label>
 								{{/page.submit_jam.colors}}
@@ -113,8 +113,8 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div id='colorPreview' style='width: 190px; margin-left: auto; margin-right: auto; background-color: #{{page.user_entry_background_color}}; border-radius: 5px; text-align: center; color: #{{page.user_entry_text_color}}'>
-							<b><span class='entryTitle' style='word-wrap:break-word;'>Preview</span></b><br />
+						<div id='colorPreview' class="submitColorPreview" style='background-color: #{{page.user_entry_background_color}}; color: #{{page.user_entry_text_color}}'>
+							<b><span class='entryTileTitleText'>Preview</span></b><br />
 							by <span class='entryAuthor'>Preview</span>
 						</div>
 					</div>
@@ -124,7 +124,7 @@
 		{{^page.user_submitted_to_this_jam}}
 		<div class="panel panel-info">
 			<div class='panel-heading'>
-				<h3 class='panel-title' style='font-size: 16px;'>
+				<h3 class='panel-title submitEntryHeading'>
 					Satisfaction
 				</h3>
 			</div>
