@@ -1,7 +1,8 @@
 <h1 class="pageHeading">Assets</h1>
-<p>
+<div class="pageDescription">
 	Here you can find some assets which you can use for your {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}.
-</p>
+</div>
+
 {{#user.is_admin}}
 	<form action='?{{{forms.get.page}}}={{{forms.pages.editasset}}}' method='POST'>
 		{{> csrf_token}}

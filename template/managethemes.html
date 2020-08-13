@@ -1,14 +1,15 @@
 <h1 class="pageHeading">Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h1>
 
 {{#cookies.is_streamer}}
-<p class='bold'>
-	Please disable streamer mode to manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.
-</p>
+	<div class="pageDescription">
+		Please disable streamer mode to manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.
+	</div>
 {{/cookies.is_streamer}}
 
 {{^cookies.is_streamer}}
-			<p>Use this page to manage {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions, decide which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to pick for a manually scheduled {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, and view probablity of certain {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} being automatically selected for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}.</p>
-			</p>
+	<div class="pageDescription">
+		Use this page to manage {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions, decide which {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} to pick for a manually scheduled {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, and view probablity of certain {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} being automatically selected for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}.
+	</div>
 
 	<div class='panel panel-info'>
 		<div class="chart-container manageThemesPie">

@@ -1,4 +1,7 @@
 <h1 class="pageHeading">Poll Results</h1>
+<div class="pageDescription">
+	This page contains the results of all held polls. Polls can currently only be scheduled by being directly inserted into the database.
+</div>
 {{#polls.LIST}}
     <div class='panel {{#IS_ACTIVE}}panel-info{{/IS_ACTIVE}}{{^IS_ACTIVE}}panel-success{{/IS_ACTIVE}}'>
         <div class='panel-heading'>

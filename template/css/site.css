@@ -806,3 +806,7 @@ body{
 .pageHeading{
   font-size: 24px;
 }
+
+.pageDescription{
+  margin: 0 0 10px;
+}

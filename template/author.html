@@ -1,8 +1,9 @@
 {{#page.viewing_author}}
 	<h1 class="pageHeading">{{display_name}}</h1>
-	<div class='panel-body'>
+	<div class="pageDescription">
 		{{{ page.author_bio }}}
 	</div>
+	
 	<div class='panel-body table-responsive'>
 		{{^page.viewing_author.entries}}
 			This user did not submit any {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}.

@@ -17,6 +17,7 @@ $mustache->setPartials(Array(
 	"footer" => file_get_contents($templateBasePath."footer.html"),
 	"message" => file_get_contents($templateBasePath."message.html"),
 	"page" => file_get_contents($templateBasePath.$pageTemplateFile),
+	"css" => file_get_contents($templateBasePath."css/site.css")
 ));
 
 print $mustache->render(file_get_contents($templateBasePath."install.html"), $dictionary);
