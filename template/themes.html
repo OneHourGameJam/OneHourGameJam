@@ -1,48 +1,4 @@
-<script type='text/javascript'>
-	function VoteTheme(themeID, vote, btn_id){
-		$.get("api/themevote?themeID="+themeID+"&vote="+vote, function(data){
-			var d = jQuery.parseJSON(data)
-
-			$("#"+btn_id+"-1").removeClass("btn-danger");
-			$("#"+btn_id+"-2").removeClass("btn-warning");
-			$("#"+btn_id+"-3").removeClass("btn-success");
-			if(vote == 1){
-				$("#"+btn_id+"-"+vote).addClass("btn-danger");
-			}
-			if(vote == 2){
-				$("#"+btn_id+"-"+vote).addClass("btn-warning");
-			}
-			if(vote == 3){
-				$("#"+btn_id+"-"+vote).addClass("btn-success");
-			}
-		});
-    }
-    
-	function SubmitThemeIdeas(themeID, ideasTextInputId){
-        var ideasUrlEncoded = encodeURI($("#"+ideasTextInputId).val());
-		$("#"+ideasTextInputId).removeClass("btn-danger");
-		$("#"+ideasTextInputId).removeClass("btn-success");
-		$("#"+ideasTextInputId).addClass("btn-warning");
-		$.get("api/submitideas?themeID="+themeID+"&ideas="+ideasUrlEncoded, function(data){
-			var d = jQuery.parseJSON(data)
-
-            $("#"+ideasTextInputId).removeClass("btn-danger");
-		    $("#"+ideasTextInputId).removeClass("btn-success");
-            $("#"+ideasTextInputId).removeClass("btn-warning");
-            console.log("TRY");
-			if(d.SUCCESS){
-                console.log("SUCCESS");
-				$("#"+ideasTextInputId).addClass("btn-success");
-			}
-			if(d.ERROR){
-                console.log("ERROR");
-				$("#"+ideasTextInputId).addClass("btn-danger");
-			}
-		});
-	}
-</script>
-
-<h3>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} Suggestions</h3>
+<h1 class="pageHeading">{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} suggestions and voting</h1>
 <h4>Suggest a {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</h4>
 
 <p>
@@ -220,3 +176,46 @@
     <p><b>Nobody has suggested other {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}.</b></p>
 {{/themes.has_other_themes}}
 
+<script type='text/javascript'>
+	function VoteTheme(themeID, vote, btn_id){
+		$.get("api/themevote?themeID="+themeID+"&vote="+vote, function(data){
+			var d = jQuery.parseJSON(data)
+
+			$("#"+btn_id+"-1").removeClass("btn-danger");
+			$("#"+btn_id+"-2").removeClass("btn-warning");
+			$("#"+btn_id+"-3").removeClass("btn-success");
+			if(vote == 1){
+				$("#"+btn_id+"-"+vote).addClass("btn-danger");
+			}
+			if(vote == 2){
+				$("#"+btn_id+"-"+vote).addClass("btn-warning");
+			}
+			if(vote == 3){
+				$("#"+btn_id+"-"+vote).addClass("btn-success");
+			}
+		});
+    }
+    
+	function SubmitThemeIdeas(themeID, ideasTextInputId){
+        var ideasUrlEncoded = encodeURI($("#"+ideasTextInputId).val());
+		$("#"+ideasTextInputId).removeClass("btn-danger");
+		$("#"+ideasTextInputId).removeClass("btn-success");
+		$("#"+ideasTextInputId).addClass("btn-warning");
+		$.get("api/submitideas?themeID="+themeID+"&ideas="+ideasUrlEncoded, function(data){
+			var d = jQuery.parseJSON(data)
+
+            $("#"+ideasTextInputId).removeClass("btn-danger");
+		    $("#"+ideasTextInputId).removeClass("btn-success");
+            $("#"+ideasTextInputId).removeClass("btn-warning");
+            console.log("TRY");
+			if(d.SUCCESS){
+                console.log("SUCCESS");
+				$("#"+ideasTextInputId).addClass("btn-success");
+			}
+			if(d.ERROR){
+                console.log("ERROR");
+				$("#"+ideasTextInputId).addClass("btn-danger");
+			}
+		});
+	}
+</script>

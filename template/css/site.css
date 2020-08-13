@@ -801,3 +801,8 @@ body{
 .installPageContainer{
   margin-top: 10px;
 }
+
+
+.pageHeading{
+  font-size: 24px;
+}
