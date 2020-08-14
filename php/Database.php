@@ -120,7 +120,7 @@ class Database{
         $sql = "";
         
         $config_result = mysqli_fetch_array($data);
-    
+
         if ($config_result == NULL) {
             die("Unable to determine the database version. Please add the config value DATABASE_VERSION before running");
         }
@@ -239,7 +239,8 @@ class Database{
     }
 
     public function Execute($sql){
-        return mysqli_query($this->dbConnection, $sql);
+        $data = mysqli_query($this->dbConnection, $sql) or die("<br>SQL Execution Error: $sql;<br><pre>debug_print_backtrace();</pre>");
+        return $data;
     }
 
     public function EscapeString($string){

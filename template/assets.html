@@ -3,22 +3,9 @@
 	Here you can find some assets which you can use for your {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}.
 </div>
 
-{{#user.is_admin}}
-	<form action='?{{{forms.get.page}}}={{{forms.pages.editasset}}}' method='POST'>
-		{{> csrf_token}}
-		<input type='hidden' name='{{{forms.form.action}}}' value='editasset'>
-		<input type='submit' name='{{{forms.form.action}}}' value='New' class="btn btn-default">
-	</form>
-{{/user.is_admin}}
-
 {{#assets.LIST}}
 	<p>
 		<h4>{{title}}</h4>
-		{{#user.is_admin}}
-			<a href='?{{{forms.get.page}}}={{{forms.pages.editasset}}}&{{{forms.get.editasset.asset_id}}}={{id}}'>
-				<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.editasset}}}' class="btn btn-default">Edit asset</button>
-			</a>
-		{{/user.is_admin}}
 	</p>
 	<p>
 		By {{author_display_name}}<br />

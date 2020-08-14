@@ -1,0 +1,58 @@
+<h1 class="pageHeading">Manage Assets</h1>
+<div class="pageDescription">
+	On this page you can manage the assets available to users.
+</div>
+
+<div class="panel-body table-responsive">
+    <a href="?{{{forms.get.page}}}={{{forms.pages.editasset}}}"><button class="btn btn-default actionButton">New Asset</button></a>
+    <table class="table fourRowDataTable">
+        <tr class="dataTableHeaderRow">
+            <th>ID</th>
+            <th>Preview</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
+        {{#assets.LIST}}
+            <tr>
+                <td rowspan="2" class="dataTableIdentifierColumn">{{id}}</td>
+                <td rowspan="2" class="assetImagePreviewCell">
+                    {{#is_audio}}
+                        <audio controls="controls" class="assetAudioPreview">
+                            Your browser does not support the <code>audio</code> element.
+                            <source src="{{content}}" type="audio/wav">
+                        </audio>
+                    {{/is_audio}}
+                    {{#is_image}}
+                        <a href="{{content}}"><img src="{{content}}" class="assetImagePreview"></a>
+                    {{/is_image}}
+                    {{#is_file}}
+                        
+                    {{/is_file}}
+                    {{#is_text}}
+                        {{content}}
+                    {{/is_text}}
+                    {{#is_link}}
+                        {{content}}
+                    {{/is_link}}
+                    {{#is_other}}
+                        {{content}}
+                    {{/is_other}}
+                </td>
+                <td>{{title}}</td>
+                <td>{{author_display_name}}</td>
+                <td>
+                    <a href="{{content}}" class="actionButton">
+                        <button class="btn btn-default">Download</button>
+                    </a>
+                    <a href="?{{{forms.get.page}}}={{{forms.pages.editasset}}}&{{{forms.get.editasset.asset_id}}}={{id}}" class="actionButton">
+                        <button class="btn btn-default">Edit</button>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"><b>Description: </b>{{description}}</td>
+            </tr>
+        {{/assets.LIST}}
+    </table>
+</div>

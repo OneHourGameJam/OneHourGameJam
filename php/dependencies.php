@@ -50,6 +50,7 @@ define("PAGE_FORGOT_PASSWORD", "forgotpassword");
 define("PAGE_SUBMIT", "submit");
 define("PAGE_NEW_JAM", "newjam");
 define("PAGE_ASSETS", "assets");
+define("PAGE_EDIT_ASSETS", "editassets");
 define("PAGE_EDIT_ASSET", "editasset");
 define("PAGE_RULES", "rules");
 define("PAGE_CONFIG", "config");
@@ -156,6 +157,12 @@ $pageSettings = Array(
         "page_title" => "Assets",
         "authorization_level" => AUTHORIZATION_LEVEL_NONE,
         "template_file" => "assets.html",
+        "dependencies" => Array(RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, RENDER_ASSETS => RENDER_DEPTH_NONE),
+    ),  
+    PAGE_EDIT_ASSETS => Array(
+        "page_title" => "Manage Assets",
+        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
+        "template_file" => "editassets.html",
         "dependencies" => Array(RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE, RENDER_ASSETS => RENDER_DEPTH_NONE),
     ),  
     PAGE_EDIT_ASSET => Array(

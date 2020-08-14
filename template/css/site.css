@@ -827,3 +827,20 @@ body{
 
 .dataTable tr:not(:first-child):nth-child(2n) {background-color: #ECF3F7; color: #31708f}
 .dataTable tr:not(:first-child):nth-child(2n+1) {background-color: #F4F7F9; color: #31708f}
+
+.assetImagePreview{
+  max-width: 200px;
+  max-height: 100px;
+}
+.assetImagePreviewCell{
+  text-align: center;
+  vertical-align: middle;
+}
+.assetAudioPreview{
+  max-width: 200px;
+  max-height: 100px;
+}
+
+.actionButton{
+  margin: 5px 5px 5px 0px;
+}

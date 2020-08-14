@@ -135,6 +135,7 @@ class FormPresenter{
         $formViewModel->pages["adminlog"] = PAGE_ADMIN_LOG;
         $formViewModel->pages["polls"] = PAGE_POLLS;
         $formViewModel->pages["editplatforms"] = PAGE_EDIT_PLATFORMS;
+        $formViewModel->pages["editassets"] = PAGE_EDIT_ASSETS;
         
         $formViewModel->action["login"] = ACTION_LOGIN;
         $formViewModel->action["register"] = ACTION_REGISTER;
