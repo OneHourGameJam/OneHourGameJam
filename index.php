@@ -20,6 +20,9 @@ $mustache->setPartials(Array(
 	"page" => file_get_contents($pageTemplateFile),
 	"csrf_token" => file_get_contents($templateBasePath."csrf-token.html"),
 	"jam_header" => file_get_contents($templateBasePath."jam_header.html"),
+	"entry_by_user" => file_get_contents($templateBasePath."entry_by_user.html"),
+	"entry_for_jam" => file_get_contents($templateBasePath."entry_for_jam.html"),
+	"user_header" => file_get_contents($templateBasePath."user_header.html"),
 	"css" => file_get_contents($templateBasePath."css/site.css")
 ));
 

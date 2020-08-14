@@ -310,12 +310,8 @@ body{
   width: 220px;
 }
 
-.authorEntryImageWithDescription{
+.authorEntryImage{
   max-height: 200px;
-}
-
-.authorEntryImageWithoutDescription{
-  max-height: 100px;
 }
 
 .searchInputField{

@@ -1,40 +1,13 @@
 {{#page.viewing_jam}}
-	<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
-		{{>jam_header}}
-	</div>
-	<div class='panel-body jamContent' id='entries{{jam_number}}'>
-		<table class='table jamTable'>
-			{{#entries}}
-				{{^entry_deleted}}
-					<tr class='jamTableRow'>
-						{{#has_screenshot}}
-							<td rowspan='2' class='alignCenter jamTableEntryScreenshot'>
-								<img src='{{screenshot_url}}' class='small_screenshot jamTableEntryScreenshotImage {{#has_description}}jamTableEntryScreenshotImageWithDescription{{/has_description}}{{^has_description}}jamTableEntryScreenshotImageWithoutDescription{{/has_description}}' hidden_src='{{screenshot_url}}' alt='{{title}} by {{author_display_name}}' onerror='this.src="logo.png"'>
-							</td>
-						{{/has_screenshot}}
-						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
-							<b><span class='entryTitle'>{{title}}</span></b><br />
-							by <a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{author_username}}'>{{author_display_name}}</a>
-						</div>
-						<td class='authorPageEntry'>
-							{{#platforms}}
-								{{#url}}
-									<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entryPlayIcon' title='{{platform_name}}'></a>
-								{{/url}}
-							{{/platforms}}
-						</td>
-					</tr>
-					<tr>
-						{{#has_description}}
-							<td colspan='{{#has_screenshot}}2{{/has_screenshot}}{{^has_screenshot}}3{{/has_screenshot}}'>
-								<p>
-									{{description}}
-								</p>
-							</td>
-						{{/has_description}}
-					</tr>
-				{{/entry_deleted}}
-			{{/entries}}
-		</table>
+	{{>jam_header}}
+	<div class='panel-body'>
+		{{#entries}}
+			{{^entry_deleted}}
+				{{>entry_by_user}}
+			{{/entry_deleted}}
+		{{/entries}}
+		{{^entries}}
+			No entries submitted to this jam.
+		{{/entries}}
 	</div>
 {{/page.viewing_jam}}

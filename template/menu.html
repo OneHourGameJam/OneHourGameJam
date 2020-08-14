@@ -58,14 +58,14 @@
 				<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></b></li>
 			{{/user}}
 			{{^user}}
-				<li><a href='?{{{forms.get.page}}}={{{forms.pages.login}}}'>Log in</a> or <a href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>Register</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.login}}}'>Log in</a> or <a href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>register</a></li>
 			{{/user}}
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>How it works</a></li>
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.assets}}}'>Assets</a></li>
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.privacy}}}'>Privacy</a></li>
 			{{#user}}
 				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>User Data</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>User data</a></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 
@@ -78,7 +78,7 @@
 				<li class="mainmenu-separator">User</li>
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
 				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User Settings</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 
@@ -86,17 +86,17 @@
 			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report bug</a></li>
 			{{#user}}
 				{{#cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable streamer Mode</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable streamer mode</a></li>
 				{{/cookies.is_streamer}}
 				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=1'>Streamer Mode</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=1'>Streamer mode</a></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 			{{#cookies.darkmode}}
-				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0'>Enable Light Mode</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0'>Enable light mode</a></li>
 			{{/cookies.darkmode}}
 			{{^cookies.darkmode}}
-				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=1'>Enable Dark Mode</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=1'>Enable dark mode</a></li>
 			{{/cookies.darkmode}}
 			
 			{{#user.admin}}
@@ -109,8 +109,8 @@
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'>Manage users</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editplatforms}}}'>Manage platforms</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editassets}}}'>Manage assets</a></li>
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll Results</a></li>
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.adminlog}}}'>Admin Log</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll results</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.adminlog}}}'>Admin log</a></li>
 				{{/cookies.is_streamer}}
 			{{/user.admin}}
 			

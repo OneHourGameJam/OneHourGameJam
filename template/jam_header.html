@@ -1,26 +1,29 @@
-<div class='panel-heading jamHeader'>
-    <div class="container jamHeaderContainer">
-        <a name='jam{{jam_number}}'></a>
-        <div class="row jamHeaderRow">
-            <div class="col-xs-2 jamHeaderOrdinalContainer">
-                <h3 class='panel-title jamHeaderOrdinal'>{{jam_number_ordinal}}</h3>
-            </div>
-            <div class="col-xs-6">
-                <b>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}:</b> {{theme}}<br />
-                {{#jam_started}}
-                    <span>{{date}}</span>
-                {{/jam_started}}
-                {{^jam_started}}
-                    <i><span>{{date}} at {{time}} UTC</span></i>
-                {{/jam_started}}
-            </div>
-            <div class="col-xs-3 jamHeaderStatsContainer">
-                {{#jam_started}}
-                    <h4>{{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</h4>
-                {{/jam_started}}
-                {{^jam_started}}
-                    <h4 class='jamHeaderTimer'><span id='next_jam_countdown_{{jam_number}}'></span></h4>
-                {{/jam_started}}
+
+<div class='panel panel-info'>
+    <div class='panel-heading jamHeader'>
+        <div class="container jamHeaderContainer">
+            <a name='jam{{jam_number}}'></a>
+            <div class="row jamHeaderRow">
+                <div class="col-xs-2 jamHeaderOrdinalContainer">
+                    <h3 class='panel-title jamHeaderOrdinal'>{{jam_number_ordinal}}</h3>
+                </div>
+                <div class="col-xs-6">
+                    <b>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}:</b> {{theme}}<br />
+                    {{#jam_started}}
+                        <span>{{date}}</span>
+                    {{/jam_started}}
+                    {{^jam_started}}
+                        <i><span>{{date}} at {{time}} UTC</span></i>
+                    {{/jam_started}}
+                </div>
+                <div class="col-xs-3 jamHeaderStatsContainer">
+                    {{#jam_started}}
+                        <h4>{{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</h4>
+                    {{/jam_started}}
+                    {{^jam_started}}
+                        <h4 class='jamHeaderTimer'><span id='next_jam_countdown_{{jam_number}}'></span></h4>
+                    {{/jam_started}}
+                </div>
             </div>
         </div>
     </div>

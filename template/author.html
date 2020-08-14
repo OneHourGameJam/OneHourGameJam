@@ -1,48 +1,14 @@
 {{#page.viewing_author}}
-	<h1 class="pageHeading">{{display_name}}</h1>
-	<div class="pageDescription">
-		{{{ page.author_bio }}}
-	</div>
+	{{>user_header}}
 	
 	<div class='panel-body table-responsive'>
+		{{#page.viewing_author.entries}}
+			{{^entry_deleted}}
+				{{>entry_for_jam}}
+			{{/entry_deleted}}	
+		{{/page.viewing_author.entries}}
 		{{^page.viewing_author.entries}}
 			This user did not submit any {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}.
 		{{/page.viewing_author.entries}}
-		<table class='table fullWidth'>
-			{{#page.viewing_author.entries}}
-				{{^entry_deleted}}
-					<tr class='authorEntry'>
-						{{#has_screenshot}}
-							<td rowspan='2' class='alignCenter authorEntryImageContainer'>
-								<img src='{{screenshot_url}}' class='small_screenshot maxFullWidth' hidden_src='{{screenshot_url}}' class='{{#has_description}}authorEntryImageWithDescription{{/has_description}}{{^has_description}}authorEntryImageWithoutDescription{{/has_description}}' alt='{{title}} by {{author}}' onerror='this.src="logo.png"'>
-							</td>
-						{{/has_screenshot}}
-						<td colspan='{{#has_screenshot}}1{{/has_screenshot}}{{^has_screenshot}}2{{/has_screenshot}}' class='authorPageEntry'>
-							<b><span class='entryTitle'>{{#has_title}}{{title}}{{/has_title}}{{^has_title}}Untitled{{/has_title}}</span></b><br />
-							for <a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{CONFIG.VALUES.JAMNAME}} {{jam_number}} ({{jam_theme}})</a>
-						</div>
-						<td class='authorPageEntry alignRight'>
-							{{#platforms}}
-								{{#url}}
-									<a href='#' class='btn btn-default entryButton' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entryPlayIcon' title='{{platform_name}}'></a>
-								{{/url}}
-							{{/platforms}}
-							{{#page.show_edit_link}}
-								<a href="?{{{forms.get.page}}}={{{forms.pages.submit}}}&amp;{{{forms.get.jam.number}}}={{jam_number}}" class="btn btn-default">Edit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</a>
-							{{/page.show_edit_link}}
-						</td>
-					</tr>
-					<tr>
-						{{#has_description}}
-							<td colspan='{{#has_screenshot}}2{{/has_screenshot}}{{^has_screenshot}}3{{/has_screenshot}}'>
-								<p>
-									{{description}}
-								</p>
-							</td>
-						{{/has_description}}
-					</tr>
-				{{/entry_deleted}}
-			{{/page.viewing_author.entries}}
-		</table>
 	</div>
 {{/page.viewing_author}}

@@ -33,36 +33,7 @@
 
 				{{#entries}}
 					{{^entry_deleted}}
-						<div onclick='$(this).find(".screenshot").toggleClass("hiddenFace"); $(this).find(".description").toggleClass("hiddenFace"); return false;' class='panel panel-default col-md-3 entry entryTile' style='color: {{color_text}}'>
-							<div class='panel-body entryScreenshot screenshot alignCenter entryTileIcon' style='background-image: url({{screenshot_url}}); background-size: contain; background-position: center; background-repeat: no-repeat;'>
-								<div class="entryTileTable">
-									<div class="entryTileCell">
-										<div class="entryTileCentering">
-											<div class="entryTileTitle" style='background-color: rgba({{color256_background_red}}, {{color256_background_green}}, {{color256_background_blue}}, 0.9);'>
-												<!-- Why is centering things such a collossal pain in CSS :s -->
-												<b><span class='entryTileTitleText'>{{title}}</span></b><br />
-												by <span class='entryAuthor'>{{author_display_name}}</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class='panel-body entryScreenshot description hiddenFace alignCenter entryTileDescriptionPanel' style='border: solid 1px {{color_border}}; background-color: {{color_lighter}}'>
-								<div>
-									<b>Play</b><br />
-									{{#platforms}}
-										{{#url}}
-											<a href='#' class='btn entryButton' style='background-color: {{color_background}}' onclick='window.open("{{url}}", "_blank");'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entryPlayIcon' title='{{platform_name}}'></a>
-										{{/url}}
-									{{/platforms}}
-								</div>
-								<div class='entryDescription' style='border-color: {{color_border}}'>
-									<b>Description</b><br />
-									{{description}}
-								</div>
-								<button type="button" class="btn entryButton" style='background-color: {{color_background}}' onclick='document.location.href = "?{{{forms.get.page}}}=author&amp;author={{author_username}}";'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}'s profile</button>
-							</div>
-						</div>
+						{{>entry_by_user}}
 					{{/entry_deleted}}
 				{{/entries}}
 

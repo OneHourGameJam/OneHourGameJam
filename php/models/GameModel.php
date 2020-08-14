@@ -41,7 +41,7 @@ class GameData{
             $game->Id = intval($info[DB_COLUMN_ENTRY_ID]);
             $game->JamId = intval($info[DB_COLUMN_ENTRY_JAM_ID]);
             $game->JamNumber = intval($info[DB_COLUMN_ENTRY_JAM_NUMBER]);
-            $game->Title = $info[DB_COLUMN_ENTRY_TITLE];
+            $game->Title = ($info[DB_COLUMN_ENTRY_TITLE]) ? $info[DB_COLUMN_ENTRY_TITLE] : "Untitled";
             $game->Description = $info[DB_COLUMN_ENTRY_DESCRIPTION];
             $game->AuthorUserId = $info[DB_COLUMN_ENTRY_AUTHOR_USER_ID];
             $game->UrlScreenshot = $info[DB_COLUMN_ENTRY_SCREENSHOT_URL];
