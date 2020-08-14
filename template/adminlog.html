@@ -5,25 +5,29 @@
 
 <div class='panel-body table-responsive'>
     <table class="table fourRowDataTable">
-        <tr class="dataTableHeaderRow">
-            <th>ID</th>
-            <th>Time</th>
-            <th>Admin Username</th>
-            <th>Subject Username</th>
-            <th>Log Type</th>
-        </tr>
-        {{#adminlog.logs}}
-            <tr>
-                <td class="dataTableIdentifierColumn" rowspan="2">{{id}}</td>
-                <td>{{datetime}}</td>
-                <td>{{#admin_username_override}}{{admin_username_override}}{{/admin_username_override}}
-                    {{#admin_username}}User: {{admin_username}} ({{admin_user_id}}){{/admin_username}}</td>
-                <td>{{#subject_username}}User: {{subject_username}} ({{subject_user_id}}){{/subject_username}}</td>
-                <td>{{log_type}}</td>
+        <thead>
+            <tr class="dataTableHeaderRow">
+                <th>ID</th>
+                <th>Time</th>
+                <th>Admin Username</th>
+                <th>Subject Username</th>
+                <th>Log Type</th>
             </tr>
-            <tr>
-                <td colspan="4" style="overflow-wrap: anywhere;">{{log_content}}</td>
-            </tr>
-        {{/adminlog.logs}}
+        </thead>
+        <tbody>
+            {{#adminlog.logs}}
+                <tr>
+                    <td class="dataTableIdentifierColumn" rowspan="2">{{id}}</td>
+                    <td>{{datetime}}</td>
+                    <td>{{#admin_username_override}}{{admin_username_override}}{{/admin_username_override}}
+                        {{#admin_username}}User: {{admin_username}} ({{admin_user_id}}){{/admin_username}}</td>
+                    <td>{{#subject_username}}User: {{subject_username}} ({{subject_user_id}}){{/subject_username}}</td>
+                    <td>{{log_type}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="adminlogContentColumn">{{log_content}}</td>
+                </tr>
+            {{/adminlog.logs}}
+        </tbody>
     </table>
 </div>

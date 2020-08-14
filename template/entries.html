@@ -3,56 +3,59 @@
 	This list contains all {{CONFIG.VALUES.GAME_PHRASE_PLURAL}} which have been submitted. The table is sortable by clicking a column header.
 </div>
 
-<input type="text" class="form-control searchInputField" id='entrysearch' placeholder="Search by Title, {{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}, {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} Number or {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}..." onkeyup="FilterEntryTable()">
-<div class='panel-body table-responsive jamContent'>
+<input type="text" class="form-control searchInputField" id='js-entrysearch' placeholder="Search by Title, {{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}, {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} Number or {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}..." onkeyup="FilterEntryTable()">
+
+<div class='panel-body table-responsive'>
 	Click on a column header to sort.
-	<table class="table sortable" id="entrytable">
-		<tr class='sortableHeader'>
-			<th class='entriesColumnTitle'>Title</th>
-			<th class='entriesColumnDeveloper'>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}</th>
-			<th class='entriesColumnJam'>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
-			<th class='entriesColumnTheme'>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
-			
-			{{#page.platforms}}
-				<th>{{platform_name}}</th>
-			{{/page.platforms}}
-		</tr>
-		{{#entries.LIST}}
-			{{^entry_deleted}}
-			<tr>
-					<td><b>{{title}}</b></td>
-					<td><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{author_username}}'>{{author_display_name}}</a></td>
-					<td><a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_number}}</a></td>
-					<td><a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_theme}}</a></td>
-					
-					{{#platforms}}
-						<td>
-							{{#url}}
-								<a href='{{url}}' target='_blank'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entriesPlatformIcon' title='{{platform_name}}'></a>
-							{{/url}}
-						</td>
-					{{/platforms}}
-				</tr>
-			{{/entry_deleted}}
-		{{/entries.LIST}}
+	<table id='js-entrytable' class="table sortable dataTable">
+		<thead>
+			<tr class='sortableHeader dataTableHeaderRow'>
+				<th>Title</th>
+				<th>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}</th>
+				<th>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
+				<th>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}</th>
+				
+				{{#page.platforms}}
+					<th><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entriesPlatformIcon' title='{{platform_name}}'></th>
+				{{/page.platforms}}
+			</tr>
+		</thead>
+		<tbody>
+			{{#entries.LIST}}
+				{{^entry_deleted}}
+				<tr>
+						<td class="dataTableIdentifierColumn entriesTitleColumn">{{title}}</td>
+						<td><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{author_username}}'>{{author_display_name}}</a></td>
+						<td><a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_number}}</a></td>
+						<td><a href='?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{jam_number}}'>{{jam_theme}}</a></td>
+						
+						{{#platforms}}
+							<td>
+								{{#url}}
+									<a href='{{{url}}}' target='_blank'><img src='{{{page.template_path}}}{{{platform_icon_url}}}' class='entriesPlatformIcon' title='{{platform_name}}'></a>
+								{{/url}}
+							</td>
+						{{/platforms}}
+					</tr>
+				{{/entry_deleted}}
+			{{/entries.LIST}}
+		</tbody>
 	</table>
 </div>
 
 <script>
 	function FilterEntryTable() {
-		// Declare variables
 		var input, filter, table, tr, td_title, td_author, td_jam, td_theme, i;
-		input = document.getElementById("entrysearch");
-		filter = input.value.toUpperCase();
-		table = document.getElementById("entrytable");
-		tr = table.getElementsByTagName("tr");
+		var input = document.getElementById("js-entrysearch");
+		var filter = input.value.toUpperCase();
+		var table = document.getElementById("js-entrytable");
+		var tr = table.getElementsByTagName("tr");
 
-		// Loop through all table rows, and hide those who don't match the search query
-		for (i = 0; i < tr.length; i++) {
-			td_title = tr[i].getElementsByTagName("td")[0];
-			td_author = tr[i].getElementsByTagName("td")[1];
-			td_jam = tr[i].getElementsByTagName("td")[2];
-			td_theme = tr[i].getElementsByTagName("td")[3];
+		for (var i = 0; i < tr.length; i++) {
+			var td_title = tr[i].getElementsByTagName("td")[0];
+			var td_author = tr[i].getElementsByTagName("td")[1];
+			var td_jam = tr[i].getElementsByTagName("td")[2];
+			var td_theme = tr[i].getElementsByTagName("td")[3];
 			if (td_title && td_author && td_jam && td_theme) {
 				if (	td_title.innerHTML.toUpperCase().indexOf(filter) > -1 ||
 						td_author.innerHTML.toUpperCase().indexOf(filter) > -1 ||

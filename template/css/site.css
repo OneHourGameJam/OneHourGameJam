@@ -433,22 +433,6 @@ body{
   height: 24px;
 }
 
-.entriesColumnTitle{
-  max-width: 150px;
-}
-
-.entriesColumnDeveloper{
-  max-width: 150px;
-}
-
-.entriesColumnJam{
-  max-width: 150px;
-}
-
-.entriesColumnTheme{
-  max-width: 150px;
-}
-
 .entriesPlatformIcon{
   width: 16px;
 }
@@ -626,7 +610,7 @@ body{
 }
 
 .entryTileTitleText{
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 
 .entryTileDescriptionPanel{
@@ -816,13 +800,13 @@ body{
   color: #31708f
 }
 
-.fourRowDataTable tr:not(:first-child):nth-child(4n) {background-color: #ECF3F7; color: #31708f}
-.fourRowDataTable tr:not(:first-child):nth-child(4n+1) {background-color: #FFF; color: #000000}
-.fourRowDataTable tr:not(:first-child):nth-child(4n+2) {background-color: #F4F7F9; color: #31708f}
-.fourRowDataTable tr:not(:first-child):nth-child(4n+3) {background-color: #FFF; color: #000000}
+.fourRowDataTable tbody tr:nth-child(4n+1) {background-color: #ECF3F7; color: #31708f}
+.fourRowDataTable tbody tr:nth-child(4n+2) {background-color: #FFF; color: #000000}
+.fourRowDataTable tbody tr:nth-child(4n+3) {background-color: #F4F7F9; color: #31708f}
+.fourRowDataTable tbody tr:nth-child(4n+4) {background-color: #FFF; color: #000000}
 
-.dataTable tr:not(:first-child):nth-child(2n) {background-color: #ECF3F7; color: #31708f}
-.dataTable tr:not(:first-child):nth-child(2n+1) {background-color: #F4F7F9; color: #31708f}
+.dataTable tbody tr:nth-child(2n) {background-color: #ECF3F7; color: #31708f}
+.dataTable tbody tr:nth-child(2n+1) {background-color: #F4F7F9; color: #31708f}
 
 .assetImagePreview{
   max-width: 200px;
@@ -839,4 +823,16 @@ body{
 
 .actionButton{
   margin: 5px 5px 5px 0px;
+}
+
+.entryTileTitleText{
+  word-wrap: break-word;
+}
+
+.adminlogContentColumn{
+  overflow-wrap: anywhere;
+}
+
+.entriesTitleColumn{
+  overflow-wrap: anywhere;
 }

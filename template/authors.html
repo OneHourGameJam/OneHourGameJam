@@ -4,45 +4,47 @@
 </div>
 
 <input type="text" class="form-control searchInputField" id='js-authorsearch' placeholder="Search by username or twitter handle..." onkeyup="FilterAuthorTable()">
-<div id='js-authortable' class='tablepanel-body table-responsive jamContent'>
+
+<div class='panel-body table-responsive'>
 	Click on a column header to sort.
-	<table class="table sortable">
-		<tr class='sortableHeader'>
-			<th>Username</th>
-			<th>Twitter</th>
-			<th>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</th>
-			<th>First {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
-			<th>Last {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
-		</tr>
-		{{#users.LIST}}
-			{{#is_author}}
-				<tr>
-					<td><b><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{username}}'>{{display_name}}</a></b></td>
-					<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
-					<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
-					<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
-					<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
-				</tr>
-			{{/is_author}}
-		{{/users.LIST}}
+	<table id='js-authortable' class="table sortable dataTable">
+		<thead>
+			<tr class='sortableHeader dataTableHeaderRow'>
+				<th>{{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}</th>
+				<th>Twitter</th>
+				<th>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</th>
+				<th>First {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
+				<th>Last {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#users.LIST}}
+				{{#is_author}}
+					<tr>
+						<td class="dataTableIdentifierColumn"><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{username}}'>{{display_name}}</a></td>
+						<td><a href='https://twitter.com/{{twitter_text_only}}' target='_BLANK'>{{twitter}}</a></td>
+						<td>{{#entry_count}}{{entry_count}}{{/entry_count}}</td>
+						<td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
+						<td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
+					</tr>
+				{{/is_author}}
+			{{/users.LIST}}
+		</tbody>
 	</table>
 </div>
 
 <script>
 	function FilterAuthorTable() {
-		// Declare variables
-		var input, filter, table, tr, td_username, td_twitter, i;
-		input = document.getElementById("js-authorsearch");
-		filter = input.value.toUpperCase();
-		table = document.getElementById("js-authortable");
-		tr = table.getElementsByTagName("tr");
+		var input = document.getElementById("js-authorsearch");
+		var filter = input.value.toUpperCase();
+		var table = document.getElementById("js-authortable");
+		var tr = table.getElementsByTagName("tr");
 
-		// Loop through all table rows, and hide those who don't match the search query
-		for (i = 0; i < tr.length; i++) {
-			td_username = tr[i].getElementsByTagName("td")[0];
-			td_twitter = tr[i].getElementsByTagName("td")[1];
-			if (td_username && td_twitter) {
-				if (td_username.textContent.toUpperCase().indexOf(filter) > -1 ||
+		for (var i = 0; i < tr.length; i++) {
+			var td_name = tr[i].getElementsByTagName("td")[0];
+			var td_twitter = tr[i].getElementsByTagName("td")[1];
+			if (td_name && td_twitter) {
+				if (td_name.textContent.toUpperCase().indexOf(filter) > -1 ||
 				     td_twitter.textContent.toUpperCase().indexOf(filter) > -1) {
 					tr[i].style.display = "";
 				} else {
