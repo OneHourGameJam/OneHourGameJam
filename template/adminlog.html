@@ -1,28 +1,28 @@
 <h1 class="pageHeading">Admin Log</h1>
 <div class="pageDescription">
-	This page shows the administration log.
+	This page shows a log of all administrative actions, including automatic ones.
 </div>
 
 <div class='panel-body table-responsive'>
-    Click on a column header to sort.
-    <table class="table sortable">
-        <tr class="sortableHeader">
+    <table class="table fourRowDataTable">
+        <tr class="dataTableHeaderRow">
             <th>ID</th>
             <th>Time</th>
             <th>Admin Username</th>
             <th>Subject Username</th>
             <th>Log Type</th>
-            <th>Log Content</th>
         </tr>
         {{#adminlog.logs}}
             <tr>
-                <td>{{id}}</td>
+                <td class="dataTableIdentifierColumn" rowspan="2">{{id}}</td>
                 <td>{{datetime}}</td>
                 <td>{{#admin_username_override}}{{admin_username_override}}{{/admin_username_override}}
                     {{#admin_username}}User: {{admin_username}} ({{admin_user_id}}){{/admin_username}}</td>
                 <td>{{#subject_username}}User: {{subject_username}} ({{subject_user_id}}){{/subject_username}}</td>
                 <td>{{log_type}}</td>
-                <td>{{log_content}}</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="overflow-wrap: anywhere;">{{log_content}}</td>
             </tr>
         {{/adminlog.logs}}
     </table>

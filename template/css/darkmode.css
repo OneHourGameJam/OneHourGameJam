@@ -132,3 +132,20 @@ a:hover{
     border-color: #7cb0c9 !important;
     color: #7cb0c9 !important;
 }
+
+.dataTable{
+    border-color: #7B8991;
+}
+
+.dataTableHeaderRow{
+    background-color: #576065;
+    color: #D8F2FF;
+}
+
+.fourRowDataTable tr:not(:first-child):nth-child(4n) {background-color: #4C5256; color: #D8F2FF}
+.fourRowDataTable tr:not(:first-child):nth-child(4n+1) {background-color: #383838; color: #ffffff}
+.fourRowDataTable tr:not(:first-child):nth-child(4n+2) {background-color: #42484B; color: #D8F2FF}
+.fourRowDataTable tr:not(:first-child):nth-child(4n+3) {background-color: #383838; color: #ffffff}
+
+.dataTable tr:not(:first-child):nth-child(2n) {background-color: #4C5256; color: #D8F2FF}
+.dataTable tr:not(:first-child):nth-child(2n+1) {background-color: #42484B; color: #D8F2FF}

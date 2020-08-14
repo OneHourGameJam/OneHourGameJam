@@ -810,3 +810,20 @@ body{
 .pageDescription{
   margin: 0 0 10px;
 }
+
+.dataTableIdentifierColumn{
+  font-weight: bold;
+}
+
+.dataTableHeaderRow{
+  background-color: #d9edf7;
+  color: #31708f
+}
+
+.fourRowDataTable tr:not(:first-child):nth-child(4n) {background-color: #ECF3F7; color: #31708f}
+.fourRowDataTable tr:not(:first-child):nth-child(4n+1) {background-color: #FFF; color: #000000}
+.fourRowDataTable tr:not(:first-child):nth-child(4n+2) {background-color: #F4F7F9; color: #31708f}
+.fourRowDataTable tr:not(:first-child):nth-child(4n+3) {background-color: #FFF; color: #000000}
+
+.dataTable tr:not(:first-child):nth-child(2n) {background-color: #ECF3F7; color: #31708f}
+.dataTable tr:not(:first-child):nth-child(2n+1) {background-color: #F4F7F9; color: #31708f}
