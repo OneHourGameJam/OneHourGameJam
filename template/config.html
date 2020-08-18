@@ -25,9 +25,9 @@
 						{{/TYPE_TEXTAREA}}
 						{{#TYPE_ENUM}}
 							<select class="form-control" id="{{KEY}}" name='{{KEY}}' {{#DISABLED}}disabled title="Cannot be edited here, edit in database"{{/DISABLED}} {{#REQUIRED}}required{{/REQUIRED}}>
-							{{#ENUM_OPTIONS}}
-								<option value="{{{VALUE}}}" {{#ENUM_SELECTED}}selected{{/ENUM_SELECTED}}>{{TEXT}}</value>
-							{{/ENUM_OPTIONS}}
+								{{#ENUM_OPTIONS}}
+									<option value="{{{VALUE}}}" {{#ENUM_SELECTED}}selected{{/ENUM_SELECTED}}>{{TEXT}}</value>
+								{{/ENUM_OPTIONS}}
 							</select>
 						{{/TYPE_ENUM}}
 					</div>

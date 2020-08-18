@@ -94,15 +94,20 @@ function filterText(text){
 
 $(document).ready(function(){	
 	$("#search").keyup(search);
-	$(".jamHeader").click(function(){
-		$(this).parent().children(".jamContent").slideToggle();
-		$(this).parent().children(".jamContent").find("img").each(function(){
-			if($(this).css("display") == "inline"){
-				var imgElement = $(this);
-				if($(imgElement).attr("src") != $(imgElement).attr("hidden_src")){
-					$(imgElement).attr("src", $(imgElement).attr("hidden_src"));
+	$(".jamContener").each(function(){
+		var jamContainer = $(this);
+		var jamHeader = jamContainer.find(".jamHeader");
+		var jamContent = jamContainer.find(".jamContent");
+		jamHeader.click(function(){
+			jamContent.slideToggle();
+			jamContent.find("img").each(function(){
+				if($(this).css("display") == "inline"){
+					var imgElement = $(this);
+					if($(imgElement).attr("src") != $(imgElement).attr("hidden_src")){
+						$(imgElement).attr("src", $(imgElement).attr("hidden_src"));
+					}
 				}
-			}
+			});
 		});
-	});
+	})
 });

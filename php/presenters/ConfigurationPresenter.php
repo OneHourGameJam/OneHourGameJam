@@ -43,15 +43,13 @@ class ConfigurationPresenter{
 			//Raw value
 			$configurationViewModel->VALUES[$configKey] = $configValue;
 
-			if(!$addedToDictionary){
-				//Pretty Print
-				$configPrettyPrint = $configValue;
-				if(isset($configPrettyPrintFunctions[$configKey])){
-					$configPrettyPrint = $configPrettyPrintFunctions[$configKey]($configValue);
-				}
-
-				$configurationViewModel->PRETTY_PRINT[$configKey] = $configPrettyPrint;
+			//Pretty Print
+			$configPrettyPrint = $configValue;
+			if(isset($configPrettyPrintFunctions[$configKey])){
+				$configPrettyPrint = $configPrettyPrintFunctions[$configKey]($configValue);
 			}
+
+			$configurationViewModel->PRETTY_PRINT[$configKey] = $configPrettyPrint;
 
 			$categoryIndex = count($configurationViewModel->LIST);
 			foreach($configurationViewModel->LIST as $index => $configDictionaryEntry){

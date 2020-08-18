@@ -836,3 +836,7 @@ body{
 .entriesTitleColumn{
   overflow-wrap: anywhere;
 }
+
+.jamHeaderPanel{
+  margin-bottom: 0px;
+}

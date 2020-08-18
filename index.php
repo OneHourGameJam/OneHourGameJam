@@ -23,6 +23,7 @@ $mustache->setPartials(Array(
 	"entry_by_user" => file_get_contents($templateBasePath."entry_by_user.html"),
 	"entry_for_jam" => file_get_contents($templateBasePath."entry_for_jam.html"),
 	"user_header" => file_get_contents($templateBasePath."user_header.html"),
+	"satisfaction" => file_get_contents($templateBasePath."satisfaction.html"),
 	"css" => file_get_contents($templateBasePath."css/site.css")
 ));
 

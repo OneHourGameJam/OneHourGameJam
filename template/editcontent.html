@@ -4,7 +4,7 @@
 </div>
 
 {{#jams.LIST}}
-	<div class='panel panel-info jamContener'>
+	<div class='panel panel-info'>
 		<div class='panel-heading {{#jam_deleted}}jamDeleted{{/jam_deleted}}{{^jam_deleted}}jamNotDeleted{{/jam_deleted}}'>
 			<span class='contentJamHeaderFont'>
 				<b>{{#jam_deleted}}Deleted - {{/jam_deleted}}{{jam_number_ordinal}} {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</b> (<b>{{theme_visible}}</b>) on {{date}} at {{time}} ({{entries_count}} {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}, scheduled by {{scheduler_display_name}}, satisfaction: {{satisfaction_average_score}} ({{satisfaction_submitted_scores}} scores), {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} ID: {{jam_id}})
@@ -13,19 +13,7 @@
 		</div>
 
 		<div class='panel-body table-responsive jamContent' id='entries{{jam_number}}'>
-			<div class='satisfacitonContainer'>
-				<div class='satisfactionStar satisfactionStarRed'>{{score_minus_5}}</div>
-				<div class='satisfactionStar satisfactionStarRed'>{{score_minus_4}}</div>
-				<div class='satisfactionStar satisfactionStarRed'>{{score_minus_3}}</div>
-				<div class='satisfactionStar satisfactionStarRed'>{{score_minus_2}}</div>
-				<div class='satisfactionStar satisfactionStarYellow'>{{score_minus_1}}</div>
-				<div class='satisfactionStar satisfactionStarYellow'>{{score_0}}</div>
-				<div class='satisfactionStar satisfactionStarYellow'>{{score_plus_1}}</div>
-				<div class='satisfactionStar satisfactionStarGreen'>{{score_plus_2}}</div>
-				<div class='satisfactionStar satisfactionStarGreen'>{{score_plus_3}}</div>
-				<div class='satisfactionStar satisfactionStarGreen'>{{score_plus_4}}</div>
-				<div class='satisfactionStar satisfactionStarGreen'>{{score_plus_5}}</div>
-			</div>
+			{{>satisfaction}}
 			{{#entries}}
 				<div class='panel panel-default col-md-12 entryHeader {{#entry_deleted}}contentEntryDeletedHeader{{/entry_deleted}}'>
 					<div class='panel-body contentEntryContent'>
