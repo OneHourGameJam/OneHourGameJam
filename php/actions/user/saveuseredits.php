@@ -3,8 +3,8 @@
 //Edits an existing user, identified by the username.
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
-function EditUser($userId, $isAdmin){
-	global $userData, $loggedInUser, $adminLogData, $userDbInterface;
+function EditUser(MessageService &$messageService, $userId, $isAdmin){
+	global $userData, $loggedInUser, $userDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -28,12 +28,18 @@ function EditUser($userId, $isAdmin){
 	$userDbInterface->UpdateIsAdmin($userId, $isAdmin);
 	
 	$username = $userData->UserModels[$userId]->Username;
-    $adminLogData->AddToAdminLog("USER_EDITED", "User $username updated with values: IsAdmin: $isAdmin", $userId, $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"USER_EDITED", 
+		"User $username updated with values: IsAdmin: $isAdmin", 
+		$loggedInUser->Id,
+		$userId)
+	);
 
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
@@ -43,7 +49,7 @@ function PerformAction(&$loggedInUser){
 			die("invalid isadmin value");
 		}
 
-		return EditUser($userId, $isAdmin);
+		return EditUser($messageService, $userId, $isAdmin);
 	}
 }
 

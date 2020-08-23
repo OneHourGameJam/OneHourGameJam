@@ -45,7 +45,7 @@ function CastVoteForAdmin($subjectUserId, $voteType){
 	return "SUCESS_INSERT";
 }
 
-function PerformAction($loggedInUser){
+function PerformAction(MessageService &$messageService, $loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

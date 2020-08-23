@@ -49,7 +49,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	if($loggedInUser !== false){

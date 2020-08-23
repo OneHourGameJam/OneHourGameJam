@@ -2,7 +2,7 @@
 
 //Returns true / false based on whether or not the specified entry can be deleted
 function CanDeleteEntry($entryId){
-	global $loggedInUser, $gameData, $adminLogData;
+	global $loggedInUser, $gameData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -23,8 +23,8 @@ function CanDeleteEntry($entryId){
 }
 
 //Deletes an existing entry, identified by the entryID.
-function DeleteEntry($entryId){
-	global $jamData, $loggedInUser, $adminLogData, $gameData, $userData, $gameDbInterface;
+function DeleteEntry(MessageService &$messageService, $entryId){
+	global $jamData, $loggedInUser, $gameData, $userData, $gameDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -43,18 +43,23 @@ function DeleteEntry($entryId){
 
 	$gameDbInterface->SoftDelete($entryId);
 
-    $adminLogData->AddToAdminLog("ENTRY_SOFT_DELETED", "Entry $entryId soft deleted", $deletedEntryAuthorId, $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"ENTRY_SOFT_DELETED", 
+		"Entry $entryId soft deleted", 
+		$loggedInUser->Id,
+		$deletedEntryAuthorId)
+	);
 
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
 		$entryId = (isset($_POST[FORM_DELETEENTRY_ENTRY_ID])) ? $_POST[FORM_DELETEENTRY_ENTRY_ID] : "";
 		if($entryId != ""){
-			return DeleteEntry(intval($entryId));
+			return DeleteEntry($messageService, intval($entryId));
 		}
 	}
 }

@@ -45,6 +45,19 @@
 
 	<div class="panel-body">
 		<ul id='mainmenu'>
+
+			{{#plugin_display}}
+			<li class="mainmenu-separator">Pages</li>
+			{{#page.pages}}
+				<li><a href='?{{{forms.get.page}}}={{{page_id}}}'>{{{page_title}}}</a></li>
+			{{/page.pages}}
+
+			<li class="mainmenu-separator">Plugin Direct Links</li>
+			{{#forms.pages.admin_log.adminlog}}
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
+			{{/forms.pages.admin_log.adminlog}}
+			{{/plugin_display}}
+
 			<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}'>Home</a></li>
 			{{#user}}
 				{{#jams.current_jam}}
@@ -110,10 +123,12 @@
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editplatforms}}}'>Manage platforms</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editassets}}}'>Manage assets</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll results</a></li>
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.adminlog}}}'>Admin log</a></li>
+					{{#forms.pages.admin_log.adminlog}}
+						<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
+					{{/forms.pages.admin_log.adminlog}}
 				{{/cookies.is_streamer}}
 			{{/user.admin}}
-			
+
 			{{#cookies.is_streamer}}
 				<li class="mainmenu-separator">Some menu items are hidden in streamer mode (<a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable Streamer Mode</a>)</li>
 			{{/cookies.is_streamer}}

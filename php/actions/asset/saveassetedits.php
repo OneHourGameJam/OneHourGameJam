@@ -1,7 +1,7 @@
 <?php
 
-function AddAsset($assetId, $author, $title, $description, $type){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $assetData, $userData, $configData, $adminLogData, $assetDbInterface;
+function AddAsset(MessageService &$messageService, $assetId, $author, $title, $description, $type){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $assetData, $userData, $configData, $assetDbInterface;
 
 	$assetId = trim($assetId);
 	$author = trim($author);
@@ -98,20 +98,30 @@ function AddAsset($assetId, $author, $title, $description, $type){
 	if($assetExists){
 		$content = ($assetUrl != "") ? $assetURL : ($assetData->AssetModels[$assetId]->Content);
 		$assetDbInterface->Update($assetId, $authorUserId, $title, $description, $type, $content);
-
-		$adminLogData->AddToAdminLog("ASSET_UPDATE", "Asset ".$assetId." updated with values: Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $authorUserId, $loggedInUser->Id, "");
+		
+		$messageService->SendMessage(LogMessage::UserLogMessage(
+			"ASSET_UPDATE", 
+			"Asset ".$assetId." updated with values: Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", 
+			$loggedInUser->Id, 
+			$authorUserId)
+		);
 		
 		return "SUCCESS_UPDATED";
 	}else{
 		$assetDbInterface->Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL);
 		
-		$adminLogData->AddToAdminLog("ASSET_INSERT", "Asset inserted with values: Id: '$assetId' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", $userData->UsernameToId[$author], $loggedInUser->Id, "");
+		$messageService->SendMessage(LogMessage::UserLogMessage(
+			"ASSET_INSERT", 
+			"Asset inserted with values: Id: '$assetId' Author User Id: '$authorUserId', Title: '$title', Description: '$description', Type: '$type', AssetURL: '$assetURL'", 
+			$loggedInUser->Id, 
+			$userData->UsernameToId[$author])
+		);
 		
 		return "SUCCESS_INSERTED";
 	}
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){

@@ -1,7 +1,7 @@
 <?php
 
 class JamController{
-	public static function ProcessJamStates(&$jamData, &$themeData, &$configData, &$adminLogData){
+	public static function ProcessJamStates(MessageService &$messageService, &$jamData, &$themeData, &$configData){
 		AddActionLog("ProcessJamStates");
 		StartTimer("ProcessJamStates");
 	
@@ -29,7 +29,7 @@ class JamController{
 				//Present Jam (started, hasn't finished yet)
 				if($jamModel->State != JAM_STATE_ACTIVE){
 					$jamData->UpdateJamStateInDatabase($jamModel->Id, JAM_STATE_ACTIVE);
-					ThemeController::PruneThemes($themeData, $jamData, $configData, $adminLogData);
+					ThemeController::PruneThemes($messageService, $themeData, $jamData, $configData);
 				}
 			}else{
 				//Future Jam (not yet started)
@@ -43,7 +43,7 @@ class JamController{
 	}
 	
 	//Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-	public static function CheckNextJamSchedule(&$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime, &$adminLogData){
+	public static function CheckNextJamSchedule(MessageService &$messageService, &$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime){
 		AddActionLog("CheckNextJamSchedule");
 		StartTimer("CheckNextJamSchedule"); 
 
@@ -64,7 +64,7 @@ class JamController{
 
 		$isTimeToScheduleJam = $timeToNextSuggestedJam > 0 && $timeToNextSuggestedJam <= $autoScheduleThreshold;
 		$isAJamAlreadyScheduled = $timeToNextScheduledJam > 0;
-		$isAJamScheduledInAuthSchedulerThresholdTime = $isAJamAlreadyScheduled && $timeToNextScheduledJam <= $autoScheduleThreshold;
+		$isAJamScheduledInAutoSchedulerThresholdTime = $isAJamAlreadyScheduled && $timeToNextScheduledJam <= $autoScheduleThreshold;
 
 		//print "<br>nextScheduledJamTime = ".gmdate("Y-m-d H:i:s", $nextScheduledJamTime);
 		//print "<br>nextSuggestedJamTime = ".gmdate("Y-m-d H:i:s", $nextSuggestedJamTime);
@@ -74,16 +74,17 @@ class JamController{
 		//print "<br>autoScheduleThreshold = $autoScheduleThreshold";
 		//print "<br>isTimeToScheduleJam = ".($isTimeToScheduleJam ? "YES" : "NO");
 		//print "<br>isAJamAlreadyScheduled = ".($isAJamAlreadyScheduled ? "YES" : "NO");
-		//print "<br>isAJamScheduledInAuthSchedulerThresholdTime = ".($isAJamScheduledInAuthSchedulerThresholdTime ? "YES" : "NO");
+		//print "<br>isAJamScheduledInAutoSchedulerThresholdTime = ".($isAJamScheduledInAutoSchedulerThresholdTime ? "YES" : "NO");
 
 		$colors = "e38484|e3b684|dee384|ade384|84e38d|84e3be|84d6e3|84a4e3|9684e3|c784e3";
 
 		if($isTimeToScheduleJam){
 			//print "<br>IT IS TIME TO SCHEDULE A JAM";
 
-			if($isAJamScheduledInAuthSchedulerThresholdTime){
+			if($isAJamScheduledInAutoSchedulerThresholdTime){
 				//A future jam is already scheduled
 				//print "<br>A JAM IS ALREADY SCHEDULED";
+				StopTimer("CheckNextJamSchedule");
 				return;
 			}
 
@@ -110,7 +111,15 @@ class JamController{
 			$jamNumber = intval($currentJam["NUMBER"] + 1);
 			//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
-			$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, "".gmdate("Y-m-d H:i", $nextSuggestedJamTime), $colors, $adminLogData);
+			$startTime = gmdate("Y-m-d H:i", $nextSuggestedJamTime);
+
+			$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, $startTime, $colors);
+
+			$messageService->SendMessage(LogMessage::SystemLogMessage(
+				"JAM_ADDED", 
+				"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$selectedTheme', StartTime: '$startTime', Colors: $colors", 
+				OVERRIDE_AUTOMATIC)
+			);
 		}
 		
 		StopTimer("CheckNextJamSchedule");
@@ -262,7 +271,7 @@ class JamController{
 		}
 
 		if(count($availableThemes) > 0){
-			$selectedIndex = rand(0, count($availableThemes));
+			$selectedIndex = rand(0, count($availableThemes) -1);
 			$selectedThemeId = $availableThemes[$selectedIndex]["theme_id"];
 		}
 

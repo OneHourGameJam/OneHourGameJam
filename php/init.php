@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $adminLogData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $adminLogDbInterface, $page;
+	global $dictionary, $configData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -16,6 +16,30 @@ function Init(){
 	$database->MigrateDatabase();
 	
 	StopTimer("Init - Database");
+
+	StartTimer("Init - Plugins");
+
+	$messageService = new MessageService();
+
+	$plugins = Array(
+		new AdminLogPlugin($messageService)
+	);
+
+	foreach($plugins as $i => $plugin){
+		foreach($plugin->PageSettings() as $pageName => $pageSetting){
+			$pageSettings[$pageName] = $pageSetting;
+		}
+	}
+	
+	foreach($plugins as $i => $plugin){
+		$plugin->EstablishDatabaseConnection();
+	}
+	
+	foreach($plugins as $i => $plugin){
+		$plugin->RetrieveData();
+	}
+	
+	StopTimer("Init - Plugins");
 	
 	StartTimer("Init - Database Interfaces");
 
@@ -35,7 +59,6 @@ function Init(){
 	$configDbInterface = new ConfigDbInterface($database);
 	$assetDbInterface = new AssetDbInterface($database);
 	$adminVoteDbInterface = new AdminVoteDbInterface($database);
-	$adminLogDbInterface = new AdminLogDbInterface($database);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -44,8 +67,7 @@ function Init(){
 	CookieController::UpdateCookies();
 	$cookieData = new CookieData();
 
-	$adminLogData = new AdminLogData($adminLogDbInterface);
-	$configData = new ConfigData($configDbInterface, $adminLogData);
+	$configData = new ConfigData($configDbInterface, $messageService);
 	$nextSuggestedJamDateTime = GetSuggestedNextJamDateTime($configData);
 
     RedirectToHttpsIfRequired($configData);
@@ -69,7 +91,7 @@ function Init(){
 	$themeData = new ThemeData($themeDbInterface, $themeVoteDbInterface, $loggedInUser);
 
 	$nextScheduledJamTime = $jamData->GetNextJamDateAndTime();
-	JamController::CheckNextJamSchedule($configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime, $adminLogData);
+	JamController::CheckNextJamSchedule($messageService, $configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime);
 
 	$siteActionData = new SiteActionData($configData);
 	$assetData = new AssetData($assetDbInterface);
@@ -84,9 +106,9 @@ function Init(){
 
 	$themesByVoteDifference = ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
 	$themesByPopularity = ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
-	JamController::ProcessJamStates($jamData, $themeData, $configData, $adminLogData);
+	JamController::ProcessJamStates($messageService, $jamData, $themeData, $configData);
 
-	PerformPendingSiteAction($configData, $siteActionData, $loggedInUser);
+	PerformPendingSiteAction($messageService, $configData, $siteActionData, $loggedInUser);
 	$streamData = StreamController::InitStream($configData);
 
 	StopTimer("Init - Process");
@@ -99,10 +121,6 @@ function Init(){
  
 	if(FindDependency(RENDER_CONFIG, $dependencies) !== false){
 		$dictionary["CONFIG"] = ConfigurationPresenter::RenderConfig($configData);
-	}
-	if(FindDependency(RENDER_ADMIN_LOG, $dependencies) !== false){
-		$renderAdminLog = new AdminLogPresenter($adminLogData, $userData);
-		$dictionary["adminlog"] = $renderAdminLog->AdminLogRender;
 	}
 	if(FindDependency(RENDER_USERS, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_USERS, $dependencies);
@@ -150,15 +168,24 @@ function Init(){
 		$dictionary["platforms"] = PlatformPresenter::RenderPlatforms($platformData);
 	}
 	if(FindDependency(RENDER_FORMS, $dependencies) !== false){
-		$dictionary["forms"] = FormPresenter::RenderForms();
+		$dictionary["forms"] = FormPresenter::RenderForms($plugins);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $adminLogData);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $plugins);
 	
 	if($loggedInUser !== false){
 		if(FindDependency(RENDER_LOGGED_IN_USER, $dependencies) !== false){
 			$dependency = FindDependency(RENDER_LOGGED_IN_USER, $dependencies);
 			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
+		}
+	}
+
+	foreach($plugins as $plugin){
+		if($plugin->ShouldBeRendered($dependencies)){;
+			$renders = $plugin->Render($userData);	
+			foreach($renders as $renderIdentifier => $render){
+				$dictionary[$renderIdentifier] = $render;
+			}
 		}
 	}
 	

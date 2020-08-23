@@ -26,7 +26,7 @@ class UserModel
     public $SponsoredByUserId;
 }
 
-class UserData{
+class UserData implements AdminLogUserData{
     public $UserModels;
     public $UsernameToId;
 
@@ -38,6 +38,14 @@ class UserData{
         $this->sessionDbInterface = $sessionDbInterface;
         $this->UserModels = $this->LoadUsers();
         $this->UsernameToId = $this->GenerateUsernameToId();
+    }
+
+    public function HasUser($userId){
+        return isset($this->UserModels[$userId]);
+    }
+
+    public function GetUsername($userId){
+        return $this->UserModels[$userId]->Username;
     }
 
 //////////////////////// MODEL CONSTRUCTOR

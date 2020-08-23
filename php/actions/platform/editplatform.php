@@ -1,7 +1,7 @@
 <?php
 
-function EditPlatform($platformId, $platformName){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
+function EditPlatform(MessageService &$messageService, $platformId, $platformName){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
 
 	$platformName = trim($platformName);
 	$platformId = intval(trim($platformId));
@@ -66,20 +66,24 @@ function EditPlatform($platformId, $platformName){
 	}
 
 	$platformDbInterface->Update($platformId, $platformName, $iconUrl);
-	
-    $adminLogData->AddToAdminLog("PLATFORM_EDITED", "Platform $platformId edited (name: $platformName, icon url: $iconUrl)", "NULL", $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"PLATFORM_EDITED", 
+		"Platform $platformId edited (name: $platformName, icon url: $iconUrl)", 
+		$loggedInUser->Id)
+	);
 
 	return "SUCCESS_PLATFORM_EDITED";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
 		$platformId = (isset($_POST[FORM_EDITPLATFORM_PLATFORM_ID])) ? $_POST[FORM_EDITPLATFORM_PLATFORM_ID] : "";
 		$platformName = (isset($_POST[FORM_EDITPLATFORM_NAME])) ? $_POST[FORM_EDITPLATFORM_NAME] : "";
 
-		return EditPlatform($platformId, $platformName);
+		return EditPlatform($messageService, $platformId, $platformName);
 	}
 }
 

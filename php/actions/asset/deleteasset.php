@@ -1,9 +1,8 @@
 <?php
 
-function DeleteAsset($assetId){
-	global $loggedInUser, $assetData, $adminLogData, $assetDbInterface;
+function DeleteAsset(MessageService &$messageService, $assetId){
+	global $loggedInUser, $assetData, $assetDbInterface;
 	$assetId = trim($assetId);
-
 	//Authorize user
 	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
@@ -29,18 +28,23 @@ function DeleteAsset($assetId){
 
 	$assetDbInterface->SoftDelete($assetId);
 
-	$adminLogData->AddToAdminLog("ASSET_SOFT_DELETE", "Asset ".$assetId." (Title: $assetTitle; Author ID: $assetAuthorUserId) soft deleted", $assetAuthorUserId, $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"ASSET_SOFT_DELETE", 
+		"Asset ".$assetId." (Title: $assetTitle; Author ID: $assetAuthorUserId) soft deleted", 
+		$loggedInUser->Id, 
+		$assetAuthorUserId)
+	);
 	
 	return "SUCCESS";
 }
 
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
 		$assetId = $_POST[FORM_DELETEASSET_ASSET_ID];
-		return DeleteAsset($assetId);
+		return DeleteAsset($messageService, $assetId);
 	}
 }
 

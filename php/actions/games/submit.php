@@ -194,7 +194,7 @@ function DeletePlatformGame($entryId, $platformId){
 	}
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST, $satisfactionData, $platformData;
 	
 	if($loggedInUser !== false){

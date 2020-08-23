@@ -10,7 +10,7 @@ class Database{
     }
 
     private function Connect(){
-        include_once("config/dbconfig.php");
+        include("config/dbconfig.php");
         
         $dbConnection = mysqli_connect($dbAddress, $dbUsername, $dbPassword, $dbDatabaseName);
         if(!$dbConnection ){

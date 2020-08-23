@@ -1,7 +1,7 @@
 <?php
 
 class FormPresenter{
-	public static function RenderForms(){
+	public static function RenderForms(&$plugins){
 		AddActionLog("RenderForms");
 		StartTimer("RenderForms");
 	
@@ -132,10 +132,15 @@ class FormPresenter{
         $formViewModel->pages["authors"] = PAGE_AUTHORS;
         $formViewModel->pages["privacy"] = PAGE_PRIVACY;
         $formViewModel->pages["userdata"] = PAGE_USER_DATA;
-        $formViewModel->pages["adminlog"] = PAGE_ADMIN_LOG;
         $formViewModel->pages["polls"] = PAGE_POLLS;
         $formViewModel->pages["editplatforms"] = PAGE_EDIT_PLATFORMS;
         $formViewModel->pages["editassets"] = PAGE_EDIT_ASSETS;
+
+        foreach($plugins as $i => $plugin){
+            foreach($plugin->PageSettings() as $pageName => $pageSetting){
+                $formViewModel->pages[$plugin->NameInTemplate][$pageName] = $pageName;
+            }
+        }
         
         $formViewModel->action["login"] = ACTION_LOGIN;
         $formViewModel->action["register"] = ACTION_REGISTER;

@@ -22,6 +22,15 @@ include_once("php/anti-csrf.php");
 include_once("php/global.php");
 include_once("php/dependencies.php");
 
+//Message Service
+include_once("php/message.php");
+
+//Plugin Base
+include_once("php/plugin.php");
+
+//Plugins
+include_once("php/adminlog/Initialise.php");
+
 //Database Interface
 include_once("php/databaseinterfaces/UserDbInterface.php");
 include_once("php/databaseinterfaces/SessionDbInterface.php");
@@ -39,7 +48,6 @@ include_once("php/databaseinterfaces/GameDbInterface.php");
 include_once("php/databaseinterfaces/ConfigDbInterface.php");
 include_once("php/databaseinterfaces/AssetDbInterface.php");
 include_once("php/databaseinterfaces/AdminVoteDbInterface.php");
-include_once("php/databaseinterfaces/AdminLogDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");
@@ -56,12 +64,10 @@ include_once("php/models/CookieModel.php");
 include_once("php/models/ConfigModel.php");
 include_once("php/models/AssetModel.php");
 include_once("php/models/AdminVoteModel.php");
-include_once("php/models/AdminLogModel.php");
 include_once("php/models/ThemeIdeaModel.php");
 include_once("php/models/FormModel.php");
 
 //ViewModels
-include_once("php/viewmodels/AdminLogViewModel.php");
 include_once("php/viewmodels/UserViewModel.php");
 include_once("php/viewmodels/ThemeViewModel.php");
 include_once("php/viewmodels/AssetViewModel.php");
@@ -76,7 +82,6 @@ include_once("php/viewmodels/PlatformViewModel.php");
 include_once("php/viewmodels/FormViewModel.php");
 
 //Presenters
-include_once("php/presenters/AdminLogPresenter.php");
 include_once("php/presenters/UserPresenter.php");
 include_once("php/presenters/ThemePresenter.php");
 include_once("php/presenters/AssetPresenter.php");

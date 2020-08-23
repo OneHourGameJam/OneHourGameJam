@@ -24,7 +24,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST, $userPreferenceSettings;
 	
 	if($loggedInUser !== false){

@@ -1,8 +1,8 @@
 <?php
 
 //Marks a suggested theme as banned
-function BanTheme($bannedThemeId){
-	global $ip, $userAgent, $loggedInUser, $adminLogData, $themeData, $themeDbInterface;
+function BanTheme(MessageService &$messageService, $bannedThemeId){
+	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -41,17 +41,22 @@ function BanTheme($bannedThemeId){
 
 	$themeDbInterface->Ban($bannedThemeId);
 
-    $adminLogData->AddToAdminLog("THEME_BANNED", "Theme '$bannedTheme' banned", $themeAuthorUserId, $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"THEME_BANNED", 
+		"Theme '$bannedTheme' banned", 
+		$loggedInUser->Id,
+		$themeAuthorUserId)
+	);
 
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
 		$bannedThemeId = $_POST[FORM_BANTHEME_THEME_ID];
-		return BanTheme($bannedThemeId);
+		return BanTheme($messageService, $bannedThemeId);
 	}
 }
 

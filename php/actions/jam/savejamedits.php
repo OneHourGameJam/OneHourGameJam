@@ -2,8 +2,8 @@
 
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
-function EditJam($jamId, $theme, $date, $time, $colorsString){
-	global $jamData, $loggedInUser, $adminLogData, $jamDbInterface;
+function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $colorsString){
+	global $jamData, $loggedInUser, $jamDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -50,12 +50,16 @@ function EditJam($jamId, $theme, $date, $time, $colorsString){
 
 	$jamDbInterface->Update($jamId, $theme, gmdate("Y-m-d H:i", $datetime), $colors);
 
-	$adminLogData->AddToAdminLog("JAM_UPDATED", "Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", "NULL", $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"JAM_UPDATED", 
+		"Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", 
+		$loggedInUser->Id)
+	);
 	
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
@@ -65,7 +69,7 @@ function PerformAction(&$loggedInUser){
 		$time = $_POST[FORM_EDITJAM_TIME];
 		$jamcolors = $_POST[FORM_EDITJAM_JAM_COLORS];
 
-		return EditJam($jamId, $theme, $date, $time, $jamcolors);
+		return EditJam($messageService, $jamId, $theme, $date, $time, $jamcolors);
 	}
 }
 

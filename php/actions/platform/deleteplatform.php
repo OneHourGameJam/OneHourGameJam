@@ -1,7 +1,7 @@
 <?php
 
-function DeletePlatform($platformId){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
+function DeletePlatform(MessageService &$messageService, $platformId){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
 
 	$platformId = intval(trim($platformId));
 
@@ -29,19 +29,23 @@ function DeletePlatform($platformId){
 	}
 
 	$platformDbInterface->SoftDelete($platformId);
-	
-    $adminLogData->AddToAdminLog("PLATFORM_SOFT_DELETED", "Platform $platformId soft deleted", "NULL", $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"PLATFORM_SOFT_DELETED", 
+		"Platform $platformId soft deleted", 
+		$loggedInUser->Id)
+	);
 
 	return "SUCCESS_PLATFORM_SOFT_DELETED";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
 		$platformId = (isset($_POST[FORM_DELETEPLATFORM_PLATFORM_ID])) ? $_POST[FORM_DELETEPLATFORM_PLATFORM_ID] : "";
 
-		return DeletePlatform($platformId);
+		return DeletePlatform($messageService, $platformId);
 	}
 }
 

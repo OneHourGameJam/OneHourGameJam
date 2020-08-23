@@ -71,24 +71,24 @@ class AdminLogData{
         StopTimer("AddToAdminLog");
     }
     
-    function GetAdminLogForAdminFormatted($adminUserId){
-        AddActionLog("GetAdminLogForAdminFormatted");
-        StartTimer("GetAdminLogForAdminFormatted");
+    function GetAdminLogForAdmin($adminUserId){
+        AddActionLog("GetAdminLogForAdmin");
+        StartTimer("GetAdminLogForAdmin");
     
         $data = $this->adminLogDbInterface->SelectWhereAdminUserId($adminUserId);
     
-        StopTimer("GetAdminLogForAdminFormatted");
-        return ArrayToHTML(MySQLDataToArray($data));
+        StopTimer("GetAdminLogForAdmin");
+        return MySQLDataToArray($data);
     }
     
-    function GetAdminLogForSubjectFormatted($subjectUserId){
-        AddActionLog("GetAdminLogForSubjectFormatted");
-        StartTimer("GetAdminLogForSubjectFormatted");
+    function GetAdminLogForSubject($subjectUserId){
+        AddActionLog("GetAdminLogForSubject");
+        StartTimer("GetAdminLogForSubject");
     
         $data = $this->adminLogDbInterface->SelectWhereSubjectUserId($subjectUserId);
     
-        StopTimer("GetAdminLogForSubjectFormatted");
-        return ArrayToHTML(MySQLDataToArray($data));
+        StopTimer("GetAdminLogForSubject");
+        return MySQLDataToArray($data);
     }
 
 //////////////////////// END DATABASE ACTIONS

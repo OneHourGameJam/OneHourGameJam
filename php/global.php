@@ -19,7 +19,6 @@ $assetData;
 $pollData;
 $satisfactionData;
 $adminVoteData;
-$adminLogData;
 $themesByVoteDifference = Array();
 $themesByPopularity = Array();
 $cookieData;
@@ -42,7 +41,6 @@ $gameDbInterface;
 $configDbInterface;
 $assetDbInterface;
 $adminVoteDbInterface;
-$adminLogDbInterface;
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];

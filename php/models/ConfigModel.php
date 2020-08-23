@@ -95,10 +95,10 @@ class ConfigData{
 
     private $configDbInterface;
 
-    function __construct(&$configDbInterface, &$adminLogData) {
+    function __construct(&$configDbInterface, MessageService &$messageService) {
         $this->configDbInterface = $configDbInterface;
         $this->ConfigModels = $this->LoadConfig();
-        $this->VerifyConfig($adminLogData);
+        $this->VerifyConfig($messageService);
     }
 
 //////////////////////// MODEL CONSTRUCTOR
@@ -145,32 +145,43 @@ class ConfigData{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function VerifyConfig(&$adminLogData) {
+    function VerifyConfig(MessageService &$messageService) {
         AddActionLog("VerifyConfig");
         StartTimer("VerifyConfig");
     
         if (!isset($this->ConfigModels[CONFIG_PEPPER]->Value) || strlen($this->ConfigModels[CONFIG_PEPPER]->Value) < 1) {
-            $this->UpdateConfig(CONFIG_PEPPER, GenerateSalt(), OVERRIDE_AUTOMATIC_NUM, OVERRIDE_AUTOMATIC, $adminLogData);
+            $pepper = GenerateSalt();
+            $this->UpdateConfig(CONFIG_PEPPER, $pepper, OVERRIDE_AUTOMATIC_NUM);
+
+			$messageService->SendMessage(LogMessage::SystemLogMessage(
+				"CONFIG_UPDATED", 
+				"Config value edited: ".CONFIG_PEPPER." = '$pepper'", 
+				OVERRIDE_AUTOMATIC)
+			);
         }
     
         if (!isset($this->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value) || strlen($this->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value) < 1) {
             $sessionPasswordIterations = GenerateUserHashIterations($this);
-            $this->UpdateConfig(CONFIG_SESSION_PASSWORD_ITERATIONS, $sessionPasswordIterations, OVERRIDE_AUTOMATIC_NUM, OVERRIDE_AUTOMATIC, $adminLogData);
+            $this->UpdateConfig(CONFIG_SESSION_PASSWORD_ITERATIONS, $sessionPasswordIterations, OVERRIDE_AUTOMATIC_NUM);
+
+			$messageService->SendMessage(LogMessage::SystemLogMessage(
+				"CONFIG_UPDATED", 
+				"Config value edited: ".CONFIG_SESSION_PASSWORD_ITERATIONS." = '$sessionPasswordIterations'", 
+				OVERRIDE_AUTOMATIC)
+			);
         }
     
         StopTimer("VerifyConfig");
     }
 
     // Saves config to database, does not authorize to ensure VerifyConfig() continues to work
-    function UpdateConfig($key, $value, $userId, $userUsernameOverride, &$adminLogData) {
+    function UpdateConfig($key, $value, $userId) {
         AddActionLog("UpdateConfig");
         StartTimer("UpdateConfig");
 
         if($this->ConfigModels[$key]->Value != $value){
             $this->configDbInterface->Update($key, $value, $userId);
             $this->ConfigModels[$key]->Value = $value;
-    
-            $adminLogData->AddToAdminLog("CONFIG_UPDATED", "Config value edited: $key = '$value'", "NULL", ($userID > 0) ? $userID : "NULL", ($userID > 0) ? "" : $userUsernameOverride);
         }
     
         StopTimer("UpdateConfig");

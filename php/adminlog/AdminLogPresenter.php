@@ -1,13 +1,13 @@
 <?php
 
+interface AdminLogUserData{
+	function HasUser($userId);
+	function GetUsername($userId);
+}
+
 class AdminLogPresenter{
-    public $AdminLogRender;
-
-    function __construct(&$adminLogData, &$userData) {
-        $this->AdminLogRender = $this->RenderAdminLog($adminLogData, $userData);
-    }
-
-	function RenderAdminLog(&$adminLogData, &$userData){
+	
+	public static function RenderAdminLog(&$adminLogData, AdminLogUserData &$userData){
 		AddActionLog("RenderAdminLog");
 		StartTimer("RenderAdminLog");
 		$adminLogsViewModel = new AdminLogsViewModel();
@@ -16,12 +16,12 @@ class AdminLogPresenter{
 			$adminUsername = "";
 			$subjectUsername = "";
 
-			if(isset($userData->UserModels[$adminLogModel->AdminUserId])){
-				$adminUsername = $userData->UserModels[$adminLogModel->AdminUserId]->Username;
+			if($userData->HasUser($adminLogModel->AdminUserId)){
+				$adminUsername = $userData->GetUsername($adminLogModel->AdminUserId);
 			}
 
-			if(isset($userData->UserModels[$adminLogModel->SubjectUserId])){
-				$subjectUsername = $userData->UserModels[$adminLogModel->SubjectUserId]->Username;
+			if($userData->HasUser($adminLogModel->SubjectUserId)){
+				$subjectUsername = $userData->GetUsername($adminLogModel->SubjectUserId);
 			}
 
 			$adminLogViewModel = new AdminLogViewModel();

@@ -19,7 +19,7 @@ function LogOut(){
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	return LogOut();
 }
 

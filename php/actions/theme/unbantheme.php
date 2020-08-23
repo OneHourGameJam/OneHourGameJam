@@ -1,8 +1,8 @@
 <?php
 
 //Unmarks a suggested theme as banned (unbans it)
-function UnbanTheme($unbannedThemeId){
-	global $ip, $userAgent, $loggedInUser, $adminLogData, $themeData, $themeDbInterface;
+function UnbanTheme(MessageService &$messageService, $unbannedThemeId){
+	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -41,17 +41,22 @@ function UnbanTheme($unbannedThemeId){
 
 	$themeDbInterface->Unban($unbannedThemeId);
 
-    $adminLogData->AddToAdminLog("THEME_UNBANNED", "Theme '$unbannedTheme' unbanned", $themeAuthorUserId, $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"THEME_UNBANNED", 
+		"Theme '$unbannedTheme' unbanned", 
+		$loggedInUser->Id,
+		$themeAuthorUserId)
+	);
 
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$unbannedThemeId = $_POST[FORM_UNBANTHEME_THEME_ID];
-		return UnbanTheme($unbannedThemeId);
+		return UnbanTheme($messageService, $unbannedThemeId);
 	}
 }
 

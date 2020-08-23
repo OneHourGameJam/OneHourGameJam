@@ -1,8 +1,8 @@
 <?php
 
 //Edits an existing user's password, user is identified by the username.
-function EditUserPassword($userId, $newPassword1, $newPassword2){
-	global $userData, $configData, $loggedInUser, $adminLogData, $userDbInterface;
+function EditUserPassword(MessageService &$messageService, $userId, $newPassword1, $newPassword2){
+	global $userData, $configData, $loggedInUser, $userDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -37,12 +37,18 @@ function EditUserPassword($userId, $newPassword1, $newPassword2){
 	$userDbInterface->UpdatePassword($userId, $newUserSalt, $newPasswordHash, $newUserPasswordIterations);
 
 	$username = $userData->UserModels[$userId]->Username;
-    $adminLogData->AddToAdminLog("USER_PASSWORD_RESET", "Password reset for user $username", $userId, $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"USER_PASSWORD_RESET", 
+		"Password reset for user $username", 
+		$loggedInUser->Id,
+		$userId)
+	);
 
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
@@ -50,7 +56,7 @@ function PerformAction(&$loggedInUser){
 		$password1 = $_POST[FORM_SAVENEWUSERPASSWORD_PASSWORD_1];
 		$password2 = $_POST[FORM_SAVENEWUSERPASSWORD_PASSWORD_2];
 
-		return EditUserPassword($userId, $password1, $password2);
+		return EditUserPassword($messageService, $userId, $password1, $password2);
 	}
 }
 

@@ -1,7 +1,7 @@
 <?php
 
-function NewPlatform($platformName){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
+function NewPlatform(MessageService &$messageService, $platformName){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
 
 	$platformName = trim($platformName);
 
@@ -55,19 +55,23 @@ function NewPlatform($platformName){
 	}
 
 	$platformDbInterface->Insert($platformName, $iconUrl);
-	
-    $adminLogData->AddToAdminLog("PLATFORM_ADDED", "Platform $platformName added (name: $platformName, icon url: $iconUrl)", "NULL", $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"PLATFORM_ADDED", 
+		"Platform $platformName added (name: $platformName, icon url: $iconUrl)", 
+		$loggedInUser->Id)
+	);
 
 	return "SUCCESS_PLATFORM_ADDED";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
 		$platformName = (isset($_POST[FORM_NEWPLATFORM_NAME])) ? $_POST[FORM_NEWPLATFORM_NAME] : "";
 
-		return NewPlatform($platformName);
+		return NewPlatform($messageService, $platformName);
 	}
 }
 

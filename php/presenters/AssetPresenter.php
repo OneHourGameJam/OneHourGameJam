@@ -1,7 +1,7 @@
 <?php
 
 class AssetPresenter{
-
+ 
 	public static function RenderAssets(&$assetData, &$userData){
 		AddActionLog("RenderAssets");
 		StartTimer("RenderAssets");

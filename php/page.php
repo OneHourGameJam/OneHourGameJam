@@ -26,7 +26,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$adminLogData){
+function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -36,6 +36,11 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
     //$render["CURRENT_TIME"] = gmdate("d M Y H:i", time());
     $render["page_title"] = $pageSettings[$page]["page_title"];
     $render["template_path"] = $templateBasePath;
+
+    $render["pages"] = Array();
+    foreach($pageSettings as $pageName => $pageSetting){
+        $render["pages"][] = Array("page_id" => $pageName, "page_title" => $pageSetting["page_title"]);
+    }
 
     //Special processing for specific pages
     switch($page){
@@ -220,10 +225,18 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_jams"] = $jamData->GetJamsOfUserFormatted($loggedInUser->Id);
             $render["userdata_satisfaction"] = $satisfactionData->GetSatisfactionVotesOfUserFormatted($loggedInUser->Id);
             $render["userdata_sessions"] = $userData->GetSessionsOfUserFormatted($loggedInUser->Id);
-            $render["userdata_adminlog_admin"] = $adminLogData->GetAdminLogForAdminFormatted($loggedInUser->Id);
-            $render["userdata_adminlog_subject"] = $adminLogData->GetAdminLogForSubjectFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Id);
+
+            $render["userdata_assets"] = "potato";
+
+            $render["user_data"] = Array();
+            foreach($plugins as $plugin){
+                $userData = $plugin->GetUserData($loggedInUser->Id);
+                foreach($userData as $userDataSegmentTitle => $userDataSegment){
+                    $render["user_data"][] = Array("segment_title" => $userDataSegmentTitle, "segment_data" => ArrayToHTML($userDataSegment));
+                }
+            }
         break;
         case PAGE_NEW_JAM:
             $render["next_jam_suggested_date"] = gmdate("Y-m-d", $nextSuggestedJamDateTime);

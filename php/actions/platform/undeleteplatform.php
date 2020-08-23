@@ -1,7 +1,7 @@
 <?php
 
-function UndeletePlatform($platformId){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $adminLogData, $platformDbInterface;
+function UndeletePlatform(MessageService &$messageService, $platformId){
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
 
 	$platformId = intval(trim($platformId));
 
@@ -29,19 +29,23 @@ function UndeletePlatform($platformId){
 	}
 
 	$platformDbInterface->RestoreSoftDeleted($platformId);
-	
-    $adminLogData->AddToAdminLog("PLATFORM_RESTORED", "Platform $platformId restored", "NULL", $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"PLATFORM_RESTORED", 
+		"Platform $platformId restored", 
+		$loggedInUser->Id)
+	);
 
 	return "SUCCESS_PLATFORM_RESTORED";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if($loggedInUser !== false){
 		$platformId = (isset($_POST[FORM_UNDELETEPLATFORM_NAME])) ? $_POST[FORM_UNDELETEPLATFORM_NAME] : "";
 
-		return UndeletePlatform($platformId);
+		return UndeletePlatform($messageService, $platformId);
 	}
 }
 

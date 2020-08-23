@@ -1,8 +1,8 @@
 <?php
 
 //Removes a suggested theme
-function RemoveTheme($themeId, $pageId){
-	global $themeData, $ip, $userAgent, $loggedInUser, $adminLogData, $themeDbInterface;
+function RemoveTheme(MessageService &$messageService, $themeId, $pageId){
+	global $themeData, $ip, $userAgent, $loggedInUser, $themeDbInterface;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -42,18 +42,23 @@ function RemoveTheme($themeId, $pageId){
 
 	$themeDbInterface->SoftDelete($themeId);
 
-    $adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", $themeAuthorUserId, $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"THEME_SOFT_DELETED", 
+		"Theme '$removedTheme' soft deleted", 
+		$loggedInUser->Id,
+		$themeAuthorUserId)
+	);
 
 	// Can be triggered from both themes and managethemes, send user to correct location.
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	$deleteThemeId = $_POST[FORM_DELETETHEME_THEME_ID];
 	$pageId = $_POST[FORM_DELETETHEME_PAGE];
-	return RemoveTheme($deleteThemeId, $pageId);
+	return RemoveTheme($messageService, $deleteThemeId, $pageId);
 	
 }
 

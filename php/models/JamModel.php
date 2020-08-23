@@ -63,14 +63,13 @@ class JamData{
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
     //Adds the jam with the provided data into the database
-    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, &$adminLogData){
+    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors){
         AddActionLog("AddJamToDatabase");
         StartTimer("AddJamToDatabase");
     
         $this->jamDbInterface->Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors);
         
         StopTimer("AddJamToDatabase");
-        $adminLogData->AddToAdminLog("JAM_ADDED", "Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", "NULL", ($userId > 0) ? $userId : "NULL", ($userId > 0) ? "" : OVERRIDE_AUTOMATIC);
     }
 
     function UpdateJamStateInDatabase($jamId, $newJamState){

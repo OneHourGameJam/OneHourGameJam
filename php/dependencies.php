@@ -2,39 +2,6 @@
 
 StartTimer("Dependencies");
 
-//These correspond to the data which needs to be retrieved with LoadXYZ()
-define("DEPENDENCY_NONE",           0);
-define("DEPENDENCY_CONFIG",         pow(2, 0));
-define("DEPENDENCY_COOKIES",        pow(2, 1));
-define("DEPENDENCY_ADMIN_LOG",      pow(2, 2));
-define("DEPENDENCY_USERS",          pow(2, 3));
-define("DEPENDENCY_GAMES",          pow(2, 4));
-define("DEPENDENCY_JAMS",           pow(2, 5));
-define("DEPENDENCY_ADMIN_VOTES",    pow(2, 6));
-define("DEPENDENCY_LOGGED_IN_USER_ADMIN_VOTES", pow(2, 7));
-define("DEPENDENCY_SATISFACTION",   pow(2, 8));
-define("DEPENDENCY_THEMES",         pow(2, 9));
-define("DEPENDENCY_LOGGED_IN_USER_THEME_VOTES", pow(2, 10));
-define("DEPENDENCY_THEMES_BY_VOTE_DIFFERENCE",  pow(2, 11));
-define("DEPENDENCY_THEMES_BY_POPULARITY",       pow(2, 12));
-define("DEPENDENCY_ASSETS",         pow(2, 13));
-define("DEPENDENCY_POLLS",          pow(2, 14));
-define("DEPENDENCY_LOGGED_IN_USER_POLL_VOTES",  pow(2, 15));
-define("DEPENDENCY_MESSAGES",       pow(2, 16));
-define("DEPENDENCY_PLATFORMS",       pow(2, 17));
-
-//define("DEPENDENCY_", pow(2, 17));
-//define("DEPENDENCY_", pow(2, 18));
-//define("DEPENDENCY_", pow(2, 19));
-//define("DEPENDENCY_", pow(2, 20));
-//define("DEPENDENCY_", pow(2, 21));
-//define("DEPENDENCY_", pow(2, 22));
-//define("DEPENDENCY_", pow(2, 23));
-
-define("DEPENDENCY_LOGGED_IN_USER", pow(2, 99));
-
-
-
 define("RENDER_DEPTH_NONE",         0);
 define("RENDER_DEPTH_USERS",        pow(2, 0));
 define("RENDER_DEPTH_JAMS",         pow(2, 1));
@@ -69,12 +36,10 @@ define("PAGE_AUTHOR", "author");
 define("PAGE_AUTHORS", "authors");
 define("PAGE_PRIVACY", "privacy");
 define("PAGE_USER_DATA", "userdata");
-define("PAGE_ADMIN_LOG", "adminlog");
 define("PAGE_POLLS", "polls");
 define("PAGE_EDIT_PLATFORMS", "editplatforms");
 
 define("RENDER_CONFIG", "RenderConfig");
-define("RENDER_ADMIN_LOG", "RenderAdminLog");
 define("RENDER_USERS", "RenderUsers");
 define("RENDER_ALL_JAMS", "RenderAllJams");
 define("RENDER_JAMS", "RenderJams");
@@ -272,12 +237,6 @@ $pageSettings = Array(
         "authorization_level" => AUTHORIZATION_LEVEL_USER,
         "template_file" => "userdata.html",
         "dependencies" => Array(  ),
-    ),
-    PAGE_ADMIN_LOG => Array(
-        "page_title" => "Admin Log",
-        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-        "template_file" => "adminlog.html",
-        "dependencies" => Array(RENDER_ADMIN_LOG => RENDER_DEPTH_NONE),
     ),
     PAGE_POLLS => Array(
         "page_title" => "Poll Results",

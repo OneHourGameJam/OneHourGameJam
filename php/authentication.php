@@ -5,6 +5,7 @@ define("OVERRIDE_LEGACY_NUM", "-2");
 define("OVERRIDE_LEGACY", "LEGACY");
 define("OVERRIDE_AUTOMATIC_NUM", "-1");
 define("OVERRIDE_AUTOMATIC", "AUTOMATIC");
+define("OVERRIDE_AUTOMATIC_PRUNING", "AUTOMATIC PRUNING");
 
 //Generates a password salt
 function GenerateSalt(){

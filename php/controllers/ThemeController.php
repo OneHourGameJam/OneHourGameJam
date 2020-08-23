@@ -123,41 +123,48 @@ class ThemeController{
 		return $result;
 	}
 
-	public static function PruneThemes(&$themeData, &$jamData, &$configData, &$adminLogData){
+	public static function PruneThemes(MessageService &$messageService, &$themeData, &$jamData, &$configData){
+		AddActionLog("PruneThemes");
+		StartTimer("PruneThemes");
 
-		$themesWithEnoughVotes = Array();
+		$themesWithEnoughVotesOrOldOrRecentlyUsed = Array();
 
 		foreach($themeData->ThemeModels as $i => $themeModel){
 			$theme = Array();
 
 			$theme["id"] = $themeModel->Id;
 			$theme["theme"] = $themeModel->Theme;
+			$theme["author_id"] = $themeModel->AuthorUserId;
 
 			$votesFor = $themeModel->VotesFor;
 			$votesOpinionated = $themeModel->VotesFor + $themeModel->VotesAgainst;
 
 			$votesTotal = $themeModel->VotesFor + $themeModel->VotesNeutral + $themeModel->VotesAgainst;
-
-			if($votesTotal < intval($configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value)){
-				//not enough votes
-				continue;
-			}
 			
 			$theme["is_old"] = intval($themeModel->DaysAgo) >= intval($configData->ConfigModels[CONFIG_THEME_DAYS_MARK_AS_OLD]->Value);
 			$theme["is_recent"] = ThemePresenter::IsRecentTheme($jamData, $configData, $themeModel->Theme);
+
+			if($votesTotal < intval($configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value)){
+				//not enough votes
+				if($theme["is_old"] || $theme["is_recent"]){
+					//Old and recently used themes should be pruned no matter how many votes they have
+					$themesWithEnoughVotesOrOldOrRecentlyUsed[] = $theme;
+					$theme["popularity"] = -1;
+				}
+				continue;
+			}
 			$theme["popularity"] = 0;
 			if($votesOpinionated > 0){
 				$theme["popularity"] = $votesFor / $votesOpinionated;
 			}
 
-			$themesWithEnoughVotes[] = $theme;
+			$themesWithEnoughVotesOrOldOrRecentlyUsed[] = $theme;
 		}
-		
 
-		usort($themesWithEnoughVotes, function ($item1, $item2) {
-			if($item1['popularity'] >= $item2['popularity']){
+		usort($themesWithEnoughVotesOrOldOrRecentlyUsed, function ($item1, $item2) {
+			if($item1["popularity"] >= $item2["popularity"]){
 				return -1;
-			}else if($item1['popularity'] <= $item2['popularity']){
+			}else if($item1["popularity"] <= $item2["popularity"]){
 				return 1;
 			}else{
 				return 0;
@@ -166,7 +173,7 @@ class ThemeController{
 
 		$themesToDelete = Array();
 		$themesToKeepRemaining = intval($configData->ConfigModels[CONFIG_THEME_NUMBER_TO_MARK_KEEP]->Value);
-		foreach($themesWithEnoughVotes as $i => $theme){
+		foreach($themesWithEnoughVotesOrOldOrRecentlyUsed as $i => $theme){
 			if($theme["is_old"]){
 				$theme["delete_reason"] = "Old";
 				$themesToDelete[] = $theme;
@@ -189,8 +196,17 @@ class ThemeController{
 			$themeData->SoftDeleteThemeInDatabase($theme["id"]);
 			$removedTheme = $theme["theme"];
 			$deletionReason = $theme["delete_reason"];
-			$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted. Reason: $deletionReason", "NULL", "NULL", "AUTOMATIC PRUNING");
+			$themeAuthor = $theme["author_id"];
+
+			$messageService->SendMessage(LogMessage::SystemLogMessage(
+				"THEME_SOFT_DELETED", 
+				"Theme '$removedTheme' soft deleted. Reason: $deletionReason", 
+				OVERRIDE_AUTOMATIC_PRUNING,
+				$themeAuthor)
+			);
 		}
+
+		StopTimer("PruneThemes");
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-function PerformPendingSiteAction(&$configData, &$siteActionData, &$loggedInUser){
+function PerformPendingSiteAction(MessageService &$messageService, &$configData, &$siteActionData, &$loggedInUser){
     global $_POST;
 	AddActionLog("PerformPendingSiteAction");
 	StartTimer("PerformPendingSiteAction");
@@ -21,7 +21,7 @@ function PerformPendingSiteAction(&$configData, &$siteActionData, &$loggedInUser
             if($_POST[FORM_POST_ACTION] == $actionPostRequest){
                 $actionResult = "PROCESSING";
                 include_once($actionPhpFile);
-                $actionResult = PerformAction($loggedInUser);
+                $actionResult = PerformAction($messageService, $loggedInUser);
                 
                 if(isset($siteActionModel->ActionResult[$actionResult]->RedirectUrl)){
                     setcookie(COOKIE_ACTION_RESULT_ACTION, $actionPostRequest, time() + 30);

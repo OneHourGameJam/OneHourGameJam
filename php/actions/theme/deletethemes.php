@@ -1,8 +1,8 @@
 <?php
 
 //Removes an array of suggested themes
-function RemoveThemes($deletedThemeIds){
-	global $ip, $userAgent, $loggedInUser, $adminLogData, $themeData, $themeDbInterface;
+function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
+	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -48,7 +48,12 @@ function RemoveThemes($deletedThemeIds){
 
 		$themeDbInterface->SoftDelete($deletedThemeId);
 
-		$adminLogData->AddToAdminLog("THEME_SOFT_DELETED", "Theme '$removedTheme' soft deleted", $themeAuthorUserId, $loggedInUser->Id, "");
+		$messageService->SendMessage(LogMessage::UserLogMessage(
+			"THEME_SOFT_DELETED", 
+			"Theme '$removedTheme' soft deleted", 
+			$loggedInUser->Id,
+			$themeAuthorUserId)
+		);
 	}
 
 	if($error){
@@ -58,7 +63,7 @@ function RemoveThemes($deletedThemeIds){
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
@@ -72,7 +77,7 @@ function PerformAction(&$loggedInUser){
 			return "NO_THEMES_SELECTED";
 		}
 		
-		return RemoveThemes($deletedThemeIds);
+		return RemoveThemes($messageService, $deletedThemeIds);
 	}
 	else{
 		return "FAILURE";

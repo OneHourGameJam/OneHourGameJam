@@ -1,7 +1,7 @@
 <?php
 
-function SaveConfig($key, $newValue){
-	global $configData, $dictionary, $loggedInUser, $adminLogData;
+function SaveConfig(MessageService &$messageService, $key, $newValue){
+	global $configData, $dictionary, $loggedInUser;
 
 	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
@@ -21,17 +21,23 @@ function SaveConfig($key, $newValue){
 		return;
 	}
 
-	$configData->UpdateConfig($key, $newValue, $loggedInUser->Id, "", $adminLogData);
+	$configData->UpdateConfig($key, $newValue, $loggedInUser->Id, "");
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"CONFIG_UPDATED", 
+		"Config value edited: $key = '$newValue'", 
+		$loggedInUser->Id)
+	);
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$overallActionResult = "NO_CHANGE";
 		foreach($_POST as $key => $value){
-			$actionResult = SaveConfig($key, $value);
+			$actionResult = SaveConfig($messageService, $key, $value);
 			if($actionResult != ""){
 				$overallActionResult = $actionResult;
 			}

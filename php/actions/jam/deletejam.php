@@ -19,8 +19,8 @@ function JamExists($jamId){
 }
 
 //Deletes an existing jam, identified by the jam number.
-function DeleteJam($jamId){
-	global $jamData, $loggedInUser, $adminLogData, $jamDbInterface;
+function DeleteJam(MessageService &$messageService, $jamId){
+	global $jamData, $loggedInUser, $jamDbInterface;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -43,7 +43,11 @@ function DeleteJam($jamId){
 
 	$jamDbInterface->SoftDelete($jamId);
 
-	$adminLogData->AddToAdminLog("JAM_SOFT_DELETED", "Jam $jamId soft deleted", "NULL", $loggedInUser->Id, "");
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"JAM_SOFT_DELETED", 
+		"Jam $jamId soft deleted", 
+		$loggedInUser->Id)
+	);
 	
 	return "SUCCESS";
 }
@@ -76,13 +80,13 @@ function CanDeleteJam($jamId){
 	}
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){
 		$jamId = (isset($_POST[FORM_DELETEJAM_JAM_ID])) ? $_POST[FORM_DELETEJAM_JAM_ID] : "";
 		if($jamId != ""){
-			return DeleteJam(intval($jamId));
+			return DeleteJam($messageService, intval($jamId));
 		}
 	}
 }

@@ -4,8 +4,8 @@
 //and time. All three are non-blank strings. $date and $time should be
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
-function CreateJam($theme, $date, $time, $colorsList){
-	global $ip, $userAgent, $loggedInUser, $jamData, $adminLogData;
+function CreateJam(MessageService &$messageService, $theme, $date, $time, $colorsList){
+	global $ip, $userAgent, $loggedInUser, $jamData;
 
 	$maxNonDeletedJamNumber = 0;
 	foreach($jamData->JamModels as $i => $jamModel){
@@ -58,12 +58,18 @@ function CreateJam($theme, $date, $time, $colorsList){
 
 	$colors = implode("|", $colorsList);
 
-	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $jamNumber, -2, $theme, "".gmdate("Y-m-d H:i", $datetime), $colors, $adminLogData);
+	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $jamNumber, -2, $theme, "".gmdate("Y-m-d H:i", $datetime), $colors);
+
+	$messageService->SendMessage(LogMessage::UserLogMessage(
+		"JAM_ADDED", 
+		"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", 
+		$loggedInUser->Id)
+	);
 
 	return "SUCCESS";
 }
 
-function PerformAction(&$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST, $configData;
 	
 	if(IsAdmin($loggedInUser) !== false){
@@ -80,7 +86,7 @@ function PerformAction(&$loggedInUser){
 			$jamColors = Array("FFFFFF");
 		}
 
-		return CreateJam($theme, $date, $time, $jamColors);
+		return CreateJam($messageService, $theme, $date, $time, $jamColors);
 	}
 }
 

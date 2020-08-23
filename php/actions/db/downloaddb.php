@@ -1,11 +1,14 @@
 <?php
 
 
-function PerformAction(&$loggedInUser){
-    global $adminLogData;
+function PerformAction(MessageService &$messageService, &$loggedInUser){
     
     if(IsAdmin($loggedInUser) !== false){
-        $adminLogData->AddToAdminLog("DOWNLOAD_DB", "Downloaded the Database", "NULL", $loggedInUser->Id, "");
+		$messageService->SendMessage(LogMessage::UserLogMessage(
+			"DOWNLOAD_DB", 
+			"Downloaded the Database", 
+			$loggedInUser->Id)
+		);
         //print GetJSONDataForAllTables();
         die();
     }
