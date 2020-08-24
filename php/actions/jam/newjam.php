@@ -5,7 +5,7 @@
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
 function CreateJam(MessageService &$messageService, $theme, $date, $time, $colorsList){
-	global $ip, $userAgent, $loggedInUser, $jamData;
+	global $ip, $userAgent, $loggedInUser, $jamData, $userData;
 
 	$maxNonDeletedJamNumber = 0;
 	foreach($jamData->JamModels as $i => $jamModel){
@@ -65,6 +65,7 @@ function CreateJam(MessageService &$messageService, $theme, $date, $time, $color
 		"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS";
 }

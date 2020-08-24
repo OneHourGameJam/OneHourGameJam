@@ -3,7 +3,7 @@
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
 function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $colorsString){
-	global $jamData, $loggedInUser, $jamDbInterface;
+	global $jamData, $loggedInUser, $jamDbInterface, $userData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -55,6 +55,7 @@ function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, 
 		"Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 	
 	return "SUCCESS";
 }

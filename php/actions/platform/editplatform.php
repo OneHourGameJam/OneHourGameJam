@@ -1,7 +1,7 @@
 <?php
 
 function EditPlatform(MessageService &$messageService, $platformId, $platformName){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface, $userData;
 
 	$platformName = trim($platformName);
 	$platformId = intval(trim($platformId));
@@ -72,6 +72,7 @@ function EditPlatform(MessageService &$messageService, $platformId, $platformNam
 		"Platform $platformId edited (name: $platformName, icon url: $iconUrl)", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS_PLATFORM_EDITED";
 }

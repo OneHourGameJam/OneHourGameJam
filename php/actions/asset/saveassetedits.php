@@ -105,6 +105,7 @@ function AddAsset(MessageService &$messageService, $assetId, $author, $title, $d
 			$loggedInUser->Id, 
 			$authorUserId)
 		);
+		$userData->LogAdminAction($loggedInUser->Id);
 		
 		return "SUCCESS_UPDATED";
 	}else{
@@ -116,6 +117,7 @@ function AddAsset(MessageService &$messageService, $assetId, $author, $title, $d
 			$loggedInUser->Id, 
 			$userData->UsernameToId[$author])
 		);
+		$userData->LogAdminAction($loggedInUser->Id);
 		
 		return "SUCCESS_INSERTED";
 	}

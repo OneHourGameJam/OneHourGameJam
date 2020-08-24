@@ -1,12 +1,6 @@
 <?php
 namespace Plugins\AdminLog;
 
-define("ADMINVOTE_FOR", "FOR");
-define("ADMINVOTE_NEUTRAL", "NEUTRAL");
-define("ADMINVOTE_AGAINST", "AGAINST");
-define("ADMINVOTE_SPONSOR", "SPONSOR");
-define("ADMINVOTE_VETO", "VETO");
-
 class AdminLogModel{
 	public $Id;
 	public $DateTime;

@@ -179,6 +179,15 @@ class UserData implements IUserDisplay{
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
+    function LogAdminAction($userId){
+        AddActionLog("LogAdminAction");
+        StartTimer("LogAdminAction");
+        
+        $this->userDbInterface->UpdateLastAdminActionTimeToNow($userId);
+        
+        StopTimer("LogAdminAction");
+    }
+
 //////////////////////// END DATABASE ACTIONS
 
 //////////////////////// PUBLIC DATA EXPORT

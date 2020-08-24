@@ -20,7 +20,7 @@ function JamExists($jamId){
 
 //Deletes an existing jam, identified by the jam number.
 function DeleteJam(MessageService &$messageService, $jamId){
-	global $jamData, $loggedInUser, $jamDbInterface;
+	global $jamData, $loggedInUser, $jamDbInterface, $userData;
 
 	//Authorize user (is admin)
 	if(IsAdmin($loggedInUser) === false){
@@ -48,6 +48,7 @@ function DeleteJam(MessageService &$messageService, $jamId){
 		"Jam $jamId soft deleted", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 	
 	return "SUCCESS";
 }

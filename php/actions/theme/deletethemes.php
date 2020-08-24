@@ -2,7 +2,7 @@
 
 //Removes an array of suggested themes
 function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
-	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface;
+	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface, $userData;
 	
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -54,6 +54,7 @@ function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
 			$loggedInUser->Id,
 			$themeAuthorUserId)
 		);
+		$userData->LogAdminAction($loggedInUser->Id);
 	}
 
 	if($error){

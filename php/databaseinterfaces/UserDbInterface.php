@@ -2,23 +2,24 @@
 
 define("DB_TABLE_USER", "user");
 
-define("DB_COLUMN_USER_ID",                     "user_id");
-define("DB_COLUMN_USER_USERNAME",               "user_username");
-define("DB_COLUMN_USER_DATETIME",               "user_datetime");
-define("DB_COLUMN_USER_IP",                     "user_register_ip");
-define("DB_COLUMN_USER_USER_AGENT",             "user_register_user_agent");
-define("DB_COLUMN_USER_DISPLAY_NAME",           "user_display_name");
-define("DB_COLUMN_USER_SALT",                   "user_password_salt");
-define("DB_COLUMN_USER_PASSWORD_HASH",          "user_password_hash");
-define("DB_COLUMN_USER_PASSWORD_ITERATIONS",    "user_password_iterations");
-define("DB_COLUMN_USER_LAST_LOGIN_DATETIME",    "user_last_login_datetime");
-define("DB_COLUMN_USER_LAST_IP",                "user_last_ip");
-define("DB_COLUMN_USER_LAST_USER_AGENT",        "user_last_user_agent");
-define("DB_COLUMN_USER_EMAIL",                  "user_email");
-define("DB_COLUMN_USER_TWITTER",                "user_twitter");
-define("DB_COLUMN_USER_BIO",                    "user_bio");
-define("DB_COLUMN_USER_ROLE",                   "user_role");
-define("DB_COLUMN_USER_PREFERENCES",            "user_preferences");
+define("DB_COLUMN_USER_ID",                         "user_id");
+define("DB_COLUMN_USER_USERNAME",                   "user_username");
+define("DB_COLUMN_USER_DATETIME",                   "user_datetime");
+define("DB_COLUMN_USER_IP",                         "user_register_ip");
+define("DB_COLUMN_USER_USER_AGENT",                 "user_register_user_agent");
+define("DB_COLUMN_USER_DISPLAY_NAME",               "user_display_name");
+define("DB_COLUMN_USER_SALT",                       "user_password_salt");
+define("DB_COLUMN_USER_PASSWORD_HASH",              "user_password_hash");
+define("DB_COLUMN_USER_PASSWORD_ITERATIONS",        "user_password_iterations");
+define("DB_COLUMN_USER_LAST_LOGIN_DATETIME",        "user_last_login_datetime");
+define("DB_COLUMN_USER_LAST_IP",                    "user_last_ip");
+define("DB_COLUMN_USER_LAST_USER_AGENT",            "user_last_user_agent");
+define("DB_COLUMN_USER_EMAIL",                      "user_email");
+define("DB_COLUMN_USER_TWITTER",                    "user_twitter");
+define("DB_COLUMN_USER_BIO",                        "user_bio");
+define("DB_COLUMN_USER_ROLE",                       "user_role");
+define("DB_COLUMN_USER_PREFERENCES",                "user_preferences");
+define("DB_COLUMN_USER_LAST_USER_ACTION_DATETIME",  "user_last_admin_action_datetime");
 
 class UserDbInterface{
     private $database;
@@ -36,14 +37,9 @@ class UserDbInterface{
         $sql = "SELECT ".DB_COLUMN_USER_ID.", ".DB_COLUMN_USER_USERNAME.", ".DB_COLUMN_USER_DISPLAY_NAME.", ".DB_COLUMN_USER_TWITTER.", ".DB_COLUMN_USER_EMAIL.",
                        ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.",
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_LOGIN_DATETIME.") AS days_since_last_login,
-                       DATEDIFF(Now(), log_max_datetime) AS days_since_last_admin_action
+                       DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_USER_ACTION_DATETIME.") AS days_since_last_admin_action
                 FROM
-                    ".DB_TABLE_USER." u LEFT JOIN
-                    (
-                        SELECT ".DB_COLUMN_ADMIN_LOG_ADMIN_USER_ID.", max(".DB_COLUMN_ADMIN_LOG_DATETIME.") AS log_max_datetime
-                        FROM ".DB_TABLE_ADMIN_LOG."
-                        GROUP BY ".DB_COLUMN_ADMIN_LOG_ADMIN_USER_ID."
-                    ) al ON u.".DB_COLUMN_USER_ID." = al.".DB_COLUMN_ADMIN_LOG_ADMIN_USER_ID."";
+                    ".DB_TABLE_USER." u;";
         
         StopTimer("UserDbInterface_SelectAll");
         return $this->database->Execute($sql);;
@@ -139,7 +135,8 @@ class UserDbInterface{
 			".DB_COLUMN_USER_LAST_IP.",
 			".DB_COLUMN_USER_LAST_USER_AGENT.",
 			".DB_COLUMN_USER_EMAIL.",
-			".DB_COLUMN_USER_ROLE.")
+            ".DB_COLUMN_USER_ROLE.",
+            ".DB_COLUMN_USER_LAST_USER_ACTION_DATETIME.")
 			VALUES
 			(null,
 			'$escapedUsername',
@@ -154,7 +151,8 @@ class UserDbInterface{
 			'$escapedIp',
 			'$escapedUserAgent',
 			'',
-			$escapedIsAdmin);
+            $escapedIsAdmin,
+            NULL);
 		";
         $this->database->Execute($sql);;
         
@@ -205,6 +203,22 @@ class UserDbInterface{
         $this->database->Execute($sql);;
         
         StopTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
+    }
+
+    public function UpdateLastAdminActionTimeToNow($userId){
+        AddActionLog("UserDbInterface_UpdateLastAdminActionTimeToNow");
+        StartTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
+
+        $escapedUserId = $this->database->EscapeString($userId);
+
+		$sql = "
+			UPDATE ".DB_TABLE_USER."
+            SET ".DB_COLUMN_USER_LAST_USER_ACTION_DATETIME." = Now()
+			WHERE ".DB_COLUMN_USER_ID." = $escapedUserId
+        ";
+        $this->database->Execute($sql);;
+        
+        StopTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
     }
 
     public function UpdatePassword($userId, $userSalt, $passwordHash, $userPasswordIterations){

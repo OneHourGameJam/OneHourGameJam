@@ -2,7 +2,7 @@
 
 //Removes a suggested theme
 function RemoveTheme(MessageService &$messageService, $themeId, $pageId){
-	global $themeData, $ip, $userAgent, $loggedInUser, $themeDbInterface;
+	global $themeData, $ip, $userAgent, $loggedInUser, $themeDbInterface, $userData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -48,6 +48,7 @@ function RemoveTheme(MessageService &$messageService, $themeId, $pageId){
 		$loggedInUser->Id,
 		$themeAuthorUserId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	// Can be triggered from both themes and managethemes, send user to correct location.
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";

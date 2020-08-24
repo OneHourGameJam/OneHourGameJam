@@ -1,7 +1,7 @@
 <?php
 
 function UndeletePlatform(MessageService &$messageService, $platformId){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface, $userData;
 
 	$platformId = intval(trim($platformId));
 
@@ -35,6 +35,7 @@ function UndeletePlatform(MessageService &$messageService, $platformId){
 		"Platform $platformId restored", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS_PLATFORM_RESTORED";
 }

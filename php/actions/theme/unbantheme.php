@@ -2,7 +2,7 @@
 
 //Unmarks a suggested theme as banned (unbans it)
 function UnbanTheme(MessageService &$messageService, $unbannedThemeId){
-	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface;
+	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface, $userData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -47,6 +47,7 @@ function UnbanTheme(MessageService &$messageService, $unbannedThemeId){
 		$loggedInUser->Id,
 		$themeAuthorUserId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS";
 }

@@ -35,6 +35,7 @@ function EditUser(MessageService &$messageService, $userId, $isAdmin){
 		$loggedInUser->Id,
 		$userId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS";
 }

@@ -1,7 +1,7 @@
 <?php
 
 function NewPlatform(MessageService &$messageService, $platformName){
-	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface;
+	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface, $userData;
 
 	$platformName = trim($platformName);
 
@@ -61,6 +61,7 @@ function NewPlatform(MessageService &$messageService, $platformName){
 		"Platform $platformName added (name: $platformName, icon url: $iconUrl)", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS_PLATFORM_ADDED";
 }

@@ -49,6 +49,7 @@ function DeleteEntry(MessageService &$messageService, $entryId){
 		$loggedInUser->Id,
 		$deletedEntryAuthorId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS";
 }

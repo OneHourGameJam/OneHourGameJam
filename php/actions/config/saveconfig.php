@@ -1,7 +1,7 @@
 <?php
 
 function SaveConfig(MessageService &$messageService, $key, $newValue){
-	global $configData, $dictionary, $loggedInUser;
+	global $configData, $dictionary, $loggedInUser, $userData;
 
 	if(IsAdmin($loggedInUser) === false){
 		return "NOT_AUTHORIZED";
@@ -28,6 +28,7 @@ function SaveConfig(MessageService &$messageService, $key, $newValue){
 		"Config value edited: $key = '$newValue'", 
 		$loggedInUser->Id)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 	return "SUCCESS";
 }
 

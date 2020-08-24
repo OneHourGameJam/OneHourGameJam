@@ -1,7 +1,7 @@
 <?php
 
 function DeleteAsset(MessageService &$messageService, $assetId){
-	global $loggedInUser, $assetData, $assetDbInterface;
+	global $loggedInUser, $assetData, $assetDbInterface, $userData;
 	$assetId = trim($assetId);
 	//Authorize user
 	if(IsAdmin($loggedInUser) === false){
@@ -34,6 +34,7 @@ function DeleteAsset(MessageService &$messageService, $assetId){
 		$loggedInUser->Id, 
 		$assetAuthorUserId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 	
 	return "SUCCESS";
 }

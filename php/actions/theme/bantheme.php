@@ -2,7 +2,7 @@
 
 //Marks a suggested theme as banned
 function BanTheme(MessageService &$messageService, $bannedThemeId){
-	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface;
+	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface, $userData;
 
 	//Authorize user (logged in)
 	if($loggedInUser === false){
@@ -47,6 +47,7 @@ function BanTheme(MessageService &$messageService, $bannedThemeId){
 		$loggedInUser->Id,
 		$themeAuthorUserId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS";
 }

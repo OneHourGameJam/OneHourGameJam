@@ -44,6 +44,7 @@ function EditUserPassword(MessageService &$messageService, $userId, $newPassword
 		$loggedInUser->Id,
 		$userId)
 	);
+	$userData->LogAdminAction($loggedInUser->Id);
 
 	return "SUCCESS";
 }
