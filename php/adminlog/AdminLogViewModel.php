@@ -1,4 +1,5 @@
 <?php
+namespace Plugins\AdminLog;
 
 class AdminLogsViewModel{
 	public $logs = Array();

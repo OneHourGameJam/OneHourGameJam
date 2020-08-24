@@ -1,4 +1,5 @@
 <?php
+namespace Plugins\AdminLog;
 
 define("ADMINVOTE_FOR", "FOR");
 define("ADMINVOTE_NEUTRAL", "NEUTRAL");

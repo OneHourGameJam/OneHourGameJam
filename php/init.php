@@ -22,7 +22,7 @@ function Init(){
 	$messageService = new MessageService();
 
 	$plugins = Array(
-		new AdminLogPlugin($messageService)
+		new \Plugins\AdminLog\AdminLogPlugin($messageService)
 	);
 
 	foreach($plugins as $i => $plugin){

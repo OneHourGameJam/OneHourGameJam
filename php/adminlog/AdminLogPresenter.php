@@ -1,13 +1,9 @@
 <?php
-
-interface AdminLogUserData{
-	function HasUser($userId);
-	function GetUsername($userId);
-}
+namespace Plugins\AdminLog;
 
 class AdminLogPresenter{
 	
-	public static function RenderAdminLog(&$adminLogData, AdminLogUserData &$userData){
+	public static function RenderAdminLog(&$adminLogData, \IUserDisplay &$userData){
 		AddActionLog("RenderAdminLog");
 		StartTimer("RenderAdminLog");
 		$adminLogsViewModel = new AdminLogsViewModel();
@@ -17,11 +13,11 @@ class AdminLogPresenter{
 			$subjectUsername = "";
 
 			if($userData->HasUser($adminLogModel->AdminUserId)){
-				$adminUsername = $userData->GetUsername($adminLogModel->AdminUserId);
+				$adminUsername = $userData->GetUserIdentifiableName($adminLogModel->AdminUserId);
 			}
 
 			if($userData->HasUser($adminLogModel->SubjectUserId)){
-				$subjectUsername = $userData->GetUsername($adminLogModel->SubjectUserId);
+				$subjectUsername = $userData->GetUserIdentifiableName($adminLogModel->SubjectUserId);
 			}
 
 			$adminLogViewModel = new AdminLogViewModel();

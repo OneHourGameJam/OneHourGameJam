@@ -26,7 +26,13 @@ class UserModel
     public $SponsoredByUserId;
 }
 
-class UserData implements AdminLogUserData{
+interface IUserDisplay{
+	function HasUser($userId);
+	function GetUserDisplayName($userId);
+	function GetUserIdentifiableName($userId);
+}
+
+class UserData implements IUserDisplay{
     public $UserModels;
     public $UsernameToId;
 
@@ -44,7 +50,11 @@ class UserData implements AdminLogUserData{
         return isset($this->UserModels[$userId]);
     }
 
-    public function GetUsername($userId){
+    public function GetUserDisplayName($userId){
+        return $this->UserModels[$userId]->DisplayName;
+    }
+
+    public function GetUserIdentifiableName($userId){
         return $this->UserModels[$userId]->Username;
     }
 

@@ -1,4 +1,6 @@
 <?php
+namespace Plugins\AdminLog;
+
 define("DB_TABLE_ADMIN_LOG", "admin_log");
 
 define("DB_COLUMN_ADMIN_LOG_ID", "log_id");

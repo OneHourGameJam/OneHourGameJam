@@ -1,4 +1,6 @@
 <?php
+namespace Plugins\AdminLog;
+
 include_once("php/adminlog/AdminLogDbInterface.php");
 include_once("php/adminlog/AdminLogModel.php");
 include_once("php/adminlog/AdminLogViewModel.php");
@@ -7,13 +9,13 @@ include_once("php/adminlog/AdminLogPresenter.php");
 define("PAGE_ADMIN_LOG", "adminlog");
 define("RENDER_ADMIN_LOG", "RenderAdminLog");
 
-class AdminLogPlugin extends AbstractPlugin{
+class AdminLogPlugin extends \AbstractPlugin{
     public $NameInTemplate = "admin_log";
 
     public $AdminLogDbInterface;
     public $AdminLogData;
 
-    public function ReceiveMessage(AbstractMessage &$message){
+    public function ReceiveMessage(\AbstractMessage &$message){
         if($message instanceof LogMessage){
             $logType = $message->LogType;
             $text = $message->Text;
@@ -37,7 +39,7 @@ class AdminLogPlugin extends AbstractPlugin{
     }
 
     public function EstablishDatabaseConnection(){
-        $database = new Database();
+        $database = new \Database();
 	    $this->AdminLogDbInterface = new AdminLogDbInterface($database);
     }
 
@@ -59,7 +61,7 @@ class AdminLogPlugin extends AbstractPlugin{
         return false;
     }
 
-    public function Render(AdminLogUserData &$userData){
+    public function Render(\IUserDisplay &$userData){
         $render = Array();
         $render["adminlog"] = AdminLogPresenter::RenderAdminLog($this->AdminLogData, $userData);
         return $render;
