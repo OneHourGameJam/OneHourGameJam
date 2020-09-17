@@ -598,6 +598,11 @@ body{
   vertical-align: bottom;
 }
 
+.entryTileSubmitButtonCell{
+  display: table-cell;
+  vertical-align: middle;
+}
+
 .entryTileCentering{
   margin-left: auto;
   margin-right: auto;

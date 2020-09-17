@@ -149,3 +149,7 @@ a:hover{
 
 .dataTable tbody tr:nth-child(2n) {background-color: #4C5256; color: #D8F2FF}
 .dataTable tbody tr:nth-child(2n+1) {background-color: #42484B; color: #D8F2FF}
+
+.entryTileSubmitButtonCell{
+  color: white;
+}
