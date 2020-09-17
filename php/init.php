@@ -22,7 +22,8 @@ function Init(){
 	$messageService = new MessageService();
 
 	$plugins = Array(
-		new \Plugins\AdminLog\AdminLogPlugin($messageService)
+		//new \Plugins\AdminLog\AdminLogPlugin($messageService, $loggedInUser)
+		new AdminVotePlugin($messageService, $loggedInUser)
 	);
 
 	foreach($plugins as $i => $plugin){
@@ -58,7 +59,6 @@ function Init(){
 	$gameDbInterface = new GameDbInterface($database);
 	$configDbInterface = new ConfigDbInterface($database);
 	$assetDbInterface = new AssetDbInterface($database);
-	$adminVoteDbInterface = new AdminVoteDbInterface($database);
 	
 	StopTimer("Init - Database Interfaces");
 
@@ -97,7 +97,6 @@ function Init(){
 	$assetData = new AssetData($assetDbInterface);
 	$pollData = new PollData($pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $loggedInUser);
     $satisfactionData = new SatisfactionData($satisfactionDbInterface, $configData);
-    $adminVoteData = new AdminVoteData($adminVoteDbInterface, $loggedInUser);
 	$messageData = new MessageData($siteActionData);
 	$themeIdeaData = new ThemeIdeaData($themeIdeaDbInterface, $loggedInUser);
 	
@@ -124,7 +123,7 @@ function Init(){
 	}
 	if(FindDependency(RENDER_USERS, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_USERS, $dependencies);
-		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
+		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency(RENDER_ALL_JAMS, $dependencies) !== false){
 		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
@@ -176,7 +175,7 @@ function Init(){
 	if($loggedInUser !== false){
 		if(FindDependency(RENDER_LOGGED_IN_USER, $dependencies) !== false){
 			$dependency = FindDependency(RENDER_LOGGED_IN_USER, $dependencies);
-			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 

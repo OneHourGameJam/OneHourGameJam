@@ -12,8 +12,8 @@ define("RENDER_ADMIN_LOG", "RenderAdminLog");
 class AdminLogPlugin extends \AbstractPlugin{
     public $NameInTemplate = "admin_log";
 
-    public $AdminLogDbInterface;
-    public $AdminLogData;
+    private $AdminLogDbInterface;
+    private $AdminLogData;
 
     public function ReceiveMessage(\AbstractMessage &$message){
         if($message instanceof LogMessage){

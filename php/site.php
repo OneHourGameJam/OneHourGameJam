@@ -15,12 +15,7 @@ include_once("plugins/plugins.php");
 StartTimer("site.php");
 StartTimer("site.php - Include");
 
-//Global variable definition
 session_start();
-
-include_once("php/anti-csrf.php");
-include_once("php/global.php");
-include_once("php/dependencies.php");
 
 //Message Service
 include_once("php/message.php");
@@ -30,6 +25,12 @@ include_once("php/plugin.php");
 
 //Plugins
 include_once("php/adminlog/Initialise.php");
+include_once("php/adminvote/Initialise.php");
+
+//Global variable definition
+include_once("php/anti-csrf.php");
+include_once("php/global.php");
+include_once("php/dependencies.php");
 
 //Database Interface
 include_once("php/databaseinterfaces/UserDbInterface.php");
@@ -47,7 +48,6 @@ include_once("php/databaseinterfaces/JamDbInterface.php");
 include_once("php/databaseinterfaces/GameDbInterface.php");
 include_once("php/databaseinterfaces/ConfigDbInterface.php");
 include_once("php/databaseinterfaces/AssetDbInterface.php");
-include_once("php/databaseinterfaces/AdminVoteDbInterface.php");
 
 //Models
 include_once("php/models/UserModel.php");
@@ -63,7 +63,6 @@ include_once("php/models/PlatformGameModel.php");
 include_once("php/models/CookieModel.php");
 include_once("php/models/ConfigModel.php");
 include_once("php/models/AssetModel.php");
-include_once("php/models/AdminVoteModel.php");
 include_once("php/models/ThemeIdeaModel.php");
 include_once("php/models/FormModel.php");
 

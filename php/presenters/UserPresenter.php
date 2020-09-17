@@ -1,7 +1,7 @@
 <?php
 
 class UserPresenter{
-	public static function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, $renderDepth){
+	public static function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, $renderDepth){
 		AddActionLog("RenderUser");
 		StartTimer("RenderUser");
 	
@@ -193,62 +193,6 @@ class UserPresenter{
 				break;
 		}
 		StopTimer("RenderUser - inactive admins");
-		
-		StartTimer("RenderUser - Admin Votes");
-		$userViewModel->votes_for = 0;
-		$userViewModel->votes_neutral = 0;
-		$userViewModel->votes_against = 0;
-		$userViewModel->votes_vetos = 0;
-		foreach($adminVoteData->AdminVoteModels as $j => $adminVoteModel){
-			if($userViewModel->id == $adminVoteModel->SubjectUserId){
-				switch($adminVoteModel->VoteType){
-					case ADMINVOTE_FOR:
-						$userViewModel->votes_for += 1;
-						break;
-					case ADMINVOTE_NEUTRAL:
-						$userViewModel->votes_neutral += 1;
-						break;
-					case ADMINVOTE_AGAINST:
-						$userViewModel->votes_against += 1;
-						break;
-					case ADMINVOTE_SPONSOR:
-						$userViewModel->votes_for += 1;
-						$userViewModel->is_sponsored = 1;
-						break;
-					case ADMINVOTE_VETO:
-						$userViewModel->votes_vetos += 1;
-						$userViewModel->is_vetoed = 1;
-						break;
-				}
-			}
-		}
-		StopTimer("RenderUser - Admin Votes");
-		
-		StartTimer("RenderUser - Logged in users admin votes");
-		foreach($adminVoteData->LoggedInUserAdminVotes as $j => $adminVoteModel){
-			if($userViewModel->id == $adminVoteModel->SubjectUserId){
-				$userViewModel->vote_type = $adminVoteModel->VoteType;
-	
-				switch($adminVoteModel->VoteType){
-					case ADMINVOTE_FOR:
-						$userViewModel->vote_type_for = 1;
-						break;
-					case ADMINVOTE_NEUTRAL:
-						$userViewModel->vote_type_neutral = 1;
-						break;
-					case ADMINVOTE_AGAINST:
-						$userViewModel->vote_type_against = 1;
-						break;
-					case ADMINVOTE_SPONSOR:
-						$userViewModel->vote_type_sponsor = 1;
-						break;
-					case ADMINVOTE_VETO:
-						$userViewModel->vote_type_veto = 1;
-						break;
-				}
-			}
-		}
-		StopTimer("RenderUser - Logged in users admin votes");
 	
 		StartTimer("RenderUser - Finish");
 		//Mark system suggested and admin-sponsored users as admin candidates
@@ -266,7 +210,7 @@ class UserPresenter{
 		return $userViewModel;
 	}
 	
-	public static function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, $renderDepth){
+	public static function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, $renderDepth){
 		AddActionLog("RenderUsers");
 		StartTimer("RenderUsers");
 		
@@ -276,7 +220,7 @@ class UserPresenter{
 	
 		foreach($userData->UserModels as $i => $userModel){
 			if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-				$userRender = UserPresenter::RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $renderDepth);
+				$userRender = UserPresenter::RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $platformData, $platformGameData, $renderDepth);
 				$usersViewModel->LIST[] = $userRender;
 			}
 	
@@ -310,10 +254,10 @@ class UserPresenter{
 		return $usersViewModel;
 	}
 	
-	public static function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
+	public static function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$loggedInUser, $renderDepth){
 		AddActionLog("RenderLoggedInUser");
 		
-		return UserPresenter::RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $renderDepth);
+		return UserPresenter::RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $platformData, $platformGameData, $renderDepth);
 	}
 }
 

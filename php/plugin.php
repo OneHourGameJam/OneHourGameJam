@@ -2,9 +2,11 @@
 
 abstract class AbstractPlugin implements MessageSubscriber{
     public $NameInTemplate;
+    protected $LoggedInUser;
 
-    function __construct(&$messageService) {
+    function __construct(&$messageService, &$loggedInUser) {
         $messageService->Subscribe($this);
+        $this->LoggedInUser = $loggedInUser;
     }
 
     public abstract function ReceiveMessage(AbstractMessage &$message);

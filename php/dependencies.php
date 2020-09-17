@@ -170,7 +170,7 @@ $pageSettings = Array(
         "page_title" => "Manage Users",
         "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editusers.html",
-        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE, RENDER_USERS => RENDER_DEPTH_USERS),
+        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE, RENDER_USERS => RENDER_DEPTH_USERS, RENDER_ADMIN_VOTES => RENDER_DEPTH_NONE),
     ),  
     PAGE_EDIT_USER => Array(
         "page_title" => "Edit User",

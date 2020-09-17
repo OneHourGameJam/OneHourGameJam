@@ -83,7 +83,7 @@ class AdminVoteData{
         $data = $this->adminVoteDbInterface->SelectWhereVoterUserId($userId);
 
         StopTimer("GetAdminVotesCastByUserFormatted");
-        return ArrayToHTML(MySQLDataToArray($data));
+        return MySQLDataToArray($data);
     }
     
     function GetAdminVotesForSubjectUserFormatted($userId){
@@ -93,7 +93,7 @@ class AdminVoteData{
         $data = $this->adminVoteDbInterface->SelectWhereSubjectUserId($userId);
     
         StopTimer("GetAdminVotesForSubjectUserFormatted");
-        return ArrayToHTML(MySQLDataToArray($data));
+        return MySQLDataToArray($data);
     }
 
 //////////////////////// END DATABASE ACTIONS
