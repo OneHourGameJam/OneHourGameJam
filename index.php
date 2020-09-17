@@ -5,6 +5,8 @@
 //
 //print phpversion ();
 
+//die("Website update in progress. Come back in a minute or two. Thanks <3");
+
 include_once("php/site.php");
 StartTimer("index.php");
 

@@ -34,7 +34,6 @@ function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
 
 		if(!$themeFound){
 			$error = true;
-			die("1");
 			continue;
 		}
 
@@ -42,7 +41,6 @@ function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
 		$data = $themeDbInterface->SelectIfExists($deletedThemeId);
 
 		if(mysqli_num_rows($data) == 0){
-			die("2");
 			$error = true;
 		}
 

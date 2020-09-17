@@ -98,11 +98,6 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBack
 		$screenshotURL = $target_file;
 	}
 
-	//Default screenshot URL
-	if($screenshotURL == ""){
-		$screenshotURL = $jam->DefaultIconUrl;
-	}
-
 	//Create or update entry
 	foreach($gameData->GameModels as $i => $gameModel){
 		if($gameModel->Deleted){
@@ -118,9 +113,9 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBack
 		}
 
 		//Updating existing entry
-		$existingScreenshot = $gameModel->UrlScreenshot;
-		if($screenshotURL == $jam->DefaultIconUrl){
-			if($existingScreenshot != "" && $existingScreenshot != $jam->DefaultIconUrl){
+		if(!$screenshotURL){
+			$existingScreenshot = $gameModel->UrlScreenshot;
+			if($existingScreenshot != ""){
 				$screenshotURL = $existingScreenshot;
 			}
 		}

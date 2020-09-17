@@ -35,10 +35,9 @@ class GamePresenter{
 		$gameViewModel->title = $title;
 		$gameViewModel->description = $gameModel->Description;
 		$gameViewModel->author_user_id = $gameModel->AuthorUserId;
-		$gameViewModel->screenshot_url = str_replace("'", "\\'", $gameModel->UrlScreenshot);
 		$gameViewModel->entry_deleted = $gameModel->Deleted;
 		$gameViewModel->title_url_encoded = urlencode($title);
-	
+
 		$platforms = Array();
 		
 		foreach($platformData->PlatformModels as $i => $platformModel){
@@ -108,17 +107,19 @@ class GamePresenter{
 		$gameViewModel->author_username_url_encoded = urlencode($authorUsername);
 		$gameViewModel->author_display_name = $authorDisplayName;
 	
-		if($gameViewModel->screenshot_url != $jamModel->DefaultIconUrl &&
-		   $gameViewModel->screenshot_url != ""){
-			$gameViewModel->has_screenshot = 1;
-		}
-	
 		if(trim($gameViewModel->title) != ""){
 			$gameViewModel->has_title = 1;
 		}
 	
 		if(trim($gameViewModel->description) != ""){
 			$gameViewModel->has_description = 1;
+		}
+	
+		if(!$gameModel->UrlScreenshot){
+			$gameViewModel->screenshot_url = $jamModel->DefaultIconUrl;
+		}else{
+			$gameViewModel->screenshot_url = str_replace("'", "\\'", $gameModel->UrlScreenshot);
+			$gameViewModel->has_screenshot = 1;
 		}
 	
 		StopTimer("RenderGame");

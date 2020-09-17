@@ -31,7 +31,7 @@ define("FORM_LOGIN_USERNAME", "un");
 define("FORM_LOGIN_PASSWORD", "pw");
 define("FORM_REGISTER_USERNAME", "un");
 define("FORM_REGISTER_PASSWORD", "pw");
-define("FORM_DELETEENTRY_ENTRY_ID", "entryID");
+define("FORM_DELETEENTRY_ENTRY_ID", "entry_id");
 define("FORM_SUBMIT_NAME", "gamename");
 define("FORM_SUBMIT_DESCRIPTION", "description");
 define("FORM_SUBMIT_JAM_NUMBER", "jam_number");
