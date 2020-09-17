@@ -730,13 +730,10 @@ body{
   font-size: 16px;
 }
 
-.notificationImageContainer{
-  height: 100px;
-}
-
 .notificationImage{
   max-height: 80px;
   float: left;
+  margin-right: 10px;
 }
 
 .messageTitle{

@@ -148,8 +148,8 @@ class ThemeController{
 				//not enough votes
 				if($theme["is_old"] || $theme["is_recent"]){
 					//Old and recently used themes should be pruned no matter how many votes they have
-					$themesWithEnoughVotesOrOldOrRecentlyUsed[] = $theme;
 					$theme["popularity"] = -1;
+					$themesWithEnoughVotesOrOldOrRecentlyUsed[] = $theme;
 				}
 				continue;
 			}
