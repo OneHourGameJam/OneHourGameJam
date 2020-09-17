@@ -49,6 +49,7 @@ class AdminLogDbInterface{
                 '$escapedLogType',
                 '$escapedLogContent'
             );";
+
         $data = $this->database->Execute($sql);
         $sql = "";
 

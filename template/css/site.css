@@ -842,3 +842,8 @@ body{
 .jamHeaderPanel{
   border: 0px;
 }
+
+.jamHeaderIcon{
+  max-width: 40px;
+  max-height: 40px;
+}

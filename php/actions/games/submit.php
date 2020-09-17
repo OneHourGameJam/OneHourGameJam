@@ -100,7 +100,7 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBack
 
 	//Default screenshot URL
 	if($screenshotURL == ""){
-		$screenshotURL = "logo.png";
+		$screenshotURL = $jam->DefaultIconUrl;
 	}
 
 	//Create or update entry
@@ -119,8 +119,8 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBack
 
 		//Updating existing entry
 		$existingScreenshot = $gameModel->UrlScreenshot;
-		if($screenshotURL == "logo.png"){
-			if($existingScreenshot != "" && $existingScreenshot != "logo.png"){
+		if($screenshotURL == $jam->DefaultIconUrl){
+			if($existingScreenshot != "" && $existingScreenshot != $jam->DefaultIconUrl){
 				$screenshotURL = $existingScreenshot;
 			}
 		}

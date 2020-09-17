@@ -16,6 +16,7 @@ class JamViewModel{
     public $jam_number;
     public $theme_id;
     public $theme;
+    public $default_icon_url;
     public $start_time;
     public $state;
     public $scheduler_username;

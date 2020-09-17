@@ -188,7 +188,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
                 $render["user_submitted_to_this_jam"] = true;
                 $render["user_entry_name"] = $gameModel->Title;
-                if($gameModel->UrlScreenshot != "logo.png"){
+                if($gameModel->UrlScreenshot != $jamModel->DefaultIconUrl){
                     $render["user_entry_screenshot"] = $gameModel->UrlScreenshot;
                 }
             

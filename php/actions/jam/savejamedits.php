@@ -2,7 +2,7 @@
 
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
-function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $colorsString){
+function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $colorsString, $defaultEntryIconUrl){
 	global $jamData, $loggedInUser, $jamDbInterface, $userData;
 
 	//Authorize user (is admin)
@@ -35,6 +35,10 @@ function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, 
 		return "INVALID_THEME";
 	}
 
+	if(!$defaultEntryIconUrl){
+		return "INVALID_DEFAULT_ENTRY_ICON_URL";
+	}
+
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
 		return "INVALID_DATE";
@@ -48,11 +52,11 @@ function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, 
 		return "NO_JAMS_EXIST";
 	}
 
-	$jamDbInterface->Update($jamId, $theme, gmdate("Y-m-d H:i", $datetime), $colors);
+	$jamDbInterface->Update($jamId, $theme, gmdate("Y-m-d H:i", $datetime), $colors, $defaultEntryIconUrl);
 
 	$messageService->SendMessage(LogMessage::UserLogMessage(
 		"JAM_UPDATED", 
-		"Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString", 
+		"Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString, Default entry icon url: $defaultEntryIconUrl", 
 		$loggedInUser->Id)
 	);
 	$userData->LogAdminAction($loggedInUser->Id);
@@ -69,8 +73,9 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 		$date = $_POST[FORM_EDITJAM_DATE];
 		$time = $_POST[FORM_EDITJAM_TIME];
 		$jamcolors = $_POST[FORM_EDITJAM_JAM_COLORS];
+		$defaultEntryIconUrl = $_POST[FORM_EDITJAM_DEFAULT_ICON_URL];
 
-		return EditJam($messageService, $jamId, $theme, $date, $time, $jamcolors);
+		return EditJam($messageService, $jamId, $theme, $date, $time, $jamcolors, $defaultEntryIconUrl);
 	}
 }
 

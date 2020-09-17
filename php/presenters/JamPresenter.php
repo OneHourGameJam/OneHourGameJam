@@ -14,6 +14,7 @@ class JamPresenter{
 		$jamViewModel->theme = $jamModel->Theme;
 		$jamViewModel->start_time = $jamModel->StartTime;
 		$jamViewModel->state = $jamModel->State;
+		$jamViewModel->default_icon_url = $jamModel->DefaultIconUrl;
 
 		if($jamModel->SchedulerUserId == OVERRIDE_AUTOMATIC_NUM){
 			$jamViewModel->scheduler_username = OVERRIDE_AUTOMATIC;

@@ -4,7 +4,7 @@
 //and time. All three are non-blank strings. $date and $time should be
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
-function CreateJam(MessageService &$messageService, $theme, $date, $time, $colorsList){
+function CreateJam(MessageService &$messageService, $theme, $date, $time, $colorsList, $defaultEntryIconUrl){
 	global $ip, $userAgent, $loggedInUser, $jamData, $userData;
 
 	$maxNonDeletedJamNumber = 0;
@@ -47,6 +47,10 @@ function CreateJam(MessageService &$messageService, $theme, $date, $time, $color
 		return "INVALID_THEME";
 	}
 
+	if(!$defaultEntryIconUrl){
+		return "INVALID_DEFAULT_ENTRY_ICON_URL";
+	}
+
 	//Validate date and time and create datetime object
 	if(strlen($date) <= 0){
 		return "INVALID_DATE";
@@ -57,12 +61,13 @@ function CreateJam(MessageService &$messageService, $theme, $date, $time, $color
 	}
 
 	$colors = implode("|", $colorsList);
-
-	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $jamNumber, -2, $theme, "".gmdate("Y-m-d H:i", $datetime), $colors);
+	$startTime = "".gmdate("Y-m-d H:i", $datetime);
+	
+	$jamData->AddJamToDatabase($ip, $userAgent, $loggedInUser->Id, $jamNumber, -2, $theme, $startTime, $colors, $defaultEntryIconUrl);
 
 	$messageService->SendMessage(LogMessage::UserLogMessage(
 		"JAM_ADDED", 
-		"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors", 
+		"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$theme', StartTime: '$startTime', Colors: $colors, Default entry icon url: $defaultEntryIconUrl", 
 		$loggedInUser->Id)
 	);
 	$userData->LogAdminAction($loggedInUser->Id);
@@ -77,6 +82,7 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 		$theme = (isset($_POST[FORM_NEWJAM_THEME])) ? $_POST[FORM_NEWJAM_THEME] : "";
 		$date = (isset($_POST[FORM_NEWJAM_DATE])) ? $_POST[FORM_NEWJAM_DATE] : "";
 		$time = (isset($_POST[FORM_NEWJAM_TIME])) ? $_POST[FORM_NEWJAM_TIME] : "";
+		$defaultEntryIconUrl = (isset($_POST[FORM_NEWJAM_DEFAULT_ICON_URL])) ? $_POST[FORM_NEWJAM_DEFAULT_ICON_URL] : $configData->ConfigModels[CONFIG_DEFAULT_GAME_ICON_URL]->Value;
 		$jamColors = Array();
 		for($colorIndex = 0; $colorIndex < $configData->ConfigModels[CONFIG_MAX_COLORS_FOR_JAM]->Value; $colorIndex++){
 			if(isset($_POST[FORM_NEWJAM_JAM_COLOR.$colorIndex])){
@@ -87,7 +93,7 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 			$jamColors = Array("FFFFFF");
 		}
 
-		return CreateJam($messageService, $theme, $date, $time, $jamColors);
+		return CreateJam($messageService, $theme, $date, $time, $jamColors, $defaultEntryIconUrl);
 	}
 }
 

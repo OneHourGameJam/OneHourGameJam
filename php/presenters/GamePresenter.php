@@ -108,7 +108,7 @@ class GamePresenter{
 		$gameViewModel->author_username_url_encoded = urlencode($authorUsername);
 		$gameViewModel->author_display_name = $authorDisplayName;
 	
-		if($gameViewModel->screenshot_url != "logo.png" &&
+		if($gameViewModel->screenshot_url != $jamModel->DefaultIconUrl &&
 		   $gameViewModel->screenshot_url != ""){
 			$gameViewModel->has_screenshot = 1;
 		}

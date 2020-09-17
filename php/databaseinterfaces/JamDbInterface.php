@@ -12,11 +12,12 @@ define("DB_COLUMN_JAM_THEME",             "jam_theme");
 define("DB_COLUMN_JAM_START_DATETIME",    "jam_start_datetime");
 define("DB_COLUMN_JAM_STATE",             "jam_state");
 define("DB_COLUMN_JAM_COLORS",            "jam_colors");
+define("DB_COLUMN_JAM_DEFAULT_ICON_URL",  "jam_default_icon_url");
 define("DB_COLUMN_JAM_DELETED",           "jam_deleted");
 
 class JamDbInterface{
     private $database;
-    private $publicColumns = Array(DB_COLUMN_JAM_ID, DB_COLUMN_JAM_USER_ID, DB_COLUMN_JAM_NUMBER, DB_COLUMN_JAM_SELECTED_THEME_ID, DB_COLUMN_JAM_THEME, DB_COLUMN_JAM_START_DATETIME, DB_COLUMN_JAM_STATE, DB_COLUMN_JAM_COLORS, DB_COLUMN_JAM_DELETED);
+    private $publicColumns = Array(DB_COLUMN_JAM_ID, DB_COLUMN_JAM_USER_ID, DB_COLUMN_JAM_NUMBER, DB_COLUMN_JAM_SELECTED_THEME_ID, DB_COLUMN_JAM_THEME, DB_COLUMN_JAM_START_DATETIME, DB_COLUMN_JAM_STATE, DB_COLUMN_JAM_COLORS, DB_COLUMN_JAM_DEFAULT_ICON_URL, DB_COLUMN_JAM_DELETED);
     private $privateColumns = Array(DB_COLUMN_JAM_DATETIME, DB_COLUMN_JAM_IP, DB_COLUMN_JAM_USER_AGENT);
 
     function __construct(&$database) {
@@ -28,7 +29,7 @@ class JamDbInterface{
         StartTimer("JamDbInterface_SelectAll");
 
         $sql = "
-            SELECT ".DB_COLUMN_JAM_ID.", ".DB_COLUMN_JAM_USER_ID.", ".DB_COLUMN_JAM_NUMBER.", ".DB_COLUMN_JAM_SELECTED_THEME_ID.", ".DB_COLUMN_JAM_THEME.", ".DB_COLUMN_JAM_START_DATETIME.", ".DB_COLUMN_JAM_STATE.", ".DB_COLUMN_JAM_COLORS.", ".DB_COLUMN_JAM_DELETED."
+            SELECT ".DB_COLUMN_JAM_ID.", ".DB_COLUMN_JAM_USER_ID.", ".DB_COLUMN_JAM_NUMBER.", ".DB_COLUMN_JAM_SELECTED_THEME_ID.", ".DB_COLUMN_JAM_THEME.", ".DB_COLUMN_JAM_START_DATETIME.", ".DB_COLUMN_JAM_STATE.", ".DB_COLUMN_JAM_COLORS.", ".DB_COLUMN_JAM_DEFAULT_ICON_URL.", ".DB_COLUMN_JAM_DELETED."
             FROM ".DB_TABLE_JAM." 
             ORDER BY ".DB_COLUMN_JAM_NUMBER." DESC";
         
@@ -101,7 +102,7 @@ class JamDbInterface{
         return $this->database->Execute($sql);
     }
 
-    public function Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors){
+    public function Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl){
         AddActionLog("JamDbInterface_Insert");
         StartTimer("JamDbInterface_Insert");
 
@@ -113,7 +114,8 @@ class JamDbInterface{
         $escapedTheme = $this->database->EscapeString($theme);
         $escapedStartTime = $this->database->EscapeString($startTime);
         $escapedColors = $this->database->EscapeString($colors);
-    
+        $escapedDefaultEntryIconUrl = $this->database->EscapeString($defaultEntryIconUrl);
+            
         $sql = "
             INSERT INTO ".DB_TABLE_JAM."
             (".DB_COLUMN_JAM_ID.",
@@ -127,6 +129,7 @@ class JamDbInterface{
             ".DB_COLUMN_JAM_START_DATETIME.",
             ".DB_COLUMN_JAM_STATE.",
             ".DB_COLUMN_JAM_COLORS.",
+            ".DB_COLUMN_JAM_DEFAULT_ICON_URL.",
             ".DB_COLUMN_JAM_DELETED.")
             VALUES
             (null,
@@ -140,6 +143,7 @@ class JamDbInterface{
             '$escapedStartTime',
             'SCHEDULED',
             '$escapedColors',
+            '$escapedDefaultEntryIconUrl',
             0);";
 
         $this->database->Execute($sql);
@@ -147,7 +151,7 @@ class JamDbInterface{
         StopTimer("JamDbInterface_Insert");
     }
 
-    public function Update($jamId, $theme, $startTime, $color){
+    public function Update($jamId, $theme, $startTime, $color, $defaultEntryIconUrl){
         AddActionLog("JamDbInterface_Update");
         StartTimer("JamDbInterface_Update");
 
@@ -155,12 +159,14 @@ class JamDbInterface{
         $escapedTheme = $this->database->EscapeString($theme);
         $escapedStartTime = $this->database->EscapeString($startTime);
         $escapedColors = $this->database->EscapeString($color);
+        $escapedDefaultEntryIconUrl = $this->database->EscapeString($defaultEntryIconUrl);
 
         $sql = "
             UPDATE ".DB_TABLE_JAM."
             SET ".DB_COLUMN_JAM_THEME." = '$escapedTheme',
                 ".DB_COLUMN_JAM_START_DATETIME." = '$escapedStartTime',
-                ".DB_COLUMN_JAM_COLORS." = '$escapedColors'
+                ".DB_COLUMN_JAM_COLORS." = '$escapedColors',
+                ".DB_COLUMN_JAM_DEFAULT_ICON_URL." = '$escapedDefaultEntryIconUrl'
             WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId;";
         $this->database->Execute($sql);
         

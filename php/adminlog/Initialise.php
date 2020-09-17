@@ -16,7 +16,7 @@ class AdminLogPlugin extends \AbstractPlugin{
     public $AdminLogData;
 
     public function ReceiveMessage(\AbstractMessage &$message){
-        if($message instanceof LogMessage){
+        if($message instanceof \LogMessage){
             $logType = $message->LogType;
             $text = $message->Text;
             $originatorDescriptor = $message->OriginatorDescriptor;

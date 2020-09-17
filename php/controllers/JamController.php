@@ -112,12 +112,13 @@ class JamController{
 			//print "<br>A JAM NUMBER WAS SELECTED: ".$jamNumber;
 
 			$startTime = gmdate("Y-m-d H:i", $nextSuggestedJamTime);
+			$defaultEntryIconUrl = $configData->ConfigModels[CONFIG_DEFAULT_GAME_ICON_URL]->Value;
 
-			$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, $startTime, $colors);
+			$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, $startTime, $colors, $defaultEntryIconUrl);
 
 			$messageService->SendMessage(LogMessage::SystemLogMessage(
 				"JAM_ADDED", 
-				"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$selectedTheme', StartTime: '$startTime', Colors: $colors", 
+				"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$selectedTheme', StartTime: '$startTime', Colors: $colors, Default entry icon url: $defaultEntryIconUrl", 
 				OVERRIDE_AUTOMATIC)
 			);
 		}
