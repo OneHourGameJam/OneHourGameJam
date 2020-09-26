@@ -29,6 +29,7 @@ $mustache->setPartials(Array(
 	"css" => file_get_contents($templateBasePath."css/site.css")
 ));
 
+$dictionary["plugin_display"]= 1;
 
 print $mustache->render(file_get_contents($templateBasePath."index.html"), $dictionary);
 ?>

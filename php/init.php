@@ -22,7 +22,8 @@ function Init(){
 	$messageService = new MessageService();
 
 	$plugins = Array(
-		new \Plugins\AdminLog\AdminLogPlugin($messageService)
+		new \Plugins\AdminLog\AdminLogPlugin($messageService),
+		new /*\Plugins\entry\*/GamePlugin($messageService)
 	);
 
 	foreach($plugins as $i => $plugin){

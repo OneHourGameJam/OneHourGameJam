@@ -47,15 +47,21 @@
 		<ul id='mainmenu'>
 
 			{{#plugin_display}}
-			<li class="mainmenu-separator">Pages</li>
-			{{#page.pages}}
-				<li><a href='?{{{forms.get.page}}}={{{page_id}}}'>{{{page_title}}}</a></li>
-			{{/page.pages}}
+				<li class="mainmenu-separator">Pages</li>
+				{{#page.pages}}
+					<li><a href='?{{{forms.get.page}}}={{{page_id}}}'>{{{page_title}}}</a></li>
+				{{/page.pages}}
 
-			<li class="mainmenu-separator">Plugin Direct Links</li>
-			{{#forms.pages.admin_log.adminlog}}
-				<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
-			{{/forms.pages.admin_log.adminlog}}
+				<li class="mainmenu-separator">Plugin Direct Links</li>
+				{{#forms.pages.admin_log}}
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
+				{{/forms.pages.admin_log}}
+				{{#forms.pages.entry}}
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.entry.editentry}}}'>Edit Entry</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.entry.submit}}}'>Submit</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.entry.entries}}}'>Entries</a></li>
+				{{/forms.pages.entry}}
+				<br><br><br>
 			{{/plugin_display}}
 
 			<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}'>Home</a></li>

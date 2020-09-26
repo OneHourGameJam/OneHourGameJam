@@ -14,7 +14,6 @@ define("PAGE_MAIN", "main");
 define("PAGE_LOGIN", "login");
 define("PAGE_REGISTER", "register");
 define("PAGE_FORGOT_PASSWORD", "forgotpassword");
-define("PAGE_SUBMIT", "submit");
 define("PAGE_NEW_JAM", "newjam");
 define("PAGE_ASSETS", "assets");
 define("PAGE_EDIT_ASSETS", "editassets");
@@ -23,13 +22,11 @@ define("PAGE_RULES", "rules");
 define("PAGE_CONFIG", "config");
 define("PAGE_EDIT_CONTENT", "editcontent");
 define("PAGE_EDIT_JAM", "editjam");
-define("PAGE_EDIT_ENTRY", "editentry");
 define("PAGE_EDIT_USERS", "editusers");
 define("PAGE_EDIT_USER", "edituser");
 define("PAGE_THEMES", "themes");
 define("PAGE_MANAGE_THEMES", "managethemes");
 define("PAGE_USER_SETTINGS", "usersettings");
-define("PAGE_ENTRIES", "entries");
 define("PAGE_JAM", "jam");
 define("PAGE_JAMS", "jams");
 define("PAGE_AUTHOR", "author");
@@ -43,7 +40,6 @@ define("RENDER_CONFIG", "RenderConfig");
 define("RENDER_USERS", "RenderUsers");
 define("RENDER_ALL_JAMS", "RenderAllJams");
 define("RENDER_JAMS", "RenderJams");
-define("RENDER_GAMES", "RenderGames");
 define("RENDER_THEMES", "RenderThemes");
 define("RENDER_ASSETS", "RenderAssets");
 define("RENDER_POLLS", "RenderPolls");
@@ -62,7 +58,7 @@ $commonDependencies = Array(
     "header" => Array(
         RENDER_CONFIG => RENDER_DEPTH_NONE, 
         RENDER_USERS => RENDER_DEPTH_NONE, 
-        RENDER_GAMES => RENDER_DEPTH_NONE, 
+        //RENDER_GAMES => RENDER_DEPTH_NONE, 
         RENDER_JAMS => RENDER_DEPTH_NONE, 
         RENDER_FORMS => RENDER_DEPTH_NONE),
     "message" => Array(RENDER_MESSAGES => RENDER_DEPTH_NONE),
@@ -106,12 +102,6 @@ $pageSettings = Array(
         "template_file" => "forgotpassword.html",
         "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
     ),
-    PAGE_SUBMIT => Array(
-        "page_title" => "Submit Game",
-        "authorization_level" => AUTHORIZATION_LEVEL_USER,
-        "template_file" => "submit.html",
-        "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE),
-    ),  
     PAGE_NEW_JAM => Array(
         "page_title" => "Schedule New Jam",
         "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
@@ -159,13 +149,7 @@ $pageSettings = Array(
         "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
         "template_file" => "editjam.html",
         "dependencies" => Array(),
-    ),  
-    PAGE_EDIT_ENTRY => Array(
-        "page_title" => "Edit Entry",
-        "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-        "template_file" => "editentry.html",
-        "dependencies" => Array(  ),
-    ),  
+    ),
     PAGE_EDIT_USERS => Array(
         "page_title" => "Manage Users",
         "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
@@ -196,12 +180,6 @@ $pageSettings = Array(
         "template_file" => "usersettings.html",
         "dependencies" => Array(RENDER_CONFIG => RENDER_DEPTH_NONE, RENDER_LOGGED_IN_USER => RENDER_DEPTH_NONE),
     ), 
-    PAGE_ENTRIES => Array(
-        "page_title" => "Entries",
-        "authorization_level" => AUTHORIZATION_LEVEL_NONE,
-        "template_file" => "entries.html",
-        "dependencies" => Array(RENDER_GAMES => RENDER_DEPTH_GAMES),
-    ),  
     PAGE_JAM => Array(
         "page_title" => "Jam",
         "authorization_level" => AUTHORIZATION_LEVEL_NONE,
