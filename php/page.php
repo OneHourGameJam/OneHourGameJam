@@ -12,12 +12,12 @@ function ValidatePage($page, &$loggedInUser){
         return PAGE_MAIN;
     }
 
-    if($pageSettings[$page]["authorization_level"] == "USER" && $loggedInUser === false){
+    if($pageSettings[$page]["authorization_level"] == AUTHORIZATION_LEVEL_USER && $loggedInUser === false){
         StopTimer("ValidatePage");
         return PAGE_MAIN;
     }
 
-    if($pageSettings[$page]["authorization_level"] == "ADMIN" && !IsAdmin($loggedInUser)){
+    if($pageSettings[$page]["authorization_level"] == AUTHORIZATION_LEVEL_ADMIN && !IsAdmin($loggedInUser)){
         StopTimer("ValidatePage");
         return PAGE_MAIN;
     }
