@@ -30,6 +30,7 @@ include_once("php/plugin.php");
 
 //Plugins
 include_once("php/adminlog/Initialise.php");
+include_once("php/entry/Initialise.php");
 
 //Database Interface
 include_once("php/databaseinterfaces/UserDbInterface.php");
@@ -44,7 +45,6 @@ include_once("php/databaseinterfaces/PollVoteDbInterface.php");
 include_once("php/databaseinterfaces/PlatformDbInterface.php");
 include_once("php/databaseinterfaces/PlatformGameDbInterface.php");
 include_once("php/databaseinterfaces/JamDbInterface.php");
-include_once("php/databaseinterfaces/GameDbInterface.php");
 include_once("php/databaseinterfaces/ConfigDbInterface.php");
 include_once("php/databaseinterfaces/AssetDbInterface.php");
 include_once("php/databaseinterfaces/AdminVoteDbInterface.php");
@@ -57,7 +57,6 @@ include_once("php/models/SatisfactionModel.php");
 include_once("php/models/PollModel.php");
 include_once("php/models/MessageModel.php");
 include_once("php/models/JamModel.php");
-include_once("php/models/GameModel.php");
 include_once("php/models/PlatformModel.php");
 include_once("php/models/PlatformGameModel.php");
 include_once("php/models/CookieModel.php");
@@ -73,7 +72,6 @@ include_once("php/viewmodels/ThemeViewModel.php");
 include_once("php/viewmodels/AssetViewModel.php");
 include_once("php/viewmodels/ConfigurationViewModel.php");
 include_once("php/viewmodels/CookieViewModel.php");
-include_once("php/viewmodels/GameViewModel.php");
 include_once("php/viewmodels/JamViewModel.php");
 include_once("php/viewmodels/PollViewModel.php");
 include_once("php/viewmodels/StreamViewModel.php");
@@ -87,7 +85,6 @@ include_once("php/presenters/ThemePresenter.php");
 include_once("php/presenters/AssetPresenter.php");
 include_once("php/presenters/ConfigurationPresenter.php");
 include_once("php/presenters/CookiePresenter.php");
-include_once("php/presenters/GamePresenter.php");
 include_once("php/presenters/JamPresenter.php");
 include_once("php/presenters/PollPresenter.php");
 include_once("php/presenters/StreamPresenter.php");
