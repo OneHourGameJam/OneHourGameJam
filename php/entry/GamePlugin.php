@@ -9,8 +9,8 @@ define("RENDER_GAMES", "RenderGames");
 class GamePlugin extends \AbstractPlugin{
     public $NameInTemplate = "entry";
 
-    public $AdminLogDbInterface;
-    public $AdminLogData;
+    public $GameDbInterface;
+    public $GameData;
 
     public function ReceiveMessage(\AbstractMessage &$message){
         if($message instanceof \LogMessage){
@@ -49,18 +49,18 @@ class GamePlugin extends \AbstractPlugin{
 
     public function EstablishDatabaseConnection(){
         $database = new \Database();
-	    //$this->AdminLogDbInterface = new AdminLogDbInterface($database);
+	    $this->GameDbInterface = new GameDbInterface($database);
     }
 
     public function RetrieveData(){
-        //$this->AdminLogData = new AdminLogData($this->AdminLogDbInterface);
+        $this->GameData = new GameData($this->GameDbInterface);
     }
 
     public function GetUserData($userId){
         $userData = Array();
-        //$userData["Admin Log (when admin)"] = $this->AdminLogData->GetAdminLogForAdmin($userId);
-        //$userData["Admin Log (when subject)"] = $this->AdminLogData->GetAdminLogForSubject($userId);
-        return  $userData;
+        $userData["Entries"] = $this->GameData->GetEntriesOfUserFormatted($userId);
+        
+        return $userData;
     }
 
     public function ShouldBeRendered(&$dependencies){
@@ -70,9 +70,9 @@ class GamePlugin extends \AbstractPlugin{
         return false;
     }
 
-    public function Render(\IUserDisplay &$userData){
+    public function Render(\UserData &$userData, \JamData &$jamData, \PlatformData &$platformData, \PlatformGameData &$platformGameData, $renderDepth){
         $render = Array();
-        //$render["adminlog"] = AdminLogPresenter::RenderAdminLog($this->AdminLogData, $userData);
+        $render["entries"] = GamePresenter::RenderGames($userData, $this->$GameData, $jamData, $platformData, $platformGameData, $renderDepth);
         return $render;
     }
 }

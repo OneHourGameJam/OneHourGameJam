@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $page;
+	global $dictionary, $configData, $userData, $jamData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -21,9 +21,11 @@ function Init(){
 
 	$messageService = new MessageService();
 
+	$adminLogPlugin = new \Plugins\AdminLog\AdminLogPlugin($messageService);
+	$gamePlugin = new /*\Plugins\entry\*/GamePlugin($messageService);
+
 	$plugins = Array(
-		new \Plugins\AdminLog\AdminLogPlugin($messageService),
-		new /*\Plugins\entry\*/GamePlugin($messageService)
+		$adminLogPlugin, $gamePlugin
 	);
 
 	foreach($plugins as $i => $plugin){
@@ -56,7 +58,6 @@ function Init(){
 	$platformDbInterface = new PlatformDbInterface($database);
 	$platformGameDbInterface = new PlatformGameDbInterface($database);
 	$jamDbInterface = new JamDbInterface($database);
-	$gameDbInterface = new GameDbInterface($database);
 	$configDbInterface = new ConfigDbInterface($database);
 	$assetDbInterface = new AssetDbInterface($database);
 	$adminVoteDbInterface = new AdminVoteDbInterface($database);
@@ -85,7 +86,6 @@ function Init(){
 	$dependencies = LoadDependencies($page, $pageSettings, $commonDependencies);
 
 	$jamData = new JamData($jamDbInterface);
-	$gameData = new GameData($gameDbInterface);
 	$platformData = new PlatformData($platformDbInterface);
 	$platformGameData = new PlatformGameData($platformGameDbInterface);
 
@@ -125,13 +125,13 @@ function Init(){
 	}
 	if(FindDependency(RENDER_USERS, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_USERS, $dependencies);
-		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
+		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
 	}
 	if(FindDependency(RENDER_ALL_JAMS, $dependencies) !== false){
 		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
 		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency(RENDER_JAMS, $dependencies) !== false){
 		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
 		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
@@ -140,11 +140,7 @@ function Init(){
 		if(isset($_GET[GET_LOAD_ALL])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
-	}
-	if(FindDependency(RENDER_GAMES, $dependencies) !== false){
-		$dependency = FindDependency(RENDER_GAMES, $dependencies);
-		$dictionary["entries"] = GamePresenter::RenderGames($userData, $gameData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
+		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
 	}
 	if(FindDependency(RENDER_THEMES, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_THEMES, $dependencies);
@@ -172,15 +168,30 @@ function Init(){
 		$dictionary["forms"] = FormPresenter::RenderForms($plugins);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $plugins);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gamePlugin->GameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $plugins);
 	
 	if($loggedInUser !== false){
 		if(FindDependency(RENDER_LOGGED_IN_USER, $dependencies) !== false){
 			$dependency = FindDependency(RENDER_LOGGED_IN_USER, $dependencies);
-			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
+			$dictionary["user"] = UserPresenter::RenderLoggedInUser($configData, $cookieData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 		}
 	}
 
+	if($adminLogPlugin->ShouldBeRendered($dependencies)){
+		$renders = $adminLogPlugin->Render($userData);	
+		foreach($renders as $renderIdentifier => $render){
+			$dictionary[$renderIdentifier] = $render;
+		}
+	}
+	if($gamePlugin->ShouldBeRendered($dependencies)){
+		$dependency = FindDependency(RENDER_GAMES, $dependencies);
+		$renders = $gamePlugin->Render($userData, $jamData, $platformData, $platformGameData, $dependency["RenderDepth"]);
+		foreach($renders as $renderIdentifier => $render){
+			$dictionary[$renderIdentifier] = $render;
+		}
+	}
+
+	/*
 	foreach($plugins as $plugin){
 		if($plugin->ShouldBeRendered($dependencies)){;
 			$renders = $plugin->Render($userData);	
@@ -188,7 +199,7 @@ function Init(){
 				$dictionary[$renderIdentifier] = $render;
 			}
 		}
-	}
+	}*/
 	
 	StopTimer("Init - Render");
 	StopTimer("Init");

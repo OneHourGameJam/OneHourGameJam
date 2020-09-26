@@ -114,9 +114,9 @@ class GameData{
         StartTimer("GetEntriesOfUserFormatted");
     
         $data = $this->gameDbInterface->SelectEntriesForAuthor($authorUserId);
-    
+
         StopTimer("GetEntriesOfUserFormatted");
-        return ArrayToHTML(MySQLDataToArray($data));
+        return MySQLDataToArray($data);
     }
 
 //////////////////////// END DATABASE ACTIONS
