@@ -184,23 +184,25 @@ class Database{
                 $escapedIP = $this->EscapeString($ip);
                 $escapedUserAgent = $this->EscapeString($userAgent);
                 $escapedLog = $this->EscapeString("Running $newDatabaseVersionMigrationFile to bring DATABASE_VERSION up to $newDatabaseVersion");
-                $sql = "
-                    INSERT INTO admin_log
-                    (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content)
-                    VALUES
-                    (
-                        null,
-                        Now(),
-                        '$escapedIP',
-                        '$escapedUserAgent',
-                        'AUTOMATIC',
-                        NULL,
-                        NULL,
-                        'DB_MIGRATION',
-                        '$escapedLog'
-                    );";
-                $this->Execute($sql) or die("Migration failed to log to admin log, please notify site admin");
-                $sql = "";
+                if ($newDatabaseVersion > 14) { // older DB versions have an outdated admin_log table
+                    $sql = "
+                        INSERT INTO admin_log
+                        (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content)
+                        VALUES
+                        (
+                            null,
+                            Now(),
+                            '$escapedIP',
+                            '$escapedUserAgent',
+                            'AUTOMATIC',
+                            NULL,
+                            NULL,
+                            'DB_MIGRATION',
+                            '$escapedLog'
+                        );";
+                    $this->Execute($sql) or die("Migration failed to log to admin log, please notify site admin");
+                    $sql = "";
+                }
     
                 // Run the script
                 $sql = file_get_contents($migrationsDir.$newDatabaseVersionMigrationFile);
@@ -211,8 +213,9 @@ class Database{
                     while(mysqli_more_results($this->dbConnection));
                 }
                 $sql = "";
-            
+
                 if(mysqli_errno($this->dbConnection)) {
+                    // echo mysqli_error($this->dbConnection) . '<br />';
                     die("Migration failed to run migration script $newDatabaseVersion, please notify site admin.");
                 }
     
