@@ -49,8 +49,6 @@ If you prefer to follow a video tutorial, please watch the following:
 
 ### 4: Install website
 
-Edit: Aug 2020 - there is currently a bug which stops the database from being migrated correctly due to a malformed insert-into-adminlog in the migration script. Please open the file `php/db.php` and comment out the line `mysqli_query($dbConn, $sql) or die("Migration failed to log to admin log, please notify site admin");` then refresh the site. This will migrate the database to the latest version. We're working on fixing this, but for now please use this workaround - same if updating from a very old database version.
-
 * Go to https://localhost/onehourgamejam/ - this should point you to the install page
 * Enter the following data into the form:
   * Host: localhost
