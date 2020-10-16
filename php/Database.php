@@ -173,7 +173,7 @@ class Database{
         for($newDatabaseVersion = $currentDatabaseVersion + 1; $newDatabaseVersion <= DATABASE_VERSION; $newDatabaseVersion++) {
     
             // Make sure that migration ID actually exists. This is so we can have version 10, 11, 14, (notice the missing 13?)
-            if (!isset($migrationFileNames[$newDatabaseVersion])){
+            if (!isset($migrationFileNames[$newDatabaseVersion])) {
                 die("Missing migration script to database version $newDatabaseVersion");
             }
     
@@ -181,27 +181,9 @@ class Database{
                 $newDatabaseVersionMigrationFile = $migrationFileNames[$newDatabaseVersion];
     
                 // Update our adminlog so we can see what happened before the migration
-                $escapedIP = $this->EscapeString($ip);
-                $escapedUserAgent = $this->EscapeString($userAgent);
-                $escapedLog = $this->EscapeString("Running $newDatabaseVersionMigrationFile to bring DATABASE_VERSION up to $newDatabaseVersion");
-                $sql = "
-                    INSERT INTO admin_log
-                    (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content)
-                    VALUES
-                    (
-                        null,
-                        Now(),
-                        '$escapedIP',
-                        '$escapedUserAgent',
-                        'AUTOMATIC',
-                        NULL,
-                        NULL,
-                        'DB_MIGRATION',
-                        '$escapedLog'
-                    );";
-                $this->Execute($sql) or die("Migration failed to log to admin log, please notify site admin");
-                $sql = "";
-    
+                $this->SaveAdminLog($newDatabaseVersion, $ip, $userAgent,
+                    "Running $newDatabaseVersionMigrationFile to bring DATABASE_VERSION up to $newDatabaseVersion");
+
                 // Run the script
                 $sql = file_get_contents($migrationsDir.$newDatabaseVersionMigrationFile);
                 if(mysqli_multi_query($this->dbConnection, $sql)) {
@@ -211,8 +193,9 @@ class Database{
                     while(mysqli_more_results($this->dbConnection));
                 }
                 $sql = "";
-            
+
                 if(mysqli_errno($this->dbConnection)) {
+                    // echo mysqli_error($this->dbConnection) . '<br />';
                     die("Migration failed to run migration script $newDatabaseVersion, please notify site admin.");
                 }
     
@@ -236,6 +219,45 @@ class Database{
         die("Database successfully updated to version $lastUpdateDatabaseVersion. <a href='$currentUrl'>Continue</a>");
     
         StopTimer("MigrateDatabase");
+    }
+
+    private function SaveAdminLog($newDatabaseVersion, $ip, $userAgent, $log) {
+        $escapedIP = $this->EscapeString($ip);
+        $escapedUserAgent = $this->EscapeString($userAgent);
+        $escapedLog = $this->EscapeString($log);
+
+        if ($newDatabaseVersion > 14) {
+            $sql = "
+                INSERT INTO admin_log
+                (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_admin_user_id, log_subject_user_id, log_type, log_content)
+                VALUES
+                (
+                    null,
+                    Now(),
+                    '$escapedIP',
+                    '$escapedUserAgent',
+                    'AUTOMATIC',
+                    NULL,
+                    NULL,
+                    'DB_MIGRATION',
+                    '$escapedLog'
+                );";
+        } else {
+            $sql = "
+                INSERT INTO admin_log
+                (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_type, log_content)
+                VALUES
+                (
+                    null,
+                    Now(),
+                    '$escapedIP',
+                    '$escapedUserAgent',
+                    'AUTOMATIC',
+                    'DB_MIGRATION',
+                    '$escapedLog'
+                );";
+        }
+        $this->Execute($sql) or die("Migration failed to log to admin log, please notify site admin");
     }
 
     public function Execute($sql){
