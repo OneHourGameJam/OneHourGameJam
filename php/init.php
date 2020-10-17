@@ -22,7 +22,7 @@ function Init(){
 	$messageService = new MessageService();
 
 	$adminLogPlugin = new \Plugins\AdminLog\AdminLogPlugin($messageService);
-	$gamePlugin = new /*\Plugins\entry\*/GamePlugin($messageService);
+	$gamePlugin = new \Plugins\entry\GamePlugin($messageService);
 
 	$plugins = Array(
 		$adminLogPlugin, $gamePlugin
@@ -131,7 +131,7 @@ function Init(){
 		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
 		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
-		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
+		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $gamePlugin, $renderDepth, true);
 	}else if(FindDependency(RENDER_JAMS, $dependencies) !== false){
 		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
 		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
@@ -140,7 +140,7 @@ function Init(){
 		if(isset($_GET[GET_LOAD_ALL])){
 			$loadAll = true;
 		}
-		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, $loadAll);
+		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gamePlugin->GameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $gamePlugin, $renderDepth, $loadAll);
 	}
 	if(FindDependency(RENDER_THEMES, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_THEMES, $dependencies);
@@ -168,7 +168,7 @@ function Init(){
 		$dictionary["forms"] = FormPresenter::RenderForms($plugins);
 	}
 	
-	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gamePlugin->GameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $plugins);
+	$dictionary["page"] = RenderPageSpecific($page, $configData, $userData, $gamePlugin->GameData, $jamData, $themeData, $themeIdeaData, $platformData, $platformGameData, $pollData,  $satisfactionData, $loggedInUser, $assetData, $cookieData, $adminVoteData, $nextSuggestedJamDateTime, $plugins, $gamePlugin);
 	
 	if($loggedInUser !== false){
 		if(FindDependency(RENDER_LOGGED_IN_USER, $dependencies) !== false){

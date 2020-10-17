@@ -1,4 +1,5 @@
 <?php
+namespace Plugins\Entry;
 
 class GamesViewModel{
     public $LIST = Array();

@@ -1,12 +1,12 @@
 <?php
-//namespace Plugins\Entry;
+namespace Plugins\Entry;
 
 define("PAGE_EDIT_ENTRY", "editentry");
 define("PAGE_SUBMIT", "submit");
 define("PAGE_ENTRIES", "entries");
 define("RENDER_GAMES", "RenderGames");
 
-class GamePlugin extends \AbstractPlugin{
+class GamePlugin extends \AbstractPlugin implements \IEntryRenderer{
     public $NameInTemplate = "entry";
 
     public $GameDbInterface;
@@ -75,6 +75,10 @@ class GamePlugin extends \AbstractPlugin{
         $render["entries"] = GamePresenter::RenderGames($userData, $this->$GameData, $jamData, $platformData, $platformGameData, $renderDepth);
         return $render;
     }
+    
+	public function RenderEntry($entryId, &$userData, &$jamData, &$platformData, &$platformGameData, $renderDepth){
+		return GamePresenter::RenderGame($userData, $this->GameData->GameModels[$entryId], $jamData, $platformData, $platformGameData, $renderDepth);
+	}
 }
 
 ?>

@@ -26,7 +26,7 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins){
+function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins, IEntryRenderer &$entryRenderer){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -59,7 +59,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $jamFound = false;
                 foreach($jamData->JamModels as $i => $jamModel){
                     if(intval($jamModel->Id) == $jamID){
-                        $render["editingjam"] = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS);
+                        $render["editingjam"] = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $entryRenderer, 0, RENDER_DEPTH_JAMS);
                         $jamFound = true;
                         break;
                     }
@@ -85,7 +85,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 $render["editingentry"] = Array();
                 foreach($gameData->GameModels as $i => $gameModel){
                     if($gameModel->Id == $entryID){
-                        $render["editingentry"] = GamePresenter::RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, RENDER_DEPTH_GAMES);
+                        $render["editingentry"] = $entryRenderer->RenderEntry($gameModel->Id, $userData, $jamData, $platformData, $platformGameData, RENDER_DEPTH_GAMES);
                         break;
                     }
                 }
@@ -110,7 +110,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                     continue;
                 }
 
-                $render["viewing_jam"] = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, RENDER_DEPTH_JAMS_GAMES);
+                $render["viewing_jam"] = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $entryRenderer, 0, RENDER_DEPTH_JAMS_GAMES);
                 $pass = TRUE;
                 break;
             }
@@ -150,7 +150,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                 die("jam not yet started");
             }
 
-            $render["submit_jam"] = JamPresenter::RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, RENDER_DEPTH_JAMS);
+            $render["submit_jam"] = JamPresenter::RenderSubmitJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $entryRenderer, RENDER_DEPTH_JAMS);
             $colorNumber = rand(0, count($jamModel->Colors) - 1);
             $render["user_entry_background_color"] = $jamModel->Colors[$colorNumber];
             $render["user_entry_text_color"] = "000000";

@@ -1,4 +1,6 @@
 <?php
+namespace Plugins\Entry;
+
 define("DB_TABLE_ENTRY", "entry");
 
 define("DB_COLUMN_ENTRY_ID",                "entry_id");

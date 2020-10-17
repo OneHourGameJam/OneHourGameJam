@@ -1,7 +1,7 @@
 <?php
 
 class JamPresenter{
-	public static function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
+	public static function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, IEntryRenderer &$entryRenderer, $nonDeletedJamCounter, $renderDepth){
 		AddActionLog("RenderJam");
 		StartTimer("RenderJam");
 
@@ -51,7 +51,7 @@ class JamPresenter{
 		foreach($gameData->GameModels as $j => $gameModel){
 			if($gameModel->JamId == $jamViewModel->jam_id){
 				if(($renderDepth & RENDER_DEPTH_GAMES) > 0){
-					$jamViewModel->entries[] = GamePresenter::RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_JAMS);
+					$jamViewModel->entries[] = $entryRenderer->RenderEntry($gameModel->Id, $userData, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_JAMS);
 				}
 
 				if(!$gameModel->Deleted){
@@ -129,13 +129,13 @@ class JamPresenter{
 		return $jamViewModel;
 	}
 
-	public static function RenderSubmitJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth){
+	public static function RenderSubmitJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, IEntryRenderer &$entryRenderer, $renderDepth){
 		AddActionLog("RenderSubmitJam");
 
-		return JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, $renderDepth);
+		return JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $entryRenderer, 0, $renderDepth);
 	}
 
-	public static function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth, $loadAll){
+	public static function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, IEntryRenderer &$entryRenderer, $renderDepth, $loadAll){
 		AddActionLog("RenderJams");
 		StartTimer("RenderJams");
 
@@ -160,7 +160,7 @@ class JamPresenter{
 			if($loadAll || $nonDeletedJamCounter <= $jamsToLoad)
 			{
 				if(($renderDepth & RENDER_DEPTH_JAMS) > 0){
-					$jamViewModel = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+					$jamViewModel = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $entryRenderer, $nonDeletedJamCounter, $renderDepth);
 					
 					if($configData->ConfigModels[CONFIG_CAN_SUBMIT_TO_PAST_JAMS]->Value){
 						$jamViewModel->can_user_submit_to_jam = !$jamViewModel->user_participated_in_jam && $jamViewModel->jam_started;
@@ -183,7 +183,7 @@ class JamPresenter{
 					$jamsViewModel->LIST[] = $jamViewModel;
 				}
 				if($currentJam["ID"] == $jamModel->Id){
-					$jamsViewModel->current_jam = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $nonDeletedJamCounter, $renderDepth);
+					$jamsViewModel->current_jam = JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $entryRenderer, $nonDeletedJamCounter, $renderDepth);
 				}
 			}else{
 				$allJamsLoaded = false;

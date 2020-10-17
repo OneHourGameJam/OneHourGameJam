@@ -26,12 +26,6 @@ class UserModel
     public $SponsoredByUserId;
 }
 
-interface IUserDisplay{
-	function HasUser($userId);
-	function GetUserDisplayName($userId);
-	function GetUserIdentifiableName($userId);
-}
-
 class UserData implements IUserDisplay{
     public $UserModels;
     public $UsernameToId;

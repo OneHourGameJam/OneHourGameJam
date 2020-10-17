@@ -736,9 +736,13 @@ body{
 }
 
 .notificationImage{
-  max-height: 80px;
+  max-height: 50px;
   float: left;
   margin-right: 10px;
+}
+
+.notificationContainer{
+  height: 80px;
 }
 
 .messageTitle{

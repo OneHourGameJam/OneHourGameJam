@@ -1,4 +1,5 @@
 <?php
+namespace Plugins\Entry;
 
 class GamePresenter{
 	public static function RenderGames(&$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, $renderDepth){

@@ -28,6 +28,9 @@ include_once("php/message.php");
 //Plugin Base
 include_once("php/plugin.php");
 
+//Interfaces
+include_once("php/Interfaces/CommonInterfaces.php");
+
 //Plugins
 include_once("php/adminlog/Initialise.php");
 include_once("php/entry/Initialise.php");

@@ -1,4 +1,5 @@
 <?php
+namespace Plugins\Entry;
 
 class GameModel{
 	public $Id;
