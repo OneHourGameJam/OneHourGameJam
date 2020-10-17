@@ -245,7 +245,7 @@ class Database{
         } else {
             $sql = "
                 INSERT INTO admin_log
-                (log_id, log_datetime, log_ip, log_user_agent, log_admin_username_override, log_type, log_content)
+                (log_id, log_datetime, log_ip, log_user_agent, log_admin_username, log_type, log_content)
                 VALUES
                 (
                     null,
