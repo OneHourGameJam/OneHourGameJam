@@ -14,25 +14,30 @@ class StreamController{
 			$timeLastUpdated = 0;
 		}
 
-		if(time() - $timeLastUpdated > intval($configData->ConfigModels[CONFIG_TWITCH_API_STREAM_UPDATE_FREQUENCY]->Value)){
-			//Enough time has passed for an update from the API, fetch it.
+		$clientId = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_ID]->Value;
+		$clientSecret = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_SECRET]->Value;
+		$channelName = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
 
-			//First overwrite the currently saved time_last_updated, so that if there is a lot of load on the twitch API and reponses are slow, only one site user has to wait.
+		if(!empty($clientId) && !empty($clientSecret) && !empty($channelName)){
+			if(time() - $timeLastUpdated > intval($configData->ConfigModels[CONFIG_TWITCH_API_STREAM_UPDATE_FREQUENCY]->Value)){
+				//Enough time has passed for an update from the API, fetch it.
+
+				//First overwrite the currently saved time_last_updated, so that if there is a lot of load on the twitch API and reponses are slow, only one site user has to wait.
+				$streamData["time_last_updated"] = time();
+				file_put_contents("cache/twitch_stream.json", json_encode($streamData));
+
+				// Fetch channel state using the Twitch API
+				$token = self::GetTwitchAccessToken($clientId, $clientSecret);
+				$streamDataResponse = self::CallTwitchApi("/helix/streams?user_login=" . $channelName, $clientId, $token);
+				$streamData = json_decode($streamDataResponse, true);
+
+				//Log current time so next update does not happen until enough time has passed.
+				$streamData["time_last_updated"] = time();
+				file_put_contents("cache/twitch_stream.json", json_encode($streamData));
+			}
+		}else{
+			$streamData = Array();
 			$streamData["time_last_updated"] = time();
-			file_put_contents("cache/twitch_stream.json", json_encode($streamData));
-
-			$clientId = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_ID]->Value;
-			$clientSecret = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_SECRET]->Value;
-			$channelName = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
-
-			// Fetch channel state using the Twitch API
-			$token = self::GetTwitchAccessToken($clientId, $clientSecret);
-			$streamDataResponse = self::CallTwitchApi("/helix/streams?user_login=" . $channelName, $clientId, $token);
-			$streamData = json_decode($streamDataResponse, true);
-
-			//Log current time so next update does not happen until enough time has passed.
-			$streamData["time_last_updated"] = time();
-			file_put_contents("cache/twitch_stream.json", json_encode($streamData));
 		}
 
 		StopTimer("InitStream");
