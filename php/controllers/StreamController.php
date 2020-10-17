@@ -19,36 +19,61 @@ class StreamController{
 
 			//First overwrite the currently saved time_last_updated, so that if there is a lot of load on the twitch API and reponses are slow, only one site user has to wait.
 			$streamData["time_last_updated"] = time();
-
 			file_put_contents("cache/twitch_stream.json", json_encode($streamData));
 
-			//Fetch API response using CURL, because that was the easiest to copy-paste in :)
-			$channelsApi = 'https://api.twitch.tv/helix/streams?user_login=';
-			$channelName = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
 			$clientId = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_ID]->Value;
 			$clientSecret = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_SECRET]->Value;
+			$channelName = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
 
-			$ch = curl_init();
-
-			curl_setopt_array($ch, array(
-				CURLOPT_HTTPHEADER => array(
-					'Client-ID: ' . $clientId
-				),
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_URL => $channelsApi . $channelName
-			));
-
-			$response = curl_exec($ch);
-			curl_close($ch);
+			// Fetch channel state using the Twitch API
+			$token = self::GetTwitchAccessToken($clientId, $clientSecret);
+			$streamDataResponse = self::CallTwitchApi("/helix/streams?user_login=" . $channelName, $clientId, $token);
+			$streamData = json_decode($streamDataResponse, true);
 
 			//Log current time so next update does not happen until enough time has passed.
-			$streamData = json_decode($response, true);
 			$streamData["time_last_updated"] = time();
 			file_put_contents("cache/twitch_stream.json", json_encode($streamData));
 		}
 
 		StopTimer("InitStream");
 		return $streamData;
+	}
+
+	private static function GetTwitchAccessToken($clientId, $clientSecret) {
+		$url = "https://id.twitch.tv/oauth2/token"
+			. "?client_id=" . $clientId
+			. "&client_secret=" . $clientSecret
+			. "&grant_type=client_credentials";
+		$headers = array();
+
+		$response = self::HttpRequest($url, $headers, array(CURLOPT_POST => true));
+		$responseObject = json_decode($response);
+		return $responseObject->access_token;
+	}
+
+	private static function CallTwitchApi($path, $clientId, $accessToken) {
+		$url = "https://api.twitch.tv" . $path;
+		$headers = array(
+			"Client-ID: " . $clientId,
+			"Authorization: Bearer " . $accessToken
+		);
+
+		return self::HttpRequest($url, $headers);
+	}
+
+	private static function HttpRequest($url, $headers, $curlOptions = array()) {
+		$curlOptions = array(
+				CURLOPT_HTTPHEADER => $headers,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_URL => $url
+			) + $curlOptions;
+
+		$ch = curl_init();
+		curl_setopt_array($ch, $curlOptions);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		return $response;
 	}
 }
 
