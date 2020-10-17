@@ -21,6 +21,7 @@ define("CONFIG_PEPPER", "PEPPER");
 define("CONFIG_SESSION_PASSWORD_ITERATIONS", "SESSION_PASSWORD_ITERATIONS");
 define("CONFIG_STREAMER_TWITCH_NAME", "STREAMER_TWITCH_NAME");
 define("CONFIG_TWITCH_CLIENT_ID", "TWITCH_CLIENT_ID");
+define("CONFIG_TWITCH_CLIENT_SECRET", "TWITCH_CLIENT_SECRET");
 define("CONFIG_RULES", "RULES");
 define("CONFIG_NOTIFICATION_URL", "NOTIFICATION_URL");
 define("CONFIG_NOTIFICATION_IMAGE", "NOTIFICATION_IMAGE");
@@ -215,6 +216,7 @@ class ConfigData{
                 case CONFIG_SESSION_PASSWORD_ITERATIONS: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = GenerateUserHashIterations($this); break;
                 case CONFIG_STREAMER_TWITCH_NAME: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
                 case CONFIG_TWITCH_CLIENT_ID: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
+                case CONFIG_TWITCH_CLIENT_SECRET: $dataFromDatabase[$i][DB_COLUMN_CONFIG_VALUE] = ""; break;
             }
         }
 
