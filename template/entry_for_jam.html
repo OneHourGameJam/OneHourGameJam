@@ -28,5 +28,8 @@
             {{description}}
         </div>
         <button type="button" class="btn entryButton" style='background-color: {{color_background}}' onclick='document.location.href = "?{{{forms.get.page}}}={{{forms.pages.jam}}}&{{{forms.get.jam.number}}}={{{jam_number}}}";'>{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} {{jam_number}}</button>
+        {{#page.show_edit_link}}
+            <button type="button" class="btn entryButton" style='background-color: {{color_background}}' onclick='document.location.href = "?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{{jam_number}}}";'>Edit</button>
+        {{/page.show_edit_link}}
     </div>
 </div>
