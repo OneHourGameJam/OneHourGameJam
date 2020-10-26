@@ -180,6 +180,25 @@ class FormPresenter{
     
         $formViewModel->preference["disable_themes_notification"] = PREFERENCE_DISABLE_THEMES_NOTIFICATION;
         
+        foreach($plugins as $i => $plugin){
+            $pluginFormSettings = $plugin->FormSettings();
+            foreach($pluginFormSettings["get"] as $pageName => $getParameterName){
+                $formViewModel->get[$plugin->NameInTemplate][$pageName][$getParameterName] = $getParameterName;
+            }
+            foreach($pluginFormSettings["form"] as $formName => $formParameters){
+                $formViewModel->form[$plugin->NameInTemplate][$formName] = $formParameters;
+            }
+            foreach($pluginFormSettings["action"] as $actionKey => $actionName){
+                $formViewModel->action[$plugin->NameInTemplate][$actionKey] = $actionName;
+            }
+            foreach($pluginFormSettings["constant"] as $constantUse => $constantValue){
+                $formViewModel->constant[$plugin->NameInTemplate][$constantUse] = $constantValue;
+            }
+            foreach($pluginFormSettings["preference"] as $preferenceKey => $preferenceValue){
+                $formViewModel->preference[$plugin->NameInTemplate][$preferenceKey] = $preferenceValue;
+            }
+        }
+        
 		StopTimer("RenderForms");
 		return $formViewModel;
 	}

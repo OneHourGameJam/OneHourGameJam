@@ -123,6 +123,9 @@
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editplatforms}}}'>Manage platforms</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editassets}}}'>Manage assets</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll results</a></li>
+					{{#forms.pages.notifications.editnotifications}}
+						<li><a href='?{{{forms.get.page}}}={{{forms.pages.notifications.editnotifications}}}'>Manage notifications</a></li>
+					{{/forms.pages.notifications.editnotifications}}
 					{{#forms.pages.admin_log.adminlog}}
 						<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
 					{{/forms.pages.admin_log.adminlog}}

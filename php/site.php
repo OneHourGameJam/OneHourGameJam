@@ -30,6 +30,7 @@ include_once("php/plugin.php");
 
 //Plugins
 include_once("php/adminlog/Initialise.php");
+include_once("php/notifications/Initialise.php");
 
 //Database Interface
 include_once("php/databaseinterfaces/UserDbInterface.php");

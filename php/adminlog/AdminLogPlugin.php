@@ -33,6 +33,20 @@ class AdminLogPlugin extends \AbstractPlugin{
         );
     }
 
+    public function CommonDependencies(){
+        return Array();
+    }
+
+    public function FormSettings(){
+        return Array(
+            "get" => Array(),
+            "form" => Array(),
+            "action" => Array(),
+            "constant" => Array(),
+            "preference" => Array()
+        );
+    }
+
     public function EstablishDatabaseConnection(){
         $database = new \Database();
 	    $this->AdminLogDbInterface = new AdminLogDbInterface($database);
@@ -56,10 +70,15 @@ class AdminLogPlugin extends \AbstractPlugin{
         return false;
     }
 
-    public function Render(\IUserDisplay &$userData){
+    public function Render($page, \IUserDisplay &$userData){
         $render = Array();
         $render["adminlog"] = AdminLogPresenter::RenderAdminLog($this->AdminLogData, $userData);
         return $render;
+    }
+
+    public function GetSiteActionSettings(){
+        $actions = Array();
+        return $actions;
     }
 }
 

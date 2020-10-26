@@ -16,3 +16,34 @@
         </div>
     </div>
 {{/CONFIG.VALUES.NOTIFICATION}}
+
+{{#notifications.notifications}}
+    {{#visible}}
+        <div class="row notificationRow">
+            <div class="col-md-12 alignCenter">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        {{#icon_image_url}}
+                            <img src='{{icon_image_url}}' id='notification_icon_{{id}}' class='notificationImageTiny' style='display: none;'>
+                        {{/icon_image_url}}
+                        <b>{{{title}}}</b>
+
+                        <div style='float: right;'><a href='#' onclick='$("#notificaion_{{id}}").toggle(); $("#notification_icon_{{id}}").toggle(); return false;'>x</a></div>
+                    </div>
+                    <div class="panel-body" id="notificaion_{{id}}">
+                        {{#icon_image_url}}
+                            {{#icon_link_url}}
+                                <a href='{{icon_link_url}}' target='_BLANK'>
+                            {{/icon_link_url}}
+                            <img src='{{icon_image_url}}' class='notificationImage'>
+                            {{#icon_link_url}}
+                                </a>
+                            {{/icon_link_url}}
+                        {{/icon_image_url}}
+                        {{{text}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/visible}}
+{{/notifications.notifications}}

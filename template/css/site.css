@@ -741,6 +741,11 @@ body{
   margin-right: 10px;
 }
 
+.notificationImageTiny{
+  max-height: 20px;
+  margin-right: 10px;
+}
+
 .messageTitle{
   font-size: 24px;
 }

@@ -1,0 +1,43 @@
+<h1 class="pageHeading">Manage Notification</h1>
+<div class="pageDescription">
+	Add or edit a notification here.
+</div>
+
+<form method='post'>
+	{{> csrf_token}}
+	<input type="hidden" class="form-control" id="notification_id" name='{{{forms.form.notifications.editnotification.id}}}' placeholder="Notification Id" value="{{{page.editingnotification.id}}}" readonly>
+	<p>
+		<div class="form-group">
+			<label for="notification_title">Title</label>
+			<input type="text" class="form-control" id="notification_title" name='{{{forms.form.notifications.editnotification.title}}}' placeholder="Title" value="{{{page.editingnotification.title}}}" required>
+		</div>
+		<div class="form-group">
+			<label for="notification_text">Text</label>
+			<textarea class="form-control" id="notification_text" name='{{{forms.form.notifications.editnotification.text}}}' placeholder="Notification Text" required>{{{page.editingnotification.text}}}</textarea>
+		</div>
+		<div class="form-group">
+			<label for="notification_icon_image_url">Icon Image URL</label>
+			<input type="text" class="form-control" id="notification_icon_image_url" name='{{{forms.form.notifications.editnotification.icon.image_url}}}' placeholder="Icon Image Url" value="{{{page.editingnotification.icon_image_url}}}">
+		</div>
+		<div class="form-group">
+			<label for="notification_icon_link_url">Icon Link URL</label>
+			<input type="text" class="form-control" id="notification_icon_link_url" name='{{{forms.form.notifications.editnotification.icon.link_url}}}' placeholder="Icon Link Url" value="{{{page.editingnotification.icon_link_url}}}">
+		</div>
+		<div class="form-group">
+			<label>Start Date and Time</label>
+			<input type="date" class="form-control" id="notification_start_date" name='{{{forms.form.notifications.editnotification.start.date}}}' placeholder="Start Date" value="{{{page.editingnotification.start_date_html_format}}}" required>
+			<input type="time" class="form-control" id="notification_start_time" name='{{{forms.form.notifications.editnotification.start.time}}}' placeholder="Start Time" value="{{{page.editingnotification.start_time_html_format}}}" required>
+		</div>
+		<div class="form-group">
+			<label>End Date and Time</label>
+			<input type="date" class="form-control" id="notification_end_date" name='{{{forms.form.notifications.editnotification.end.date}}}' placeholder="End Date" value="{{{page.editingnotification.end_date_html_format}}}" required>
+			<input type="time" class="form-control" id="notification_end_time" name='{{{forms.form.notifications.editnotification.end.time}}}' placeholder="End Time" value="{{{page.editingnotification.end_time_html_format}}}" required>
+		</div>
+
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.notifications.editnotification}}}' class="btn btn-default">Save</button>  
+		
+		{{#page.editingnotification}}
+			<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.notifications.deletenotification}}}' class="btn btn-default">Delete</button>
+		{{/page.editingnotification}}
+	</p>
+</form>

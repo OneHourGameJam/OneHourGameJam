@@ -24,6 +24,7 @@ $themesByPopularity = Array();
 $cookieData;
 $messageData;
 $themeIdeaData;
+$notificationData;
 
 $userDbInterface;
 $sessionDbInterface;
@@ -41,6 +42,7 @@ $gameDbInterface;
 $configDbInterface;
 $assetDbInterface;
 $adminVoteDbInterface;
+$notificationDbInterface;
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $userAgent = $_SERVER['HTTP_USER_AGENT'];

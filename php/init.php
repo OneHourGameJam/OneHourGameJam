@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $page;
+	global $dictionary, $configData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $notificationData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $notificationDbInterface, $page;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -21,16 +21,34 @@ function Init(){
 
 	$messageService = new MessageService();
 
+	$notificationPlugin = new \Plugins\Notification\NotificationPlugin($messageService);
+
 	$plugins = Array(
-		new \Plugins\AdminLog\AdminLogPlugin($messageService)
+		new \Plugins\AdminLog\AdminLogPlugin($messageService),
+		$notificationPlugin
 	);
 
 	foreach($plugins as $i => $plugin){
+		//Page Settings
 		foreach($plugin->PageSettings() as $pageName => $pageSetting){
 			$pageSettings[$pageName] = $pageSetting;
 		}
+
+		//Common Dependencies
+		foreach($plugin->CommonDependencies() as $pageName => $pageDeependencies){
+			if(!isset($commonDependencies[$pageName])){
+				$commonDependencies[$pageName] = Array();
+			}
+			foreach($pageDeependencies as $pageDeependency => $dependencyRenderDepth){
+				$existingDependencyRenderDepth = 0;
+				if(isset($commonDependencies[$pageName][$pageDeependency])){
+					$existingDependencyRenderDepth = $commonDependencies[$pageName][$pageDeependency];
+				}
+				$commonDependencies[$pageName][$pageDeependency] = intval($existingDependencyRenderDepth) | intval($dependencyRenderDepth);
+			}
+		}
 	}
-	
+
 	foreach($plugins as $i => $plugin){
 		$plugin->EstablishDatabaseConnection();
 	}
@@ -38,7 +56,10 @@ function Init(){
 	foreach($plugins as $i => $plugin){
 		$plugin->RetrieveData();
 	}
-	
+
+	$notificationDbInterface = $notificationPlugin->NotificationDbInterface;
+	$notificationData = $notificationPlugin->NotificationData;
+
 	StopTimer("Init - Plugins");
 	
 	StartTimer("Init - Database Interfaces");
@@ -94,6 +115,11 @@ function Init(){
 	JamController::CheckNextJamSchedule($messageService, $configData, $jamData, $themeData, $nextScheduledJamTime, $nextSuggestedJamDateTime);
 
 	$siteActionData = new SiteActionData($configData);
+	foreach($plugins as $i => $plugin){
+		$siteActionData->SiteActionModels = array_merge($siteActionData->SiteActionModels, $plugin->GetSiteActionSettings());
+	}
+
+
 	$assetData = new AssetData($assetDbInterface);
 	$pollData = new PollData($pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $loggedInUser);
     $satisfactionData = new SatisfactionData($satisfactionDbInterface, $configData);
@@ -182,9 +208,12 @@ function Init(){
 
 	foreach($plugins as $plugin){
 		if($plugin->ShouldBeRendered($dependencies)){;
-			$renders = $plugin->Render($userData);	
+			$renders = $plugin->Render($page, $userData);	
 			foreach($renders as $renderIdentifier => $render){
-				$dictionary[$renderIdentifier] = $render;
+				if(!isset($dictionary[$renderIdentifier])){
+					$dictionary[$renderIdentifier] = Array();
+				}
+				$dictionary[$renderIdentifier] = array_merge($dictionary[$renderIdentifier], (array)$render);
 			}
 		}
 	}

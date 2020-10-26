@@ -1,0 +1,28 @@
+<h1 class="pageHeading">Manage notifications</h1>
+<div class="pageDescription">
+	Schedule or edit site notifications.
+	<a href='?{{{forms.get.page}}}={{{forms.pages.notifications.editnotification}}}'><button type="submit" class="btn btn-default">New</button></a>
+</div>
+
+{{#notifications.notifications}}
+	From {{start_datetime}} until {{end_datetime}}. <a href='?{{{forms.get.page}}}={{{forms.pages.notifications.editnotification}}}&{{{forms.get.notifications.editnotification.notification_id}}}={{id}}'>edit</a>
+	<div class="row notificationRow">
+		<div class="col-md-12 alignCenter">
+			<div class="panel panel-warning">
+				<div class="panel-heading">{{{title}}}</div>
+				<div class="panel-body">
+					{{#icon_image_url}}
+						{{#icon_link_url}}
+							<a href='{{icon_link_url}}' target='_BLANK'>
+						{{/icon_link_url}}
+						<img src='{{icon_image_url}}' class='notificationImage'>
+						{{#icon_link_url}}
+							</a>
+						{{/icon_link_url}}
+					{{/icon_image_url}}
+					{{{text}}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/notifications.notifications}}
