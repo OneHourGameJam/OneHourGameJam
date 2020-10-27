@@ -24,13 +24,19 @@
                 <div class="panel panel-warning">
                     <div class="panel-heading">
                         {{#icon_image_url}}
-                            <img src='{{icon_image_url}}' id='notification_icon_{{id}}' class='notificationImageTiny' style='display: none;'>
+                            <img src='{{icon_image_url}}' id='notification_icon_{{id}}' class='notificationImageTiny' style='
+                            {{^minimised}}display: none;{{/minimised}}'>
                         {{/icon_image_url}}
                         <b>{{{title}}}</b>
 
-                        <div style='float: right;'><a href='#' onclick='$("#notificaion_{{id}}").toggle(); $("#notification_icon_{{id}}").toggle(); return false;'>x</a></div>
+                        <div style='float: right;'>
+                            <a href='#' onclick='ToggleNotification({{id}}); return false;'>
+                                <span id="notification_close_{{id}}" style="{{#minimised}}display: none;{{/minimised}}">close</span>
+                                <span id="notification_show_{{id}}" style="{{^minimised}}display: none;{{/minimised}}">show</span>
+                            </a>
+                        </div>
                     </div>
-                    <div class="panel-body" id="notificaion_{{id}}">
+                    <div class="panel-body" id="notificaion_{{id}}" data-notification-id="{{id}}" style="{{#minimised}}display: none;{{/minimised}}">
                         {{#icon_image_url}}
                             {{#icon_link_url}}
                                 <a href='{{icon_link_url}}' target='_BLANK'>

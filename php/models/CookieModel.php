@@ -6,6 +6,7 @@ define("COOKIE_COOKIENOTICE", "cookienotice");
 define("COOKIE_SESSION_ID", "sessionID");
 define("COOKIE_ACTION_RESULT", "actionResult");
 define("COOKIE_ACTION_RESULT_ACTION", "actionResultAction");
+define("COOKIE_CLOSED_NOTIFICATIONS", "closednotifications");
 
 class CookieModel{
     public $IsStreamer;

@@ -8,16 +8,22 @@ class NotificationPresenter{
 		StartTimer("RenderNotifications");
 		$notificationsViewModel = new NotificationsViewModel();
 
+		$closedNotifications = Array();
+		if(isset($_COOKIE[COOKIE_CLOSED_NOTIFICATIONS])){
+			$closedNotificationsJson = $_COOKIE[COOKIE_CLOSED_NOTIFICATIONS];
+			$closedNotifications = json_decode($closedNotificationsJson, true);
+		};
+
 		foreach($notificationData->NotificationModels as $i => $notificationModel){
 			$notificationId = $notificationModel->Id;
-			$notificationsViewModel->notifications[] = NotificationPresenter::RenderNotification($notificationData, $notificationId);
+			$notificationsViewModel->notifications[] = NotificationPresenter::RenderNotification($notificationData, $notificationId, $closedNotifications);
 		}
 
 		StopTimer("RenderNotifications");
 		return $notificationsViewModel;
 	}
 	
-	public static function RenderNotification(&$notificationData, $notificationId){
+	public static function RenderNotification(&$notificationData, $notificationId, $closedNotifications){
 		AddActionLog("RenderNotification");
 		StartTimer("RenderNotification");
 
@@ -28,7 +34,7 @@ class NotificationPresenter{
 		$startDatetime = strtotime($notificationModel->StartDateTime." UTC");
 		$endDatetime = strtotime($notificationModel->EndDateTime." UTC");
 
-		$notificationViewModel->id = $notificationModel->Id;
+		$notificationViewModel->id = $notificationId;
 		$notificationViewModel->title = $notificationModel->Title;
 		$notificationViewModel->text = $notificationModel->Text;
 		$notificationViewModel->icon_image_url = $notificationModel->IconImageUrl;
@@ -40,6 +46,12 @@ class NotificationPresenter{
 		$notificationViewModel->start_time_html_format = gmdate("H:i", $startDatetime);
 		$notificationViewModel->end_date_html_format = gmdate("Y-m-d", $endDatetime);
 		$notificationViewModel->end_time_html_format = gmdate("H:i", $endDatetime);
+
+		if(array_search($notificationId, $closedNotifications) === false){
+			$notificationViewModel->minimised = 0;
+		}else{
+			$notificationViewModel->minimised = 1;
+		}
 
 		$notificationViewModel->visible = ( (time() >= $startDatetime) && (time() <= $endDatetime) ) ? 1 : 0;
 

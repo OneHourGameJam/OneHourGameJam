@@ -18,6 +18,7 @@ class NotificationViewModel{
     public $start_time_html_format;
     public $end_date_html_format;
     public $end_time_html_format;
+    public $minimised;
 }
 
 ?>

@@ -43,15 +43,14 @@
                 </div>
             </div>
         </div>
-        {{#cookies.show_cookie_notice}}
-            <div class="cookieNotice">
-                <form method="POST"><button type="submit" name='{{{forms.form.cookienotice.accept}}}' class="btn btn-xs cookieNoticeForm">
-                    {{> csrf_token}}
-                    <b>X</b>
-                </button></form>
-                {{> cookie_notice}}
-            </div>
-        {{/cookies.show_cookie_notice}}
+        
+        <div class="cookieNotice" id="cookieNotice" style='{{^cookies.show_cookie_notice}}display: none{{/cookies.show_cookie_notice}}'>
+            <form method="POST"><button type="submit" name='{{{forms.form.cookienotice.accept}}}' class="btn btn-xs cookieNoticeForm">
+                {{> csrf_token}}
+                <b>X</b>
+            </button></form>
+            {{> cookie_notice}}
+        </div>
         <script src="vendor/components/Bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>
