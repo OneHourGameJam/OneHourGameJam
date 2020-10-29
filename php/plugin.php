@@ -13,7 +13,7 @@ abstract class AbstractPlugin implements MessageSubscriber{
     public abstract function CommonDependencies();
     public abstract function EstablishDatabaseConnection();
     public abstract function RetrieveData();
-    public abstract function GetUserData($userId);
+    public abstract function GetUserDataExport($userId);
     public abstract function ShouldBeRendered(&$dependencies);
     public abstract function Render($page, \IUserDisplay &$userData);
     public abstract function GetSiteActionSettings();

@@ -232,8 +232,8 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
 
             $render["user_data"] = Array();
             foreach($plugins as $plugin){
-                $userData = $plugin->GetUserData($loggedInUser->Id);
-                foreach($userData as $userDataSegmentTitle => $userDataSegment){
+                $userDataSegments = $plugin->GetUserDataExport($loggedInUser->Id);
+                foreach($userDataSegments as $userDataSegmentTitle => $userDataSegment){
                     $render["user_data"][] = Array("segment_title" => $userDataSegmentTitle, "segment_data" => ArrayToHTML($userDataSegment));
                 }
             }

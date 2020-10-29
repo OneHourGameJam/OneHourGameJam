@@ -88,8 +88,9 @@ class NotificationPlugin extends \AbstractPlugin{
         $this->NotificationData = new NotificationData($this->NotificationDbInterface);
     }
 
-    public function GetUserData($userId){
+    public function GetUserDataExport($userId){
         $userData = Array();
+        $userData["Notifications"] = $this->NotificationData->GetNotificationsByUser($userId);
         return  $userData;
     }
 

@@ -62,6 +62,16 @@ class NotificationData{
 
         StopTimer("AddNotification");
     }
+    
+    function GetNotificationsByUser($userId){
+        AddActionLog("GetNotificationsByUser");
+        StartTimer("GetNotificationsByUser");
+    
+        $data = $this->notificationDbInterface->SelectNotificationsByUser($userId);
+    
+        StopTimer("GetNotificationsByUser");
+        return MySQLDataToArray($data);
+    }
 
 //////////////////////// END DATABASE ACTIONS
 

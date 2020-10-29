@@ -56,7 +56,7 @@ class AdminLogPlugin extends \AbstractPlugin{
         $this->AdminLogData = new AdminLogData($this->AdminLogDbInterface);
     }
 
-    public function GetUserData($userId){
+    public function GetUserDataExport($userId){
         $userData = Array();
         $userData["Admin Log (when admin)"] = $this->AdminLogData->GetAdminLogForAdmin($userId);
         $userData["Admin Log (when subject)"] = $this->AdminLogData->GetAdminLogForSubject($userId);

@@ -83,7 +83,7 @@ class NotificationDbInterface{
         $escapedEndDatetime = $this->database->EscapeString($endDatetime);
     
         $sql = "
-            UPDATE notification
+            UPDATE ".DB_TABLE_NOTIFICATION."
             SET  
                 ".DB_COLUMN_NOTIFICAITON_IP." = '$escapedIp', 
                 ".DB_COLUMN_NOTIFICAITON_USER_AGENT." = '$escapedUserAgent', 
@@ -114,6 +114,20 @@ class NotificationDbInterface{
             ORDER BY ".DB_COLUMN_NOTIFICAITON_ID." DESC";
 
         StopTimer("NotificationDbInterface_SelectAll");
+        return $this->database->Execute($sql);;
+    }
+
+    public function SelectNotificationsByUser($userId){
+        AddActionLog("NotificationDbInterface_SelectNotificationsByUser");
+        StartTimer("NotificationDbInterface_SelectNotificationsByUser");
+
+        $escapedUserId = $this->database->EscapeString($userId);
+        $sql = "
+            SELECT ".DB_COLUMN_NOTIFICAITON_ID.", ".DB_COLUMN_NOTIFICAITON_IP.", ".DB_COLUMN_NOTIFICAITON_USER_AGENT.", ".DB_COLUMN_NOTIFICAITON_USER_ID.", ".DB_COLUMN_NOTIFICAITON_TITLE.", ".DB_COLUMN_NOTIFICAITON_TEXT.", ".DB_COLUMN_NOTIFICATION_ICON_IMAGE_URL.", ".DB_COLUMN_NOTIFICATION_ICON_LINK_URL.", ".DB_COLUMN_NOTIFICAITON_START_DATETIME.", ".DB_COLUMN_NOTIFICAITON_END_DATETIME."
+            FROM ".DB_TABLE_NOTIFICATION."
+            WHERE ".DB_COLUMN_NOTIFICAITON_USER_ID." = '$escapedUserId';";
+
+        StopTimer("NotificationDbInterface_SelectNotificationsByUser");
         return $this->database->Execute($sql);;
     }
 
