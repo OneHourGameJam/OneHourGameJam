@@ -8,7 +8,7 @@ WHERE config_key = "STREAMER_TWITCH_NAME";
 INSERT INTO config
 (config_key, config_value, config_category, config_description, config_type, config_options, config_editable, config_required, config_added_to_dictionary) 
 VALUES 
-('TWITCH_CHECK_STREAM_AFTER_JAM_END_MINUTES', '3600', 'STREAM', 'How long after a jam ends should the streamer\'s Twitch account be checked and shown on the site?', 'NUMBER', '[]', '1', '1', '1');
+('TWITCH_CHECK_STREAM_AFTER_JAM_END_MINUTES', '360', 'STREAM', 'How long after a jam ends should the streamer\'s Twitch account be checked and shown on the site? (in minutes)', 'NUMBER', '[]', '1', '1', '1');
 
 ALTER TABLE user
 ADD COLUMN user_twitch VARCHAR(255) NULL AFTER user_twitter;
