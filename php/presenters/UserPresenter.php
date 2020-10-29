@@ -12,6 +12,7 @@ class UserPresenter{
 		$userViewModel->display_name = $userModel->DisplayName;
 		$userViewModel->twitter = $userModel->Twitter;
 		$userViewModel->twitter_text_only = $userModel->TwitterTextOnly;
+		$userViewModel->twitch = $userModel->Twitch;
 		$userViewModel->email = $userModel->Email;
 		$userViewModel->salt = $userModel->Salt;
 		$userViewModel->password_hash = $userModel->PasswordHash;

@@ -13,6 +13,7 @@ class UserModel
     public $DisplayName;
     public $Twitter;
     public $TwitterTextOnly;
+    public $Twitch;
     public $Email;
     public $Salt;
     public $PasswordHash;
@@ -77,6 +78,7 @@ class UserData implements IUserDisplay{
             $user->DisplayName = $info[DB_COLUMN_USER_DISPLAY_NAME];
             $user->Twitter = $info[DB_COLUMN_USER_TWITTER];
             $user->TwitterTextOnly = str_replace("@", "", $info[DB_COLUMN_USER_TWITTER]);
+            $user->Twitch = $info[DB_COLUMN_USER_TWITCH];
             $user->Email = $info[DB_COLUMN_USER_EMAIL];
             $user->Salt = $info[DB_COLUMN_USER_SALT];
             $user->PasswordHash = $info[DB_COLUMN_USER_PASSWORD_HASH];

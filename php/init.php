@@ -135,7 +135,7 @@ function Init(){
 	JamController::ProcessJamStates($messageService, $jamData, $themeData, $configData);
 
 	PerformPendingSiteAction($messageService, $configData, $siteActionData, $loggedInUser);
-	$streamData = StreamController::InitStream($configData);
+	$streamData = StreamController::InitStream($configData, $jamData);
 
 	StopTimer("Init - Process");
 	StartTimer("Init - Render");
@@ -188,7 +188,7 @@ function Init(){
 		$dictionary["messages"] = MessagePresenter::RenderMessages($messageData);
 	}
 	if(FindDependency(RENDER_STREAM, $dependencies) !== false){
-		$dictionary["stream"] = StreamPresenter::RenderStream($streamData, $configData);
+		$dictionary["stream"] = StreamPresenter::RenderStream($streamData);
 	}
 	if(FindDependency(RENDER_PLATFORMS, $dependencies) !== false){
 		$dictionary["platforms"] = PlatformPresenter::RenderPlatforms($platformData);

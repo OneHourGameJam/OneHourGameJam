@@ -7,6 +7,9 @@ class JamPresenter{
 
 		$jamViewModel = new JamViewModel();
 
+		$streamerUserId = $jamModel->StreamerUserId;
+		$streamerTwitchUsername = $jamModel->StreamerTwitchUsername;
+
 		$jamViewModel->jam_id = $jamModel->Id;
 		$jamViewModel->scheduler_user_id = $jamModel->SchedulerUserId;
 		$jamViewModel->jam_number = $jamModel->JamNumber;
@@ -14,7 +17,26 @@ class JamPresenter{
 		$jamViewModel->theme = $jamModel->Theme;
 		$jamViewModel->start_time = $jamModel->StartTime;
 		$jamViewModel->state = $jamModel->State;
+		$jamViewModel->streamer_user_id = $jamModel->StreamerUserId;
+		$jamViewModel->streamer_twitch_username = preg_replace("/[^0-9a-zA-Z ]/m", "", $jamModel->StreamerTwitchUsername);
 		$jamViewModel->default_icon_url = $jamModel->DefaultIconUrl;
+
+		if($streamerUserId != "" && $streamerTwitchUsername != ""){
+			$jamViewModel->streamer_is_set = 1;
+			$jamViewModel->streamer_username = $userData->UserModels[$streamerUserId]->Username;
+			$jamViewModel->streamer_user_display_name = $userData->UserModels[$streamerUserId]->DisplayName;
+			if($loggedInUser->Id == $streamerUserId){
+				$jamViewModel->user_is_streamer_for_jam = 1;
+			}
+		}
+		
+		$now = new DateTime();
+		$datetime = new DateTime($jamModel->StartTime . " UTC");
+		$timeSinceJamEndedInSeconds = $now->getTimestamp() - ($datetime->getTimestamp() + ($configData->ConfigModels[CONFIG_JAM_DURATION]->Value * 60));
+		
+		if($timeSinceJamEndedInSeconds > 0 && $timeSinceJamEndedInSeconds < ($configData->ConfigModels[CONFIG_TWITCH_CHECK_STREAM_AFTER_JAM_END_MINUTES]->Value * 60)){
+			$jamViewModel->in_straming_period = 1;
+		}
 
 		if($jamModel->SchedulerUserId == OVERRIDE_AUTOMATIC_NUM){
 			$jamViewModel->scheduler_username = OVERRIDE_AUTOMATIC;

@@ -18,6 +18,11 @@ class JamViewModel{
     public $theme;
     public $default_icon_url;
     public $start_time;
+    public $streamer_is_set;
+    public $streamer_user_id;
+    public $streamer_username;
+    public $streamer_user_display_name;
+    public $streamer_twitch_username;
     public $state;
     public $scheduler_username;
     public $scheduler_display_name;
@@ -31,6 +36,8 @@ class JamViewModel{
     public $minutes_to_jam;
     public $entries_count;
     public $user_participated_in_jam;
+    public $user_is_streamer_for_jam;
+    public $in_straming_period;
     public $first_jam;
     public $entries_visible;
     public $jam_started;

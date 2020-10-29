@@ -17,6 +17,7 @@ class UserViewModel{
     public $display_name;
     public $twitter;
     public $twitter_text_only;
+    public $twitch;
     public $email;
     public $salt;
     public $password_hash;

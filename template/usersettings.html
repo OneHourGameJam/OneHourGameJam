@@ -18,6 +18,10 @@
 			<input type="text" class="form-control" id="twitterhandle" name='{{{forms.form.usersettings.twitter_handle}}}' placeholder="@Twitter Handle" value="{{user.twitter}}" pattern="^@[a-zA-Z0-9_]+$" maxlength="16">
 		</div>
 		<div class="form-group">
+			<label for="twitchusername">Twitch username<span class="userSettingsInput"> (https://www.twitch.tv/<span style='color: orange;'><b>twitch</b></span> <- this part) When set this enables the "become streamer" button for jams. (NOT Required)</span></label>
+			<input type="text" class="form-control" id="twitchusername" name='{{{forms.form.usersettings.twitch_username}}}' placeholder="Twitch Username" value="{{user.twitch}}" pattern="^[a-zA-Z0-9_]+$" maxlength="25">
+		</div>
+		<div class="form-group">
 			<label for="emailaddress">Email <span class="userSettingsInput">(NOT Required)</span></label>
 			<input type="email" class="form-control" id="emailaddress" name='{{{forms.form.usersettings.email_address}}}' placeholder="Email Address" value="{{user.email}}">
 		</div>

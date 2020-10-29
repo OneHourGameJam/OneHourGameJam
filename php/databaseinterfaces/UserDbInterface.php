@@ -16,6 +16,7 @@ define("DB_COLUMN_USER_LAST_IP",                    "user_last_ip");
 define("DB_COLUMN_USER_LAST_USER_AGENT",            "user_last_user_agent");
 define("DB_COLUMN_USER_EMAIL",                      "user_email");
 define("DB_COLUMN_USER_TWITTER",                    "user_twitter");
+define("DB_COLUMN_USER_TWITCH",                     "user_twitch");
 define("DB_COLUMN_USER_BIO",                        "user_bio");
 define("DB_COLUMN_USER_ROLE",                       "user_role");
 define("DB_COLUMN_USER_PREFERENCES",                "user_preferences");
@@ -24,7 +25,7 @@ define("DB_COLUMN_USER_LAST_USER_ACTION_DATETIME",  "user_last_admin_action_date
 class UserDbInterface{
     private $database;
     private $publicColumnsUser = Array(DB_COLUMN_USER_ID, DB_COLUMN_USER_USERNAME, DB_COLUMN_USER_DISPLAY_NAME, DB_COLUMN_USER_TWITTER, DB_COLUMN_USER_BIO);
-    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES);
+    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_TWITCH);
 
     function __construct(&$database) {
         $this->database = $database;
@@ -34,7 +35,7 @@ class UserDbInterface{
         AddActionLog("UserDbInterface_SelectAll");
         StartTimer("UserDbInterface_SelectAll");
     
-        $sql = "SELECT ".DB_COLUMN_USER_ID.", ".DB_COLUMN_USER_USERNAME.", ".DB_COLUMN_USER_DISPLAY_NAME.", ".DB_COLUMN_USER_TWITTER.", ".DB_COLUMN_USER_EMAIL.",
+        $sql = "SELECT ".DB_COLUMN_USER_ID.", ".DB_COLUMN_USER_USERNAME.", ".DB_COLUMN_USER_DISPLAY_NAME.", ".DB_COLUMN_USER_TWITTER.", ".DB_COLUMN_USER_TWITCH.", ".DB_COLUMN_USER_EMAIL.",
                        ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.",
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_LOGIN_DATETIME.") AS days_since_last_login,
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_USER_ACTION_DATETIME.") AS days_since_last_admin_action
@@ -159,13 +160,14 @@ class UserDbInterface{
         StopTimer("UserDbInterface_Insert");
     }
 
-    public function Update($userId, $displayName, $twitterHandle, $emailAddress, $bio, $preferences){
+    public function Update($userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferences){
         AddActionLog("UserDbInterface_Update");
         StartTimer("UserDbInterface_Update");
 
         $escapedUserId = $this->database->EscapeString($userId);
         $escapedDisplayName = $this->database->EscapeString($displayName);
         $escapedTwitterHandle = $this->database->EscapeString($twitterHandle);
+        $escapedTwitchUsername = $this->database->EscapeString($twitchUsername);
         $escapedEmailAddress = $this->database->EscapeString($emailAddress);
         $escapedBio = $this->database->EscapeString($bio);
         $escapedPreferences = $this->database->EscapeString($preferences);
@@ -175,12 +177,14 @@ class UserDbInterface{
             SET
             ".DB_COLUMN_USER_DISPLAY_NAME." = '$escapedDisplayName',
             ".DB_COLUMN_USER_TWITTER." = '$escapedTwitterHandle',
+            ".DB_COLUMN_USER_TWITCH." = '$escapedTwitchUsername',
             ".DB_COLUMN_USER_EMAIL." = '$escapedEmailAddress',
             ".DB_COLUMN_USER_BIO." = '$escapedBio',
             ".DB_COLUMN_USER_PREFERENCES." = $escapedPreferences
             WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
-        $this->database->Execute($sql);;
+
+        $this->database->Execute($sql);
         
         StopTimer("UserDbInterface_Update");
     }

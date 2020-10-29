@@ -1,23 +1,25 @@
 <?php
 define("DB_TABLE_JAM", "jam");
 
-define("DB_COLUMN_JAM_ID",                "jam_id");
-define("DB_COLUMN_JAM_DATETIME",          "jam_datetime");
-define("DB_COLUMN_JAM_IP",                "jam_ip");
-define("DB_COLUMN_JAM_USER_AGENT",        "jam_user_agent");
-define("DB_COLUMN_JAM_USER_ID",           "jam_user_id");
-define("DB_COLUMN_JAM_NUMBER",            "jam_jam_number");
-define("DB_COLUMN_JAM_SELECTED_THEME_ID", "jam_selected_theme_id");
-define("DB_COLUMN_JAM_THEME",             "jam_theme");
-define("DB_COLUMN_JAM_START_DATETIME",    "jam_start_datetime");
-define("DB_COLUMN_JAM_STATE",             "jam_state");
-define("DB_COLUMN_JAM_COLORS",            "jam_colors");
-define("DB_COLUMN_JAM_DEFAULT_ICON_URL",  "jam_default_icon_url");
-define("DB_COLUMN_JAM_DELETED",           "jam_deleted");
+define("DB_COLUMN_JAM_ID",                          "jam_id");
+define("DB_COLUMN_JAM_DATETIME",                    "jam_datetime");
+define("DB_COLUMN_JAM_IP",                          "jam_ip");
+define("DB_COLUMN_JAM_USER_AGENT",                  "jam_user_agent");
+define("DB_COLUMN_JAM_USER_ID",                     "jam_user_id");
+define("DB_COLUMN_JAM_NUMBER",                      "jam_jam_number");
+define("DB_COLUMN_JAM_SELECTED_THEME_ID",           "jam_selected_theme_id");
+define("DB_COLUMN_JAM_THEME",                       "jam_theme");
+define("DB_COLUMN_JAM_START_DATETIME",              "jam_start_datetime");
+define("DB_COLUMN_JAM_STREAMER_USER_ID",            "jam_streamer_user_id");
+define("DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME",    "jam_streamer_twitch_username");
+define("DB_COLUMN_JAM_STATE",                       "jam_state");
+define("DB_COLUMN_JAM_COLORS",                      "jam_colors");
+define("DB_COLUMN_JAM_DEFAULT_ICON_URL",            "jam_default_icon_url");
+define("DB_COLUMN_JAM_DELETED",                     "jam_deleted");
 
 class JamDbInterface{
     private $database;
-    private $publicColumns = Array(DB_COLUMN_JAM_ID, DB_COLUMN_JAM_USER_ID, DB_COLUMN_JAM_NUMBER, DB_COLUMN_JAM_SELECTED_THEME_ID, DB_COLUMN_JAM_THEME, DB_COLUMN_JAM_START_DATETIME, DB_COLUMN_JAM_STATE, DB_COLUMN_JAM_COLORS, DB_COLUMN_JAM_DEFAULT_ICON_URL, DB_COLUMN_JAM_DELETED);
+    private $publicColumns = Array(DB_COLUMN_JAM_ID, DB_COLUMN_JAM_USER_ID, DB_COLUMN_JAM_NUMBER, DB_COLUMN_JAM_SELECTED_THEME_ID, DB_COLUMN_JAM_THEME, DB_COLUMN_JAM_START_DATETIME, DB_COLUMN_JAM_STATE, DB_COLUMN_JAM_COLORS, DB_COLUMN_JAM_DEFAULT_ICON_URL, DB_COLUMN_JAM_DELETED, DB_COLUMN_JAM_STREAMER_USER_ID, DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME);
     private $privateColumns = Array(DB_COLUMN_JAM_DATETIME, DB_COLUMN_JAM_IP, DB_COLUMN_JAM_USER_AGENT);
 
     function __construct(&$database) {
@@ -29,7 +31,7 @@ class JamDbInterface{
         StartTimer("JamDbInterface_SelectAll");
 
         $sql = "
-            SELECT ".DB_COLUMN_JAM_ID.", ".DB_COLUMN_JAM_USER_ID.", ".DB_COLUMN_JAM_NUMBER.", ".DB_COLUMN_JAM_SELECTED_THEME_ID.", ".DB_COLUMN_JAM_THEME.", ".DB_COLUMN_JAM_START_DATETIME.", ".DB_COLUMN_JAM_STATE.", ".DB_COLUMN_JAM_COLORS.", ".DB_COLUMN_JAM_DEFAULT_ICON_URL.", ".DB_COLUMN_JAM_DELETED."
+            SELECT ".DB_COLUMN_JAM_ID.", ".DB_COLUMN_JAM_USER_ID.", ".DB_COLUMN_JAM_NUMBER.", ".DB_COLUMN_JAM_SELECTED_THEME_ID.", ".DB_COLUMN_JAM_THEME.", ".DB_COLUMN_JAM_START_DATETIME.", ".DB_COLUMN_JAM_STREAMER_USER_ID.", ".DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME.", ".DB_COLUMN_JAM_STATE.", ".DB_COLUMN_JAM_COLORS.", ".DB_COLUMN_JAM_DEFAULT_ICON_URL.", ".DB_COLUMN_JAM_DELETED."
             FROM ".DB_TABLE_JAM." 
             ORDER BY ".DB_COLUMN_JAM_NUMBER." DESC";
         
@@ -127,6 +129,8 @@ class JamDbInterface{
             ".DB_COLUMN_JAM_SELECTED_THEME_ID.",
             ".DB_COLUMN_JAM_THEME.",
             ".DB_COLUMN_JAM_START_DATETIME.",
+            ".DB_COLUMN_JAM_STREAMER_USER_ID.",
+            ".DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME.",
             ".DB_COLUMN_JAM_STATE.",
             ".DB_COLUMN_JAM_COLORS.",
             ".DB_COLUMN_JAM_DEFAULT_ICON_URL.",
@@ -141,6 +145,8 @@ class JamDbInterface{
             $escapedSelectedThemeId,
             '$escapedTheme',
             '$escapedStartTime',
+            null,
+            '',
             'SCHEDULED',
             '$escapedColors',
             '$escapedDefaultEntryIconUrl',
@@ -151,13 +157,15 @@ class JamDbInterface{
         StopTimer("JamDbInterface_Insert");
     }
 
-    public function Update($jamId, $theme, $startTime, $color, $defaultEntryIconUrl){
+    public function Update($jamId, $theme, $startTime, $streamerUserId, $streamerTwitchUsername, $color, $defaultEntryIconUrl){
         AddActionLog("JamDbInterface_Update");
         StartTimer("JamDbInterface_Update");
 
         $escapedJamId = $this->database->EscapeString(intval($jamId));
         $escapedTheme = $this->database->EscapeString($theme);
         $escapedStartTime = $this->database->EscapeString($startTime);
+        $escapedStreamerUserId = $this->database->EscapeString($streamerUserId);
+        $escapedStreamerTwitchUsername = $this->database->EscapeString($streamerTwitchUsername);
         $escapedColors = $this->database->EscapeString($color);
         $escapedDefaultEntryIconUrl = $this->database->EscapeString($defaultEntryIconUrl);
 
@@ -165,6 +173,8 @@ class JamDbInterface{
             UPDATE ".DB_TABLE_JAM."
             SET ".DB_COLUMN_JAM_THEME." = '$escapedTheme',
                 ".DB_COLUMN_JAM_START_DATETIME." = '$escapedStartTime',
+                ".DB_COLUMN_JAM_STREAMER_USER_ID." = '$escapedStreamerUserId',
+                ".DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME." = '$escapedStreamerTwitchUsername',
                 ".DB_COLUMN_JAM_COLORS." = '$escapedColors',
                 ".DB_COLUMN_JAM_DEFAULT_ICON_URL." = '$escapedDefaultEntryIconUrl'
             WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId;";
@@ -187,6 +197,24 @@ class JamDbInterface{
         $this->database->Execute($sql);
         
         StopTimer("JamDbInterface_UpdateJamState");
+    }
+
+    public function UpdateStreamer($jamId, $streamerUserId, $streamerTwitchUsername){
+        AddActionLog("JamDbInterface_UpdateStreamer");
+        StartTimer("JamDbInterface_UpdateStreamer");
+
+        $escapedJamId = $this->database->EscapeString(intval($jamId));
+        $escapedStreamerUserId = $this->database->EscapeString($streamerUserId);
+        $escapedStreamerTwitchUsername = $this->database->EscapeString($streamerTwitchUsername);
+
+        $sql = "
+            UPDATE ".DB_TABLE_JAM."
+            SET ".DB_COLUMN_JAM_STREAMER_USER_ID." = '$escapedStreamerUserId',
+                ".DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME." = '$escapedStreamerTwitchUsername'
+            WHERE ".DB_COLUMN_JAM_ID." = $escapedJamId";
+        $this->database->Execute($sql);
+        
+        StopTimer("JamDbInterface_UpdateStreamer");
     }
 
     public function SoftDelete($jamId){

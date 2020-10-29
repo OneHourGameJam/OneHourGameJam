@@ -1,7 +1,7 @@
 <?php
 
 class StreamPresenter{
-	public static function RenderStream(&$streamData, &$configData){
+	public static function RenderStream(&$streamData){
 		AddActionLog("RenderStream");
 		StartTimer("RenderStream");
 	
@@ -10,7 +10,7 @@ class StreamPresenter{
 		if(isset($streamData) && isset($streamData["data"]) && count($streamData["data"]) > 0){
 			if(isset($streamData["data"][0]["type"]) && $streamData["data"][0]["type"] == "live"){
 				$streamViewModel->IS_STREAM_ACTIVE = 1;
-				$streamViewModel->STREAMER_CHANNEL = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
+				$streamViewModel->STREAMER_CHANNEL = $streamData["data"][0]["user_name"];
 			}
 		}
 	

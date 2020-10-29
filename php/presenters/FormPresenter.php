@@ -58,6 +58,8 @@ class FormPresenter{
         $formViewModel->form["editjam"]["theme"] = FORM_EDITJAM_THEME;
         $formViewModel->form["editjam"]["date"] = FORM_EDITJAM_DATE;
         $formViewModel->form["editjam"]["time"] = FORM_EDITJAM_TIME;
+        $formViewModel->form["editjam"]["streamer_username"] = FORM_EDITJAM_STREAMER_USERNAME;
+        $formViewModel->form["editjam"]["streamer_twitch_username"] = FORM_EDITJAM_STREAMER_TWITCH_USERNAME;
         $formViewModel->form["editjam"]["jam_color"] = FORM_EDITJAM_JAM_COLORS;
         $formViewModel->form["editjam"]["default_icon_url"] = FORM_EDITJAM_DEFAULT_ICON_URL;
         $formViewModel->form["deleteplatform"]["platform_id"] = FORM_DELETEPLATFORM_PLATFORM_ID;
@@ -80,6 +82,7 @@ class FormPresenter{
         $formViewModel->form["savenewuserpassword"]["password_2"] = FORM_SAVENEWUSERPASSWORD_PASSWORD_2;
         $formViewModel->form["usersettings"]["display_name"] = FORM_SAVEUSERCHANGES_DISPLAY_NAME;
         $formViewModel->form["usersettings"]["twitter_handle"] = FORM_SAVEUSERCHANGES_TWITTER_HANDLE;
+        $formViewModel->form["usersettings"]["twitch_username"] = FORM_SAVEUSERCHANGES_TWITCH_USERNAME;
         $formViewModel->form["usersettings"]["email_address"] = FORM_SAVEUSERCHANGES_EMAIL_ADDRESS;
         $formViewModel->form["usersettings"]["bio"] = FORM_SAVEUSERCHANGES_BIO;
         $formViewModel->form["edituser"]["user_id"] = FORM_EDITUSER_USER_ID;
@@ -108,6 +111,8 @@ class FormPresenter{
         $formViewModel->form["editentry"]["url"] = "url_";
         $formViewModel->form["editentry"]["entry_id"] = "entry_id";
         $formViewModel->form["editentry"]["entry_id"] = "entry_id";
+        $formViewModel->form["setstreamer"]["jam_number"] = FORM_SETSTREAMER_JAM_NUMBER;
+        $formViewModel->form["unsetstreamer"]["jam_number"] = FORM_UNSETSTREAMER_JAM_NUMBER;
         
         $formViewModel->pages["main"] = PAGE_MAIN;
         $formViewModel->pages["login"] = PAGE_LOGIN;
@@ -171,6 +176,8 @@ class FormPresenter{
         $formViewModel->action["deleteplatform"] = ACTION_DELETE_PLATFORM;
         $formViewModel->action["undeleteplatform"] = ACTION_UNDELETE_PLATFORM;
         $formViewModel->action["setup_database"] = "setup";
+        $formViewModel->action["setstreamer"] = ACTION_SET_STREAMER;
+        $formViewModel->action["unsetstreamer"] = ACTION_UNSET_STREAMER;
         
         $formViewModel->constant["adminvote"]["for"] = ADMINVOTE_FOR;
         $formViewModel->constant["adminvote"]["neutral"] = ADMINVOTE_NEUTRAL;

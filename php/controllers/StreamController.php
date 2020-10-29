@@ -1,7 +1,7 @@
 <?php
 
 class StreamController{
-	public static function InitStream(&$configData){
+	public static function InitStream(ConfigData &$configData, JamData &$jamData){
 		AddActionLog("InitStream");
 		StartTimer("InitStream");
 
@@ -14,9 +14,28 @@ class StreamController{
 			$timeLastUpdated = 0;
 		}
 
+		$latestStartedJamModel = null;
+		$timeSinceLatestJamEndedInSeconds = 99999999;
+		$now = new DateTime();
+		foreach($jamData->JamModels as $i => $jamModel){
+			$datetime = new DateTime($jamModel->StartTime . " UTC");
+			$timeSinceJamEndedInSeconds = $now->getTimestamp() - ($datetime->getTimestamp() + ($configData->ConfigModels[CONFIG_JAM_DURATION]->Value * 60));
+			
+			if($timeSinceJamEndedInSeconds > 0 && $timeSinceJamEndedInSeconds < ($configData->ConfigModels[CONFIG_TWITCH_CHECK_STREAM_AFTER_JAM_END_MINUTES]->Value * 60)){
+				if($timeSinceJamEndedInSeconds < $timeSinceLatestJamEndedInSeconds){
+					$timeSinceLatestJamEndedInSeconds = $timeSinceJamEndedInSeconds;
+					$latestStartedJamModel = $jamModel;
+				}
+			}
+		}
+
+		$channelName = "";
+		if($latestStartedJamModel){
+			$channelName = $latestStartedJamModel->StreamerTwitchUsername;
+		}
+
 		$clientId = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_ID]->Value;
 		$clientSecret = $configData->ConfigModels[CONFIG_TWITCH_CLIENT_SECRET]->Value;
-		$channelName = $configData->ConfigModels[CONFIG_STREAMER_TWITCH_NAME]->Value;
 
 		if(!empty($clientId) && !empty($clientSecret) && !empty($channelName)){
 			if(time() - $timeLastUpdated > intval($configData->ConfigModels[CONFIG_TWITCH_API_STREAM_UPDATE_FREQUENCY]->Value)){

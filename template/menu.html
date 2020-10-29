@@ -91,7 +91,7 @@
 				<li class="mainmenu-separator">User</li>
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
 				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a> <span class='updated'></span></li>
 				{{/cookies.is_streamer}}
 			{{/user}}
 
@@ -101,9 +101,11 @@
 				{{#cookies.is_streamer}}
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable streamer mode</a></li>
 				{{/cookies.is_streamer}}
-				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=1'>Streamer mode</a></li>
-				{{/cookies.is_streamer}}
+				{{#twitch}}
+					{{^cookies.is_streamer}}
+						<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=1'>Streamer mode</a></li>
+					{{/cookies.is_streamer}}
+				{{/twitch}}
 			{{/user}}
 			{{#cookies.darkmode}}
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0'>Enable light mode</a></li>

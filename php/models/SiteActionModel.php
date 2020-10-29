@@ -26,6 +26,8 @@ define("ACTION_NEW_PLAYFORM", "newplatform");
 define("ACTION_EDIT_PLATFORM", "editplatform");
 define("ACTION_DELETE_PLATFORM", "deleteplatform");
 define("ACTION_UNDELETE_PLATFORM", "undeleteplatform");
+define("ACTION_SET_STREAMER", "setstreamer");
+define("ACTION_UNSET_STREAMER", "unsetstreamer");
 
 class SiteActionResultModel{
     public $RedirectUrl;
@@ -208,6 +210,8 @@ class SiteActionData{
                     "INVALID_THEME" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_WARNING, "Invalid theme."),
                     "INVALID_DEFAULT_ENTRY_ICON_URL" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_WARNING, "Default entry icon is not valid."),
                     "INVALID_JAM_NUMBER" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_ERROR, "Invalid jam number"),
+                    "INVALID_STREAMER_USERNAME" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_ERROR, "Stramer username is not valid"),
+                    "MISSING_STREAMER_USERNAME_OR_TWITCH_USERNAME" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_ERROR, "For streamers both the username and twitch username must be set"),
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
                     "NO_JAMS_EXIST" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_ERROR, "No jams exist."),
                     "INVALID_JAM_ID" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_CONTENT, MESSAGE_ERROR, "Invalid jam id."),
@@ -395,6 +399,30 @@ class SiteActionData{
                     "SUCCESS_PLATFORM_RESTORED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_PLATFORMS, MESSAGE_SUCCESS, "Platform restored."),
                     "UNKNOWN_PLATFORM" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_PLATFORMS, MESSAGE_WARNING, "Unknown platform."),
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
+                    "NOT_LOGGED_IN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Not logged in."),
+                )
+            ),
+            new SiteActionModel(
+                ACTION_SET_STREAMER,
+                "php/actions/jam/setstreamer.php",
+                "?".GET_PAGE."=".PAGE_MAIN,
+                Array(
+                    "SUCCESS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_SUCCESS, "You're now the streamer for this jam."),
+                    "STREAMER_ALREADY_SET" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_WARNING, "A streamer is already set for this jam."),
+                    "INVALID_JAM_ID" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Jam not found."),
+                    "NO_JAM_TO_SUBMIT_TO" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "No jam to submit to."),
+                    "NOT_LOGGED_IN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Not logged in."),
+                )
+            ),
+            new SiteActionModel(
+                ACTION_UNSET_STREAMER,
+                "php/actions/jam/unsetstreamer.php",
+                "?".GET_PAGE."=".PAGE_MAIN,
+                Array(
+                    "SUCCESS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_SUCCESS, "You're now the streamer for this jam."),
+                    "NOT_CURRENTLY_STREAMER" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_WARNING, "You're not the streamer for this jam."),
+                    "INVALID_JAM_ID" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Jam not found."),
+                    "NO_JAM_TO_SUBMIT_TO" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "No jam to submit to."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Not logged in."),
                 )
             )

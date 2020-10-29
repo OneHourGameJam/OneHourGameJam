@@ -11,7 +11,9 @@ class JamModel{
 	public $JamNumber;
 	public $ThemeId;
 	public $Theme;
-	public $StartTime;
+    public $StartTime;
+    public $StreamerUserId;
+    public $StreamerTwitchUsername;
 	public $State;
     public $Colors;
     public $DefaultIconUrl;
@@ -48,6 +50,8 @@ class JamData{
             $jamModel->ThemeId = intval($info[DB_COLUMN_JAM_SELECTED_THEME_ID]);
             $jamModel->Theme = $info[DB_COLUMN_JAM_THEME];
             $jamModel->StartTime = $info[DB_COLUMN_JAM_START_DATETIME];
+            $jamModel->StreamerUserId = $info[DB_COLUMN_JAM_STREAMER_USER_ID];
+            $jamModel->StreamerTwitchUsername = $info[DB_COLUMN_JAM_STREAMER_TWITCH_USERNAME];
             $jamModel->State = $info[DB_COLUMN_JAM_STATE];
             $jamModel->Colors = $this->ParseJamColors($info[DB_COLUMN_JAM_COLORS]);
             $jamModel->DefaultIconUrl = $info[DB_COLUMN_JAM_DEFAULT_ICON_URL];

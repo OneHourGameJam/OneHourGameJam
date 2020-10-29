@@ -28,6 +28,14 @@
 			<input type="time" class="form-control" id="time" name='{{{forms.form.editjam.time}}}' placeholder="Time" value="{{{time}}}" required>
 		</div>
 		<div class="form-group">
+			<label for="streamer_username">Streamer Username</label>
+			<input type="text" class="form-control" id="streamer_username" name='{{{forms.form.editjam.streamer_username}}}' placeholder="Streamer Username" value="{{{streamer_username}}}">
+		</div>
+		<div class="form-group">
+			<label for="streamer_twitch_username">Streamer Twitch Username</label>
+			<input type="text" class="form-control" id="streamer_twitch_username" name='{{{forms.form.editjam.streamer_twitch_username}}}' placeholder="Streamer Twitch Username" value="{{{streamer_twitch_username}}}">
+		</div>
+		<div class="form-group">
 			<label for="jamcolors">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours (Users can choose between these to customize their {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}'s appearance on the site)</label>
 			<input type="text" class="form-control" id="jamcolors" name='{{{forms.form.editjam.jam_color}}}' value='{{colors_input_string}}' placeholder="{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} colours, formatted with hex codes (without #), delimitered with a dash (-). Example: ff0000-00ff00-0000ff-ffcc00-ccff00" required>
 		</div>

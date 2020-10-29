@@ -1,7 +1,7 @@
 <?php
 
 //Changes data about the logged in user
-function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferences){
+function ChangeUserData($displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferences){
 	global $loggedInUser, $configData, $userDbInterface;
 
 	//Authorize user
@@ -19,7 +19,7 @@ function ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $pref
 		return "INVALID_EMAIL";
 	}
 
-	$userDbInterface->Update($loggedInUser->Id, $displayName, $twitterHandle, $emailAddress, CleanHtml($bio), $preferences);
+	$userDbInterface->Update($loggedInUser->Id, $displayName, $twitterHandle, $twitchUsername, $emailAddress, CleanHtml($bio), $preferences);
 
 	return "SUCCESS";
 }
@@ -30,6 +30,7 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 	if($loggedInUser !== false){
 		$displayName = $_POST[FORM_SAVEUSERCHANGES_DISPLAY_NAME];
 		$twitterHandle = $_POST[FORM_SAVEUSERCHANGES_TWITTER_HANDLE];
+		$twitchUsername = $_POST[FORM_SAVEUSERCHANGES_TWITCH_USERNAME];
 		$emailAddress = $_POST[FORM_SAVEUSERCHANGES_EMAIL_ADDRESS];
 		$bio = $_POST[FORM_SAVEUSERCHANGES_BIO];
 
@@ -45,7 +46,7 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 			}
 		}
 
-		return ChangeUserData($displayName, $twitterHandle, $emailAddress, $bio, $preferenceValue);
+		return ChangeUserData($displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferenceValue);
 	}
 }
 
