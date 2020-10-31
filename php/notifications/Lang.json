@@ -1,0 +1,14 @@
+{
+    "EN": {
+        "page_heading": "Manage notifications",
+        "page_description": "Schedule or edit site notifications.",
+        "new_button": "New",
+        "notification_active_time": "From {{start_datetime}} until {{end_datetime}}."
+    },
+    "SI": {
+        "page_heading": "Urejanje obvetil",
+        "page_description": "Ustvari ali uredi obvestila.",
+        "new_button": "Novo",
+        "notification_active_time": "Začetek: {{start_datetime}}, Konec: {{end_datetime}}."
+    }
+}

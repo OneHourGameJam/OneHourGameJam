@@ -6,7 +6,7 @@ AfterInit();	//Plugin hook
 
 //Initializes the site.
 function Init(){
-	global $dictionary, $configData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $notificationData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $notificationDbInterface, $page;
+	global $dictionary, $configData, $userData, $jamData, $gameData, $platformData, $platformGameData, $assetData, $loggedInUser, $satisfactionData, $adminVotes, $nextSuggestedJamDateTime, $nextJamTime, $themeData, $themesByVoteDifference, $themesByPopularity, $pollData, $cookieData, $siteActionData, $themeIdeaData, $notificationData, $commonDependencies, $pageSettings, $userDbInterface, $sessionDbInterface, $themeDbInterface, $themeVoteDbInterface, $themeIdeaDbInterface, $satisfactionDbInterface, $pollDbInterface, $pollOptionDbInterface, $pollVoteDbInterface, $platformDbInterface, $platformGameDbInterface, $jamDbInterface, $gameDbInterface, $configDbInterface, $assetDbInterface, $adminVoteDbInterface, $notificationDbInterface, $page, $mustache;
 	AddActionLog("Init");
 	StartTimer("Init");
 
@@ -214,6 +214,18 @@ function Init(){
 					$dictionary[$renderIdentifier] = Array();
 				}
 				$dictionary[$renderIdentifier] = array_merge($dictionary[$renderIdentifier], (array)$render);
+			}
+		}
+	}
+
+	foreach($plugins as $plugin){
+		if($plugin->ShouldBeLocalized($page)){;
+			$localization = $plugin->GetLocalization("SI");
+
+			if($localization){
+				foreach($localization as $localizationKey => $localizationValue){
+					$dictionary["lang"][$localizationKey] = $mustache->render($localizationValue, $dictionary);;
+				}
 			}
 		}
 	}

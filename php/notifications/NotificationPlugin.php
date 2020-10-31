@@ -117,6 +117,20 @@ class NotificationPlugin extends \AbstractPlugin{
         return $render;
     }
 
+    public function ShouldBeLocalized($page){
+        switch($page){
+            case PAGE_EDIT_NOTIFICATIONS:
+            case PAGE_EDIT_NOTIFICATION:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public function GetLocalizationFile(){
+        return "php/notifications/Lang.json";
+    }
+
     public function GetSiteActionSettings(){
         $actions = Array(
             new \SiteActionModel(

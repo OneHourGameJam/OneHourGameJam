@@ -17,6 +17,25 @@ abstract class AbstractPlugin implements MessageSubscriber{
     public abstract function ShouldBeRendered(&$dependencies);
     public abstract function Render($page, \IUserDisplay &$userData);
     public abstract function GetSiteActionSettings();
+
+    public abstract function ShouldBeLocalized($page);
+    public abstract function GetLocalizationFile();
+    public function GetLocalization($preferredLanguage){
+        $localization = json_decode(file_get_contents($this->GetLocalizationFile()), true);
+        $return = Array();
+
+        if(isset($localization[$preferredLanguage])){
+            $return = $localization[$preferredLanguage];
+        }
+        
+        foreach($localization["EN"] as $localizationKey => $localizationTemplate){
+            if(!isset($return[$localizationKey])){
+                $return[$localizationKey] = $localizationTemplate;
+            }
+        }
+
+        return $return;
+    }
 }
 
 ?>

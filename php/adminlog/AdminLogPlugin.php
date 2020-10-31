@@ -76,6 +76,19 @@ class AdminLogPlugin extends \AbstractPlugin{
         return $render;
     }
 
+    public function ShouldBeLocalized($page){
+        switch($page){
+            case PAGE_ADMIN_LOG:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public function GetLocalizationFile(){
+        return "php/adminlog/Lang.json";
+    }
+
     public function GetSiteActionSettings(){
         $actions = Array();
         return $actions;
