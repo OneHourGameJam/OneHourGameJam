@@ -93,7 +93,7 @@ function Init(){
 
     RedirectToHttpsIfRequired($configData);
 
-	$userData = new UserData($userDbInterface, $sessionDbInterface);
+	$userData = new UserData($userDbInterface, $sessionDbInterface, $configData);
 
 	$loggedInUser = IsLoggedIn($configData, $userData);
 	

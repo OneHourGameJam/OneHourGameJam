@@ -20,13 +20,16 @@ class UserPresenter{
 		$userViewModel->admin = $userModel->Admin;
 		$userViewModel->user_preferences = $userModel->UserPreferences;
 		$userViewModel->preferences = $userModel->Preferences;
+		$userViewModel->permissions = $userModel->Permissions;
 		$userViewModel->days_since_last_login = $userModel->DaysSinceLastLogin;
 		$userViewModel->days_since_last_admin_action = $userModel->DaysSinceLastAdminAction;
 		if($userModel->IsSponsored){
 			$userViewModel->is_sponsored = 1;
 			$userViewModel->sponsored_by = $userModel->SponsoredBy;
 		}
-	
+		$userViewModel->preferences_array = Array();
+		$userViewModel->permissions_array = Array();
+
 		$currentJam = GetCurrentJamNumberAndId();
 	
 		$userId = $userModel->Id;
@@ -84,8 +87,36 @@ class UserPresenter{
 			}
 			StopTimer("RenderUser - foreach games - RenderGame");
 	
+			StartTimer("RenderUser - permissions");
+
+			foreach($userModel->Permissions as $permissionKey => $permissionValue){
+				$permissionViewModel = new UserPermissionViewModel();
+	
+				$permissionViewModel->key = $permissionKey;
+				$permissionViewModel->granted = $permissionValue;
+				$permissionViewModel->allowed_by_allowlist = array_search($permissionKey, $userModel->PermissionsInAllowlist);
+				$permissionViewModel->denied_by_denylist = array_search($permissionKey, $userModel->PermissionsInDenylist);
+				$permissionViewModel->allowed_by_config = array_search($permissionKey, $userModel->PermissionsInConfig);
+	
+				$userViewModel->permissions_array = $permissionViewModel;
+				
+				if($permissionValue != 0){
+					$userViewModel->permissions_list[$permissionKey] = 1;
+				}
+			}
+	
+			StopTimer("RenderUser - permissions");
+	
 			StartTimer("RenderUser - preferences");
-			foreach($userViewModel->preferences as $preferenceKey => $preferenceValue){
+
+			foreach($userModel->Preferences as $preferenceKey => $preferenceValue){
+				$preferenceViewModel = new UserPreferenceViewModel();
+	
+				$preferenceViewModel->key = $preferenceKey;
+				$preferenceViewModel->granted = $preferenceValue;
+	
+				$userViewModel->preferences_array = $preferenceViewModel;
+				
 				if($preferenceValue != 0){
 					$userViewModel->preferences_list[$preferenceKey] = 1;
 				}

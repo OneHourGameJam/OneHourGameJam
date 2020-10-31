@@ -2,8 +2,14 @@
 
 define("PREFERENCE_DISABLE_THEMES_NOTIFICATION", "DISABLE_THEMES_NOTIFICATION");
 
+define("PERMISSION_HOST_STREAM", "HOST_STREAM");
+
 $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => PREFERENCE_DISABLE_THEMES_NOTIFICATION, "BIT_FLAG_EXPONENT" => 0)
+);
+
+$userPermissionsSettings = Array(
+	Array("PERMISSION_KEY" => PERMISSION_HOST_STREAM, "BIT_FLAG_EXPONENT" => 0)
 );
 
 class UserModel
@@ -21,6 +27,12 @@ class UserModel
     public $Admin;
     public $UserPreferences;
     public $Preferences;
+    public $UserPermissionsAllowlist;
+    public $UserPermissionsDenylist;
+    public $PermissionsInAllowlist;
+    public $PermissionsInDenylist;
+    public $PermissionsInConfig;
+    public $Permissions;
     public $DaysSinceLastLogin;
     public $DaysSinceLastAdminAction;
     public $IsSponsored;
@@ -40,10 +52,10 @@ class UserData implements IUserDisplay{
     private $userDbInterface;
     private $sessionDbInterface;
 
-    function __construct(&$userDbInterface, &$sessionDbInterface) {
+    function __construct(&$userDbInterface, &$sessionDbInterface, ConfigData &$configData) {
         $this->userDbInterface = $userDbInterface;
         $this->sessionDbInterface = $sessionDbInterface;
-        $this->UserModels = $this->LoadUsers();
+        $this->UserModels = $this->LoadUsers($configData);
         $this->UsernameToId = $this->GenerateUsernameToId();
     }
 
@@ -61,8 +73,8 @@ class UserData implements IUserDisplay{
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadUsers(){
-        global $userPreferenceSettings;
+    function LoadUsers(ConfigData &$configData){
+        global $userPreferenceSettings, $userPermissionsSettings;
         AddActionLog("LoadUsers");
         StartTimer("LoadUsers");
     
@@ -86,16 +98,47 @@ class UserData implements IUserDisplay{
             $user->Admin = intval($info[DB_COLUMN_USER_ROLE]);
             $user->UserPreferences = intval($info[DB_COLUMN_USER_PREFERENCES]);
             $user->Preferences = Array();
+            $user->UserPermissionsAllowlist = intval($info[DB_COLUMN_USER_PERMISSIONS_ALLOWLIST]);
+            $user->UserPermissionsDenylist = intval($info[DB_COLUMN_USER_PERMISSIONS_DENYLIST]);
+            $user->Permissions = Array();
             $user->DaysSinceLastLogin = 1000000;
             $user->DaysSinceLastAdminAction = 1000000;
             $user->IsSponsored = 0;
             $user->SponsoredBy = "";
+            $user->PermissionsInConfig[] = Array();
+            $user->PermissionsInAllowlist[] = Array();
+            $user->PermissionsInDenylist[] = Array();
     
             foreach($userPreferenceSettings as $i => $preferenceSetting){
                 $preferenceFlag = pow(2, $preferenceSetting["BIT_FLAG_EXPONENT"]);
                 $preferenceKey = $preferenceSetting["PREFERENCE_KEY"];
     
                 $user->Preferences[$preferenceKey] = $user->UserPreferences & $preferenceFlag;
+            }
+    
+            foreach($userPermissionsSettings as $i => $permissionSetting){
+                $permissionFlag = pow(2, $permissionSetting["BIT_FLAG_EXPONENT"]);
+                $permissionKey = $permissionSetting["PERMISSION_KEY"];
+
+                if($permissionFlag & $configData->ConfigModels[CONFIG_DEFAULT_PERMISSIONS]->Value){
+                    $user->PermissionsInConfig[] = $permissionKey;
+                }
+
+                if($permissionFlag & $user->UserPermissionsAllowlist){
+                    $user->PermissionsInAllowlist[] = $permissionKey;
+                }
+
+                if($permissionFlag & $user->UserPermissionsDenylist){
+                    $user->PermissionsInDenylist[] = $permissionKey;
+                }
+    
+                //Permission an be granted by defaults in configuration, or by an explicit allow list
+                $permissionAllowStatus = $permissionFlag & ($configData->ConfigModels[CONFIG_DEFAULT_PERMISSIONS]->Value | $user->UserPermissionsAllowlist);
+                
+                //Permission an be cenied explicitly in deny list
+                $permission = $permissionAllowStatus & (~$user->UserPermissionsDenylist);
+
+                $user->Permissions[$permissionKey] = $permission;
             }
     
             //This fixes an issue where user_last_login_datetime was not set properly in the database, which results in days_since_last_login being null for users who have not logged in since the fix was applied
@@ -228,6 +271,8 @@ class UserData implements IUserDisplay{
             $dataFromDatabase[$i][DB_COLUMN_USER_EMAIL] = "";
             $dataFromDatabase[$i][DB_COLUMN_USER_ROLE] = 0;
             $dataFromDatabase[$i][DB_COLUMN_USER_PREFERENCES] = rand(0, 1);
+            $dataFromDatabase[$i][DB_COLUMN_USER_PERMISSIONS_ALLOWLIST] = 0;
+            $dataFromDatabase[$i][DB_COLUMN_USER_PERMISSIONS_DENYLIST] = 0;
 
             $password = "";
             $passwordHashIterations = "";

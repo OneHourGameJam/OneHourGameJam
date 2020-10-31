@@ -10,6 +10,9 @@ class UsersViewModel{
 
 class UserViewModel{
     public $preferences_list = Array();
+    public $preferences_array = Array();
+    public $permissions_list = Array();
+    public $permissions_array = Array();
     public $entries = Array();
 
     public $id;
@@ -25,6 +28,7 @@ class UserViewModel{
     public $admin;
     public $user_preferences;
     public $preferences;
+    public $permissions;
     public $days_since_last_login;
     public $days_since_last_admin_action;
     public $is_sponsored;
@@ -67,6 +71,19 @@ class UserViewModel{
     public $vote_type_veto;
     public $is_admin_candidate;
     public $is_admin;
+}
+
+class UserPreferenceViewModel{
+    public $key;
+    public $granted;
+}
+
+class UserPermissionViewModel{
+    public $key;
+    public $granted;
+    public $allowed_by_allowlist;
+    public $denied_by_denylist;
+    public $allowed_by_config;
 }
 
 ?>

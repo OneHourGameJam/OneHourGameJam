@@ -20,12 +20,14 @@ define("DB_COLUMN_USER_TWITCH",                     "user_twitch");
 define("DB_COLUMN_USER_BIO",                        "user_bio");
 define("DB_COLUMN_USER_ROLE",                       "user_role");
 define("DB_COLUMN_USER_PREFERENCES",                "user_preferences");
+define("DB_COLUMN_USER_PERMISSIONS_ALLOWLIST",      "user_permissions_allowlist");
+define("DB_COLUMN_USER_PERMISSIONS_DENYLIST",      "user_permissions_denylist");
 define("DB_COLUMN_USER_LAST_USER_ACTION_DATETIME",  "user_last_admin_action_datetime");
 
 class UserDbInterface{
     private $database;
     private $publicColumnsUser = Array(DB_COLUMN_USER_ID, DB_COLUMN_USER_USERNAME, DB_COLUMN_USER_DISPLAY_NAME, DB_COLUMN_USER_TWITTER, DB_COLUMN_USER_BIO);
-    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_TWITCH);
+    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_PERMISSIONS_ALLOWLIST, DB_COLUMN_USER_PERMISSIONS_DENYLIST, DB_COLUMN_USER_TWITCH);
 
     function __construct(&$database) {
         $this->database = $database;
@@ -36,7 +38,7 @@ class UserDbInterface{
         StartTimer("UserDbInterface_SelectAll");
     
         $sql = "SELECT ".DB_COLUMN_USER_ID.", ".DB_COLUMN_USER_USERNAME.", ".DB_COLUMN_USER_DISPLAY_NAME.", ".DB_COLUMN_USER_TWITTER.", ".DB_COLUMN_USER_TWITCH.", ".DB_COLUMN_USER_EMAIL.",
-                       ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.",
+                       ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.", ".DB_COLUMN_USER_PERMISSIONS_ALLOWLIST.", ".DB_COLUMN_USER_PERMISSIONS_DENYLIST.",
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_LOGIN_DATETIME.") AS days_since_last_login,
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_USER_ACTION_DATETIME.") AS days_since_last_admin_action
                 FROM
@@ -171,7 +173,6 @@ class UserDbInterface{
         $escapedEmailAddress = $this->database->EscapeString($emailAddress);
         $escapedBio = $this->database->EscapeString($bio);
         $escapedPreferences = $this->database->EscapeString($preferences);
-
         $sql = "
             UPDATE ".DB_TABLE_USER."
             SET
@@ -263,6 +264,26 @@ class UserDbInterface{
         $this->database->Execute($sql);;
         
         StopTimer("UserDbInterface_UpdateIsAdmin");
+    }
+
+    public function UpdateUserPermissions($userId, $permissionsAllowlist, $permissionsDenylist){
+        AddActionLog("UserDbInterface_UpdateUserPermissions");
+        StartTimer("UserDbInterface_UpdateUserPermissions");
+
+        $escapedUserId = $this->database->EscapeString($userId);
+        $escapedPermissionsAllowlist = $this->database->EscapeString($permissionsAllowlist);
+        $escapedPermissionsDenylist = $this->database->EscapeString($permissionsDenylist);
+
+        $sql = "
+            UPDATE ".DB_TABLE_USER."
+            SET
+            ".DB_COLUMN_USER_PERMISSIONS_ALLOWLIST." = $escapedPermissionsAllowlist,
+            ".DB_COLUMN_USER_PERMISSIONS_DENYLIST." = $escapedPermissionsDenylist
+            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
+        ";
+        $this->database->Execute($sql);;
+        
+        StopTimer("UserDbInterface_UpdateUserPermissions");
     }
 
     public function SelectPublicData(){

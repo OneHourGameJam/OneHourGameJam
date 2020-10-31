@@ -25,7 +25,7 @@ class JamPresenter{
 			$jamViewModel->streamer_is_set = 1;
 			$jamViewModel->streamer_username = $userData->UserModels[$streamerUserId]->Username;
 			$jamViewModel->streamer_user_display_name = $userData->UserModels[$streamerUserId]->DisplayName;
-			if($loggedInUser->Id == $streamerUserId){
+			if($loggedInUser && $loggedInUser->Id == $streamerUserId){
 				$jamViewModel->user_is_streamer_for_jam = 1;
 			}
 		}
