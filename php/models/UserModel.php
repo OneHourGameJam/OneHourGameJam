@@ -153,7 +153,7 @@ class UserData implements IUserDisplay{
     
             $user->DaysSinceLastLogin = intval($info["days_since_last_login"]);
             $user->DaysSinceLastAdminAction = intval($info["days_since_last_admin_action"]);
-    
+
             $userModels[$user->Id] = $user;
         }
     

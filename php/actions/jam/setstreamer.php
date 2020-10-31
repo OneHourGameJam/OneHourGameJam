@@ -45,11 +45,9 @@ function SetStreamer(MessageService &$messageService, $jamNumber){
 function PerformAction(MessageService &$messageService, &$loggedInUser){
 	global $_POST;
 	
-	if(IsAdmin($loggedInUser) !== false){
-		$jamNumber = intval($_POST[FORM_SETSTREAMER_JAM_NUMBER]);
+	$jamNumber = intval($_POST[FORM_SETSTREAMER_JAM_NUMBER]);
 
-		return SetStreamer($messageService, $jamNumber);
-	}
+	return SetStreamer($messageService, $jamNumber);
 }
 
 ?>

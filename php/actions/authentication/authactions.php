@@ -64,7 +64,7 @@ function RegisterUser($username, $password){
 
 	$userDbInterface->Insert($username, $ip, $userAgent, $salt, $passwordHash, $passwordIterations, $isAdmin);
 	
-	$userData = new UserData($userDbInterface, $sessionDbInterface);
+	$userData = new UserData($userDbInterface, $sessionDbInterface, $configData);
 	return LogInUser($username, $password);
 }
 

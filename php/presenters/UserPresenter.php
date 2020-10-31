@@ -86,44 +86,45 @@ class UserPresenter{
 				$userViewModel->entries[] = GamePresenter::RenderGame($userData, $gameModel, $jamData, $platformData, $platformGameData, $renderDepth & ~RENDER_DEPTH_USERS);
 			}
 			StopTimer("RenderUser - foreach games - RenderGame");
-	
-			StartTimer("RenderUser - permissions");
-
-			foreach($userModel->Permissions as $permissionKey => $permissionValue){
-				$permissionViewModel = new UserPermissionViewModel();
-	
-				$permissionViewModel->key = $permissionKey;
-				$permissionViewModel->granted = $permissionValue;
-				$permissionViewModel->allowed_by_allowlist = array_search($permissionKey, $userModel->PermissionsInAllowlist);
-				$permissionViewModel->denied_by_denylist = array_search($permissionKey, $userModel->PermissionsInDenylist);
-				$permissionViewModel->allowed_by_config = array_search($permissionKey, $userModel->PermissionsInConfig);
-	
-				$userViewModel->permissions_array = $permissionViewModel;
-				
-				if($permissionValue != 0){
-					$userViewModel->permissions_list[$permissionKey] = 1;
-				}
-			}
-	
-			StopTimer("RenderUser - permissions");
-	
-			StartTimer("RenderUser - preferences");
-
-			foreach($userModel->Preferences as $preferenceKey => $preferenceValue){
-				$preferenceViewModel = new UserPreferenceViewModel();
-	
-				$preferenceViewModel->key = $preferenceKey;
-				$preferenceViewModel->granted = $preferenceValue;
-	
-				$userViewModel->preferences_array = $preferenceViewModel;
-				
-				if($preferenceValue != 0){
-					$userViewModel->preferences_list[$preferenceKey] = 1;
-				}
-			}
-			StopTimer("RenderUser - preferences");
 		}
 		StopTimer("RenderUser - foreach games");
+	
+		StartTimer("RenderUser - permissions");
+
+		foreach($userModel->Permissions as $permissionKey => $permissionValue){
+			$permissionViewModel = new UserPermissionViewModel();
+
+
+			$permissionViewModel->key = $permissionKey;
+			$permissionViewModel->granted = $permissionValue;
+			$permissionViewModel->allowed_by_allowlist = array_search($permissionKey, $userModel->PermissionsInAllowlist);
+			$permissionViewModel->denied_by_denylist = array_search($permissionKey, $userModel->PermissionsInDenylist);
+			$permissionViewModel->allowed_by_config = array_search($permissionKey, $userModel->PermissionsInConfig);
+
+			$userViewModel->permissions_array = $permissionViewModel;
+			
+			if($permissionValue != 0){
+				$userViewModel->permissions_list[$permissionKey] = 1;
+			}
+		}
+
+		StopTimer("RenderUser - permissions");
+
+		StartTimer("RenderUser - preferences");
+
+		foreach($userModel->Preferences as $preferenceKey => $preferenceValue){
+			$preferenceViewModel = new UserPreferenceViewModel();
+
+			$preferenceViewModel->key = $preferenceKey;
+			$preferenceViewModel->granted = $preferenceValue;
+
+			$userViewModel->preferences_array = $preferenceViewModel;
+			
+			if($preferenceValue != 0){
+				$userViewModel->preferences_list[$preferenceKey] = 1;
+			}
+		}
+		StopTimer("RenderUser - preferences");
 	
 		//Find admin candidates
 		StartTimer("RenderUser - admin candidates");
@@ -134,7 +135,7 @@ class UserPresenter{
 			$userViewModel->admin_candidate_total_participation_check_pass = 1;
 		}
 		if(	isset($userViewModel->admin_candidate_recent_participation_check_pass) &&
-		isset($userViewModel->admin_candidate_total_participation_check_pass)){
+			isset($userViewModel->admin_candidate_total_participation_check_pass)){
 				$userViewModel->system_suggestsed_admin_candidate = 1;
 		}
 		StopTimer("RenderUser - admin candidates");
@@ -295,6 +296,7 @@ class UserPresenter{
 	
 		StopTimer("RenderUser - Finish");
 		StopTimer("RenderUser");
+		
 		return $userViewModel;
 	}
 	
