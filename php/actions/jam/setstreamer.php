@@ -9,6 +9,10 @@ function SetStreamer(MessageService &$messageService, $jamNumber){
 	if($loggedInUser === false){
 		return "NOT_LOGGED_IN";
 	}
+	
+	if(!($loggedInUser->Permissions[HOST_STREAM])){
+		return "PERMISSION_DENIED";
+	}
 
 	$jamModel = $jamData->GetJamByNumber($jamNumber);
 	if($jamModel == null || $jamModel->JamNumber == 0){

@@ -411,6 +411,7 @@ class SiteActionData{
                     "STREAMER_ALREADY_SET" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_WARNING, "A streamer is already set for this jam."),
                     "INVALID_JAM_ID" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Jam not found."),
                     "NO_JAM_TO_SUBMIT_TO" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "No jam to submit to."),
+                    "PERMISSION_DENIED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Missing permission."),
                     "NOT_LOGGED_IN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Not logged in."),
                 )
             ),
