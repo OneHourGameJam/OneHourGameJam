@@ -23,11 +23,11 @@ class AdminLogPlugin extends \AbstractPlugin{
     }
 
     public function GetTemplateFolder(){
-        return "php/adminlog/template/";
+        return __DIR__."/template/";
     }
 
     public function GetPartialsFolder(){
-        return "php/adminlog/partial/";
+        return __DIR__."/partial/";
     }
 
 

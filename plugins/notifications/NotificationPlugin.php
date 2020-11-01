@@ -29,12 +29,16 @@ class NotificationPlugin extends \AbstractPlugin{
 
     public function ReceiveMessage(\AbstractMessage &$message){}
 
+    public function GetActionsFolder(){
+        return __DIR__."/actions/";
+    }
+
     public function GetTemplateFolder(){
-        return "php/notifications/template/";
+        return __DIR__."/template/";
     }
 
     public function GetPartialsFolder(){
-        return "php/notifications/partial/";
+        return __DIR__."/partial/";
     }
 
     public function PageSettings(){
@@ -124,7 +128,7 @@ class NotificationPlugin extends \AbstractPlugin{
             case PAGE_EDIT_NOTIFICATION:
                 if(isset($_GET[GET_EDITNOTIFICATION_NOTIFICATION_ID])){
                     $notificationId = intval($_GET[GET_EDITNOTIFICATION_NOTIFICATION_ID]);
-                    $render["page"]["editingnotification"] = NotificationPresenter::RenderNotification($this->NotificationData, $notificationId);
+                    $render["page"]["editingnotification"] = NotificationPresenter::RenderNotification($this->NotificationData, $notificationId, Array());
                 }
                 break;
         }
@@ -136,7 +140,7 @@ class NotificationPlugin extends \AbstractPlugin{
         $actions = Array(
             new \SiteActionModel(
                 ACTION_EDIT_NOTIFICATION,
-                "php/notifications/actions/savenotification.php",
+                $this->GetActionsFolder()."savenotification.php",
                 "?".GET_PAGE."=".PAGE_MAIN,
                 Array(
                     "SUCESS_UPDATE" => new \SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_NOTIFICATIONS, MESSAGE_SUCCESS, "Notification updated."),
@@ -155,10 +159,11 @@ class NotificationPlugin extends \AbstractPlugin{
             ),
             new \SiteActionModel(
                 ACTION_DELETE_NOTIFICATION,
-                "php/notifications/actions/savenotification.php",
+                $this->GetActionsFolder()."deletenotification.php",
                 "?".GET_PAGE."=".PAGE_MAIN,
                 Array(
                     "SUCESS" => new \SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_NOTIFICATIONS, MESSAGE_SUCCESS, "Notification deleted."),
+                    "UNKNOWN_NOTIFICATION" => new \SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_NOTIFICATIONS, MESSAGE_WARNING, "Notification does not exist."),
                     "NOT_AUTHORIZED" => new \SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
                     "NOT_LOGGED_IN" => new \SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Not logged in."),
                 )

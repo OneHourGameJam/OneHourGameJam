@@ -9,9 +9,6 @@ if(!IsDatabaseConfigFilePresent()){
 
 include_once("php/helpers.php");
 
-//Fetch plugins
-include_once("plugins/plugins.php");
-
 StartTimer("site.php");
 StartTimer("site.php - Include");
 
@@ -29,8 +26,8 @@ include_once("php/message.php");
 include_once("php/plugin.php");
 
 //Plugins
-include_once("php/adminlog/Initialise.php");
-include_once("php/notifications/Initialise.php");
+include_once("plugins/adminlog/Initialise.php");
+include_once("plugins/notifications/Initialise.php");
 
 //Database Interface
 include_once("php/databaseinterfaces/UserDbInterface.php");

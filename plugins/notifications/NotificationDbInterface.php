@@ -12,6 +12,7 @@ define("DB_COLUMN_NOTIFICATION_ICON_IMAGE_URL", "notification_icon_image_url");
 define("DB_COLUMN_NOTIFICATION_ICON_LINK_URL", "notification_icon_link_url");
 define("DB_COLUMN_NOTIFICAITON_START_DATETIME", "notification_start_datetime");
 define("DB_COLUMN_NOTIFICAITON_END_DATETIME", "notification_end_datetime");
+define("DB_COLUMN_NOTIFICATION_DELETED", "notification_deleted");
 
 class NotificationDbInterface{
     private $database;
@@ -20,6 +21,20 @@ class NotificationDbInterface{
 
     function __construct(&$database) {
         $this->database = $database;
+    }
+    
+    public function SelectAll(){
+        AddActionLog("NotificationDbInterface_SelectAll");
+        StartTimer("NotificationDbInterface_SelectAll");
+
+        $sql = "
+            SELECT ".DB_COLUMN_NOTIFICAITON_ID.", ".DB_COLUMN_NOTIFICAITON_TITLE.", ".DB_COLUMN_NOTIFICAITON_TEXT.", ".DB_COLUMN_NOTIFICATION_ICON_IMAGE_URL.", ".DB_COLUMN_NOTIFICATION_ICON_LINK_URL.", ".DB_COLUMN_NOTIFICAITON_START_DATETIME.", ".DB_COLUMN_NOTIFICAITON_END_DATETIME.", ".DB_COLUMN_NOTIFICATION_DELETED."
+            FROM ".DB_TABLE_NOTIFICATION."
+            WHERE ".DB_COLUMN_NOTIFICATION_DELETED." = 0
+            ORDER BY ".DB_COLUMN_NOTIFICAITON_ID." DESC";
+
+        StopTimer("NotificationDbInterface_SelectAll");
+        return $this->database->Execute($sql);;
     }
 
     public function Insert($ip, $userAgent, $userId, $title, $text, $iconImageUrl, $iconLinkUrl, $startDatetime, $endDatetime){
@@ -103,18 +118,23 @@ class NotificationDbInterface{
 
         StopTimer("NotificationDbInterface_Update");
     }
+
+    public function SoftDelete($notificationId){
+        AddActionLog("NotificationDbInterface_SoftDelete");
+        StartTimer("NotificationDbInterface_SoftDelete");
+
+        $escapedNotificationId = $this->database->EscapeString($notificationId);
     
-    public function SelectAll(){
-        AddActionLog("NotificationDbInterface_SelectAll");
-        StartTimer("NotificationDbInterface_SelectAll");
-
-        $sql = "
-            SELECT ".DB_COLUMN_NOTIFICAITON_ID.", ".DB_COLUMN_NOTIFICAITON_TITLE.", ".DB_COLUMN_NOTIFICAITON_TEXT.", ".DB_COLUMN_NOTIFICATION_ICON_IMAGE_URL.", ".DB_COLUMN_NOTIFICATION_ICON_LINK_URL.", ".DB_COLUMN_NOTIFICAITON_START_DATETIME.", ".DB_COLUMN_NOTIFICAITON_END_DATETIME."
-            FROM ".DB_TABLE_NOTIFICATION."
-            ORDER BY ".DB_COLUMN_NOTIFICAITON_ID." DESC";
-
-        StopTimer("NotificationDbInterface_SelectAll");
-        return $this->database->Execute($sql);;
+        $sql = " 
+            UPDATE ".DB_TABLE_NOTIFICATION."
+            SET
+                ".DB_COLUMN_NOTIFICATION_DELETED." = 1
+            WHERE
+                ".DB_COLUMN_NOTIFICAITON_ID." = $escapedNotificationId;
+        ";
+        $data = $this->database->Execute($sql);;
+        
+        StopTimer("NotificationDbInterface_SoftDelete");
     }
 
     public function SelectNotificationsByUser($userId){

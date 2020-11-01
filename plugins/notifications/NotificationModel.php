@@ -9,6 +9,7 @@ class NotificationModel{
 	public $IconLinkUrl;
 	public $StartDateTime;
 	public $EndDateTime;
+	public $Deleted;
 }
 
 class NotificationData{
@@ -41,6 +42,7 @@ class NotificationData{
             $notificationModel->IconLinkUrl = $info[DB_COLUMN_NOTIFICATION_ICON_LINK_URL];
             $notificationModel->StartDateTime = $info[DB_COLUMN_NOTIFICAITON_START_DATETIME];
             $notificationModel->EndDateTime = $info[DB_COLUMN_NOTIFICAITON_END_DATETIME];
+            $notificationModel->Deleted = $info[DB_COLUMN_NOTIFICATION_DELETED];
 
             $notificationModels[$notificationId] = $notificationModel;
         }
