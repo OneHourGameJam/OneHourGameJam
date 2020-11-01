@@ -22,15 +22,29 @@ class AdminLogPlugin extends \AbstractPlugin{
         }
     }
 
+    public function GetTemplateFolder(){
+        return "php/adminlog/template/";
+    }
+
+    public function GetPartialsFolder(){
+        return "php/adminlog/partial/";
+    }
+
+
     public function PageSettings(){
         return Array(
             PAGE_ADMIN_LOG => Array(
                 "page_title" => "Admin Log",
                 "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-                "template_file" => "adminlog.html",
+                "template_file" => $this->GetTemplateFolder()."adminlog.html",
                 "dependencies" => Array(RENDER_ADMIN_LOG => RENDER_DEPTH_NONE),
             )
         );
+    }
+    
+    public function GetPartials(){
+        $partials = Array();
+        return $partials;
     }
 
     public function CommonDependencies(){

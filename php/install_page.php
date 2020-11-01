@@ -15,7 +15,7 @@ function RunInstallPage(&$dictionary) {
 	// Safety check, make sure that this is a fresh installation
 	if (file_exists($dbConfigPath)) {
 		$dictionary['error_message'] = "Database has been configured already! Please delete the $dbConfigPath file to start the installation process.";
-		$dictionary['template_file'] = 'install_fail.html';
+		$dictionary['template_file'] = $templateBasePath."install_fail.html";
 		return;
 	}
 
@@ -27,17 +27,17 @@ function RunInstallPage(&$dictionary) {
 			$dictionary['error_message'] = $errorMessage;
 
 			if ($errorMessage == "") {
-				$dictionary['template_file'] = 'install_success.html';
+				$dictionary['template_file'] = $templateBasePath."install_success.html";
 				return;
 			} else {
-				$dictionary['template_file'] = 'install_fail.html';
+				$dictionary['template_file'] = $templateBasePath."install_fail.html";
 				return;
 			}
 		}
 	}
 	
 	// Assume that if we got here we want to display the form.
-	$dictionary['template_file'] = 'install_form.html';
+	$dictionary['template_file'] = $templateBasePath."install_form.html";
 }
 
 // Runs the setup and returns any errors encountered

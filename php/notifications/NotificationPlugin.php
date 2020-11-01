@@ -29,21 +29,36 @@ class NotificationPlugin extends \AbstractPlugin{
 
     public function ReceiveMessage(\AbstractMessage &$message){}
 
+    public function GetTemplateFolder(){
+        return "php/notifications/template/";
+    }
+
+    public function GetPartialsFolder(){
+        return "php/notifications/partial/";
+    }
+
     public function PageSettings(){
         return Array(
             PAGE_EDIT_NOTIFICATIONS => Array(
                 "page_title" => "Manage Notifications",
                 "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-                "template_file" => "editnotifications.html",
+                "template_file" => $this->GetTemplateFolder()."editnotifications.html",
                 "dependencies" => Array(RENDER_NOTIFICATIONS => RENDER_DEPTH_NONE),
             ),
             PAGE_EDIT_NOTIFICATION => Array(
                 "page_title" => "Edit Notification",
                 "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-                "template_file" => "editnotification.html",
+                "template_file" => $this->GetTemplateFolder()."editnotification.html",
                 "dependencies" => Array(),
             )
         );
+    }
+    
+    public function GetPartials(){
+        $partials = Array(
+            "notification" => $this->GetPartialsFolder()."notification.html"
+        );
+        return $partials;
     }
 
     public function CommonDependencies(){

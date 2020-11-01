@@ -8,7 +8,10 @@ abstract class AbstractPlugin implements MessageSubscriber{
     }
 
     public abstract function ReceiveMessage(AbstractMessage &$message);
+    public abstract function GetTemplateFolder();
+    public abstract function GetPartialsFolder();
     public abstract function PageSettings();
+    public abstract function GetPartials();
     public abstract function FormSettings();
     public abstract function CommonDependencies();
     public abstract function EstablishDatabaseConnection();

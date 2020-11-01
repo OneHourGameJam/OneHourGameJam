@@ -3,6 +3,7 @@
 
 //Global variables
 $page = "main";
+$partials = Array();
 $warnings = Array();
 $loggedInUser = "";
 $loginChecked = false;

@@ -7,27 +7,27 @@
 
 //die("Website update in progress. Come back in a minute or two. Thanks <3");
 
+$templateBasePath = "template/";
 include_once("php/site.php");
 StartTimer("index.php");
 
-$pageTemplateFile = $templateBasePath.$pageSettings[$page]["template_file"];
-$mustache->setPartials(Array(
-	"header" => file_get_contents($templateBasePath."header.html"),
-	"message" => file_get_contents($templateBasePath."message.html"),
-	"menu" => file_get_contents($templateBasePath."menu.html"),
-	"footer" => file_get_contents($templateBasePath."footer.html"),
-	"poll" => file_get_contents($templateBasePath."poll.html"),
-	"notification" => file_get_contents($templateBasePath."notification.html"),
-	"cookie_notice" => file_get_contents($templateBasePath."cookienotice.html"),
-	"page" => file_get_contents($pageTemplateFile),
-	"csrf_token" => file_get_contents($templateBasePath."csrf-token.html"),
-	"jam_header" => file_get_contents($templateBasePath."jam_header.html"),
-	"entry_by_user" => file_get_contents($templateBasePath."entry_by_user.html"),
-	"entry_for_jam" => file_get_contents($templateBasePath."entry_for_jam.html"),
-	"user_header" => file_get_contents($templateBasePath."user_header.html"),
-	"satisfaction" => file_get_contents($templateBasePath."satisfaction.html"),
-	"css" => file_get_contents($templateBasePath."css/site.css")
-));
+$pageTemplateFile = $pageSettings[$page]["template_file"];
+$partials["header"] = file_get_contents($templateBasePath."header.html");
+$partials["message"] = file_get_contents($templateBasePath."message.html");
+$partials["menu"] = file_get_contents($templateBasePath."menu.html");
+$partials["footer"] = file_get_contents($templateBasePath."footer.html");
+$partials["poll"] = file_get_contents($templateBasePath."poll.html");
+$partials["cookie_notice"] = file_get_contents($templateBasePath."cookienotice.html");
+$partials["page"] = file_get_contents($pageTemplateFile);
+$partials["csrf_token"] = file_get_contents($templateBasePath."csrf-token.html");
+$partials["jam_header"] = file_get_contents($templateBasePath."jam_header.html");
+$partials["entry_by_user"] = file_get_contents($templateBasePath."entry_by_user.html");
+$partials["entry_for_jam"] = file_get_contents($templateBasePath."entry_for_jam.html");
+$partials["user_header"] = file_get_contents($templateBasePath."user_header.html");
+$partials["satisfaction"] = file_get_contents($templateBasePath."satisfaction.html");
+$partials["css"] = file_get_contents($templateBasePath."css/site.css");
+
+$mustache->setPartials($partials);
 
 print $mustache->render(file_get_contents($templateBasePath."index.html"), $dictionary);
 ?>
