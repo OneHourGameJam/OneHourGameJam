@@ -49,6 +49,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                     die("no user selected");
                 }
                 $render["editinguser"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, RENDER_DEPTH_NONE);
+                $render["user_bio"] = $userData->LoadBio($editingUserId);
             }
         break;
         case PAGE_EDIT_JAM:

@@ -230,6 +230,8 @@ class SiteActionData{
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
                     "INSUFFICIENT_PERMISSIONS_OUTRANK" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Cannot edit permissions level of user with higher permissions level than yours."),
                     "INSUFFICIENT_PERMISSIONS_BEYOND_OWN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Can only set a user's role up to the role you have."),
+                    "INVALID_DISPLAY_NAME" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Invalid display name"),
+                    "INVALID_EMAIL" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Invalid email"),
                 )
             ),
             new SiteActionModel(

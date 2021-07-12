@@ -1,6 +1,6 @@
 <h1 class="pageHeading">Manage user</h1>
 <div class="pageDescription">
-	Edit information about the user here. Currently you can only make them an admin or change their password.
+	Edit information about the user here or change their password.
 </div>
 
 <form method='post'>
@@ -13,11 +13,32 @@
 				<input type="text" class="form-control" id="username" name='{{{forms.form.edituser.username}}}' placeholder="Username" value="{{{username}}}" readonly required>
 			</div>
 			<div class="form-group">
+				<label for="displayname">Display Name <span class="userSettingsInput">(Required)</span></label>
+				<input type="text" class="form-control" id="displayname" name='{{{forms.form.edituser.display_name}}}' placeholder="Display name" value="{{display_name}}" minlength='{{{CONFIG.VALUES.MINIMUM_DISPLAY_NAME_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_DISPLAY_NAME_LENGTH}}}' required>
+			</div>
+			<div class="form-group">
+				<label for="emailaddress">Email <span class="userSettingsInput">(NOT Required)</span></label>
+				<input type="email" class="form-control" id="emailaddress" name='{{{forms.form.edituser.email_address}}}' placeholder="Email Address" value="{{email}}">
+			</div>
+			<div class="form-group">
+				<label for="twitterhandle">Twitter Handle <span class="userSettingsInput">(NOT Required)</span></label>
+				<input type="text" class="form-control" id="twitterhandle" name='{{{forms.form.edituser.twitter_handle}}}' placeholder="@Twitter Handle" value="{{twitter}}" pattern="^@[a-zA-Z0-9_]+$" maxlength="16">
+			</div>
+			<div class="form-group">
+				<label for="twitchusername">Twitch username<span class="userSettingsInput"> (https://www.twitch.tv/<span style='color: orange;'><b>twitch</b></span> <- this part) When set this enables the "become streamer" button for jams. (NOT Required)</span></label>
+				<input type="text" class="form-control" id="twitchusername" name='{{{forms.form.edituser.twitch_username}}}' placeholder="Twitch Username" value="{{twitch}}" pattern="^[a-zA-Z0-9_]+$" maxlength="25">
+			</div>
+			<div class="form-group">
+				<label for="emailaddress">Bio <span class="userSettingsInput">(NOT Required)</span></label>
+				<div id="bio" name="{{{forms.form.edituser.bio}}}" class="trumbowyg-editor">{{{ page.user_bio }}}</div>
+			</div>
+			<div class="form-group">
 				<label for="permission_level">Permission Level</label>
 				<input type="number" class="form-control" id="permission_level" name='{{{forms.form.edituser.permission_level}}}' placeholder="Permission Level" value='{{admin}}' min="0" max="{{user.admin}}" {{^is_equal_or_lower_permission_level_to_logged_in_user}}disabled{{/is_equal_or_lower_permission_level_to_logged_in_user}}>
 			</div>
 
 			<h3>User Preferences</h3>
+			<p>Preferences can't be changed by admins</p>
 			<table class="table">
 				<tr>
 					<th>Preference Key</th>
@@ -96,3 +117,21 @@
 		</p>
 	{{/page.editinguser}}
 </form>
+
+<script src="vendor/components/trumbowyg/trumbowyg.js"></script>
+<script src="vendor/components/trumbowyg/trumbowyg.emoji.js"></script>
+<script>
+	$.trumbowyg.svgPath = '/template/images/icons.svg';
+	$('.trumbowyg-editor').trumbowyg({
+	    btns: [
+					['emoji'],
+        	['strong', 'em', 'del'],
+        	['superscript', 'subscript'],
+        	['link'],
+        	['unorderedList', 'orderedList'],
+       		['removeformat']
+	    ],
+	    removeformatPasted: true,
+	    autogrow: true
+	});
+</script>
