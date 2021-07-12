@@ -167,6 +167,7 @@ class SiteActionData{
                 Array(
                     "SUCCESS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_CONFIG, MESSAGE_SUCCESS, "Config updated."),
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
+                    "INSUFFICIENT_PERMISSIONS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_CONFIG, MESSAGE_ERROR, "Insufficient permission level to update this property."),
                     "NO_CHANGE" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_CONFIG, MESSAGE_WARNING, "No changes to config."),
                 )
             ),
@@ -225,8 +226,10 @@ class SiteActionData{
                 Array(
                     "SUCCESS" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_SUCCESS, "User successfully edited"),
                     "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "User does not exist."),
-                    "INVALID_ISADMIN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Invalid IsAdmin."),
+                    "INVALID_PERMISSION_LEVEL" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Invalid Permission Level - must be a number between 0 and your permission level."),
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
+                    "INSUFFICIENT_PERMISSIONS_OUTRANK" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Cannot edit permissions level of user with higher permissions level than yours."),
+                    "INSUFFICIENT_PERMISSIONS_BEYOND_OWN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Can only set a user's role up to the role you have."),
                 )
             ),
             new SiteActionModel(

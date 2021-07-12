@@ -3,7 +3,7 @@
 //Edits an existing user, identified by the username.
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
-function EditUser(MessageService &$messageService, $userId, $isAdmin, $allowlistPermissionValue, $denylistPermissionValue){
+function EditUser(MessageService &$messageService, $userId, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue){
 	global $userData, $loggedInUser, $userDbInterface;
 	
 	$allowlistPermissionValue = intval($allowlistPermissionValue);
@@ -15,12 +15,9 @@ function EditUser(MessageService &$messageService, $userId, $isAdmin, $allowlist
 	}
 
 	//Validate values
-	if($isAdmin == 0){
-		$isAdmin = 0;
-	}else if($isAdmin == 1){
-		$isAdmin = 1;
-	}else{
-		return "INVALID_ISADMIN";
+    $permissionLevel = intval($permissionLevel);
+	if($permissionLevel < 0){
+		return "INVALID_PERMISSION_LEVEL";
 	}
 
 	//Check that the user exists
@@ -28,14 +25,22 @@ function EditUser(MessageService &$messageService, $userId, $isAdmin, $allowlist
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	$userDbInterface->UpdateIsAdmin($userId, $isAdmin);
+    if(!UserHasPermissionLevel($loggedInUser, $userData->UserModels[$userId]->Admin)){
+        return "INSUFFICIENT_PERMISSIONS_OUTRANK";
+    }
+
+	if(!UserHasPermissionLevel($loggedInUser, $permissionLevel)){
+        return "INSUFFICIENT_PERMISSIONS_BEYOND_OWN";
+    }
+
+	$userDbInterface->UpdateUserPermissionLevel($userId, $permissionLevel);
 	$userDbInterface->UpdateUserPermissions($userId, $allowlistPermissionValue, $denylistPermissionValue);
 	
 	$username = $userData->UserModels[$userId]->Username;
 
 	$messageService->SendMessage(LogMessage::UserLogMessage(
 		"USER_EDITED", 
-		"User $username updated with values: IsAdmin: $isAdmin; AllowlistPermissions: $allowlistPermissionValue; DenylistPermissions: $denylistPermissionValue", 
+		"User $username updated with values: PermissionLevel: $permissionLevel; AllowlistPermissions: $allowlistPermissionValue; DenylistPermissions: $denylistPermissionValue",
 		$loggedInUser->Id,
 		$userId)
 	);
@@ -49,8 +54,8 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$userId = $_POST[FORM_EDITUSER_USER_ID];
-		$isAdmin = (isset($_POST[FORM_EDITUSER_IS_ADMIN])) ? intval($_POST[FORM_EDITUSER_IS_ADMIN]) : 0;
-		if($isAdmin != 0 && $isAdmin != 1){
+		$permissionLevel = (isset($_POST[FORM_EDITUSER_PERMISSION_LEVEL])) ? intval($_POST[FORM_EDITUSER_PERMISSION_LEVEL]) : 0;
+		if($permissionLevel < 0){
 			die("invalid isadmin value");
 		}
 
@@ -73,7 +78,7 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 			}
 		}
 
-		return EditUser($messageService, $userId, $isAdmin, $allowlistPermissionValue, $denylistPermissionValue);
+		return EditUser($messageService, $userId, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue);
 	}
 }
 

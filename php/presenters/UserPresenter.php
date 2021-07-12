@@ -1,7 +1,7 @@
 <?php
 
 class UserPresenter{
-	public static function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, $renderDepth){
+	public static function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
 		AddActionLog("RenderUser");
 		StartTimer("RenderUser");
 	
@@ -290,8 +290,13 @@ class UserPresenter{
 		}
 	
 		//Is administrator
-		if($userViewModel->admin == 1){
+		if($userViewModel->admin >= 1){
 			$userViewModel->is_admin = 1;
+
+            $userViewModel->is_equal_or_lower_permission_level_to_logged_in_user = 0;
+            if($loggedInUser && $loggedInUser->Admin >= $userViewModel->admin){
+                $userViewModel->is_equal_or_lower_permission_level_to_logged_in_user = 1;
+            }
 		}
 	
 		StopTimer("RenderUser - Finish");
@@ -300,7 +305,7 @@ class UserPresenter{
 		return $userViewModel;
 	}
 	
-	public static function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, $renderDepth){
+	public static function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
 		AddActionLog("RenderUsers");
 		StartTimer("RenderUsers");
 		
@@ -310,7 +315,7 @@ class UserPresenter{
 	
 		foreach($userData->UserModels as $i => $userModel){
 			if(($renderDepth & RENDER_DEPTH_USERS) > 0){
-				$userRender = UserPresenter::RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $renderDepth);
+				$userRender = UserPresenter::RenderUser($configData, $cookieData, $userModel, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $renderDepth);
 				$usersViewModel->LIST[] = $userRender;
 			}
 	
@@ -347,7 +352,7 @@ class UserPresenter{
 	public static function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
 		AddActionLog("RenderLoggedInUser");
 		
-		return UserPresenter::RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $renderDepth);
+		return UserPresenter::RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $renderDepth);
 	}
 }
 

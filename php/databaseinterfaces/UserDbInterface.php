@@ -248,22 +248,22 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdatePassword");
     }
 
-    public function UpdateIsAdmin($userId, $isAdmin){
-        AddActionLog("UserDbInterface_UpdateIsAdmin");
-        StartTimer("UserDbInterface_UpdateIsAdmin");
+    public function UpdateUserPermissionLevel($userId, $permissionLevel){
+        AddActionLog("UserDbInterface_UpdateUserPermissionLevel");
+        StartTimer("UserDbInterface_UpdateUserPermissionLevel");
 
         $escapedUserId = $this->database->EscapeString($userId);
-        $escapedIsAdmin = $this->database->EscapeString($isAdmin);
+        $escapedPermissionLevel = $this->database->EscapeString($permissionLevel);
 
         $sql = "
             UPDATE ".DB_TABLE_USER."
             SET
-            ".DB_COLUMN_USER_ROLE." = $escapedIsAdmin
+            ".DB_COLUMN_USER_ROLE." = $escapedPermissionLevel
             WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         $this->database->Execute($sql);;
         
-        StopTimer("UserDbInterface_UpdateIsAdmin");
+        StopTimer("UserDbInterface_UpdateUserPermissionLevel");
     }
 
     public function UpdateUserPermissions($userId, $permissionsAllowlist, $permissionsDenylist){

@@ -24,7 +24,7 @@ $configPrettyPrintFunctions = Array(
 
 class ConfigurationPresenter{
 	
-	public static function RenderConfig($configData){
+	public static function RenderConfig(ConfigData &$configData, &$loggedInUser){
 		global $configCategorySettings, $configPrettyPrintFunctions;
 		AddActionLog("RenderConfig");
 		StartTimer("RenderConfig");
@@ -68,6 +68,8 @@ class ConfigurationPresenter{
 			$settingViewModel->EDITABLE = $configModel->Editable;
 			$settingViewModel->REQUIRED = $configModel->Required;
 			$settingViewModel->TYPE = $type;
+            $settingViewModel->USER_HAS_READ_PERMISSION = UserHasPermissionLevel($loggedInUser, $configModel->RequiredPermissionsRead) ? 1 : 0;
+            $settingViewModel->USER_HAS_WRITE_PERMISSION = UserHasPermissionLevel($loggedInUser, $configModel->RequiredPermissionsWrite) ? 1 : 0;
 
 			switch($type) {
 				case "TEXT":

@@ -71,6 +71,7 @@ class UserViewModel{
     public $vote_type_veto;
     public $is_admin_candidate;
     public $is_admin;
+    public $is_equal_or_lower_permission_level_to_logged_in_user;
 }
 
 class UserPreferenceViewModel{

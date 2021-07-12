@@ -31,6 +31,8 @@ class SettingViewModel{
     public $TYPE_NUMBER;
     public $TYPE_ENUM;
     public $TYPE_TEXTAREA;
+    public $USER_HAS_READ_PERMISSION;
+    public $USER_HAS_WRITE_PERMISSION;
 }
 
 class SettingEnumOptionViewModel{

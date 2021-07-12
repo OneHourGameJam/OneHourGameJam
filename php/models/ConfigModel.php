@@ -85,7 +85,9 @@ class ConfigModel{
 	public $Required;
 	public $Type;
 	public $Options = Array();
-	public $AddedToDictionary;
+    public $AddedToDictionary;
+    public $RequiredPermissionsRead;
+    public $RequiredPermissionsWrite;
 }
 
 class SettingEnumOptionModel{
@@ -128,6 +130,8 @@ class ConfigData{
             $configModel->Required = $configData[DB_COLUMN_CONFIG_REQUIRED];
             $configModel->Type = $configData[DB_COLUMN_CONFIG_TYPE];
             $configModel->AddedToDictionary = $configData[DB_COLUMN_CONFIG_ADDED_TO_DICTIONARY];
+            $configModel->RequiredPermissionsRead = $configData[DB_COLUMN_CONFIG_REQUIRED_PERMISSION_READ];
+            $configModel->RequiredPermissionsWrite = $configData[DB_COLUMN_CONFIG_REQUIRED_PERMISSION_WRITE];
 
             $configModel->Options = Array();
             foreach($options as $i => $option){

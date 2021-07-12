@@ -12,17 +12,15 @@
 				<label for="username">Username</label>
 				<input type="text" class="form-control" id="username" name='{{{forms.form.edituser.username}}}' placeholder="Username" value="{{{username}}}" readonly required>
 			</div>
-			<div class="checkbox">
-				<label>
-					<input type='checkbox' name='{{{forms.form.edituser.is_admin}}}' value='1' {{#is_admin}}checked{{/is_admin}}>
-					Site administrator
-				</label>
+			<div class="form-group">
+				<label for="permission_level">Permission Leve</label>
+				<input type="number" class="form-control" id="permission_level" name='{{{forms.form.edituser.permission_level}}}' placeholder="Permission Level" value='{{admin}}' min="0" max="{{user.admin}}" {{^is_equal_or_lower_permission_level_to_logged_in_user}}disabled{{/is_equal_or_lower_permission_level_to_logged_in_user}}>
 			</div>
 
 			<h3>User Preferences</h3>
 			<table class="table">
 				<tr>
-					<th>Permission Key</th>
+					<th>Preference Key</th>
 					<th>Granted</th>
 				</tr>
 			{{#preferences_array}}

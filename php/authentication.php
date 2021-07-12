@@ -92,9 +92,8 @@ function IsLoggedIn(&$configData, &$userData){
 	StopTimer("IsLoggedIn");
 }
 
-//Returns TRUE or FALSE depending on whether the logged in user is an admin.
-//returns FALSE if there is no logged in user.
-function IsAdmin($user){
+//Returns TRUE or FALSE depending on whether the specified user is an admin.
+function IsAdmin(&$user){
 	AddActionLog("IsAdmin");
 	StartTimer("IsAdmin");
 
@@ -112,6 +111,27 @@ function IsAdmin($user){
 	}
 
 	StopTimer("IsAdmin");
+}
+
+//Returns TRUE or FALSE depending on whether the specified user has the specified permission level
+function UserHasPermissionLevel(&$user, $permissionLevel){
+	AddActionLog("UserHasPermissionLevel");
+	StartTimer("UserHasPermissionLevel");
+
+	if($user === false){
+		StopTimer("UserHasPermissionLevel");
+		return false;
+	}
+
+	if($user->Admin >= $permissionLevel){
+		StopTimer("UserHasPermissionLevel");
+		return true;
+	}else{
+		StopTimer("UserHasPermissionLevel");
+		return false;
+	}
+
+	StopTimer("UserHasPermissionLevel");
 }
 
 function ValidatePassword($password, &$configData){

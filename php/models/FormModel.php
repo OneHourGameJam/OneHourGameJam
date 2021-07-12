@@ -76,7 +76,7 @@ define("FORM_SAVEUSERCHANGES_TWITCH_USERNAME", "twitchusername");
 define("FORM_SAVEUSERCHANGES_EMAIL_ADDRESS", "emailaddress");
 define("FORM_SAVEUSERCHANGES_BIO", "bio");
 define("FORM_EDITUSER_USER_ID", "user_id");
-define("FORM_EDITUSER_IS_ADMIN", "isadmin");
+define("FORM_EDITUSER_PERMISSION_LEVEL", "permission_level");
 define("FORM_COOKIENOTICE_ACCEPT", "cookienotice-accepted");
 define("FORM_SETSTREAMER_JAM_NUMBER", "jam_number");
 define("FORM_UNSETSTREAMER_JAM_NUMBER", "jam_number");

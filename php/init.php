@@ -149,11 +149,11 @@ function Init(){
 	$dictionary["csrf_token"] = $_SESSION[SESSION_CSRF_TOKEN];
  
 	if(FindDependency(RENDER_CONFIG, $dependencies) !== false){
-		$dictionary["CONFIG"] = ConfigurationPresenter::RenderConfig($configData);
+		$dictionary["CONFIG"] = ConfigurationPresenter::RenderConfig($configData, $loggedInUser);
 	}
 	if(FindDependency(RENDER_USERS, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_USERS, $dependencies);
-		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $dependency["RenderDepth"]);
+		$dictionary["users"] = UserPresenter::RenderUsers($configData, $cookieData, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency(RENDER_ALL_JAMS, $dependencies) !== false){
 		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);

@@ -21,6 +21,10 @@ function SaveConfig(MessageService &$messageService, $key, $newValue){
 		return;
 	}
 
+	if(!UserHasPermissionLevel($loggedInUser, $configData->ConfigModels[$key]->RequiredPermissionsWrite)){
+        return "INSUFFICIENT_PERMISSIONS";
+    }
+
 	$configData->UpdateConfig($key, $newValue, $loggedInUser->Id, "");
 
 	$messageService->SendMessage(LogMessage::UserLogMessage(

@@ -87,7 +87,7 @@ class FormPresenter{
         $formViewModel->form["usersettings"]["bio"] = FORM_SAVEUSERCHANGES_BIO;
         $formViewModel->form["edituser"]["user_id"] = FORM_EDITUSER_USER_ID;
         $formViewModel->form["edituser"]["username"] = "username";
-        $formViewModel->form["edituser"]["is_admin"] = FORM_EDITUSER_IS_ADMIN;
+        $formViewModel->form["edituser"]["permission_level"] = FORM_EDITUSER_PERMISSION_LEVEL;
         $formViewModel->form["cookienotice"]["accept"] = FORM_COOKIENOTICE_ACCEPT;
         $formViewModel->form["pollvote"]["poll_id"] = FORM_POLLVOTE_POLL_ID;
         $formViewModel->form["pollvote"]["option_id"] = FORM_POLLVOTE_OPTION_ID;
