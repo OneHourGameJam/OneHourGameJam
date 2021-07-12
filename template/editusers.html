@@ -12,6 +12,7 @@
         <th>First {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
         <th>Last {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</th>
         <th>Recent Participation</th>
+        <th>Permission Level</th>
         <th>Login</th>
         <th>{{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</th>
         <th>Admin</th>
@@ -25,6 +26,7 @@
                 <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
                 <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
                 <td>{{recent_participation}}%</td>
+                <td>{{admin}}</td>
                 <td class='editUserAdminActivityIndicatorLoginContainer' style='background-color: {{{activity_login_color}}};'>
                     {{#activity_login_inactive}}
                         <img src='{{{page.template_path}}}images/cross.png' class='editUserAdminActivityImage' title='Login Status: User is inactive - Has not logged in within the last {{CONFIG.VALUES.ADMIN_ACTIVITY_DAYS_SINCE_LAST_LOGIN_WARNING}} days'>

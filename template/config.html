@@ -16,16 +16,16 @@
 						<div class="form-group">
 							<label for="{{KEY}}">{{DESCRIPTION}}</label>
 							{{#TYPE_TEXT}}
-								<input type="text" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>
+								<input type="text" class="form-control" id="{{KEY}}" name='CONFIG_VALUE_{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>
 							{{/TYPE_TEXT}}
 							{{#TYPE_NUMBER}}
-								<input type="number" class="form-control" id="{{KEY}}" name='{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>
+								<input type="number" class="form-control" id="{{KEY}}" name='CONFIG_VALUE_{{KEY}}' placeholder="{{DESCRIPTION}}" value="{{{VALUE_HTML_ENCODED}}}" {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>
 							{{/TYPE_NUMBER}}
 							{{#TYPE_TEXTAREA}}
-								<textarea class="form-control configTextarea" id="{{KEY}}" name='{{KEY}}' {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE_HTML_ENCODED}}}</textarea>
+								<textarea class="form-control configTextarea" id="{{KEY}}" name='CONFIG_VALUE_{{KEY}}' {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>{{{VALUE_HTML_ENCODED}}}</textarea>
 							{{/TYPE_TEXTAREA}}
 							{{#TYPE_ENUM}}
-								<select class="form-control" id="{{KEY}}" name='{{KEY}}' {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>
+								<select class="form-control" id="{{KEY}}" name='CONFIG_VALUE_{{KEY}}' {{^USER_HAS_WRITE_PERMISSION}}disabled{{/USER_HAS_WRITE_PERMISSION}} {{#DISABLED}}disabled{{/DISABLED}} title="{{^USER_HAS_WRITE_PERMISSION}}Not enough permissions to edit{{/USER_HAS_WRITE_PERMISSION}}{{#DISABLED}} Cannot be edited here, edit in database{{/DISABLED}}" {{#REQUIRED}}required{{/REQUIRED}}>
 									{{#ENUM_OPTIONS}}
 										<option value="{{{VALUE}}}" {{#ENUM_SELECTED}}selected{{/ENUM_SELECTED}}>{{TEXT}}</value>
 									{{/ENUM_OPTIONS}}

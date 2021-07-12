@@ -41,11 +41,14 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$overallActionResult = "NO_CHANGE";
-		foreach($_POST as $key => $value){
-			$actionResult = SaveConfig($messageService, $key, $value);
-			if($actionResult != ""){
-				$overallActionResult = $actionResult;
-			}
+		foreach($_POST as $postKey => $value){
+		    if(startsWith($postKey, "CONFIG_VALUE_")){
+                $key = substr($postKey, strlen("CONFIG_VALUE_"));
+                $actionResult = SaveConfig($messageService, $key, $value);
+                if($actionResult != ""){
+                    $overallActionResult = $actionResult;
+                }
+            }
 		}
 		return $overallActionResult;
 	}
