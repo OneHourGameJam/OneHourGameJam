@@ -1,4 +1,7 @@
 <?php
+
+$softwareVersion = "1.1.0";
+
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
 //error_reporting(-1);
@@ -10,6 +13,8 @@
 $templateBasePath = "template/";
 include_once("php/site.php");
 StartTimer("index.php");
+
+$dictionary["SOFTWARE_VERSION"] = $softwareVersion;
 
 $pageTemplateFile = $pageSettings[$page]["template_file"];
 $partials["header"] = file_get_contents($templateBasePath."header.html");
