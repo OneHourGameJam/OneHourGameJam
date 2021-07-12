@@ -4,7 +4,7 @@
 function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	global $userData, $loggedInUser, $configData, $userDbInterface;
 
-	//Authorize user (is admin)
+	//Authorize user (Logged in)
 	if($loggedInUser === false){
 		return "NOT_LOGGED_IN";
 	}
