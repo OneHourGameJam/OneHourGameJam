@@ -31,7 +31,7 @@ class GameDbInterface{
         $sql = "
             SELECT ".DB_COLUMN_ENTRY_ID.", ".DB_COLUMN_ENTRY_JAM_ID.", ".DB_COLUMN_ENTRY_JAM_NUMBER.", ".DB_COLUMN_ENTRY_TITLE.", ".DB_COLUMN_ENTRY_DESCRIPTION.", ".DB_COLUMN_ENTRY_AUTHOR_USER_ID.", ".DB_COLUMN_ENTRY_SCREENSHOT_URL.", ".DB_COLUMN_ENTRY_BACKGROUND_COLOR.", ".DB_COLUMN_ENTRY_TEXT_COLOR.", ".DB_COLUMN_ENTRY_DELETED."
             FROM ".DB_TABLE_ENTRY."
-            ORDER BY ".DB_COLUMN_ENTRY_ID." DESC";
+            ORDER BY ".DB_COLUMN_ENTRY_JAM_ID." DESC, ".DB_COLUMN_ENTRY_ID." DESC";
         
         StopTimer("GameDbInterface_SelectAll");
         return $this->database->Execute($sql);;
