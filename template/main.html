@@ -9,7 +9,12 @@
 	{{/stream.IS_STREAM_ACTIVE}}
 {{/cookies.is_streamer}}
 
-<input type="text" class="form-control searchInputField" id='search' placeholder="Search for...">
+<p>
+	<b>Next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}:</b>
+	<script type='text/javascript'>
+		document.write("<b>"+day+" "+month+" "+year+" at "+hour+":"+min+"</b>("+timezone+")");
+	</script>
+</p>
 
 {{#jams.LIST}}
 	{{^jam_deleted}}

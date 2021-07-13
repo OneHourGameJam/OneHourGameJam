@@ -1,48 +1,7 @@
 <div class="panel panel-info">
 	<div class="panel-heading">
-		{{#user}}
-		<h3 class="panel-title">Hello {{user.display_name}}</h3>
-		<form method='post'>
-			{{> csrf_token}}
-			<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.logout}}}' class="btn btn-default">Log out</button>
-		</form>
-		{{/user}}
-		{{^user}}
-			<h3 class="panel-title">Menu</h3>
-		{{/user}}
+		<h3 class="panel-title">Menu</h3>
 	</div>
-
-	<div class="notifications-panel">
-		{{#user}}
-			{{^cookies.is_streamer}}
-				{{#user.admin}}
-					{{#themes.themes_must_be_pruned}}
-						<div class="panel-body notification notification-major">
-							<a href='?{{{forms.get.page}}}={{{forms.pages.managethemes}}}#markedfordeletion'><strong>Admins: </strong>{{CONFIG.VALUES.THEME_PHRASE_PLURAL}} must be pruned.</a>
-						</div>
-					{{/themes.themes_must_be_pruned}}
-					{{#users.missing_admin_candidate_votes}}
-						<div class="panel-body notification notification-major">
-							<a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'><strong>Admin: </strong>{{{users.missing_admin_candidate_votes_number}}}
-								admin candidate(s) need(s) your vote</a>
-						</div>
-					{{/users.missing_admin_candidate_votes}}
-				{{/user.admin}}
-				{{#themes.user_has_not_voted_for_all_themes}}
-					{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
-						<div class="panel-body notification notification-minor">
-							<a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>{{{themes.themes_user_has_not_voted_for}}}
-								{{^themes.themes_user_has_not_voted_for_plural}}{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}{{/themes.themes_user_has_not_voted_for_plural}}
-								{{#themes.themes_user_has_not_voted_for_plural}}{{CONFIG.VALUES.THEME_PHRASE_PLURAL}}{{/themes.themes_user_has_not_voted_for_plural}}
-								need{{^themes.themes_user_has_not_voted_for_plural}}s{{/themes.themes_user_has_not_voted_for_plural}} your vote</a>
-						</div>
-					{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
-				{{/themes.user_has_not_voted_for_all_themes}}
-			{{/cookies.is_streamer}}
-		{{/user}}
-	</div>
-		
-
 	<div class="panel-body">
 		<ul id='mainmenu'>
 
@@ -86,14 +45,6 @@
 			<li><a href='?{{{forms.get.page}}}={{{forms.pages.entries}}}'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
 			<li><a href='?{{{forms.get.page}}}={{{forms.pages.authors}}}'>{{CONFIG.VALUES.DEVELOPER_PHRASE_PLURAL}}</a></li>
 			<li><a href='?{{{forms.get.page}}}={{{forms.pages.jams}}}'>{{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a></li>
-
-			{{#user}}
-				<li class="mainmenu-separator">User</li>
-				<li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
-				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a></li>
-				{{/cookies.is_streamer}}
-			{{/user}}
 
 			<li class="mainmenu-separator">Misc</li>
 			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report bug</a></li>

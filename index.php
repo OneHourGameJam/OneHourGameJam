@@ -18,6 +18,7 @@ $dictionary["SOFTWARE_VERSION"] = $softwareVersion;
 
 $pageTemplateFile = $pageSettings[$page]["template_file"];
 $partials["header"] = file_get_contents($templateBasePath."header.html");
+$partials["jam_stats"] = file_get_contents($templateBasePath."jam_stats.html");
 $partials["message"] = file_get_contents($templateBasePath."message.html");
 $partials["menu"] = file_get_contents($templateBasePath."menu.html");
 $partials["footer"] = file_get_contents($templateBasePath."footer.html");
