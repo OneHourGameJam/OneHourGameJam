@@ -157,8 +157,11 @@ body{
 }
 
 .themeTableCell{
-	padding: 3px 3px;
-	min-width: 30px;
+  padding: 3px 3px;
+  min-width: 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 250px;
 }
 
 .themeTableCellCentered{
@@ -703,7 +706,12 @@ body{
 }
 
 .loadAllJamsButtonContainer{
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+.loadAllThemesButtonContainer{
+  padding-bottom: 10px;
   padding-top: 5px;
 }
 

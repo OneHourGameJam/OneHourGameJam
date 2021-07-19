@@ -24,7 +24,9 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins){
+function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData, GameData &$gameData, JamData &$jamData, ThemeData &$themeData, ThemeIdeaData &$themeIdeaData, PlatformData &$platformData,
+                            PlatformGameData &$platformGameData, PollData &$pollData, SatisfactionData &$satisfactionData, &$loggedInUser, AssetData &$assetData, CookieData &$cookieData,
+                            AdminVoteData &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -92,7 +94,16 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                     die("no entry selected");
                 }
             }
-        break;
+            break;
+        case PAGE_MANAGE_THEMES:
+            if(isset($_GET[GET_LOAD_ALL])){
+                if(IsAdmin($loggedInUser) !== false){
+                    $themeData->AllThemeModels = $themeData->LoadAllThemes();
+                    $render["all_themes"] = ThemePresenter::RenderAllThemes($configData, $userData, $themeData);
+                    $render["loading_all_themes"] = 1;
+                }
+            }
+            break;
         case PAGE_JAM:
             $viewingJamNumber = ((isset($_GET[GET_JAM_JAM_NUMBER])) ? intval($_GET[GET_JAM_JAM_NUMBER]) : 0);
             if($viewingJamNumber == 0){

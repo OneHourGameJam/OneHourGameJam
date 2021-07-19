@@ -14,7 +14,8 @@ class ThemeModel{
 }
 
 class ThemeData{
-    public $ThemeModels;
+    public $AllThemeModels;
+    public $ActiveThemeModels;
     public $LoggedInUserThemeVotes;
 
     private $themeDbInterface;
@@ -23,16 +24,59 @@ class ThemeData{
     function __construct(&$themeDbInterface, &$themeVoteDbInterface, &$loggedInUser) {
         $this->themeDbInterface = $themeDbInterface;
         $this->themeVoteDbInterface = $themeVoteDbInterface;
-        $this->ThemeModels = $this->LoadThemes();
+        $this->ActiveThemeModels = $this->LoadActiveThemes();
         $this->LoggedInUserThemeVotes = $this->LoadUserThemeVotes($loggedInUser);
     }
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadThemes(){
-        AddActionLog("LoadThemes");
-        StartTimer("LoadThemes");
-        
+    function LoadActiveThemes(){
+        AddActionLog("LoadActiveThemes");
+        StartTimer("LoadActiveThemes");
+
+        $data = $this->themeDbInterface->SelectAllActiveWithResults();
+
+        $themeModels = Array();
+        while($themeData = mysqli_fetch_array($data)){
+            $themeID = $themeData[DB_COLUMN_THEME_ID];
+            $themeVoteType = $themeData[DB_COLUMN_THEMEVOTE_TYPE];
+            $themeVoteCount = intval($themeData["themevote_count"]);
+            $themeVotesFor = ($themeVoteType == "3") ? $themeVoteCount : 0;
+            $themeVotesNeutral = ($themeVoteType == "2") ? $themeVoteCount : 0;
+            $themeVotesAgainst = ($themeVoteType == "1") ? $themeVoteCount : 0;
+
+            if(isset($themeModels[$themeID])){
+                //Theme already processed, simply log numbers for vote type
+                $theme = $themeModels[$themeID];
+                $theme->VotesAgainst = max($theme->VotesAgainst, $themeVotesAgainst);
+                $theme->VotesNeutral =  max($theme->VotesNeutral, $themeVotesNeutral);
+                $theme->VotesFor =  max($theme->VotesFor, $themeVotesFor);
+                continue;
+            }
+
+            $theme = new ThemeModel();
+            $theme->Id = $themeID;
+            $theme->Theme = $themeData[DB_COLUMN_THEME_TEXT];
+            $theme->AuthorUserId = $themeData[DB_COLUMN_THEME_AUTHOR_USER_ID];
+            $theme->Banned = $themeData[DB_COLUMN_THEME_BANNED];
+            $theme->Deleted = $themeData[DB_COLUMN_THEME_DELETED];
+            $theme->VotesAgainst = $themeVotesAgainst;
+            $theme->VotesNeutral = $themeVotesNeutral;
+            $theme->VotesFor = $themeVotesFor;
+            $theme->VotesReport = 0;
+            $theme->DaysAgo = intval($themeData["theme_daysago"]);
+
+            $themeModels[$themeID] = $theme;
+        }
+
+        StopTimer("LoadActiveThemes");
+        return $themeModels;
+    }
+
+    function LoadAllThemes(){
+        AddActionLog("LoadAllThemes");
+        StartTimer("LoadAllThemes");
+
         $data = $this->themeDbInterface->SelectAllWithResults();
 
         $themeModels = Array();
@@ -68,7 +112,7 @@ class ThemeData{
             $themeModels[$themeID] = $theme;
         }
 
-        StopTimer("LoadThemes");
+        StopTimer("LoadAllThemes");
         return $themeModels;
     }
 

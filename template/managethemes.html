@@ -463,3 +463,91 @@
 		<img src="{{{page.template_path}}}images/cross.png" height="20" width="20"> Delete
 	</button>
 </div>
+
+<a id="allthemes"></a>
+<h4>All {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</h4>
+This section shows all the themes that have ever been suggested, including the votes they received. If the jam runs out of themes this can be used to select historically popular themes. If a theme was suggested multiple times, it will appear in this list multiple times.
+{{^page.loading_all_themes}}
+	<div class="row">
+		<div class="col-md-10 alignCenter loadAllThemesButtonContainer">
+			<a class="btn btn-default" href="?{{{forms.get.page}}}={{{forms.pages.managethemes}}}&{{{forms.get.load_all}}}">Load all {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a>
+		</div>
+	</div>
+{{/page.loading_all_themes}}
+{{#page.loading_all_themes}}
+	<table>
+		<tr>
+			<th class='themeTableCell themeTableCellCentered manageThemesStatusColumn'>Status</th>
+
+			<th class='themeTableCell themeTableCellCentered'>
+				{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}
+			</th>
+
+			<th class='themeTableCell themeTableCellCentered'>
+				Author
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				Votes
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				Popularity
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				Apathy
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				+1
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				0
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				-1
+			</th>
+			<th class='themeTableCell themeTableCellCentered'>
+				Days old
+			</th>
+		</tr>
+		{{#page.all_themes}}
+			<tr>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{#has_enough_votes}}
+						<!-- Enough votes ballot box -->
+						<img src='{{{page.template_path}}}images/tick.png' title='{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} wil be kept in voting for the next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}'>
+					{{/has_enough_votes}}
+					{{^has_enough_votes}}
+						<!-- Not enough votes ballot box -->
+						<img src='{{{page.template_path}}}images/votes.png' title='Theme does not yet have enough votes.'>
+					{{/has_enough_votes}}
+				</td>
+				<td class='themeTableCell'>
+					{{{theme}}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{author_username}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{votes_total}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}}style='background-color: {{popularity_color}}'{{/has_enough_votes}}>
+					{{votes_popularity}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered' {{#has_enough_votes}}style='background-color: {{apathy_color}}'{{/has_enough_votes}}>
+					{{votes_apathy}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{votes_for}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{votes_neutral}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{votes_against}}
+				</td>
+				<td class='themeTableCell themeTableCellCentered'>
+					{{days_ago}}
+				</td>
+			</tr>
+		{{/page.all_themes}}
+	</table>
+{{/page.loading_all_themes}}

@@ -17,7 +17,7 @@ function BanTheme(MessageService &$messageService, $bannedThemeId){
 	$themeAuthorUserId = -1;
 	$themeFound = false;
 	$bannedTheme = "";
-	foreach($themeData->ThemeModels as $id => $themeModel) {
+	foreach($themeData->ActiveThemeModels as $id => $themeModel) {
 		if ($themeModel->Deleted != 0){
 			continue;
 		}

@@ -17,7 +17,7 @@ function UnbanTheme(MessageService &$messageService, $unbannedThemeId){
 	$themeAuthorUserId = -1;
 	$themeFound = false;
 	$unbannedTheme = "";
-	foreach($themeData->ThemeModels as $id => $themeModel) {
+	foreach($themeData->ActiveThemeModels as $id => $themeModel) {
 		if ($themeModel->Deleted != 0){
 			continue;
 		}

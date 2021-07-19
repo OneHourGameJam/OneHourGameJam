@@ -133,8 +133,8 @@ function Init(){
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Process");
 
-	$themesByVoteDifference = ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
-	$themesByPopularity = ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
+	$themesByVoteDifference = ThemeController::CalculateActiveThemeSelectionProbabilityByVoteDifference($themeData, $configData);
+	$themesByPopularity = ThemeController::CalculateActiveThemeSelectionProbabilityByPopularity($themeData, $configData);
 	JamController::ProcessJamStates($messageService, $jamData, $themeData, $configData);
 
 	PerformPendingSiteAction($messageService, $configData, $siteActionData, $loggedInUser);
@@ -176,7 +176,7 @@ function Init(){
 	}
 	if(FindDependency(RENDER_THEMES, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_THEMES, $dependencies);
-		$dictionary["themes"] = ThemePresenter::RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeaData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
+		$dictionary["themes"] = ThemePresenter::RenderActiveThemes($configData, $jamData, $userData, $themeData, $themeIdeaData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency(RENDER_ASSETS, $dependencies) !== false){
 		$dictionary["assets"] = AssetPresenter::RenderAssets($assetData, $userData);

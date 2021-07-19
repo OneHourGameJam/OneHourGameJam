@@ -102,7 +102,7 @@ class JamController{
 				//Failed to find a theme
 				$selectedTheme = "Any theme";
 			}else{
-				$selectedTheme = $ThemeData->ThemeModels[$selectedThemeId]->Theme;
+				$selectedTheme = $ThemeData->ActiveThemeModels[$selectedThemeId]->Theme;
 			}
 
 			//print "<br>A THEME WAS SELECTED";
@@ -138,7 +138,7 @@ class JamController{
 
 		$availableThemes = Array();
 		$totalVotesDifference = 0;
-		foreach($ThemeData->ThemeModels as $id => $themeModel){
+		foreach($ThemeData->ActiveThemeModels as $id => $themeModel){
 			$themeOption = Array();
 
 			if($themeModel->Banned){
@@ -200,7 +200,7 @@ class JamController{
 
 		$availableThemes = Array();
 		$totalPopularity = 0;
-		foreach($ThemeData->ThemeModels as $id => $themeModel){
+		foreach($ThemeData->ActiveThemeModels as $id => $themeModel){
 			$themeOption = Array();
 
 			if($themeModel->Banned){
@@ -259,7 +259,7 @@ class JamController{
 		$selectedThemeId = -1;
 
 		$availableThemes = Array();
-		foreach($ThemeData->ThemeModels as $id => $themeModel){
+		foreach($ThemeData->ActiveThemeModels as $id => $themeModel){
 			$themeOption = Array();
 
 			if($themeModel->Banned){

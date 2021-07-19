@@ -14,7 +14,7 @@ function AddTheme($newTheme){
 		return "INVALID_THEME";
 	}
 	
-	foreach($themeData->ThemeModels as $i => $theme){
+	foreach($themeData->ActiveThemeModels as $i => $theme){
 		if(strtolower($theme->Theme) == strtolower($newTheme)){
 			if($theme->Banned){
 				return "THEME_BANNED";
@@ -28,7 +28,7 @@ function AddTheme($newTheme){
 	}
 
 	$themesByThisUser = 0;
-	foreach($themeData->ThemeModels as $i => $themeModel) {
+	foreach($themeData->ActiveThemeModels as $i => $themeModel) {
 		if ($themeModel->AuthorUserId == $loggedInUser->Id && !$themeModel->Banned) {
 			$themesByThisUser++;
 		}
