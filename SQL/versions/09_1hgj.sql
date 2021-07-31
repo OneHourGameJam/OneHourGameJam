@@ -86,8 +86,8 @@ DROP TABLE IF EXISTS `config`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `config` (
   `config_id` int(11) NOT NULL AUTO_INCREMENT,
-  `config_lastedited` datetime NOT NULL,
-  `config_lasteditedby` varchar(45) COLLATE utf8mb4_bin NOT NULL,
+  `config_lastedited` datetime NULL,
+  `config_lasteditedby` varchar(45) COLLATE utf8mb4_bin NULL,
   `config_key` varchar(100) COLLATE utf8mb4_bin NOT NULL,
   `config_value` mediumtext COLLATE utf8mb4_bin NOT NULL,
   `config_category` varchar(255) COLLATE utf8mb4_bin NOT NULL,
