@@ -27,10 +27,19 @@
 						</a></b></li>
 					{{/cookies.is_streamer}}
 				{{/jams.current_jam}}
-				<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></b></li>
+				<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</b>
+					{{#themes.user_has_not_voted_for_all_themes}}
+						{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
+							<div class="annoyingNumberNotification">
+								{{{themes.themes_user_has_not_voted_for}}}
+							</div>
+						{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
+					{{/themes.user_has_not_voted_for_all_themes}}
+				</a></li>
 			{{/user}}
 			{{^user}}
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.login}}}'>Log in</a> or <a href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>register</a></li>
+				<li>Log in to vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</li>
 			{{/user}}
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>How it works</a></li>
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.assets}}}'>Assets</a></li>
@@ -70,9 +79,33 @@
 					<li class="mainmenu-separator">Administration</li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.newjam}}}'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration</a></li>
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.managethemes}}}'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.managethemes}}}'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}
+						{{#user}}
+							{{^cookies.is_streamer}}
+								{{#user.admin}}
+									{{#themes.themes_must_be_pruned}}
+										<div class="annoyingNumberNotification">
+											Prune
+										</div>
+									{{/themes.themes_must_be_pruned}}
+								{{/user.admin}}
+							{{/cookies.is_streamer}}
+						{{/user}}
+					</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editcontent}}}'>Manage content</a></li>
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'>Manage users</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'>Manage users
+						{{#user}}
+							{{^cookies.is_streamer}}
+								{{#user.admin}}
+									{{#users.missing_admin_candidate_votes}}
+										<div class="annoyingNumberNotification">
+											{{{users.missing_admin_candidate_votes_number}}}
+										</div>
+									{{/users.missing_admin_candidate_votes}}
+								{{/user.admin}}
+							{{/cookies.is_streamer}}
+						{{/user}}
+					</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editplatforms}}}'>Manage platforms</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editassets}}}'>Manage assets</a></li>
 					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll results</a></li>

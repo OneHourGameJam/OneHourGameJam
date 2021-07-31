@@ -38,6 +38,8 @@ class JamPresenter{
 			$jamViewModel->in_straming_period = 1;
 		}
 
+        $jamViewModel->jam_ended = $timeSinceJamEndedInSeconds >= 0;
+
 		if($jamModel->SchedulerUserId == OVERRIDE_AUTOMATIC_NUM){
 			$jamViewModel->scheduler_username = OVERRIDE_AUTOMATIC;
 			$jamViewModel->scheduler_display_name = OVERRIDE_AUTOMATIC;
@@ -102,16 +104,20 @@ class JamPresenter{
 		if($datetime > $now){
 			$jamViewModel->theme = "Not yet announced";
 			$jamViewModel->jam_started = false;
+            $jamViewModel->jam_starts_soon = false;
 			if($timeUntilJam->days > 0){
 				$jamViewModel->time_left = $timeUntilJam->format("%a days %H:%I:%S");
 			}else if($timeUntilJam->h > 0){
 				$jamViewModel->time_left = $timeUntilJam->format("%H:%I:%S");
 			}else  if($timeUntilJam->i > 0){
 				$jamViewModel->time_left = $timeUntilJam->format("%I:%S");
+                $jamViewModel->jam_starts_soon = true;
 			}else if($timeUntilJam->s > 0){
 				$jamViewModel->time_left = $timeUntilJam->format("%S seconds");
+                $jamViewModel->jam_starts_soon = true;
 			}else{
 				$jamViewModel->time_left = "Now!";
+                $jamViewModel->jam_starts_soon = false;
 			}
 		}else{
 			$jamViewModel->jam_started = true;

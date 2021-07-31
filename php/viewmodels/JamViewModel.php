@@ -41,6 +41,8 @@ class JamViewModel{
     public $first_jam;
     public $entries_visible;
     public $jam_started;
+    public $jam_ended;
+    public $jam_starts_soon;
     public $time_left;
     public $satisfaction;
     public $satisfaction_average_score;

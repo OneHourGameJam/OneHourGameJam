@@ -19,41 +19,149 @@
 
 {{#jams.LIST}}
 	{{^jam_deleted}}
-		<div class='panel panel-info jamContener' id='jam{{jam_number}}'>
+		<div class='panel panel-info jamContener {{#jam_starts_soon}}jamContainerStartsSoon{{/jam_starts_soon}} {{#jam_started}}{{^jam_ended}}jamContainerCurrent{{/jam_ended}}{{/jam_started}} {{#in_straming_period}}jamContainerStreamingPeriod{{/in_straming_period}}' id='jam{{jam_number}}'>
 			{{>jam_header}}
 			<div class='panel-body jamContent {{^entries_visible}}entriesNotVisible{{/entries_visible}}' id='entries{{jam_number}}'>
 				{{#enough_scores_to_show_satisfaction}}
 					{{>satisfaction}}
 				{{/enough_scores_to_show_satisfaction}}
 
+				<div style="width: 100%; margin-bottom: 10px;">
+					{{#jam_started}}
+						{{#jam_ended}}
+							{{#in_straming_period}}
+								{{#user}}
+									<div class="alignCenter">
+										{{#can_user_submit_to_jam}}
+											<p class='entryTileSubmitText'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
+											<a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{jam_number}}' style='display: inline-block;'>
+												<div class="mediaButton submitGameButton">
+													Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
+												</div>
+											</a>
+										{{/can_user_submit_to_jam}}
+										{{#streamer_is_set}}
+											<a href="https://twitch.tv/{{streamer_twitch_username}}" target='_blank' style='display: inline-block;'>
+												<div class='mediaButton twitchButton'><img src='{{{page.template_path}}}images/twitch.png' class="menuButton" /> Watch</div>
+											</a>
+											{{#user_is_streamer_for_jam}}
+											<form method='post' id="form_stop_streaming_{{{jam_number}}}" style="display: inline;">
+												{{> csrf_token}}
+												<div class="form-group" style="display: inline;">
+													<input type="hidden" id="jam_streamer_jam_number" name='{{{forms.form.setstreamer.jam_number}}}' value="{{{jam_number}}}" required>
+													<input type="hidden" id="jam_streamer_action" name='{{{forms.form.action}}}' value='{{{forms.action.unsetstreamer}}}' required>
+													{{^cookies.is_streamer}}
+														<a href='#' onclick="$('#form_stop_streaming_{{{jam_number}}}').submit();" style='display: inline-block;'>
+															<div class="mediaButton stopBeingStreamerButton">
+																Stop Being Streamer
+															</div>
+														</a>
+													{{/cookies.is_streamer}}
+												</div>
+											</form>
+											{{/user_is_streamer_for_jam}}
+										{{/streamer_is_set}}
+										{{^streamer_is_set}}
+											{{#user.permissions_list.HOST_STREAM}}
+												{{#user.twitch}}
+													<form method='post' id="form_become_streamer_{{{jam_number}}}" style="display: inline;">
+														{{> csrf_token}}
+														<div class="form-group" style="display: inline;">
+															<input type="hidden" id="jam_streamer_jam_number" name='{{{forms.form.setstreamer.jam_number}}}' value="{{{jam_number}}}" required>
+															<input type="hidden" id="jam_streamer_action" name='{{{forms.form.action}}}' value='{{{forms.action.setstreamer}}}' required>
+															<a href='#' onclick="$('#form_become_streamer_{{{jam_number}}}').submit();" style='display: inline-block;'>
+																<div class="mediaButton becomeStreamerButton">
+																	Become Streamer
+																</div>
+															</a>
+														</div>
+													</form>
+												{{/user.twitch}}
+											{{/user.permissions_list.HOST_STREAM}}
+										{{/streamer_is_set}}
+									</div>
+								{{/user}}
+							{{/in_straming_period}}
+							{{^in_straming_period}}
+								Play the {{CONFIG.VALUES.GAME_PHRASE_PLURAL}} submitted to this {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}:
+							{{/in_straming_period}}
+						{{/jam_ended}}
+						{{^jam_ended}}
+							<div class="alignCenter">
+								The {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} is
+								<h4>{{theme}}</h4>
+								Go make some {{CONFIG.VALUES.GAME_PHRASE_PLURAL}}!
+								{{#user}}
+									{{#can_user_submit_to_jam}}
+										{{#jam_started}}
+											<p class='entryTileSubmitText'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
+											<a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{jam_number}}'>
+												<div class="btn btn-success">
+													Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
+												</div>
+											</a>
+										{{/jam_started}}
+									{{/can_user_submit_to_jam}}
+								{{/user}}
+							</div>
+						{{/jam_ended}}
+					{{/jam_started}}
+					{{^jam_started}}
+						{{#jam_starts_soon}}
+							<div class="alignCenter">Get Ready! This {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} is starting soon!</div>
+							<div class='jamCountdownTimer'><span id='next_jam_countdown_{{jam_number}}'></span></div>
+						{{/jam_starts_soon}}
+						{{^jam_starts_soon}}
+							<div class='jamCountdownTimer'><span id='next_jam_countdown_{{jam_number}}'></span></div>
+						{{/jam_starts_soon}}
+					{{/jam_started}}
+				</div>
+
+				{{^jam_started}}
+					<script type='text/javascript'>
+						var date_{{jam_number}} = new Date('{{{timer_code}}}');
+						var now = new Date();
+
+						function UpdateTimer_{{jam_number}}(inputId){
+							now = new Date();
+							var countdownTimer = (date_{{jam_number}} - now) / 1000;
+							var totalS = countdownTimer;
+							var d = Math.floor(totalS / (24*60*60));
+							totalS -= d * (24*60*60);
+							var h = Math.floor(totalS / (60*60));
+							totalS -= h * (60*60);
+							var m = Math.floor(totalS / (60));
+							totalS -= m * (60);
+							var s = Math.floor(totalS);
+
+							let update_interval = 60000;
+							var timerString = "Starts in ";
+							if (d > 0){
+								timerString += d+" day"+((d > 1) ? "s" : "")+((h > 0) ? (" "+h + " hour"+((h > 1) ? "s" : "")) : "");
+							}else if (d == 0 && h > 0){
+								timerString += h+" hour"+((h > 1) ? "s" : "")+((m > 0) ? (" "+m + " minute"+((m > 1) ? "s" : "")) : "");
+							}else if (d == 0 && h == 0 && m > 0){
+								update_interval = 500;
+								timerString += m+" min"+((s > 0) ? (" "+s + " s") : "");
+							}else if (d == 0 && h == 0 && m == 0 && s > 0){
+								update_interval = 500;
+								timerString += s+" s";
+							}else{
+								timerString = "Go! Go! Go!";
+							}
+
+							$("#"+inputId).text(timerString);
+							setTimeout(UpdateTimer_{{jam_number}}, update_interval, inputId);
+						}
+						setTimeout(UpdateTimer_{{jam_number}}, 0, 'next_jam_countdown_{{jam_number}}')
+					</script>
+				{{/jam_started}}
+
 				{{#entries}}
 					{{^entry_deleted}}
 						{{>entry_by_user}}
 					{{/entry_deleted}}
 				{{/entries}}
-
-				{{#user}}
-					{{#can_user_submit_to_jam}}
-						<div class='panel panel-default col-md-3 entry entryTileSubmit'>
-							<div class='panel-body entryScreenshot screenshot alignCenter entryTileIcon'>
-								<div class="entryTileTable">
-									<div class="entryTileSubmitButtonCell">
-										<div class="entryTileCentering">
-											<div class='entryTileTitle'>
-												<p class='entryTileSubmitText'>Once ready, submit your {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} to the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} here:</p>
-												<a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{jam_number}}'>
-													<div class="btn btn-success">
-														Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
-													</div>
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					{{/can_user_submit_to_jam}}
-				{{/user}}
 			</div>
 		</div>
 	{{/jam_deleted}}

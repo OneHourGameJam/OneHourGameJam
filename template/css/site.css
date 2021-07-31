@@ -207,13 +207,46 @@ body{
   min-height: 150px;
 }
 
+.profileMediaButton{
+  min-width: 100px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 5px;
+}
+
 .mediaButton{
-	width: 100px; 
+	min-width: 100px;
 	border-radius: 5px; 
 	color: white; 
 	text-align: center; 
-	padding: 4px 0px;
+	padding: 4px;
 	margin-bottom: 5px;
+}
+
+.becomeStreamerButton{
+  background-color: #6441A5;
+}
+
+.becomeStreamerButton:hover{
+  background-color: #6441A5;
+}
+
+.stopBeingStreamerButton{
+  background-color: #6441A5;
+}
+
+.stopBeingStreamerButton:hover{
+  background-color: #6441A5;
+}
+
+.submitGameButton{
+  background-color: #FF0066;
+}
+
+.submitGameButton:hover{
+  background-color: #D20054;
 }
 
 .twitterButton{
@@ -596,9 +629,37 @@ body{
   font-size: 35px;
 }
 
-.jamHeaderTimer{
+.jamContainerStartsSoon{
+  border-color: #f1bcd9;
+}
+
+.jamContainerCurrent{
+  border-color: #f1bcd9;
+}
+
+.jamHeaderStreamingPeriod{
+  border-color: #f1bcd9;
+}
+
+.jamContener>.jamHeaderPanel>.jamHeaderStartsSoon{
+  background-color: #F7D9EE;
+  color: #8F315B;
+}
+
+.jamContener>.jamHeaderPanel>.jamHeaderCurrent{
+  background-color: #F7D9EE;
+  color: #8F315B;
+}
+
+.jamContener>.jamHeaderPanel>.jamHeaderStreamingPeriod{
+  background-color: #F7D9EE;
+  color: #8F315B;
+}
+
+.jamCountdownTimer{
   color: indianred; 
   font-weight: bold;
+  text-align: center;
 }
 
 .jamHeaderStatsContainer{
@@ -961,4 +1022,12 @@ body{
 .jamHeaderIcon{
   max-width: 40px;
   max-height: 40px;
+}
+
+.annoyingNumberNotification {
+  background-color: #a94442;
+  color: white;
+  display: inline-block;
+  padding-left: 3px;
+  padding-right: 3px;
 }
