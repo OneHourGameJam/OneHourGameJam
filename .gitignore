@@ -5,6 +5,7 @@ custom/*
 plugins/migratedata/*.json
 .vscode/
 .idea/
+.vs/
 
 config/dbconfig.php
 .vagrant/
