@@ -71,7 +71,7 @@
   				<span class="input-group-addon" id="sizing-addon1">
 					<input type="checkbox" onchange='SetColorLock(this, ${i})' ${locked_colors[i]?"checked":""}>	
 				</span>
-				<input type='text' class='form-control color-preview' id='jamcolor${i}' name='{{{forms.form.newjam.jam_color}}}${i}' value='' placeholder='Color Hex' onchange='PreviewJamColor(this);' style='background-color: #ffffff; color: black;' maxlength='6'>
+				<input type='text' class='form-control color-preview' id='jamcolor${i}' name='{{{forms.form.newjam.jam_color}}}${i}' value='' placeholder='Color Hex' onchange='PreviewJamColor(this);' style='background-color: #ffffff; color: black;' maxlength='6' ${locked_colors[i]?"disabled":""}>
 			</div>`
 			));
 		}
