@@ -61,12 +61,19 @@
 		$("#theme").val(themeText);
 	}
 
+	locked_colors = {};
 	function UpdateNumberOfColors(){
 		$("#ColorPreviews").empty();
 		var numberOfColors = parseInt($("#NumberOfColors").val());
 		for(var i = 0; i < numberOfColors; i++){
-			var tag = jQuery.parseHTML("<input type='text' class='form-control color-preview' id='jamcolor"+i+"' name='{{{forms.form.newjam.jam_color}}}"+i+"' value='' placeholder='Color Hex' onchange='PreviewJamColor(\"jamcolor"+i+"\");' style='background-color: #ffffff; color: black;' maxlength='6'>");
-			$("#ColorPreviews").append(tag);
+			$("#ColorPreviews").append(jQuery.parseHTML(`
+			<div class="input-group">
+  				<span class="input-group-addon" id="sizing-addon1">
+					🔒    <input type="checkbox" onchange='SetColorLock(this, ${i})' ${locked_colors[i]?"checked":""}>
+				</span>
+				<input type='text' class='form-control color-preview' id='jamcolor${i}' name='{{{forms.form.newjam.jam_color}}}${i}' value='' placeholder='Color Hex' onchange='PreviewJamColor(this);' style='background-color: #ffffff; color: black;' maxlength='6' ${locked_colors[i]?"disabled":""}>
+			</div>`
+			));
 		}
 		UpdateAutoJamcolors();
 	}
@@ -85,26 +92,37 @@
 		}
 
 		for(var i = 0; i < numberOfColors; i++){
-			var percent = (1.0 * i) / (numberOfColors - 1);
-			var hue = minHue + (percent * hueDiff);
-			var rgb = hsl2rgb((hue % 256) / 255, sat / 255, bri / 255);
+			var hex_color;
 
-			var r = rgb.r.toString(16);
-			var g = rgb.g.toString(16);
-			var b = rgb.b.toString(16);
+			if(locked_colors[i]) // check if color is locked
+				hex_color = locked_colors[i];
+			else {
+				var percent = (1.0 * i) / (numberOfColors - 1);
+				var hue = minHue + (percent * hueDiff);
+				var rgb = hsl2rgb((hue % 256) / 255, sat / 255, bri / 255);
 
-			if(r.length == 1){ r = "0"+r; }
-			if(g.length == 1){ g = "0"+g; }
-			if(b.length == 1){ b = "0"+b; }
+				var r = rgb.r<<16;
+				var g = rgb.g<<8;
+				var b = rgb.b;
+				hex_color = (r+g+b).toString(16);
+			}
 
-			$("#jamcolor"+i).val(r+g+b);
-			$("#jamcolor"+i).css("background-color", "#"+r+g+b);
+			$("#jamcolor"+i).val(hex_color);
+			$("#jamcolor"+i).css("background-color", "#"+hex_color);
 		}
 	}
 
-	function PreviewJamColor(colorInputFieldIS){
-		var colorHex = $("#"+colorInputFieldIS).val();
-		$("#"+colorInputFieldIS).css("background-color", "#"+colorHex);
+	function SetColorLock(checkbox, color){
+		$("#jamcolor"+color).prop('disabled', checkbox.checked);
+		if(checkbox.checked)
+			locked_colors[color] = $("#jamcolor"+color).val();
+		else if (locked_colors[color])
+			locked_colors[color] = undefined;
+	}
+
+	function PreviewJamColor(colorInputField){
+		var colorHex = $(colorInputField).val();
+		$(colorInputField).css("background-color", "#"+colorHex);
 	}
 
 	function hsl2rgb(h, s, l) {
