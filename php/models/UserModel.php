@@ -266,8 +266,7 @@ class UserData implements IUserDisplay{
             $dataFromDatabase[$i][DB_COLUMN_USER_USER_AGENT] = OVERRIDE_MIGRATION;
             $dataFromDatabase[$i][DB_COLUMN_USER_SALT] = $salt;
             $dataFromDatabase[$i][DB_COLUMN_USER_PASSWORD_HASH] = $hashedPassword;
-            $dataFromDatabase[$i][DB_COLUMN_USER_AUTH_VERSION] = $hashedPassword;
-            // TODO ^^ figure out what it's for and set a proper value.
+            $dataFromDatabase[$i][DB_COLUMN_USER_AUTH_VERSION] = 1;
             $dataFromDatabase[$i][DB_COLUMN_USER_PASSWORD_ITERATIONS] = $passwordHashIterations;
             $dataFromDatabase[$i][DB_COLUMN_USER_LAST_LOGIN_DATETIME] = gmdate("Y-m-d H:i:s", time());
             $dataFromDatabase[$i][DB_COLUMN_USER_LAST_IP] = OVERRIDE_MIGRATION;
