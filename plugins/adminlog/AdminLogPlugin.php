@@ -36,7 +36,7 @@ class AdminLogPlugin extends \AbstractPlugin{
             PAGE_ADMIN_LOG => Array(
                 "page_title" => "Admin Log",
                 "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-                "template_file" => $this->GetTemplateFolder()."adminlog.html",
+                "template_file" => $this->GetTemplateFolder()."adminlog.mustache",
                 "dependencies" => Array(RENDER_ADMIN_LOG => RENDER_DEPTH_NONE),
             )
         );

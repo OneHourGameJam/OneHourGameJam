@@ -24,8 +24,8 @@ $dictionary['page'] = array(
 RunInstallPage($dictionary);
 $pageTemplateFile = $dictionary["template_file"];
 $mustache->setPartials(Array(
-	"footer" => file_get_contents($templateBasePath."footer.html"),
-	"message" => file_get_contents($templateBasePath."message.html"),
+	"footer" => file_get_contents($templateBasePath."footer.mustache"),
+	"message" => file_get_contents($templateBasePath."message.mustache"),
 	"page" => file_get_contents($templateBasePath.$pageTemplateFile),
 	"css" => file_get_contents($templateBasePath."css/site.css")
 ));
@@ -33,5 +33,5 @@ $mustache->setPartials(Array(
 $plugins = array();
 $dictionary["forms"] = FormPresenter::RenderForms($plugins);
 
-print $mustache->render(file_get_contents($templateBasePath."install.html"), $dictionary);
+print $mustache->render(file_get_contents($templateBasePath."install.mustache"), $dictionary);
 ?>
