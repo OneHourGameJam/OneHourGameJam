@@ -1,6 +1,6 @@
 <?php
 
-define("DATABASE_VERSION", "40");
+define("DATABASE_VERSION", "41");
 
 class Database{
     private $dbConnection;

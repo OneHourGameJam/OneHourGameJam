@@ -23,6 +23,7 @@ class UserModel
     public $Email;
     public $Salt;
     public $PasswordHash;
+    public $AuthVersion;
     public $PasswordIterations;
     public $Admin;
     public $UserPreferences;
@@ -94,6 +95,7 @@ class UserData implements IUserDisplay{
             $user->Email = $info[DB_COLUMN_USER_EMAIL];
             $user->Salt = $info[DB_COLUMN_USER_SALT];
             $user->PasswordHash = $info[DB_COLUMN_USER_PASSWORD_HASH];
+            $user->AuthVersion = $info[DB_COLUMN_USER_AUTH_VERSION];
             $user->PasswordIterations = intval($info[DB_COLUMN_USER_PASSWORD_ITERATIONS]);
             $user->Admin = intval($info[DB_COLUMN_USER_ROLE]);
             $user->UserPreferences = intval($info[DB_COLUMN_USER_PREFERENCES]);
@@ -264,6 +266,7 @@ class UserData implements IUserDisplay{
             $dataFromDatabase[$i][DB_COLUMN_USER_USER_AGENT] = OVERRIDE_MIGRATION;
             $dataFromDatabase[$i][DB_COLUMN_USER_SALT] = $salt;
             $dataFromDatabase[$i][DB_COLUMN_USER_PASSWORD_HASH] = $hashedPassword;
+            $dataFromDatabase[$i][DB_COLUMN_USER_AUTH_VERSION] = 1;
             $dataFromDatabase[$i][DB_COLUMN_USER_PASSWORD_ITERATIONS] = $passwordHashIterations;
             $dataFromDatabase[$i][DB_COLUMN_USER_LAST_LOGIN_DATETIME] = gmdate("Y-m-d H:i:s", time());
             $dataFromDatabase[$i][DB_COLUMN_USER_LAST_IP] = OVERRIDE_MIGRATION;
