@@ -72,7 +72,7 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through TryLogin(...)
 function LogInUser($username, $password){
-	global $configData, $userData, $sessionDbInterface, $_COOKIE;
+	global $configData, $userData, $sessionDbInterface, $_COOKIE, $userDbInterface;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
@@ -103,6 +103,16 @@ function LogInUser($username, $password){
 			$passwordIterations = intval($user->PasswordIterations);
 			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
 			if($correctPasswordHash == $passwordHash) {
+				//User password is correct!
+				//Migrate password to v2
+				$userDbInterface->UpdateUserAuthToV2($userId, password_hash($password, PASSWORD_BCRYPT));
+				SetUserVariables($userId);
+			} else {
+				return "INCORRECT_PASSWORD";
+			}
+			break;
+		case 2:
+			if(password_verify($password, $user->PasswordHash)) {
 				//User password is correct!
 				SetUserVariables($userId);
 			} else {
