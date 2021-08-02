@@ -95,24 +95,36 @@ function LogInUser($username, $password){
 	}
 
 	$user = $userData->UserModels[$userId];
-	$correctPasswordHash = $user->PasswordHash;
-	$userSalt = $user->Salt;
-	$passwordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
-	if($correctPasswordHash == $passwordHash){
-		//User password correct!
-		$sessionID = "".GenerateSalt();
-		$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
-		$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
 
-		$daysToKeepLoggedIn = $configData->ConfigModels[CONFIG_DAYS_TO_KEEP_LOGGED_IN]->Value;
-		setcookie(COOKIE_SESSION_ID, $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
-		$_COOKIE[COOKIE_SESSION_ID] = $sessionID;
-
-		$sessionDbInterface->Insert($userId, $sessionIdHash);
-	}else{
-		return "INCORRECT_PASSWORD";
+	switch ($user->AuthVersion) {
+		case 1:
+			$correctPasswordHash = $user->PasswordHash;
+			$userSalt = $user->Salt;
+			$passwordIterations = intval($user->PasswordIterations);
+			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
+			if($correctPasswordHash == $passwordHash) {
+				//User password is correct!
+				SetUserVariables($userId);
+			} else {
+				return "INCORRECT_PASSWORD";
+			}
+			break;
+		default:
+			return "INVALID_AUTH_VERSION";
 	}
 
 	return "SUCCESS";
+}
+
+function SetUserVariables($userId) {
+	global $configData, $userData, $sessionDbInterface, $_COOKIE;
+	$sessionID = "".GenerateSalt();
+	$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
+	$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
+
+	$daysToKeepLoggedIn = $configData->ConfigModels[CONFIG_DAYS_TO_KEEP_LOGGED_IN]->Value;
+	setcookie(COOKIE_SESSION_ID, $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
+	$_COOKIE[COOKIE_SESSION_ID] = $sessionID;
+
+	$sessionDbInterface->Insert($userId, $sessionIdHash);
 }
