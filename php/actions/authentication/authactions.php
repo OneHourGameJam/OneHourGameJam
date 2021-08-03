@@ -95,39 +95,12 @@ function LogInUser($username, $password){
 	}
 
 	$user = $userData->UserModels[$userId];
+	$auth_status = VerifyPassword($user, $password);
+	if($auth_status != "SUCCESS")
+		return $auth_status;
 
-	switch ($user->AuthVersion) {
-		case 1:
-			$correctPasswordHash = $user->PasswordHash;
-			$userSalt = $user->Salt;
-			$passwordIterations = intval($user->PasswordIterations);
-			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
-			if($correctPasswordHash == $passwordHash) {
-				//User password is correct!
-				//Migrate password to v2
-				$userDbInterface->UpdateUserAuthToV2($userId, password_hash($password, PASSWORD_BCRYPT));
-				SetUserVariables($userId);
-			} else {
-				return "INCORRECT_PASSWORD";
-			}
-			break;
-		case 2:
-			if(password_verify($password, $user->PasswordHash)) {
-				//User password is correct!
-				SetUserVariables($userId);
-			} else {
-				return "INCORRECT_PASSWORD";
-			}
-			break;
-		default:
-			return "INVALID_AUTH_VERSION";
-	}
 
-	return "SUCCESS";
-}
-
-function SetUserVariables($userId) {
-	global $configData, $userData, $sessionDbInterface, $_COOKIE;
+	// login successful! set user session data.
 	$sessionID = "".GenerateSalt();
 	$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
 	$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
@@ -137,4 +110,26 @@ function SetUserVariables($userId) {
 	$_COOKIE[COOKIE_SESSION_ID] = $sessionID;
 
 	$sessionDbInterface->Insert($userId, $sessionIdHash);
+	return "SUCCESS";
+}
+
+function VerifyPassword($user, $password) {
+	global $configData;
+	switch ($user->AuthVersion) {
+		case 1:
+			$correctPasswordHash = $user->PasswordHash;
+			$userSalt = $user->Salt;
+			$passwordIterations = intval($user->PasswordIterations);
+			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
+			if($correctPasswordHash != $passwordHash)
+				return "INCORRECT_PASSWORD".$password." : ".$userSalt." : ".$passwordIterations." : ".$configData." : ".$passwordHash;
+			break;
+		case 2:
+			if(!password_verify($password, $user->PasswordHash))
+				return "INCORRECT_PASSWORD";
+			break;
+		default:
+			return "INVALID_AUTH_VERSION";
+	}
+	return "SUCCESS";
 }
