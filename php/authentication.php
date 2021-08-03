@@ -212,6 +212,7 @@ function VerifyPassword($user, $password) {
 			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
 			if($correctPasswordHash != $passwordHash)
 				return "INCORRECT_PASSWORD";
+			UpdateUserPassword($user->Id, $password, true);
 			break;
 		case 2:
 			if(!password_verify($password, $user->PasswordHash))
