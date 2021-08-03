@@ -25,19 +25,9 @@ function EditUserPassword(MessageService &$messageService, $userId, $newPassword
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	//Generate new salt, number of iterations and hashed password.
-	$newUserSalt = GenerateSalt();
-	$newUserPasswordIterations = GenerateUserHashIterations($configData);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData);
-
-	$userData->UserModels[$loggedInUser->Id]->Salt = $newUserSalt;
-	$userData->UserModels[$loggedInUser->Id]->PasswordHash = $newPasswordHash;
-	$userData->UserModels[$loggedInUser->Id]->PasswordIterations = $newUserPasswordIterations;
-
-	$userDbInterface->UpdatePassword($userId, $newUserSalt, $newPasswordHash, $newUserPasswordIterations);
+	UpdateUserPassword($userId, $password, false);
 
 	$username = $userData->UserModels[$userId]->Username;
-
 	$messageService->SendMessage(LogMessage::UserLogMessage(
 		"USER_PASSWORD_RESET", 
 		"Password reset for user $username", 

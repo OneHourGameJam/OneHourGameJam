@@ -230,7 +230,7 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
     }
 
-    public function UpdatePassword($userId, $userSalt, $passwordHash, $userPasswordIterations){
+    public function UpdatePassword($userId, $userSalt, $passwordHash, $userPasswordIterations, $authVersion){
         AddActionLog("UserDbInterface_UpdatePassword");
         StartTimer("UserDbInterface_UpdatePassword");
 
@@ -238,35 +238,20 @@ class UserDbInterface{
         $escapedUserSalt = $this->database->EscapeString($userSalt);
         $escapedPasswordHash = $this->database->EscapeString($passwordHash);
         $escapedUserPasswordIterations = $this->database->EscapeString($userPasswordIterations);
+        $escapedAuthVersion = $this->database->EscapeString($authVersion);
 
         $sql = " 
             UPDATE ".DB_TABLE_USER."
             SET
             ".DB_COLUMN_USER_SALT." = '$escapedUserSalt',
             ".DB_COLUMN_USER_PASSWORD_ITERATIONS." = '$escapedUserPasswordIterations',
-            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash'
+            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash',
+            ".DB_COLUMN_USER_AUTH_VERSION." = '$escapedAuthVersion'
             WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         $this->database->Execute($sql);;
         
         StopTimer("UserDbInterface_UpdatePassword");
-    }
-
-    public function UpdateUserAuthToV2($userId, $passwordHash) {
-        // TODO consult with someone more competent, it's probably fine to use UpdatePassword() and make it always use the latest auth algorithm instead of a separate method.
-        // as far as i understand, with bcrypt, abandoning salt and password_iterations is fine.    
-        StartTimer("UserDbInterface_UpdateUserAuth");
-        $escapedUserId = $this->database->EscapeString($userId);
-        $escapedPasswordHash = $this->database->EscapeString($passwordHash);
-        $sql = " 
-            UPDATE ".DB_TABLE_USER."
-            SET
-            ".DB_COLUMN_USER_AUTH_VERSION." = '2',
-            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash'
-            WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
-        ";
-        $this->database->Execute($sql);;
-        StopTimer("UserDbInterface_UpdateUserAuth");
     }
 
     public function UpdateUserPermissionLevel($userId, $permissionLevel){
