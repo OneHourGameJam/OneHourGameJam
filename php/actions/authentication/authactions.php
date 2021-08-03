@@ -36,7 +36,6 @@ function TryLogin($username, $password, $register){
         return "USER_DOES_NOT_EXIST";
     }
 }
-define("AUTH_VERSION", 1);
 //Registers the given user. Funciton should be called through TryLogin(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
@@ -57,14 +56,14 @@ function RegisterUser($username, $password){
 		return "USERNAME_ALREADY_REGISTERED";
 	}
 
-	$salt = GenerateSalt();
-	$passwordIterations = GenerateUserHashIterations($configData);
-	$passwordHash = HashPassword($password, $salt, $passwordIterations, $configData);
 	$isAdmin = (count($userData->UserModels) == 0) ? 1 : 0;
 
-	$userDbInterface->Insert($username, $ip, $userAgent, $salt, $passwordHash, AUTH_VERSION, $passwordIterations, $isAdmin);
-	
+	// create user without password
+	$userDbInterface->Insert($username, $ip, $userAgent, OVERRIDE_UNUSED, OVERRIDE_UNUSED, AUTH_BCRYPT, OVERRIDE_UNUSED, $isAdmin);	
+
 	$userData = new UserData($userDbInterface, $sessionDbInterface, $configData);
+	// change the new user's password to the one provided by the user;
+	UpdateUserPassword($userData->UsernameToId[$username], $password, true);
 	return LogInUser($username, $password);
 }
 

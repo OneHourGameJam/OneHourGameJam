@@ -6,6 +6,10 @@ define("OVERRIDE_LEGACY", "LEGACY");
 define("OVERRIDE_AUTOMATIC_NUM", "-1");
 define("OVERRIDE_AUTOMATIC", "AUTOMATIC");
 define("OVERRIDE_AUTOMATIC_PRUNING", "AUTOMATIC PRUNING");
+define("OVERRIDE_UNUSED", "-3");
+
+define("AUTH_SHA256", 1);
+define("AUTH_BCRYPT", 2);
 
 //Generates a password salt
 function GenerateSalt(){
@@ -218,25 +222,21 @@ function VerifyPassword($user, $password) {
 	}
 	return "SUCCESS";
 }
-function UpdateUserPassword($userId, $plainTextPassword, $changing_own_password) {
+
+function UpdateUserPassword($userId, $plainTextPassword, $update_loadedUserData) {
 	global $loggedInUser, $userData, $userDbInterface;
 	
 	// bcrypt generates new salt, number of iterations and hashed password and stores them by itself.
 	$newPasswordHash = password_hash($plainTextPassword, PASSWORD_BCRYPT);
-	if($changing_own_password) {
-		// the below part should not run if it's an admin changing the password.
-		if($loggedInUser) {
-			// add variable for whether the change is made by an admin or the user themselves, cause if it's an admin, the loggedinuser is a wrong value
-			$loggedInUserId = $loggedInUser->Id;
-			$userData->UserModels[$loggedInUserId]->Salt = " "; // doesn't matter with bcrypt
-			$userData->UserModels[$loggedInUserId]->PasswordIterations = 1; // doesn't matter with bcrypt
+	if($update_loadedUserData) {
+		// the below part should not run if it's an admin changing the password of another account.
+		$userData->UserModels[$userId]->Salt = OVERRIDE_UNUSED; // doesn't matter with bcrypt
+		$userData->UserModels[$userId]->PasswordIterations = OVERRIDE_UNUSED; // doesn't matter with bcrypt
 	
-			$userData->UserModels[$loggedInUserId]->PasswordHash = $newPasswordHash; // only important field with bcrypt
-			$userData->UserModels[$loggedInUserId]->AuthVersion = 2; // tell site we're using auth version 2 now.
-		}
+		$userData->UserModels[$userId]->PasswordHash = $newPasswordHash; // only important field with bcrypt
+		$userData->UserModels[$userId]->AuthVersion = AUTH_BCRYPT; // tell site we're using AUTH_BCRYPT now.
 	}
-
-	$userDbInterface->UpdatePassword($userId, 1, $newPasswordHash, 1, 2); 
-	// Salt and password iterations columns set to empty values. Auth version: 2.
+	$userDbInterface->UpdatePassword($userId, OVERRIDE_UNUSED, $newPasswordHash, OVERRIDE_UNUSED, AUTH_BCRYPT); 
+	// Salt and password iterations columns set to empty values. Auth version: AUTH_BCRYPT.
 }
 ?>
