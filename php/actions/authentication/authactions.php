@@ -112,24 +112,3 @@ function LogInUser($username, $password){
 	$sessionDbInterface->Insert($userId, $sessionIdHash);
 	return "SUCCESS";
 }
-
-function VerifyPassword($user, $password) {
-	global $configData;
-	switch ($user->AuthVersion) {
-		case 1:
-			$correctPasswordHash = $user->PasswordHash;
-			$userSalt = $user->Salt;
-			$passwordIterations = intval($user->PasswordIterations);
-			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
-			if($correctPasswordHash != $passwordHash)
-				return "INCORRECT_PASSWORD".$password." : ".$userSalt." : ".$passwordIterations." : ".$configData." : ".$passwordHash;
-			break;
-		case 2:
-			if(!password_verify($password, $user->PasswordHash))
-				return "INCORRECT_PASSWORD";
-			break;
-		default:
-			return "INVALID_AUTH_VERSION";
-	}
-	return "SUCCESS";
-}

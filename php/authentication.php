@@ -198,5 +198,25 @@ function RedirectToHttpsIfRequired($configData){
     }
 	StopTimer("RedirectToHttpsIfRequired");
 }
+function VerifyPassword($user, $password) {
+	global $configData;
+	switch ($user->AuthVersion) {
+		case 1:
+			$correctPasswordHash = $user->PasswordHash;
+			$userSalt = $user->Salt;
+			$passwordIterations = intval($user->PasswordIterations);
+			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
+			if($correctPasswordHash != $passwordHash)
+				return "INCORRECT_PASSWORD";
+			break;
+		case 2:
+			if(!password_verify($password, $user->PasswordHash))
+				return "INCORRECT_PASSWORD";
+			break;
+		default:
+			return "INVALID_AUTH_VERSION";
+	}
+	return "SUCCESS";
+}
 
 ?>
