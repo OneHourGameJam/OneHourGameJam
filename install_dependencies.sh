@@ -1,9 +1,11 @@
 #!/bin/bash
 echo Deleting downloaded dependencies...
 if test -f "./dependencies"
+then
 	rm -rf "./dependencies"
 fi
 if test -f "./vendor"
+then
 	rm -rf ./vendor
 fi
 
