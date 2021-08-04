@@ -71,7 +71,7 @@ function RegisterUser($username, $password){
 //Sets the user's session cookie.
 //Should not be called directly, call through TryLogin(...)
 function LogInUser($username, $password){
-	global $configData, $userData, $sessionDbInterface, $_COOKIE, $userDbInterface;
+	global $configData, $userData, $sessionDbInterface, $_COOKIE;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
 	$password = trim($password);
