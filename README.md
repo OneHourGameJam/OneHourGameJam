@@ -18,7 +18,10 @@ You can either install with vagrant or you can manually install (if you want to 
 
 ## With Vagrant:
 
+Prerequisites: npm, composer, git, vagrant
+
 ```
+./install_dependencies.bat
 vagrant up
 ```
 
@@ -33,21 +36,37 @@ If you prefer to follow a video tutorial, please watch the following:
 
 [![OneHourGameJam Local Copy Setup](http://img.youtube.com/vi/NiaaSXDoVf0/0.jpg)](http://www.youtube.com/watch?v=NiaaSXDoVf0 "OneHourGameJam Local Copy Setup")
 
-### 1: Download XAMPP
+### 1: Install Dependencies
+
+* Install Node Package Manager (npm):
+  * Either install node.js (npm comes with it, though node.js is otherwise not used by this software)
+  * Or install npm only:
+    * Download the latest version from https://nodejs.org/dist/npm/
+    * Unzip
+    * Add the file containing npm.cmd into your Path (environment variables)
+* Install Composer: https://getcomposer.org/download/
+* Ensure git can be used via the command line
+* Run `./install_dependencies.bat` What this does is:
+  * Clones the various dependencies from npm (javascript), composer (php) and git into the "vendor" folder
+  * Copies the relevant files from each repository (distributable, minified, etc.) into the "dependencies" folder
+  * Deletes the vendor folder
+  * Once this process finishes the website is ready for use can be deployed
+
+### 2: Download XAMPP
 
 * Go to [Apache](https://www.apachefriends.org/download.html) and download a version for your operating system (For PHP 5.6, not a VM version)
 * Install (On Windows this must be to `C:/XAMPP`)
 
-### 2: Start Server
+### 3: Start Server
 
 * Start XAMPP Control Panel
 * Find Apache and MySQL services in the panel and Start them (If it fails to start, shut down Skype, the two programs conflict)
 
-### 3: Set up web server content
+### 4: Set up web server content
 
 * Check out this repository to `C://XAMPP/htdocs/onehourgamejam` (Windows) or `/Applications/XAMPP/htdocs/onehourgamejam` (Mac)
 
-### 4: Install website
+### 5: Install website
 
 * Go to https://localhost/onehourgamejam/ - this should point you to the install page
 * Enter the following data into the form:
@@ -59,7 +78,7 @@ If you prefer to follow a video tutorial, please watch the following:
 * Press "Setup Database"
 * Go to http://localhost/onehourgamejam (A message confirming the database upgrade may appear)
 
-### 5: Open the site
+### 6: Open the site
 
 * Go to http://localhost/onehourgamejam
 * Create your first user (The first user created will be an administrator)
@@ -69,15 +88,15 @@ If you prefer to follow a video tutorial, please watch the following:
 
 ## Subsequent startups
 
-* Only the server must be started: See **2: Start Server**
+* Only the server must be started: See **3: Start Server**
 
 # Common tasks
 
-## Registering
+## First administrator account
 
-Done on the website. The first registered account will have admin rights.
+The first registered account will have admin rights.
 
-## Adding more admins
+## Adding more administrators
 
 Adding or removing administrators can be done via the "Manage users" administrative menu.
 
@@ -85,9 +104,9 @@ Adding or removing administrators can be done via the "Manage users" administrat
 
 Done on the website - can be scheduled for the future in which case the theme is only revealed once the set time passes. An automatic jam scheduler feature also exists, set up in site configuration.
 
-## Removing or editing jams and entries
+## Removing or editing jams and entries and entries
 
-Editing jams can be done via the website's "edit content" menu.
+Editing jams and entries can be done via the website's "edit content" menu.
 
 ## Removing a user
 

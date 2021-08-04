@@ -11,3 +11,15 @@ config/dbconfig.php
 .vagrant/
 .DS_Store
 error_log
+
+#composer
+composer.lock
+
+#npm
+package-lock.json
+
+#npm, composer and git target where full project/source repositories are downloaded
+vendor/*
+
+#folder where dependencies distributables are (retrieved from vendor folder)
+dependencies/*

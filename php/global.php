@@ -50,7 +50,7 @@ $userAgent = $_SERVER['HTTP_USER_AGENT'];
 $nextScheduledJamTime = "";
 $nextSuggestedJamDateTime = "";
 
-require __DIR__ . '/../vendor/Mustache/Autoloader.php';
+require __DIR__ . '/../dependencies/mustache/Autoloader.php';
 Mustache_Autoloader::register();
 $mustache = new Mustache_Engine();
 
