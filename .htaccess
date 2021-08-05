@@ -1,4 +1,4 @@
-<Files "asd.sh">  
+<Files "*.sh">  
     Order deny,allow
     Deny from all
 </Files>
