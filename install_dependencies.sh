@@ -31,7 +31,7 @@ cp ./vendor/components/bootstrap/js/bootstrap.min.js ./dependencies/bootstrap/bo
 cp ./vendor/components/bootstrap/css/bootstrap.min.css ./dependencies/bootstrap/bootstrap.min.css
 
 mkdir ./dependencies/mustache
-cp -R ./vendor/mustache/mustache/src/Mustache ./dependencies/mustache
+cp -R ./vendor/mustache/mustache/src/Mustache/. ./dependencies/mustache
 
 mkdir ./dependencies/chartjs
 cp ./vendor/node_modules/chart.js/dist/chart.min.js ./dependencies/chartjs/chart.min.js
