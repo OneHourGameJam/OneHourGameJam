@@ -1,0 +1,4 @@
+<Files "asd.sh">  
+    Order deny,allow
+    Deny from all
+</Files>

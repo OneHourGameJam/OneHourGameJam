@@ -20,8 +20,15 @@ You can either install with vagrant or you can manually install (if you want to 
 
 Prerequisites: npm, composer, git, vagrant
 
+Windows:
 ```
-./install_dependencies.bat
+sh ./install_dependencies.sh
+vagrant up
+```
+
+Linux:
+```
+./install_dependencies.sh
 vagrant up
 ```
 
@@ -32,7 +39,7 @@ This will setup a scotchbox vagrant box with 1hgj fully installed. You only need
 ## Manually:
 What you need is a web server capable of running PHP, for example Apache.
 
-If you prefer to follow a video tutorial, please watch the following:
+If you prefer to follow a video tutorial, please watch the following - keep in mind this video hasn't been updated in a while so read through the rest of the written guide where inconsistencies appear between what the video shows and what you see when setting up:
 
 [![OneHourGameJam Local Copy Setup](http://img.youtube.com/vi/NiaaSXDoVf0/0.jpg)](http://www.youtube.com/watch?v=NiaaSXDoVf0 "OneHourGameJam Local Copy Setup")
 
@@ -46,11 +53,11 @@ If you prefer to follow a video tutorial, please watch the following:
     * Add the file containing npm.cmd into your Path (environment variables)
 * Install Composer: https://getcomposer.org/download/
 * Ensure git can be used via the command line
-* Run `./install_dependencies.bat` What this does is:
-  * Clones the various dependencies from npm (javascript), composer (php) and git into the "vendor" folder
-  * Copies the relevant files from each repository (distributable, minified, etc.) into the "dependencies" folder
+* Run `./install_dependencies.sh` (on Windows `sh ./install_dependencies.sh` What this does is:
+  * Clones the various dependencies from npm (javascript), composer (php) and git into a temporary "vendor" folder
+  * Copies the relevant files from each repository (distributable, minified, etc.) into a "dependencies" folder
   * Deletes the vendor folder
-  * Once this process finishes the website is ready for use can be deployed
+  * Once this process finishes the website is ready for use
 
 ### 2: Download XAMPP
 
