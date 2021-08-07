@@ -205,7 +205,7 @@ function RedirectToHttpsIfRequired($configData){
 function VerifyPassword($user, $password) {
 	global $configData;
 	switch ($user->AuthVersion) {
-		case 1:
+		case AUTH_SHA256:
 			$correctPasswordHash = $user->PasswordHash;
 			$userSalt = $user->Salt;
 			$passwordIterations = intval($user->PasswordIterations);
@@ -214,7 +214,7 @@ function VerifyPassword($user, $password) {
 				return "INCORRECT_PASSWORD";
 			UpdateUserPassword($user->Id, $password, true);
 			break;
-		case 2:
+		case AUTH_BCRYPT:
 			if(!password_verify($password, $user->PasswordHash))
 				return "INCORRECT_PASSWORD";
 			break;
