@@ -29,7 +29,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	$user = $userData->UserModels[$loggedInUserId];
 	
 	$auth_result = VerifyPassword($user, $oldPassword);
-	if(VerifyPassword($user, $oldPassword) != "SUCCESS"){
+	if($auth_result != "SUCCESS"){
 		return $auth_result;
 	}
 
