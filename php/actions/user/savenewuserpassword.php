@@ -25,7 +25,7 @@ function EditUserPassword(MessageService &$messageService, $userId, $newPassword
 		return "USER_DOES_NOT_EXIST";
 	}
 
-	UpdateUserPassword($userId, $password, false);
+	UpdateUserPassword($userId, $password);
 
 	$username = $userData->UserModels[$userId]->Username;
 	$messageService->SendMessage(LogMessage::UserLogMessage(

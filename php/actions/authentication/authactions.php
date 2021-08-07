@@ -63,7 +63,7 @@ function RegisterUser($username, $password){
 
 	$userData = new UserData($userDbInterface, $sessionDbInterface, $configData);
 	// change the new user's password to the one provided by the user;
-	UpdateUserPassword($userData->UsernameToId[$username], $password, true);
+	UpdateUserPassword($userData->UsernameToId[$username], $password);
 	return LogInUser($username, $password);
 }
 

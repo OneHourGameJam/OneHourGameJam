@@ -212,7 +212,7 @@ function VerifyPassword($user, $password) {
 			$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
 			if($correctPasswordHash != $passwordHash)
 				return "INCORRECT_PASSWORD";
-			UpdateUserPassword($user->Id, $password, true);
+			UpdateUserPassword($user->Id, $password);
 			break;
 		case AUTH_BCRYPT:
 			if(!password_verify($password, $user->PasswordHash))
@@ -224,13 +224,14 @@ function VerifyPassword($user, $password) {
 	return "SUCCESS";
 }
 
-function UpdateUserPassword($userId, $plainTextPassword, $update_loadedUserData) {
+function UpdateUserPassword($userId, $plainTextPassword) {
 	global $loggedInUser, $userData, $userDbInterface;
 	
 	// bcrypt generates new salt, number of iterations and hashed password and stores them by itself.
 	$newPasswordHash = password_hash($plainTextPassword, PASSWORD_BCRYPT);
-	if($update_loadedUserData) {
-		// the below part should not run if it's an admin changing the password of another account.
+
+	if (isset($userData->UserModels[$userId])) {
+		// update a loaded user's information
 		$userData->UserModels[$userId]->Salt = OVERRIDE_UNUSED; // doesn't matter with bcrypt
 		$userData->UserModels[$userId]->PasswordIterations = OVERRIDE_UNUSED; // doesn't matter with bcrypt
 	

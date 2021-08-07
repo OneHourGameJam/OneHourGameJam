@@ -33,7 +33,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 		return $auth_result;
 	}
 
-	UpdateUserPassword($user->Id, $password, true);
+	UpdateUserPassword($user->Id, $password);
 	return "SUCCESS";
 }
 
