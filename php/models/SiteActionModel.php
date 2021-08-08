@@ -78,6 +78,7 @@ class SiteActionData{
                     "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect username length. Must be between ".$configData->ConfigModels[CONFIG_MINIMUM_USERNAME_LENGTH]->Value." and ".$configData->ConfigModels[CONFIG_MAXIMUM_USERNAME_LENGTH]->Value." characters long."),
                     "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "That username doesn't exist.<br>Do you want to <a href='?".GET_PAGE."=".PAGE_REGISTER."'>create an account</a>?"),
                     "INCORRECT_PASSWORD" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect username/password combination."),
+                    "INVALID_AUTH_VERSION" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Account authentication system version is not supported.<br>Please contact your site admin about this issue."),
                 )
             ),
             new SiteActionModel(

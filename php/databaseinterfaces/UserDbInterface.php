@@ -112,17 +112,17 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($username, $ip, $userAgent, $salt, $passwordHash, $authVersion, $passwordIterations, $isAdmin){
+    public function Insert($username, $ip, $userAgent, $passwordHash, $authVersion, $isAdmin){
         AddActionLog("UserDbInterface_Insert");
         StartTimer("UserDbInterface_Insert");
 
         $escapedUsername = $this->database->EscapeString($username);
         $escapedIp = $this->database->EscapeString($ip);
         $escapedUserAgent = $this->database->EscapeString($userAgent);
-        $escapedSalt = $this->database->EscapeString($salt);
+        $escapedSalt = $this->database->EscapeString(OVERRIDE_UNUSED);
         $escapedPasswordHash = $this->database->EscapeString($passwordHash);
         $escapedAuthVersion = $this->database->EscapeString($authVersion);
-        $escapedPasswordIterations = $this->database->EscapeString($passwordIterations);
+        $escapedPasswordIterations = $this->database->EscapeString(OVERRIDE_UNUSED);
         $escapedIsAdmin = $this->database->EscapeString($isAdmin);
 
 		$sql = "
@@ -230,21 +230,23 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
     }
 
-    public function UpdatePassword($userId, $userSalt, $passwordHash, $userPasswordIterations){
+    public function UpdatePassword($userId, $passwordHash, $authVersion){
         AddActionLog("UserDbInterface_UpdatePassword");
         StartTimer("UserDbInterface_UpdatePassword");
 
         $escapedUserId = $this->database->EscapeString($userId);
-        $escapedUserSalt = $this->database->EscapeString($userSalt);
+        $escapedUserSalt = $this->database->EscapeString(OVERRIDE_UNUSED);
         $escapedPasswordHash = $this->database->EscapeString($passwordHash);
-        $escapedUserPasswordIterations = $this->database->EscapeString($userPasswordIterations);
+        $escapedUserPasswordIterations = $this->database->EscapeString(OVERRIDE_UNUSED);
+        $escapedAuthVersion = $this->database->EscapeString($authVersion);
 
         $sql = " 
             UPDATE ".DB_TABLE_USER."
             SET
             ".DB_COLUMN_USER_SALT." = '$escapedUserSalt',
             ".DB_COLUMN_USER_PASSWORD_ITERATIONS." = '$escapedUserPasswordIterations',
-            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash'
+            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash',
+            ".DB_COLUMN_USER_AUTH_VERSION." = '$escapedAuthVersion'
             WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         $this->database->Execute($sql);;
