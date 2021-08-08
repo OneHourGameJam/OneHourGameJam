@@ -224,11 +224,15 @@ function VerifyPassword(UserModel &$userModel, $password) {
 	return "SUCCESS";
 }
 
+function CalculatePasswordHash($password){
+	return password_hash($password, PASSWORD_BCRYPT);
+}
+
 function UpdateUserPassword($userId, $plainTextPassword) {
-	global $loggedInUser, $userData, $userDbInterface;
+	global $userData, $userDbInterface;
 	
 	// bcrypt generates new salt, number of iterations and hashed password and stores them by itself.
-	$newPasswordHash = password_hash($plainTextPassword, PASSWORD_BCRYPT);
+	$newPasswordHash = CalculatePasswordHash($plainTextPassword);
 
 	if (isset($userData->UserModels[$userId])) {
 		// update a loaded user's information
@@ -238,7 +242,7 @@ function UpdateUserPassword($userId, $plainTextPassword) {
 		$userData->UserModels[$userId]->PasswordHash = $newPasswordHash; // only important field with bcrypt
 		$userData->UserModels[$userId]->AuthVersion = AUTH_BCRYPT; // tell site we're using AUTH_BCRYPT now.
 	}
-	$userDbInterface->UpdatePassword($userId, OVERRIDE_UNUSED, $newPasswordHash, OVERRIDE_UNUSED, AUTH_BCRYPT); 
+	$userDbInterface->UpdatePassword($userId, $newPasswordHash, AUTH_BCRYPT);
 	// Salt and password iterations columns set to empty values. Auth version: AUTH_BCRYPT.
 }
 ?>

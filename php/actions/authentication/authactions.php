@@ -58,12 +58,12 @@ function RegisterUser($username, $password){
 
 	$isAdmin = (count($userData->UserModels) == 0) ? 1 : 0;
 
-	// create user without password
-	$userDbInterface->Insert($username, $ip, $userAgent, OVERRIDE_UNUSED, OVERRIDE_UNUSED, AUTH_BCRYPT, OVERRIDE_UNUSED, $isAdmin);	
+    $passwordHash = CalculatePasswordHash($password);
+
+	$userDbInterface->Insert($username, $ip, $userAgent, $passwordHash, AUTH_BCRYPT, $isAdmin);
 
 	$userData = new UserData($userDbInterface, $sessionDbInterface, $configData);
-	// change the new user's password to the one provided by the user;
-	UpdateUserPassword($userData->UsernameToId[$username], $password);
+
 	return LogInUser($username, $password);
 }
 
