@@ -2,11 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset='utf-8'>
-		<script src="vendor/components/jquery/jquery.js"></script>
+		<script src="dependencies/jquery/jquery.min.js"></script>
 		<title>{{CONFIG.VALUES.JAMNAME}} - {{page.page_title}}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<link href="vendor/components/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="dependencies\bootstrap/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="{{{page.template_path}}}css/trumbowyg.css">
 		<link rel="stylesheet" href="{{{page.template_path}}}css/trumbowyg.emoji.css">
 		<style>
@@ -18,8 +18,8 @@
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
 		<script src='{{{page.template_path}}}js/1hgj.js' type='text/javascript'></script>
-		<script src='vendor/components/sorttable/sorttable.js' type='text/javascript'></script>
-		<script src='vendor/components/chartjs/chart.min.js' type='text/javascript'></script>
+		<script src='dependencies/sorttable/sorttable.js' type='text/javascript'></script>
+		<script src='dependencies/chartjs/chart.min.js' type='text/javascript'></script>
 	</head>
 	<body>
         {{> header}}
@@ -55,6 +55,6 @@
             </button></form>
             {{> cookie_notice}}
         </div>
-        <script src="vendor/components/Bootstrap/js/bootstrap.min.js"></script>
+        <script src="dependencies\bootstrap/bootstrap.min.js"></script>
     </body>
 </html>
