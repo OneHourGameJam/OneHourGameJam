@@ -1,139 +1,137 @@
 <div class="headerRow">
 	<div class="alignCenter header">
-		<div class="panel panel-info headerPanel">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4 alignCenter headerColumn">
-						<a href='.'><img src='{{#CONFIG.has_custom_main_logo}}{{{CONFIG.VALUES.OVERRIDE_MAIN_LOGO}}}{{/CONFIG.has_custom_main_logo}}{{^CONFIG.has_custom_main_logo}}{{{page.template_path}}}images/logos/logo_onehourgamejam.png{{/CONFIG.has_custom_main_logo}}' alt='Logo' class='mainLogo' /></a><br />
-					</div>
-					<div class="col-md-4 alignCenter headerColumn headerTimer">
-						<p>
-							<b>Next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} starts in...</b><br>
-							<span id='countdownTimer' class='headerTimerCountdown'></span>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 alignCenter headerColumn">
+                    <a href='.'><img src='{{#CONFIG.has_custom_main_logo}}{{{CONFIG.VALUES.OVERRIDE_MAIN_LOGO}}}{{/CONFIG.has_custom_main_logo}}{{^CONFIG.has_custom_main_logo}}{{{page.template_path}}}images/logos/logo_onehourgamejam.png{{/CONFIG.has_custom_main_logo}}' alt='Logo' class='mainLogo' /></a><br />
+                </div>
+                <div class="col-md-4 alignCenter headerColumn headerTimer">
+                    <p>
+                        <b>Next {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} starts in...</b><br>
+                        <span id='countdownTimer' class='headerTimerCountdown'></span>
 
-							<script type='text/javascript'>
-								var date = new Date('{{{jams.next_jam_timer_code}}}');
-								var now = new Date();
-								function UpdateTimer(){
-									now = new Date();
-									var countdownTimer = (date - now) / 1000;
-									var totalS = countdownTimer;
-									var d = Math.floor(totalS / (24*60*60));
-									totalS -= d * (24*60*60);
-									var h = Math.floor(totalS / (60*60));
-									totalS -= h * (60*60);
-									var m = Math.floor(totalS / (60));
-									totalS -= m * (60);
-									var s = Math.floor(totalS);
+                        <script type='text/javascript'>
+                            var date = new Date('{{{jams.next_jam_timer_code}}}');
+                            var now = new Date();
+                            function UpdateTimer(){
+                                now = new Date();
+                                var countdownTimer = (date - now) / 1000;
+                                var totalS = countdownTimer;
+                                var d = Math.floor(totalS / (24*60*60));
+                                totalS -= d * (24*60*60);
+                                var h = Math.floor(totalS / (60*60));
+                                totalS -= h * (60*60);
+                                var m = Math.floor(totalS / (60));
+                                totalS -= m * (60);
+                                var s = Math.floor(totalS);
 
-									let update_interval = 60000;
-									var timerString = "";
-									if (d > 0){
-										timerString = d+" day"+((d > 1) ? "s" : "")+((h > 0) ? (" "+h + " hour"+((h > 1) ? "s" : "")) : "");
-									}else if (d == 0 && h > 0){
-										timerString = h+" hour"+((h > 1) ? "s" : "")+((m > 0) ? (" "+m + " minute"+((m > 1) ? "s" : "")) : "");
-									}else if (d == 0 && h == 0 && m > 0){
-										timerString = m+" min"+((s > 0) ? (" "+s + " s") : "");
-										update_interval = 500;
-									}else if (d == 0 && h == 0 && m == 0 && s > 0){
-										timerString = s+" s";
-										update_interval = 500;
-									}else{
-										timerString = "Go! Go! Go!";
-									}
+                                let update_interval = 60000;
+                                var timerString = "";
+                                if (d > 0){
+                                    timerString = d+" day"+((d > 1) ? "s" : "")+((h > 0) ? (" "+h + " hour"+((h > 1) ? "s" : "")) : "");
+                                }else if (d == 0 && h > 0){
+                                    timerString = h+" hour"+((h > 1) ? "s" : "")+((m > 0) ? (" "+m + " minute"+((m > 1) ? "s" : "")) : "");
+                                }else if (d == 0 && h == 0 && m > 0){
+                                    timerString = m+" min"+((s > 0) ? (" "+s + " s") : "");
+                                    update_interval = 500;
+                                }else if (d == 0 && h == 0 && m == 0 && s > 0){
+                                    timerString = s+" s";
+                                    update_interval = 500;
+                                }else{
+                                    timerString = "Go! Go! Go!";
+                                }
 
-									$("#countdownTimer").text(timerString);
-									setTimeout(UpdateTimer, update_interval);
-								}
-								var year = date.getFullYear();
-								var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-								var month = months[date.getMonth()];
-								var day = date.getDate();
-								var hour = date.getHours();
-								var min = date.getMinutes();
-								if(min < 10){
-									min = "0"+min
-								}
+                                $("#countdownTimer").text(timerString);
+                                setTimeout(UpdateTimer, update_interval);
+                            }
+                            var year = date.getFullYear();
+                            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            var month = months[date.getMonth()];
+                            var day = date.getDate();
+                            var hour = date.getHours();
+                            var min = date.getMinutes();
+                            if(min < 10){
+                                min = "0"+min
+                            }
 
-								var i1 = String(date).indexOf("(");
-								var i2 = String(date).lastIndexOf(")");
+                            var i1 = String(date).indexOf("(");
+                            var i2 = String(date).lastIndexOf(")");
 
-								var timezone = "";
+                            var timezone = "";
 
-								if(i1 > 0 && i2 > 0){
-									timezone = String(date).substring(i1 +1, i2);
-								}
-								else
-								{
-									var n = now.getTimezoneOffset() / -60;
-									timezone = "UTC";
-									if(n > 0){
-										if(n < 10){
-											n = "+0"+(n*100);
-										}else{
-											n = "+"+(n*100);
-										}
-										timezone += n;
-									}
-									if(n < 0){
-										if(n > -10){
-											n = "-0"+(n*-100);
-										}else{
-											n = "-"+(n*-100);
-										}
-										timezone += n;
-									}
-								}
+                            if(i1 > 0 && i2 > 0){
+                                timezone = String(date).substring(i1 +1, i2);
+                            }
+                            else
+                            {
+                                var n = now.getTimezoneOffset() / -60;
+                                timezone = "UTC";
+                                if(n > 0){
+                                    if(n < 10){
+                                        n = "+0"+(n*100);
+                                    }else{
+                                        n = "+"+(n*100);
+                                    }
+                                    timezone += n;
+                                }
+                                if(n < 0){
+                                    if(n > -10){
+                                        n = "-0"+(n*-100);
+                                    }else{
+                                        n = "-"+(n*-100);
+                                    }
+                                    timezone += n;
+                                }
+                            }
 
-								setTimeout(UpdateTimer, 0);
-							</script>
-						</p>
-					</div>
-					<div class="col-md-4 alignCenter headerColumn headerChat">
-						{{#CONFIG.VALUES.IRC_ADDRESS}}
-						{{#CONFIG.VALUES.IRC_CHANNEL}}
-							<a href="#" onclick='$("#ircInfo").slideToggle(); return false;' class='ircButtonLink' target='_blank'>
-								<div class='mediaButton ircButton'><img src='{{{page.template_path}}}images/irc.png' class='ircButtonImage' /> IRC</div>
-							</a>
-						{{/CONFIG.VALUES.IRC_CHANNEL}}
-						{{/CONFIG.VALUES.IRC_ADDRESS}}
+                            setTimeout(UpdateTimer, 0);
+                        </script>
+                    </p>
+                </div>
+                <div class="col-md-4 alignCenter headerColumn headerChat">
+                    {{#CONFIG.VALUES.IRC_ADDRESS}}
+                    {{#CONFIG.VALUES.IRC_CHANNEL}}
+                        <a href="#" onclick='$("#ircInfo").slideToggle(); return false;' class='ircButtonLink' target='_blank'>
+                            <div class='mediaButton ircButton'><img src='{{{page.template_path}}}images/irc.png' class='ircButtonImage' /> IRC</div>
+                        </a>
+                    {{/CONFIG.VALUES.IRC_CHANNEL}}
+                    {{/CONFIG.VALUES.IRC_ADDRESS}}
 
-						{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
-							<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" class='discordButtonLink' target='_blank'>
-								<div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' class='discordButtonImage' /> Discord</div>
-							</a>
-						{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
+                    {{#CONFIG.VALUES.DISCORD_INVITE_URL}}
+                        <a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" class='discordButtonLink' target='_blank'>
+                            <div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' class='discordButtonImage' /> Discord</div>
+                        </a>
+                    {{/CONFIG.VALUES.DISCORD_INVITE_URL}}
 
-						{{#user}}
-							<form method='post' id="logoutForm" style="display: inline;">
-								<div class="dropdown" style="display: inline;">
-									<button class="btn btn-default dropdown-toggle profileMediaButton profileDropdown" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-										{{user.display_name}}
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu">
-										<li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
-										{{^cookies.is_streamer}}
-											<li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a></li>
-										{{/cookies.is_streamer}}
-										<li role="separator" class="divider"></li>
-										<li>
-											{{> csrf_token}}
-											<input type="hidden" name='{{{forms.form.action}}}' value='{{{forms.action.logout}}}'>
-											<a href="#" onclick='$("#logoutForm").submit();return false;'>Log Out</a>
-										</li>
-									</ul>
-								</div>
-							</form>
-						{{/user}}
-						{{^user}}
-							<a href='?{{{forms.get.page}}}={{{forms.pages.login}}}' class='loginButtonLink'>
-								<div class='mediaButton loginButton'><img src='{{{page.template_path}}}images/user.png' class='loginButtonImage' /> Log In</div>
-							</a>
-						{{/user}}
-					</div>
-				</div>
-			</div>
-		</div>
+                    {{#user}}
+                        <form method='post' id="logoutForm" style="display: inline;">
+                            <div class="dropdown" style="display: inline;">
+                                <button class="btn btn-default dropdown-toggle profileMediaButton profileDropdown" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    {{user.display_name}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
+                                    {{^cookies.is_streamer}}
+                                        <li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a></li>
+                                    {{/cookies.is_streamer}}
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        {{> csrf_token}}
+                                        <input type="hidden" name='{{{forms.form.action}}}' value='{{{forms.action.logout}}}'>
+                                        <a href="#" onclick='$("#logoutForm").submit();return false;'>Log Out</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    {{/user}}
+                    {{^user}}
+                        <a href='?{{{forms.get.page}}}={{{forms.pages.login}}}' class='loginButtonLink'>
+                            <div class='mediaButton loginButton'><img src='{{{page.template_path}}}images/user.png' class='loginButtonImage' /> Log In</div>
+                        </a>
+                    {{/user}}
+                </div>
+            </div>
+        </div>
 	</div>
 </div>
