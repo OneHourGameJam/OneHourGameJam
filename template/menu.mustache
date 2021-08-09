@@ -43,12 +43,6 @@
 			{{/user}}
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>How it works</a></li>
 				<li><a href='?{{{forms.get.page}}}={{{forms.pages.assets}}}'>Assets</a></li>
-				<li><a href='?{{{forms.get.page}}}={{{forms.pages.privacy}}}'>Privacy</a></li>
-			{{#user}}
-				{{^cookies.is_streamer}}
-					<li><a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>User data</a></li>
-				{{/cookies.is_streamer}}
-			{{/user}}
 
 			<li class="mainmenu-separator">Browse</li>
 			<li><a href='?{{{forms.get.page}}}={{{forms.pages.entries}}}'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
