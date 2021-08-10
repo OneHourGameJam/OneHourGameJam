@@ -114,7 +114,9 @@
                                     <li><a href='?{{{forms.get.page}}}={{{forms.pages.author}}}&{{{forms.get.author.username}}}={{user.username}}'>Profile</a></li>
                                     {{^cookies.is_streamer}}
                                         <li><a href='?{{{forms.get.page}}}={{{forms.pages.usersettings}}}'>User settings</a></li>
+                                        <li><a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>Your data</a></li>
                                     {{/cookies.is_streamer}}
+                                    <li><a href='?{{{forms.get.page}}}={{{forms.pages.privacy}}}'>Privacy</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         {{> csrf_token}}
