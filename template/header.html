@@ -21,6 +21,12 @@
 							<div class='mediaButton discordButton' class='discordButton'><img src='{{{page.template_path}}}images/discord.png' class='discordButtonImage' /> Discord</div>
 						</a>
 					{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
+					{{^user}}
+					<!-- Login and logout button added -->
+					<a  href="?page=login"><button class="btn ">Log in</button></a>
+					<a href="?page=register" class="header-register"><button class="btn">Register</button></a>
+					{{/user}}
+
 				</div>
 				<div class="col-md-3 alignCenter headerColumn headerTimer">
 					<p>

@@ -857,3 +857,14 @@ body{
   max-width: 40px;
   max-height: 40px;
 }
+
+/* CSS for login and register butotn on header  */
+.header-register{
+  text-decoration: none;
+  color: #26cf00;
+}
+.header-register button{
+  border: 3px solid #26cf00;
+  padding: 4px;
+  background-color: transparent;
+}
