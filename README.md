@@ -78,7 +78,7 @@ If you prefer to follow a video tutorial, please watch the following - keep in m
 * Go to https://localhost/onehourgamejam/ - this should point you to the install page
 * Enter the following data into the form:
   * Host: localhost
-  * Username: Root
+  * Username: root
   * leave Password blank
   * Database Name: onehourgamejam
   * tick "Initialise database"
