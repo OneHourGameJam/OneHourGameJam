@@ -104,6 +104,7 @@
 							</a>
 						{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
 
+
 						{{#user}}
 							<form method='post' id="logoutForm" style="display: inline;">
 								<div class="dropdown" style="display: inline;">
@@ -130,6 +131,8 @@
 							<a href='?{{{forms.get.page}}}={{{forms.pages.login}}}' class='loginButtonLink'>
 								<div class='mediaButton loginButton'><img src='{{{page.template_path}}}images/user.png' class='loginButtonImage' /> Log In</div>
 							</a>
+							<a href="?page=register" class="header-register"><button class="mediabutton btn">Register</button></a>
+
 						{{/user}}
 					</div>
 				</div>
