@@ -1,3 +1,6 @@
+
+
+
 <div class="headerRow">
 	<div class="alignCenter header">
         <div class="container">
@@ -138,3 +141,25 @@
         </div>
 	</div>
 </div>
+
+<!-- Enable Light mode -->
+<label class="theme-toggle-container">
+    {{#cookies.darkmode}}
+        <input class='toggle-checkbox' type='checkbox' onchange="Javascript:window.location.href ='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0'" checked></input>
+        <div class='toggle-slot'>
+            <a class="toggle-button" href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0' class="theme-toggle-btn theme-toggle-dark"></a>
+        </div>  
+    {{/cookies.darkmode}}
+    </label>
+    
+    <!-- enable dark mode -->
+    <label class="theme-toggle-container">
+    {{^cookies.darkmode}}
+        <input class='toggle-checkbox' type='checkbox' onchange="Javascript:window.location.href ='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=1'" ></input>
+        <div class='toggle-slot'>
+            <a class="toggle-button" href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=1' class="theme-toggle-btn theme-toggle-light"></a>
+        </div>
+    {{/cookies.darkmode}}
+    
+    
+    </label>
