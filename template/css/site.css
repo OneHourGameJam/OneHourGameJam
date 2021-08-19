@@ -1324,3 +1324,17 @@ body{
   }
 }
 
+/* CSS for login and register butotn on header  */
+.header-register{
+  text-decoration: none;
+  color: #ffffff;
+  margin: auto;
+}
+.header-register button{
+  color: #ffffff;
+  background-color: #FF0066;
+}
+.header-register button:hover{
+  color: #ffffff;
+  background-color: #FF0066;
+}
