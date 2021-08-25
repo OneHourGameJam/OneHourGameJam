@@ -178,3 +178,13 @@ a:hover{
     background-color: #99667a;
     color: #ffd8e8;
 }
+
+.header{
+    background-color: #383838;
+    border-bottom: 1px solid #7B8991;
+}
+
+.footer{
+    background-color: #383838;
+    border-top: 1px solid #7B8991;
+}

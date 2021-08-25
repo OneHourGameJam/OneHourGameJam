@@ -524,8 +524,8 @@ body{
 }
 
 .header{
-  background-color: #383838;
-  border-bottom: 1px solid #7B8991;
+  background-color: #F7FBFD;
+  border-bottom: 1px solid rgb(188, 232, 241);
 }
 
 .headerPanel{
@@ -537,8 +537,8 @@ body{
 }
 
 .footer{
-  background-color: #383838;
-  border-top: 1px solid #7B8991;
+  background-color: #F7FBFD;
+  border-top: 1px solid rgb(188, 232, 241);
   padding-bottom: 10px;
 }
 
