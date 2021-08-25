@@ -217,12 +217,13 @@ body{
 }
 
 .mediaButton{
-	min-width: 100px;
-	border-radius: 5px; 
-	color: white; 
-	text-align: center; 
-	padding: 4px;
-	margin-bottom: 5px;
+  min-width: 100px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 5px;
+  display: inline-block;
 }
 
 .becomeStreamerButton{
@@ -525,6 +526,26 @@ body{
   padding-top: 15px;
 }
 
+.footer{
+  background-color: #383838;
+  border-top: 1px solid #7B8991;
+  padding-bottom: 10px;
+}
+
+.footerPanel{
+  margin-bottom: 0px;
+}
+
+.footerColumnLeft{
+  padding-top: 10px;
+}
+.footerColumnCenter{
+  padding-top: 20px;
+}
+.footerColumnRight{
+  padding-top: 10px;
+}
+
 .statsRow{
   font-size: 16px; 
   font-weight: bold;
@@ -555,8 +576,14 @@ body{
 }
 
 .mainLogo{
-  max-width: 100%; 
-  width: 400px; 
+  max-width: 100%;
+  width: 400px;
+  border: 0;
+}
+
+.footerLogo{
+  max-width: 100%;
+  width: 250px;
   border: 0;
 }
 
@@ -606,10 +633,6 @@ body{
 
 .loginButtonImage{
   width: 20px;
-}
-
-.footer{
-  padding-bottom: 50px;
 }
 
 .cookieNoticeForm{
@@ -1103,225 +1126,6 @@ body{
   background-color: #485367;
   box-shadow: inset 0px 0px 0px 0.75em white;
   transform: translate(2em, 0);
-}
-
-/* Site footer */
-.footer-distributed{
-	background: #383838;
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
-	box-sizing: border-box;
-	width: 100%;
-	text-align: left;
-	font: bold 16px sans-serif;
-	padding: 55px 50px;
-  display: flex;
-  justify-content: space-between;
-
-}
-
-.footer-distributed .footer-left,
-.footer-distributed .footer-center,
-.footer-distributed .footer-right{
-	display: inline-block;
-	vertical-align: top;
-}
-
-/* Footer left */
-
-.footer-distributed .footer-left{
-	width: 40%;
-}
-
-/* The company logo */
-
-.footer-distributed h3{
-	color:  #ffffff;
-	font: normal 36px 'Open Sans', cursive;
-	margin: 0;
-}
-
-.footer-distributed h3 span{
-	color:  lightseagreen;
-}
-
-/* Footer links */
-
-.footer-distributed .footer-links{
-	color:  #ffffff;
-	margin: 20px 0 12px;
-	padding: 0;
-}
-
-.footer-distributed .footer-links a{
-	display:inline-block;
-	line-height: 1.8;
-  font-weight:400;
-	text-decoration: none;
-	color:  inherit;
-}
-.footer-distributed .footer-links a:hover{
-  color: #FF0066;
-}
-
-.footer-distributed .footer-company-name{
-	color:  #fff;
-	font-size: 14px;
-	font-weight: normal;
-	margin: 0;
-}
-
-/* Footer Center */
-
-.footer-distributed .footer-center{
-	width: 35%;
-}
-
-.footer-distributed .footer-center i{
-	background-color:  #33383b;
-	color: #ffffff;
-	font-size: 25px;
-	width: 38px;
-	height: 38px;
-	border-radius: 50%;
-	text-align: center;
-	line-height: 42px;
-	margin: 10px 15px;
-	vertical-align: middle;
-}
-
-.footer-distributed .footer-center i.fa-envelope{
-	font-size: 17px;
-	line-height: 38px;
-}
-
-.footer-distributed .footer-center p{
-	display: inline-block;
-	color: #ffffff;
-  font-weight:400;
-	vertical-align: middle;
-	margin:0;
-}
-
-.footer-distributed .footer-center p span{
-	display:block;
-	font-weight: normal;
-	font-size:14px;
-	line-height:2;
-}
-
-.footer-distributed .footer-center p a{
-	color:  lightseagreen;
-	text-decoration: none;;
-}
-
-.footer-distributed .footer-links a:before {
-  content: "|";
-  font-weight:300;
-  font-size: 20px;
-  left: 0;
-  color: #fff;
-  display: inline-block;
-  padding-right: 5px;
-}
-
-.footer-distributed .footer-links .link-1:before {
-  content: none;
-}
-
-/* Footer Right */
-
-.footer-distributed .footer-right{
-	width: 30%;
-}
-
-.footer-distributed .footer-company-about{
-	line-height: 20px;
-	color:  #fff;
-	font-size: 13px;
-	font-weight: normal;
-	margin: 0;
-}
-
-.footer-distributed .footer-company-about span{
-	display: block;
-	color:  #FF0066;
-	font-size: 14px;
-	font-weight: bold;
-	margin-bottom: 20px;
-}
-
-.footer-distributed .footer-icons{
-	margin-top: 25px;
-}
-.footer-icon-right{
-  display: flex;
-}
-
-.footer-distributed .footer-icons a{
-	display: inline-block;
-
-	cursor: pointer;
-	border-radius: 2px;
-
-	color: #ffffff;
-	text-align: center;
-	line-height: 35px;
-
-	margin-right: 3px;
-	margin-bottom: 5px;
-}
-.footer-icons{
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-}
-.footer-icon-right .mediaButton{
-  display: inline-block;
-}
-/* If you don't want the footer to be responsive, remove these media queries */
-
-@media (max-width: 880px) {
-	.footer-distributed{
-		font: bold 14px sans-serif;
-    flex-direction: column;
-	}
-
-	.footer-distributed .footer-left,
-	.footer-distributed .footer-center,
-	.footer-distributed .footer-right{
-		display: block;
-		width: 100%;
-		margin-bottom: 40px;
-		text-align: center;
-	}
-
-	.footer-distributed .footer-center i{
-		margin-left: 0;
-	}
-  .footer-icons{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .footer-icon-right{
-    flex-direction: column;
-    width: 45%;
-  }
-
-}
-@media (max-width: 1300px) {
-  .footer-icons{
-    grid-template-columns:auto auto auto;
-  }
-}
-@media (max-width: 1000px) {
-  .footer-icons{
-    grid-template-columns:auto auto;
-  }
-}
-@media (max-width: 880px) {
-  .footer-icons{
-    grid-template-columns:auto auto;
-  }
 }
 
 /* CSS for login and register butotn on header  */

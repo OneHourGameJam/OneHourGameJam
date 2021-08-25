@@ -1,80 +1,54 @@
-<!-- New footer design -->
-<footer class="footer-distributed">
 
-    <div class="footer-left">
-
-        <img src="template/images/logos/logo_onehourgamejam.png" alt="Logo" class="mainLogo">
-        <p class="footer-links">
-            <a href='?{{{forms.get.page}}}={{{forms.pages.main}}}' class="link-1">Home</a>
-            
-            <a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>How it works</a>
-                
-
-        </p>
-
-        <p class="footer-company-name">OneHourJam 2021</p>
-    </div>
-
-    <div class="footer-center">
-        <br>
-        <br>
-        Powered By - <br>
-        <a href='https://github.com/OneHourGameJam/OneHourGameJam'>One Hour Game Jam</a> version {{SOFTWARE_VERSION}} -
-<a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report a bug / suggest a feature</a>
-
-    </div>
-
-    <div class="footer-right">
-
-        <p class="footer-company-about">
-            <span>About OneHourGameJam</span>
-            {{{CONFIG.VALUES.SITE_FOOTER}}}
-        </p>
-
-        <div class="footer-icons" id="mainmenu-social">
-            {{#CONFIG.VALUES.TWITTER_ACCOUNT}}
-                <div class="footer-icon-right">
-                    <a href="https://twitter.com/{{CONFIG.VALUES.TWITTER_ACCOUNT}}" target='_blank'>
-                        <div class='mediaButton twitterButton'><img src='{{{page.template_path}}}images/twitter.png' class="menuButton" /> Follow</div>
-                    </a>
+<div class="footerRow">
+    <div class="alignCenter footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 alignCenter footerColumn footerColumnLeft">
+                    <img src="template/images/logos/logo_onehourgamejam.png" alt="Logo" class="footerLogo">
+                    <p>
+                        <a href='?{{{forms.get.page}}}={{{forms.pages.main}}}'>Home</a> -
+                        <a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>About</a>
+                    </p>
                 </div>
-                {{/CONFIG.VALUES.TWITTER_ACCOUNT}}
-                {{#CONFIG.VALUES.DISCORD_INVITE_URL}}
-                <div class="footer-icon-right">
-                    <a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" target='_blank'>
-                        <div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' class="menuButton" /> Discord</div>
-                    </a>
+                <div class="col-md-5 alignCenter footerColumn footerColumnCenter">
+                    Powered By
+                    <a href='https://github.com/OneHourGameJam/OneHourGameJam'>One Hour Game Jam</a> version {{SOFTWARE_VERSION}} <br />
+                    <a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report a bug / suggest a feature</a>
                 </div>
-                {{/CONFIG.VALUES.DISCORD_INVITE_URL}}
-                {{#CONFIG.VALUES.TWITCH_ACCOUNT}}
-                <div class="footer-icon-right">
-                    <a href="https://twitch.tv/{{CONFIG.VALUES.TWITCH_ACCOUNT}}" target='_blank'>
-                        <div class='mediaButton twitchButton'><img src='{{{page.template_path}}}images/twitch.png' class="menuButton" /> Watch</div>
-                    </a>
-                </div>
-                {{/CONFIG.VALUES.TWITCH_ACCOUNT}}
-
-                {{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
-                    {{#CONFIG.VALUES.IRC_ADDRESS}}
-                        {{#CONFIG.VALUES.IRC_CHANNEL}}
-                        <div class="footer-icon-right">
+                <div class="col-md-4 alignCenter footerColumn footerColumnRight">
+                    <div>
+                        Contact: <br />
+                        {{#CONFIG.VALUES.TWITTER_ACCOUNT}}
+                            <a href="https://twitter.com/{{CONFIG.VALUES.TWITTER_ACCOUNT}}" target='_blank'>
+                                <div class='mediaButton twitterButton'><img src='{{{page.template_path}}}images/twitter.png' class="menuButton" /> Follow</div>
+                            </a>
+                        {{/CONFIG.VALUES.TWITTER_ACCOUNT}}
+                        {{#CONFIG.VALUES.DISCORD_INVITE_URL}}
+                            <a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" target='_blank'>
+                                <div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' class="menuButton" /> Discord</div>
+                            </a>
+                        {{/CONFIG.VALUES.DISCORD_INVITE_URL}}
+                        {{#CONFIG.VALUES.TWITCH_ACCOUNT}}
+                            <a href="https://twitch.tv/{{CONFIG.VALUES.TWITCH_ACCOUNT}}" target='_blank'>
+                                <div class='mediaButton twitchButton'><img src='{{{page.template_path}}}images/twitch.png' class="menuButton" /> Watch</div>
+                            </a>
+                        {{/CONFIG.VALUES.TWITCH_ACCOUNT}}
+                        {{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
                             <a href="{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}" target='_blank'>
                                 <div class='mediaButton ircButton'><img src='{{{page.template_path}}}images/irc.png' class="menuButton" /> IRC</div>
                             </a>
-                        </div>
-                            
-                        {{/CONFIG.VALUES.IRC_CHANNEL}}
-                    {{/CONFIG.VALUES.IRC_ADDRESS}}
-			    {{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
-                <div class="footer-icon-right">
-                    <a href="https://github.com/OneHourGameJam/OneHourGameJam" target='_blank'>
-                        <div class='mediaButton githubButton'><img src='{{{page.template_path}}}images/github.png' class="menuButton" /> Github</div>
-                    </a>
+                        {{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
+                        <a href="https://github.com/OneHourGameJam/OneHourGameJam" target='_blank'>
+                            <div class='mediaButton githubButton'><img src='{{{page.template_path}}}images/github.png' class="menuButton" /> Github</div>
+                        </a>
+                    </div>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-md-12 alignCenter">
+                    {{{CONFIG.VALUES.SITE_FOOTER}}}
+                </div>
+            </div>
         </div>
-
     </div>
-
-</footer>
+</div>
