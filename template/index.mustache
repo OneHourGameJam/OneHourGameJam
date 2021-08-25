@@ -41,13 +41,9 @@
                     {{> page}}
                 </div>
             </div>
-            <div class='row'>
-                <div class='col-md-12 alignCenter footer'>
-                    {{> footer}}
-                </div>
-            </div>
         </div>
-        
+        {{> footer}}
+
         <div class="cookieNotice" id="cookieNotice" style='{{^cookies.show_cookie_notice}}display: none{{/cookies.show_cookie_notice}}'>
             <form method="POST"><button type="submit" name='{{{forms.form.cookienotice.accept}}}' class="btn btn-xs cookieNoticeForm">
                 {{> csrf_token}}

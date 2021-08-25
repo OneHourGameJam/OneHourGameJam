@@ -217,12 +217,13 @@ body{
 }
 
 .mediaButton{
-	min-width: 100px;
-	border-radius: 5px; 
-	color: white; 
-	text-align: center; 
-	padding: 4px;
-	margin-bottom: 5px;
+  min-width: 100px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 5px;
+  display: inline-block;
 }
 
 .becomeStreamerButton{
@@ -279,6 +280,12 @@ body{
 
 .discordButton:hover{
 	background-color: #6676AE; 
+}
+.githubButton{
+  background-color: #292929;
+}
+.githubButton:hover{
+  background-color: #000000;
 }
 
 .logoutButton{
@@ -519,6 +526,26 @@ body{
   padding-top: 15px;
 }
 
+.footer{
+  background-color: #383838;
+  border-top: 1px solid #7B8991;
+  padding-bottom: 10px;
+}
+
+.footerPanel{
+  margin-bottom: 0px;
+}
+
+.footerColumnLeft{
+  padding-top: 10px;
+}
+.footerColumnCenter{
+  padding-top: 20px;
+}
+.footerColumnRight{
+  padding-top: 10px;
+}
+
 .statsRow{
   font-size: 16px; 
   font-weight: bold;
@@ -549,8 +576,14 @@ body{
 }
 
 .mainLogo{
-  max-width: 100%; 
-  width: 400px; 
+  max-width: 100%;
+  width: 400px;
+  border: 0;
+}
+
+.footerLogo{
+  max-width: 100%;
+  width: 250px;
   border: 0;
 }
 
@@ -600,10 +633,6 @@ body{
 
 .loginButtonImage{
   width: 20px;
-}
-
-.footer{
-  padding-bottom: 50px;
 }
 
 .cookieNoticeForm{
@@ -1098,6 +1127,7 @@ body{
   box-shadow: inset 0px 0px 0px 0.75em white;
   transform: translate(2em, 0);
 }
+
 /* CSS for login and register butotn on header  */
 .header-register{
   text-decoration: none;
