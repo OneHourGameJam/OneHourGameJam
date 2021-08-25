@@ -228,42 +228,52 @@ body{
 
 .becomeStreamerButton{
   background-color: #6441A5;
+  text-decoration: none;
 }
 
 .becomeStreamerButton:hover{
-  background-color: #6441A5;
+  background-color: #472B7C;
+  text-decoration: none;
 }
 
 .stopBeingStreamerButton{
   background-color: #6441A5;
+  text-decoration: none;
 }
 
 .stopBeingStreamerButton:hover{
-  background-color: #6441A5;
+  background-color: #472B7C;
+  text-decoration: none;
 }
 
 .submitGameButton{
   background-color: #FF0066;
+  text-decoration: none;
 }
 
 .submitGameButton:hover{
   background-color: #D20054;
+  text-decoration: none;
 }
 
 .twitterButton{
-	background-color: #1B95E0; 
+  background-color: #1B95E0;
+  text-decoration: none;
 }
 
 .twitterButton:hover{
-	background-color: #0C7ABF; 
+  background-color: #0C7ABF;
+  text-decoration: none;
 }
 
 .twitchButton{
-	background-color: #6441A5; 
+  background-color: #6441A5;
+  text-decoration: none;
 }
 
 .twitchButton:hover{
-	background-color: #472B7C; 
+  background-color: #472B7C;
+  text-decoration: none;
 }
 
 .ircButton{
@@ -591,6 +601,10 @@ body{
   text-decoration: none;
 }
 
+.ircButtonLink:hover{
+  text-decoration: none;
+}
+
 .ircButton{
   display: inline-block;
 }
@@ -600,6 +614,10 @@ body{
 }
 
 .discordButtonLink{
+  text-decoration: none;
+}
+
+.discordButtonLink:hover{
   text-decoration: none;
 }
 
@@ -615,6 +633,10 @@ body{
   text-decoration: none;
 }
 
+.logoutButtonLink:hover{
+  text-decoration: none;
+}
+
 .logoutButton{
   display: inline-block;
 }
@@ -627,11 +649,37 @@ body{
   text-decoration: none;
 }
 
+.loginButtonLink:hover{
+  text-decoration: none;
+}
+
 .loginButton{
   display: inline-block;
 }
 
 .loginButtonImage{
+  width: 20px;
+}
+
+.registerButtonLink{
+  text-decoration: none;
+}
+
+.registerButtonLink:hover{
+  text-decoration: none;
+}
+
+.registerButton{
+  display: inline-block;
+  color: #ffffff;
+  background-color: #FF0066;
+}
+
+.registerButton:hover{
+  background-color: #CC2668;
+}
+
+.registerButtonImage{
   width: 20px;
 }
 
@@ -1126,19 +1174,4 @@ body{
   background-color: #485367;
   box-shadow: inset 0px 0px 0px 0.75em white;
   transform: translate(2em, 0);
-}
-
-/* CSS for login and register butotn on header  */
-.header-register{
-  text-decoration: none;
-  color: #ffffff;
-  margin: auto;
-}
-.header-register button{
-  color: #ffffff;
-  background-color: #FF0066;
-}
-.header-register button:hover{
-  color: #ffffff;
-  background-color: #FF0066;
 }
