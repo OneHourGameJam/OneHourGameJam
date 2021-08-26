@@ -213,7 +213,14 @@ body{
   color: white;
   text-align: center;
   padding: 4px;
-  margin-bottom: 5px;
+  height: 29px;
+  border: 0px;
+  margin-bottom: 1px;
+}
+
+.profileMediaButtonText{
+  position: relative;
+  top: -1px;
 }
 
 .mediaButton{
@@ -224,6 +231,8 @@ body{
   padding: 4px;
   margin-bottom: 5px;
   display: inline-block;
+  height: 29px;
+  border: 0px;
 }
 
 .becomeStreamerButton{
@@ -308,7 +317,6 @@ body{
 
 .profileDropdown {
   background-color: #777777;
-  margin: 0px;
   color: white;
 }
 
