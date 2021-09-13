@@ -294,10 +294,12 @@ class UserPresenter{
 			$userViewModel->is_admin = 1;
 
             $userViewModel->is_equal_or_lower_permission_level_to_logged_in_user = 0;
-            if($loggedInUser && $loggedInUser->Admin >= $userViewModel->admin){
+            if($loggedInUser && $loggedInUser->Admin >= $userModel->Admin){
                 $userViewModel->is_equal_or_lower_permission_level_to_logged_in_user = 1;
             }
-		}
+		}else{
+            $userViewModel->is_equal_or_lower_permission_level_to_logged_in_user = 1;
+        }
 	
 		StopTimer("RenderUser - Finish");
 		StopTimer("RenderUser");
