@@ -90,7 +90,7 @@ function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData,
                         break;
                     }
                 }
-                if(count($render["editingentry"]) == 0){
+                if(!isset($render["editingentry"])){
                     die("no entry selected");
                 }
             }
