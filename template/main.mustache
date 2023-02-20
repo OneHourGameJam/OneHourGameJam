@@ -83,7 +83,14 @@
 								{{/user}}
 							{{/in_straming_period}}
 							{{^in_straming_period}}
-								Play the {{CONFIG.VALUES.GAME_PHRASE_PLURAL}} submitted to this {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}:
+								Play the {{CONFIG.VALUES.GAME_PHRASE_PLURAL}} submitted to this {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} or
+                                {{#can_user_submit_to_jam}}
+                                    <a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}&{{{forms.get.submit.jam_number}}}={{jam_number}}' style='display: inline-block;'>
+                                        <div class="mediaButton submitGameButton">
+                                            Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}
+                                        </div>
+                                    </a>
+                                {{/can_user_submit_to_jam}}
 							{{/in_straming_period}}
 						{{/jam_ended}}
 						{{^jam_ended}}
