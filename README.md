@@ -11,7 +11,7 @@ Source code required to run your very own One hour game jam event.
 * Glossary of development terms
 
 # Requirements
-Requires a web server with PHP 5.6 or later and MySQL or MariaDB.
+Requires a web server with PHP versions between 5.6 and 8.1 (possibly newer, untested), and MySQL or MariaDB. Requires Mysqli package for PHP. 
 
 # Installing
 You can either install with vagrant or you can manually install (if you want to install on a production server)
