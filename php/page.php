@@ -238,8 +238,6 @@ function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData,
             $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Id);
 
-            $render["userdata_assets"] = "potato";
-
             $render["user_data"] = Array();
             foreach($plugins as $plugin){
                 $userDataSegments = $plugin->GetUserDataExport($loggedInUser->Id);
