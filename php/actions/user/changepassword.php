@@ -27,25 +27,13 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 
 	$loggedInUserId = $loggedInUser->Id;
 	$user = $userData->UserModels[$loggedInUserId];
-	$correctPasswordHash = $user->PasswordHash;
-	$userSalt = $user->Salt;
-	$userPasswordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($oldPassword, $userSalt, $userPasswordIterations, $configData);
-	if($correctPasswordHash != $passwordHash){
-		return "INCORRECT_PASSWORD";
+	
+	$auth_result = VerifyPassword($user, $oldPassword);
+	if($auth_result != "SUCCESS"){
+		return $auth_result;
 	}
 
-	//Generate new salt, number of iterations and hashed password.
-	$newUserSalt = GenerateSalt();
-	$newUserPasswordIterations = GenerateUserHashIterations($configData);
-	$newPasswordHash = HashPassword($password, $newUserSalt, $newUserPasswordIterations, $configData);
-
-	$userData->UserModels[$loggedInUserId]->Salt = $newUserSalt;
-	$userData->UserModels[$loggedInUserId]->PasswordHash = $newPasswordHash;
-	$userData->UserModels[$loggedInUserId]->PasswordIterations = $newUserPasswordIterations;
-
-	$userDbInterface->UpdatePassword($loggedInUser->Id, $newUserSalt, $newPasswordHash, $newUserPasswordIterations);
-	
+	UpdateUserPassword($user->Id, $password);
 	return "SUCCESS";
 }
 

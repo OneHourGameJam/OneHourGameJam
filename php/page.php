@@ -24,7 +24,9 @@ function ValidatePage($page, &$loggedInUser){
     return $page;
 }
 
-function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamData, &$themeData, &$themeIdeaData, &$platformData, &$platformGameData, &$pollData, &$satisfactionData, &$loggedInUser, &$assetData, &$cookieData, &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins){
+function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData, GameData &$gameData, JamData &$jamData, ThemeData &$themeData, ThemeIdeaData &$themeIdeaData, PlatformData &$platformData,
+                            PlatformGameData &$platformGameData, PollData &$pollData, SatisfactionData &$satisfactionData, &$loggedInUser, AssetData &$assetData, CookieData &$cookieData,
+                            AdminVoteData &$adminVoteData, &$nextSuggestedJamDateTime, &$plugins){
     global $_GET, $templateBasePath, $pageSettings;
 	AddActionLog("RenderPageSpecific");
 	StartTimer("RenderPageSpecific");
@@ -49,6 +51,7 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                     die("no user selected");
                 }
                 $render["editinguser"] = UserPresenter::RenderUser($configData, $cookieData, $userData->UserModels[$editingUserId], $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, RENDER_DEPTH_NONE);
+                $render["user_bio"] = $userData->LoadBio($editingUserId);
             }
         break;
         case PAGE_EDIT_JAM:
@@ -87,11 +90,20 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
                         break;
                     }
                 }
-                if(count($render["editingentry"]) == 0){
+                if(!isset($render["editingentry"])){
                     die("no entry selected");
                 }
             }
-        break;
+            break;
+        case PAGE_MANAGE_THEMES:
+            if(isset($_GET[GET_LOAD_ALL])){
+                if(IsAdmin($loggedInUser) !== false){
+                    $themeData->AllThemeModels = $themeData->LoadAllThemes();
+                    $render["all_themes"] = ThemePresenter::RenderAllThemes($configData, $userData, $themeData);
+                    $render["loading_all_themes"] = 1;
+                }
+            }
+            break;
         case PAGE_JAM:
             $viewingJamNumber = ((isset($_GET[GET_JAM_JAM_NUMBER])) ? intval($_GET[GET_JAM_JAM_NUMBER]) : 0);
             if($viewingJamNumber == 0){
@@ -225,8 +237,6 @@ function RenderPageSpecific($page, &$configData, &$userData, &$gameData, &$jamDa
             $render["userdata_sessions"] = $userData->GetSessionsOfUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Id);
-
-            $render["userdata_assets"] = "potato";
 
             $render["user_data"] = Array();
             foreach($plugins as $plugin){

@@ -46,13 +46,13 @@ class NotificationPlugin extends \AbstractPlugin{
             PAGE_EDIT_NOTIFICATIONS => Array(
                 "page_title" => "Manage Notifications",
                 "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-                "template_file" => $this->GetTemplateFolder()."editnotifications.html",
+                "template_file" => $this->GetTemplateFolder()."editnotifications.mustache",
                 "dependencies" => Array(RENDER_NOTIFICATIONS => RENDER_DEPTH_NONE),
             ),
             PAGE_EDIT_NOTIFICATION => Array(
                 "page_title" => "Edit Notification",
                 "authorization_level" => AUTHORIZATION_LEVEL_ADMIN,
-                "template_file" => $this->GetTemplateFolder()."editnotification.html",
+                "template_file" => $this->GetTemplateFolder()."editnotification.mustache",
                 "dependencies" => Array(),
             )
         );
@@ -60,7 +60,7 @@ class NotificationPlugin extends \AbstractPlugin{
     
     public function GetPartials(){
         $partials = Array(
-            "notification" => $this->GetPartialsFolder()."notification.html"
+            "notification" => $this->GetPartialsFolder()."notification.mustache"
         );
         return $partials;
     }

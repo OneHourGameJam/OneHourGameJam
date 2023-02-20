@@ -1,0 +1,209 @@
+<h1 class="pageHeading">Privacy</h1>
+<div class="pageDescription">
+	This page outlines the data which is collected and stored, how it is transmitted and stored, why it is stored and how you can control this. We're a tiny operation who fully support your ability to control your own data.
+</div>
+
+<p>
+	<h4>What we collect and store</h4>
+
+	<ul>
+		<li>For each user, the following user data is stored:</li>
+		<ul>
+			<li>User ID (number used to identify each user internally)</li>
+			<li>User registration date and time</li>
+			<li>Username</li>
+			<li>User registration IP address</li>
+			<li>User registration User Agent (browser and operating system data)</li>
+			<li>Display name (set in User Settings)</li>
+			<li>Password validation information (salt, hashed password, number of hashing iterations)</li>
+			<li>Last login date and time</li>
+			<li>Last login IP address</li>
+			<li>Last login User Agent (browser and operating system data)</li>
+			<li>Email address (set in User Settings)</li>
+            <li>Twitter handle (set in User Settings)</li>
+            <li>Twitch username (set in User Settings)</li>
+			<li>Bio (set in User Settings)</li>
+            <li>Current role (user or administrator)</li>
+            <li>User preferences (set in User Settings)</li>
+            <li>User permissions (allowlist and denylist - set by site admins)</li>
+			<li>Last time user performed an admin action</li>
+		</ul>
+
+		<li>For each suggested {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}}, the following user data is stored:</li>
+		<ul>
+			<li>Submission date and time</li>
+			<li>IP Address and User Agent of user who suggested it</li>
+			<li>User ID of user who suggested it</li>
+			<li>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} text (user entered)</li>
+		</ul>
+
+        <li>For each {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} vote, the following user data is stored:</li>
+        <ul>
+            <li>Date and time when vote was cast</li>
+            <li>IP Address and User Agent of user who cast the vote</li>
+            <li>User ID of user who cast the vote</li>
+            <li>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} which was voted on</li>
+            <li>Cast vote (-1, 0, +1)</li>
+        </ul>
+
+        <li>For each {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} idea (set on the {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} voting page), the following user data is stored:</li>
+        <ul>
+            <li>Date and time when idea was saved</li>
+            <li>IP Address and User Agent of user who saved the idea</li>
+            <li>User ID of user who saved the idea</li>
+            <li>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} the idea is associated with</li>
+            <li>Idea text (user entered)</li>
+        </ul>
+
+		<li>For each submitted {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} (sometimes called an entry), the following user data is stored:</li>
+		<ul>
+			<li>Date and time when the {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} was submitted</li>
+			<li>IP Address and User Agent of user who submitted the {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</li>
+			<li>Title of {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} (user entered)</li>
+			<li>Description of {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} (user entered)</li>
+			<li>User ID of user who submitted the {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}</li>
+			<li>Screenshot image for {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} (uploaded by user)</li>
+			<li>{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} color (background and text - user entered)</li>
+		</ul>
+
+        <li>For each submitted {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} (sometimes called an entry), one or more platform entries exist. For example if an entry has a URL set for three platforms, that entry will have three entries in this table - one for each platform. Platforms left blank won't result in an entry in this table.</li>
+        <ul>
+            <li>{{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} this platform entry is associated with</li>
+            <li>Platform this platform entry is associated with</li>
+            <li>URL which where this platform entry can be downloaded (user entered)</li>
+        </ul>
+
+		<li>For each poll vote, the following user data is stored:</li>
+		<ul>
+			<li>Option which was voted for</li>
+			<li>User ID of the user who voted</li>
+		</ul>
+
+		<li>For each satisfaction vote, the following user data is stored:</li>
+		<ul>
+			<li>Date and time when the vote was cast</li>
+			<li>IP Address and User Agent of user who cast the vote</li>
+			<li>Question identifier which was voted on (for example JAM_160 when casting a satisfaction vote for {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} 160)</li>
+			<li>Option which was voted for</li>
+			<li>User ID of the user who voted</li>
+		</ul>
+
+		<li>For each user session, the following user data is stored:</li>
+		<ul>
+			<li>User ID (of logged in user the session is for)</li>
+			<li>Date and time when the session started</li>
+			<li>Hashed session ID (token)</li>
+		</ul>
+
+		<li>For each administrative action (scheduling {{CONFIG.VALUES.JAM_PHRASE_PLURAL}}, changing user roles, deleting {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, etc.), the following user data is stored:</li>
+		<ul>
+			<li>Date and time when the log was created</li>
+			<li>IP Address and User Agent of administrator who triggered the event</li>
+			<li>User ID of the administrator who triggered the event</li>
+            <li>User ID of the subject the event relates to</li>
+            <li>Type of log (for example JAM_ADDED, THEME_SOFT_DELETED, etc.)</li>
+			<li>A human readable descriptor of the event, which may include user data relevant to the event. The specific user data may be any of the following: User ID, Date and time of any kind, Username, IP Address, User Agent, User-entered content, Password hashes, Email address, Twitter handle, Role or anything else from this privacy document.</li>
+		</ul>
+
+        <li>For each administration candidate vote the following user data is stored:</li>
+        <ul>
+            <li>Date and time the vote was cast</li>
+            <li>IP Address and User Agent of administrator who cast the vote</li>
+            <li>User ID of the administrator who cast the vote</li>
+            <li>User ID of the candidate being voted on</li>
+            <li>The type of vote cast: Sponsor (administrator suggests the user as an admin candidate), for, neutral, against, veto</li>
+        </ul>
+
+        <li>For each asset the following user data is stored:</li>
+        <ul>
+            <li>Date and time the asset was first added</li>
+            <li>IP Address and User Agent of administrator who added the asset</li>
+            <li>User ID of the asset author (set by administrator)</li>
+            <li>Asset title (set by administrator)</li>
+            <li>Asset description (set by administrator)</li>
+            <li>Asset type (for example image, sound, ... set by administrator)</li>
+            <li>Asset content (plain text or URL to asset, set by administrator)</li>
+        </ul>
+
+        <li>For each site configuration option the following user data is stored:</li>
+        <ul>
+            <li>Date and time the config value was last changed</li>
+            <li>User ID of the administrator who last changed the config value</li>
+            <li>Value of the specific configuration option (set by administrator)</li>
+        </ul>
+
+        <li>For each {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}, the following user data is stored:</li>
+        <ul>
+            <li>Date and time when the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} was scheduled</li>
+            <li>IP Address and User Agent of the user who scheduled the {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</li>
+            <li>{{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} (set by administrator)</li>
+            <li>User ID of the user who streamed</li>
+            <li>Twitch username of the user who streamed</li>
+            <li>URL to the default icon for this {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} and {{CONFIG.VALUES.ENTRY_PHRASE_PLURAL}} submitted to it (unless a custom image is provided by the {{CONFIG.VALUES.ENTRY_PHRASE_SINGULAR}} {{CONFIG.VALUES.DEVELOPER_PHRASE_SINGULAR}}</li>
+        </ul>
+
+        <li>For each notification, the following user data is stored:</li>
+        <ul>
+            <li>Date and time when the notification was scheduled</li>
+            <li>IP Address and User Agent of the user who scheduled the notification</li>
+            <li>Notification title text (set by administrator)</li>
+            <li>Notification body text (set by administrator)</li>
+            <li>Notification icon URL (set by administrator)</li>
+            <li>Notification icon link URL (set by administrator)</li>
+        </ul>
+	</ul>
+</p>
+<p>
+	<h4>How data is transmitted and stored</h4>
+
+	<p>
+		All data is transmitted encrypted via HTTPS. This includes passwords and session IDs. Session IDs are stored in cookies.
+	</p>
+	<p>
+		All data is stored in plaintext, except passwords and session IDs. These are salted, peppered and hashed with SHA256 between 10000 and 20000 times (random number for each user). The result is stored. This same process is done again whenever a password or session ID is provided and the result is checked against the stored hashed values. As far as we're aware, this method means a breech of our database would not result in username/password combinations being obtainable through brute-forcing with current technology. Weak passwords are however easily obtainable no matter what encryption we use.
+	</p>
+</p>
+<p>
+	<h4>Why data is stored</h4>
+
+	<ul>
+		<li>
+			User IDs and usernames are stored to determine which user is associated with each bit of content.
+		</li>
+		<li>
+			Event dates and times, IP Addresses and User Agent information is stored to identify users in cases of abuse and user's level of activity.
+		</li>
+		<li>
+			Usernames, password validation information, session IDs and the user's role are stored to authenticate and authorize users.
+		</li>
+		<li>
+			Email addresses, Twitter handles, Twitch username, Bio, {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} text, Cast vote, {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} title, {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} description, {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} URLs, {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} image, {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} color, Voted for option and any other user-entered fields are considered voluntarily entered. Removing these fields (e.g. submitting them as blank) will (unless otherwise stated upon submission) remove them from public visibility, the old versions may however remain in logs or administrator-only tools. See "How you can control your data" for more details.
+		</li>
+		<li>
+			For {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} votes, poll votes, satisfaction votes and admin candidate votes, the cast votes are directly tied to the user who cast them. This is done to ensure each user can only cast one vote and to indicate to the user what they voted for. In the case of {{CONFIG.VALUES.THEME_PHRASE_SINGULAR}} votes, it is so we can color the currently-voted-for option. This is also done to mittigate cases of vote abuse or to check what different groups of users voted for - for example select only what recent participants voted for. This does mean that there is enough data available to check what each user individually has voted for ({{CONFIG.VALUES.THEME_PHRASE_PLURAL}}, polls, satisfaction and admin candidates).
+		</li>
+		<li>
+			The data in the administration log is stored to identify abuse, determine administrator activity and to reverse accidental or malicious changes.
+		</li>
+		<li>
+			The data in the administration candidate vote is stored to help determine which candidates should be given the administration role.
+		</li>
+	</ul>
+</p>
+<p>
+	<h4>How you can control your data</h4>
+
+	<p>
+		If you wish to get a copy of all the data we have on you, please click the link labeled "<a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>User Data</a>" in the menu, or visit us on Discord by clicking the button in the page's header and ask for an administrator. We'll need to authenticate you first though.
+	</p>
+	<p>
+		If you wish us to delete the data we have, please visit us on Discord by clicking the button in the page's header and ask for an administrator. We'll need to authenticate you first though.
+	</p>
+</p>
+<p>
+	<h4>Validate these claims</h4>
+
+	<p>
+		This software is open-source. Please feel free to validate these claims by examining the code for yourself. The code is linked in the page's footer.
+	</p>
+</p>

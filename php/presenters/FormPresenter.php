@@ -87,6 +87,11 @@ class FormPresenter{
         $formViewModel->form["usersettings"]["bio"] = FORM_SAVEUSERCHANGES_BIO;
         $formViewModel->form["edituser"]["user_id"] = FORM_EDITUSER_USER_ID;
         $formViewModel->form["edituser"]["username"] = "username";
+        $formViewModel->form["edituser"]["display_name"] = FORM_EDITUSER_DISPLAY_NAME;
+        $formViewModel->form["edituser"]["twitter_handle"] = FORM_EDITUSER_TWITTER_HANDLE;
+        $formViewModel->form["edituser"]["twitch_username"] = FORM_EDITUSER_TWITCH_USERNAME;
+        $formViewModel->form["edituser"]["email_address"] = FORM_EDITUSER_EMAIL_ADDRESS;
+        $formViewModel->form["edituser"]["bio"] = FORM_EDITUSER_BIO;
         $formViewModel->form["edituser"]["permission_level"] = FORM_EDITUSER_PERMISSION_LEVEL;
         $formViewModel->form["cookienotice"]["accept"] = FORM_COOKIENOTICE_ACCEPT;
         $formViewModel->form["pollvote"]["poll_id"] = FORM_POLLVOTE_POLL_ID;

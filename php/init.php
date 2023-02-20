@@ -133,8 +133,8 @@ function Init(){
 	StopTimer("Init - Load Data");
 	StartTimer("Init - Process");
 
-	$themesByVoteDifference = ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData, $configData);
-	$themesByPopularity = ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData, $configData);
+	$themesByVoteDifference = ThemeController::CalculateActiveThemeSelectionProbabilityByVoteDifference($themeData, $configData);
+	$themesByPopularity = ThemeController::CalculateActiveThemeSelectionProbabilityByPopularity($themeData, $configData);
 	JamController::ProcessJamStates($messageService, $jamData, $themeData, $configData);
 
 	PerformPendingSiteAction($messageService, $configData, $siteActionData, $loggedInUser);
@@ -161,9 +161,8 @@ function Init(){
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency(RENDER_JAMS, $dependencies) !== false){
-		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
 		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
-		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
+		$renderDepth = $dependency2["RenderDepth"];
 		$loadAll = false;
 		if(isset($_GET[GET_LOAD_ALL])){
 			$loadAll = true;
@@ -176,7 +175,7 @@ function Init(){
 	}
 	if(FindDependency(RENDER_THEMES, $dependencies) !== false){
 		$dependency = FindDependency(RENDER_THEMES, $dependencies);
-		$dictionary["themes"] = ThemePresenter::RenderThemes($configData, $jamData, $userData, $themeData, $themeIdeaData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
+		$dictionary["themes"] = ThemePresenter::RenderActiveThemes($configData, $jamData, $userData, $themeData, $themeIdeaData, $themesByVoteDifference, $themesByPopularity, $loggedInUser, $dependency["RenderDepth"]);
 	}
 	if(FindDependency(RENDER_ASSETS, $dependencies) !== false){
 		$dictionary["assets"] = AssetPresenter::RenderAssets($assetData, $userData);

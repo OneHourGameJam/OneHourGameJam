@@ -78,6 +78,7 @@ class SiteActionData{
                     "INVALID_USERNAME_LENGTH" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect username length. Must be between ".$configData->ConfigModels[CONFIG_MINIMUM_USERNAME_LENGTH]->Value." and ".$configData->ConfigModels[CONFIG_MAXIMUM_USERNAME_LENGTH]->Value." characters long."),
                     "USER_DOES_NOT_EXIST" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "That username doesn't exist.<br>Do you want to <a href='?".GET_PAGE."=".PAGE_REGISTER."'>create an account</a>?"),
                     "INCORRECT_PASSWORD" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Incorrect username/password combination."),
+                    "INVALID_AUTH_VERSION" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_LOGIN, MESSAGE_WARNING, "Account authentication system version is not supported.<br>Please contact your site admin about this issue."),
                 )
             ),
             new SiteActionModel(
@@ -230,6 +231,8 @@ class SiteActionData{
                     "NOT_AUTHORIZED" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_MAIN, MESSAGE_ERROR, "Only admins can perform this action."),
                     "INSUFFICIENT_PERMISSIONS_OUTRANK" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Cannot edit permissions level of user with higher permissions level than yours."),
                     "INSUFFICIENT_PERMISSIONS_BEYOND_OWN" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Can only set a user's role up to the role you have."),
+                    "INVALID_DISPLAY_NAME" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Invalid display name"),
+                    "INVALID_EMAIL" => new SiteActionResultModel("?".GET_PAGE."=".PAGE_EDIT_USERS, MESSAGE_ERROR, "Invalid email"),
                 )
             ),
             new SiteActionModel(

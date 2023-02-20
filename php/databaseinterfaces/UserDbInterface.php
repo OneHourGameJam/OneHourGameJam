@@ -10,6 +10,7 @@ define("DB_COLUMN_USER_USER_AGENT",                 "user_register_user_agent");
 define("DB_COLUMN_USER_DISPLAY_NAME",               "user_display_name");
 define("DB_COLUMN_USER_SALT",                       "user_password_salt");
 define("DB_COLUMN_USER_PASSWORD_HASH",              "user_password_hash");
+define("DB_COLUMN_USER_AUTH_VERSION",               "user_auth_version");
 define("DB_COLUMN_USER_PASSWORD_ITERATIONS",        "user_password_iterations");
 define("DB_COLUMN_USER_LAST_LOGIN_DATETIME",        "user_last_login_datetime");
 define("DB_COLUMN_USER_LAST_IP",                    "user_last_ip");
@@ -27,7 +28,7 @@ define("DB_COLUMN_USER_LAST_USER_ACTION_DATETIME",  "user_last_admin_action_date
 class UserDbInterface{
     private $database;
     private $publicColumnsUser = Array(DB_COLUMN_USER_ID, DB_COLUMN_USER_USERNAME, DB_COLUMN_USER_DISPLAY_NAME, DB_COLUMN_USER_TWITTER, DB_COLUMN_USER_BIO);
-    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_PERMISSIONS_ALLOWLIST, DB_COLUMN_USER_PERMISSIONS_DENYLIST, DB_COLUMN_USER_TWITCH);
+    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_AUTH_VERSION, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_PERMISSIONS_ALLOWLIST, DB_COLUMN_USER_PERMISSIONS_DENYLIST, DB_COLUMN_USER_TWITCH);
 
     function __construct(&$database) {
         $this->database = $database;
@@ -38,7 +39,7 @@ class UserDbInterface{
         StartTimer("UserDbInterface_SelectAll");
     
         $sql = "SELECT ".DB_COLUMN_USER_ID.", ".DB_COLUMN_USER_USERNAME.", ".DB_COLUMN_USER_DISPLAY_NAME.", ".DB_COLUMN_USER_TWITTER.", ".DB_COLUMN_USER_TWITCH.", ".DB_COLUMN_USER_EMAIL.",
-                       ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.", ".DB_COLUMN_USER_PERMISSIONS_ALLOWLIST.", ".DB_COLUMN_USER_PERMISSIONS_DENYLIST.",
+                       ".DB_COLUMN_USER_SALT.", ".DB_COLUMN_USER_PASSWORD_HASH.", ".DB_COLUMN_USER_AUTH_VERSION.", ".DB_COLUMN_USER_PASSWORD_ITERATIONS.", ".DB_COLUMN_USER_ROLE.", ".DB_COLUMN_USER_PREFERENCES.", ".DB_COLUMN_USER_PERMISSIONS_ALLOWLIST.", ".DB_COLUMN_USER_PERMISSIONS_DENYLIST.",
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_LOGIN_DATETIME.") AS days_since_last_login,
                        DATEDIFF(Now(), ".DB_COLUMN_USER_LAST_USER_ACTION_DATETIME.") AS days_since_last_admin_action
                 FROM
@@ -111,16 +112,17 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($username, $ip, $userAgent, $salt, $passwordHash, $passwordIterations, $isAdmin){
+    public function Insert($username, $ip, $userAgent, $passwordHash, $authVersion, $isAdmin){
         AddActionLog("UserDbInterface_Insert");
         StartTimer("UserDbInterface_Insert");
 
         $escapedUsername = $this->database->EscapeString($username);
         $escapedIp = $this->database->EscapeString($ip);
         $escapedUserAgent = $this->database->EscapeString($userAgent);
-        $escapedSalt = $this->database->EscapeString($salt);
+        $escapedSalt = $this->database->EscapeString(OVERRIDE_UNUSED);
         $escapedPasswordHash = $this->database->EscapeString($passwordHash);
-        $escapedPasswordIterations = $this->database->EscapeString($passwordIterations);
+        $escapedAuthVersion = $this->database->EscapeString($authVersion);
+        $escapedPasswordIterations = $this->database->EscapeString(OVERRIDE_UNUSED);
         $escapedIsAdmin = $this->database->EscapeString($isAdmin);
 
 		$sql = "
@@ -133,6 +135,7 @@ class UserDbInterface{
 			".DB_COLUMN_USER_DISPLAY_NAME.",
 			".DB_COLUMN_USER_SALT.",
 			".DB_COLUMN_USER_PASSWORD_HASH.",
+			".DB_COLUMN_USER_AUTH_VERSION.",
 			".DB_COLUMN_USER_PASSWORD_ITERATIONS.",
 			".DB_COLUMN_USER_LAST_LOGIN_DATETIME.",
 			".DB_COLUMN_USER_LAST_IP.",
@@ -149,6 +152,7 @@ class UserDbInterface{
 			'$escapedUsername',
 			'$escapedSalt',
 			'$escapedPasswordHash',
+            '$escapedAuthVersion',
 			$escapedPasswordIterations,
 			Now(),
 			'$escapedIp',
@@ -226,21 +230,23 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
     }
 
-    public function UpdatePassword($userId, $userSalt, $passwordHash, $userPasswordIterations){
+    public function UpdatePassword($userId, $passwordHash, $authVersion){
         AddActionLog("UserDbInterface_UpdatePassword");
         StartTimer("UserDbInterface_UpdatePassword");
 
         $escapedUserId = $this->database->EscapeString($userId);
-        $escapedUserSalt = $this->database->EscapeString($userSalt);
+        $escapedUserSalt = $this->database->EscapeString(OVERRIDE_UNUSED);
         $escapedPasswordHash = $this->database->EscapeString($passwordHash);
-        $escapedUserPasswordIterations = $this->database->EscapeString($userPasswordIterations);
+        $escapedUserPasswordIterations = $this->database->EscapeString(OVERRIDE_UNUSED);
+        $escapedAuthVersion = $this->database->EscapeString($authVersion);
 
         $sql = " 
             UPDATE ".DB_TABLE_USER."
             SET
             ".DB_COLUMN_USER_SALT." = '$escapedUserSalt',
             ".DB_COLUMN_USER_PASSWORD_ITERATIONS." = '$escapedUserPasswordIterations',
-            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash'
+            ".DB_COLUMN_USER_PASSWORD_HASH." = '$escapedPasswordHash',
+            ".DB_COLUMN_USER_AUTH_VERSION." = '$escapedAuthVersion'
             WHERE ".DB_COLUMN_USER_ID." = $escapedUserId;
         ";
         $this->database->Execute($sql);;

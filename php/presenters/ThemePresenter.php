@@ -1,7 +1,7 @@
 <?php
 
 class ThemePresenter{
-	public static function RenderThemes(&$configData, &$jamData, &$userData, &$themeData, &$themeIdeaData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
+	public static function RenderActiveThemes(ConfigData &$configData, JamData &$jamData, UserData &$userData, ThemeData &$themeData, ThemeIdeaData &$themeIdeaData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
 		AddActionLog("RenderThemes");
 		StartTimer("RenderThemes");
 		
@@ -19,7 +19,7 @@ class ThemePresenter{
 
 		$themesUserHasNotVotedFor = 0;
 
-		foreach($themeData->ThemeModels as $i => $themeModel){
+		foreach($themeData->ActiveThemeModels as $i => $themeModel){
 
 			$themeID = intval($themeModel->Id);
 			$themeText = $themeModel->Theme;
@@ -72,8 +72,13 @@ class ThemePresenter{
 				}
 			}
 
-			$themeViewModel->author_username = $userData->UserModels[$themeModel->AuthorUserId]->Username;
-			$themeViewModel->author_display_name = $userData->UserModels[$themeModel->AuthorUserId]->DisplayName;
+			if($themeModel->AuthorUserId) {
+                $themeViewModel->author_username = $userData->UserModels[$themeModel->AuthorUserId]->Username;
+                $themeViewModel->author_display_name = $userData->UserModels[$themeModel->AuthorUserId]->DisplayName;
+            }else{
+                $themeViewModel->author_username = "Legacy theme";
+                $themeViewModel->author_display_name = "Legacy theme";
+            }
 			
 			//Generate theme vote button ID
 			$themeBtnID = preg_replace("/[^A-Za-z0-9]/", '', $themeText);
@@ -230,6 +235,83 @@ class ThemePresenter{
 		StopTimer("RenderThemes");
 		return $themesViewModel;
 	}
+
+    public static function RenderAllThemes(ConfigData &$configData, UserData &$userData, ThemeData &$themeData){
+        $render = Array();
+
+        foreach($themeData->AllThemeModels as $i => $themeModel){
+            $themeID = intval($themeModel->Id);
+            $themeText = $themeModel->Theme;
+            $banned = $themeModel->Banned;
+            $votesFor = $themeModel->VotesFor;
+            $votesNeutral = $themeModel->VotesNeutral;
+            $votesAgainst = $themeModel->VotesAgainst;
+            $votesTotal = $votesFor + $votesNeutral + $votesAgainst;
+
+            $themeViewModel = new ThemeSmallViewModel();
+            $themeViewModel->theme = $themeText;
+            $themeViewModel->votes_for = $votesFor;
+            $themeViewModel->votes_neutral = $votesNeutral;
+            $themeViewModel->votes_against = $votesAgainst;
+            $themeViewModel->votes_report = $themeModel->VotesReport;
+            $themeViewModel->votes_total = $votesTotal;
+            $themeViewModel->votes_popularity = "?";
+            $themeViewModel->votes_apathy = "?";
+            $themeViewModel->popularity_num = 0;
+            $themeViewModel->apathy_num = 0;
+            $themeViewModel->apathy_color = "#ffffff";
+            $themeViewModel->popularity_color = "#ffffff";
+            $themeViewModel->banned = $banned;
+            $themeViewModel->author_user_id = $themeModel->AuthorUserId;
+            $themeViewModel->theme_id = $themeID;
+            $themeViewModel->days_ago = $themeModel->DaysAgo;
+
+            if($themeModel->AuthorUserId) {
+                $themeViewModel->author_username = $userData->UserModels[$themeModel->AuthorUserId]->Username;
+                $themeViewModel->author_display_name = $userData->UserModels[$themeModel->AuthorUserId]->DisplayName;
+            }else{
+                $themeViewModel->author_username = "Legacy theme";
+                $themeViewModel->author_display_name = "Legacy theme";
+            }
+
+            //Calculate popularity and apathy
+            if($votesTotal >= intval($configData->ConfigModels[CONFIG_THEME_MIN_VOTES_TO_SCORE]->Value)){
+                $themeViewModel->has_enough_votes = true;
+
+                $oppinionatedVotesTotal = $votesFor + $votesAgainst;
+                $unopinionatedVotesTotal = $votesNeutral;
+
+                //Popularity
+                if($oppinionatedVotesTotal > 0){
+                    $votesPopularity = $votesFor / $oppinionatedVotesTotal;
+                    $themeViewModel->popularity_num = $votesPopularity;
+                    $themeViewModel->votes_popularity = round($votesPopularity * 100) . "%";
+                }
+                if($votesPopularity >= 0.5){
+                    //Popularity color >50%: yellow to green
+                    $themeViewModel->popularity_color = "#".(str_pad(dechex(0xFF - (0xFF * 2 * ($votesPopularity - 0.5))), 2, "0", STR_PAD_LEFT))."FF00";
+                }else{
+                    //Popularity color <50%: red to yellow
+                    $themeViewModel->popularity_color = "#ff".str_pad(dechex((0xFF * 2 * $votesPopularity)), 2, "0", STR_PAD_LEFT)."00";
+                }
+
+                //Apathy
+                if($votesTotal > 0){
+                    $votesApathy = $unopinionatedVotesTotal / $votesTotal;
+                    $themeViewModel->apathy_num = $votesApathy;
+                    $themeViewModel->votes_apathy = round($votesApathy * 100) . "%";
+                }
+                //Apathy color: blue to red
+                $themeViewModel->apathy_color = "#".str_pad(dechex(0xBB + round(0x44 * $votesApathy)), 2, "0", STR_PAD_LEFT)."DD".str_pad(dechex(0xBB + round(0x44 * (1 - $votesApathy))), 2, "0", STR_PAD_LEFT);
+            }
+
+            $render[] = $themeViewModel;
+        }
+
+        usort($render, function($a, $b){ return $a->popularity_num < $b->popularity_num; });
+
+        return $render;
+    }
 
 	public static function UserThemeVoteTypeToKey($themeVoteType){
 		AddActionLog("UserThemeVoteTypeToKey");

@@ -1,0 +1,156 @@
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title">Menu</h3>
+	</div>
+	<div class="panel-body">
+		<ul id='mainmenu'>
+
+			{{#plugin_display}}
+			<li class="mainmenu-separator">Pages</li>
+			{{#page.pages}}
+				<li><a href='?{{{forms.get.page}}}={{{page_id}}}'>{{{page_title}}}</a></li>
+			{{/page.pages}}
+
+			<li class="mainmenu-separator">Plugin Direct Links</li>
+			{{#forms.pages.admin_log.adminlog}}
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
+			{{/forms.pages.admin_log.adminlog}}
+			{{/plugin_display}}
+
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}'>Home</a></li>
+			{{#user}}
+				{{#jams.current_jam}}
+					{{^cookies.is_streamer}}
+						<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.submit}}}'>
+							{{^user_participated_in_jam}}Submit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}{{/user_participated_in_jam}}
+							{{#user_participated_in_jam}}Edit {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}}{{/user_participated_in_jam}}
+						</a></b></li>
+					{{/cookies.is_streamer}}
+				{{/jams.current_jam}}
+				<li><b><a href='?{{{forms.get.page}}}={{{forms.pages.themes}}}'>Vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</b>
+					{{#themes.user_has_not_voted_for_all_themes}}
+						{{^user.preferences.DISABLE_THEMES_NOTIFICATION}}
+							<div class="annoyingNumberNotification">
+								{{{themes.themes_user_has_not_voted_for}}}
+							</div>
+						{{/user.preferences.DISABLE_THEMES_NOTIFICATION}}
+					{{/themes.user_has_not_voted_for_all_themes}}
+				</a></li>
+			{{/user}}
+			{{^user}}
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.login}}}'>Log in</a> or <a href='?{{{forms.get.page}}}={{{forms.pages.register}}}'>register</a></li>
+				<li>Log in to vote for {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}</li>
+			{{/user}}
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.rules}}}'>How it works</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.assets}}}'>Assets</a></li>
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.privacy}}}'>Privacy</a></li>
+			{{#user}}
+				{{^cookies.is_streamer}}
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.userdata}}}'>User data</a></li>
+				{{/cookies.is_streamer}}
+			{{/user}}
+
+			<li class="mainmenu-separator">Browse</li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.entries}}}'>{{CONFIG.VALUES.GAME_PHRASE_PLURAL}}</a></li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.authors}}}'>{{CONFIG.VALUES.DEVELOPER_PHRASE_PLURAL}}</a></li>
+			<li><a href='?{{{forms.get.page}}}={{{forms.pages.jams}}}'>{{CONFIG.VALUES.JAM_PHRASE_PLURAL}}</a></li>
+
+			<li class="mainmenu-separator">Misc</li>
+			<li><a href='https://github.com/OneHourGameJam/OneHourGameJam/issues' target='_BLANK'>Report bug</a></li>
+			{{#user}}
+				{{#cookies.is_streamer}}
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable streamer mode</a></li>
+				{{/cookies.is_streamer}}
+				{{#twitch}}
+					{{^cookies.is_streamer}}
+						<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=1'>Streamer mode</a></li>
+					{{/cookies.is_streamer}}
+				{{/twitch}}
+			{{/user}}
+			{{#cookies.darkmode}}
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=0'>Enable light mode</a></li>
+			{{/cookies.darkmode}}
+			{{^cookies.darkmode}}
+				<li><a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.dark_mode}}}=1'>Enable dark mode</a></li>
+			{{/cookies.darkmode}}
+			
+			{{#user.admin}}
+				{{^cookies.is_streamer}}
+					<li class="mainmenu-separator">Administration</li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.newjam}}}'>Schedule {{CONFIG.VALUES.JAM_PHRASE_SINGULAR}}</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.config}}}'>Configuration</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.managethemes}}}'>Manage {{CONFIG.VALUES.THEME_PHRASE_PLURAL}}
+						{{#user}}
+							{{^cookies.is_streamer}}
+								{{#user.admin}}
+									{{#themes.themes_must_be_pruned}}
+										<div class="annoyingNumberNotification">
+											Prune
+										</div>
+									{{/themes.themes_must_be_pruned}}
+								{{/user.admin}}
+							{{/cookies.is_streamer}}
+						{{/user}}
+					</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editcontent}}}'>Manage content</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editusers}}}'>Manage users
+						{{#user}}
+							{{^cookies.is_streamer}}
+								{{#user.admin}}
+									{{#users.missing_admin_candidate_votes}}
+										<div class="annoyingNumberNotification">
+											{{{users.missing_admin_candidate_votes_number}}}
+										</div>
+									{{/users.missing_admin_candidate_votes}}
+								{{/user.admin}}
+							{{/cookies.is_streamer}}
+						{{/user}}
+					</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editplatforms}}}'>Manage platforms</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.editassets}}}'>Manage assets</a></li>
+					<li><a href='?{{{forms.get.page}}}={{{forms.pages.polls}}}'>Poll results</a></li>
+					{{#forms.pages.notifications.editnotifications}}
+						<li><a href='?{{{forms.get.page}}}={{{forms.pages.notifications.editnotifications}}}'>Manage notifications</a></li>
+					{{/forms.pages.notifications.editnotifications}}
+					{{#forms.pages.admin_log.adminlog}}
+						<li><a href='?{{{forms.get.page}}}={{{forms.pages.admin_log.adminlog}}}'>Admin Log</a></li>
+					{{/forms.pages.admin_log.adminlog}}
+				{{/cookies.is_streamer}}
+			{{/user.admin}}
+
+			{{#cookies.is_streamer}}
+				<li class="mainmenu-separator">Some menu items are hidden in streamer mode (<a href='?{{{forms.get.page}}}={{{forms.pages.main}}}&{{{forms.get.streaming_mode}}}=0'>Disable Streamer Mode</a>)</li>
+			{{/cookies.is_streamer}}
+		</ul>
+		
+		<div id="mainmenu-social">
+			{{#CONFIG.VALUES.TWITTER_ACCOUNT}}
+				<a href="https://twitter.com/{{CONFIG.VALUES.TWITTER_ACCOUNT}}" target='_blank'>
+					<div class='mediaButton twitterButton'><img src='{{{page.template_path}}}images/twitter.png' class="menuButton" /> Follow</div>
+				</a>
+			{{/CONFIG.VALUES.TWITTER_ACCOUNT}}
+
+			{{#CONFIG.VALUES.TWITCH_ACCOUNT}}
+				<a href="https://twitch.tv/{{CONFIG.VALUES.TWITCH_ACCOUNT}}" target='_blank'>
+					<div class='mediaButton twitchButton'><img src='{{{page.template_path}}}images/twitch.png' class="menuButton" /> Watch</div>
+				</a>
+			{{/CONFIG.VALUES.TWITCH_ACCOUNT}}
+
+			{{#CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
+				{{#CONFIG.VALUES.IRC_ADDRESS}}
+					{{#CONFIG.VALUES.IRC_CHANNEL}}
+						<a href="{{{CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}}" target='_blank'>
+							<div class='mediaButton ircButton'><img src='{{{page.template_path}}}images/irc.png' class="menuButton" /> IRC</div>
+						</a>
+					{{/CONFIG.VALUES.IRC_CHANNEL}}
+				{{/CONFIG.VALUES.IRC_ADDRESS}}
+			{{/CONFIG.VALUES.IRC_CHAT_IN_BROWSER}}
+
+			{{#CONFIG.VALUES.DISCORD_INVITE_URL}}
+				<a href="{{{CONFIG.VALUES.DISCORD_INVITE_URL}}}" target='_blank'>
+					<div class='mediaButton discordButton'><img src='{{{page.template_path}}}images/discord.png' class="menuButton" /> Discord</div>
+				</a>
+			{{/CONFIG.VALUES.DISCORD_INVITE_URL}}
+		</div>
+	</div>
+</div>

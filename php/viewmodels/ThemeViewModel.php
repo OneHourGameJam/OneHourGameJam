@@ -52,4 +52,26 @@ class ThemeViewModel{
     public $is_marked_for_deletion;
 }
 
+class ThemeSmallViewModel{
+    public $theme;
+    public $votes_for;
+    public $votes_neutral;
+    public $votes_against;
+    public $votes_report;
+    public $votes_total;
+    public $votes_popularity;
+    public $votes_apathy;
+    public $popularity_num;
+    public $apathy_num;
+    public $has_enough_votes;
+    public $apathy_color;
+    public $popularity_color;
+    public $banned;
+    public $author_user_id;
+    public $theme_id;
+    public $days_ago;
+    public $author_username;
+    public $author_display_name;
+}
+
 ?>
