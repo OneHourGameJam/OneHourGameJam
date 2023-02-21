@@ -23,6 +23,7 @@ $dictionary['page'] = array(
 
 RunInstallPage($dictionary);
 $pageTemplateFile = $dictionary["template_file"];
+
 $mustache->setPartials(Array(
 	"footer" => file_get_contents($templateBasePath."footer.mustache"),
 	"message" => file_get_contents($templateBasePath."message.mustache"),

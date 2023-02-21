@@ -90,7 +90,7 @@ function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData,
                         break;
                     }
                 }
-                if(count($render["editingentry"]) == 0){
+                if(!isset($render["editingentry"])){
                     die("no entry selected");
                 }
             }
@@ -237,8 +237,6 @@ function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData,
             $render["userdata_sessions"] = $userData->GetSessionsOfUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_voter"] = $adminVoteData->GetAdminVotesCastByUserFormatted($loggedInUser->Id);
             $render["userdata_admin_vote_subject"] = $adminVoteData->GetAdminVotesForSubjectUserFormatted($loggedInUser->Id);
-
-            $render["userdata_assets"] = "potato";
 
             $render["user_data"] = Array();
             foreach($plugins as $plugin){

@@ -161,9 +161,8 @@ function Init(){
 		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
 		$dictionary["jams"] = JamPresenter::RenderJams($configData, $userData, $gameData, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, $renderDepth, true);
 	}else if(FindDependency(RENDER_JAMS, $dependencies) !== false){
-		$dependency1 = FindDependency(RENDER_ALL_JAMS, $dependencies);
 		$dependency2 = FindDependency(RENDER_JAMS, $dependencies);
-		$renderDepth = $dependency1["RenderDepth"] | $dependency2["RenderDepth"];
+		$renderDepth = $dependency2["RenderDepth"];
 		$loadAll = false;
 		if(isset($_GET[GET_LOAD_ALL])){
 			$loadAll = true;
