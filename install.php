@@ -8,7 +8,7 @@ $dictionary = array();
 include_once("php/global.php");
 include_once("php/helpers.php");
 include_once("php/dependencies.php");
-include_once("php/models/SiteACtionModel.php");
+include_once("php/models/SiteActionModel.php");
 include_once("php/models/UserModel.php");
 include_once("php/models/AdminVoteModel.php");
 include_once("php/models/FormModel.php");
