@@ -1,6 +1,6 @@
 <?php
 
-$softwareVersion = "1.3.0";
+$softwareVersion = "1.3.1-SNAPSHOT";
 
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
