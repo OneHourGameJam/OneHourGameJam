@@ -22,6 +22,9 @@
                     {{^jam_started}}
                         <i><span>{{date}} at {{time}} UTC</span></i>
                     {{/jam_started}}
+                    {{#event_name}}
+                        - <b>Event:</b> {{{event_name}}}
+                    {{/event_name}}
                     {{#streamer_is_set}}
                         <br />Streamed by <a href='https://www.twitch.tv/{{{streamer_twitch_username}}}' target='_blank'>{{streamer_user_display_name}} (@{{streamer_twitch_username}})</a>
                     {{/streamer_is_set}}

@@ -113,12 +113,13 @@ class JamController{
 
 			$startTime = gmdate("Y-m-d H:i", $nextSuggestedJamTime);
 			$defaultEntryIconUrl = $configData->ConfigModels[CONFIG_DEFAULT_GAME_ICON_URL]->Value;
+			$eventName = $configData->ConfigModels[CONFIG_DEFAULT_JAM_EVENT_NAME]->Value;
 
-			$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, $startTime, $colors, $defaultEntryIconUrl);
+			$jamData->AddJamToDatabase("127.0.0.1", "AUTO", -1, $jamNumber, $selectedThemeId, $selectedTheme, $startTime, $colors, $defaultEntryIconUrl, $eventName);
 
 			$messageService->SendMessage(LogMessage::SystemLogMessage(
 				"JAM_ADDED", 
-				"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$selectedTheme', StartTime: '$startTime', Colors: $colors, Default entry icon url: $defaultEntryIconUrl", 
+				"Jam scheduled with values: JamNumber: $jamNumber, Theme: '$selectedTheme', StartTime: '$startTime', Colors: $colors, Default entry icon url: $defaultEntryIconUrl, Event Name: $eventName",
 				OVERRIDE_AUTOMATIC)
 			);
 		}

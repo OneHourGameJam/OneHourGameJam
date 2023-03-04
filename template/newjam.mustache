@@ -13,6 +13,10 @@
 		<label for="default_icon_url">Default {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} icon</label> (Used by {{CONFIG.VALUES.GAME_PHRASE_PLURAL}} without a custom icon)
 		<input type="text" class="form-control" id="default_icon_url" name='{{{forms.form.newjam.default_icon_url}}}' placeholder="Default {{CONFIG.VALUES.GAME_PHRASE_SINGULAR}} icon" value="{{{CONFIG.VALUES.DEFAULT_GAME_ICON_URL}}}" required>
 	</div>
+    <div class="form-group">
+        <label for="default_icon_url">Event name</label> (Optional; if the jam is commemorating or otherwise referencing something)
+        <input type="text" class="form-control" id="event_name" name='{{{forms.form.newjam.event_name}}}' placeholder="Event Name" value="">
+    </div>
 	<div class="form-group">
 		<label for="date">{{CONFIG.VALUES.JAM_PHRASE_SINGULAR}} date</label>
 		<input type="date" class="form-control" id="date" name='{{{forms.form.newjam.date}}}' placeholder="" value='{{page.next_jam_suggested_date}}' required>
