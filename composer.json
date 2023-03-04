@@ -2,6 +2,7 @@
     "require": {
         "mustache/mustache": "2.13.*",
         "components/jquery": "3.5.*",
-        "components/bootstrap": "3.4.*"
+        "components/bootstrap": "3.4.*",
+        "ext-mysqli": "*"
     }
 }

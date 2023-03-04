@@ -17,6 +17,7 @@ class JamModel{
 	public $State;
     public $Colors;
     public $DefaultIconUrl;
+    public $EventName;
 	public $Deleted;
 }
 
@@ -55,6 +56,7 @@ class JamData{
             $jamModel->State = $info[DB_COLUMN_JAM_STATE];
             $jamModel->Colors = $this->ParseJamColors($info[DB_COLUMN_JAM_COLORS]);
             $jamModel->DefaultIconUrl = $info[DB_COLUMN_JAM_DEFAULT_ICON_URL];
+            $jamModel->EventName = $info[DB_COLUMN_JAM_EVENT_NAME];
             $jamModel->Deleted = $info[DB_COLUMN_JAM_DELETED];
 
             $jamModels[$jamID] = $jamModel;
@@ -69,11 +71,11 @@ class JamData{
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
     //Adds the jam with the provided data into the database
-    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl){
+    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl, $eventName){
         AddActionLog("AddJamToDatabase");
         StartTimer("AddJamToDatabase");
     
-        $this->jamDbInterface->Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl);
+        $this->jamDbInterface->Insert($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl, $eventName);
         
         StopTimer("AddJamToDatabase");
     }
