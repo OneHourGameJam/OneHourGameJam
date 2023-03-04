@@ -20,10 +20,10 @@ class ThemeDbInterface{
         $this->database = $database;
     }
 
-    public function SelectAllWithResults(){
-        AddActionLog("ThemeDbInterface_SelectAllWithResults");
-        StartTimer("ThemeDbInterface_SelectAllWithResults");
-    
+    public function SelectAllActiveWithResults(){
+        AddActionLog("ThemeDbInterface_SelectAllActiveWithResults");
+        StartTimer("ThemeDbInterface_SelectAllActiveWithResults");
+
         //Fill list of themes - will return same theme row multiple times (once for each valid themevote_type)
         $sql = "
             SELECT ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEME_TEXT.", ".DB_COLUMN_THEME_AUTHOR_USER_ID.", ".DB_COLUMN_THEME_BANNED.", ".DB_COLUMN_THEMEVOTE_TYPE.", count(".DB_COLUMN_THEMEVOTE_ID.") AS themevote_count, DATEDIFF(Now(), ".DB_COLUMN_THEME_DATETIME.") as theme_daysago, ".DB_COLUMN_THEME_DELETED."
@@ -35,7 +35,26 @@ class ThemeDbInterface{
             GROUP BY ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEMEVOTE_TYPE."
             ORDER BY ".DB_COLUMN_THEME_BANNED." ASC, ".DB_COLUMN_THEME_ID." ASC;
         ";
-        
+
+        StopTimer("ThemeDbInterface_SelectAllActiveWithResults");
+        return $this->database->Execute($sql);;
+    }
+
+    public function SelectAllWithResults(){
+        AddActionLog("ThemeDbInterface_SelectAllWithResults");
+        StartTimer("ThemeDbInterface_SelectAllWithResults");
+
+        //Fill list of themes - will return same theme row multiple times (once for each valid themevote_type)
+        $sql = "
+            SELECT ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEME_TEXT.", ".DB_COLUMN_THEME_AUTHOR_USER_ID.", ".DB_COLUMN_THEME_BANNED.", ".DB_COLUMN_THEMEVOTE_TYPE.", count(".DB_COLUMN_THEMEVOTE_ID.") AS themevote_count, DATEDIFF(Now(), ".DB_COLUMN_THEME_DATETIME.") as theme_daysago, ".DB_COLUMN_THEME_DELETED."
+            FROM (
+                ".DB_TABLE_THEME." LEFT JOIN ".DB_TABLE_THEMEVOTE." 
+                ON (".DB_TABLE_THEMEVOTE.".".DB_COLUMN_THEMEVOTE_THEME_ID." = ".DB_TABLE_THEME.".".DB_COLUMN_THEME_ID.")
+            )
+            GROUP BY ".DB_COLUMN_THEME_ID.", ".DB_COLUMN_THEMEVOTE_TYPE."
+            ORDER BY ".DB_COLUMN_THEME_BANNED." ASC, ".DB_COLUMN_THEME_ID." ASC;
+        ";
+
         StopTimer("ThemeDbInterface_SelectAllWithResults");
         return $this->database->Execute($sql);;
     }

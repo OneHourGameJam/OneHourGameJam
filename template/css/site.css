@@ -157,8 +157,11 @@ body{
 }
 
 .themeTableCell{
-	padding: 3px 3px;
-	min-width: 30px;
+  padding: 3px 3px;
+  min-width: 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 250px;
 }
 
 .themeTableCellCentered{
@@ -204,13 +207,46 @@ body{
   min-height: 150px;
 }
 
+.profileMediaButton{
+  min-width: 100px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 5px;
+}
+
 .mediaButton{
-	width: 100px; 
+	min-width: 100px;
 	border-radius: 5px; 
 	color: white; 
 	text-align: center; 
-	padding: 4px 0px;
+	padding: 4px;
 	margin-bottom: 5px;
+}
+
+.becomeStreamerButton{
+  background-color: #6441A5;
+}
+
+.becomeStreamerButton:hover{
+  background-color: #6441A5;
+}
+
+.stopBeingStreamerButton{
+  background-color: #6441A5;
+}
+
+.stopBeingStreamerButton:hover{
+  background-color: #6441A5;
+}
+
+.submitGameButton{
+  background-color: #FF0066;
+}
+
+.submitGameButton:hover{
+  background-color: #D20054;
 }
 
 .twitterButton{
@@ -243,6 +279,38 @@ body{
 
 .discordButton:hover{
 	background-color: #6676AE; 
+}
+
+.logoutButton{
+  background-color: #777777;
+}
+
+.logoutButton:hover{
+  background-color: #4B4B4B;
+}
+
+.profileDropdown {
+  background-color: #777777;
+  margin: 0px;
+  color: white;
+}
+
+.profileDropdown:hover, .profileDropdown:link, .profileDropdown:visited, .profileDropdown:active {
+  background-color: #4B4B4B;
+  color: white;
+}
+
+.profileDropdown .active, .profileDropdown .focus, .open>.dropdown-toggle.profileDropdown {
+  background-color: #4B4B4B;
+  color: white;
+}
+
+.loginButton{
+  background-color: #777777;
+}
+
+.loginButton:hover{
+  background-color: #4B4B4B;
 }
 
 .authorPageEntry{
@@ -439,15 +507,25 @@ body{
 }
 
 .header{
-  margin-top: 10px;
+
+}
+
+.headerPanel{
+  margin-bottom: 0px;
+}
+
+.headerChat{
+  padding-top: 15px;
 }
 
 .statsRow{
   font-size: 16px; 
   font-weight: bold;
+  margin: auto;
 }
 
 .statsDisplay{
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -500,6 +578,30 @@ body{
   width: 20px;
 }
 
+.logoutButtonLink{
+  text-decoration: none;
+}
+
+.logoutButton{
+  display: inline-block;
+}
+
+.logoutButtonImage{
+  width: 20px;
+}
+
+.loginButtonLink{
+  text-decoration: none;
+}
+
+.loginButton{
+  display: inline-block;
+}
+
+.loginButtonImage{
+  width: 20px;
+}
+
 .footer{
   padding-bottom: 50px;
 }
@@ -528,9 +630,37 @@ body{
   font-size: 35px;
 }
 
-.jamHeaderTimer{
+.jamContainerStartsSoon{
+  border-color: #f1bcd9;
+}
+
+.jamContainerCurrent{
+  border-color: #f1bcd9;
+}
+
+.jamHeaderStreamingPeriod{
+  border-color: #f1bcd9;
+}
+
+.jamContener>.jamHeaderPanel>.jamHeaderStartsSoon{
+  background-color: #F7D9EE;
+  color: #8F315B;
+}
+
+.jamContener>.jamHeaderPanel>.jamHeaderCurrent{
+  background-color: #F7D9EE;
+  color: #8F315B;
+}
+
+.jamContener>.jamHeaderPanel>.jamHeaderStreamingPeriod{
+  background-color: #F7D9EE;
+  color: #8F315B;
+}
+
+.jamCountdownTimer{
   color: indianred; 
   font-weight: bold;
+  text-align: center;
 }
 
 .jamHeaderStatsContainer{
@@ -638,7 +768,12 @@ body{
 }
 
 .loadAllJamsButtonContainer{
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+.loadAllThemesButtonContainer{
+  padding-bottom: 10px;
   padding-top: 5px;
 }
 
@@ -732,7 +867,39 @@ body{
 }
 
 .notificationRow{
-  font-size: 16px;
+  font-size: 14px;
+}
+
+.notificationPanel{
+  margin-bottom: 0px;
+}
+
+.notificationPanelBody{
+  padding: 2px;
+}
+
+.notificationHeading{
+  cursor: pointer;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.notificationHeading:hover{
+  color: #000000;
+  background-color: #FCF2BE;
+  border-color: #FADEA5;
+}
+
+.notificationDangerHeading{
+  cursor: pointer;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.notificationDangerHeading:hover{
+  color: #000000;
+  background-color: #F2B7B7;
+  border-color: #F28C8C;
 }
 
 .notificationImage{
@@ -856,4 +1023,12 @@ body{
 .jamHeaderIcon{
   max-width: 40px;
   max-height: 40px;
+}
+
+.annoyingNumberNotification {
+  background-color: #a94442;
+  color: white;
+  display: inline-block;
+  padding-left: 3px;
+  padding-right: 3px;
 }

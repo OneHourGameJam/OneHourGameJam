@@ -36,7 +36,6 @@ function TryLogin($username, $password, $register){
         return "USER_DOES_NOT_EXIST";
     }
 }
-
 //Registers the given user. Funciton should be called through TryLogin(...).
 //Calls LogInUser(...) after registering the user to also log them in.
 function RegisterUser($username, $password){
@@ -57,14 +56,14 @@ function RegisterUser($username, $password){
 		return "USERNAME_ALREADY_REGISTERED";
 	}
 
-	$salt = GenerateSalt();
-	$passwordIterations = GenerateUserHashIterations($configData);
-	$passwordHash = HashPassword($password, $salt, $passwordIterations, $configData);
 	$isAdmin = (count($userData->UserModels) == 0) ? 1 : 0;
 
-	$userDbInterface->Insert($username, $ip, $userAgent, $salt, $passwordHash, $passwordIterations, $isAdmin);
-	
+    $passwordHash = CalculatePasswordHash($password);
+
+	$userDbInterface->Insert($username, $ip, $userAgent, $passwordHash, AUTH_BCRYPT, $isAdmin);
+
 	$userData = new UserData($userDbInterface, $sessionDbInterface, $configData);
+
 	return LogInUser($username, $password);
 }
 
@@ -95,24 +94,20 @@ function LogInUser($username, $password){
 	}
 
 	$user = $userData->UserModels[$userId];
-	$correctPasswordHash = $user->PasswordHash;
-	$userSalt = $user->Salt;
-	$passwordIterations = intval($user->PasswordIterations);
-	$passwordHash = HashPassword($password, $userSalt, $passwordIterations, $configData);
-	if($correctPasswordHash == $passwordHash){
-		//User password correct!
-		$sessionID = "".GenerateSalt();
-		$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
-		$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
+	$auth_status = VerifyPassword($user, $password);
+	if($auth_status != "SUCCESS")
+		return $auth_status;
 
-		$daysToKeepLoggedIn = $configData->ConfigModels[CONFIG_DAYS_TO_KEEP_LOGGED_IN]->Value;
-		setcookie(COOKIE_SESSION_ID, $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
-		$_COOKIE[COOKIE_SESSION_ID] = $sessionID;
 
-		$sessionDbInterface->Insert($userId, $sessionIdHash);
-	}else{
-		return "INCORRECT_PASSWORD";
-	}
+	// login successful! set user session data.
+	$sessionID = "".GenerateSalt();
+	$pepper = isset($configData->ConfigModels[CONFIG_PEPPER]->Value) ? $configData->ConfigModels[CONFIG_PEPPER]->Value : "BetterThanNothing";
+	$sessionIdHash = HashPassword($sessionID, $pepper, $configData->ConfigModels[CONFIG_SESSION_PASSWORD_ITERATIONS]->Value, $configData);
 
+	$daysToKeepLoggedIn = $configData->ConfigModels[CONFIG_DAYS_TO_KEEP_LOGGED_IN]->Value;
+	setcookie(COOKIE_SESSION_ID, $sessionID, time()+60*60*24*$daysToKeepLoggedIn);
+	$_COOKIE[COOKIE_SESSION_ID] = $sessionID;
+
+	$sessionDbInterface->Insert($userId, $sessionIdHash);
 	return "SUCCESS";
 }

@@ -2,7 +2,21 @@
 
 class ThemeController{
 
-	public static function CalculateThemeSelectionProbabilityByVoteDifference(&$themeData, &$configData){
+	public static function CalculateActiveThemeSelectionProbabilityByVoteDifference(ThemeData &$themeData, ConfigData &$configData){
+		return ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData->ActiveThemeModels, $configData);
+	}
+	public static function CalculateAllThemeSelectionProbabilityByVoteDifference(ThemeData &$themeData, ConfigData &$configData){
+		return ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData->AllThemeModels, $configData);
+	}
+	public static function CalculateActiveThemeSelectionProbabilityByPopularity(ThemeData &$themeData, ConfigData &$configData){
+		return ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData->ActiveThemeModels, $configData);
+	}
+	public static function CalculateAllThemeSelectionProbabilityByPopularity(ThemeData &$themeData, ConfigData &$configData){
+		return ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData->AllThemeModels, $configData);
+	}
+
+
+	private static function CalculateThemeSelectionProbabilityByVoteDifference(&$themeModelList, ConfigData &$configData){
 		AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 		StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 
@@ -12,7 +26,7 @@ class ThemeController{
 		$availableThemes = Array();
 
 		$totalVotesDifference = 0;
-		foreach($themeData->ThemeModels as $id => $themeModels){
+		foreach($themeModelList as $id => $themeModels){
 			$themeOption = Array();
 			$themeID = $themeModels->Id;
 			$result[$themeID]["ThemeSelectionProbabilityByVoteDifference"] = 0;
@@ -62,7 +76,7 @@ class ThemeController{
 		return $result;
 	}
 
-	public static function CalculateThemeSelectionProbabilityByPopularity(&$themeData, &$configData){
+	private static function CalculateThemeSelectionProbabilityByPopularity(&$themeModelList, ConfigData &$configData){
 		AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 		StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 
@@ -73,7 +87,7 @@ class ThemeController{
 		$availableThemes = Array();
 
 		$totalVotesDifference = 0;
-		foreach($themeData->ThemeModels as $id => $themeModels){
+		foreach($themeModelList as $id => $themeModels){
 			$themeOption = Array();
 			$themeID = $themeModels->Id;
 			$result[$themeID]["ThemeSelectionProbabilityByPopularity"] = 0;
@@ -129,7 +143,7 @@ class ThemeController{
 
 		$themesWithEnoughVotesOrOldOrRecentlyUsed = Array();
 
-		foreach($themeData->ThemeModels as $i => $themeModel){
+		foreach($themeData->ActiveThemeModels as $i => $themeModel){
 			$theme = Array();
 
 			$theme["id"] = $themeModel->Id;

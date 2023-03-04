@@ -3,8 +3,8 @@
 //Edits an existing user, identified by the username.
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
-function EditUser(MessageService &$messageService, $userId, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue){
-	global $userData, $loggedInUser, $userDbInterface;
+function EditUser(MessageService &$messageService, $userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue){
+	global $userData, $configData, $loggedInUser, $userDbInterface;
 	
 	$allowlistPermissionValue = intval($allowlistPermissionValue);
 	$denylistPermissionValue = intval($denylistPermissionValue);
@@ -25,22 +25,41 @@ function EditUser(MessageService &$messageService, $userId, $permissionLevel, $a
 		return "USER_DOES_NOT_EXIST";
 	}
 
-    if(!UserHasPermissionLevel($loggedInUser, $userData->UserModels[$userId]->Admin)){
-        return "INSUFFICIENT_PERMISSIONS_OUTRANK";
+    //Validate values
+    if(!$displayName || strlen($displayName) < $configData->ConfigModels[CONFIG_MINIMUM_DISPLAY_NAME_LENGTH]->Value || strlen($displayName) > $configData->ConfigModels[CONFIG_MAXIMUM_DISPLAY_NAME_LENGTH]->Value){
+        return "INVALID_DISPLAY_NAME";
     }
 
-	if(!UserHasPermissionLevel($loggedInUser, $permissionLevel)){
-        return "INSUFFICIENT_PERMISSIONS_BEYOND_OWN";
+    //Validate email address
+    if($emailAddress != "" && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+        return "INVALID_EMAIL";
     }
 
-	$userDbInterface->UpdateUserPermissionLevel($userId, $permissionLevel);
+    if($userData->UserModels[$userId]->Admin != $permissionLevel) {
+        //Updating user's permission level
+
+        if (!UserHasPermissionLevel($loggedInUser, $userData->UserModels[$userId]->Admin)) {
+            return "INSUFFICIENT_PERMISSIONS_OUTRANK";
+        }
+
+        if (!UserHasPermissionLevel($loggedInUser, $permissionLevel)) {
+            return "INSUFFICIENT_PERMISSIONS_BEYOND_OWN";
+        }
+
+        $userDbInterface->UpdateUserPermissionLevel($userId, $permissionLevel);
+    }
+
+    //Keep preferences the same
+    $preferences = $userData->UserModels[$userId]->UserPreferences;
+
+    $userDbInterface->Update($userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, CleanHtml($bio), $preferences);
 	$userDbInterface->UpdateUserPermissions($userId, $allowlistPermissionValue, $denylistPermissionValue);
 	
 	$username = $userData->UserModels[$userId]->Username;
 
 	$messageService->SendMessage(LogMessage::UserLogMessage(
 		"USER_EDITED", 
-		"User $username updated with values: PermissionLevel: $permissionLevel; AllowlistPermissions: $allowlistPermissionValue; DenylistPermissions: $denylistPermissionValue",
+		"User $userId ($username) updated with values: PermissionLevel: $permissionLevel; DisplayName: $displayName, TwitterHandle: $twitterHandle, TwitchUsername: $twitchUsername, EmailAddress: $emailAddress, Bio: $bio, AllowlistPermissions: $allowlistPermissionValue; DenylistPermissions: $denylistPermissionValue",
 		$loggedInUser->Id,
 		$userId)
 	);
@@ -54,7 +73,12 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 	
 	if(IsAdmin($loggedInUser) !== false){
 		$userId = $_POST[FORM_EDITUSER_USER_ID];
-		$permissionLevel = (isset($_POST[FORM_EDITUSER_PERMISSION_LEVEL])) ? intval($_POST[FORM_EDITUSER_PERMISSION_LEVEL]) : 0;
+        $permissionLevel = (isset($_POST[FORM_EDITUSER_PERMISSION_LEVEL])) ? intval($_POST[FORM_EDITUSER_PERMISSION_LEVEL]) : 0;
+        $displayName = (isset($_POST[FORM_EDITUSER_DISPLAY_NAME])) ? $_POST[FORM_EDITUSER_DISPLAY_NAME] : "";
+        $twitterHandle = (isset($_POST[FORM_EDITUSER_TWITTER_HANDLE])) ? $_POST[FORM_EDITUSER_TWITTER_HANDLE] : "";
+        $twitchUsername = (isset($_POST[FORM_EDITUSER_TWITCH_USERNAME])) ? $_POST[FORM_EDITUSER_TWITCH_USERNAME] : "";
+        $emailAddress = (isset($_POST[FORM_EDITUSER_EMAIL_ADDRESS])) ? $_POST[FORM_EDITUSER_EMAIL_ADDRESS] : "";
+        $bio = (isset($_POST[FORM_EDITUSER_BIO])) ? $_POST[FORM_EDITUSER_BIO] : "";
 		if($permissionLevel < 0){
 			die("invalid isadmin value");
 		}
@@ -78,7 +102,7 @@ function PerformAction(MessageService &$messageService, &$loggedInUser){
 			}
 		}
 
-		return EditUser($messageService, $userId, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue);
+		return EditUser($messageService, $userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue);
 	}
 }
 

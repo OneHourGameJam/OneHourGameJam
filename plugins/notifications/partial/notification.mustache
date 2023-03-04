@@ -1,0 +1,52 @@
+{{#CONFIG.VALUES.NOTIFICATION}}
+    <div class="row notificationRow">
+        <div class="col-md-12 alignCenter">
+            <div class="alert alert-warning">
+                {{#CONFIG.VALUES.NOTIFICATION_IMAGE}}
+                    {{#CONFIG.VALUES.NOTIFICATION_URL}}
+                        <a href='{{CONFIG.VALUES.NOTIFICATION_URL}}' target='_BLANK'>
+                    {{/CONFIG.VALUES.NOTIFICATION_URL}}
+                    <img src='{{CONFIG.VALUES.NOTIFICATION_IMAGE}}' class='notificationImage'>
+                    {{#CONFIG.VALUES.NOTIFICATION_URL}}
+                        </a>
+                    {{/CONFIG.VALUES.NOTIFICATION_URL}}
+                {{/CONFIG.VALUES.NOTIFICATION_IMAGE}}
+                {{{CONFIG.VALUES.NOTIFICATION}}}
+            </div>
+        </div>
+    </div>
+{{/CONFIG.VALUES.NOTIFICATION}}
+
+{{#notifications.notifications}}
+    {{#visible}}
+        <div class="notificationRow">
+            <div class="alignCenter">
+                <div class="panel panel-warning notificationPanel">
+                    <div class="panel-heading notificationHeading" onclick='ToggleNotification({{id}}); return false;'>
+                        {{#icon_image_url}}
+                            <img src='{{icon_image_url}}' id='notification_icon_{{id}}' class='notificationImageTiny' style='
+                            {{^minimised}}display: none;{{/minimised}}'>
+                        {{/icon_image_url}}
+                        <b>{{{title}}}</b>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="panel-body notificationPanelBody" id="notificaion_{{id}}" data-notification-id="{{id}}" style="{{#minimised}}display: none;{{/minimised}}">
+                                {{#icon_image_url}}
+                                    {{#icon_link_url}}
+                                        <a href='{{icon_link_url}}' target='_BLANK'>
+                                    {{/icon_link_url}}
+                                    <img src='{{icon_image_url}}' class='notificationImage'>
+                                    {{#icon_link_url}}
+                                        </a>
+                                    {{/icon_link_url}}
+                                {{/icon_image_url}}
+                                {{{text}}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/visible}}
+{{/notifications.notifications}}

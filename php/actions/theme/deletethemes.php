@@ -21,7 +21,7 @@ function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
 		$themeFound = false;
 		$removedTheme = "";
 
-		foreach($themeData->ThemeModels as $id => $themeModel) {
+		foreach($themeData->ActiveThemeModels as $id => $themeModel) {
 			if ($themeModel->Deleted != 0){
 				continue;
 			}

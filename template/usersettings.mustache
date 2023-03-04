@@ -1,0 +1,80 @@
+<h1 class="pageHeading">User Settings</h1>
+<div class="pageDescription">
+	Manage your user settings on this page.
+</div>
+
+<p>
+	<b>Login username:</b> {{user.username}} (cannot be changed)
+</p>
+<form method='post'>
+	{{> csrf_token}}
+	<p class="userSettingsForm">
+		<div class="form-group">
+			<label for="displayname">Display Name <span class="userSettingsInput">(Required)</span></label>
+			<input type="text" class="form-control" id="displayname" name='{{{forms.form.usersettings.display_name}}}' placeholder="Display name" value="{{user.display_name}}" minlength='{{{CONFIG.VALUES.MINIMUM_DISPLAY_NAME_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_DISPLAY_NAME_LENGTH}}}' required>
+		</div>
+		<div class="form-group">
+			<label for="twitterhandle">Twitter Handle <span class="userSettingsInput">(NOT Required)</span></label>
+			<input type="text" class="form-control" id="twitterhandle" name='{{{forms.form.usersettings.twitter_handle}}}' placeholder="@Twitter Handle" value="{{user.twitter}}" pattern="^@[a-zA-Z0-9_]+$" maxlength="16">
+		</div>
+		{{#user.permissions_list.HOST_STREAM}}
+			<div class="form-group">
+				<label for="twitchusername">Twitch username<span class="userSettingsInput"> (https://www.twitch.tv/<span style='color: orange;'><b>twitch</b></span> <- this part) When set this enables the "become streamer" button for jams. (NOT Required)</span></label>
+				<input type="text" class="form-control" id="twitchusername" name='{{{forms.form.usersettings.twitch_username}}}' placeholder="Twitch Username" value="{{user.twitch}}" pattern="^[a-zA-Z0-9_]+$" maxlength="25">
+			</div>
+		{{/user.permissions_list.HOST_STREAM}}
+		<div class="form-group">
+			<label for="emailaddress">Email <span class="userSettingsInput">(NOT Required)</span></label>
+			<input type="email" class="form-control" id="emailaddress" name='{{{forms.form.usersettings.email_address}}}' placeholder="Email Address" value="{{user.email}}">
+		</div>
+
+		<div class="form-group">
+			<label for="emailaddress">Bio <span class="userSettingsInput">(NOT Required)</span></label>
+			<div id="bio" name="{{{forms.form.usersettings.bio}}}" class="trumbowyg-editor">{{{ page.user_bio }}}</div>
+		</div>
+
+		<label>Preferences</label>
+		<div class="form-check">
+			<input type="checkbox" class="form-check-input" id="DISABLE_THEMES_NOTIFICATION" name="{{{forms.preference.disable_themes_notification}}}" {{#user.preferences_list.DISABLE_THEMES_NOTIFICATION}}checked{{/user.preferences_list.DISABLE_THEMES_NOTIFICATION}}>
+			<label class="form-check-label" for="DISABLE_THEMES_NOTIFICATION">Disable {{CONFIG.VALUES.THEME_PHRASE_PLURAL}} Notification</label>
+		</div>
+
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.saveuserchanges}}}' class="btn btn-default">Save Changes</button>
+	</p>
+</form>
+<form method='post'>
+	{{> csrf_token}}
+	<p class="userSettingsForm">
+		<div class="form-group">
+			<label for="passwordold">Current Password</label>
+			<input type="password" class="form-control" id="passwordold" name='{{{forms.form.changepassword.old_password}}}' placeholder="Old Password" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
+		</div>
+		<div class="form-group">
+			<label for="password1">New Password</label>
+			<input type="password" class="form-control" id="password1" name='{{{forms.form.changepassword.password_1}}}' placeholder="New Password" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
+		</div>
+		<div class="form-group">
+			<label for="password2">Repeat Password</label>
+			<input type="password" class="form-control" id="password2" name='{{{forms.form.changepassword.password_2}}}' placeholder="New Password (repeat)" value="" minlength='{{{CONFIG.VALUES.MINIMUM_PASSWORD_LENGTH}}}' maxlength='{{{CONFIG.VALUES.MAXIMUM_PASSWORD_LENGTH}}}' required>
+		</div>
+		<button type="submit" name='{{{forms.form.action}}}' value='{{{forms.action.changepassword}}}' class="btn btn-default">Change password</button>
+	</p>
+</form>
+
+<script src="dependencies/trumbowyg/trumbowyg.min.js"></script>
+<script src="dependencies/trumbowyg/trumbowyg.emoji.min.js"></script>
+<script>
+	$.trumbowyg.svgPath = 'template/images/icons.svg';
+	$('.trumbowyg-editor').trumbowyg({
+	    btns: [
+					['emoji'],
+        	['strong', 'em', 'del'],
+        	['superscript', 'subscript'],
+        	['link'],
+        	['unorderedList', 'orderedList'],
+       		['removeformat']
+	    ],
+	    removeformatPasted: true,
+	    autogrow: true
+	});
+</script>
