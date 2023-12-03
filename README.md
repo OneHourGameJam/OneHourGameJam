@@ -188,3 +188,5 @@ This section aims to describe how the site functions from a high level, intended
 - **Partials (templates)** - A reusable part of the template. See Mustache documentation. For a partial to be loaded for rendering, it must be listed in the setParitals() call in [index.php](https://github.com/OneHourGameJam/OneHourGameJam/blob/master/index.php)
 - **Mustache** - A widely used templating solution. See [bobthecow/mustache.php](https://github.com/bobthecow/mustache.php) for documentation
 - **Plugins** - A newer architecture which groups all functionality for a given feature into a single unit. Currently only notifications and the admin log exist as plugins.
+
+- Link to the game: 
