@@ -21,7 +21,7 @@
     {{#users.LIST}}
         {{#is_admin}}
             <tr>
-                <td><b>{{username}}</b></td>
+                <td><b>{{display_name}} ({{username}})</b></td>
                 <td>{{entry_count}}</td>
                 <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
                 <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
@@ -85,7 +85,7 @@
         {{#is_admin_candidate}}
             {{^is_admin}}
                 <tr>
-                    <td><b>{{username}} {{#is_sponsored}}(<span class='editUserAdminCandidatesSponsored'>Sponsored</span>){{/is_sponsored}}</b></td>
+                    <td><b>{{display_name}} ({{username}}) {{#is_sponsored}}(<span class='editUserAdminCandidatesSponsored'>Sponsored</span>){{/is_sponsored}}</b></td>
                     <td>{{entry_count}}</td>
                     <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
                     <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
@@ -159,7 +159,7 @@
     {{#users.LIST}}
         {{^is_admin}}
             <tr>
-                <td><b>{{username}}</b></td>
+                <td><b>{{display_name}} ({{username}})</b></td>
                 <td>{{entry_count}}</td>
                 <td>{{#first_jam_number}}{{first_jam_number}}{{/first_jam_number}}</td>
                 <td>{{#last_jam_number}}{{last_jam_number}}{{/last_jam_number}}</td>
