@@ -17,6 +17,7 @@ class JamViewModel{
     public $theme_id;
     public $theme;
     public $default_icon_url;
+    public $event_name;
     public $start_time;
     public $streamer_is_set;
     public $streamer_user_id;

@@ -19,7 +19,8 @@ class JamPresenter{
 		$jamViewModel->state = $jamModel->State;
 		$jamViewModel->streamer_user_id = $jamModel->StreamerUserId;
 		$jamViewModel->streamer_twitch_username = preg_replace("/[^0-9a-zA-Z ]/m", "", $jamModel->StreamerTwitchUsername);
-		$jamViewModel->default_icon_url = $jamModel->DefaultIconUrl;
+        $jamViewModel->default_icon_url = $jamModel->DefaultIconUrl;
+        $jamViewModel->event_name = $jamModel->EventName;
 
 		if($streamerUserId != "" && $streamerTwitchUsername != ""){
 			$jamViewModel->streamer_is_set = 1;

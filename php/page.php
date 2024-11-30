@@ -139,7 +139,8 @@ function RenderPageSpecific($page, ConfigData &$configData, UserData &$userData,
 
             $viewingAuthorId = $userData->UsernameToId[$viewingAuthor];
 
-            $render['show_edit_link'] = $viewingAuthor == $loggedInUser->Username;
+            $render['show_edit_link'] = ($loggedInUser !== FALSE) && ($viewingAuthor == $loggedInUser->Username);
+
             if($viewingAuthorId != null){
                 $render["author_bio"] = $userData->LoadBio($viewingAuthorId);
             }

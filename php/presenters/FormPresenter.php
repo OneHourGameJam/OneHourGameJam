@@ -53,6 +53,7 @@ class FormPresenter{
         $formViewModel->form["newjam"]["time"] = FORM_NEWJAM_TIME;
         $formViewModel->form["newjam"]["jam_color"] = FORM_NEWJAM_JAM_COLOR;
         $formViewModel->form["newjam"]["default_icon_url"] = FORM_NEWJAM_DEFAULT_ICON_URL;
+        $formViewModel->form["newjam"]["event_name"] = FORM_NEWJAM_EVENT_NAME;
         $formViewModel->form["editjam"]["jam_id"] = FORM_EDITJAM_JAM_ID;
         $formViewModel->form["editjam"]["number"] = "jam_number";
         $formViewModel->form["editjam"]["theme"] = FORM_EDITJAM_THEME;
@@ -62,6 +63,7 @@ class FormPresenter{
         $formViewModel->form["editjam"]["streamer_twitch_username"] = FORM_EDITJAM_STREAMER_TWITCH_USERNAME;
         $formViewModel->form["editjam"]["jam_color"] = FORM_EDITJAM_JAM_COLORS;
         $formViewModel->form["editjam"]["default_icon_url"] = FORM_EDITJAM_DEFAULT_ICON_URL;
+        $formViewModel->form["editjam"]["event_name"] = FORM_EDITJAM_EVENT_NAME;
         $formViewModel->form["deleteplatform"]["platform_id"] = FORM_DELETEPLATFORM_PLATFORM_ID;
         $formViewModel->form["editplatform"]["platform_id"] = FORM_EDITPLATFORM_PLATFORM_ID;
         $formViewModel->form["editplatform"]["name"] = FORM_EDITPLATFORM_NAME;
