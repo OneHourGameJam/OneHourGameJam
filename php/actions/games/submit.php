@@ -1,6 +1,6 @@
 <?php
 
-function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBackground, $colorText){
+function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBackground, $colorText): string{
 	global $loggedInUser, $_FILES, $ip, $userAgent, $jamData, $gameData, $configData, $gameDbInterface;
 
 	$gameName = trim($gameName);
@@ -163,7 +163,7 @@ function SubmitEntry($jamNumber, $gameName, $platforms, $description, $colorBack
 	return "SUCCESS_ENTRY_ADDED";
 }
 
-function SubmitPlatformGame($entryId, $platformId, $url){
+function SubmitPlatformGame($entryId, $platformId, $url): string{
 	global $platformGameDbInterface;
 
 	$data = $platformGameDbInterface->SelectSinglePlatformEntryId($entryId, $platformId);
@@ -177,7 +177,7 @@ function SubmitPlatformGame($entryId, $platformId, $url){
 	}
 }
 
-function DeletePlatformGame($entryId, $platformId){
+function DeletePlatformGame($entryId, $platformId): string{
 	global $platformGameDbInterface;
 	
 	$data = $platformGameDbInterface->SelectSinglePlatformEntryId($entryId, $platformId);
@@ -189,7 +189,7 @@ function DeletePlatformGame($entryId, $platformId){
 	}
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST, $satisfactionData, $platformData;
 	
 	if($loggedInUser !== false){

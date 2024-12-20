@@ -1,25 +1,25 @@
 <?php
 
 class GameModel{
-	public $Id;
-	public $JamId;
-	public $JamNumber;
-	public $Title;
-	public $Description;
-	public $AuthorUserId;
-	public $UrlScreenshot;
-	public $BackgroundColor;
-	public $TextColor;
-	public $Deleted;
+	public string $Id;
+	public string $JamId;
+	public string $JamNumber;
+	public string $Title;
+	public string $Description;
+	public string $AuthorUserId;
+	public string $UrlScreenshot;
+	public string $BackgroundColor;
+	public string $TextColor;
+	public bool $Deleted;
 }
 
 class GameData{
-    public $GameModels;
-    public $GamesByUserId;
+    public array $GameModels;
+    public array $GamesByUserId;
 
-    private $gameDbInterface;
+    private GameDbInterface $gameDbInterface;
 
-    function __construct(&$gameDbInterface) {
+    function __construct(GameDbInterface &$gameDbInterface) {
         $this->gameDbInterface = $gameDbInterface;
         $this->GameModels = $this->LoadGames();
         $this->GamesByUserId = $this->GroupGamesByUserId();
@@ -27,7 +27,8 @@ class GameData{
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadGames(){
+    function LoadGames(): array
+    {
         AddActionLog("LoadGames");
         StartTimer("LoadGames");
 
@@ -56,7 +57,7 @@ class GameData{
         return $gameModels;
     }
 
-    private function GroupGamesByUserId()
+    private function GroupGamesByUserId(): array
     {
         AddActionLog("GroupGamesByUserId");
         StartTimer("GroupGamesByUserId");
@@ -74,7 +75,7 @@ class GameData{
         return $GamesByUserId;
     }
 
-    public function GetGamesMadeByUserId($userId){
+    public function GetGamesMadeByUserId($userId): array{
         if(isset($this->GamesByUserId[$userId])){
             return $this->GamesByUserId[$userId];
         }
@@ -86,7 +87,8 @@ class GameData{
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
     //Returns true / false based on whether or not the specified entry exists (and has not been deleted)
-    public function EntryExists($entryId){
+    public function EntryExists($entryId): bool
+    {
         AddActionLog("EntryExists");
         StartTimer("EntryExists");
     
@@ -97,19 +99,16 @@ class GameData{
         }
     
         $data = $this->gameDbInterface->SelectIfExists($entryId);
-    
-        if(mysqli_fetch_array($data)){
-            StopTimer("EntryExists");
-            return true;
-        }else{
-            StopTimer("EntryExists");
-            return false;
-        }
-        
+
         StopTimer("EntryExists");
+        if(mysqli_fetch_array($data)){
+            return true;
+        }
+        return false;
     }
     
-    function GetEntriesOfUserFormatted($authorUserId){
+    function GetEntriesOfUserFormatted($authorUserId): string
+    {
         AddActionLog("GetEntriesOfUserFormatted");
         StartTimer("GetEntriesOfUserFormatted");
     
@@ -123,7 +122,8 @@ class GameData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("GameData_GetAllPublicData");
         StartTimer("GameData_GetAllPublicData");
         

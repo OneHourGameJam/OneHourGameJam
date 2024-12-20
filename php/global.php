@@ -84,7 +84,7 @@ include_once( __DIR__ . "/../dependencies/mustache/Exception/UnknownTemplateExce
 include_once( __DIR__ . "/../dependencies/mustache/Cache/AbstractCache.php");
 include_once( __DIR__ . "/../dependencies/mustache/Cache/FilesystemCache.php");
 include_once( __DIR__ . "/../dependencies/mustache/Cache/NoopCache.php");
-$mustache = new MustacheEngine();
+$mustache = new Mustache_Engine();
 
 
 ?>

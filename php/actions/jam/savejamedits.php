@@ -2,7 +2,7 @@
 
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
-function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $streamerUsername, $streamerTwitchUsername, $colorsString, $defaultEntryIconUrl, $eventName){
+function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $streamerUsername, $streamerTwitchUsername, $colorsString, $defaultEntryIconUrl, $eventName): string{
 	global $jamData, $loggedInUser, $jamDbInterface, $userData;
 
 	//Authorize user (is admin)
@@ -78,7 +78,7 @@ function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, 
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){

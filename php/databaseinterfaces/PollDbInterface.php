@@ -1,23 +1,24 @@
 <?php
-define("DB_TABLE_POLL", "poll");
+const DB_TABLE_POLL = "poll";
 
-define("DB_COLUMN_POLL_ID",             "poll_id");
-define("DB_COLUMN_POLL_QUESTION",       "poll_question");
-define("DB_COLUMN_POLL_TYPE",           "poll_type");
-define("DB_COLUMN_POLL_START_DATETIME", "poll_start_datetime");
-define("DB_COLUMN_POLL_END_DATETIME",   "poll_end_datetime");
-define("DB_COLUMN_POLL_DELETED",        "poll_deleted");
+const DB_COLUMN_POLL_ID = "poll_id";
+const DB_COLUMN_POLL_QUESTION = "poll_question";
+const DB_COLUMN_POLL_TYPE = "poll_type";
+const DB_COLUMN_POLL_START_DATETIME = "poll_start_datetime";
+const DB_COLUMN_POLL_END_DATETIME = "poll_end_datetime";
+const DB_COLUMN_POLL_DELETED = "poll_deleted";
 
 class PollDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_POLL_ID, DB_COLUMN_POLL_QUESTION, DB_COLUMN_POLL_TYPE, DB_COLUMN_POLL_START_DATETIME, DB_COLUMN_POLL_END_DATETIME, DB_COLUMN_POLL_DELETED);
-    private $privateColumns = Array();
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_POLL_ID, DB_COLUMN_POLL_QUESTION, DB_COLUMN_POLL_TYPE, DB_COLUMN_POLL_START_DATETIME, DB_COLUMN_POLL_END_DATETIME, DB_COLUMN_POLL_DELETED);
+    private array $privateColumns = Array();
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAllPollOptionsAndVotes(){
+    public function SelectAllPollOptionsAndVotes(): mysqli_result
+    {
         AddActionLog("PollDbInterface_SelectAllPollOptionsAndVotes");
         StartTimer("PollDbInterface_SelectAllPollOptionsAndVotes");
 
@@ -40,7 +41,8 @@ class PollDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectNumberOfUsersVotedInEachPoll(){
+    public function SelectNumberOfUsersVotedInEachPoll(): mysqli_result
+    {
         AddActionLog("PollDbInterface_SelectNumberOfUsersVotedInEachPoll");
         StartTimer("PollDbInterface_SelectNumberOfUsersVotedInEachPoll");
 
@@ -63,7 +65,8 @@ class PollDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectActivePollVotesOfUser($userId){
+    public function SelectActivePollVotesOfUser($userId): mysqli_result
+    {
         AddActionLog("PollDbInterface_SelectActivePollVotesOfUser");
         StartTimer("PollDbInterface_SelectActivePollVotesOfUser");
 
@@ -80,7 +83,8 @@ class PollDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectPollVotesOfUser($userId){
+    public function SelectPollVotesOfUser($userId): mysqli_result
+    {
         AddActionLog("PollDbInterface_SelectPollVotesOfUser");
         StartTimer("PollDbInterface_SelectPollVotesOfUser");
 
@@ -97,7 +101,8 @@ class PollDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectIfPollAndPollOptionCombinationExists($pollId, $pollOptionId){
+    public function SelectIfPollAndPollOptionCombinationExists($pollId, $pollOptionId): mysqli_result
+    {
         AddActionLog("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
         StartTimer("PollDbInterface_SelectIfPollAndPollOptionCombinationExists");
 
@@ -116,12 +121,13 @@ class PollDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("PollDbInterface_SelectPublicData");
         StartTimer("PollDbInterface_SelectPublicData");
 
         $sql = "
-            SELECT ".implode(",", $this->publicColumnsPoll)."
+            SELECT ".implode(",", $this->publicColumns)."
             FROM ".DB_TABLE_POLL.";
         ";
 

@@ -1,7 +1,8 @@
 <?php
 
 class JamPresenter{
-	public static function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $nonDeletedJamCounter, $renderDepth){
+	public static function RenderJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $nonDeletedJamCounter, $renderDepth): JamViewModel
+    {
 		AddActionLog("RenderJam");
 		StartTimer("RenderJam");
 
@@ -158,13 +159,15 @@ class JamPresenter{
 		return $jamViewModel;
 	}
 
-	public static function RenderSubmitJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth){
+	public static function RenderSubmitJam(&$configData, &$userData, &$gameData, &$jamModel, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth): JamViewModel
+    {
 		AddActionLog("RenderSubmitJam");
 
 		return JamPresenter::RenderJam($configData, $userData, $gameData, $jamModel, $jamData, $platformData, $platformGameData, $satisfactionData, $loggedInUser, 0, $renderDepth);
 	}
 
-	public static function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth, $loadAll){
+	public static function RenderJams(&$configData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$satisfactionData, &$loggedInUser, $renderDepth, $loadAll): JamsViewModel
+    {
 		AddActionLog("RenderJams");
 		StartTimer("RenderJams");
 

@@ -1,24 +1,24 @@
 <?php
 
-define("MESSAGE_SUCCESS", "success");
-define("MESSAGE_WARNING", "warning");
-define("MESSAGE_ERROR", "error");
-define("MESSAGE_NONE", "none");
+const MESSAGE_SUCCESS = "success";
+const MESSAGE_WARNING = "warning";
+const MESSAGE_ERROR = "error";
+const MESSAGE_NONE = "none";
 
 class MessageModel{
-    public $Type;
-    public $Title;
-    public $Body;
+    public string $Type;
+    public string $Title;
+    public string $Body;
 }
 
 class MessageData{
-    public $MessageModels;
+    public array $MessageModels;
 
-    function __construct(&$siteActionData) {
+    function __construct(SiteActionData &$siteActionData) {
         $this->MessageModels = $this->LoadMessages($siteActionData);
     }
 
-    function LoadMessages(&$siteActionData){
+    function LoadMessages(SiteActionData &$siteActionData): array{
         global $_COOKIE;
         AddActionLog("LoadMessages");
         StartTimer("LoadMessages");

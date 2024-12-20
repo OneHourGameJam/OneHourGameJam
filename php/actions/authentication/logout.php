@@ -2,7 +2,7 @@
 
 //Logs out the current user by setting their sessionID cookie to blank and expiring it.
 //TODO: Clear session from on-server session data
-function LogOut(){
+function LogOut(): string{
 	global $configData, $sessionDbInterface, $_COOKIE;
 
 	// Delete the session out of our DB
@@ -19,7 +19,7 @@ function LogOut(){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	return LogOut();
 }
 

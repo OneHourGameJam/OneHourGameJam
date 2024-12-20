@@ -1,7 +1,7 @@
 <?php
 
 //Marks a suggested theme as banned
-function BanTheme(MessageService &$messageService, $bannedThemeId){
+function BanTheme(MessageService &$messageService, $bannedThemeId): string{
 	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface, $userData;
 
 	//Authorize user (logged in)
@@ -52,7 +52,7 @@ function BanTheme(MessageService &$messageService, $bannedThemeId){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

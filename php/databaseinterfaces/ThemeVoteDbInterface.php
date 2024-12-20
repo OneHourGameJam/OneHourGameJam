@@ -1,25 +1,26 @@
 <?php
 
-define("DB_TABLE_THEMEVOTE", "themevote");
+const DB_TABLE_THEMEVOTE = "themevote";
 
-define("DB_COLUMN_THEMEVOTE_ID",            "themevote_id");
-define("DB_COLUMN_THEMEVOTE_DATETIME",      "themevote_datetime");
-define("DB_COLUMN_THEMEVOTE_IP",            "themevote_ip");
-define("DB_COLUMN_THEMEVOTE_USER_AGENT",    "themevote_user_agent");
-define("DB_COLUMN_THEMEVOTE_THEME_ID",      "themevote_theme_id");
-define("DB_COLUMN_THEMEVOTE_USER_ID",       "themevote_user_id");
-define("DB_COLUMN_THEMEVOTE_TYPE",          "themevote_type");
+const DB_COLUMN_THEMEVOTE_ID = "themevote_id";
+const DB_COLUMN_THEMEVOTE_DATETIME = "themevote_datetime";
+const DB_COLUMN_THEMEVOTE_IP = "themevote_ip";
+const DB_COLUMN_THEMEVOTE_USER_AGENT = "themevote_user_agent";
+const DB_COLUMN_THEMEVOTE_THEME_ID = "themevote_theme_id";
+const DB_COLUMN_THEMEVOTE_USER_ID = "themevote_user_id";
+const DB_COLUMN_THEMEVOTE_TYPE = "themevote_type";
 
 class ThemeVoteDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_THEMEVOTE_ID, DB_COLUMN_THEMEVOTE_THEME_ID, DB_COLUMN_THEMEVOTE_USER_ID);
-    private $privateColumns = Array(DB_COLUMN_THEMEVOTE_DATETIME, DB_COLUMN_THEMEVOTE_IP, DB_COLUMN_THEMEVOTE_USER_AGENT, DB_COLUMN_THEMEVOTE_TYPE);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_THEMEVOTE_ID, DB_COLUMN_THEMEVOTE_THEME_ID, DB_COLUMN_THEMEVOTE_USER_ID);
+    private array $privateColumns = Array(DB_COLUMN_THEMEVOTE_DATETIME, DB_COLUMN_THEMEVOTE_IP, DB_COLUMN_THEMEVOTE_USER_AGENT, DB_COLUMN_THEMEVOTE_TYPE);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectThemeVotesByUser($userId){
+    public function SelectThemeVotesByUser($userId): mysqli_result
+    {
         AddActionLog("ThemeVoteDbInterface_SelectThemeVotesByUser");
         StartTimer("ThemeVoteDbInterface_SelectThemeVotesByUser");
     
@@ -34,7 +35,8 @@ class ThemeVoteDbInterface{
         return $this->database->Execute($sql);
     }
 
-    public function SelectThemeVotesWithThemeByUser($userId){
+    public function SelectThemeVotesWithThemeByUser($userId): mysqli_result
+    {
         AddActionLog("ThemeVoteDbInterface_SelectThemeVotesWithThemeByUser");
         StartTimer("ThemeVoteDbInterface_SelectThemeVotesWithThemeByUser");
         
@@ -50,7 +52,8 @@ class ThemeVoteDbInterface{
         return $this->database->Execute($sql);
     }
 
-    public function SelectSingle($themeId, $userId){
+    public function SelectSingle($themeId, $userId): mysqli_result
+    {
         AddActionLog("ThemeVoteDbInterface_SelectSingle");
         StartTimer("ThemeVoteDbInterface_SelectSingle");
         
@@ -66,7 +69,8 @@ class ThemeVoteDbInterface{
         return $this->database->Execute($sql);
     }
 
-    public function Insert($ip, $userAgent, $themeId, $userId, $vote){
+    public function Insert($ip, $userAgent, $themeId, $userId, $vote): void
+    {
         AddActionLog("ThemeVoteDbInterface_Insert");
         StartTimer("ThemeVoteDbInterface_Insert");
         
@@ -85,7 +89,8 @@ class ThemeVoteDbInterface{
         StopTimer("ThemeVoteDbInterface_Insert");
     }
 
-    public function Update($themeVoteId, $vote){
+    public function Update($themeVoteId, $vote): void
+    {
         AddActionLog("ThemeVoteDbInterface_Update");
         StartTimer("ThemeVoteDbInterface_Update");
         
@@ -100,7 +105,8 @@ class ThemeVoteDbInterface{
         StopTimer("ThemeVoteDbInterface_Update");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("ThemeVoteDbInterface_SelectPublicData");
         StartTimer("ThemeVoteDbInterface_SelectPublicData");
 

@@ -1,12 +1,12 @@
 <?php
 
 class FormViewModel{
-	public $get = Array();
-	public $form = Array();
-	public $pages = Array();
-	public $action = Array();
-    public $constant = Array();
-    public $preference = Array();
+	public array $get = Array();
+	public array $form = Array();
+	public array $pages = Array();
+	public array $action = Array();
+    public array $constant = Array();
+    public array $preference = Array();
 }
 
 ?>

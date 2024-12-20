@@ -2,7 +2,7 @@
 
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
-function UnsetStreamer(MessageService &$messageService, $jamNumber){
+function UnsetStreamer(MessageService &$messageService, $jamNumber): string{
 	global $loggedInUser, $jamDbInterface, $jamData;
 
 	//Authorize user
@@ -38,7 +38,7 @@ function UnsetStreamer(MessageService &$messageService, $jamNumber){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	$jamNumber = intval($_POST[FORM_SETSTREAMER_JAM_NUMBER]);

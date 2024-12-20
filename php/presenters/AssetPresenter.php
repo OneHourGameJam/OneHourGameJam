@@ -2,7 +2,8 @@
 
 class AssetPresenter{
  
-	public static function RenderAssets(&$assetData, &$userData){
+	public static function RenderAssets(&$assetData, &$userData): AssetsViewModel
+    {
 		AddActionLog("RenderAssets");
 		StartTimer("RenderAssets");
 		$assetsViewModel = new AssetsViewModel();
@@ -15,7 +16,8 @@ class AssetPresenter{
 		return $assetsViewModel;
 	}
 	
-	public static function RenderAsset(&$asset, &$userData){
+	public static function RenderAsset(&$asset, &$userData): AssetViewModel
+    {
 		AddActionLog("RenderAsset");
 		StartTimer("RenderAsset");
 		$type = $asset->Type;

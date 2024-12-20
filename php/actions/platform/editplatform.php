@@ -1,6 +1,6 @@
 <?php
 
-function EditPlatform(MessageService &$messageService, $platformId, $platformName){
+function EditPlatform(MessageService &$messageService, $platformId, $platformName): string{
 	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface, $userData;
 
 	$platformName = trim($platformName);
@@ -77,7 +77,7 @@ function EditPlatform(MessageService &$messageService, $platformId, $platformNam
 	return "SUCCESS_PLATFORM_EDITED";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if($loggedInUser !== false){

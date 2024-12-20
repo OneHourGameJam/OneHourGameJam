@@ -1,0 +1,154 @@
+[20-Feb-2023 21:52:08 Europe/Ljubljana] PHP Fatal error:  Class 'Mustache_Engine' not found in /home/onehou54/public_html/php/global.php on line 55
+[20-Feb-2023 21:52:09 Europe/Ljubljana] PHP Fatal error:  Class 'Mustache_Engine' not found in /home/onehou54/public_html/php/global.php on line 55
+[20-Feb-2023 21:53:02 Europe/Ljubljana] PHP Fatal error:  Class 'Mustache_Engine' not found in /home/onehou54/public_html/php/global.php on line 55
+[20-Feb-2023 21:54:38 Europe/Ljubljana] PHP Warning:  require(/home/onehou54/public_html/php../dependencies/mustache/Autoloader.php): failed to open stream: No such file or directory in /home/onehou54/public_html/php/global.php on line 53
+[20-Feb-2023 21:54:38 Europe/Ljubljana] PHP Warning:  require(/home/onehou54/public_html/php../dependencies/mustache/Autoloader.php): failed to open stream: No such file or directory in /home/onehou54/public_html/php/global.php on line 53
+[20-Feb-2023 21:54:38 Europe/Ljubljana] PHP Fatal error:  require(): Failed opening required '/home/onehou54/public_html/php../dependencies/mustache/Autoloader.php' (include_path='.:/opt/alt/php56/usr/share/pear:/opt/alt/php56/usr/share/php') in /home/onehou54/public_html/php/global.php on line 53
+[20-Feb-2023 21:56:01 Europe/Ljubljana] PHP Fatal error:  Class 'Mustache_Engine' not found in /home/onehou54/public_html/php/global.php on line 55
+[20-Feb-2023 21:57:12 Europe/Ljubljana] PHP Fatal error:  Class 'Mustache_Engine' not found in /home/onehou54/public_html/php/global.php on line 55
+[20-Feb-2023 21:57:13 Europe/Ljubljana] PHP Fatal error:  Class 'Mustache_Engine' not found in /home/onehou54/public_html/php/global.php on line 55
+[20-Feb-2023 21:59:50 Europe/Ljubljana] PHP Warning:  mysqli_connect(): Headers and client library minor version mismatch. Headers:100611 Library:100505 in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 21:59:55 Europe/Ljubljana] PHP Warning:  mysqli_connect(): Headers and client library minor version mismatch. Headers:100611 Library:100505 in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 22:01:57 Europe/Ljubljana] PHP Warning:  mysqli_connect(): Headers and client library minor version mismatch. Headers:100611 Library:100505 in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 22:01:57 Europe/Ljubljana] PHP Warning:  mysqli_connect(): Headers and client library minor version mismatch. Headers:100611 Library:100505 in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 22:01:57 Europe/Ljubljana] PHP Warning:  mysqli_connect(): Headers and client library minor version mismatch. Headers:100611 Library:100505 in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 22:01:58 Europe/Ljubljana] PHP Fatal error:  Call to a member function setPartials() on null in /home/onehou54/public_html/index.php on line 36
+[20-Feb-2023 21:05:47 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_connect() in /home/onehou54/public_html/php/Database.php:15
+Stack trace:
+#0 /home/onehou54/public_html/php/Database.php(9): Database->Connect()
+#1 /home/onehou54/public_html/php/init.php(13): Database->__construct()
+#2 /home/onehou54/public_html/php/init.php(3): Init()
+#3 /home/onehou54/public_html/php/site.php(112): include_once('/home/onehou54/...')
+#4 /home/onehou54/public_html/index.php(14): include_once('/home/onehou54/...')
+#5 {main}
+  thrown in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 21:05:48 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_connect() in /home/onehou54/public_html/php/Database.php:15
+Stack trace:
+#0 /home/onehou54/public_html/php/Database.php(9): Database->Connect()
+#1 /home/onehou54/public_html/php/init.php(13): Database->__construct()
+#2 /home/onehou54/public_html/php/init.php(3): Init()
+#3 /home/onehou54/public_html/php/site.php(112): include_once('/home/onehou54/...')
+#4 /home/onehou54/public_html/index.php(14): include_once('/home/onehou54/...')
+#5 {main}
+  thrown in /home/onehou54/public_html/php/Database.php on line 15
+[20-Feb-2023 22:06:33 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Call to a member function setPartials() on null in /home/onehou54/public_html/index.php:36
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 36
+[20-Feb-2023 22:07:09 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Call to a member function setPartials() on null in /home/onehou54/public_html/index.php:36
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 36
+[20-Feb-2023 22:09:01 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Call to a member function setPartials() on null in /home/onehou54/public_html/index.php:36
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 36
+[20-Feb-2023 22:09:20 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Call to a member function setPartials() on null in /home/onehou54/public_html/index.php:36
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 36
+[20-Feb-2023 22:10:59 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:36
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 36
+[20-Feb-2023 22:12:41 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:13:07 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:13:55 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:14:44 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:15:21 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:16:02 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:17:04 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:18:09 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:18:31 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Loader_ArrayLoader' not found in /home/onehou54/public_html/dependencies/mustache/Engine.php:343
+Stack trace:
+#0 /home/onehou54/public_html/index.php(37): Mustache_Engine->setPartials(Array)
+#1 {main}
+  thrown in /home/onehou54/public_html/dependencies/mustache/Engine.php on line 343
+[20-Feb-2023 22:20:44 Europe/Ljubljana] PHP Fatal error:  Cannot declare class Mustache_Autoloader, because the name is already in use in /home/onehou54/public_html/dependencies/mustache/Autoloader.php on line 15
+[20-Feb-2023 22:21:35 Europe/Ljubljana] PHP Fatal error:  Cannot declare class Mustache_Autoloader, because the name is already in use in /home/onehou54/public_html/dependencies/mustache/Autoloader.php on line 15
+[20-Feb-2023 22:23:07 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:39
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 39
+[20-Feb-2023 22:23:59 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:39
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 39
+[20-Feb-2023 22:24:28 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:29 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:29 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:29 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:30 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:30 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:30 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:38 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:50 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:24:51 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'Mustache_Engine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:27:29 Europe/Ljubljana] PHP Fatal error:  Uncaught Error: Class 'MustacheEngine' not found in /home/onehou54/public_html/index.php:38
+Stack trace:
+#0 {main}
+  thrown in /home/onehou54/public_html/index.php on line 38
+[20-Feb-2023 22:32:07 Europe/Ljubljana] PHP Fatal error:  Interface 'Mustache_Loader_MutableLoader' not found in /home/onehou54/public_html/dependencies/mustache/Loader/ArrayLoader.php on line 27
+[20-Feb-2023 22:32:40 Europe/Ljubljana] PHP Fatal error:  Interface 'Mustache_Loader_MutableLoader' not found in /home/onehou54/public_html/dependencies/mustache/Loader/ArrayLoader.php on line 27

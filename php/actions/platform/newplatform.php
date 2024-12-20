@@ -1,6 +1,6 @@
 <?php
 
-function NewPlatform(MessageService &$messageService, $platformName){
+function NewPlatform(MessageService &$messageService, $platformName): string{
 	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface, $userData;
 
 	$platformName = trim($platformName);
@@ -66,7 +66,7 @@ function NewPlatform(MessageService &$messageService, $platformName){
 	return "SUCCESS_PLATFORM_ADDED";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if($loggedInUser !== false){

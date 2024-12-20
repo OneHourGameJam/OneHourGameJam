@@ -1,6 +1,6 @@
 <?php
 
-function AddAsset(MessageService &$messageService, $assetId, $author, $title, $description, $type){
+function AddAsset(MessageService &$messageService, $assetId, $author, $title, $description, $type): string{
 	global $loggedInUser, $_FILES, $ip, $userAgent, $assetData, $userData, $configData, $assetDbInterface;
 
 	$assetId = trim($assetId);
@@ -123,7 +123,7 @@ function AddAsset(MessageService &$messageService, $assetId, $author, $title, $d
 	}
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){

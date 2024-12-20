@@ -2,21 +2,26 @@
 
 class ThemeController{
 
-	public static function CalculateActiveThemeSelectionProbabilityByVoteDifference(ThemeData &$themeData, ConfigData &$configData){
+	public static function CalculateActiveThemeSelectionProbabilityByVoteDifference(ThemeData &$themeData, ConfigData &$configData): array
+	{
 		return ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData->ActiveThemeModels, $configData);
 	}
-	public static function CalculateAllThemeSelectionProbabilityByVoteDifference(ThemeData &$themeData, ConfigData &$configData){
+	public static function CalculateAllThemeSelectionProbabilityByVoteDifference(ThemeData &$themeData, ConfigData &$configData): array
+	{
 		return ThemeController::CalculateThemeSelectionProbabilityByVoteDifference($themeData->AllThemeModels, $configData);
 	}
-	public static function CalculateActiveThemeSelectionProbabilityByPopularity(ThemeData &$themeData, ConfigData &$configData){
+	public static function CalculateActiveThemeSelectionProbabilityByPopularity(ThemeData &$themeData, ConfigData &$configData): array
+	{
 		return ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData->ActiveThemeModels, $configData);
 	}
-	public static function CalculateAllThemeSelectionProbabilityByPopularity(ThemeData &$themeData, ConfigData &$configData){
+	public static function CalculateAllThemeSelectionProbabilityByPopularity(ThemeData &$themeData, ConfigData &$configData): array
+	{
 		return ThemeController::CalculateThemeSelectionProbabilityByPopularity($themeData->AllThemeModels, $configData);
 	}
 
 
-	private static function CalculateThemeSelectionProbabilityByVoteDifference(&$themeModelList, ConfigData &$configData){
+	private static function CalculateThemeSelectionProbabilityByVoteDifference(&$themeModelList, ConfigData &$configData): array
+	{
 		AddActionLog("CalculateThemeSelectionProbabilityByVoteDifference");
 		StartTimer("CalculateThemeSelectionProbabilityByVoteDifference");
 
@@ -76,7 +81,8 @@ class ThemeController{
 		return $result;
 	}
 
-	private static function CalculateThemeSelectionProbabilityByPopularity(&$themeModelList, ConfigData &$configData){
+	private static function CalculateThemeSelectionProbabilityByPopularity(&$themeModelList, ConfigData &$configData): array
+	{
 		AddActionLog("CalculateThemeSelectionProbabilityByPopularity");
 		StartTimer("CalculateThemeSelectionProbabilityByPopularity");
 
@@ -137,7 +143,8 @@ class ThemeController{
 		return $result;
 	}
 
-	public static function PruneThemes(MessageService &$messageService, &$themeData, &$jamData, &$configData){
+	public static function PruneThemes(MessageService &$messageService, &$themeData, &$jamData, &$configData): void
+	{
 		AddActionLog("PruneThemes");
 		StartTimer("PruneThemes");
 

@@ -1,7 +1,8 @@
 <?php
 
 class CookiePresenter{
-	public static function RenderCookies(&$cookieData){
+	public static function RenderCookies(&$cookieData): CookieViewModel
+    {
 		global $_GET;
 		AddActionLog("RenderCookies");
 		StartTimer("RenderCookies");

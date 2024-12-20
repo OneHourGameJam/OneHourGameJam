@@ -24,7 +24,8 @@ $configPrettyPrintFunctions = Array(
 
 class ConfigurationPresenter{
 	
-	public static function RenderConfig(ConfigData &$configData, &$loggedInUser){
+	public static function RenderConfig(ConfigData &$configData, &$loggedInUser): ConfigurationViewModel
+    {
 		global $configCategorySettings, $configPrettyPrintFunctions;
 		AddActionLog("RenderConfig");
 		StartTimer("RenderConfig");

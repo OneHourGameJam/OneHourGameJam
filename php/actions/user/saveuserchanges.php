@@ -1,7 +1,7 @@
 <?php
 
 //Changes data about the logged in user
-function ChangeUserData($displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferences){
+function ChangeUserData($displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferences): string{
 	global $loggedInUser, $configData, $userDbInterface;
 
 	//Authorize user
@@ -24,7 +24,7 @@ function ChangeUserData($displayName, $twitterHandle, $twitchUsername, $emailAdd
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST, $userPreferenceSettings;
 	
 	if($loggedInUser !== false){

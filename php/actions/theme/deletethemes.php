@@ -1,7 +1,7 @@
 <?php
 
 //Removes an array of suggested themes
-function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
+function RemoveThemes(MessageService &$messageService, $deletedThemeIds): string{
 	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface, $userData;
 	
 	//Authorize user (logged in)
@@ -62,7 +62,7 @@ function RemoveThemes(MessageService &$messageService, $deletedThemeIds){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

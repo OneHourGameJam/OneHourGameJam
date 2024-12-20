@@ -1,8 +1,8 @@
 <?php
 
-define("PREFERENCE_DISABLE_THEMES_NOTIFICATION", "DISABLE_THEMES_NOTIFICATION");
+const PREFERENCE_DISABLE_THEMES_NOTIFICATION = "DISABLE_THEMES_NOTIFICATION";
 
-define("PERMISSION_HOST_STREAM", "HOST_STREAM");
+const PERMISSION_HOST_STREAM = "HOST_STREAM";
 
 $userPreferenceSettings = Array(
 	Array("PREFERENCE_KEY" => PREFERENCE_DISABLE_THEMES_NOTIFICATION, "BIT_FLAG_EXPONENT" => 0)
@@ -14,30 +14,30 @@ $userPermissionsSettings = Array(
 
 class UserModel
 {
-    public $Id;
-    public $Username;
-    public $DisplayName;
-    public $Twitter;
-    public $TwitterTextOnly;
-    public $Twitch;
-    public $Email;
-    public $Salt;
-    public $PasswordHash;
-    public $AuthVersion;
-    public $PasswordIterations;
-    public $Admin;
-    public $UserPreferences;
-    public $Preferences;
-    public $UserPermissionsAllowlist;
-    public $UserPermissionsDenylist;
-    public $PermissionsInAllowlist;
-    public $PermissionsInDenylist;
-    public $PermissionsInConfig;
-    public $Permissions;
-    public $DaysSinceLastLogin;
-    public $DaysSinceLastAdminAction;
-    public $IsSponsored;
-    public $SponsoredByUserId;
+    public string $Id;
+    public string $Username;
+    public string $DisplayName;
+    public string $Twitter;
+    public string $TwitterTextOnly;
+    public string $Twitch;
+    public string $Email;
+    public string $Salt;
+    public string $PasswordHash;
+    public int $AuthVersion;
+    public int $PasswordIterations;
+    public int $Admin;
+    public int $UserPreferences;
+    public array $Preferences;
+    public int $UserPermissionsAllowlist;
+    public int $UserPermissionsDenylist;
+    public array $PermissionsInAllowlist;
+    public array $PermissionsInDenylist;
+    public array $PermissionsInConfig;
+    public array $Permissions;
+    public int $DaysSinceLastLogin;
+    public int $DaysSinceLastAdminAction;
+    public bool $IsSponsored;
+    public string $SponsoredBy;
 }
 
 interface IUserDisplay{
@@ -47,11 +47,11 @@ interface IUserDisplay{
 }
 
 class UserData implements IUserDisplay{
-    public $UserModels;
-    public $UsernameToId;
+    public array $UserModels;
+    public array $UsernameToId;
 
-    private $userDbInterface;
-    private $sessionDbInterface;
+    private UserDbInterface $userDbInterface;
+    private SessionDbInterface $sessionDbInterface;
 
     function __construct(&$userDbInterface, &$sessionDbInterface, ConfigData &$configData) {
         $this->userDbInterface = $userDbInterface;
@@ -60,21 +60,23 @@ class UserData implements IUserDisplay{
         $this->UsernameToId = $this->GenerateUsernameToId();
     }
 
-    public function HasUser($userId){
+    public function HasUser($userId): bool
+    {
         return isset($this->UserModels[$userId]);
     }
 
-    public function GetUserDisplayName($userId){
+    public function GetUserDisplayName($userId): string{
         return $this->UserModels[$userId]->DisplayName;
     }
 
-    public function GetUserIdentifiableName($userId){
+    public function GetUserIdentifiableName($userId): string{
         return $this->UserModels[$userId]->Username;
     }
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadUsers(ConfigData &$configData){
+    function LoadUsers(ConfigData &$configData): array
+    {
         global $userPreferenceSettings, $userPermissionsSettings;
         AddActionLog("LoadUsers");
         StartTimer("LoadUsers");
@@ -179,7 +181,8 @@ class UserData implements IUserDisplay{
         return $userModels;
     }
 
-    function GenerateUsernameToId(){
+    function GenerateUsernameToId(): array
+    {
         $usernamesToIds = Array();
 
         foreach($this->UserModels as $i => $userModel){
@@ -193,7 +196,7 @@ class UserData implements IUserDisplay{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function LoadBio($userId) {
+    function LoadBio($userId): string {
         AddActionLog("LoadBio");
         StartTimer("LoadBio");
     
@@ -206,7 +209,8 @@ class UserData implements IUserDisplay{
         return $bio;
     }
 
-    function GetUsersOfUserFormatted($userId){
+    function GetUsersOfUserFormatted($userId): string
+    {
         AddActionLog("GetUsersOfUserFormatted");
         StartTimer("GetUsersOfUserFormatted");
     
@@ -216,7 +220,8 @@ class UserData implements IUserDisplay{
         return ArrayToHTML(MySQLDataToArray($data));
     }
     
-    function GetSessionsOfUserFormatted($userId){
+    function GetSessionsOfUserFormatted($userId): string
+    {
         AddActionLog("GetSessionsOfUserFormatted");
         StartTimer("GetSessionsOfUserFormatted");
     
@@ -226,7 +231,7 @@ class UserData implements IUserDisplay{
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
-    function LogAdminAction($userId){
+    function LogAdminAction($userId): string{
         AddActionLog("LogAdminAction");
         StartTimer("LogAdminAction");
         
@@ -238,7 +243,8 @@ class UserData implements IUserDisplay{
 //////////////////////// END DATABASE ACTIONS
 
 //////////////////////// PUBLIC DATA EXPORT
-    function GenerateRandomString($length) {
+    function GenerateRandomString($length): string
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -248,12 +254,13 @@ class UserData implements IUserDisplay{
         return $randomString;
     }
 
-    function GetAllPublicUserData(){
+    function GetAllPublicUserData(): array
+    {
         global $configData;
         AddActionLog("UserData_GetAllPublicUserData");
         StartTimer("UserData_GetAllPublicUserData");
         
-        $dataFromDatabase = MySQLDataToArray($userDbInterface->SelectPublicData());
+        $dataFromDatabase = MySQLDataToArray($this->userDbInterface->SelectPublicData());
 
         foreach($dataFromDatabase as $i => $row){
             $password = $this->GenerateRandomString(30);
@@ -287,12 +294,13 @@ class UserData implements IUserDisplay{
         return $dataFromDatabase;
     }
 
-    function GetAllPublicSessionData($sessionHashIterations, $pepper){
+    function GetAllPublicSessionData($sessionHashIterations, $pepper): array
+    {
         global $configData;
         AddActionLog("UserData_GetAllPublicSessionData");
         StartTimer("UserData_GetAllPublicSessionData");
         
-        $dataFromDatabase = MySQLDataToArray($this->SelectPublicSessionData());
+        $dataFromDatabase = MySQLDataToArray($this->sessionDbInterface->SelectPublicData());
 
         foreach($dataFromDatabase as $i => $row){
             $sessionId = GenerateSalt();

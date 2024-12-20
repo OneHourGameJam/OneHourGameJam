@@ -1,7 +1,7 @@
 <?php
 
 class StreamController{
-	public static function InitStream(ConfigData &$configData, JamData &$jamData){
+	public static function InitStream(ConfigData &$configData, JamData &$jamData): array{
 		AddActionLog("InitStream");
 		StartTimer("InitStream");
 
@@ -63,7 +63,7 @@ class StreamController{
 		return $streamData;
 	}
 
-	private static function GetTwitchAccessToken($clientId, $clientSecret) {
+	private static function GetTwitchAccessToken($clientId, $clientSecret): string {
 		$url = "https://id.twitch.tv/oauth2/token"
 			. "?client_id=" . $clientId
 			. "&client_secret=" . $clientSecret
@@ -75,7 +75,7 @@ class StreamController{
 		return $responseObject->access_token;
 	}
 
-	private static function CallTwitchApi($path, $clientId, $accessToken) {
+	private static function CallTwitchApi($path, $clientId, $accessToken): string{
 		$url = "https://api.twitch.tv" . $path;
 		$headers = array(
 			"Client-ID: " . $clientId,
@@ -85,7 +85,7 @@ class StreamController{
 		return self::HttpRequest($url, $headers);
 	}
 
-	private static function HttpRequest($url, $headers, $curlOptions = array()) {
+	private static function HttpRequest($url, $headers, $curlOptions = array()): string {
 		$curlOptions = array(
 				CURLOPT_HTTPHEADER => $headers,
 				CURLOPT_RETURNTRANSFER => true,

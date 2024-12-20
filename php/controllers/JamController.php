@@ -1,7 +1,8 @@
 <?php
 
 class JamController{
-	public static function ProcessJamStates(MessageService &$messageService, &$jamData, &$themeData, &$configData){
+	public static function ProcessJamStates(MessageService &$messageService, &$jamData, &$themeData, &$configData): void
+	{
 		AddActionLog("ProcessJamStates");
 		StartTimer("ProcessJamStates");
 	
@@ -43,7 +44,8 @@ class JamController{
 	}
 	
 	//Checks if a jam is scheduled. If not and a jam is coming up, one is scheduled automatically.
-	public static function CheckNextJamSchedule(MessageService &$messageService, &$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime){
+	public static function CheckNextJamSchedule(MessageService &$messageService, &$configData, &$jamData, &$ThemeData, $nextScheduledJamTime, $nextSuggestedJamTime): void
+	{
 		AddActionLog("CheckNextJamSchedule");
 		StartTimer("CheckNextJamSchedule"); 
 
@@ -129,7 +131,7 @@ class JamController{
 
 	//Selects a random theme (or "" if none can be selected) by calculating the difference between positive and negative votes and
 	//selecting a proportional random theme by this difference
-	public static function SelectRandomThemeByVoteDifference(&$ThemeData, &$configData){
+	public static function SelectRandomThemeByVoteDifference(&$ThemeData, &$configData): string{
 		AddActionLog("SelectRandomThemeByVoteDifference");
 		StartTimer("SelectRandomThemeByVoteDifference");
 
@@ -191,7 +193,7 @@ class JamController{
 	}
 
 	//Selects a random theme (or "" if none can be selected) proportionally based on its popularity.
-	public static function SelectRandomThemeByPopularity(&$ThemeData, &$configData){
+	public static function SelectRandomThemeByPopularity(&$ThemeData, &$configData): string{
 		AddActionLog("SelectRandomThemeByPopularity");
 		StartTimer("SelectRandomThemeByPopularity");
 
@@ -253,7 +255,7 @@ class JamController{
 	}
 
 	//Selects a random theme with equal probability for all themes, not caring for number of votes
-	public static function SelectRandomTheme(&$ThemeData){
+	public static function SelectRandomTheme(&$ThemeData): string{
 		AddActionLog("SelectRandomTheme");
 		StartTimer("SelectRandomTheme");
 

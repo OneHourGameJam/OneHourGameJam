@@ -1,27 +1,28 @@
 <?php
-define("DB_TABLE_ASSET", "asset");
+const DB_TABLE_ASSET = "asset";
 
-define("DB_COLUMN_ASSET_ID",                "asset_id");
-define("DB_COLUMN_ASSET_DATETIME",          "asset_datetime");
-define("DB_COLUMN_ASSET_IP",                "asset_ip");
-define("DB_COLUMN_ASSET_USER_AGENT",        "asset_user_agent");
-define("DB_COLUMN_ASSET_AUTHOR_USER_ID",    "asset_author_user_id");
-define("DB_COLUMN_ASSET_TITLE",             "asset_title");
-define("DB_COLUMN_ASSET_DESCRIPTION",       "asset_description");
-define("DB_COLUMN_ASSET_TYPE",              "asset_type");
-define("DB_COLUMN_ASSET_CONTENT",           "asset_content");
-define("DB_COLUMN_ASSET_DELETED",           "asset_deleted");
+const DB_COLUMN_ASSET_ID = "asset_id";
+const DB_COLUMN_ASSET_DATETIME = "asset_datetime";
+const DB_COLUMN_ASSET_IP = "asset_ip";
+const DB_COLUMN_ASSET_USER_AGENT = "asset_user_agent";
+const DB_COLUMN_ASSET_AUTHOR_USER_ID = "asset_author_user_id";
+const DB_COLUMN_ASSET_TITLE = "asset_title";
+const DB_COLUMN_ASSET_DESCRIPTION = "asset_description";
+const DB_COLUMN_ASSET_TYPE = "asset_type";
+const DB_COLUMN_ASSET_CONTENT = "asset_content";
+const DB_COLUMN_ASSET_DELETED = "asset_deleted";
 
 class AssetDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_ASSET_ID, DB_COLUMN_ASSET_AUTHOR_USER_ID, DB_COLUMN_ASSET_TITLE, DB_COLUMN_ASSET_DESCRIPTION, DB_COLUMN_ASSET_TYPE, DB_COLUMN_ASSET_CONTENT, DB_COLUMN_ASSET_DELETED);
-    private $privateColumns = Array(DB_COLUMN_ASSET_DATETIME, DB_COLUMN_ASSET_IP, DB_COLUMN_ASSET_USER_AGENT);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_ASSET_ID, DB_COLUMN_ASSET_AUTHOR_USER_ID, DB_COLUMN_ASSET_TITLE, DB_COLUMN_ASSET_DESCRIPTION, DB_COLUMN_ASSET_TYPE, DB_COLUMN_ASSET_CONTENT, DB_COLUMN_ASSET_DELETED);
+    private array $privateColumns = Array(DB_COLUMN_ASSET_DATETIME, DB_COLUMN_ASSET_IP, DB_COLUMN_ASSET_USER_AGENT);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectCurrentlyActiveAssets(){
+    public function SelectCurrentlyActiveAssets(): mysqli_result
+    {
         AddActionLog("AssetDbInterface_SelectCurrentlyActiveAssets");
         StartTimer("AssetDbInterface_SelectCurrentlyActiveAssets");
 
@@ -35,7 +36,8 @@ class AssetDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectWhereAuthorUserId($authorUserId){
+    public function SelectWhereAuthorUserId($authorUserId): mysqli_result
+    {
         AddActionLog("AssetDbInterface_SelectWhereAuthorUserId");
         StartTimer("AssetDbInterface_SelectWhereAuthorUserId");
 
@@ -49,7 +51,8 @@ class AssetDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSingleAsset($assetId){
+    public function SelectSingleAsset($assetId): mysqli_result
+    {
         AddActionLog("AssetDbInterface_SelectSingleAsset");
         StartTimer("AssetDbInterface_SelectSingleAsset");
 
@@ -64,7 +67,8 @@ class AssetDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL){
+    public function Insert($ip, $userAgent, $authorUserId, $title, $description, $type, $assetURL): void
+    {
         AddActionLog("AssetDbInterface_Insert");
         StartTimer("AssetDbInterface_Insert");
 
@@ -105,7 +109,8 @@ class AssetDbInterface{
         StopTimer("AssetDbInterface_Insert");
     }
 
-    public function Update($assetId, $authorUserId, $title, $description, $type, $content){
+    public function Update($assetId, $authorUserId, $title, $description, $type, $content): void
+    {
         AddActionLog("AssetDbInterface_Update");
         StartTimer("AssetDbInterface_Update");
 
@@ -131,7 +136,8 @@ class AssetDbInterface{
         StopTimer("AssetDbInterface_Update");
     }
 
-    public function SoftDelete($assetId){
+    public function SoftDelete($assetId): void
+    {
         AddActionLog("AssetDbInterface_SoftDelete");
         StartTimer("AssetDbInterface_SoftDelete");
 
@@ -148,7 +154,8 @@ class AssetDbInterface{
         StopTimer("AssetDbInterface_SoftDelete");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("AssetDbInterface_SelectPublicData");
         StartTimer("AssetDbInterface_SelectPublicData");
 

@@ -1,7 +1,8 @@
 <?php
 
 class UserPresenter{
-	public static function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
+	public static function RenderUser(&$configData, &$cookieData, &$userModel, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth): UserViewModel
+    {
 		AddActionLog("RenderUser");
 		StartTimer("RenderUser");
 	
@@ -307,7 +308,8 @@ class UserPresenter{
 		return $userViewModel;
 	}
 	
-	public static function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
+	public static function RenderUsers(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth): UsersViewModel
+    {
 		AddActionLog("RenderUsers");
 		StartTimer("RenderUsers");
 		
@@ -351,7 +353,8 @@ class UserPresenter{
 		return $usersViewModel;
 	}
 	
-	public static function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth){
+	public static function RenderLoggedInUser(&$configData, &$cookieData, &$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, &$adminVoteData, &$loggedInUser, $renderDepth): UserViewModel
+    {
 		AddActionLog("RenderLoggedInUser");
 		
 		return UserPresenter::RenderUser($configData, $cookieData, $loggedInUser, $userData, $gameData, $jamData, $platformData, $platformGameData, $adminVoteData, $loggedInUser, $renderDepth);

@@ -9,7 +9,7 @@ class Database{
         $this->dbConnection = $this->Connect();
     }
 
-    private function Connect(){
+    private function Connect(): mysqli{
         include("config/dbconfig.php");
         
         $dbConnection = mysqli_connect($dbAddress, $dbUsername, $dbPassword, $dbDatabaseName);
@@ -28,7 +28,8 @@ class Database{
         return $dbConnection;
     }
 
-    private function GetTables(){
+    private function GetTables(): array
+    {
         AddActionLog("GetTables");
         StartTimer("GetTables");
     
@@ -42,7 +43,8 @@ class Database{
         return $tables;
     }
     
-    private function GetColumnsForTable($tabName){
+    private function GetColumnsForTable($tabName): array
+    {
         AddActionLog("GetColumnsForTable");
         StartTimer("GetColumnsForTable");
     
@@ -58,7 +60,8 @@ class Database{
         return $columns;
     }
     
-    private function GetDataForTable($tabName){
+    private function GetDataForTable($tabName): array
+    {
         AddActionLog("GetDataForTable");
         StartTimer("GetDataForTable");
     
@@ -81,7 +84,7 @@ class Database{
         return $tabData;
     }
 
-    private function GetJSONDataForTable($tabName){
+    private function GetJSONDataForTable($tabName): string{
         AddActionLog("GetJSONDataForTable");
         StartTimer("GetJSONDataForTable");
     
@@ -91,7 +94,7 @@ class Database{
         return json_encode(GetDataForTable($tabName));
     }
     
-    private function GetJSONDataForAllTables(){
+    private function GetJSONDataForAllTables(): string{
         AddActionLog("GetJSONDataForAllTables");
         StartTimer("GetJSONDataForAllTables");
         
@@ -106,7 +109,8 @@ class Database{
         return json_encode($allData);
     }
 
-    public function MigrateDatabase() {
+    public function MigrateDatabase(): void
+    {
         global $ip, $userAgent;
         AddActionLog("MigrateDatabase");
         StartTimer("MigrateDatabase");
@@ -221,7 +225,8 @@ class Database{
         StopTimer("MigrateDatabase");
     }
 
-    private function SaveAdminLog($newDatabaseVersion, $ip, $userAgent, $log) {
+    private function SaveAdminLog($newDatabaseVersion, $ip, $userAgent, $log): void
+    {
         $escapedIP = $this->EscapeString($ip);
         $escapedUserAgent = $this->EscapeString($userAgent);
         $escapedLog = $this->EscapeString($log);
@@ -260,12 +265,13 @@ class Database{
         $this->Execute($sql) or die("Migration failed to log to admin log, please notify site admin");
     }
 
-    public function Execute($sql){
+    public function Execute($sql): mysqli_result{
         $data = mysqli_query($this->dbConnection, $sql) or die("<br>SQL Execution Error: $sql;<br><pre>debug_print_backtrace();</pre>");
         return $data;
     }
 
-    public function EscapeString($string){
+    public function EscapeString($string): string
+    {
         return mysqli_real_escape_string($this->dbConnection, $string);
     }
 

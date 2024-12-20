@@ -2,7 +2,8 @@
 
 class CookieController{
 
-	public static function UpdateCookies(){
+	public static function UpdateCookies(): void
+	{
 		global $_COOKIE, $_GET, $_POST;
 		AddActionLog("UpdateCookies");
 		StartTimer("UpdateCookies");

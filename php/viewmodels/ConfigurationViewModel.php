@@ -1,44 +1,44 @@
 <?php
 
 class ConfigurationViewModel{
-    public $LIST = Array();
-    public $VALUES = Array();
-    public $PRETTY_PRINT = Array();
+    public array $LIST = Array();
+    public array $VALUES = Array();
+    public array $PRETTY_PRINT = Array();
 
-    public $has_custom_brand_logo;
-    public $has_custom_main_logo;
+    public int $has_custom_brand_logo;
+    public int $has_custom_main_logo;
 }
 
 class SettingGroupViewModel{
-    public $ENTRIES = Array();
-    public $CATEGORY_ID;
-    public $CATEGORY_HEADER;
+    public array $ENTRIES = Array();
+    public string $CATEGORY_ID;
+    public string $CATEGORY_HEADER;
 }
 
 
 class SettingViewModel{
-    public $ENUM_OPTIONS = Array();
-    public $KEY;
-    public $VALUE;
-    public $VALUE_HTML_ENCODED;
-    public $CATEGORY;
-    public $DESCRIPTION;
-    public $DISABLED;
-    public $EDITABLE;
-    public $REQUIRED;
-    public $TYPE;
-    public $TYPE_TEXT;
-    public $TYPE_NUMBER;
-    public $TYPE_ENUM;
-    public $TYPE_TEXTAREA;
-    public $USER_HAS_READ_PERMISSION;
-    public $USER_HAS_WRITE_PERMISSION;
+    public array $ENUM_OPTIONS = Array();
+    public string $KEY;
+    public string $VALUE;
+    public string $VALUE_HTML_ENCODED;
+    public string $CATEGORY;
+    public string $DESCRIPTION;
+    public int $DISABLED;
+    public int $EDITABLE;
+    public int $REQUIRED;
+    public string $TYPE;
+    public int $TYPE_TEXT;
+    public int $TYPE_NUMBER;
+    public int $TYPE_ENUM;
+    public int $TYPE_TEXTAREA;
+    public int $USER_HAS_READ_PERMISSION;
+    public int $USER_HAS_WRITE_PERMISSION;
 }
 
 class SettingEnumOptionViewModel{
-    public $TEXT;
-    public $VALUE;
-    public $ENUM_SELECTED;
+    public string $TEXT;
+    public string $VALUE;
+    public int $ENUM_SELECTED;
 }
 
 ?>

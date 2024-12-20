@@ -1,7 +1,7 @@
 <?php
 
 //Edits an existing user's password, user is identified by the username.
-function EditUserPassword(MessageService &$messageService, $userId, $newPassword1, $newPassword2){
+function EditUserPassword(MessageService &$messageService, $userId, $newPassword1, $newPassword2): string{
 	global $userData, $configData, $loggedInUser, $userDbInterface;
 
 	//Authorize user (is admin)
@@ -39,7 +39,7 @@ function EditUserPassword(MessageService &$messageService, $userId, $newPassword
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){

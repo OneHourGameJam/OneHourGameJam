@@ -1,7 +1,7 @@
 <?php
 include_once "authactions.php";
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	$username = (isset($_POST[FORM_LOGIN_USERNAME])) ? $_POST[FORM_LOGIN_USERNAME] : "";

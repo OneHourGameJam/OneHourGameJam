@@ -1,7 +1,7 @@
 <?php
 
 //Returns true / false based on whether or not the specified entry can be deleted
-function CanDeleteEntry($entryId){
+function CanDeleteEntry($entryId): string{
 	global $loggedInUser, $gameData;
 
 	//Authorize user (is admin)
@@ -23,7 +23,7 @@ function CanDeleteEntry($entryId){
 }
 
 //Deletes an existing entry, identified by the entryID.
-function DeleteEntry(MessageService &$messageService, $entryId){
+function DeleteEntry(MessageService &$messageService, $entryId): string{
 	global $jamData, $loggedInUser, $gameData, $userData, $gameDbInterface;
 
 	//Authorize user (is admin)
@@ -54,7 +54,7 @@ function DeleteEntry(MessageService &$messageService, $entryId){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

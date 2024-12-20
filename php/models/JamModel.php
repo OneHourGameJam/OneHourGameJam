@@ -1,39 +1,40 @@
 <?php
 
-define("JAM_STATE_COMPLETED", "COMPLETED");
-define("JAM_STATE_ACTIVE", "ACTIVE");
-define("JAM_STATE_SCHEDULED", "SCHEDULED");
-define("JAM_STATE_DELETED", "DELETED");
+const JAM_STATE_COMPLETED = "COMPLETED";
+const JAM_STATE_ACTIVE = "ACTIVE";
+const JAM_STATE_SCHEDULED = "SCHEDULED";
+const JAM_STATE_DELETED = "DELETED";
 
 class JamModel{
-	public $Id;
-	public $SchedulerUserId;
-	public $JamNumber;
-	public $ThemeId;
-	public $Theme;
-    public $StartTime;
-    public $StreamerUserId;
-    public $StreamerTwitchUsername;
-	public $State;
-    public $Colors;
-    public $DefaultIconUrl;
-    public $EventName;
-	public $Deleted;
+	public string $Id;
+	public string $SchedulerUserId;
+	public string $JamNumber;
+	public string $ThemeId;
+	public string $Theme;
+    public string $StartTime;
+    public string $StreamerUserId;
+    public string $StreamerTwitchUsername;
+	public string $State;
+    public array $Colors;
+    public string $DefaultIconUrl;
+    public string $EventName;
+	public bool $Deleted;
 }
 
 class JamData{
-    public $JamModels;
+    public array $JamModels;
 
-    private $jamDbInterface;
+    private JamDbInterface $jamDbInterface;
 
-    function __construct(&$jamDbInterface) {
+    function __construct(JamDbInterface &$jamDbInterface) {
         $this->jamDbInterface = $jamDbInterface;
         $this->JamModels = $this->LoadJams();
     }
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadJams(){
+    function LoadJams(): array
+    {
         AddActionLog("LoadJams");
         StartTimer("LoadJams");
 
@@ -71,7 +72,8 @@ class JamData{
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
     //Adds the jam with the provided data into the database
-    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl, $eventName){
+    function AddJamToDatabase($ip, $userAgent, $userId, $jamNumber, $selectedThemeId, $theme, $startTime, $colors, $defaultEntryIconUrl, $eventName): void
+    {
         AddActionLog("AddJamToDatabase");
         StartTimer("AddJamToDatabase");
     
@@ -80,16 +82,17 @@ class JamData{
         StopTimer("AddJamToDatabase");
     }
 
-    function UpdateJamStateInDatabase($jamId, $newJamState){
+    function UpdateJamStateInDatabase($jamId, $newJamState): void
+    {
         AddActionLog("ChangeJamStateInDatabase");
         StartTimer("ChangeJamStateInDatabase");
 
-        $data = $this->jamDbInterface->UpdateJamState($jamId, $newJamState);
+        $this->jamDbInterface->UpdateJamState($jamId, $newJamState);
 
         StopTimer("ChangeJamStateInDatabase");
     }
 
-    function GetNextJamDateAndTime(){
+    function GetNextJamDateAndTime(): int{
         AddActionLog("GetNextJamDateAndTime");
         StartTimer("GetNextJamDateAndTime");
 
@@ -110,7 +113,7 @@ class JamData{
 
     // Returns a jam given its number.
     // The dictionary of jams must have been previously loaded.
-    function GetJamByNumber($jamNumber) {
+    function GetJamByNumber($jamNumber): JamModel {
         AddActionLog("GetJamByNumber");
         StartTimer("GetJamByNumber");
     
@@ -125,7 +128,8 @@ class JamData{
         return null;
     }
     
-    function GetJamsOfUserFormatted($userId){
+    function GetJamsOfUserFormatted($userId): string
+    {
         AddActionLog("GetJamsOfUserFormatted");
         StartTimer("GetJamsOfUserFormatted");
     
@@ -135,7 +139,8 @@ class JamData{
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
-    function ParseJamColors($colorString){
+    function ParseJamColors($colorString): array
+    {
         AddActionLog("ParseJamColors");
         StartTimer("ParseJamColors");
     
@@ -153,7 +158,8 @@ class JamData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("JamData_GetAllPublicData");
         StartTimer("JamData_GetAllPublicData");
         

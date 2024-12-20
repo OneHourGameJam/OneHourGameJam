@@ -1,31 +1,31 @@
 <?php
 
 class PollModel{
-	public $Id;
-	public $Question;
-	public $PollType;
-	public $DateStart;
-	public $DateEnd;
-	public $IsActive;
-    public $Options;
-    public $UsersVotedInPoll;
+	public string $Id;
+	public string $Question;
+	public string $PollType;
+	public string $DateStart;
+	public string $DateEnd;
+	public bool $IsActive;
+    public array $Options;
+    public array $UsersVotedInPoll;
 }
 
 class PollOptionModel{
-	public $Id;
-	public $Text;
-	public $Votes;
+	public string $Id;
+	public string $Text;
+	public int $Votes;
 }
 
 class PollData{
-    public $PollModels;
-    public $LoggedInUserPollVotes;
+    public array $PollModels;
+    public array $LoggedInUserPollVotes;
 
-    private $pollDbInterface;
-    private $pollOptionDbInterface;
-    private $pollVoteDbInterface;
+    private PollDbInterface $pollDbInterface;
+    private PollOptionDbInterface $pollOptionDbInterface;
+    private PollVoteDbInterface $pollVoteDbInterface;
 
-    function __construct(&$pollDbInterface, &$pollOptionDbInterface, &$pollVoteDbInterface, &$loggedInUser) {
+    function __construct(PollDbInterface &$pollDbInterface, PollOptionDbInterface &$pollOptionDbInterface, PollVoteDbInterface &$pollVoteDbInterface, &$loggedInUser) {
         $this->pollDbInterface = $pollDbInterface;
         $this->pollOptionDbInterface = $pollOptionDbInterface;
         $this->pollVoteDbInterface = $pollVoteDbInterface;
@@ -35,7 +35,8 @@ class PollData{
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadPolls(){
+    function LoadPolls(): array
+    {
         AddActionLog("LoadPolls");
         StartTimer("LoadPolls");
 
@@ -87,7 +88,8 @@ class PollData{
         return $pollModels;
     }
 
-    function LoadLoggedInUserPollVotes(&$loggedInUser){
+    function LoadLoggedInUserPollVotes(&$loggedInUser): array
+    {
         AddActionLog("LoadLoggedInUserPollVotes");
         StartTimer("LoadLoggedInUserPollVotes");
     
@@ -110,7 +112,8 @@ class PollData{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function GetPollVotesOfUserFormatted($userId){
+    function GetPollVotesOfUserFormatted($userId): string
+    {
         AddActionLog("GetPollVotesOfUserFormatted");
         StartTimer("GetPollVotesOfUserFormatted");
     
@@ -124,7 +127,8 @@ class PollData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicPollData(){
+    function GetAllPublicPollData(): array
+    {
         AddActionLog("PollData_GetAllPublicData");
         StartTimer("PollData_GetAllPublicData");
         
@@ -138,7 +142,8 @@ class PollData{
         return $dataFromDatabase;
     }
 
-    function GetAllPublicPollOptionData(){
+    function GetAllPublicPollOptionData(): array
+    {
         AddActionLog("PollData_GetAllPublicData");
         StartTimer("PollData_GetAllPublicData");
         
@@ -152,7 +157,8 @@ class PollData{
         return $dataFromDatabase;
     }
 
-    function GetAllPublicPollVoteData(){
+    function GetAllPublicPollVoteData(): array
+    {
         AddActionLog("PollData_GetAllPublicData");
         StartTimer("PollData_GetAllPublicData");
         

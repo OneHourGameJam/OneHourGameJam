@@ -1,6 +1,6 @@
 <?php
 
-function DeleteAsset(MessageService &$messageService, $assetId){
+function DeleteAsset(MessageService &$messageService, $assetId): string{
 	global $loggedInUser, $assetData, $assetDbInterface, $userData;
 	$assetId = trim($assetId);
 	//Authorize user
@@ -40,7 +40,7 @@ function DeleteAsset(MessageService &$messageService, $assetId){
 }
 
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

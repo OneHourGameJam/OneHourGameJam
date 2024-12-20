@@ -1,40 +1,41 @@
 <?php
 
-define("DB_TABLE_USER", "user");
+const DB_TABLE_USER = "user";
 
-define("DB_COLUMN_USER_ID",                         "user_id");
-define("DB_COLUMN_USER_USERNAME",                   "user_username");
-define("DB_COLUMN_USER_DATETIME",                   "user_datetime");
-define("DB_COLUMN_USER_IP",                         "user_register_ip");
-define("DB_COLUMN_USER_USER_AGENT",                 "user_register_user_agent");
-define("DB_COLUMN_USER_DISPLAY_NAME",               "user_display_name");
-define("DB_COLUMN_USER_SALT",                       "user_password_salt");
-define("DB_COLUMN_USER_PASSWORD_HASH",              "user_password_hash");
-define("DB_COLUMN_USER_AUTH_VERSION",               "user_auth_version");
-define("DB_COLUMN_USER_PASSWORD_ITERATIONS",        "user_password_iterations");
-define("DB_COLUMN_USER_LAST_LOGIN_DATETIME",        "user_last_login_datetime");
-define("DB_COLUMN_USER_LAST_IP",                    "user_last_ip");
-define("DB_COLUMN_USER_LAST_USER_AGENT",            "user_last_user_agent");
-define("DB_COLUMN_USER_EMAIL",                      "user_email");
-define("DB_COLUMN_USER_TWITTER",                    "user_twitter");
-define("DB_COLUMN_USER_TWITCH",                     "user_twitch");
-define("DB_COLUMN_USER_BIO",                        "user_bio");
-define("DB_COLUMN_USER_ROLE",                       "user_role");
-define("DB_COLUMN_USER_PREFERENCES",                "user_preferences");
-define("DB_COLUMN_USER_PERMISSIONS_ALLOWLIST",      "user_permissions_allowlist");
-define("DB_COLUMN_USER_PERMISSIONS_DENYLIST",      "user_permissions_denylist");
-define("DB_COLUMN_USER_LAST_USER_ACTION_DATETIME",  "user_last_admin_action_datetime");
+const DB_COLUMN_USER_ID = "user_id";
+const DB_COLUMN_USER_USERNAME = "user_username";
+const DB_COLUMN_USER_DATETIME = "user_datetime";
+const DB_COLUMN_USER_IP = "user_register_ip";
+const DB_COLUMN_USER_USER_AGENT = "user_register_user_agent";
+const DB_COLUMN_USER_DISPLAY_NAME = "user_display_name";
+const DB_COLUMN_USER_SALT = "user_password_salt";
+const DB_COLUMN_USER_PASSWORD_HASH = "user_password_hash";
+const DB_COLUMN_USER_AUTH_VERSION = "user_auth_version";
+const DB_COLUMN_USER_PASSWORD_ITERATIONS = "user_password_iterations";
+const DB_COLUMN_USER_LAST_LOGIN_DATETIME = "user_last_login_datetime";
+const DB_COLUMN_USER_LAST_IP = "user_last_ip";
+const DB_COLUMN_USER_LAST_USER_AGENT = "user_last_user_agent";
+const DB_COLUMN_USER_EMAIL = "user_email";
+const DB_COLUMN_USER_TWITTER = "user_twitter";
+const DB_COLUMN_USER_TWITCH = "user_twitch";
+const DB_COLUMN_USER_BIO = "user_bio";
+const DB_COLUMN_USER_ROLE = "user_role";
+const DB_COLUMN_USER_PREFERENCES = "user_preferences";
+const DB_COLUMN_USER_PERMISSIONS_ALLOWLIST = "user_permissions_allowlist";
+const DB_COLUMN_USER_PERMISSIONS_DENYLIST = "user_permissions_denylist";
+const DB_COLUMN_USER_LAST_USER_ACTION_DATETIME = "user_last_admin_action_datetime";
 
 class UserDbInterface{
-    private $database;
-    private $publicColumnsUser = Array(DB_COLUMN_USER_ID, DB_COLUMN_USER_USERNAME, DB_COLUMN_USER_DISPLAY_NAME, DB_COLUMN_USER_TWITTER, DB_COLUMN_USER_BIO);
-    private $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_AUTH_VERSION, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_PERMISSIONS_ALLOWLIST, DB_COLUMN_USER_PERMISSIONS_DENYLIST, DB_COLUMN_USER_TWITCH);
+    private Database $database;
+    private array $publicColumnsUser = Array(DB_COLUMN_USER_ID, DB_COLUMN_USER_USERNAME, DB_COLUMN_USER_DISPLAY_NAME, DB_COLUMN_USER_TWITTER, DB_COLUMN_USER_BIO);
+    private array $privateColumnsUser = Array(DB_COLUMN_USER_DATETIME, DB_COLUMN_USER_IP, DB_COLUMN_USER_USER_AGENT, DB_COLUMN_USER_SALT, DB_COLUMN_USER_PASSWORD_HASH, DB_COLUMN_USER_AUTH_VERSION, DB_COLUMN_USER_PASSWORD_ITERATIONS, DB_COLUMN_USER_LAST_LOGIN_DATETIME, DB_COLUMN_USER_LAST_IP, DB_COLUMN_USER_LAST_USER_AGENT, DB_COLUMN_USER_EMAIL, DB_COLUMN_USER_ROLE, DB_COLUMN_USER_PREFERENCES, DB_COLUMN_USER_PERMISSIONS_ALLOWLIST, DB_COLUMN_USER_PERMISSIONS_DENYLIST, DB_COLUMN_USER_TWITCH);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAll(){
+    public function SelectAll(): mysqli_result
+    {
         AddActionLog("UserDbInterface_SelectAll");
         StartTimer("UserDbInterface_SelectAll");
     
@@ -49,7 +50,8 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectAdminCandidates(){
+    public function SelectAdminCandidates(): mysqli_result
+    {
         AddActionLog("UserDbInterface_SelectAdminCandidates");
         StartTimer("UserDbInterface_SelectAdminCandidates");
 
@@ -68,7 +70,8 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectBioOfUser($userId){
+    public function SelectBioOfUser($userId): mysqli_result
+    {
         AddActionLog("UserDbInterface_SelectBioOfUser");
         StartTimer("UserDbInterface_SelectBioOfUser");
     
@@ -82,7 +85,8 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectUsersOfUser($userId){
+    public function SelectUsersOfUser($userId): mysqli_result
+    {
         AddActionLog("UserDbInterface_SelectUsersOfUser");
         StartTimer("UserDbInterface_SelectUsersOfUser");
     
@@ -97,7 +101,8 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSessionsOfUser($userId){
+    public function SelectSessionsOfUser($userId): mysqli_result
+    {
         AddActionLog("UserDbInterface_SelectSessionsOfUser");
         StartTimer("UserDbInterface_SelectSessionsOfUser");
 
@@ -112,7 +117,8 @@ class UserDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($username, $ip, $userAgent, $passwordHash, $authVersion, $isAdmin){
+    public function Insert($username, $ip, $userAgent, $passwordHash, $authVersion, $isAdmin): void
+    {
         AddActionLog("UserDbInterface_Insert");
         StartTimer("UserDbInterface_Insert");
 
@@ -166,7 +172,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_Insert");
     }
 
-    public function Update($userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferences){
+    public function Update($userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $preferences): void
+    {
         AddActionLog("UserDbInterface_Update");
         StartTimer("UserDbInterface_Update");
 
@@ -194,7 +201,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_Update");
     }
 
-    public function UpdateLastUsedIpAndUserAgent($userId, $ip, $userAgent){
+    public function UpdateLastUsedIpAndUserAgent($userId, $ip, $userAgent): void
+    {
         AddActionLog("UserDbInterface_UpdateLastUsedIpAndUserAgent");
         StartTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
 
@@ -214,7 +222,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateLastUsedIpAndUserAgent");
     }
 
-    public function UpdateLastAdminActionTimeToNow($userId){
+    public function UpdateLastAdminActionTimeToNow($userId): void
+    {
         AddActionLog("UserDbInterface_UpdateLastAdminActionTimeToNow");
         StartTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
 
@@ -230,7 +239,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateLastAdminActionTimeToNow");
     }
 
-    public function UpdatePassword($userId, $passwordHash, $authVersion){
+    public function UpdatePassword($userId, $passwordHash, $authVersion): void
+    {
         AddActionLog("UserDbInterface_UpdatePassword");
         StartTimer("UserDbInterface_UpdatePassword");
 
@@ -254,7 +264,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdatePassword");
     }
 
-    public function UpdateUserPermissionLevel($userId, $permissionLevel){
+    public function UpdateUserPermissionLevel($userId, $permissionLevel): void
+    {
         AddActionLog("UserDbInterface_UpdateUserPermissionLevel");
         StartTimer("UserDbInterface_UpdateUserPermissionLevel");
 
@@ -272,7 +283,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateUserPermissionLevel");
     }
 
-    public function UpdateUserPermissions($userId, $permissionsAllowlist, $permissionsDenylist){
+    public function UpdateUserPermissions($userId, $permissionsAllowlist, $permissionsDenylist): void
+    {
         AddActionLog("UserDbInterface_UpdateUserPermissions");
         StartTimer("UserDbInterface_UpdateUserPermissions");
 
@@ -292,7 +304,8 @@ class UserDbInterface{
         StopTimer("UserDbInterface_UpdateUserPermissions");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("UserData_SelectPublicUserData");
         StartTimer("UserData_SelectPublicUserData");
 

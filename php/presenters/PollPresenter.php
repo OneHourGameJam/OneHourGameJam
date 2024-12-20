@@ -1,7 +1,8 @@
 <?php
 
 class PollPresenter{
-	public static function RenderPolls(&$pollData){
+	public static function RenderPolls(&$pollData): PollsViewModel
+    {
 		AddActionLog("RenderPolls");
 		StartTimer("RenderPolls");
 		

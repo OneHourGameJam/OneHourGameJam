@@ -1,30 +1,31 @@
 <?php
-define("DB_TABLE_ENTRY", "entry");
+const DB_TABLE_ENTRY = "entry";
 
-define("DB_COLUMN_ENTRY_ID",                "entry_id");
-define("DB_COLUMN_ENTRY_DATETIME",          "entry_datetime");
-define("DB_COLUMN_ENTRY_IP",                "entry_ip");
-define("DB_COLUMN_ENTRY_USER_AGENT",        "entry_user_agent");
-define("DB_COLUMN_ENTRY_JAM_ID",            "entry_jam_id");
-define("DB_COLUMN_ENTRY_JAM_NUMBER",        "entry_jam_number");
-define("DB_COLUMN_ENTRY_TITLE",             "entry_title");
-define("DB_COLUMN_ENTRY_DESCRIPTION",       "entry_description");
-define("DB_COLUMN_ENTRY_AUTHOR_USER_ID",    "entry_author_user_id");
-define("DB_COLUMN_ENTRY_SCREENSHOT_URL",    "entry_screenshot_url");
-define("DB_COLUMN_ENTRY_BACKGROUND_COLOR",  "entry_background_color");
-define("DB_COLUMN_ENTRY_TEXT_COLOR",        "entry_text_color");
-define("DB_COLUMN_ENTRY_DELETED",           "entry_deleted");
+const DB_COLUMN_ENTRY_ID = "entry_id";
+const DB_COLUMN_ENTRY_DATETIME = "entry_datetime";
+const DB_COLUMN_ENTRY_IP = "entry_ip";
+const DB_COLUMN_ENTRY_USER_AGENT = "entry_user_agent";
+const DB_COLUMN_ENTRY_JAM_ID = "entry_jam_id";
+const DB_COLUMN_ENTRY_JAM_NUMBER = "entry_jam_number";
+const DB_COLUMN_ENTRY_TITLE = "entry_title";
+const DB_COLUMN_ENTRY_DESCRIPTION = "entry_description";
+const DB_COLUMN_ENTRY_AUTHOR_USER_ID = "entry_author_user_id";
+const DB_COLUMN_ENTRY_SCREENSHOT_URL = "entry_screenshot_url";
+const DB_COLUMN_ENTRY_BACKGROUND_COLOR = "entry_background_color";
+const DB_COLUMN_ENTRY_TEXT_COLOR = "entry_text_color";
+const DB_COLUMN_ENTRY_DELETED = "entry_deleted";
 
 class GameDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_ENTRY_ID, DB_COLUMN_ENTRY_JAM_ID, DB_COLUMN_ENTRY_JAM_NUMBER, DB_COLUMN_ENTRY_TITLE, DB_COLUMN_ENTRY_DESCRIPTION, DB_COLUMN_ENTRY_AUTHOR_USER_ID, DB_COLUMN_ENTRY_SCREENSHOT_URL, DB_COLUMN_ENTRY_BACKGROUND_COLOR, DB_COLUMN_ENTRY_TEXT_COLOR, DB_COLUMN_ENTRY_DELETED);
-    private $privateColumns = Array(DB_COLUMN_ENTRY_DATETIME, DB_COLUMN_ENTRY_IP, DB_COLUMN_ENTRY_USER_AGENT);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_ENTRY_ID, DB_COLUMN_ENTRY_JAM_ID, DB_COLUMN_ENTRY_JAM_NUMBER, DB_COLUMN_ENTRY_TITLE, DB_COLUMN_ENTRY_DESCRIPTION, DB_COLUMN_ENTRY_AUTHOR_USER_ID, DB_COLUMN_ENTRY_SCREENSHOT_URL, DB_COLUMN_ENTRY_BACKGROUND_COLOR, DB_COLUMN_ENTRY_TEXT_COLOR, DB_COLUMN_ENTRY_DELETED);
+    private array $privateColumns = Array(DB_COLUMN_ENTRY_DATETIME, DB_COLUMN_ENTRY_IP, DB_COLUMN_ENTRY_USER_AGENT);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAll(){
+    public function SelectAll(): mysqli_result
+    {
         AddActionLog("GameDbInterface_SelectAll");
         StartTimer("GameDbInterface_SelectAll");
 
@@ -37,7 +38,8 @@ class GameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectIfExists($entryId){
+    public function SelectIfExists($entryId): mysqli_result
+    {
         AddActionLog("GameDbInterface_SelectIfExists");
         StartTimer("GameDbInterface_SelectIfExists");
 
@@ -52,7 +54,8 @@ class GameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectEntriesForAuthor($authorUserId){
+    public function SelectEntriesForAuthor($authorUserId): mysqli_result
+    {
         AddActionLog("GameDbInterface_SelectEntriesForAuthor");
         StartTimer("GameDbInterface_SelectEntriesForAuthor");
     
@@ -67,7 +70,8 @@ class GameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSingleEntryId($jamId, $authorId){
+    public function SelectSingleEntryId($jamId, $authorId): mysqli_result
+    {
         AddActionLog("GameDbInterface_SelectSingleEntryId");
         StartTimer("GameDbInterface_SelectSingleEntryId");
         
@@ -86,7 +90,8 @@ class GameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectEntriesInJam($jamId, $authorId){
+    public function SelectEntriesInJam($jamId, $authorId): mysqli_result
+    {
         AddActionLog("GameDbInterface_SelectEntriesForJam");
         StartTimer("GameDbInterface_SelectEntriesForJam");
         
@@ -103,7 +108,8 @@ class GameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($ip, $userAgent, $jamId, $jamNumber, $gameName, $description, $userId, $screenshotURL, $colorBackgroundWithoutHash, $colorTextWithoutHash){
+    public function Insert($ip, $userAgent, $jamId, $jamNumber, $gameName, $description, $userId, $screenshotURL, $colorBackgroundWithoutHash, $colorTextWithoutHash): void
+    {
         AddActionLog("GameDbInterface_Insert");
         StartTimer("GameDbInterface_Insert");
 
@@ -151,7 +157,8 @@ class GameDbInterface{
         StopTimer("GameDbInterface_Insert");
     }
 
-    public function Update($jamNumber, $userId, $gameName, $screenshotURL, $description, $colorBackgroundWithoutHash, $colorTextWithoutHash){
+    public function Update($jamNumber, $userId, $gameName, $screenshotURL, $description, $colorBackgroundWithoutHash, $colorTextWithoutHash): void
+    {
         AddActionLog("GameDbInterface_Update");
         StartTimer("GameDbInterface_Update");
 
@@ -181,7 +188,8 @@ class GameDbInterface{
         StopTimer("GameDbInterface_Update");
     }
 
-    public function SoftDelete($entryId){
+    public function SoftDelete($entryId): void
+    {
         AddActionLog("GameDbInterface_SoftDelete");
         StartTimer("GameDbInterface_SoftDelete");
 
@@ -196,7 +204,8 @@ class GameDbInterface{
         StopTimer("GameDbInterface_SoftDelete");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("GameDbInterface_SelectPublicData");
         StartTimer("GameDbInterface_SelectPublicData");
 

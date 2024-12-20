@@ -1,24 +1,25 @@
 <?php
-define("DB_TABLE_ADMINVOTE", "admin_vote");
+const DB_TABLE_ADMINVOTE = "admin_vote";
 
-define("DB_COLUMN_ADMINVOTE_ID", "vote_id");
-define("DB_COLUMN_ADMINVOTE_DATETIME", "vote_datetime");
-define("DB_COLUMN_ADMINVOTE_IP", "vote_ip");
-define("DB_COLUMN_ADMINVOTE_USER_AGENT", "vote_user_agent");
-define("DB_COLUMN_ADMINVOTE_VOTER_USER_ID", "vote_voter_user_id");
-define("DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID", "vote_subject_user_id");
-define("DB_COLUMN_ADMINVOTE_TYPE", "vote_type");
+const DB_COLUMN_ADMINVOTE_ID = "vote_id";
+const DB_COLUMN_ADMINVOTE_DATETIME = "vote_datetime";
+const DB_COLUMN_ADMINVOTE_IP = "vote_ip";
+const DB_COLUMN_ADMINVOTE_USER_AGENT = "vote_user_agent";
+const DB_COLUMN_ADMINVOTE_VOTER_USER_ID = "vote_voter_user_id";
+const DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID = "vote_subject_user_id";
+const DB_COLUMN_ADMINVOTE_TYPE = "vote_type";
 
 class AdminVoteDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_ADMINVOTE_ID, DB_COLUMN_ADMINVOTE_VOTER_USER_ID, DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID);
-    private $privateColumns = Array(DB_COLUMN_ADMINVOTE_DATETIME, DB_COLUMN_ADMINVOTE_IP, DB_COLUMN_ADMINVOTE_USER_AGENT, DB_COLUMN_ADMINVOTE_TYPE);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_ADMINVOTE_ID, DB_COLUMN_ADMINVOTE_VOTER_USER_ID, DB_COLUMN_ADMINVOTE_SUBJECT_USER_ID);
+    private array $privateColumns = Array(DB_COLUMN_ADMINVOTE_DATETIME, DB_COLUMN_ADMINVOTE_IP, DB_COLUMN_ADMINVOTE_USER_AGENT, DB_COLUMN_ADMINVOTE_TYPE);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectCurrentlyActiveVotes(){
+    public function SelectCurrentlyActiveVotes(): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectCurrentlyActiveVotes");
         StartTimer("AdminVoteDbInterface_SelectCurrentlyActiveVotes");
 
@@ -33,7 +34,8 @@ class AdminVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectVotesByUser($voterUserId){
+    public function SelectVotesByUser($voterUserId): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectVotesByUser");
         StartTimer("AdminVoteDbInterface_SelectVotesByUser");
 
@@ -48,7 +50,8 @@ class AdminVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectWhereVoterUserId($voterUserId){
+    public function SelectWhereVoterUserId($voterUserId): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectWhereVoterUserId");
         StartTimer("AdminVoteDbInterface_SelectWhereVoterUserId");
 
@@ -62,7 +65,8 @@ class AdminVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectWhereSubjectUserId($subjectUserId){
+    public function SelectWhereSubjectUserId($subjectUserId): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectWhereSubjectUserId");
         StartTimer("AdminVoteDbInterface_SelectWhereSubjectUserId");
 
@@ -76,7 +80,8 @@ class AdminVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSingleVoteIdByVoterAndSubjectUserId($voterUserId, $subjectUserId){
+    public function SelectSingleVoteIdByVoterAndSubjectUserId($voterUserId, $subjectUserId): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectSingleVoteIdByVoterAndSubjectUserId");
         StartTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterAndSubjectUserId");
 
@@ -94,7 +99,8 @@ class AdminVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSingleVoteIdByVoterUserIdAndVoteType($voterUserId, $voteType){
+    public function SelectSingleVoteIdByVoterUserIdAndVoteType($voterUserId, $voteType): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectSingleVoteIdByVoterUserIdAndVoteType");
         StartTimer("AdminVoteDbInterface_SelectSingleVoteIdByVoterUserIdAndVoteType");
 
@@ -112,7 +118,8 @@ class AdminVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($ip, $userAgent, $voterUserId, $subjectUserId, $voteType){
+    public function Insert($ip, $userAgent, $voterUserId, $subjectUserId, $voteType): void
+    {
         AddActionLog("AdminVoteDbInterface_Insert");
         StartTimer("AdminVoteDbInterface_Insert");
         
@@ -139,7 +146,8 @@ class AdminVoteDbInterface{
         StopTimer("AdminVoteDbInterface_Insert");
     }
 
-    public function Delete($voteId){
+    public function Delete($voteId): void
+    {
         AddActionLog("AdminVoteDbInterface_Delete");
         StartTimer("AdminVoteDbInterface_Delete");
         
@@ -154,7 +162,8 @@ class AdminVoteDbInterface{
         StopTimer("AdminVoteDbInterface_Delete");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("AdminVoteDbInterface_SelectPublicData");
         StartTimer("AdminVoteDbInterface_SelectPublicData");
 

@@ -1,24 +1,25 @@
 <?php
-define("DB_TABLE_SATISFACTION", "satisfaction");
+const DB_TABLE_SATISFACTION = "satisfaction";
 
-define("DB_COLUMN_SATISFACTION_ID",             "satisfaction_id");
-define("DB_COLUMN_SATISFACTION_DATETIME",       "satisfaction_datetime");
-define("DB_COLUMN_SATISFACTION_IP",             "satisfaction_ip");
-define("DB_COLUMN_SATISFACTION_USER_AGENT",     "satisfaction_user_agent");
-define("DB_COLUMN_SATISFACTION_QUESTION_ID",    "satisfaction_question_id");
-define("DB_COLUMN_SATISFACTION_USER_ID",        "satisfaction_user_id");
-define("DB_COLUMN_SATISFACTION_SCORE",          "satisfaction_score");
+const DB_COLUMN_SATISFACTION_ID = "satisfaction_id";
+const DB_COLUMN_SATISFACTION_DATETIME = "satisfaction_datetime";
+const DB_COLUMN_SATISFACTION_IP = "satisfaction_ip";
+const DB_COLUMN_SATISFACTION_USER_AGENT = "satisfaction_user_agent";
+const DB_COLUMN_SATISFACTION_QUESTION_ID = "satisfaction_question_id";
+const DB_COLUMN_SATISFACTION_USER_ID = "satisfaction_user_id";
+const DB_COLUMN_SATISFACTION_SCORE = "satisfaction_score";
 
 class SatisfactionDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_SATISFACTION_ID, DB_COLUMN_SATISFACTION_QUESTION_ID, DB_COLUMN_SATISFACTION_USER_ID);
-    private $privateColumns = Array(DB_COLUMN_SATISFACTION_DATETIME, DB_COLUMN_SATISFACTION_IP, DB_COLUMN_SATISFACTION_USER_AGENT, DB_COLUMN_SATISFACTION_SCORE);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_SATISFACTION_ID, DB_COLUMN_SATISFACTION_QUESTION_ID, DB_COLUMN_SATISFACTION_USER_ID);
+    private array $privateColumns = Array(DB_COLUMN_SATISFACTION_DATETIME, DB_COLUMN_SATISFACTION_IP, DB_COLUMN_SATISFACTION_USER_AGENT, DB_COLUMN_SATISFACTION_SCORE);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAllWithPercentageResultsAndCount(){
+    public function SelectAllWithPercentageResultsAndCount(): mysqli_result
+    {
         AddActionLog("SatisfactionDbInterface_SelectAllWithPercentageResultsAndCount");
         StartTimer("SatisfactionDbInterface_SelectAllWithPercentageResultsAndCount");
 
@@ -35,7 +36,8 @@ class SatisfactionDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectAllWithAbsoluteResults(){
+    public function SelectAllWithAbsoluteResults(): mysqli_result
+    {
         AddActionLog("SatisfactionDbInterface_SelectAllWithAbsoluteResults");
         StartTimer("SatisfactionDbInterface_SelectAllWithAbsoluteResults");
 
@@ -52,7 +54,8 @@ class SatisfactionDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($satisfactionQuestionId, $ip, $userAgent, $userId, $score){
+    public function Insert($satisfactionQuestionId, $ip, $userAgent, $userId, $score): void
+    {
         AddActionLog("SatisfactionDbInterface_Insert");
         StartTimer("SatisfactionDbInterface_Insert");
 
@@ -83,7 +86,8 @@ class SatisfactionDbInterface{
         StopTimer("SatisfactionDbInterface_Insert");
     }
 
-    public function SelectSatisfactionVotesByUser($userId){
+    public function SelectSatisfactionVotesByUser($userId): mysqli_result
+    {
         AddActionLog("SatisfactionDbInterface_SelectSatisfactionVotesByUser");
         StartTimer("SatisfactionDbInterface_SelectSatisfactionVotesByUser");
 
@@ -98,7 +102,8 @@ class SatisfactionDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("SatisfactionDbInterface_SelectPublicData");
         StartTimer("SatisfactionDbInterface_SelectPublicData");
 

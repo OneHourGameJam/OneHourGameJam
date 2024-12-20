@@ -1,7 +1,8 @@
 <?php
 
 class GamePresenter{
-	public static function RenderGames(&$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, $renderDepth){
+	public static function RenderGames(&$userData, &$gameData, &$jamData, &$platformData, &$platformGameData, $renderDepth): GamesViewModel
+    {
 		AddActionLog("RenderGames");
 		StartTimer("RenderGames");
 	
@@ -21,7 +22,8 @@ class GamePresenter{
 		return $gamesViewModel;
 	}
 	
-	public static function RenderGame(&$userData, &$gameModel, &$jamData, &$platformData, &$platformGameData, $renderDepth){
+	public static function RenderGame(&$userData, &$gameModel, &$jamData, &$platformData, &$platformGameData, $renderDepth): GameViewModel
+    {
 		AddActionLog("RenderGame");
 		StartTimer("RenderGame");
 		

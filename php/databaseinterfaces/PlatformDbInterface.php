@@ -1,21 +1,22 @@
 <?php
-define("DB_TABLE_PLATFORM", "platform");
+const DB_TABLE_PLATFORM = "platform";
 
-define("DB_COLUMN_PLATFORM_ID",         "platform_id");
-define("DB_COLUMN_PLATFORM_NAME",       "platform_name");
-define("DB_COLUMN_PLATFORM_ICON_URL",   "platform_icon_url");
-define("DB_COLUMN_PLATFORM_DELETED",    "platform_deleted");
+const DB_COLUMN_PLATFORM_ID = "platform_id";
+const DB_COLUMN_PLATFORM_NAME = "platform_name";
+const DB_COLUMN_PLATFORM_ICON_URL = "platform_icon_url";
+const DB_COLUMN_PLATFORM_DELETED = "platform_deleted";
 
 class PlatformDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_PLATFORM_ID, DB_COLUMN_PLATFORM_NAME, DB_COLUMN_PLATFORM_ICON_URL, DB_COLUMN_PLATFORM_DELETED);
-    private $privateColumns = Array();
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_PLATFORM_ID, DB_COLUMN_PLATFORM_NAME, DB_COLUMN_PLATFORM_ICON_URL, DB_COLUMN_PLATFORM_DELETED);
+    private array $privateColumns = Array();
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAll(){
+    public function SelectAll(): mysqli_result
+    {
         AddActionLog("PlatformDbInterface_SelectAll");
         StartTimer("PlatformDbInterface_SelectAll");
 
@@ -27,7 +28,8 @@ class PlatformDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($platformName, $iconUrl){
+    public function Insert($platformName, $iconUrl): void
+    {
         AddActionLog("PlatformDbInterface_Insert");
         StartTimer("PlatformDbInterface_Insert");
 
@@ -51,7 +53,8 @@ class PlatformDbInterface{
         StopTimer("PlatformDbInterface_Insert");
     }
 
-    public function Update($platformId, $platformName, $iconUrl){
+    public function Update($platformId, $platformName, $iconUrl): void
+    {
         AddActionLog("PlatformDbInterface_Update");
         StartTimer("PlatformDbInterface_Update");
 
@@ -72,7 +75,8 @@ class PlatformDbInterface{
         StopTimer("PlatformDbInterface_Update");
     }
 
-    public function SoftDelete($platformId){
+    public function SoftDelete($platformId): void
+    {
         AddActionLog("PlatformDbInterface_SoftDelete");
         StartTimer("PlatformDbInterface_SoftDelete");
 
@@ -90,7 +94,8 @@ class PlatformDbInterface{
         StopTimer("PlatformDbInterface_SoftDelete");
     }
 
-    public function RestoreSoftDeleted($platformId){
+    public function RestoreSoftDeleted($platformId): void
+    {
         AddActionLog("PlatformDbInterface_RestoreSoftDeleted");
         StartTimer("PlatformDbInterface_RestoreSoftDeleted");
 
@@ -108,7 +113,8 @@ class PlatformDbInterface{
         StopTimer("PlatformDbInterface_RestoreSoftDeleted");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("PlatformDbInterface_SelectPublicData");
         StartTimer("PlatformDbInterface_SelectPublicData");
 

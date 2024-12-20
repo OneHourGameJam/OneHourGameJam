@@ -1,25 +1,26 @@
 <?php
 
-define("DB_TABLE_THEMEIDEA", "theme_ideas");
+const DB_TABLE_THEMEIDEA = "theme_ideas";
 
-define("DB_COLUMN_THEMEIDEA_ID",           "idea_id");
-define("DB_COLUMN_THEMEIDEA_DATETIME",     "idea_datetime");
-define("DB_COLUMN_THEMEIDEA_IP",           "idea_ip");
-define("DB_COLUMN_THEMEIDEA_USER_AGENT",   "idea_user_agent");
-define("DB_COLUMN_THEMEIDEA_THEME_ID",     "idea_theme_id");
-define("DB_COLUMN_THEMEIDEA_USER_ID",      "idea_user_id");
-define("DB_COLUMN_THEMEIDEA_IDEAS",        "idea_ideas");
+const DB_COLUMN_THEMEIDEA_ID = "idea_id";
+const DB_COLUMN_THEMEIDEA_DATETIME = "idea_datetime";
+const DB_COLUMN_THEMEIDEA_IP = "idea_ip";
+const DB_COLUMN_THEMEIDEA_USER_AGENT = "idea_user_agent";
+const DB_COLUMN_THEMEIDEA_THEME_ID = "idea_theme_id";
+const DB_COLUMN_THEMEIDEA_USER_ID = "idea_user_id";
+const DB_COLUMN_THEMEIDEA_IDEAS = "idea_ideas";
 
 class ThemeIdeaDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_THEMEIDEA_ID, DB_COLUMN_THEMEIDEA_THEME_ID, DB_COLUMN_THEMEIDEA_USER_ID);
-    private $privateColumns = Array(DB_COLUMN_THEMEIDEA_DATETIME, DB_COLUMN_THEMEIDEA_IP, DB_COLUMN_THEMEIDEA_USER_AGENT, DB_COLUMN_THEMEIDEA_IDEAS);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_THEMEIDEA_ID, DB_COLUMN_THEMEIDEA_THEME_ID, DB_COLUMN_THEMEIDEA_USER_ID);
+    private array $privateColumns = Array(DB_COLUMN_THEMEIDEA_DATETIME, DB_COLUMN_THEMEIDEA_IP, DB_COLUMN_THEMEIDEA_USER_AGENT, DB_COLUMN_THEMEIDEA_IDEAS);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectThemeIdeasByUser($userId){
+    public function SelectThemeIdeasByUser($userId): mysqli_result
+    {
         AddActionLog("ThemeIdeaDbInterface_SelectThemeIdeasByUser");
         StartTimer("ThemeIdeaDbInterface_SelectThemeIdeasByUser");
         
@@ -34,7 +35,8 @@ class ThemeIdeaDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectAllThemeIdeasByUserWithTheme($userId){
+    public function SelectAllThemeIdeasByUserWithTheme($userId): mysqli_result
+    {
         AddActionLog("ThemeIdeaDbInterface_SelectAllThemeIdeasByUserWithTheme");
         StartTimer("ThemeIdeaDbInterface_SelectAllThemeIdeasByUserWithTheme");
         
@@ -50,7 +52,8 @@ class ThemeIdeaDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSingle($themeId, $userId){
+    public function SelectSingle($themeId, $userId): mysqli_result
+    {
         AddActionLog("ThemeIdeaDbInterface_SelectSingle");
         StartTimer("ThemeIdeaDbInterface_SelectSingle");
         
@@ -66,7 +69,8 @@ class ThemeIdeaDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($ip, $userAgent, $themeId, $userId, $ideas){
+    public function Insert($ip, $userAgent, $themeId, $userId, $ideas): void
+    {
         AddActionLog("ThemeIdeaDbInterface_Insert");
         StartTimer("ThemeIdeaDbInterface_Insert");
         
@@ -86,7 +90,8 @@ class ThemeIdeaDbInterface{
         StopTimer("ThemeIdeaDbInterface_Insert");
     }
 
-    public function Update($ideaId, $ideas){
+    public function Update($ideaId, $ideas): void
+    {
         AddActionLog("ThemeIdeaDbInterface_Update");
         StartTimer("ThemeIdeaDbInterface_Update");
         
@@ -102,7 +107,8 @@ class ThemeIdeaDbInterface{
         StopTimer("ThemeIdeaDbInterface_Update");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("ThemeIdeaDbInterface_SelectPublicData");
         StartTimer("ThemeIdeaDbInterface_SelectPublicData");
 

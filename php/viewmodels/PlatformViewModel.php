@@ -1,14 +1,14 @@
 <?php
 
 class PlatformsViewModel{
-    public $LIST = Array();
+    public array $LIST = Array();
 }
 
 class PlatformViewModel{
-    public $id;
-    public $name;
-    public $deleted;
-    public $icon_url;
+    public string $id;
+    public string $name;
+    public int $deleted;
+    public string $icon_url;
 }
 
 ?>

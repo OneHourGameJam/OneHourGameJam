@@ -3,7 +3,7 @@
 //Edits an existing user, identified by the username.
 //Valid values for isAdmin are 0 (not admin) and 1 (admin)
 //Only changes whether the user is an admin, does NOT change the user's username.
-function EditUser(MessageService &$messageService, $userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue){
+function EditUser(MessageService &$messageService, $userId, $displayName, $twitterHandle, $twitchUsername, $emailAddress, $bio, $permissionLevel, $allowlistPermissionValue, $denylistPermissionValue): string{
 	global $userData, $configData, $loggedInUser, $userDbInterface;
 	
 	$allowlistPermissionValue = intval($allowlistPermissionValue);
@@ -68,7 +68,7 @@ function EditUser(MessageService &$messageService, $userId, $displayName, $twitt
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST, $userPermissionsSettings;
 	
 	if(IsAdmin($loggedInUser) !== false){

@@ -1,18 +1,18 @@
 <?php
 
 class AssetModel{
-	public $Id;
-	public $AuthorUserId;
-	public $Title;
-	public $Description;
-	public $Type;
-	public $Content;
+	public string $Id;
+	public string $AuthorUserId;
+	public string $Title;
+	public string $Description;
+	public string $Type;
+	public string $Content;
 }
 
 class AssetData{
-    public $AssetModels;
+    public array $AssetModels;
 
-    private $assetDbInterface;
+    private AssetDbInterface $assetDbInterface;
 
     function __construct(&$assetDbInterface) {
         $this->assetDbInterface = $assetDbInterface;
@@ -21,7 +21,8 @@ class AssetData{
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadAssets(){
+    function LoadAssets(): array
+    {
         AddActionLog("LoadAssets");
         StartTimer("LoadAssets");
 
@@ -51,7 +52,8 @@ class AssetData{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function GetAssetsOfUserFormatted($authorUserId){
+    function GetAssetsOfUserFormatted($authorUserId): string
+    {
         AddActionLog("GetAssetsOfUserFormatted");
         StartTimer("GetAssetsOfUserFormatted");
         
@@ -65,7 +67,8 @@ class AssetData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("AssetData_GetAllPublicData");
         StartTimer("AssetData_GetAllPublicData");
         $dataFromDatabase = MySQLDataToArray($this->assetDbInterface->SelectPublicData());

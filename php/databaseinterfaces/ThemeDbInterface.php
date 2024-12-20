@@ -1,26 +1,27 @@
 <?php
 
-define("DB_TABLE_THEME", "theme");
+const DB_TABLE_THEME = "theme";
 
-define("DB_COLUMN_THEME_ID",                "theme_id");
-define("DB_COLUMN_THEME_DATETIME",          "theme_datetime");
-define("DB_COLUMN_THEME_IP",                "theme_ip");
-define("DB_COLUMN_THEME_USER_AGENT",        "theme_user_agent");
-define("DB_COLUMN_THEME_TEXT",              "theme_text");
-define("DB_COLUMN_THEME_AUTHOR_USER_ID",    "theme_author_user_id");
-define("DB_COLUMN_THEME_BANNED",            "theme_banned");
-define("DB_COLUMN_THEME_DELETED",           "theme_deleted");
+const DB_COLUMN_THEME_ID = "theme_id";
+const DB_COLUMN_THEME_DATETIME = "theme_datetime";
+const DB_COLUMN_THEME_IP = "theme_ip";
+const DB_COLUMN_THEME_USER_AGENT = "theme_user_agent";
+const DB_COLUMN_THEME_TEXT = "theme_text";
+const DB_COLUMN_THEME_AUTHOR_USER_ID = "theme_author_user_id";
+const DB_COLUMN_THEME_BANNED = "theme_banned";
+const DB_COLUMN_THEME_DELETED = "theme_deleted";
 
 class ThemeDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_THEME_ID, DB_COLUMN_THEME_TEXT, DB_COLUMN_THEME_AUTHOR_USER_ID, DB_COLUMN_THEME_BANNED, DB_COLUMN_THEME_DELETED);
-    private $privateColumns = Array(DB_COLUMN_THEME_DATETIME, DB_COLUMN_THEME_IP, DB_COLUMN_THEME_USER_AGENT);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_THEME_ID, DB_COLUMN_THEME_TEXT, DB_COLUMN_THEME_AUTHOR_USER_ID, DB_COLUMN_THEME_BANNED, DB_COLUMN_THEME_DELETED);
+    private array $privateColumns = Array(DB_COLUMN_THEME_DATETIME, DB_COLUMN_THEME_IP, DB_COLUMN_THEME_USER_AGENT);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAllActiveWithResults(){
+    public function SelectAllActiveWithResults(): mysqli_result
+    {
         AddActionLog("ThemeDbInterface_SelectAllActiveWithResults");
         StartTimer("ThemeDbInterface_SelectAllActiveWithResults");
 
@@ -40,7 +41,8 @@ class ThemeDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectAllWithResults(){
+    public function SelectAllWithResults(): mysqli_result
+    {
         AddActionLog("ThemeDbInterface_SelectAllWithResults");
         StartTimer("ThemeDbInterface_SelectAllWithResults");
 
@@ -59,7 +61,8 @@ class ThemeDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectThemesByUser($userId){
+    public function SelectThemesByUser($userId): mysqli_result
+    {
         AddActionLog("ThemeDbInterface_SelectThemesByUser");
         StartTimer("ThemeDbInterface_SelectThemesByUser");
     
@@ -74,7 +77,8 @@ class ThemeDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectIfExists($themeId){
+    public function SelectIfExists($themeId): mysqli_result
+    {
         AddActionLog("ThemeDbInterface_SelectIfExists");
         StartTimer("ThemeDbInterface_SelectIfExists");
         
@@ -89,7 +93,8 @@ class ThemeDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectIfActive($themeId){
+    public function SelectIfActive($themeId): mysqli_result
+    {
         AddActionLog("ThemeDbInterface_SelectIfActive");
         StartTimer("ThemeDbInterface_SelectIfActive");
         
@@ -104,7 +109,8 @@ class ThemeDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($ip, $userAgent, $newTheme, $userId){
+    public function Insert($ip, $userAgent, $newTheme, $userId): void
+    {
         AddActionLog("ThemeDbInterface_Insert");
         StartTimer("ThemeDbInterface_Insert");
 
@@ -123,7 +129,8 @@ class ThemeDbInterface{
         StopTimer("ThemeDbInterface_Insert");
     }
 
-    public function Ban($themeId){
+    public function Ban($themeId): void
+    {
         AddActionLog("ThemeDbInterface_Ban");
         StartTimer("ThemeDbInterface_Ban");
 
@@ -139,7 +146,8 @@ class ThemeDbInterface{
         StopTimer("ThemeDbInterface_Ban");
     }
 
-    public function Unban($themeId){
+    public function Unban($themeId): void
+    {
         AddActionLog("ThemeDbInterface_Ban");
         StartTimer("ThemeDbInterface_Ban");
 
@@ -155,7 +163,8 @@ class ThemeDbInterface{
         StopTimer("ThemeDbInterface_Ban");
     }
 
-    public function SoftDelete($themeId){
+    public function SoftDelete($themeId): void
+    {
         AddActionLog("ThemeDbInterface_SoftDelete");
         StartTimer("ThemeDbInterface_SoftDelete");
 
@@ -170,7 +179,8 @@ class ThemeDbInterface{
         StopTimer("ThemeDbInterface_SoftDelete");        
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("ThemeDbInterface_SelectPublicData");
         StartTimer("ThemeDbInterface_SelectPublicData");
 

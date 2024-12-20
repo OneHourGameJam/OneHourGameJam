@@ -1,7 +1,8 @@
 <?php
 
 class StreamPresenter{
-	public static function RenderStream(&$streamData){
+	public static function RenderStream(&$streamData): StreamViewModel
+    {
 		AddActionLog("RenderStream");
 		StartTimer("RenderStream");
 	

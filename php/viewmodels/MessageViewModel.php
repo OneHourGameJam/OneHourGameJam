@@ -1,13 +1,13 @@
 <?php
 
 class MessagesViewModel{
-    public $LIST = Array();
+    public array $LIST = Array();
 }
 
 class MessageViewModel{
-    public $message_type;
-    public $message_title;
-    public $message_body;
+    public string $message_type;
+    public string $message_title;
+    public string $message_body;
 }
 
 ?>

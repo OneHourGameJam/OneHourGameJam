@@ -1,22 +1,23 @@
 <?php
 
-define("DB_TABLE_SESSION", "session");
+const DB_TABLE_SESSION = "session";
 
-define("DB_COLUMN_SESSION_ID",                  "session_id");
-define("DB_COLUMN_SESSION_USER_ID",             "session_user_id");
-define("DB_COLUMN_SESSION_DATETIME_STARTED",    "session_datetime_started");
-define("DB_COLUMN_SESSION_DATETIME_LAST_USED",  "session_datetime_last_used");
+const DB_COLUMN_SESSION_ID = "session_id";
+const DB_COLUMN_SESSION_USER_ID = "session_user_id";
+const DB_COLUMN_SESSION_DATETIME_STARTED = "session_datetime_started";
+const DB_COLUMN_SESSION_DATETIME_LAST_USED = "session_datetime_last_used";
 
 class SessionDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_SESSION_USER_ID);
-    private $privateColumns = Array(DB_COLUMN_SESSION_ID, DB_COLUMN_SESSION_DATETIME_STARTED, DB_COLUMN_SESSION_DATETIME_LAST_USED);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_SESSION_USER_ID);
+    private array $privateColumns = Array(DB_COLUMN_SESSION_ID, DB_COLUMN_SESSION_DATETIME_STARTED, DB_COLUMN_SESSION_DATETIME_LAST_USED);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectSingleSession($sessionIdHash){
+    public function SelectSingleSession($sessionIdHash): mysqli_result
+    {
         AddActionLog("SessionDbInterface_SelectSingleSession");
         StartTimer("SessionDbInterface_SelectSingleSession");
         
@@ -32,7 +33,8 @@ class SessionDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSessionsOfUser($userId){
+    public function SelectSessionsOfUser($userId): mysqli_result
+    {
         AddActionLog("SessionDbInterface_SelectSessionsOfUser");
         StartTimer("SessionDbInterface_SelectSessionsOfUser");
 
@@ -47,7 +49,8 @@ class SessionDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($userId, $sessionIdHash){
+    public function Insert($userId, $sessionIdHash): void
+    {
         AddActionLog("SessionDbInterface_Insert");
         StartTimer("SessionDbInterface_Insert");
 
@@ -71,7 +74,8 @@ class SessionDbInterface{
         StopTimer("SessionDbInterface_Insert");
     }
 
-    public function UpdateLastUsedTime($sessionIdHash){
+    public function UpdateLastUsedTime($sessionIdHash): void
+    {
         AddActionLog("SessionDbInterface_UpdateLastUsedTime");
         StartTimer("SessionDbInterface_UpdateLastUsedTime");
 
@@ -87,7 +91,8 @@ class SessionDbInterface{
         StopTimer("SessionDbInterface_UpdateLastUsedTime");
     }
 
-    public function Delete($sessionIdHash){
+    public function Delete($sessionIdHash): void
+    {
         AddActionLog("SessionDbInterface_Insert");
         StartTimer("SessionDbInterface_Insert");
 
@@ -102,12 +107,13 @@ class SessionDbInterface{
         StopTimer("SessionDbInterface_Insert");
     }
 
-    private function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("SessionDbInterface_SelectPublicData");
         StartTimer("SessionDbInterface_SelectPublicData");
 
         $sql = "
-            SELECT ".implode(",", $this->publicColumnsSession)."
+            SELECT ".implode(",", $this->publicColumns)."
             FROM ".DB_TABLE_SESSION.";
         ";
 

@@ -1,7 +1,7 @@
 <?php
 
 //Returns true / false based on whether or not the specified jam exists (and has not been deleted)
-function JamExists($jamId){
+function JamExists($jamId): string{
 	global $jamDbInterface;
 
 	//Validate values
@@ -19,7 +19,7 @@ function JamExists($jamId){
 }
 
 //Deletes an existing jam, identified by the jam number.
-function DeleteJam(MessageService &$messageService, $jamId){
+function DeleteJam(MessageService &$messageService, $jamId): string{
 	global $jamData, $loggedInUser, $jamDbInterface, $userData;
 
 	//Authorize user (is admin)
@@ -54,7 +54,7 @@ function DeleteJam(MessageService &$messageService, $jamId){
 }
 
 //Returns true / false based on whether or not the specified jam can be deleted
-function CanDeleteJam($jamId){
+function CanDeleteJam($jamId): string{
 	global $loggedInUser, $gameDbInterface;
 
 	//Authorize user (is admin)
@@ -81,7 +81,7 @@ function CanDeleteJam($jamId){
 	}
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

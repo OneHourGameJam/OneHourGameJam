@@ -2,25 +2,26 @@
 
 class ThemeIdeaModel
 {
-    public $Id;
-    public $ThemeId;
-    public $UserId;
-    public $Ideas;
+    public string $Id;
+    public string $ThemeId;
+    public string $UserId;
+    public string $Ideas;
 }
 
 class ThemeIdeaData{
-    public $ThemeIdeas;
+    public array $ThemeIdeas;
     
-    private $themeIdeaDbInterface;
+    private ThemeIdeaDbInterface $themeIdeaDbInterface;
 
-    function __construct(&$themeIdeaDbInterface, &$loggedInUser) {
+    function __construct(ThemeIdeaDbInterface &$themeIdeaDbInterface, &$loggedInUser) {
         $this->themeIdeaDbInterface = $themeIdeaDbInterface;
         $this->ThemeIdeas = $this->LoadThemeIdeasForUser($loggedInUser);
     }
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadThemeIdeasForUser(&$loggedInUser){
+    function LoadThemeIdeasForUser(&$loggedInUser): array
+    {
         AddActionLog("LoadThemeIdeasForUser");
         StartTimer("LoadThemeIdeasForUser");
 
@@ -47,7 +48,8 @@ class ThemeIdeaData{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function GetThemeIdeasOfUserFormatted($userId){
+    function GetThemeIdeasOfUserFormatted($userId): string
+    {
         AddActionLog("GetThemeIdeasOfUserFormatted");
         StartTimer("GetThemeIdeasOfUserFormatted");
 
@@ -61,7 +63,8 @@ class ThemeIdeaData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("ThemeIdeaData_GetAllPublicData");
         StartTimer("ThemeIdeaData_GetAllPublicData");
         

@@ -1,21 +1,22 @@
 <?php
-define("DB_TABLE_POLLVOTE", "poll_vote");
+const DB_TABLE_POLLVOTE = "poll_vote";
 
-define("DB_COLUMN_POLLVOTE_ID",         "vote_id");
-define("DB_COLUMN_POLLVOTE_OPTION_ID",  "vote_option_id");
-define("DB_COLUMN_POLLVOTE_USER_ID",    "vote_user_id");
-define("DB_COLUMN_POLLVOTE_DELETED",    "vote_deleted");
+const DB_COLUMN_POLLVOTE_ID = "vote_id";
+const DB_COLUMN_POLLVOTE_OPTION_ID = "vote_option_id";
+const DB_COLUMN_POLLVOTE_USER_ID = "vote_user_id";
+const DB_COLUMN_POLLVOTE_DELETED = "vote_deleted";
 
 class PollVoteDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_POLLVOTE_ID, DB_COLUMN_POLLVOTE_USER_ID, DB_COLUMN_POLLVOTE_DELETED);
-    private $privateColumns = Array(DB_COLUMN_POLLVOTE_OPTION_ID);
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_POLLVOTE_ID, DB_COLUMN_POLLVOTE_USER_ID, DB_COLUMN_POLLVOTE_DELETED);
+    private array $privateColumns = Array(DB_COLUMN_POLLVOTE_OPTION_ID);
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectUserVoteForOption($userId, $pollOptionId){
+    public function SelectUserVoteForOption($userId, $pollOptionId): mysqli_result
+    {
         AddActionLog("PollVoteDbInterface_SelectUserVoteForOption");
         StartTimer("PollVoteDbInterface_SelectUserVoteForOption");
 
@@ -31,7 +32,8 @@ class PollVoteDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($userId, $pollOptionId){
+    public function Insert($userId, $pollOptionId): void
+    {
         AddActionLog("PollVoteDbInterface_Insert");
         StartTimer("PollVoteDbInterface_Insert");
 
@@ -49,7 +51,8 @@ class PollVoteDbInterface{
         StopTimer("PollVoteDbInterface_Insert");
     }
 
-    public function UpdateIsDeleted($pollVoteId, $isDeleted){
+    public function UpdateIsDeleted($pollVoteId, $isDeleted): void
+    {
         AddActionLog("PollVoteDbInterface_UpdateIsDeleted");
         StartTimer("PollVoteDbInterface_UpdateIsDeleted");
 
@@ -66,12 +69,13 @@ class PollVoteDbInterface{
         StopTimer("PollVoteDbInterface_UpdateIsDeleted");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("PollVoteDbInterface_SelectPublicData");
         StartTimer("PollVoteDbInterface_SelectPublicData");
 
         $sql = "
-            SELECT ".implode(",", $this->publicColumnsPollVote)."
+            SELECT ".implode(",", $this->publicColumns)."
             FROM ".DB_TABLE_POLLVOTE.";
         ";
 

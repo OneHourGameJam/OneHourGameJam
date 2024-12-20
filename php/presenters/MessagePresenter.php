@@ -1,7 +1,8 @@
 <?php
 
 class MessagePresenter{
-	public static function RenderMessages(&$messageData){
+	public static function RenderMessages(&$messageData): MessagesViewModel
+    {
 		$messagesViewModel = new MessagesViewModel();
 		AddActionLog("RenderMessages");
 		StartTimer("RenderMessages");

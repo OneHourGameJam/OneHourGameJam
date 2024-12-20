@@ -1,7 +1,7 @@
 <?php
 
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $userData;
 	
     if(IsAdmin($loggedInUser) !== false){

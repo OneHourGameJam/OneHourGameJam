@@ -1,7 +1,8 @@
 <?php
 
 class PlatformPresenter{
-	public static function RenderPlatform(&$platformModel){
+	public static function RenderPlatform(&$platformModel): PlatformViewModel
+    {
 		AddActionLog("RenderPlatform");
 		StartTimer("RenderPlatform");
 	
@@ -16,7 +17,8 @@ class PlatformPresenter{
 		return $platformViewModel;
 	}
 	
-	public static function RenderPlatforms(&$platformData){
+	public static function RenderPlatforms(&$platformData): PlatformsViewModel
+    {
 		AddActionLog("RenderPlatforms");
 		StartTimer("RenderPlatforms");
 		

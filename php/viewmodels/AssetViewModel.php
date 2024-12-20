@@ -1,24 +1,24 @@
 <?php
 
 class AssetsViewModel{
-    public $LIST = Array();
+    public array $LIST = Array();
 }
 
 class AssetViewModel{
-    public $id;
-    public $author_user_id;
-    public $title;
-    public $description;
-    public $type;
-    public $content;
-    public $author_username;
-    public $author_display_name;
-    public $is_audio;
-    public $is_image;
-    public $is_text;
-    public $is_link;
-    public $is_file;
-    public $is_other;
+    public string $id;
+    public string $author_user_id;
+    public string $title;
+    public string $description;
+    public string $type;
+    public string $content;
+    public string $author_username;
+    public string $author_display_name;
+    public int $is_audio;
+    public int $is_image;
+    public int $is_text;
+    public int $is_link;
+    public int $is_file;
+    public int $is_other;
 }
 
 ?>

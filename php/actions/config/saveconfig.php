@@ -1,6 +1,6 @@
 <?php
 
-function SaveConfig(MessageService &$messageService, $key, $newValue){
+function SaveConfig(MessageService &$messageService, $key, $newValue): string{
 	global $configData, $dictionary, $loggedInUser, $userData;
 
 	if(IsAdmin($loggedInUser) === false){
@@ -36,7 +36,7 @@ function SaveConfig(MessageService &$messageService, $key, $newValue){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){

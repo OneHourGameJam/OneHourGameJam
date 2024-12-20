@@ -1,26 +1,27 @@
 <?php
 
 class SatisfactionModel{
-	public $QuestionId;
-	public $AverageScore;
-	public $SubmittedScores;
-	public $EnoughScoresToShowSatisfaction;
-	public $Scores;
+	public string $QuestionId;
+	public float $AverageScore;
+	public int $SubmittedScores;
+	public bool $EnoughScoresToShowSatisfaction;
+	public array $Scores;
 }
 
 class SatisfactionData{
-    public $SatisfactionModels;
+    public array $SatisfactionModels;
     
-    private $satisfactionDbInterface;
+    private SatisfactionDbInterface $satisfactionDbInterface;
 
-    function __construct(&$satisfactionDbInterface, &$configData) {
+    function __construct(SatisfactionDbInterface &$satisfactionDbInterface, &$configData) {
         $this->satisfactionDbInterface = $satisfactionDbInterface;
         $this->SatisfactionModels = $this->LoadSatisfaction($configData);
     }
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadSatisfaction(&$configData){
+    function LoadSatisfaction(ConfigData &$configData): array
+    {
         AddActionLog("LoadSatisfaction");
         StartTimer("LoadSatisfaction");
     
@@ -64,7 +65,8 @@ class SatisfactionData{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function SubmitSatisfaction(&$loggedInUser, $satisfactionQuestionId, $score){
+    function SubmitSatisfaction(&$loggedInUser, $satisfactionQuestionId, $score): void
+    {
         global $ip, $userAgent;
         AddActionLog("SubmitSatisfaction");
         StartTimer("SubmitSatisfaction");
@@ -78,12 +80,13 @@ class SatisfactionData{
             return;
         }
 
-        $data = $this->satisfactionDbInterface->Insert($satisfactionQuestionId, $ip, $userAgent, $loggedInUser->Id, $score);
+        $this->satisfactionDbInterface->Insert($satisfactionQuestionId, $ip, $userAgent, $loggedInUser->Id, $score);
     
         StopTimer("SubmitSatisfaction");
     }
     
-    function GetSatisfactionVotesOfUserFormatted($userId){
+    function GetSatisfactionVotesOfUserFormatted($userId): string
+    {
         AddActionLog("GetSatisfactionVotesOfUserFormatted");
         StartTimer("GetSatisfactionVotesOfUserFormatted");
     
@@ -97,7 +100,8 @@ class SatisfactionData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("SatisfactionData_GetAllPublicData");
         StartTimer("SatisfactionData_GetAllPublicData");
         

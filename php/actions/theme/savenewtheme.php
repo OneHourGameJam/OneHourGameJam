@@ -1,7 +1,7 @@
 <?php
 
 //Add a suggested theme
-function AddTheme($newTheme){
+function AddTheme($newTheme): string{
 	global $themeData, $configData, $jamData, $ip, $userAgent, $loggedInUser, $themeDbInterface;
 	
 	//Authorize user (logged in)
@@ -42,7 +42,7 @@ function AddTheme($newTheme){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if($loggedInUser !== false){

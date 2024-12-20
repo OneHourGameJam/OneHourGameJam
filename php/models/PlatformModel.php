@@ -1,25 +1,26 @@
 <?php
 
 class PlatformModel{
-	public $Id;
-	public $Name;
-	public $IconUrl;
-	public $Deleted;
+	public string $Id;
+	public string $Name;
+	public string $IconUrl;
+	public bool $Deleted;
 }
 
 class PlatformData{
-    public $PlatformModels;
+    public array $PlatformModels;
 
-    private $platformDbInterface;
+    private PlatformDbInterface $platformDbInterface;
 
-    function __construct(&$platformDbInterface) {
+    function __construct(PlatformDbInterface &$platformDbInterface) {
         $this->platformDbInterface = $platformDbInterface;
         $this->PlatformModels = $this->LoadPlatforms();
     }
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadPlatforms(){
+    function LoadPlatforms(): array
+    {
         AddActionLog("LoadPlatforms");
         StartTimer("LoadPlatforms");
 
@@ -49,7 +50,8 @@ class PlatformData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("PlatformData_GetAllPublicData");
         StartTimer("PlatformData_GetAllPublicData");
         

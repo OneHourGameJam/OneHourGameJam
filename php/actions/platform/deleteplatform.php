@@ -1,6 +1,6 @@
 <?php
 
-function DeletePlatform(MessageService &$messageService, $platformId){
+function DeletePlatform(MessageService &$messageService, $platformId): string{
 	global $loggedInUser, $_FILES, $ip, $userAgent, $platformData, $platformDbInterface, $userData;
 
 	$platformId = intval(trim($platformId));
@@ -40,7 +40,7 @@ function DeletePlatform(MessageService &$messageService, $platformId){
 	return "SUCCESS_PLATFORM_SOFT_DELETED";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if($loggedInUser !== false){

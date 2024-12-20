@@ -1,7 +1,7 @@
 <?php
 
 //Unmarks a suggested theme as banned (unbans it)
-function UnbanTheme(MessageService &$messageService, $unbannedThemeId){
+function UnbanTheme(MessageService &$messageService, $unbannedThemeId): string{
 	global $ip, $userAgent, $loggedInUser, $themeData, $themeDbInterface, $userData;
 
 	//Authorize user (logged in)
@@ -52,7 +52,7 @@ function UnbanTheme(MessageService &$messageService, $unbannedThemeId){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 	
 	if(IsAdmin($loggedInUser) !== false){

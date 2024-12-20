@@ -1,6 +1,6 @@
 <?php
 
-function CastVoteForAdmin($subjectUserId, $voteType){
+function CastVoteForAdmin($subjectUserId, $voteType): string{
 	global $ip, $userAgent, $loggedInUser, $adminVoteDbInterface;
 
 	//Authorize user (logged in)
@@ -41,11 +41,11 @@ function CastVoteForAdmin($subjectUserId, $voteType){
 	}
 
 	$adminVoteDbInterface->Insert($ip, $userAgent, $loggedInUser->Id, $subjectUserId, $voteType);
-	
+
 	return "SUCESS_INSERT";
 }
 
-function PerformAction(MessageService &$messageService, $loggedInUser){
+function PerformAction(MessageService &$messageService, $loggedInUser): string{
 	global $_POST;
 
 	if(IsAdmin($loggedInUser) !== false){

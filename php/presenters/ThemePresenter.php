@@ -1,7 +1,8 @@
 <?php
 
 class ThemePresenter{
-	public static function RenderActiveThemes(ConfigData &$configData, JamData &$jamData, UserData &$userData, ThemeData &$themeData, ThemeIdeaData &$themeIdeaData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth){
+	public static function RenderActiveThemes(ConfigData &$configData, JamData &$jamData, UserData &$userData, ThemeData &$themeData, ThemeIdeaData &$themeIdeaData, &$themesByVoteDifference, &$themesByPopularity, &$loggedInUser, &$renderDepth): ThemesViewModel
+    {
 		AddActionLog("RenderThemes");
 		StartTimer("RenderThemes");
 		
@@ -236,7 +237,8 @@ class ThemePresenter{
 		return $themesViewModel;
 	}
 
-    public static function RenderAllThemes(ConfigData &$configData, UserData &$userData, ThemeData &$themeData){
+    public static function RenderAllThemes(ConfigData &$configData, UserData &$userData, ThemeData &$themeData): array
+    {
         $render = Array();
 
         foreach($themeData->AllThemeModels as $i => $themeModel){
@@ -313,7 +315,7 @@ class ThemePresenter{
         return $render;
     }
 
-	public static function UserThemeVoteTypeToKey($themeVoteType){
+	public static function UserThemeVoteTypeToKey($themeVoteType): string{
 		AddActionLog("UserThemeVoteTypeToKey");
 		switch($themeVoteType){
 			case "1":
@@ -326,7 +328,7 @@ class ThemePresenter{
 	}
 	
 	//Numeric comparator for arrays based on property
-	public static function CmpArrayByPropertyPopularityNum($a, $b)
+	public static function CmpArrayByPropertyPopularityNum($a, $b): int
 	{
 		AddActionLog("CmpArrayByPropertyPopularityNum");
 
@@ -337,14 +339,14 @@ class ThemePresenter{
 	}
 
 	//Numeric comparator for arrays based on property
-	public static function CmpArrayByProperty($a, $b, $property)
-	{
+	public static function CmpArrayByProperty($a, $b, $property): int
+    {
 		AddActionLog("CmpArrayByProperty");
 
 		return $a->$property < $b->$property;
 	}
 
-	public static function IsRecentTheme(&$jamData, &$configData, $theme) {
+	public static function IsRecentTheme(&$jamData, &$configData, $theme): bool {
 		AddActionLog("IsRecentTheme");
 		StartTimer("IsRecentTheme");
 		$jamNumber = 1; // Number of non deleted jams traversed

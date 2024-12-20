@@ -1,27 +1,27 @@
 <?php
 
 class ThemeModel{
-	public $Id;
-	public $Theme;
-	public $AuthorUserId;
-	public $Banned;
-	public $Deleted;
-	public $VotesAgainst;
-	public $VotesNeutral;
-	public $VotesFor;
-	public $VotesReport;
-	public $DaysAgo;
+	public string $Id;
+	public string $Theme;
+	public string $AuthorUserId;
+	public bool $Banned;
+	public bool $Deleted;
+	public int $VotesAgainst;
+	public int $VotesNeutral;
+	public int $VotesFor;
+	public int $VotesReport;
+	public int $DaysAgo;
 }
 
 class ThemeData{
-    public $AllThemeModels;
-    public $ActiveThemeModels;
-    public $LoggedInUserThemeVotes;
+    public array $AllThemeModels;
+    public array $ActiveThemeModels;
+    public array $LoggedInUserThemeVotes;
 
-    private $themeDbInterface;
-    private $themeVoteDbInterface;
+    private ThemeDbInterface $themeDbInterface;
+    private ThemeVoteDbInterface $themeVoteDbInterface;
 
-    function __construct(&$themeDbInterface, &$themeVoteDbInterface, &$loggedInUser) {
+    function __construct(ThemeDbInterface &$themeDbInterface, ThemeVoteDbInterface &$themeVoteDbInterface, &$loggedInUser) {
         $this->themeDbInterface = $themeDbInterface;
         $this->themeVoteDbInterface = $themeVoteDbInterface;
         $this->ActiveThemeModels = $this->LoadActiveThemes();
@@ -30,7 +30,8 @@ class ThemeData{
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadActiveThemes(){
+    function LoadActiveThemes(): array
+    {
         AddActionLog("LoadActiveThemes");
         StartTimer("LoadActiveThemes");
 
@@ -73,7 +74,8 @@ class ThemeData{
         return $themeModels;
     }
 
-    function LoadAllThemes(){
+    function LoadAllThemes(): array
+    {
         AddActionLog("LoadAllThemes");
         StartTimer("LoadAllThemes");
 
@@ -116,7 +118,8 @@ class ThemeData{
         return $themeModels;
     }
 
-    function LoadUserThemeVotes(&$loggedInUser){
+    function LoadUserThemeVotes(&$loggedInUser): array
+    {
         AddActionLog("LoadUserThemeVotes");
         StartTimer("LoadUserThemeVotes");
     
@@ -144,16 +147,18 @@ class ThemeData{
     
 //////////////////////// DATABASE ACTIONS (select, insert, update)
 
-    function SoftDeleteThemeInDatabase($themeId){
+    function SoftDeleteThemeInDatabase($themeId): void
+    {
         AddActionLog("LoadThemes");
         StartTimer("LoadThemes");
 
-        $data = $this->themeDbInterface->SoftDelete($themeId);
+        $this->themeDbInterface->SoftDelete($themeId);
         
         StopTimer("LoadThemes");
     }
 
-    function GetThemesOfUserFormatted($userId){
+    function GetThemesOfUserFormatted($userId): string
+    {
         AddActionLog("GetThemesOfUserFormatted");
         StartTimer("GetThemesOfUserFormatted");
 
@@ -163,7 +168,8 @@ class ThemeData{
         return ArrayToHTML(MySQLDataToArray($data));
     }
 
-    function GetThemeVotesOfUserFormatted($userId){
+    function GetThemeVotesOfUserFormatted($userId): string
+    {
         AddActionLog("GetThemeVotesOfUserFormatted");
         StartTimer("GetThemeVotesOfUserFormatted");
     
@@ -177,11 +183,12 @@ class ThemeData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllThemePublicData(){
+    function GetAllThemePublicData(): array
+    {
         AddActionLog("ThemesData_GetAllThemePublicData");
         StartTimer("ThemesData_GetAllThemePublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->themeDbInterface->SelectThemePublicData());
+        $dataFromDatabase = MySQLDataToArray($this->themeDbInterface->SelectPublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEME_DATETIME] = gmdate("Y-m-d H:i:s", time());
             $dataFromDatabase[$i][DB_COLUMN_THEME_IP] = OVERRIDE_MIGRATION;
@@ -192,11 +199,12 @@ class ThemeData{
         return $dataFromDatabase;
     }
 
-    function GetAllThemeVotePublicData(){
+    function GetAllThemeVotePublicData(): array
+    {
         AddActionLog("ThemesData_GetAllThemeVotePublicData");
         StartTimer("ThemesData_GetAllThemeVotePublicData");
         
-        $dataFromDatabase = MySQLDataToArray($this->themeVoteDbInterface->SelectThemeVotePublicData());
+        $dataFromDatabase = MySQLDataToArray($this->themeVoteDbInterface->SelectPublicData());
         foreach($dataFromDatabase as $i => $row){
             $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_DATETIME] = gmdate("Y-m-d H:i:s", time());
             $dataFromDatabase[$i][DB_COLUMN_THEMEVOTE_IP] = OVERRIDE_MIGRATION;

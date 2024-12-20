@@ -4,7 +4,7 @@
 //and time. All three are non-blank strings. $date and $time should be
 //parsable by PHP's date(...) function. Function also authorizes the user
 //(checks whether or not they are an admin).
-function CreateJam(MessageService &$messageService, $theme, $date, $time, $colorsList, $defaultEntryIconUrl, $eventName){
+function CreateJam(MessageService &$messageService, $theme, $date, $time, $colorsList, $defaultEntryIconUrl, $eventName): string{
 	global $ip, $userAgent, $loggedInUser, $jamData, $userData;
 
 	$maxNonDeletedJamNumber = 0;
@@ -75,7 +75,7 @@ function CreateJam(MessageService &$messageService, $theme, $date, $time, $color
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST, $configData;
 	
 	if(IsAdmin($loggedInUser) !== false){

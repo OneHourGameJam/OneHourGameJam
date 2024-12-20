@@ -1,40 +1,40 @@
 <?php
 
-define("ACTION_LOGIN", "login");
-define("ACTION_REGISTER", "register");
-define("ACTION_LOGOUT", "logout");
-define("ACTION_SUBMIT", "submit");
-define("ACTION_NEW_JAM", "newjam");
-define("ACTION_DELETE_JAM", "deletejam");
-define("ACTION_DELETE_ENTRY", "deleteentry");
-define("ACTION_SAVE_CONFIG", "saveconfig");
-define("ACTION_SAVE_ASSET_EDITS", "saveassetedits");
-define("ACTION_DELETE_ASSET", "deleteasset");
-define("ACTION_SAVE_JAM_EDITS", "savejamedits");
-define("ACTION_SAVE_USER_EDITS", "saveuseredits");
-define("ACTION_SAVE_NEW_USER_PASSWORD", "savenewuserpassword");
-define("ACTION_CHANGE_PASSWORD", "changepassword");
-define("ACTION_SAVE_USER_CHANGES", "saveuserchanges");
-define("ACTION_SAVE_NEW_THEME", "savenewtheme");
-define("ACTION_DELETE_THEME", "deletetheme");
-define("ACTION_DELETE_THEMES", "deletethemes");
-define("ACTION_BAN_THEME", "bantheme");
-define("ACTION_UNBAN_THEME", "unbantheme");
-define("ACTION_DOWNLOAD_DB", "downloaddb");
-define("ACTION_ADMIN_VOTE", "adminvote");
-define("ACTION_NEW_PLAYFORM", "newplatform");
-define("ACTION_EDIT_PLATFORM", "editplatform");
-define("ACTION_DELETE_PLATFORM", "deleteplatform");
-define("ACTION_UNDELETE_PLATFORM", "undeleteplatform");
-define("ACTION_SET_STREAMER", "setstreamer");
-define("ACTION_UNSET_STREAMER", "unsetstreamer");
+const ACTION_LOGIN = "login";
+const ACTION_REGISTER = "register";
+const ACTION_LOGOUT = "logout";
+const ACTION_SUBMIT = "submit";
+const ACTION_NEW_JAM = "newjam";
+const ACTION_DELETE_JAM = "deletejam";
+const ACTION_DELETE_ENTRY = "deleteentry";
+const ACTION_SAVE_CONFIG = "saveconfig";
+const ACTION_SAVE_ASSET_EDITS = "saveassetedits";
+const ACTION_DELETE_ASSET = "deleteasset";
+const ACTION_SAVE_JAM_EDITS = "savejamedits";
+const ACTION_SAVE_USER_EDITS = "saveuseredits";
+const ACTION_SAVE_NEW_USER_PASSWORD = "savenewuserpassword";
+const ACTION_CHANGE_PASSWORD = "changepassword";
+const ACTION_SAVE_USER_CHANGES = "saveuserchanges";
+const ACTION_SAVE_NEW_THEME = "savenewtheme";
+const ACTION_DELETE_THEME = "deletetheme";
+const ACTION_DELETE_THEMES = "deletethemes";
+const ACTION_BAN_THEME = "bantheme";
+const ACTION_UNBAN_THEME = "unbantheme";
+const ACTION_DOWNLOAD_DB = "downloaddb";
+const ACTION_ADMIN_VOTE = "adminvote";
+const ACTION_NEW_PLAYFORM = "newplatform";
+const ACTION_EDIT_PLATFORM = "editplatform";
+const ACTION_DELETE_PLATFORM = "deleteplatform";
+const ACTION_UNDELETE_PLATFORM = "undeleteplatform";
+const ACTION_SET_STREAMER = "setstreamer";
+const ACTION_UNSET_STREAMER = "unsetstreamer";
 
 class SiteActionResultModel{
-    public $RedirectUrl;
-    public $MessageType;
-    public $MessageText;
+    public string $RedirectUrl;
+    public string $MessageType;
+    public string $MessageText;
 
-    function __construct($redirectUrl, $messageType, $messageText) {
+    function __construct(string $redirectUrl, string $messageType, string $messageText) {
         $this->RedirectUrl = $redirectUrl;
         $this->MessageType = $messageType;
         $this->MessageText = $messageText;
@@ -42,10 +42,10 @@ class SiteActionResultModel{
 }
 
 class SiteActionModel{
-    public $PostRequest;
-    public $PhpFile;
-    public $RedirectAfterExecution;
-    public $ActionResult;
+    public string $PostRequest;
+    public string $PhpFile;
+    public string $RedirectAfterExecution;
+    public array $ActionResult;
 
     function __construct($postRequest, $phpFile, $redirectAfterExecution, $actionResult) {
         $this->PostRequest = $postRequest;
@@ -56,13 +56,14 @@ class SiteActionModel{
 }
 
 class SiteActionData{
-    public $SiteActionModels;
+    public array $SiteActionModels;
 
     function __construct(&$configData) {
         $this->SiteActionModels = $this->LoadSiteActions($configData);
     }
 
-    function LoadSiteActions(&$configData){
+    function LoadSiteActions(&$configData): array
+    {
         AddActionLog("LoadSiteActions");
         StartTimer("LoadSiteActions");
         

@@ -1,7 +1,7 @@
 <?php
 
 //Changes the logged in user's password if the old one matches.
-function ChangePassword($oldPassword, $newPassword1, $newPassword2){
+function ChangePassword($oldPassword, $newPassword1, $newPassword2): string{
 	global $userData, $loggedInUser, $configData, $userDbInterface;
 
 	//Authorize user (Logged in)
@@ -37,7 +37,7 @@ function ChangePassword($oldPassword, $newPassword1, $newPassword2){
 	return "SUCCESS";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	if($loggedInUser !== false){

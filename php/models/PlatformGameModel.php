@@ -2,19 +2,19 @@
 
 
 class PlatformGameModel{
-	public $Id;
-	public $GameId;
-	public $PlatformId;
-	public $Url;
+	public string $Id;
+	public string $GameId;
+	public string $PlatformId;
+	public string $Url;
 }
 
 class PlatformGameData{
-    public $PlatformGameModels;
-    public $GameIdToPlatformGameIds;
+    public array $PlatformGameModels;
+    public array $GameIdToPlatformGameIds;
 
-    private $platformGameDbInterface;
+    private PlatformGameDbInterface $platformGameDbInterface;
 
-    function __construct(&$platformGameDbInterface) {
+    function __construct(PlatformGameDbInterface &$platformGameDbInterface) {
         $this->platformGameDbInterface = $platformGameDbInterface;
         $this->PlatformGameModels = $this->LoadPlatformEntries();
         $this->GameIdToPlatformGameIds = $this->GenerateGameIdToPlatformGameIds();
@@ -22,7 +22,8 @@ class PlatformGameData{
 
 //////////////////////// MODEL CONSTRUCTOR
 
-    function LoadPlatformEntries(){
+    function LoadPlatformEntries(): array
+    {
         AddActionLog("LoadPlatformEntries");
         StartTimer("LoadPlatformEntries");
 
@@ -44,7 +45,8 @@ class PlatformGameData{
         return $platformGameModels;
     }
 
-    function GenerateGameIdToPlatformGameIds(){
+    function GenerateGameIdToPlatformGameIds(): array
+    {
         $gameIdToPlatformGameIds = Array();
 
         foreach($this->PlatformGameModels as $i => $platformGameModel){
@@ -69,7 +71,8 @@ class PlatformGameData{
 
 //////////////////////// PUBLIC DATA EXPORT
 
-    function GetAllPublicData(){
+    function GetAllPublicData(): array
+    {
         AddActionLog("PlatformGameData_GetAllPublicData");
         StartTimer("PlatformGameData_GetAllPublicData");
         

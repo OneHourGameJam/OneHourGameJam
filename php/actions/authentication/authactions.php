@@ -2,7 +2,7 @@
 
 //Function called when the login form is sent. Either logs in or registers the
 //user, depending on whether the username exists.
-function TryLogin($username, $password, $register){
+function TryLogin($username, $password, $register): string{
 	global $userData, $configData;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
@@ -38,7 +38,7 @@ function TryLogin($username, $password, $register){
 }
 //Registers the given user. Funciton should be called through TryLogin(...).
 //Calls LogInUser(...) after registering the user to also log them in.
-function RegisterUser($username, $password){
+function RegisterUser($username, $password): string{
 	global $userData, $ip, $userAgent, $configData, $userDbInterface, $sessionDbInterface;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));
@@ -70,7 +70,7 @@ function RegisterUser($username, $password){
 //Logs in the user with the provided credentials.
 //Sets the user's session cookie.
 //Should not be called directly, call through TryLogin(...)
-function LogInUser($username, $password){
+function LogInUser($username, $password): string{
 	global $configData, $userData, $sessionDbInterface, $_COOKIE;
 
 	$username = str_replace(" ", "_", strtolower(trim($username)));

@@ -1,39 +1,39 @@
 <?php
 
 class PollsViewModel{
-    public $LIST = Array();
-    public $ACTIVE_POLLS = Array();
+    public array $LIST = Array();
+    public array $ACTIVE_POLLS = Array();
 }
 
 class PollViewModel{
-    public $preferences_list = Array();
-    public $entries = Array();
+    public array $preferences_list = Array();
+    public array $entries = Array();
 
-    public $QUESTION;
-    public $POLL_ID;
-    public $USER_VOTED_IN_POLL;
-    public $OPTIONS;
-    public $IS_ACTIVE;
-    public $USERS_VOTED_IN_POLL;
-    public $DATE_STARTED;
-    public $DATE_ENDED;
-    public $TOTAL_VOTES;
-    public $js_formatted_options_list;
-    public $js_formatted_votes_list;
-    public $js_formatted_fill_color_list;
-    public $js_formatted_border_color_list;
-    public $js_formatted_user_votes_percentage_list;
+    public string $QUESTION;
+    public string $POLL_ID;
+    public string $USER_VOTED_IN_POLL;
+    public array $OPTIONS;
+    public int $IS_ACTIVE;
+    public int $USERS_VOTED_IN_POLL;
+    public string $DATE_STARTED;
+    public string $DATE_ENDED;
+    public int $TOTAL_VOTES;
+    public string $js_formatted_options_list;
+    public string $js_formatted_votes_list;
+    public string $js_formatted_fill_color_list;
+    public string $js_formatted_border_color_list;
+    public string $js_formatted_user_votes_percentage_list;
 }
 
 class PollOptionsViewModel{
-    public $OPTION_ID;
-    public $USER_VOTED;
-    public $TEXT;
-    public $VOTES;
-    public $PERCENTAGE_OF_ALL_VOTES;
-    public $PERCENTAGE_OF_ALL_VOTES_DISPLAY;
-    public $PERCENTAGE_OF_USERS_VOTES;
-    public $PERCENTAGE_OF_USERS_VOTES_DISPLAY;
+    public string $OPTION_ID;
+    public string $USER_VOTED;
+    public string $TEXT;
+    public int $VOTES;
+    public float $PERCENTAGE_OF_ALL_VOTES;
+    public float $PERCENTAGE_OF_ALL_VOTES_DISPLAY;
+    public float $PERCENTAGE_OF_USERS_VOTES;
+    public float $PERCENTAGE_OF_USERS_VOTES_DISPLAY;
 }
 
 ?>

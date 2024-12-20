@@ -1,7 +1,7 @@
 <?php
 
 //Removes a suggested theme
-function RemoveTheme(MessageService &$messageService, $themeId, $pageId){
+function RemoveTheme(MessageService &$messageService, $themeId, $pageId): string{
 	global $themeData, $ip, $userAgent, $loggedInUser, $themeDbInterface, $userData;
 
 	//Authorize user (logged in)
@@ -54,7 +54,7 @@ function RemoveTheme(MessageService &$messageService, $themeId, $pageId){
 	return $pageId == "themes" ? "SUCCESS_THEMES" : "SUCCESS_MANAGETHEMES";
 }
 
-function PerformAction(MessageService &$messageService, &$loggedInUser){
+function PerformAction(MessageService &$messageService, &$loggedInUser): string{
 	global $_POST;
 
 	$deleteThemeId = $_POST[FORM_DELETETHEME_THEME_ID];

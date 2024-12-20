@@ -1,21 +1,22 @@
 <?php
-define("DB_TABLE_PLATFORMENTRY", "platform_entry");
+const DB_TABLE_PLATFORMENTRY = "platform_entry";
 
-define("DB_COLUMN_PLATFORMENTRY_ID",            "platformentry_id");
-define("DB_COLUMN_PLATFORMENTRY_ENTRY_ID",      "platformentry_entry_id");
-define("DB_COLUMN_PLATFORMENTRY_PLATFORM_ID",   "platformentry_platform_id");
-define("DB_COLUMN_PLATFORMENTRY_URL",           "platformentry_url");
+const DB_COLUMN_PLATFORMENTRY_ID = "platformentry_id";
+const DB_COLUMN_PLATFORMENTRY_ENTRY_ID = "platformentry_entry_id";
+const DB_COLUMN_PLATFORMENTRY_PLATFORM_ID = "platformentry_platform_id";
+const DB_COLUMN_PLATFORMENTRY_URL = "platformentry_url";
 
 class PlatformGameDbInterface{
-    private $database;
-    private $publicColumns = Array(DB_COLUMN_PLATFORMENTRY_ID, DB_COLUMN_PLATFORMENTRY_ENTRY_ID, DB_COLUMN_PLATFORMENTRY_PLATFORM_ID, DB_COLUMN_PLATFORMENTRY_URL);
-    private $privateColumns = Array();
+    private Database $database;
+    private array $publicColumns = Array(DB_COLUMN_PLATFORMENTRY_ID, DB_COLUMN_PLATFORMENTRY_ENTRY_ID, DB_COLUMN_PLATFORMENTRY_PLATFORM_ID, DB_COLUMN_PLATFORMENTRY_URL);
+    private array $privateColumns = Array();
 
-    function __construct(&$database) {
+    function __construct(Database &$database) {
         $this->database = $database;
     }
 
-    public function SelectAll(){
+    public function SelectAll(): mysqli_result
+    {
         AddActionLog("PlatformGameDbInterface_SelectAll");
         StartTimer("PlatformGameDbInterface_SelectAll");
 
@@ -27,7 +28,8 @@ class PlatformGameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function SelectSinglePlatformEntryId($entryId, $platformId){
+    public function SelectSinglePlatformEntryId($entryId, $platformId): mysqli_result
+    {
         AddActionLog("PlatformGameDbInterface_SelectSinglePlatformEntryId");
         StartTimer("PlatformGameDbInterface_SelectSinglePlatformEntryId");
 
@@ -44,7 +46,8 @@ class PlatformGameDbInterface{
         return $this->database->Execute($sql);;
     }
 
-    public function Insert($entryId, $platformId, $url){
+    public function Insert($entryId, $platformId, $url): void
+    {
         AddActionLog("PlatformGameDbInterface_Insert");
         StartTimer("PlatformGameDbInterface_Insert");
     
@@ -63,7 +66,8 @@ class PlatformGameDbInterface{
         StopTimer("PlatformGameDbInterface_Insert");
     }
 
-    public function UpdateUrl($platformEntryId, $url){
+    public function UpdateUrl($platformEntryId, $url): void
+    {
         AddActionLog("PlatformGameDbInterface_UpdateUrl");
         StartTimer("PlatformGameDbInterface_UpdateUrl");
     
@@ -79,7 +83,8 @@ class PlatformGameDbInterface{
         StopTimer("PlatformGameDbInterface_UpdateUrl");
     }
 
-    public function Delete($platformEntryId){
+    public function Delete($platformEntryId): void
+    {
         AddActionLog("PlatformGameDbInterface_Delete");
         StartTimer("PlatformGameDbInterface_Delete");
     
@@ -93,7 +98,8 @@ class PlatformGameDbInterface{
         StopTimer("PlatformGameDbInterface_Delete");
     }
 
-    public function SelectPublicData(){
+    public function SelectPublicData(): mysqli_result
+    {
         AddActionLog("PlatformGameDbInterface_SelectPublicData");
         StartTimer("PlatformGameDbInterface_SelectPublicData");
 

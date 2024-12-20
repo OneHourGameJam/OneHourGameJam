@@ -1,7 +1,8 @@
 <?php
 
 class FormPresenter{
-	public static function RenderForms(&$plugins){
+	public static function RenderForms(&$plugins): FormViewModel
+    {
 		AddActionLog("RenderForms");
 		StartTimer("RenderForms");
 	
