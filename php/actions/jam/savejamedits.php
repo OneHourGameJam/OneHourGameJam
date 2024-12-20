@@ -2,7 +2,7 @@
 
 //Edits an existing jam, identified by the jam id.
 //Only changes the theme, date and time and colors does NOT change the jam number.
-function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $streamerUsername, $streamerTwitchUsername, $colorsString, $defaultEntryIconUrl){
+function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, $streamerUsername, $streamerTwitchUsername, $colorsString, $defaultEntryIconUrl, $eventName){
 	global $jamData, $loggedInUser, $jamDbInterface, $userData;
 
 	//Authorize user (is admin)
@@ -66,11 +66,11 @@ function EditJam(MessageService &$messageService, $jamId, $theme, $date, $time, 
 		$streamerUserId = $userData->UsernameToId[$streamerUsername];
 	}
 
-	$jamDbInterface->Update($jamId, $theme, gmdate("Y-m-d H:i", $datetime), $streamerUserId, $streamerTwitchUsername, $colors, $defaultEntryIconUrl);
+	$jamDbInterface->Update($jamId, $theme, gmdate("Y-m-d H:i", $datetime), $streamerUserId, $streamerTwitchUsername, $colors, $defaultEntryIconUrl, $eventName);
 
 	$messageService->SendMessage(LogMessage::UserLogMessage(
 		"JAM_UPDATED", 
-		"Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString, Default entry icon url: $defaultEntryIconUrl", 
+		"Jam updated with values: JamID: $jamId, Theme: '$theme', Date: '$date', Time: '$time', Colors: $colorsString, Default entry icon url: $defaultEntryIconUrl, Event Name: $eventName",
 		$loggedInUser->Id)
 	);
 	$userData->LogAdminAction($loggedInUser->Id);

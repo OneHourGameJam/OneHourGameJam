@@ -41,6 +41,7 @@ define("FORM_SUBMIT_URL", "gameurl");
 define("FORM_SUBMIT_SATISFACTION", "satisfaction");
 define("FORM_DELETEJAM_JAM_ID", "jamID");
 define("FORM_NEWJAM_THEME", "theme");
+define("FORM_NEWJAM_EVENT_NAME", "eventName");
 define("FORM_NEWJAM_DATE", "date");
 define("FORM_NEWJAM_TIME", "time");
 define("FORM_NEWJAM_JAM_COLOR", "jamcolor");

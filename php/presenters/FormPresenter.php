@@ -53,6 +53,7 @@ class FormPresenter{
         $formViewModel->form["newjam"]["time"] = FORM_NEWJAM_TIME;
         $formViewModel->form["newjam"]["jam_color"] = FORM_NEWJAM_JAM_COLOR;
         $formViewModel->form["newjam"]["default_icon_url"] = FORM_NEWJAM_DEFAULT_ICON_URL;
+        $formViewModel->form["newjam"]["event_name"] = FORM_NEWJAM_EVENT_NAME;
         $formViewModel->form["editjam"]["jam_id"] = FORM_EDITJAM_JAM_ID;
         $formViewModel->form["editjam"]["number"] = "jam_number";
         $formViewModel->form["editjam"]["theme"] = FORM_EDITJAM_THEME;

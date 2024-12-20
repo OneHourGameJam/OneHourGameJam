@@ -1,6 +1,6 @@
 <?php
 
-define("DATABASE_VERSION", "41");
+define("DATABASE_VERSION", "42");
 
 class Database{
     private $dbConnection;
@@ -126,6 +126,9 @@ class Database{
         }
     
         $currentDatabaseVersion = intval($config_result[0], 10);
+
+        print($currentDatabaseVersion);
+        print(DATABASE_VERSION);
     
         // Check and see if we need to migrate.
         if (DATABASE_VERSION < $currentDatabaseVersion) {
